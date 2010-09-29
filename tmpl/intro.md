@@ -1,0 +1,5 @@
+Mirage is an open-source platform designed to construct build portable high-performance, reliable network applications with minimal fuss.  Code can be developed on normal operating systems such as Linux or MacOS X, and then compiled into a fully-standalone operating system that runs under the [Xen](http://xen.org/) hypervisor.  Since Xen powers most [cloud computing](http://en.wikipedia.org/Cloud_computing) infrastructure such as [Amazon EC2](http://aws.amazon.com), this lets your servers elastically scale up massively with little effort on your part.
+
+Mirage is a complete framework based around the [OCaml](http://caml.inria.fr/) language, with syntax extensions and libraries which provide networking, storage and concurrency support that are easy to use during development, and map directly into operating system constructs when being compiled for production deployment.
+
+You can [download](/download/) the latest version, check-out the [code](/code/), read [documentation](/resources/) and [papers](/resources/), or find out more [about](/about/) the community behind it on this site.
