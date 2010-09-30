@@ -8,7 +8,7 @@ open Lwt
 let md_file f =
   let f = match Filesystem_templates.t f with |Some x -> x |None -> "" in
   let t = Str.split (Str.regexp_string "\n") f in
-  let md = Markdown.parse_lines (List.rev t) in
+  let md = Markdown.parse_lines t in
   Markdown_html.t md
 
 module Index = struct
