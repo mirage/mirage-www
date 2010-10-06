@@ -113,7 +113,7 @@ a#logo:hover {
 
 #linkbar {
 	float: right;
-	height: 50px;
+	height: 30px;
 }
 
 #linkbar ul {
@@ -230,8 +230,12 @@ a#logo:hover {
 
 .left_column, .right_column {
 	float: left;
-	margin: 15px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
 	width: 480px;
+}
+
+.left_column {
+        margin: 10px 0px 0px 0px;
 }
 
 .right_column {
@@ -818,3 +822,7 @@ ul#file_not_found_list li.list_head {
 	background-color: #ddd;
 	cursor: pointer;
 }
+
+.impl_red    { background-color: #FE9696; }
+.impl_orange { background-color: #FDC086; }
+.impl_green  { background-color: #B0ECB0; }

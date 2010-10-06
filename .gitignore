@@ -1,0 +1,10 @@
+*.o
+*.cmi
+src/.depend
+*.cmo
+*.cma
+*.cmx
+*.annot
+mirage-unix
+filesystem_*.ml
+.*.swp

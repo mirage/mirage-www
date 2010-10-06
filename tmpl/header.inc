@@ -22,7 +22,7 @@
 
 	<div id="wrapper">
 		<div id="header">
-			<a id="logo" href="index.html"><img src="/graphics/mirage-logo.png" alt="Logo" /></a>
+			<a id="logo" href="/"><img src="/graphics/mirage-logo.png" alt="Logo" /></a>
 			
 			<div id="search_bar">
 				<form method="post" action="">
@@ -35,36 +35,9 @@
 		<div id="info_bar">
 			<div id="linkbar">
 				<ul>
-					<li><a class="current_page" href="/">Home</a></li>
-					<li><a href="/blog/">Blog</a></li>
-					<li><a href="http://github.com/avsm/mirage">Code</a></li>
-					<li><a href="/resources/">Resources</a></li>
-					<li><a href="/about/">About</a></li>
-				</ul>
+                                   @@BAR@@
+                                </ul>
 			</div>
 		</div>
 		
 		<div id="content">
-			@@CONTENT@@
-
-			</div>
- 
-			<div class="clear_div"></div><!-- Clears above floated columns -->
-		</div>
-	
-		<div id="footer">
-			<h4>&copy; 2009-2010 Anil Madhavapeddy</h4>
-			
-			<ul>
-				<li><a href="/">Home</a></li>
-				<li><a href="/blog/">Blog</a></li>
-				<li><a href="http://github.com/avsm/mirage">Code</a></li>
-				<li><a href="/resources/">Resources</a></li>
-				<li><a href="/about/">About</a></li>
-			</ul>
-		</div>
-
-	</div>
-</body>
-
-</html>
