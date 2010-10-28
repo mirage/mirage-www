@@ -243,6 +243,16 @@ a#logo:hover {
 	width: 460px;
 }
 
+.left_column_blog {
+        float: left;
+        width: 690px;
+}
+
+.right_column_blog {
+	float: right;
+	width: 250px;
+}
+
 .float_left {
 	float: left;
 }
@@ -826,3 +836,24 @@ ul#file_not_found_list li.list_head {
 .impl_red    { background-color: #FE9696; }
 .impl_orange { background-color: #FDC086; }
 .impl_green  { background-color: #B0ECB0; }
+
+.blog_entry_title { 
+  font-size: 2em; 
+  font-weight: bold;
+}
+
+.blog_entry_heading {
+  border-bottom: 1px solid #eee;
+  margin-left: 4px;
+  margin-bottom: 4px;
+}
+
+.blog_entry_info {
+  font-size: 1.1em;
+}
+
+.blog_entry_body {
+  margin-left: 6px;
+  font-size: 1em;
+}
+

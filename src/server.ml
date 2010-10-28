@@ -1,5 +1,5 @@
-open Cohttp
 open Lwt
+open Http
 open Http_daemon
 
 let spec = {

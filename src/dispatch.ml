@@ -1,5 +1,5 @@
 open Printf
-open Cohttp
+open Http
 open Log
 open Lwt
 
@@ -16,6 +16,7 @@ module Resp = struct
     | [] | "index.html" :: [] -> dyn req Pages.Index.t
     | "resources" :: [] -> dyn req Pages.Resources.t
     | "about" :: [] -> dyn req Pages.About.t
+    | "blog" :: [] -> dyn req Pages.Blog.t
     | x -> (Http_daemon.respond_not_found ~url:(Http_request.path req) ())
 end
 
