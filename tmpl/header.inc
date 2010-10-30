@@ -22,22 +22,16 @@
 
 	<div id="wrapper">
 		<div id="header">
+		  <div id="header_logo">
 			<a id="logo" href="/"><img src="/graphics/mirage-logo.png" alt="Logo" /></a>
-			
-			<div id="search_bar">
-				<form method="post" action="">
-					<p><input id="search_field" name="search" type="text" /></p>
-					<p><input id="search_button" type="submit" name="submit" value="Search" /></p>
-				</form>
-			</div>
-		</div>
-		
-		<div id="info_bar">
+		  </div>
+	  	  <div id="info_bar">
 			<div id="linkbar">
 				<ul>
                                    @@BAR@@
                                 </ul>
 			</div>
+		  </div>
 		</div>
-		
+	
 		<div id="content">
