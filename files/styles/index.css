@@ -7,7 +7,7 @@ pre, form, fieldset, table, th, td {
 body {
   background-image: url('../graphics/cloud-bg.png');
   background-repeat: repeat-x;
-  font: 62.5%/1.6 "helvetica neue", "helvetica", "arial", sans-serif;
+  font: 65.0%/1.6 "helvetica neue", "helvetica", "arial", sans-serif;
 }
 
 a { outline: none; }
