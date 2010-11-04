@@ -20,7 +20,18 @@ let entries = [
     subject="Preparing the Mirage release";
     tags=[];
     body="blog-welcome.md"
-  }
+  };
+
+  { year=2010;
+    month=11;
+    day=4;
+    author="Thomas Gazagnaire";
+    author_link="http://gazagnaire.org/";
+    subject="A (quick) introduction to HTCaML";
+    tags=[];
+    body="htcaml-part1.md"
+  };
+
 ]
 
 let bar = []
