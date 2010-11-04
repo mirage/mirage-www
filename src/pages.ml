@@ -11,9 +11,9 @@ let md_file f =
 let col_files l r = 
   let h = <:html< 
      <div class="left_column">
-       <div class="summary_information"> $str:md_file l$ </>
+       <div class="summary_information"> $md_file l$ </>
      </>
-     <div class="right_column"> $str:md_file r$ </>
+     <div class="right_column"> $md_file r$ </>
   >> in 
   Htcaml.Html.to_string h 
 
@@ -48,7 +48,7 @@ module Blog = struct
           </>
         </>
       </>
-      <div class="blog_entry_body"> $str:md_file e.body$ </>
+      <div class="blog_entry_body"> $md_file e.body$ </>
     >>
 
   let entries = List.map html_of_ent Blog.entries

@@ -1,31 +1,37 @@
 open Printf
 open Markdown
 
-let tag t x = sprintf "<%s>%s</%s>" t x t
-
-let tags t l = String.concat "\n" (List.map (tag t) l)
+let quote str = "\"" ^ str ^ "\""
 
 let rec text = function
-    Text t -> t
-  | Emph t -> tag "i" t
-  | Bold t -> tag "b" t
-  | Struck pt -> tag "del" (par_text pt)
-  | Code t -> tag "code" t
-  | Link href -> sprintf "<a href=\"%s\">%s</a>" href.href_target href.href_desc
-  | Anchor a -> sprintf "<a name=\"%s\" />" a
-  | Image img -> sprintf "<img src=\"%s\" alt=\"%s\" />" img.img_src img.img_alt
+    Text t    -> <:html< $str:t$ >>
+  | Emph t    -> <:html< <i>$str:t$</> >>
+  | Bold t    -> <:html< <b>$str:t$</> >>
+  | Struck pt -> <:html< <del>$par_text pt$</> >>
+  | Code t    -> <:html< <code>$str:t$ </> >>
+  | Link href -> <:html< <a href=$str:quote href.href_target$>$str:href.href_desc$</> >>
+  | Anchor a  -> <:html< <a name=$str:quote a$/> >>
+  | Image img -> <:html< <img src=$str:quote img.img_src$ alt=$str:quote img.img_alt$/> >>
 
 and para = function
-    Normal pt -> par_text pt
-  | Pre (t,kind) -> tag "pre" (tag "code" t)
-  | Heading (lvl,pt) -> tag ("h" ^ (string_of_int lvl)) (par_text pt)
-  | Quote pl ->  tag "blockquote" (paras pl)
-  | Ulist (pl,pll) -> tag "ul" (tags "li" (List.map paras (pl::pll)))
-  | Olist (pl,pll) -> tag "ol" (tags "li" (List.map paras (pl::pll)))
+    Normal pt        -> <:html< $par_text pt$ >>
+  | Pre (t,kind)     -> <:html< <pre><code>$str:t$</></> >>
+  | Heading (1,pt)   -> <:html< <h1>$par_text pt$</> >>
+  | Heading (2,pt)   -> <:html< <h2>$par_text pt$</> >>
+  | Heading (3,pt)   -> <:html< <h3>$par_text pt$</> >>
+  | Heading (_,pt)   -> <:html< <h4>$par_text pt$</> >>
+  | Quote pl         -> <:html< <blockquote>$paras pl$</> >>
+  | Ulist (pl,pll)   -> let l = pl :: pll in <:html< <ul>$li l$ </> >>
+  | Olist (pl,pll)   -> let l = pl :: pll in <:html< <ol>$li l$ </> >>
 
-and par_text pt = String.concat "" (List.map text pt)
+and par_text pt = <:html< $list:List.map text pt$ >>
 
-and paras ps = tags "p" (List.map para ps)
+and li pl =
+  let aux p = <:html< <li>$paras p$</> >> in
+  <:html< $list:List.map aux pl$ >>
 
-and t pl =
-  String.concat "\n" (List.map (fun p -> sprintf "<p>%s</p>" (para p)) pl)
+and paras ps =
+  let aux p = <:html< <p>$para p$</> >> in
+  <:html< $list:List.map aux  ps$ >>
+
+let t = paras

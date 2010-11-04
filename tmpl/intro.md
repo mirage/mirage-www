@@ -2,4 +2,4 @@ Mirage is an open-source operating system for constructing secure, high-performa
 
 Mirage is based around the [OCaml](http://caml.inria.fr/) language, with syntax extensions and libraries which provide networking, storage and concurrency support that are easy to use during development, and map directly into operating system constructs when being compiled for production deployment.
 
-Mirage is still in <b>pre-alpha stage</b>, but the infrastructure you see here is self-hosting. The authors hang on out <tt>&#35;mirage</tt> on FreeNode IRC, so drop by with any questions you might have.
+Mirage is still in *pre-alpha stage*, but the infrastructure you see here is self-hosting. The authors hang on out `&#35;mirage` on FreeNode IRC, so drop by with any questions you might have.
