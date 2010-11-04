@@ -1,21 +1,21 @@
 In this post I introduce [HTCaML](http://www.github.com/samoht/htcaml)
 and I will explain how to use it to quickly generate static HTML
-pages. HTCaML is composed of two main parts: (i) a quotation mechanism
-to embed XHTML trees into an OCaml program; and (ii) a syntax
-extension to auto-generate boilerplate HTML definitions from an OCaml
-type definitions.
+pages. HTCaML is composed of two main parts:
+
+* a quotation mechanism to embed XHTML trees into an OCaml program
+* a syntax extension to auto-generate boilerplate HTML definitions from OCaml type definitions.
 
 !!HTML quotations
 
 Let us first focus on the quotation mechanism. This part is quite
 similar to the syntax extension provided by
-[Eliom](http://ocsigen.org/eliom/manual/1.3.0/), but it is exposed as
-explicit `<:html< ... >>` quotations; This let us compose HTCaML with
-other language quotation (as CSS) in the same file.
+[Eliom](http://ocsigen.org/eliom/manual/1.3.0/), but exposed as
+explicit `<:html< ... >>` quotations. This lets us compose HTCaML with
+other language quotations (such as CSS) in the same file.
 
-Let us start by an example. We would like to display a list of tweets
+Let us start with an example. We would like to display a list of tweets
 stored locally. As for any OCaml program, we need to start thinking first
-about the data structures to use. So let us define one :
+about the data structures to use. So let us define one:
 
 {{
 type author = {
@@ -24,7 +24,7 @@ type author = {
 }
 }}
 
-for the author type and :
+for the `author` type and:
 
 {{
 type tweet = {
@@ -34,13 +34,12 @@ type tweet = {
 }
 }}
 
-for the tweet type. We assume here that we have already defined in our
-code a module `Date` which manipulate date formats; Also `Html.t` is
+for the `tweet` type. We assume here that we have already defined in our
+code a module `Date` which manipulates date formats. `Html.t` is
 part of the HTCaML library and is the type of HTML fragments.
 
 We can now define the functions converting any value of type `tweet`
-into an HTML fragment. Let us start with `val html_of_author : author
--> Html.t` :
+into an HTML fragment. Let us start with `val html_of_author : author -> Html.t`:
 
 {{
 let html_of_author a =
@@ -49,11 +48,11 @@ let html_of_author a =
    >>
 }}
 
-Fragments of code written between `$` are called antiquotations, and
+Fragments of code written between `$` are called "antiquotations", and
 are valid OCaml code not interpreted by the HTML parser; the
 (optional) prefix first of the antiquotation is a hint to the compiler
 to understand the type of the value returned by the antiquotation. The
-code above will automatically be expanded by Camlp4 as follows :
+code above will automatically be expanded by `camlp4` into:
 
 {{
 let html_of_author a =
@@ -63,8 +62,7 @@ let html_of_author a =
      Html.String name)
 }}
 
-Next, we can write the code for `val html_of_tweet : tweet -> Html.t`
-:
+Next, we can write the code for `val html_of_tweet : tweet -> Html.t`:
 
 {{
 let html_of_tweet t =
@@ -76,13 +74,13 @@ let html_of_tweet t =
    >>
 }}
 
-Remark here that we do not need to add a prefix to antiquotation as
-the `html_of_*` functions are returning a value of type `Html.t`, so
-no need to translate the returning value of the antiquotation.
+Note that we do not need to add a prefix to the antiquotations here as
+the `html_of_*` functions already return a value of type `Html.t`, and so
+no translation from other types (e.g. a `string`) is required.
 
-Then, using `val Html.to_string : Html.t -> string`, it's
+Then, using `val Html.to_string : Html.t -> string`, it is
 straightforward to process a list of tweet values in order to generate
-a static HTML page :
+a static HTML page:
 
 {{
 let process tweets =
@@ -103,8 +101,8 @@ let process tweets =
 }}
 
 Finally, we can use [CaSS](http://www.github.com/samoht/cass) to produce
-a very simple CSS files; CaSS provides CSS quotations to write CSS
-fragments into an OCaml program :
+a very simple CSS files. CaSS provides CSS quotations to convert CSS
+fragments into an OCaml program:
 
 {{
 let () =
@@ -122,8 +120,8 @@ let () =
 
 !!HTML Generator
  
-Some of the OCaml code we wrote in the last section are quite tedious
-to write. Let us consider again `html_of_tweet` :
+Some of the OCaml code we wrote in the last section is quite tedious
+to write. Let us consider `html_of_tweet` again:
 
 {{
 let html_of_tweet t =
@@ -135,17 +133,17 @@ let html_of_tweet t =
    >>
 }}
 
-As you can see, to write this code fragment, we had to reason by
+To write this code fragment, we had to reason by
 induction on the type structure of `tweet`. So this piece of code can
-be generated automatically, given a way to get a representation of the
-type structure in the language -- hopefully, that's exactly what
-[DynType](http://www.github.com/samoht/dyntype) does. So using
-DynType, HTCaML auto-generate `html_of_t` when the type definition of
-`t` is annotated by the keywords *with html*. However, we still want
+be generated automatically, given a way to obtain a dynamic representation of the
+type structure. That is exactly what the
+[DynType](http://www.github.com/samoht/dyntype) library does!
+Using DynType, HTCaML can auto-generate `html_of_t` when the type definition of
+`t` is annotated by the keywords `with html`. However, we still want
 to be able to manually write the translation to HTML, as for the
 `author` type above.
 
-So we can rewrite the previous example in the following way :
+So we can rewrite the previous example:
 
 {{
 type author = {
@@ -166,9 +164,3 @@ type tweet = {
 }}
 
 And `html_of_tweet` will pick the right definition of `html_of_author`.
-
-
-
-
-
-
