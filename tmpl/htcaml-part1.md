@@ -81,7 +81,7 @@ the `html_of_*` functions are returning a value of type `Html.t`, so
 no need to translate the returning value of the antiquotation.
 
 Then, using `val Html.to_string : Html.t -> string`, it's
-straigh-forward to process a list of tweet values in order to generate
+straightforward to process a list of tweet values in order to generate
 a static HTML page :
 
 {{
@@ -137,7 +137,7 @@ let html_of_tweet t =
 
 As you can see, to write this code fragment, we had to reason by
 induction on the type structure of `tweet`. So this piece of code can
-be generated automaticaly, given a way to get a representation of the
+be generated automatically, given a way to get a representation of the
 type structure in the language -- hopefully, that's exactly what
 [DynType](http://www.github.com/samoht/dyntype) does. So using
 DynType, HTCaML auto-generate `html_of_t` when the type definition of
