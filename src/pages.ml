@@ -42,8 +42,6 @@ module Blog = struct
     let author = match e.author.Atom.uri with
       |None -> <:html< $str:e.author.Atom.name$ >>
       |Some uri -> <:html< <a href= $str:uri$ > $str:e.author.Atom.name$ </> >> in
-    let tags = List.map (fun t -> 
-      <:html< <span class="blog_tag"> $str:t$ </> >>) e.tags in
     let day,month,year,hour,minute = e.updated in
     <:html<
       <div class="blog_entry_heading">
@@ -61,7 +59,28 @@ module Blog = struct
 
   let entries = List.sort compare (List.map html_of_ent Blog.entries)
 
-  let right_bar = Blog.bar
+  let html_of_category (l1, l2l) =
+    let l2h = List.map (fun l2 ->
+       let nl2 = Blog.num_categories l1 l2 in
+       match nl2 with 
+       |0 -> <:html< <div class="blog_bar_l2">$str:l2$</> >>
+       |n ->
+         let num = <:html< <i>$str:sprintf "(%d)" n$</> >> in
+         let url = sprintf "%s/blog/%s/%s" Config.baseurl l1 l2 in
+         <:html< <div class="blog_bar_l2"><a href=$str:url$>$str:l2$</>$num$</> >>
+    ) l2l in
+    <:html<
+      <div class="blog_bar_l1">$str:l1$</>
+      $list:l2h$
+    >>
+
+  let right_bar =
+    <:html<
+      <div class="blog_bar">
+         $list:List.map html_of_category Blog.categories$
+      </>
+    >>
+
   let body = <:html<
     <div class="left_column_blog">
       <div class="summary_information">
@@ -69,7 +88,7 @@ module Blog = struct
        </>
     </>
     <div class="right_column_blog">
-       $list:right_bar$
+       $right_bar$
     </>
   >>
 

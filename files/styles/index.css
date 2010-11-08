@@ -178,16 +178,6 @@ a#logo img {
   width: 470px;
 }
 
-.left_column_blog {
-  float: left;
-  width: 690px;
-}
-
-.right_column_blog {
-  float: right;
-  width: 250px;
-}
-
 .float_left {
   float: left;
 }
@@ -204,18 +194,8 @@ img.float_right { /* Only for images */
   margin: 7px 0px -2px 10px;
 }
 
-img.full_width { /* For images that take up entire width of column */
-  border-bottom: 2px solid #888;
-  border-top: 1px solid #888;
-  margin: 10px 0px 10px 0px;
-}
-
 .clear_div {
   clear: both;
-}
-
-.category { /* Mainly used on contact page but can be used throughout */
-  font-weight: bold;
 }
 
 #footer {
@@ -257,6 +237,14 @@ img.full_width { /* For images that take up entire width of column */
   text-decoration: underline;
 }
 
+#content a {
+  text-decoration: none;
+}
+
+#content a:hover {
+  text-decoration: underline;
+}
+
 /* Column Styling */
 
 .column {
@@ -294,10 +282,6 @@ img.full_width { /* For images that take up entire width of column */
   padding: 4px 10px 4px 15px;
 }
 
-#content .column img.full_width { /* Slightly changes the class .full_width to conform to columns */
-  border: 1px solid #aaa;
-  margin: 10px 15px -5px 10px;
-}
 
 .first_column {
   margin: 5px 11px 0px 0px;
@@ -310,6 +294,16 @@ img.full_width { /* For images that take up entire width of column */
 .impl_red    { background-color: #FE9696; }
 .impl_orange { background-color: #FDC086; }
 .impl_green  { background-color: #B0ECB0; }
+
+.left_column_blog {
+  float: left;
+  width: 800px;
+}
+
+.right_column_blog {
+  float: right;
+  width: 100px;
+}
 
 .blog_entry_title { 
   font-size: 2em; 
@@ -331,3 +325,14 @@ img.full_width { /* For images that take up entire width of column */
   font-size: 1em;
 }
 
+.blog_bar {
+  text-align: left;
+}
+
+.blog_bar_l1 {
+   font-size: 1.5em;
+}
+.blog_bar_l2 {
+   font-size: 1.2em;
+   margin-left: 1.5em;
+}
