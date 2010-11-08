@@ -8,6 +8,10 @@ let md_file f =
   let md = Markdown.parse_text f in
   Markdown_html.t md
 
+let md_xml f =
+  let ibuf = Htcaml.Html.to_string (md_file f) in
+  ibuf
+ 
 let col_files l r = 
   let h = <:html< 
      <div class="left_column">
@@ -35,23 +39,28 @@ end
 module Blog = struct
   open Blog
   let html_of_ent e =
+    let author = match e.author.Atom.uri with
+      |None -> <:html< $str:e.author.Atom.name$ >>
+      |Some uri -> <:html< <a href= $str:uri$ > $str:e.author.Atom.name$ </> >> in
     let tags = List.map (fun t -> 
       <:html< <span class="blog_tag"> $str:t$ </> >>) e.tags in
+    let day,month,year,hour,minute = e.updated in
     <:html<
       <div class="blog_entry_heading">
         <div class="blog_entry_title">
           $str:e.subject$
         </>
         <div class="blog_entry_info">
-          <i> Posted by <a href= $str:e.author_link$ > $str:e.author$ </> on
-          $str:sprintf "%2d/%2d/%4d" e.day e.month e.year$
+          <i> Posted by $author$ on
+          $str:sprintf "%2d/%2d/%4d" day month year$
           </>
         </>
       </>
       <div class="blog_entry_body"> $md_file e.body$ </>
     >>
 
-  let entries = List.map html_of_ent Blog.entries
+  let entries = List.sort compare (List.map html_of_ent Blog.entries)
+
   let right_bar = Blog.bar
   let body = <:html<
     <div class="left_column_blog">
@@ -63,6 +72,14 @@ module Blog = struct
        $list:right_bar$
     </>
   >>
-  let t = Template.t "blog" (Htcaml.Html.to_string body)
+
+  let idx = Template.t "blog" (Htcaml.Html.to_string body)
+  let atom_feed = 
+    let f = Blog.atom_feed md_xml Blog.entries in
+    Atom.string_of_feed f
+
+  let t = function
+   |[] -> idx
+   |["atom.xml"] -> atom_feed
 end
 
