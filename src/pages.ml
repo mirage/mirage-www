@@ -73,7 +73,12 @@ module Blog = struct
     </>
   >>
 
-  let idx = Template.t "blog" (Htcaml.Html.to_string body)
+  let idx =
+    let url = sprintf "\"%s/blog/atom.xml\"" Config.baseurl in
+    let headers = Htcaml.Html.to_string <:html< 
+     <link rel="alternate" type="application/atom+xml" href=$str:url$ /> >> in
+    Template.t ~headers "blog" (Htcaml.Html.to_string body)
+
   let atom_feed = 
     let f = Blog.atom_feed md_xml Blog.entries in
     Atom.string_of_feed f
