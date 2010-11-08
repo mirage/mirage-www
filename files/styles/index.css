@@ -13,7 +13,10 @@ body {
 a { outline: none; }
 
 .blog_entry_body pre {
-    background: #CEF6F5;
+    padding-left: 15px;
+    border-left: 1px solid #ddd;
+    border: 1px solid #ddd;
+    background: #eee;
     font-size: 1.5em;
     margin-left: 2em;
     margin-right: 6em;
@@ -105,7 +108,7 @@ a#logo img {
 }
 
 #content h2 {
-  border-bottom: 1px dashed #bbb;
+  border-bottom: 1px solid #ddd;
   color: #222;
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   font-size: 2.0em;
@@ -121,7 +124,8 @@ a#logo img {
 }
 
 #content ul {
-  list-style-type: none;
+  padding-left: 2em;
+  list-style-type: square;
 }
 
 #content blockquote {
@@ -293,11 +297,6 @@ img.full_width { /* For images that take up entire width of column */
 #content .column img.full_width { /* Slightly changes the class .full_width to conform to columns */
   border: 1px solid #aaa;
   margin: 10px 15px -5px 10px;
-}
-
-.column #testimonials li {
-  list-style-type: none;
-  padding: 5px 10px 15px 15px;
 }
 
 .first_column {
