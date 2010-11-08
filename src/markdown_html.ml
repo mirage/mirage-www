@@ -44,6 +44,7 @@ and li pl =
 
 and paras ps =
   let aux p = <:html< <p>$para p$</> >> in
-  <:html< <div class="post"> $list:List.map aux  ps$ </> >>
+  <:html< $list:List.map aux  ps$ >>
 
-let t = paras
+let t ps =
+  <:html< <div class="post"> $paras ps$ </> >>
