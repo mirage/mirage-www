@@ -1,4 +1,4 @@
-In this post I introduce [HTCaML](http://www.github.com/samoht/htcaml)
+In this post I introduce [HTCaML](http://www.github.com/samoht/htcaml),
 and I will explain how to use it to quickly generate static HTML
 pages. HTCaML is composed of two main parts:
 
@@ -44,7 +44,7 @@ into an HTML fragment. Let us start with `val html_of_author : author -> Html.t`
 {{
 let html_of_author a =
    <:html<
-      &lt;a href=$str:"\"" ^ a.link ^ "\""$&gt;$str:name$&lt;/&gt;
+      <a href=$str:"\"" ^ a.link ^ "\""$>$str:name$</>
    >>
 }}
 
@@ -67,10 +67,10 @@ Next, we can write the code for `val html_of_tweet : tweet -> Html.t`:
 {{
 let html_of_tweet t =
    <:html<
-      &lt;div class="tweet">
-      &lt;div class="author">$html_of_author t.author$&lt;/>
-      &lt;div class="date">$Date.html_of_date t.date$&lt;/>
-      &lt;div class="contents">$t.contents$&lt;/>
+      <div class="tweet">
+      <div class="author">$html_of_author t.author$</>
+      <div class="date">$Date.html_of_date t.date$</>
+      <div class="contents">$t.contents$</>
    >>
 }}
 
@@ -85,15 +85,15 @@ a static HTML page:
 {{
 let process tweets =
     let html = <:html<
-      &lt;html>
-        &lt;head>
-          &lt;link rel="stylesheet" type="text/css" href="style.css"/>
-        &lt;/>
-        &lt;body>
+      <html>
+        <head>
+          <link rel="stylesheet" type="text/css" href="style.css"/>
+        </>
+        <body>
           My collection of tweets :
           $list:List.map html_of_tweet tweets$
-        &lt;/>
-      &lt;/>
+        </>
+      </>
     >> in
     let chan = open_out "tweets.html" in
     output_string chan (Html.to_string html);
@@ -126,10 +126,10 @@ to write. Let us consider `html_of_tweet` again:
 {{
 let html_of_tweet t =
    <:html<
-      &lt;div class="tweet">
-      &lt;div class="author">$html_of_author t.author$&lt;/>
-      &lt;div class="date">$Date.html_of_date t.date$&lt;/>
-      &lt;div class="contents">$t.contents$&lt;/>
+      <div class="tweet">
+      <div class="author">$html_of_author t.author$</>
+      <div class="date">$Date.html_of_date t.date$</>
+      <div class="contents">$t.contents$</>
    >>
 }}
 
@@ -153,7 +153,7 @@ type author = {
 
 let html_of_author a =
    <:html<
-      &lt;a href=$str:"\"" ^ a.link ^ "\""$&gt;$str:name$&lt;/&gt;
+      <a href=$str:"\"" ^ a.link ^ "\""$>$str:name$</>
    >>
 
 type tweet = {

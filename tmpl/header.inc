@@ -16,6 +16,8 @@
 	<script type="text/javascript" src="/scripts/index.js"></script>
 	<script type="text/javascript" src="/scripts/innerfade.js"></script>
 	<script type="text/javascript" src="/scripts/easySlider1.7.js"></script>
+
+        @@EXTRA_HEAD@@
 </head>
 
 <body>
