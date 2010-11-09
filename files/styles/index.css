@@ -108,19 +108,20 @@ a#logo img {
 }
 
 #content h2 {
-  border-bottom: 1px solid #ddd;
   color: #222;
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   font-size: 2.0em;
   font-weight: normal;
-  margin: 5px 0px 5px 0px;
+  margin: 0px 0px 0px 0px;
   padding: 1px 0px 0px 5px;
 }
 
 #content p {
   color: #222;
   font-size: 1.3em;
-  padding: 3px 10px 3px 2px;
+  padding: 5px 10px 3px 2px;
+  line-height: 130%;
+  text-align: justify;
 }
 
 #content ul {
@@ -239,10 +240,12 @@ img.float_right { /* Only for images */
 
 #content a {
   text-decoration: none;
+  border-bottom: 1px dotted #ccc;
+  color: #000055;
 }
 
 #content a:hover {
-  text-decoration: underline;
+  border-bottom: 1px solid #aaa;
 }
 
 /* Column Styling */
@@ -260,7 +263,6 @@ img.float_right { /* Only for images */
 
 #content .column h2 {
   background-color: #f2f2f2;
-  border-bottom: 1px solid #aaa;
   font-size: 2.2em;
   margin: 0px 0px 0px 0px;
   padding: 1px 0px 1px 0px;
@@ -298,6 +300,8 @@ img.float_right { /* Only for images */
 .left_column_blog {
   float: left;
   width: 800px;
+  border-left: 1px solid #eee;
+  padding-left: 5px;
 }
 
 .right_column_blog {
@@ -311,13 +315,14 @@ img.float_right { /* Only for images */
 }
 
 .blog_entry_heading {
-  border-bottom: 1px solid #eee;
+  margin-top: 0px;
   margin-left: 4px;
   margin-bottom: 4px;
+  
 }
 
 .blog_entry_info {
-  font-size: 1.1em;
+  font-size:1.5em;
 }
 
 .blog_entry_body {
@@ -326,13 +331,51 @@ img.float_right { /* Only for images */
 }
 
 .blog_bar {
-  text-align: left;
+  text-align: right;
+  border-right: 1px solid #eee;
+  padding: 5px;
+}
+
+.blog_bar_l0 {
+   font-size: 2.0em;
+   padding-right: 5px;
 }
 
 .blog_bar_l1 {
    font-size: 1.5em;
+   padding-right: 5px;
 }
 .blog_bar_l2 {
    font-size: 1.2em;
    margin-left: 1.5em;
 }
+
+.blog_entry_space {
+}
+
+.entryDate { 
+    border: 1px solid #999; 
+    line-height: 1; 
+    width: 4em;
+    position: relative;
+    float: left;
+    margin-right: 15px;
+}
+.entryDate span { 
+    display: block; 
+    text-align: center; 
+}
+.postMonth { 
+    text-transform: uppercase; 
+    font-size: 1.2em;
+    padding-top: 0.3em; 
+}
+.postDay { font-size: 2em }
+.postYear { 
+    background-color: #2358B8; 
+    color: #FFF; 
+    font-size: 1.2em; 
+    padding: 0.3em 0; 
+    margin-top: 0.3em;
+}
+

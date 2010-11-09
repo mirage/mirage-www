@@ -1,8 +1,7 @@
-In this post I introduce [HTCaML](http://www.github.com/samoht/htcaml),
-and I will explain how to use it to quickly generate static HTML
-pages. HTCaML is composed of two main parts:
+In this post I introduce [HTCaML](http://www.github.com/samoht/htcaml)
+and explain how to use it to generate static HTML from within OCaml applications. It consists of:
 
-* a quotation mechanism to embed XHTML trees into an OCaml program
+* a quotation mechanism to embed XML into an OCaml program.
 * a syntax extension to auto-generate boilerplate HTML definitions from OCaml type definitions.
 
 !!HTML quotations

@@ -53,7 +53,13 @@ let entries = [
   };
 ]
 
-let num_categories l1 l2 =
+let num_l1_categories l1 =
+  List.fold_left (fun a e ->
+    let l1',_ = e.category in
+    if l1' = l1 then a+1 else a
+  ) 0 entries
+
+let num_l2_categories l1 l2 =
   List.fold_left (fun a e ->
     let l1',l2' = e.category in
     if l1'=l1 && l2'=l2 then a+1 else a
@@ -61,6 +67,8 @@ let num_categories l1 l2 =
 
 let permalink e =
   sprintf "%s/blog/%s" Config.baseurl e.permalink
+
+let permalink_exists x = List.exists (fun e -> e.permalink = x) entries
 
 let atom_entry_of_ent filefn e =
   let meta = { Atom.id=permalink e; title=`Text e.subject;
@@ -80,6 +88,4 @@ let atom_feed filefn es =
   let feed = { Atom.id; title; subtitle; author; contributors; rights; updated } in
   let entries = List.map (atom_entry_of_ent filefn) es in
   { Atom.feed=feed; entries }
-
-let bar = []
 

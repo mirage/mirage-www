@@ -38,53 +38,75 @@ end
 
 module Blog = struct
   open Blog
+
+  let str_of_month = function
+  |1 -> "Jan" |2 -> "Feb" |3 -> "Mar" |4 -> "Apr" |5 -> "May"
+  |6 -> "Jun" |7 -> "Jul" |8 -> "Aug" |9 -> "Sep" |10 -> "Oct"
+  |11 -> "Nov" |12 -> "Dec" |_ -> "???"
+
+  (* Convert a blog record into an Html.t fragment *)
   let html_of_ent e =
     let author = match e.author.Atom.uri with
       |None -> <:html< $str:e.author.Atom.name$ >>
       |Some uri -> <:html< <a href= $str:uri$ > $str:e.author.Atom.name$ </> >> in
-    let day,month,year,hour,minute = e.updated in
+    let permalink = sprintf "%s/blog/%s" Config.baseurl e.permalink in
+    let year,month,day,hour,minute = e.updated in
     <:html<
+      <div class="entryDate">
+       <span class="postMonth">$str:str_of_month month$</>
+       <span class="postDay">$int:day$</>
+       <span class="postYear">$int:year$</>
+      </>
+
       <div class="blog_entry_heading">
         <div class="blog_entry_title">
+         <a href=$str:permalink$>
           $str:e.subject$
+         </>
         </>
         <div class="blog_entry_info">
-          <i> Posted by $author$ on
-          $str:sprintf "%2d/%2d/%4d" day month year$
-          </>
+          <i> Posted by $author$ </>
         </>
       </>
-      <div class="blog_entry_body"> $md_file e.body$ </>
+      <div class="blog_entry_body"> $md_file e.body$ 
+       <br />
+       </>
     >>
 
-  let entries = List.sort compare (List.map html_of_ent Blog.entries)
-
+  (* Generate the category bar Html.t fragment *)
   let html_of_category (l1, l2l) =
     let l2h = List.map (fun l2 ->
-       let nl2 = Blog.num_categories l1 l2 in
-       match nl2 with 
+       match Blog.num_l2_categories l1 l2 with 
        |0 -> <:html< <div class="blog_bar_l2">$str:l2$</> >>
-       |n ->
-         let num = <:html< <i>$str:sprintf "(%d)" n$</> >> in
-         let url = sprintf "%s/blog/%s/%s" Config.baseurl l1 l2 in
+       |nl2 ->
+         let num = <:html< <i>$str:sprintf "(%d)" nl2$</> >> in
+         let url = sprintf "\"%s/tag/%s/%s\"" Config.baseurl l1 l2 in
          <:html< <div class="blog_bar_l2"><a href=$str:url$>$str:l2$</>$num$</> >>
     ) l2l in
+    let url = sprintf "\"%s/tag/%s\"" Config.baseurl l1 in
+    let l1h = match Blog.num_l1_categories l1 with
+    | 0 -> <:html< <div class="blog_bar_l1">$str:l1$</> >>
+    | nl1 -> <:html< <div class="blog_bar_l1"><a href=$str:url$>$str:l1$</></> >> in
     <:html<
-      <div class="blog_bar_l1">$str:l1$</>
+      $l1h$
       $list:l2h$
     >>
 
+  (* The full right bar in blog *)
   let right_bar =
+    let url = sprintf "\"%s/blog/\"" Config.baseurl in
     <:html<
       <div class="blog_bar">
+        <div class="blog_bar_l0"><a href=$str:url$>Index</></>
          $list:List.map html_of_category Blog.categories$
       </>
     >>
 
-  let body = <:html<
+  (* From a list of Html.t entries, wrap it in the Blog Html.t *)
+  let body_of_entries ents = <:html<
     <div class="left_column_blog">
       <div class="summary_information">
-        $list:entries$
+        $list:ents$
        </>
     </>
     <div class="right_column_blog">
@@ -92,18 +114,70 @@ module Blog = struct
     </>
   >>
 
-  let idx =
+  (* Make a full Html.t including RSS link and headers from a list
+     of Html.t entry fragments *)
+  let html_of_entries title ents =
     let url = sprintf "\"%s/blog/atom.xml\"" Config.baseurl in
     let headers = Htcaml.Html.to_string <:html< 
      <link rel="alternate" type="application/atom+xml" href=$str:url$ /> >> in
-    Template.t ~headers "blog" (Htcaml.Html.to_string body)
+    Template.t ~headers ("blog" ^ (match title with None -> "" |Some x -> " :: " ^ x)) (Htcaml.Html.to_string ents)
+
+  (* Main blog page Html.t fragment with all blog posts *)
+  let main_page =
+    let index_entries = List.sort compare (List.map html_of_ent Blog.entries) in
+    html_of_entries None (body_of_entries index_entries)
+
+  let ent_bodies = Hashtbl.create 1
+  let _ =
+    List.iter (fun ent ->
+      let title = Some ent.subject in
+      let html = body_of_entries [html_of_ent ent] in
+      Hashtbl.add ent_bodies ent.permalink (html_of_entries title html);
+    ) Blog.entries
+
+  let lt1_bodies = Hashtbl.create 1
+  let _ =
+    List.iter (fun (lt1,_) ->
+       let title = Some lt1 in
+       let ents = List.filter (fun e ->
+          let c,_ = e.category in c = lt1
+       ) Blog.entries in
+       let html = body_of_entries (List.map html_of_ent ents) in
+       Hashtbl.add lt1_bodies lt1 (html_of_entries title html);
+    ) Blog.categories
+
+  let lt2_bodies = Hashtbl.create 1
+  let _ =
+    List.iter (fun (lt1,lt2s) ->
+      List.iter (fun lt2 ->
+         let title = Some (lt1 ^ " :: " ^ lt2) in
+         let ents = List.filter (fun e ->
+           let _,c = e.category in c = lt2
+         ) Blog.entries in
+         let html = body_of_entries (List.map html_of_ent ents) in
+         Hashtbl.add lt2_bodies lt2 (html_of_entries title html);
+      ) lt2s
+    ) Blog.categories
 
   let atom_feed = 
     let f = Blog.atom_feed md_xml Blog.entries in
     Atom.string_of_feed f
 
+  let not_found x = sprintf "Not found: %s (known links: %s)"
+     (String.concat " ... " x) 
+     (String.concat " " 
+       (Hashtbl.fold (fun k v a -> k :: a) 
+         ent_bodies []))
+
   let t = function
-   |[] -> idx
-   |["atom.xml"] -> atom_feed
+   | [] -> main_page
+   | ["atom.xml"] -> atom_feed
+   | [x] when permalink_exists x -> Hashtbl.find ent_bodies x
+   | x ->  not_found x
+
+  let tag = function
+   | [lt1] -> (try Hashtbl.find lt1_bodies lt1 with Not_found -> not_found [lt1])
+   | [lt1;lt2] -> (try Hashtbl.find lt2_bodies lt2 with Not_found -> not_found [lt2])
+   
 end
 
