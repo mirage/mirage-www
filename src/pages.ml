@@ -52,6 +52,7 @@ module Blog = struct
     let permalink = sprintf "%s/blog/%s" Config.baseurl e.permalink in
     let year,month,day,hour,minute = e.updated in
     <:html<
+     <div class="blog_entry">
       <div class="entryDate">
        <span class="postMonth">$str:str_of_month month$</>
        <span class="postDay">$int:day$</>
@@ -71,6 +72,7 @@ module Blog = struct
       <div class="blog_entry_body"> $md_file e.body$ 
        <br />
        </>
+     </>
     >>
 
   (* Generate the category bar Html.t fragment *)

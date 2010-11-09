@@ -11,17 +11,18 @@ let escape ibuf =
     |'<' -> add "&lt;"
     |'>' -> add "&gt;"
     |'&' -> add "&amp;"
+    |'#' -> add "&#35;"
     |c -> Buffer.add_char obuf c
   done;
   Buffer.contents obuf
 
 let rec text = function
-    Text t    -> <:html< $str:escape t$ >>
-  | Emph t    -> <:html< <i>$str:escape t$</> >>
-  | Bold t    -> <:html< <b>$str:escape t$</> >>
+    Text t    -> <:html< $str:t$ >>
+  | Emph t    -> <:html< <i>$str:t$</> >>
+  | Bold t    -> <:html< <b>$str:t$</> >>
   | Struck pt -> <:html< <del>$par_text pt$</> >>
-  | Code t    -> <:html< <code>$str:escape t$ </> >>
-  | Link href -> <:html< <a href=$str:quote href.href_target$>$str:escape href.href_desc$</> >>
+  | Code t    -> <:html< <code>$str:t$ </> >>
+  | Link href -> <:html< <a href=$str:quote href.href_target$>$str:href.href_desc$</> >>
   | Anchor a  -> <:html< <a name=$str:quote a$/> >>
   | Image img -> <:html< <img src=$str:quote img.img_src$ alt=$str:quote img.img_alt$/> >>
 
