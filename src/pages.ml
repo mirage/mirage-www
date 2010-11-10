@@ -23,17 +23,17 @@ let col_files l r =
 
 module Index = struct
   let body = col_files "intro.md" "ne.md"
-  let t = Template.t "index" body
+  let t = Template.t "Home" "index" body
 end
 
 module Resources = struct
   let body = col_files "docs.md" "papers.md"
-  let t = Template.t "resources" body
+  let t = Template.t "Resources" "resources" body
 end 
 
 module About = struct
   let body = col_files "status.md" "ne.md"
-  let t = Template.t "about" body
+  let t = Template.t "About" "about" body
 end
 
 module Blog = struct
@@ -122,7 +122,7 @@ module Blog = struct
     let url = sprintf "\"%s/blog/atom.xml\"" Config.baseurl in
     let headers = Htcaml.Html.to_string <:html< 
      <link rel="alternate" type="application/atom+xml" href=$str:url$ /> >> in
-    Template.t ~headers ("blog" ^ (match title with None -> "" |Some x -> " :: " ^ x)) (Htcaml.Html.to_string ents)
+    Template.t ~headers "Blog" ("blog" ^ (match title with None -> "" |Some x -> " :: " ^ x)) (Htcaml.Html.to_string ents)
 
   (* Main blog page Html.t fragment with all blog posts *)
   let main_page =

@@ -15,13 +15,12 @@ let subst_head tos =
   subst_re ~frm:"@@EXTRA_HEAD@@" ~tos
 
 let subst_bar cur =
-  prerr_endline cur;
   let bars = [ "/","Home"; "/blog/","Blog"; 
     "http://github.com/avsm/mirage", "Code";
     "/resources/","Resources"; "/about/","About" ] in
   let tos = String.concat "\n" (List.map (fun (href,title) ->
         sprintf "<li><a%s href=\"%s\">%s</a></li>"
-          (if ("/"^cur)=href then " class=\"current_page\"" else "")
+          (if title=cur then " class=\"current_page\"" else "")
           href title
     ) bars) in
   subst_re ~frm:"@@BAR@@" ~tos
@@ -34,8 +33,8 @@ let subst_file headers url filename title =
   |Some s -> subst headers url title s
   |None -> assert false
 
-let t ?(headers="") title body =
-  let h = subst_file headers "" "header.inc" title in
-  let f = subst_file headers "" "footer.inc" title in
+let t ?(headers="") page title body =
+  let h = subst_file headers page "header.inc" title in
+  let f = subst_file headers page "footer.inc" title in
   h ^ body ^ f
 
