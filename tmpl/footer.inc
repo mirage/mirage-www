@@ -12,6 +12,16 @@
 		</div>
 
 	</div>
+
+<script type="text/javascript">
+var disqus_shortname = 'openmirage';
+(function () {
+  var s = document.createElement('script'); s.async = true;
+  s.src = 'http://disqus.com/forums/openmirage/count.js';
+  (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+
 </body>
 
 </html>

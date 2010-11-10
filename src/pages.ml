@@ -49,7 +49,8 @@ module Blog = struct
     let author = match e.author.Atom.uri with
       |None -> <:html< $str:e.author.Atom.name$ >>
       |Some uri -> <:html< <a href= $str:uri$ > $str:e.author.Atom.name$ </> >> in
-    let permalink = sprintf "%s/blog/%s" Config.baseurl e.permalink in
+    let permalink = sprintf "\"%s/blog/%s\"" Config.baseurl e.permalink in
+    let permalink_disqus = sprintf "\"%s/blog/%s#disqus_thread\"" Config.baseurl e.permalink in
     let year,month,day,hour,minute = e.updated in
     <:html<
      <div class="blog_entry">
@@ -69,9 +70,8 @@ module Blog = struct
           <i> Posted by $author$ </>
         </>
       </>
-      <div class="blog_entry_body"> $md_file e.body$ 
-       <br />
-       </>
+      <div class="blog_entry_body">$md_file e.body$</>
+      <a href=$str:permalink_disqus$>Comments</>
      </>
     >>
 
@@ -94,6 +94,21 @@ module Blog = struct
       $list:l2h$
     >>
 
+  (* The disqus comment *)
+  let disqus_html permalink = 
+    let permalink = "\"" ^ permalink ^ "\"" in
+    <:html<
+      <div id="disqus_thread" />
+      <script type="text/javascript"> 
+        var disqus_identifer = $str:permalink$; 
+        (function() { 
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+           dsq.src = 'http://openmirage.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+         })();
+      </>
+    >>
+
   (* The full right bar in blog *)
   let right_bar =
     let url = sprintf "\"%s/blog/\"" Config.baseurl in
@@ -105,7 +120,11 @@ module Blog = struct
     >>
 
   (* From a list of Html.t entries, wrap it in the Blog Html.t *)
-  let body_of_entries ents = <:html<
+  let body_of_entries ?disqus ents =
+    let dh = match disqus with
+     |Some perm -> disqus_html perm
+     |None -> Htcaml.Html.Nil in
+    <:html<
     <div class="left_column_blog">
       <div class="summary_information">
         $list:ents$
@@ -114,6 +133,7 @@ module Blog = struct
     <div class="right_column_blog">
        $right_bar$
     </>
+    $dh$
   >>
 
   (* Make a full Html.t including RSS link and headers from a list
@@ -133,7 +153,7 @@ module Blog = struct
   let _ =
     List.iter (fun ent ->
       let title = Some ent.subject in
-      let html = body_of_entries [html_of_ent ent] in
+      let html = body_of_entries ~disqus:ent.permalink [html_of_ent ent] in
       Hashtbl.add ent_bodies ent.permalink (html_of_entries title html);
     ) Blog.entries
 
@@ -180,6 +200,7 @@ module Blog = struct
   let tag = function
    | [lt1] -> (try Hashtbl.find lt1_bodies lt1 with Not_found -> not_found [lt1])
    | [lt1;lt2] -> (try Hashtbl.find lt2_bodies lt2 with Not_found -> not_found [lt2])
+   | x -> not_found x
    
 end
 

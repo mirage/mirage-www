@@ -321,6 +321,10 @@ img.float_right { /* Only for images */
   font-size: 1em;
 }
 
+.blog_entry {
+  padding-bottom: 10px;
+}
+
 .blog_bar {
   text-align: right;
   border-right: 1px solid #eee;
