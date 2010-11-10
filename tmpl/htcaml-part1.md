@@ -67,9 +67,10 @@ Next, we can write the code for `val html_of_tweet : tweet -> Html.t`:
 let html_of_tweet t =
    <:html<
       <div class="tweet">
-      <div class="author">$html_of_author t.author$</div>
-      <div class="date">$Date.html_of_date t.date$</div>
-      <div class="contents">$t.contents$</div>
+        <div class="author">$html_of_author t.author$</div>
+        <div class="date">$Date.html_of_date t.date$</div>
+        <div class="contents">$t.contents$</div>
+      </div>
    >>
 }}
 
@@ -126,9 +127,10 @@ to write. Let us consider `html_of_tweet` again:
 let html_of_tweet t =
    <:html<
       <div class="tweet">
-      <div class="author">$html_of_author t.author$</div>
-      <div class="date">$Date.html_of_date t.date$</div>
-      <div class="contents">$t.contents$</div>
+        <div class="author">$html_of_author t.author$</div>
+        <div class="date">$Date.html_of_date t.date$</div>
+        <div class="contents">$t.contents$</div>
+      </div>
    >>
 }}
 
