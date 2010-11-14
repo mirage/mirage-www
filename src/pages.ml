@@ -98,6 +98,7 @@ module Blog = struct
   let disqus_html permalink = 
     let permalink = "\"" ^ permalink ^ "\"" in
     <:html<
+      <div class="blog_entry_comments">
       <div id="disqus_thread" />
       <script type="text/javascript"> 
         var disqus_identifer = $str:permalink$; 
@@ -106,6 +107,7 @@ module Blog = struct
            dsq.src = 'http://openmirage.disqus.com/embed.js';
           (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
          })();
+      </>
       </>
     >>
 

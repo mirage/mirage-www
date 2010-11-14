@@ -347,7 +347,10 @@ img.float_right { /* Only for images */
    margin-left: 1.5em;
 }
 
-.blog_entry_space {
+.blog_entry_comments {
+   float: left;
+   width: 600px;
+   position: relative;
 }
 
 .entryDate { 
