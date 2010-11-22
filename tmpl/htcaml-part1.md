@@ -43,7 +43,7 @@ into an HTML fragment. Let us start with `val html_of_author : author -> Html.t`
 {{
 let html_of_author a =
    <:html<
-      <a href=$str:"\"" ^ a.link ^ "\""$>$str:name$</>
+      <a href=$str:a.link$>$str:name$</a>
    >>
 }}
 
@@ -57,7 +57,7 @@ code above will automatically be expanded by `camlp4` into:
 let html_of_author a =
    Html.Tag ("a",
      Html.Prop(href,
-       Html.String ("\"" ^ a.link ^ "\"")),
+       Html.String a.link),
      Html.String name)
 }}
 
@@ -67,9 +67,10 @@ Next, we can write the code for `val html_of_tweet : tweet -> Html.t`:
 let html_of_tweet t =
    <:html<
       <div class="tweet">
-      <div class="author">$html_of_author t.author$</>
-      <div class="date">$Date.html_of_date t.date$</>
-      <div class="contents">$t.contents$</>
+        <div class="author">$html_of_author t.author$</div>
+        <div class="date">$Date.html_of_date t.date$</div>
+        <div class="contents">$t.contents$</div>
+      </div>
    >>
 }}
 
@@ -87,12 +88,12 @@ let process tweets =
       <html>
         <head>
           <link rel="stylesheet" type="text/css" href="style.css"/>
-        </>
+        </head>
         <body>
           My collection of tweets :
           $list:List.map html_of_tweet tweets$
-        </>
-      </>
+        </body>
+      </html>
     >> in
     let chan = open_out "tweets.html" in
     output_string chan (Html.to_string html);
@@ -126,9 +127,10 @@ to write. Let us consider `html_of_tweet` again:
 let html_of_tweet t =
    <:html<
       <div class="tweet">
-      <div class="author">$html_of_author t.author$</>
-      <div class="date">$Date.html_of_date t.date$</>
-      <div class="contents">$t.contents$</>
+        <div class="author">$html_of_author t.author$</div>
+        <div class="date">$Date.html_of_date t.date$</div>
+        <div class="contents">$t.contents$</div>
+      </div>
    >>
 }}
 
@@ -152,7 +154,7 @@ type author = {
 
 let html_of_author a =
    <:html<
-      <a href=$str:"\"" ^ a.link ^ "\""$>$str:name$</>
+      <a href=$str:a.link$>$str:name$</a>
    >>
 
 type tweet = {

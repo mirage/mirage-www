@@ -15,7 +15,7 @@ let rights = Some "All rights reserved by the author"
 
 let categories = [
   "overview", [
-      "website"; "installation"; "papers"
+      "website"; "usage"; "papers"
   ];
   "language", [
       "syntax"; "dyntype"
@@ -35,6 +35,14 @@ let categories = [
 ]
 
 let entries = [
+  { updated=2010,11,10,11,0;
+    author=anil;
+    subject="Source code layout";
+    body="repo-layout.md";
+    permalink="source-code-layout";
+    category="overview","usage";
+  };
+
   { updated=2010,10,11,15,0;
     author=anil;
     subject="Self-hosting Mirage website";

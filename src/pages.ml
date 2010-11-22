@@ -23,17 +23,17 @@ let col_files l r =
 
 module Index = struct
   let body = col_files "intro.md" "ne.md"
-  let t = Template.t "index" body
+  let t = Template.t "Home" "index" body
 end
 
 module Resources = struct
   let body = col_files "docs.md" "papers.md"
-  let t = Template.t "resources" body
+  let t = Template.t "Resources" "resources" body
 end 
 
 module About = struct
   let body = col_files "status.md" "ne.md"
-  let t = Template.t "about" body
+  let t = Template.t "About" "about" body
 end
 
 module Blog = struct
@@ -48,10 +48,12 @@ module Blog = struct
   let html_of_ent e =
     let author = match e.author.Atom.uri with
       |None -> <:html< $str:e.author.Atom.name$ >>
-      |Some uri -> <:html< <a href= $str:uri$ > $str:e.author.Atom.name$ </a> >> in
-    let permalink = sprintf "%s/blog/%s" Config.baseurl e.permalink in
+      |Some uri -> <:html< <a href= $str:uri$>$str:e.author.Atom.name$</a> >> in
+    let permalink = sprintf "\"%s/blog/%s\"" Config.baseurl e.permalink in
+    let permalink_disqus = sprintf "\"%s/blog/%s#disqus_thread\"" Config.baseurl e.permalink in
     let year,month,day,hour,minute = e.updated in
     <:html<
+     <div class="blog_entry">
       <div class="entryDate">
        <span class="postMonth">$str:str_of_month month$</span>
        <span class="postDay">$int:day$</span>
@@ -65,12 +67,12 @@ module Blog = struct
          </a>
         </div>
         <div class="blog_entry_info">
-          <i> Posted by $author$ </i>
+          <i>Posted by $author$</i>
         </div>
       </div>
-      <div class="blog_entry_body"> $md_file e.body$ 
-       <br />
-       </div>
+      <div class="blog_entry_body">$md_file e.body$</div>
+      <a href=$str:permalink_disqus$>Comments</a>
+     </div>
     >>
 
   (* Generate the category bar Html.t fragment *)
@@ -92,6 +94,21 @@ module Blog = struct
       $list:l2h$
     >>
 
+  (* The disqus comment *)
+  let disqus_html permalink = 
+    let permalink = "\"" ^ permalink ^ "\"" in
+    <:html<
+      <div id="disqus_thread"/>
+      <script type="text/javascript"> 
+        var disqus_identifer = $str:permalink$; 
+        (function() { 
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+           dsq.src = 'http://openmirage.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+         })();
+      </script>
+    >>
+
   (* The full right bar in blog *)
   let right_bar =
     let url = sprintf "\"%s/blog/\"" Config.baseurl in
@@ -103,7 +120,11 @@ module Blog = struct
     >>
 
   (* From a list of Html.t entries, wrap it in the Blog Html.t *)
-  let body_of_entries ents = <:html<
+  let body_of_entries ?disqus ents =
+    let dh = match disqus with
+     |Some perm -> disqus_html perm
+     |None -> <:html< >> in
+    <:html<
     <div class="left_column_blog">
       <div class="summary_information">
         $list:ents$
@@ -112,6 +133,7 @@ module Blog = struct
     <div class="right_column_blog">
        $right_bar$
     </div>
+    $dh$
   >>
 
   (* Make a full Html.t including RSS link and headers from a list
@@ -120,7 +142,7 @@ module Blog = struct
     let url = sprintf "\"%s/blog/atom.xml\"" Config.baseurl in
     let headers = Html.to_string <:html< 
      <link rel="alternate" type="application/atom+xml" href=$str:url$ /> >> in
-    Template.t ~headers ("blog" ^ (match title with None -> "" |Some x -> " :: " ^ x)) (Html.to_string ents)
+    Template.t ~headers "Blog" ("blog" ^ (match title with None -> "" |Some x -> " :: " ^ x)) (Html.to_string ents)
 
   (* Main blog page Html.t fragment with all blog posts *)
   let main_page =
@@ -131,7 +153,7 @@ module Blog = struct
   let _ =
     List.iter (fun ent ->
       let title = Some ent.subject in
-      let html = body_of_entries [html_of_ent ent] in
+      let html = body_of_entries ~disqus:ent.permalink [html_of_ent ent] in
       Hashtbl.add ent_bodies ent.permalink (html_of_entries title html);
     ) Blog.entries
 
@@ -178,6 +200,7 @@ module Blog = struct
   let tag = function
    | [lt1] -> (try Hashtbl.find lt1_bodies lt1 with Not_found -> not_found [lt1])
    | [lt1;lt2] -> (try Hashtbl.find lt2_bodies lt2 with Not_found -> not_found [lt2])
+   | x -> not_found x
    
 end
 

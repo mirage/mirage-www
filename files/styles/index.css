@@ -170,13 +170,13 @@ a#logo img {
 
 .left_column {
   float: left;
-  width: 470px;
+  width: 475px;
   text-align: justify;
 }
 
 .right_column {
   float: right;
-  width: 470px;
+  width: 475px;
 }
 
 .float_left {
@@ -284,22 +284,13 @@ img.float_right { /* Only for images */
   padding: 4px 10px 4px 15px;
 }
 
-
-.first_column {
-  margin: 5px 11px 0px 0px;
-}
-
-.last_column {
-  margin: 5px 0px 0px 1px;
-}
-
 .impl_red    { background-color: #FE9696; }
 .impl_orange { background-color: #FDC086; }
 .impl_green  { background-color: #B0ECB0; }
 
 .left_column_blog {
   float: left;
-  width: 800px;
+  width: 840px;
   border-left: 1px solid #eee;
   padding-left: 5px;
 }
@@ -328,6 +319,10 @@ img.float_right { /* Only for images */
 .blog_entry_body {
   margin-left: 6px;
   font-size: 1em;
+}
+
+.blog_entry {
+  padding-bottom: 10px;
 }
 
 .blog_bar {
