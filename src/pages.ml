@@ -9,17 +9,17 @@ let md_file f =
   Markdown_html.t md
 
 let md_xml f =
-  let ibuf = Htcaml.Html.to_string (md_file f) in
+  let ibuf = Html.to_string (md_file f) in
   ibuf
  
 let col_files l r = 
   let h = <:html< 
      <div class="left_column">
-       <div class="summary_information"> $md_file l$ </>
-     </>
-     <div class="right_column"> $md_file r$ </>
+       <div class="summary_information"> $md_file l$ </div>
+     </div>
+     <div class="right_column"> $md_file r$ </div>
   >> in 
-  Htcaml.Html.to_string h 
+  Html.to_string h 
 
 module Index = struct
   let body = col_files "intro.md" "ne.md"
@@ -48,45 +48,45 @@ module Blog = struct
   let html_of_ent e =
     let author = match e.author.Atom.uri with
       |None -> <:html< $str:e.author.Atom.name$ >>
-      |Some uri -> <:html< <a href= $str:uri$ > $str:e.author.Atom.name$ </> >> in
+      |Some uri -> <:html< <a href= $str:uri$ > $str:e.author.Atom.name$ </a> >> in
     let permalink = sprintf "%s/blog/%s" Config.baseurl e.permalink in
     let year,month,day,hour,minute = e.updated in
     <:html<
       <div class="entryDate">
-       <span class="postMonth">$str:str_of_month month$</>
-       <span class="postDay">$int:day$</>
-       <span class="postYear">$int:year$</>
-      </>
+       <span class="postMonth">$str:str_of_month month$</span>
+       <span class="postDay">$int:day$</span>
+       <span class="postYear">$int:year$</span>
+      </div>
 
       <div class="blog_entry_heading">
         <div class="blog_entry_title">
          <a href=$str:permalink$>
           $str:e.subject$
-         </>
-        </>
+         </a>
+        </div>
         <div class="blog_entry_info">
-          <i> Posted by $author$ </>
-        </>
-      </>
+          <i> Posted by $author$ </i>
+        </div>
+      </div>
       <div class="blog_entry_body"> $md_file e.body$ 
        <br />
-       </>
+       </div>
     >>
 
   (* Generate the category bar Html.t fragment *)
   let html_of_category (l1, l2l) =
     let l2h = List.map (fun l2 ->
        match Blog.num_l2_categories l1 l2 with 
-       |0 -> <:html< <div class="blog_bar_l2">$str:l2$</> >>
+       |0 -> <:html< <div class="blog_bar_l2">$str:l2$</div> >>
        |nl2 ->
-         let num = <:html< <i>$str:sprintf "(%d)" nl2$</> >> in
+         let num = <:html< <i>$str:sprintf "(%d)" nl2$</i> >> in
          let url = sprintf "\"%s/tag/%s/%s\"" Config.baseurl l1 l2 in
-         <:html< <div class="blog_bar_l2"><a href=$str:url$>$str:l2$</>$num$</> >>
+         <:html< <div class="blog_bar_l2"><a href=$str:url$>$str:l2$</a>$num$</div> >>
     ) l2l in
     let url = sprintf "\"%s/tag/%s\"" Config.baseurl l1 in
     let l1h = match Blog.num_l1_categories l1 with
-    | 0 -> <:html< <div class="blog_bar_l1">$str:l1$</> >>
-    | nl1 -> <:html< <div class="blog_bar_l1"><a href=$str:url$>$str:l1$</></> >> in
+    | 0 -> <:html< <div class="blog_bar_l1">$str:l1$</div> >>
+    | nl1 -> <:html< <div class="blog_bar_l1"><a href=$str:url$>$str:l1$</a></div> >> in
     <:html<
       $l1h$
       $list:l2h$
@@ -97,9 +97,9 @@ module Blog = struct
     let url = sprintf "\"%s/blog/\"" Config.baseurl in
     <:html<
       <div class="blog_bar">
-        <div class="blog_bar_l0"><a href=$str:url$>Index</></>
+        <div class="blog_bar_l0"><a href=$str:url$>Index</a></div>
          $list:List.map html_of_category Blog.categories$
-      </>
+      </div>
     >>
 
   (* From a list of Html.t entries, wrap it in the Blog Html.t *)
@@ -107,20 +107,20 @@ module Blog = struct
     <div class="left_column_blog">
       <div class="summary_information">
         $list:ents$
-       </>
-    </>
+       </div>
+    </div>
     <div class="right_column_blog">
        $right_bar$
-    </>
+    </div>
   >>
 
   (* Make a full Html.t including RSS link and headers from a list
      of Html.t entry fragments *)
   let html_of_entries title ents =
     let url = sprintf "\"%s/blog/atom.xml\"" Config.baseurl in
-    let headers = Htcaml.Html.to_string <:html< 
+    let headers = Html.to_string <:html< 
      <link rel="alternate" type="application/atom+xml" href=$str:url$ /> >> in
-    Template.t ~headers ("blog" ^ (match title with None -> "" |Some x -> " :: " ^ x)) (Htcaml.Html.to_string ents)
+    Template.t ~headers ("blog" ^ (match title with None -> "" |Some x -> " :: " ^ x)) (Html.to_string ents)
 
   (* Main blog page Html.t fragment with all blog posts *)
   let main_page =
