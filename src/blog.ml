@@ -4,7 +4,7 @@ type ent = {
   updated: int * int * int * int * int; (* year,month,day,hour,min *)
   author: Atom.author;
   subject: string;
-  category: string * string; (* category, subcategory, see list of them below *)
+  category: (string * string) list; (* category, subcategory, see list of them below *)
   body: string;
   permalink: string;
 }
@@ -35,42 +35,64 @@ let categories = [
 ]
 
 let entries = [
+  { updated=2010,11,13,18,10;
+    author=anil;
+    subject="Developing the Mirage networking stack on UNIX";
+    body="net-unix.md";
+    permalink="running-ethernet-stack-on-unix";
+    category=["overview","usage"; "backend","unix"];
+  };
+
   { updated=2010,11,10,11,0;
     author=anil;
     subject="Source code layout";
     body="repo-layout.md";
     permalink="source-code-layout";
-    category="overview","usage";
+    category=["overview","usage"];
   };
-
+  { 
+    updated=2010,11,4,16,30;
+    author=thomas;
+    subject="A (quick) introduction to HTCaML";
+    category=["language","syntax"];
+    body="htcaml-part1.md";
+    permalink="introduction-to-htcaml";
+  };
   { updated=2010,10,11,15,0;
     author=anil;
     subject="Self-hosting Mirage website";
     body="blog-welcome.md";
     permalink="self-hosting-mirage-website";
-    category="overview","website";
-  };
-
-  { 
-    updated=2010,11,4,16,30;
-    author=thomas;
-    subject="A (quick) introduction to HTCaML";
-    category="language","syntax";
-    body="htcaml-part1.md";
-    permalink="introduction-to-htcaml";
+    category=["overview","website"];
   };
 ]
 
+let cmp_entry a b =
+  let cmp_up (yr1,mn1,da1,_,_) (yr2,mn2,da2,_,_) =
+    match yr1 - yr2 with
+    | 0 ->
+       (match mn1 - mn2 with
+        | 0 -> da1 - da2
+        | n -> n
+       )
+    | n -> n in
+  cmp_up a.updated b.updated
+
+let entries = List.rev (List.sort cmp_entry entries)
+let _ = List.iter (fun x -> Printf.printf "ENT: %s\n%!" x.subject) entries
+
 let num_l1_categories l1 =
   List.fold_left (fun a e ->
-    let l1',_ = e.category in
-    if l1' = l1 then a+1 else a
+    List.fold_left (fun a (l1',_) ->
+      if l1' = l1 then a+1 else a
+    ) 0 e.category + a
   ) 0 entries
 
 let num_l2_categories l1 l2 =
   List.fold_left (fun a e ->
-    let l1',l2' = e.category in
-    if l1'=l1 && l2'=l2 then a+1 else a
+    List.fold_left (fun a (l1',l2') ->
+      if l1'=l1 && l2'=l2 then a+1 else a
+    ) 0 e.category + a
   ) 0 entries
 
 let permalink e =
@@ -86,7 +108,7 @@ let atom_entry_of_ent filefn e =
   { Atom.entry=meta; summary=`Empty; content }
   
 let atom_feed filefn es = 
-  let es = List.rev (List.sort compare es) in
+  let es = List.rev (List.sort cmp_entry es) in
   let updated = (List.hd es).updated in
   let id = sprintf "%s/blog/" Config.baseurl in
   let title = `Text "openmirage blog" in

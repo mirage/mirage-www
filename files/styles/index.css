@@ -107,6 +107,10 @@ a#logo img {
   padding-bottom: 10px;
 }
 
+#content code {
+  font-size: 110%;
+}
+
 #content h2 {
   color: #222;
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
@@ -291,8 +295,6 @@ img.float_right { /* Only for images */
 .left_column_blog {
   float: left;
   width: 840px;
-  border-left: 1px solid #eee;
-  padding-left: 5px;
 }
 
 .right_column_blog {
@@ -322,7 +324,7 @@ img.float_right { /* Only for images */
 }
 
 .blog_entry {
-  padding-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .blog_bar {
@@ -345,7 +347,10 @@ img.float_right { /* Only for images */
    margin-left: 1.5em;
 }
 
-.blog_entry_space {
+.blog_entry_comments {
+   float: left;
+   width: 600px;
+   position: relative;
 }
 
 .entryDate { 

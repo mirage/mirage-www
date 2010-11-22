@@ -98,6 +98,7 @@ module Blog = struct
   let disqus_html permalink = 
     let permalink = "\"" ^ permalink ^ "\"" in
     <:html<
+      <div class="blog_entry_comments">
       <div id="disqus_thread"/>
       <script type="text/javascript"> 
         var disqus_identifer = $str:permalink$; 
@@ -107,6 +108,7 @@ module Blog = struct
           (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
          })();
       </script>
+      </div>
     >>
 
   (* The full right bar in blog *)
@@ -146,7 +148,7 @@ module Blog = struct
 
   (* Main blog page Html.t fragment with all blog posts *)
   let main_page =
-    let index_entries = List.sort compare (List.map html_of_ent Blog.entries) in
+    let index_entries = List.map html_of_ent Blog.entries in
     html_of_entries None (body_of_entries index_entries)
 
   let ent_bodies = Hashtbl.create 1
@@ -162,7 +164,7 @@ module Blog = struct
     List.iter (fun (lt1,_) ->
        let title = Some lt1 in
        let ents = List.filter (fun e ->
-          let c,_ = e.category in c = lt1
+         List.exists (fun (c,_) -> c=lt1) e.category
        ) Blog.entries in
        let html = body_of_entries (List.map html_of_ent ents) in
        Hashtbl.add lt1_bodies lt1 (html_of_entries title html);
@@ -174,7 +176,7 @@ module Blog = struct
       List.iter (fun lt2 ->
          let title = Some (lt1 ^ " :: " ^ lt2) in
          let ents = List.filter (fun e ->
-           let _,c = e.category in c = lt2
+           List.exists (fun (_,c) -> c = lt2) e.category
          ) Blog.entries in
          let html = body_of_entries (List.map html_of_ent ents) in
          Hashtbl.add lt2_bodies lt2 (html_of_entries title html);
