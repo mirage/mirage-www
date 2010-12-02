@@ -2,6 +2,7 @@ open Printf
 open Http
 open Log
 open Lwt
+open Cow
 
 let md_file f =
   let f = match Filesystem_templates.t f with |Some x -> x |None -> "" in
