@@ -7,7 +7,7 @@ open Cow
 let md_file f =
   let f = match Filesystem_templates.t f with |Some x -> x |None -> "" in
   let md = Markdown.of_string f in
-  Markdown.html_of_t md
+  Markdown.to_html md
  
 let col_files l r : Html.t = <:html< 
   <div class="left_column">
