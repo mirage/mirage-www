@@ -9,11 +9,25 @@ let md_file f =
   let md = Markdown.of_string f in
   Markdown.to_html md
  
+let html_file f =
+  let f = match Filesystem_templates.t f with |Some x -> x |None -> "" in
+  Html.of_string f
+
+let read_file f =
+  let suffix =
+    try let n = String.rindex f '.' in
+        String.sub f (n+1) (String.length f - n - 1)
+    with _ -> "" in
+  match suffix with
+    | "md"   -> md_file f
+    | "html" -> html_file f
+    | _      -> []
+
 let col_files l r : Html.t = <:html< 
   <div class="left_column">
-    <div class="summary_information"> $md_file l$ </div>
+    <div class="summary_information"> $read_file l$ </div>
   </div>
-  <div class="right_column"> $md_file r$ </div>
+  <div class="right_column"> $read_file r$ </div>
 >>
 
 module Index = struct
@@ -22,12 +36,12 @@ module Index = struct
 end
 
 module Resources = struct
-  let body = col_files "docs.md" "papers.md"
+  let body = col_files "docs.md" "papers.html"
   let t = Html.to_string (Template.t "Resources" "ressources" body)
 end 
 
 module About = struct
-  let body = col_files "status.md" "ne.md"
+  let body = col_files "status.html" "ne.md"
   let t = Html.to_string (Template.t "About" "about" body)
 end
 
@@ -65,7 +79,7 @@ module Blog = struct
           <i>Posted by $author$</i>
         </div>
       </div>
-      <div class="blog_entry_body">$md_file e.body$</div>
+      <div class="blog_entry_body">$read_file e.body$</div>
       <a href=$str:permalink_disqus$>Comments</a>
      </div>
     >>
@@ -179,7 +193,7 @@ module Blog = struct
     ) Blog.categories
 
   let atom_feed = 
-    let f = Blog.atom_feed md_file Blog.entries in
+    let f = Blog.atom_feed read_file Blog.entries in
     Atom.xml_of_feed f
 
   let not_found x =
