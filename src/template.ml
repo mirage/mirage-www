@@ -1,40 +1,29 @@
-open Lwt
 open Printf
+open Cow
 
-let subst_re ~frm ~tos s =
-  let rex = Str.regexp_string frm in
-  Str.global_replace rex tos s
-  
-let subst_url =
-  subst_re ~frm:"@@URL@@" ~tos:Config.baseurl
-
-let subst_title tos =
-  subst_re ~frm:"@@TITLE@@" ~tos
-
-let subst_head tos =
-  subst_re ~frm:"@@EXTRA_HEAD@@" ~tos
-
-let subst_bar cur =
-  let bars = [ "/","Home"; "/blog/","Blog"; 
+let bar cur =
+  let bars = [
+    "/","Home";
+    "/blog/","Blog"; 
     "http://github.com/avsm/mirage", "Code";
-    "/resources/","Resources"; "/about/","About" ] in
-  let tos = String.concat "\n" (List.map (fun (href,title) ->
-        sprintf "<li><a%s href=\"%s\">%s</a></li>"
-          (if title=cur then " class=\"current_page\"" else "")
-          href title
-    ) bars) in
-  subst_re ~frm:"@@BAR@@" ~tos
+    "/resources/","Resources";
+    "/about/","About"
+  ] in
+  let one (href, title) =
+    if title=cur then
+      <:html<
+        <li class="current_page">
+          <a href=$str:href$>$str:title$</a>
+        </li>
+      >>
+    else
+      <:html<
+        <li><a href=$str:href$>$str:title$</a></li>
+      >> in
+  <:html< <ul>$list:List.map one bars$</ul> >>
 
-let subst headers url title body =
-  subst_bar url (subst_head headers (subst_title title (subst_url body)))
+let t ?(extra_header : Html.t = []) title page content =
+  let main_html = Filesystem_templates.t "main.html" in
+  <:html< $raw:main_html$ >>
 
-let subst_file headers url filename title =
-  match Filesystem_templates.t filename with
-  |Some s -> subst headers url title s
-  |None -> assert false
-
-let t ?(headers="") page title body =
-  let h = subst_file headers page "header.inc" title in
-  let f = subst_file headers page "footer.inc" title in
-  h ^ body ^ f
 

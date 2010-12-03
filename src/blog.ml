@@ -68,18 +68,9 @@ let entries = [
   };
 ]
 
-let cmp_entry a b =
-  let cmp_up (yr1,mn1,da1,_,_) (yr2,mn2,da2,_,_) =
-    match yr1 - yr2 with
-    | 0 ->
-       (match mn1 - mn2 with
-        | 0 -> da1 - da2
-        | n -> n
-       )
-    | n -> n in
-  cmp_up a.updated b.updated
+let cmp_ent a b = Atom.compare a.updated b.updated
 
-let entries = List.rev (List.sort cmp_entry entries)
+let entries = List.rev (List.sort cmp_ent entries)
 let _ = List.iter (fun x -> Printf.printf "ENT: %s\n%!" x.subject) entries
 
 let num_l1_categories l1 =
@@ -102,18 +93,18 @@ let permalink e =
 let permalink_exists x = List.exists (fun e -> e.permalink = x) entries
 
 let atom_entry_of_ent filefn e =
-  let meta = { Atom.id=permalink e; title=`Text e.subject;
-    subtitle=`Empty; author=Some e.author; contributors=[];
+  let meta = { Atom.id=permalink e; title=e.subject;
+    subtitle=None; author=Some e.author; contributors=[];
     updated=e.updated; rights } in
-  let content = `XML (filefn e.body) in
-  { Atom.entry=meta; summary=`Empty; content }
+  let content = filefn e.body in
+  { Atom.entry=meta; summary=None; content }
   
 let atom_feed filefn es = 
-  let es = List.rev (List.sort cmp_entry es) in
+  let es = List.rev (List.sort cmp_ent es) in
   let updated = (List.hd es).updated in
   let id = sprintf "%s/blog/" Config.baseurl in
-  let title = `Text "openmirage blog" in
-  let subtitle = `Text "a cloud operating system" in
+  let title = "openmirage blog" in
+  let subtitle = Some "a cloud operating system" in
   let author = Some anil in
   let contributors = [ anil; thomas ] in
   let feed = { Atom.id; title; subtitle; author; contributors; rights; updated } in

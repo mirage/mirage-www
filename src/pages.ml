@@ -6,35 +6,29 @@ open Cow
 
 let md_file f =
   let f = match Filesystem_templates.t f with |Some x -> x |None -> "" in
-  let md = Markdown.parse_text f in
-  Markdown_html.t md
-
-let md_xml f =
-  let ibuf = Html.to_string (md_file f) in
-  ibuf
+  let md = Markdown.of_string f in
+  Markdown.html_of_t md
  
-let col_files l r = 
-  let h = <:html< 
-     <div class="left_column">
-       <div class="summary_information"> $md_file l$ </div>
-     </div>
-     <div class="right_column"> $md_file r$ </div>
-  >> in 
-  Html.to_string h 
+let col_files l r : Html.t = <:html< 
+  <div class="left_column">
+    <div class="summary_information"> $md_file l$ </div>
+  </div>
+  <div class="right_column"> $md_file r$ </div>
+>>
 
 module Index = struct
   let body = col_files "intro.md" "ne.md"
-  let t = Template.t "Home" "index" body
+  let t = Html.to_string (Template.t "Home" "home" body)
 end
 
 module Resources = struct
   let body = col_files "docs.md" "papers.md"
-  let t = Template.t "Resources" "resources" body
+  let t = Html.to_string (Template.t "Resources" "ressources" body)
 end 
 
 module About = struct
   let body = col_files "status.md" "ne.md"
-  let t = Template.t "About" "about" body
+  let t = Html.to_string (Template.t "About" "about" body)
 end
 
 module Blog = struct
@@ -142,10 +136,11 @@ module Blog = struct
   (* Make a full Html.t including RSS link and headers from a list
      of Html.t entry fragments *)
   let html_of_entries title ents =
-    let url = sprintf "\"%s/blog/atom.xml\"" Config.baseurl in
-    let headers = Html.to_string <:html< 
-     <link rel="alternate" type="application/atom+xml" href=$str:url$ /> >> in
-    Template.t ~headers "Blog" ("blog" ^ (match title with None -> "" |Some x -> " :: " ^ x)) (Html.to_string ents)
+    let url = sprintf "%s/blog/atom.xml" Config.baseurl in
+    let extra_header = <:html< 
+     <link rel="alternate" type="application/atom+xml" href=$str:url$ />
+    >> in
+    Template.t ~extra_header "Blog" ("blog" ^ (match title with None -> "" |Some x -> " :: " ^ x)) ents
 
   (* Main blog page Html.t fragment with all blog posts *)
   let main_page =
@@ -185,25 +180,30 @@ module Blog = struct
     ) Blog.categories
 
   let atom_feed = 
-    let f = Blog.atom_feed md_xml Blog.entries in
-    Atom.string_of_feed f
+    let f = Blog.atom_feed md_file Blog.entries in
+    Atom.xml_of_feed f
 
-  let not_found x = sprintf "Not found: %s (known links: %s)"
-     (String.concat " ... " x) 
-     (String.concat " " 
-       (Hashtbl.fold (fun k v a -> k :: a) 
-         ent_bodies []))
+  let not_found x =
+    let str = sprintf "Not found: %s (known links: %s)"
+      (String.concat " ... " x) 
+      (String.concat " " 
+         (Hashtbl.fold (fun k v a -> k :: a) 
+            ent_bodies [])) in
+    <:html< $str:str$ >>
 
-  let t = function
-   | [] -> main_page
-   | ["atom.xml"] -> atom_feed
-   | [x] when permalink_exists x -> Hashtbl.find ent_bodies x
-   | x ->  not_found x
+  let t path =
+    let xml = match path with
+      | []                          -> main_page
+      | ["atom.xml"]                -> atom_feed
+      | [x] when permalink_exists x -> Hashtbl.find ent_bodies x
+      | x                           -> not_found x in
+    Xml.to_string xml
 
-  let tag = function
-   | [lt1] -> (try Hashtbl.find lt1_bodies lt1 with Not_found -> not_found [lt1])
-   | [lt1;lt2] -> (try Hashtbl.find lt2_bodies lt2 with Not_found -> not_found [lt2])
-   | x -> not_found x
-   
+  let tag path =
+    let xml = match path with
+      | [lt1]     -> (try Hashtbl.find lt1_bodies lt1 with Not_found -> not_found [lt1])
+      | [lt1;lt2] -> (try Hashtbl.find lt2_bodies lt2 with Not_found -> not_found [lt2])
+      | x         -> not_found x in
+   Xml.to_string xml
 end
 
