@@ -9,7 +9,7 @@ filesystem_templates.ml: ../tmpl/*
 	mlcrunch ../tmpl > $@
 
 bin: filesystem_static.ml filesystem_templates.ml
-	mir mirage-www.unix
+	mir-unix mirage-www.bin
 
 .PHONY:clean
 clean:
