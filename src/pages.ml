@@ -44,8 +44,8 @@ module Blog = struct
     let author = match e.author.Atom.uri with
       |None -> <:html< $str:e.author.Atom.name$ >>
       |Some uri -> <:html< <a href= $str:uri$>$str:e.author.Atom.name$</a> >> in
-    let permalink = sprintf "\"%s/blog/%s\"" Config.baseurl e.permalink in
-    let permalink_disqus = sprintf "\"%s/blog/%s#disqus_thread\"" Config.baseurl e.permalink in
+    let permalink = sprintf "%s/blog/%s" Config.baseurl e.permalink in
+    let permalink_disqus = sprintf "%s/blog/%s#disqus_thread" Config.baseurl e.permalink in
     let year,month,day,hour,minute = e.updated in
     <:html<
      <div class="blog_entry">
@@ -77,10 +77,10 @@ module Blog = struct
        |0 -> <:html< <div class="blog_bar_l2">$str:l2$</div> >>
        |nl2 ->
          let num = <:html< <i>$str:sprintf "(%d)" nl2$</i> >> in
-         let url = sprintf "\"%s/tag/%s/%s\"" Config.baseurl l1 l2 in
+         let url = sprintf "%s/tag/%s/%s" Config.baseurl l1 l2 in
          <:html< <div class="blog_bar_l2"><a href=$str:url$>$str:l2$</a>$num$</div> >>
     ) l2l in
-    let url = sprintf "\"%s/tag/%s\"" Config.baseurl l1 in
+    let url = sprintf "%s/tag/%s" Config.baseurl l1 in
     let l1h = match Blog.num_l1_categories l1 with
     | 0 -> <:html< <div class="blog_bar_l1">$str:l1$</div> >>
     | nl1 -> <:html< <div class="blog_bar_l1"><a href=$str:url$>$str:l1$</a></div> >> in
@@ -91,7 +91,6 @@ module Blog = struct
 
   (* The disqus comment *)
   let disqus_html permalink = 
-    let permalink = "\"" ^ permalink ^ "\"" in
     <:html<
       <div class="blog_entry_comments">
       <div id="disqus_thread"/>
@@ -108,7 +107,7 @@ module Blog = struct
 
   (* The full right bar in blog *)
   let right_bar =
-    let url = sprintf "\"%s/blog/\"" Config.baseurl in
+    let url = sprintf "%s/blog/" Config.baseurl in
     <:html<
       <div class="blog_bar">
         <div class="blog_bar_l0"><a href=$str:url$>Index</a></div>

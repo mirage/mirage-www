@@ -22,8 +22,18 @@ let bar cur =
       >> in
   <:html< <ul>$list:List.map one bars$</ul> >>
 
-let t ?(extra_header : Html.t = []) title page content =
-  let main_html = Filesystem_templates.t "main.html" in
-  <:html< $raw:main_html$ >>
+let t ?extra_header title page content =
+  match Filesystem_templates.t "main.html" with
+    | Some main_html ->
+      let templates = [
+        "TITLE"       , <:html< $str:title$ >>;
+        "BAR"         , <:html< $bar title$ >>;
+        "EXTRA_HEADER", <:html< $opt:extra_header$ >>;
+        "CONTENT"     , <:html< $content$ >>;
+      ] in
+      Html.of_string ~templates main_html
+    | None ->
+      Printf.eprintf "[ERROR] Cannot find tmp/main.html\n";
+      assert false
 
 
