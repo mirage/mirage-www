@@ -209,12 +209,12 @@ module Blog = struct
     <:html< $str:str$ >>
 
   let t path =
-    let xml = match path with
-      | []                          -> main_page
-      | ["atom.xml"]                -> atom_feed
-      | [x] when permalink_exists x -> Hashtbl.find ent_bodies x
-      | x                           -> not_found x in
-    Xml.to_string xml
+    let h,xml = match path with
+      | []                          -> [], main_page
+      | ["atom.xml"]                -> ["content-type","application/atom+xml; charset=UTF-8"], atom_feed
+      | [x] when permalink_exists x -> [], (Hashtbl.find ent_bodies x)
+      | x                           -> [], not_found x in
+    h, (Xml.to_string xml)
 
   let tag path =
     let xml = match path with
