@@ -13,8 +13,8 @@ type author = string
 let html_of_authors al =
   match List.rev al with
     | []   -> assert false
-    | [a]  -> <:html< $str:a$ >>
-    | a::t -> <:html< $str:String.concat ", " (List.rev t)$ and $str:a$ >>
+    | [a]  -> <:html<$str:a$&>>
+    | a::t -> <:html<$str:String.concat ", " (List.rev t)$ and $str:a$&>>
 
 type paper = {
   name : string;
