@@ -11,7 +11,9 @@ let md_file f =
  
 let html_file f =
   let f = match Filesystem_templates.t f with |Some x -> x |None -> "" in
-  Html.of_string f
+  <:html< <div class="post">
+            $Html.of_string f$
+          </div> >>
 
 let read_file f =
   let suffix =
@@ -23,25 +25,27 @@ let read_file f =
     | "html" -> html_file f
     | _      -> []
 
-let col_files l r : Html.t = <:html< 
+let col_files l r = <:html< 
   <div class="left_column">
-    <div class="summary_information"> $read_file l$ </div>
+    <div class="summary_information"> $l$ </div>
   </div>
-  <div class="right_column"> $read_file r$ </div>
+  <div class="right_column"> $r$ </div>
 >>
 
+let none : Html.t = []
+
 module Index = struct
-  let body = col_files "intro.md" "ne.md"
+  let body = col_files (read_file "intro.md") none
   let t = Html.to_string (Template.t "Home" "home" body)
 end
 
 module Resources = struct
-  let body = col_files "docs.md" "papers.html"
+  let body = col_files (read_file "docs.md") Paper.html
   let t = Html.to_string (Template.t "Resources" "ressources" body)
 end 
 
 module About = struct
-  let body = col_files "status.html" "ne.md"
+  let body = col_files (read_file "status.html") none
   let t = Html.to_string (Template.t "About" "about" body)
 end
 

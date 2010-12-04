@@ -12,9 +12,7 @@ let bar cur =
   let one (href, title) =
     if title=cur then
       <:html<
-        <li class="current_page">
-          <a href=$str:href$>$str:title$</a>
-        </li>
+        <li><a class="current_page" href=$str:href$>$str:title$</a></li>
       >>
     else
       <:html<
@@ -35,5 +33,6 @@ let t ?extra_header title page content =
     | None ->
       Printf.eprintf "[ERROR] Cannot find tmp/main.html\n";
       assert false
+
 
 
