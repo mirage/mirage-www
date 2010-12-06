@@ -7,9 +7,8 @@ open Cow
 module Resp = struct
 
   (* dynamic response *)
-  let dyn req body =
+  let dyn ?(headers=[]) req body =
     let status = `OK in
-    let headers = [] in
     Http_daemon.respond ~body ~headers ~status ()
 
   (* dispatch non-file URLs *)
@@ -17,7 +16,9 @@ module Resp = struct
     | [] | "index.html" :: [] -> dyn req Pages.Index.t
     | "resources" :: [] -> dyn req Pages.Resources.t
     | "about" :: [] -> dyn req Pages.About.t
-    | "blog" :: tl -> dyn req (Pages.Blog.t tl)
+    | "blog" :: tl -> 
+        let headers, t = Pages.Blog.t tl in
+        dyn ~headers req t
     | "tag" :: tl -> dyn req (Pages.Blog.tag tl)
     | "styles" :: "index.css" :: [] -> dyn req Style.t
     | x -> (Http_daemon.respond_not_found ~url:(Http_request.path req) ())

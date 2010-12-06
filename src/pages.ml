@@ -124,10 +124,10 @@ module Blog = struct
             ent_bodies []))
 
   let t = function
-    | []                          -> main_page
-    | ["atom.xml"]                -> atom_feed
-    | [x] when permalink_exists x -> Hashtbl.find ent_bodies x
-    | x                           -> not_found x
+    | []                          -> [], main_page
+    | ["atom.xml"]                -> ["content-type","application/atom+xml; charset=UTF-8"], atom_feed
+    | [x] when permalink_exists x -> [], (Hashtbl.find ent_bodies x)
+    | x                           -> [], not_found x
 
   let tag = function
     | [lt1]     -> (try Hashtbl.find lt1_bodies lt1 with Not_found -> not_found [lt1])
