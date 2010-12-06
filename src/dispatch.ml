@@ -19,6 +19,7 @@ module Resp = struct
     | "about" :: [] -> dyn req Pages.About.t
     | "blog" :: tl -> dyn req (Pages.Blog.t tl)
     | "tag" :: tl -> dyn req (Pages.Blog.tag tl)
+    | "styles" :: "index.css" :: [] -> dyn req Style.t
     | x -> (Http_daemon.respond_not_found ~url:(Http_request.path req) ())
 end
 
