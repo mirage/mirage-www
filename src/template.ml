@@ -20,14 +20,14 @@ let bar cur =
       >> in
   <:html< <ul>$list:List.map one bars$</ul> >>
 
-let t ?extra_header title page content =
+let t ?extra_header page title content =
   match Filesystem_templates.t "main.html" with
     | Some main_html ->
       let templates = [
-        "TITLE"       , <:html< $str:title$ >>;
-        "BAR"         , <:html< $bar title$ >>;
-        "EXTRA_HEADER", <:html< $opt:extra_header$ >>;
-        "CONTENT"     , <:html< $content$ >>;
+        "TITLE"       , <:html<$str:title$>>;
+        "BAR"         , <:html<$bar page$>>;
+        "EXTRA_HEADER", <:html<$opt:extra_header$>>;
+        "CONTENT"     , <:html<$content$>>;
       ] in
       Html.of_string ~templates main_html
     | None ->
