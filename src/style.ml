@@ -207,6 +207,8 @@ let footer = <:css<
 let t = Css.to_string <:css<
   $Css.reset_padding$;
 
+  $Code.ocaml_css$;
+
   body {
     background-image: url('../graphics/cloud-bg.png');
     background-repeat: repeat-x;

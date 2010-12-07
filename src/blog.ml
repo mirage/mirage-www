@@ -75,7 +75,7 @@ let date_css = <:css<
 let html_of_author author =
   match author.Atom.uri with
     | None     -> <:html<Posted by $str:author.Atom.name$>>
-    | Some uri -> <:html<Posted by <a href= $str:uri$>$str:author.Atom.name$</a>&>>
+    | Some uri -> <:html<Posted by <a href=$str:uri$>$str:author.Atom.name$</a>&>>
 
 type category = string * string  (* category, subcategory, see list of them below *)
 
@@ -112,6 +112,16 @@ let entry_css = <:css<
     margin-bottom: 20px;
 
     $date_css$;
+
+    pre {
+      padding-left: 15px;
+      border-left: 1px solid #ddd;
+      border: 1px solid #ddd;
+      background: #eee;
+      font-size: 1.5em;
+      margin-left: 2em;
+      margin-right: 6em;
+    }
 
     .blog_entry_heading {
       margin-top: 0px;
