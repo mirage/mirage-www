@@ -191,11 +191,11 @@ let html_of_category num (l1, l2l) =
 
 let category_css = <:css<
   .blog_bar_l1 {
-    font-size: 1.5em;
+    font-size: 1.2em;
     padding-right: 5px;
   }
   .blog_bar_l2 {
-    font-size: 1.2em;
+    font-size: 1em;
     margin-left: 1.5em;
   }
 >>
