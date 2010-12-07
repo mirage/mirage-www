@@ -118,7 +118,7 @@ let entry_css = <:css<
       border-left: 1px solid #ddd;
       border: 1px solid #ddd;
       background: #eee;
-      font-size: 1.5em;
+      font-size: 1.2em;
       margin-left: 2em;
       margin-right: 6em;
     }

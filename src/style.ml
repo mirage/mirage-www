@@ -48,11 +48,8 @@ let content = <:css<
   width: 960px;
   padding-top: 10px;
   padding-bottom: 10px;
+  font-size: 1.3em;
   
-  code {
-    font-size: 110%;
-  }
-
   h2 {
     color: #222;
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
@@ -63,10 +60,9 @@ let content = <:css<
   }
 
   p {
-    color: #222;
-    font-size: 1.3em;
-    padding: 5px 10px 3px 2px;
     line-height: 130%;
+    color: #222;
+    padding: 5px 10px 3px 2px;
     text-align: justify;
   }
 
