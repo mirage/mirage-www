@@ -227,9 +227,7 @@ let categories_css = <:css<
 (* Entries *)
 
 (* From a list of Html.t entries, wrap it in the Blog Html.t *)
-let html_of_entries ?disqus read_file categories entries =
-
-  let num = num_of_entries entries in
+let html_of_entries ?disqus read_file categories num entries =
 
   (* The disqus comment *)
   let disqus_html permalink = <:html<
@@ -348,6 +346,8 @@ let entries = [
     categories = ["overview","website"];
   };
 ]
+
+let num = num_of_entries entries
 
 let cmp_ent a b = Atom.compare (atom_date a.updated) (atom_date b.updated)
 

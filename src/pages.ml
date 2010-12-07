@@ -78,13 +78,13 @@ module Blog = struct
 
   (* Main blog page Html.t fragment with all blog posts *)
   let main_page =
-    make (Blog.html_of_entries read_file Blog.categories Blog.entries)
+    make (Blog.html_of_entries read_file Blog.categories Blog.num Blog.entries)
 
   let ent_bodies = Hashtbl.create 1
   let _ =
     List.iter (fun entry ->
       let title = entry.subject in
-      let body  = Blog.html_of_entries ~disqus:entry.permalink read_file Blog.categories [entry] in
+      let body  = Blog.html_of_entries ~disqus:entry.permalink read_file Blog.categories Blog.num [entry] in
       Hashtbl.add ent_bodies entry.permalink (make ~title body);
     ) Blog.entries
 
@@ -95,7 +95,7 @@ module Blog = struct
        let entries = List.filter (fun entry ->
          List.exists (fun (c,_) -> c=lt1) entry.categories
        ) Blog.entries in
-       let body = Blog.html_of_entries read_file Blog.categories entries in
+       let body = Blog.html_of_entries read_file Blog.categories Blog.num entries in
        Hashtbl.add lt1_bodies lt1 (make ~title body);
     ) Blog.categories
 
@@ -107,7 +107,7 @@ module Blog = struct
          let entries = List.filter (fun entry ->
            List.exists (fun (_,c) -> c = lt2) entry.categories
          ) Blog.entries in
-         let body = Blog.html_of_entries read_file Blog.categories entries in
+         let body = Blog.html_of_entries read_file Blog.categories Blog.num entries in
          Hashtbl.add lt2_bodies lt2 (make ~title body);
       ) lt2s
     ) Blog.categories
