@@ -1,6 +1,5 @@
 open Lwt
-open Http
-open Http_daemon
+open Http.Daemon
 
 let spec = {
   address = "0.0.0.0";
