@@ -1,5 +1,5 @@
 open Printf
-open Http
+open Net.Http
 open Log
 open Lwt
 open Cow
