@@ -315,6 +315,13 @@ let categories = [
 ]
 
 let entries = [
+  { updated    = date (2010, 12, 13, 15, 0);
+    author     = anil;
+    subject    = "OCaml + Web programming = Cow";
+    body       = "cow-introduction.md";
+    permalink  = "cow-introduction";
+    categories = ["language","syntax"];
+  };
   { updated    = date (2010, 11, 13, 18, 10);
     author     = anil;
     subject    = "Developing the Mirage networking stack on UNIX";
