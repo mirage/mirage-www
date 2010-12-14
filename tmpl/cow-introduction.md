@@ -9,12 +9,12 @@ security issues as injection, cross-scripting, ... To fix these issues, some new
 such as [HOP](http://hop.inria.fr/), [OPA](https://www.mlstate.com/),... have been proposed
 recently.
 
-In this post, I will describe the library we developed for OCaml, that we coined
-[CoW](http://www.github.com/samoht/mirage/lib/cow) for __Caml on web__.
+In this post, I will describe the library we developed for OCaml to solve these problems. We coined
+that library [CoW](http://www.github.com/samoht/mirage/lib/cow), for __Caml on web__.
 
 !!!Context
 
-Cow generalizes what we presented with [HTCaML](blog/introduction-to-htcaml), ie. it is
+Cow generalizes what we have discussed about [HTCaML](blog/introduction-to-htcaml). It is
 composed of two main parts.
 
 * First, Cow enables using the web languages as Embedded DSL into OCaml : it offers
@@ -27,6 +27,8 @@ to translate data from one web language to another. Moreover, as we reason by in
 it is possible to mix hand-written and generated code to deal more easily with special-cases.
 
 In Cow, most of the work is done at pre-processing time, so there is no hidden runtime costs.
+
+<img src="/graphics/cow-schema.png" alt="schema" width="50%"/>
 
 !!!Embedded Domain Specific Language
 
@@ -296,4 +298,69 @@ let xml_of_feed f = <:xml<
 
 !!!Status
 
-XXX: TODO
+To conclude, a table to indicate what is the status of Cow in mirage.
+
+<table>
+<tr>
+  <th>Language</th>
+  <th>Quotations</th>
+  <th>Code generation</th>
+  <th>Runtime API</th>
+</tr><tr>
+  <td>HTML</td>
+  <td class="impl_green"></td>
+  <td class="impl_green"></td>
+  <td class="impl_green"></td>
+</tr><tr>
+  <td>CSS</td>
+  <td class="impl_green"></td>
+  <td class="impl_red">CSS validator</td>
+  <td class="impl_green"></td>
+</tr><tr>
+  <td>Markdown</td>
+  <td class="impl_red"></td>
+  <td></td>
+  <td class="impl_green"></td>
+</tr><tr>
+  <td>XML</td>
+  <td class="impl_green"></td>
+  <td class="impl_green"></td>
+  <td class="impl_green"></td>
+</tr><tr>
+  <td>JSON</td>
+  <td class="impl_red">Starting from <a href="https://github.com/jaked/cufp-metaprogramming-tutorial/tree/master/solutions/ocaml/json_quot">CUFP tutorial</a></td>
+  <td class="impl_green"></td>
+  <td class="impl_green"></td>
+</tr><tr>
+  <td>JavaScript</td>
+  <td class="impl_red">Integration of <a href="https://www.github.com/jaked/ocamljs/">ocamljs/JSlib</a> and <a href="https://www.github.com/samoht/camlscript">camlscript</a> </td>
+  <td></td>
+  <td class="impl_red">Integration of <a href="https://www.github.com/jaked/ocamljs/">ocamljs client APIs</a></td>
+</tr><tr>
+  <td>SQL</td>
+  <td class="impl_red">Integration of <a href="http://ocsigen.org/macaque/">macaque</a></td>
+  <td class="impl_red">Integration of <a href="https://www.github.com/mirage/orm">ORM</a></td>
+  <td></td>
+</tr><tr>
+  <td>Atom</td>
+  <td></td>
+  <td></td>
+  <td class="impl_orange">Minimal set to run mirage blog</td>
+</tr><tr>
+  <td>Twitter</td>
+  <td></td>
+  <td></td>
+  <td class="impl_orange">no OAuth integration yet</td>
+</tr>
+</table>
+
+The legend for this table is :
+
+<table class="impl">
+<tr>
+  <td class="impl_green">Integrated in Cow</td>
+  <td class="impl_orange">Prototyped in Cow</td>
+  <td class="impl_red">On the roadmap</td>
+  <td>Nothing planned</td>
+</tr>
+</table>

@@ -316,7 +316,7 @@ let categories = [
 
 let entries = [
   { updated    = date (2010, 12, 13, 15, 0);
-    author     = anil;
+    author     = thomas;
     subject    = "OCaml + Web programming = Cow";
     body       = "cow-introduction.md";
     permalink  = "cow-introduction";
