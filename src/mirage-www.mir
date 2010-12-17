@@ -3,7 +3,6 @@ Config
 Dispatch
 Filesystem_static
 Filesystem_templates
-Log
 Pages
 Server
 Template

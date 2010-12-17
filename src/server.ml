@@ -13,6 +13,6 @@ let spec = {
 
 let _ =
   OS.Main.run ( 
-    Log.logmod "Server" "listening to HTTP on port %d" spec.port;
+    Log.info "Server" "listening to HTTP on port %d" spec.port;
     main spec
   )

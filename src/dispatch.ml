@@ -27,17 +27,17 @@ end
 (* handle exceptions with a 500 *)
 let exn_handler exn =
   let body = Printexc.to_string exn in
-  logmod "HTTP" "ERROR: %s" body;
+  error "HTTP" "ERROR: %s" body;
   return ()
 
 (* main callback function *)
 let t conn_id req =
   let path = Http.Request.path req in
 
-  logmod "HTTP" "%s %s %s [%s]" (Http.Request.client_addr req) (Http.Common.string_of_method (Http.Request.meth req)) path 
+  debug "HTTP" "%s %s %s [%s]" (Http.Request.client_addr req) (Http.Common.string_of_method (Http.Request.meth req)) path 
     (String.concat "," (List.map (fun (h,v) -> sprintf "%s=%s" h v) 
       (Http.Request.params_get req)));
-  logmod "header" "Connection: %s" (String.concat ", " (Http.Request.header req ~name:"connection"));
+  debug "header" "Connection: %s" (String.concat ", " (Http.Request.header req ~name:"connection"));
   let path_elem = Str.split (Str.regexp_string "/") path in
 
   (* determine if it is static or dynamic content *)
