@@ -1,3 +1,5 @@
+open Cow
+
 type item = {
   href : string;
   img : string;
