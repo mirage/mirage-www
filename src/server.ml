@@ -13,12 +13,12 @@ let spec = {
 }
 
 let main () =
-  lwt mgr = Net.Manager.create () in
+  lwt mgr, mgr_t = Net.Manager.create () in
   let src = None, port in
   Http.Server.listen mgr src spec
 
 let _ =
   OS.Main.run ( 
-    Log.info "Server" "listening to HTTP on port %d" spec.port;
+    Log.info "Server" "listening to HTTP on port %d" port;
     main ()
   )
