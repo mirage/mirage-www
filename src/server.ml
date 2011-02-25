@@ -15,7 +15,7 @@ let spec = {
 let main () =
   lwt mgr, mgr_t = Net.Manager.create () in
   let src = None, port in
-  Http.Server.listen mgr src spec
+  Http.Server.listen mgr (`TCPv4 (src, spec))
 
 let _ =
   OS.Main.run ( 
