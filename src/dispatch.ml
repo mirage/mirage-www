@@ -32,11 +32,6 @@ let exn_handler exn =
 (* main callback function *)
 let t conn_id req =
   let path = Http.Request.path req in
-
-  debug "HTTP" "%s %s %s [%s]" (* XXX Http.Request.client_addr req*) "<TODO>" (Http.Common.string_of_method (Http.Request.meth req)) path 
-    (String.concat "," (List.map (fun (h,v) -> sprintf "%s=%s" h v) 
-      (Http.Request.params_get req)));
-  debug "header" "Connection: %s" (String.concat ", " (Http.Request.header req ~name:"connection"));
   let path_elem = Str.split (Str.regexp_string "/") path in
 
   (* determine if it is static or dynamic content *)
