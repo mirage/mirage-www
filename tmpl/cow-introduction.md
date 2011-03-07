@@ -71,12 +71,11 @@ let world : Html.t = <:html< "World" >>
 let html = <:html< <h1>Hello $world$!</h1> >>
 }}
 
-Here, quotations will be expanded to values of type `Html.t` (the type annotiation is provided
+Here, quotations will be expanded to values of type `Html.t` (the type annotation is provided
 for clarity, and is usually inferred automatically).
 
-It is possible to give hints to the quotation expander about the expected type of a given anti-quotation.
-The hints appear as a prefix of the anti-quotations; the usual
-ones are `$str:...$` for strings, `$int:...$` and `$flo:...$` for numerals and `$list:...$` for lists.
+It is possible to give hints to the quotation expander about the expected type of an anti-quotation, by prefixing it to the name of the quotation.
+Common ones are `$str:...$` for strings, `$int:...$` and `$flo:...$` for numerals and `$list:...$` for lists.
 The preceding example could thus be written as :
 
 {{
@@ -103,10 +102,7 @@ let js2 : Javascript.t =
   <:camlscript< List.iter print_int [1;2;3] >>
 }}
 
-The `<:js< >>` and `<:camlscript< >>` quotations are not yet available in Cow, but will be integrated
-in next releases; `js` uses Jake Donham's [ocamljs](https://github.com/jaked/ocamljs) and an early prototype
-of `camlscript` is available [on my gihtub account](https://github.com/samoht/camlscript).
-
+The `<:css< >>`, `<:xml< >>` and `<:html< >>` quotations are present in Mirage today, and the `<:js< >>` and `<:camlscript< >>` quotations will be integrated soon.  `js` uses Jake Donham's [ocamljs](https://github.com/jaked/ocamljs) and an early prototype of `camlscript` is [available](https://github.com/samoht/camlscript) on Github.
 
 !!!Type-driven code generation
 
