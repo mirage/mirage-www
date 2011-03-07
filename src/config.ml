@@ -1,2 +1,2 @@
-let port = 8080
-let baseurl = Printf.sprintf "http://localhost:%d" port
+let port = 80
+let baseurl = Printf.sprintf "http://www.openmirage.org:%d" port
