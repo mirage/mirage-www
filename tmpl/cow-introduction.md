@@ -1,44 +1,31 @@
-Writing web-applications requires a lots of skills. First of all, you need to master
-numerous description and programming languages like [HTML](http://en.wikipedia.org/wiki/HTML),
+Writing web-applications requires a lot of skills: [HTML](http://en.wikipedia.org/wiki/HTML),
 [CSS](http://en.wikipedia.org/wiki/Cascading_Style_Sheets), [XML](http://en.wikipedia.org/wiki/XML),
-[JSON](http://en.wikipedia.org/wiki/JSON),[markdown](http://en.wikipedia.org/wiki/Markdown),
-[JavaScript](http://en.wikipedia.org/wiki/JavaScript), [SQL](http://en.wikipedia.org/wiki/SQL), ...
-You also need to master the art of of plumbing : translating concepts from
-one language to an other is tedious and error-prone code; it is this very hard to avoid
-security issues as injection, cross-scripting, ... To fix these issues, some new languages
-such as [HOP](http://hop.inria.fr/), [OPA](https://www.mlstate.com/),... have been proposed
-recently.
+[JSON](http://en.wikipedia.org/wiki/JSON), [Markdown](http://en.wikipedia.org/wiki/Markdown),
+[JavaScript](http://en.wikipedia.org/wiki/JavaScript) and [SQL](http://en.wikipedia.org/wiki/SQL), to name but a few!
+You also need to master the art of plumbing: translating concepts across languages is tedious and
+error-prone.
 
-In this post, I will describe the library we developed for OCaml to solve these problems. We coined
-that library [CoW](http://www.github.com/samoht/mirage/lib/cow), for __Caml on web__.
+This post describes a library we developed to help solve these problems, dubbed
+[Cow](http://www.github.com/samoht/mirage/lib/cow) (for __Caml On the Web__).
+Cow generalises our previous post about [HTCaML](blog/introduction-to-htcaml) by:
 
-!!!Context
+* extending standard OCaml syntax with embedded web [DSLs](http://en.wikipedia.org/wiki/Domain-specific_language). It haow
+a quotation mechanism which parses HTML, CSS or XML to OCaml, and also anti-quotations that form a template mechanism.
 
-Cow generalizes what we have discussed about [HTCaML](blog/introduction-to-htcaml). It is
-composed of two main parts.
+* using type-driven code generation to generate markup directly from OCaml type declarations.  It is possible to mix hand-written and generated code to deal with special-cases.
 
-* First, Cow enables using the web languages as Embedded DSL into OCaml : it offers
-a quotation mechanism which compiles to pure OCaml -- anti-quotations can then be used
-as a template mechanism to call back some OCaml code.
-
-* Second, Cow relies on type-driven code generation. Using an camlp4 syntax extension to
-annotate type declarations, it is possible to automatically generate boiler-plate OCaml code
-to translate data from one web language to another. Moreover, as we reason by induction,
-it is possible to mix hand-written and generated code to deal more easily with special-cases.
-
-In Cow, most of the work is done at pre-processing time, so there is no hidden runtime costs.
+Most of the work is done at pre-processing time, so there is no runtime costs and the generated OCaml code can be manually inspected if desired.
 
 <img src="/graphics/cow-schema.png" alt="schema" width="50%"/>
 
-!!!Embedded Domain Specific Language
+!!!!Quotations and anti-quotations
 
-!!!!Quotations in Camlp4
-
-Camlp4 quotations are an easy way to manipulate OCaml AST. Quotations are named, and they are enclosed
-between `<:name< ... >>`. For each name, corresponds a dedicated parser, so inside quotations, you are
-not writing OCaml code anymore but things that the associated parser will parse. You can come back to
-the OCaml world using `$...$` inside quotations. For example, camlp4 defines, for each node of the OCaml
-AST a quotation whose name is the node kind and which is parsing OCaml fragment of this kind :
+Camlp4 quotations are an easy way to manipulate the OCaml syntax tree and embed custom syntax.
+Quotations are named, and are enclosed between `<:name< ... >>`.
+Each name has a corresponding parser that handles the contents between the angle brackets.
+Code can still be embedded via __anti-quotations__ that escape back to the
+OCaml world using `$...$` inside quotations.
+Lets show an example of this via a built-in `camlp4` quotation, `<:expr< ... >>`, which translates OCaml syntax into its corresponding AST fragment (as the compiler itself does):
 
 {{
 let x = <:expr< Random.int 10 >>
@@ -73,28 +60,24 @@ let t =
           (Ast.IdLid (_loc, "list")))))
 }}
 
-!!!!Quotations in Cow
-
-In Cow, each web language has is own quotation. Inside a quotation, the user
+In Cow, each web syntax registers its own quotation, within which a user
 can write any valid code of the embedded language, and use anti-quotations to call
-back some OCaml code. By default, values produced by anti-quotations should be of
-the same type than the quotations they are embedded into. For example, for HTML:
+back into OCaml code. Values produced by anti-quotations should be of
+the same type as the quotations they are embedded in.
+Below is an example of an HTML quotation:
 
 {{
 let world : Html.t = <:html< "World" >>
 let html = <:html< <h1>Hello $world$!</h1> >>
 }}
 
-Here, quotations will be expanded to values of type `Html.t` (the type will be enforced
-by the quotation expander, so the type constraint are not necessary), and `$world$` makes
-the assumption than `home` is of type `Html.t` as well; this will be checked at compile-time,
-after the pre-processing step.
+Here, quotations will be expanded to values of type `Html.t` (the type annotiation is provided
+for clarity, and is usually inferred automatically).
 
-It is also possible to give some hints to the quotation expander to tell him what is the 
-expected type of a given anti-quotation; in this case, the expander will introduce the right
-casts in the generated code. This hints appears as prefix of the anti-quotations; the usual
+It is possible to give hints to the quotation expander about the expected type of a given anti-quotation.
+The hints appear as a prefix of the anti-quotations; the usual
 ones are `$str:...$` for strings, `$int:...$` and `$flo:...$` for numerals and `$list:...$` for lists.
-For example, the preceding example should be rewritten as :
+The preceding example could thus be written as :
 
 {{
 let world = "world"
