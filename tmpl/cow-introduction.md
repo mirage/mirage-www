@@ -93,7 +93,7 @@ after the pre-processing step.
 It is also possible to give some hints to the quotation expander to tell him what is the 
 expected type of a given anti-quotation; in this case, the expander will introduce the right
 casts in the generated code. This hints appears as prefix of the anti-quotations; the usual
-ones are `$str:...$ for strings, $int:...$ and $flo:...$ for numerals and $list:...$ for lists.
+ones are `$str:...$` for strings, `$int:...$` and `$flo:...$` for numerals and `$list:...$` for lists.
 For example, the preceding example should be rewritten as :
 
 {{
@@ -143,7 +143,7 @@ the types and to reason on induction on them:
 
 So the idea is to use normal OCaml types in our programs and let Cow translates __automatically__
 these types in the EDSL web languages. We already described a similar approach to automatically 
-[persist ML values](http://gazagnaire.org/pub/GM10.pd).
+[persist ML values](http://gazagnaire.org/pub/GM10.pdf).
 
 !!!!An example
 
