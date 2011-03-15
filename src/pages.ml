@@ -114,7 +114,7 @@ module Blog = struct
 
   let atom_feed = 
     let f = Blog.atom_feed read_file Blog.entries in
-    Xml.to_string (Atom.xml_of_feed f)
+    Xml.to_string (Atom.xml_of_feed ~self:(Config.baseurl ^ "/blog/atom.xml") f)
 
   let not_found x =
     sprintf "Not found: %s (known links: %s)"

@@ -34,7 +34,7 @@ let date (year, month, day, hour, min) =
   { month; day; year; hour; min }
 
 let atom_date d =
-  (d.month, d.day, d.year, d.hour, d.min)
+  ( d.year, d.month, d.day, d.hour, d.min)
 
 let date_css = <:css<
   .date {
@@ -288,7 +288,7 @@ let anil = {
 let thomas = {
   Atom.name = "Thomas Gazagnaire";
   uri       = Some "http://gazagnaire.org";
-  email     = Some "thomas.gazagnaire@gmail.com";
+  email     = Some "thomas@gazagnaire.org";
 }
 
 let rights = Some "All rights reserved by the author"
@@ -372,7 +372,6 @@ let atom_entry_of_ent filefn e =
     title        = e.subject;
     subtitle     = None;
     author       = Some e.author;
-    contributors = [];
     updated      = atom_date e.updated;
     rights;
   } in {
@@ -387,9 +386,7 @@ let atom_feed filefn es =
   let id = sprintf "%s/blog/" Config.baseurl in
   let title = "openmirage blog" in
   let subtitle = Some "a cloud operating system" in
-  let author = Some anil in
-  let contributors = [ anil; thomas ] in
-  let feed = { Atom.id; title; subtitle; author; contributors; rights; updated } in
+  let feed = { Atom.id; title; subtitle; author=None; rights; updated } in
   let entries = List.map (atom_entry_of_ent filefn) es in
   { Atom.feed=feed; entries }
 
