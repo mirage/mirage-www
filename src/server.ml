@@ -1,6 +1,6 @@
 open Lwt
 
-let port = 80
+let port = 8080
 
 let spec = {
   Http.Server.address = "0.0.0.0";

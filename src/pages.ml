@@ -58,7 +58,7 @@ module Resources = struct
 end 
 
 module About = struct
-  let body = col_files (read_file "status.html") none
+  let body = col_files (read_file "about.md") none
   let t = Html.to_string (Template.t "About" "about" body)
 end
 
