@@ -2,6 +2,8 @@ open Cow
 
 (* XXX: some of the following code can be factored out *)
 
+let content_type_css = [ "content-type", "text/css" ]
+
 let linkbar = <:css<
   position: absolute;
   bottom: 0;
@@ -118,7 +120,7 @@ let content = <:css<
   }
 
   $Pages.column_css$;
-  $Blog.entries_css$;
+  $Wiki.page_css$;
 >>
 
 let wrapper = <:css<

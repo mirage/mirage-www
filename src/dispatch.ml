@@ -10,17 +10,20 @@ module Resp = struct
     let status = `OK in
     Http.Server.respond ~body ~headers ~status ()
 
+  let dyn_xhtml = dyn ~headers:Pages.content_type_xhtml
+
   (* dispatch non-file URLs *)
   let dispatch req = function
-    | [] | "index.html" :: [] -> dyn req Pages.Index.t
-    | "resources" :: [] -> dyn req Pages.Resources.t
-    | "about" :: [] -> dyn req Pages.About.t
-    | "blog" :: tl -> 
-        let headers, t = Pages.Blog.t tl in
+    | [] 
+    | ["index.html"]         -> dyn_xhtml req Pages.Index.t
+    | ["resources"]          -> dyn_xhtml req Pages.Resources.t
+    | ["about"]              -> dyn_xhtml req Pages.About.t
+    | "wiki" :: "tag" :: tl  -> dyn_xhtml req (Pages.Wiki.tag tl)
+    | "wiki" :: page         ->
+        let headers, t = Pages.Wiki.t page in
         dyn ~headers req t
-    | "tag" :: tl -> dyn req (Pages.Blog.tag tl)
-    | "styles" :: "index.css" :: [] -> dyn req Style.t
-    | x -> (Http.Server.respond_not_found ~url:(Http.Request.path req) ())
+    | ["styles";"index.css"] -> dyn ~headers:Style.content_type_css req Style.t
+    | x                      -> Http.Server.respond_not_found ~url:(Http.Request.path req) ()
 end
 
 (* handle exceptions with a 500 *)

@@ -4,7 +4,7 @@ open Cow
 let bar cur =
   let bars = [
     "/","Home";
-    "/blog/","Blog"; 
+    "/wiki/","Wiki"; 
     "http://github.com/avsm/mirage", "Code";
     "/resources/","Resources";
     "/about/","About"

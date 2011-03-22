@@ -36,6 +36,9 @@ let date (year, month, day, hour, min) =
 let atom_date d =
   ( d.year, d.month, d.day, d.hour, d.min)
 
+let short_html_of_date d =
+  <:html<last modified on $int:d.day$ $html_of_month d.month$ $int:d.year$>>
+
 let date_css = <:css<
   .date {
     border: 1px solid #999; 
@@ -74,8 +77,8 @@ let date_css = <:css<
 
 let html_of_author author =
   match author.Atom.uri with
-    | None     -> <:html<Posted by $str:author.Atom.name$>>
-    | Some uri -> <:html<Posted by <a href=$str:uri$>$str:author.Atom.name$</a>&>>
+    | None     -> <:html<Last modified by $str:author.Atom.name$>>
+    | Some uri -> <:html<Last modified by <a href=$str:uri$>$str:author.Atom.name$</a>&>>
 
 type category = string * string  (* category, subcategory, see list of them below *)
 
@@ -87,28 +90,29 @@ type entry = {
   body       : string;
   permalink  : string;
 }
-(* Convert a blog record into an Html.t fragment *)
+
+(* Convert a wiki record into an Html.t fragment *)
 let html_of_entry read_file e =
-  let permalink = sprintf "%s/blog/%s" Config.baseurl e.permalink in
-  let permalink_disqus = sprintf "%s/blog/%s#disqus_thread" Config.baseurl e.permalink in
+  let permalink = sprintf "%s/wiki/%s" Config.baseurl e.permalink in
+  let permalink_disqus = sprintf "%s/wiki/%s#disqus_thread" Config.baseurl e.permalink in
   <:html<
-    <div class="blog_entry">
+    <div class="wiki_entry">
       $html_of_date e.updated$
-      <div class="blog_entry_heading">
-        <div class="blog_entry_title">
+      <div class="wiki_entry_heading">
+        <div class="wiki_entry_title">
           <a href=$str:permalink$>$str:e.subject$</a>
         </div>
-        <div class="blog_entry_info">
+        <div class="wiki_entry_info">
           <i>$html_of_author e.author$</i>
         </div>
      </div>
-     <div class="blog_entry_body">$read_file e.body$</div>
+     <div class="wiki_entry_body">$read_file e.body$</div>
      <a href=$str:permalink_disqus$>Comments</a>
    </div>
  >>
 
 let entry_css = <:css<
-  .blog_entry {
+  .wiki_entry {
     margin-bottom: 20px;
 
     $date_css$;
@@ -123,19 +127,19 @@ let entry_css = <:css<
       margin-right: 6em;
     }
 
-    .blog_entry_heading {
+    .wiki_entry_heading {
       margin-top: 0px;
       margin-left: 4px;
       margin-bottom: 4px;
     }
-    .blog_entry_title { 
+    .wiki_entry_title { 
       font-size: 2em; 
       font-weight: bold;
     }
-    .blog_entry_info {
-      font-size: 1.5em;
+    .wiki_entry_info {
+      font-size: 1em;
     }
-    .blog_entry_body {
+    .wiki_entry_body {
       margin-left: 6px;
       font-size: 1em;
     }
@@ -170,68 +174,110 @@ let num_of_entries entries =
     l2 = num_l2;
   }
 
-(* Generate the category bar Html.t fragment *)
-let html_of_category num (l1, l2l) =
+(* One categorie on the right column *)
+let short_html_of_category num (l1, l2l) =
   let l2h = List.map (fun l2 ->
     match num.l2 l1 l2 with 
-      | 0   -> <:html< <div class="blog_bar_l2">$str:l2$</div> >>
+      | 0   -> <:html<<div class="wiki_bar_l2">$str:l2$</div>&>>
       | nl2 ->
-        let num = <:html< <i>$str:sprintf "(%d)" nl2$</i> >> in
-        let url = sprintf "%s/tag/%s/%s" Config.baseurl l1 l2 in
-        <:html< <div class="blog_bar_l2"><a href=$str:url$>$str:l2$</a>$num$</div> >>
+        let num = <:html<<i>$str:sprintf "(%d)" nl2$</i>&>> in
+        let url = sprintf "%s/wiki/tag/%s/%s" Config.baseurl l1 l2 in
+        <:html<<div class="wiki_bar_l2"><a href=$str:url$>$str:l2$</a>$num$</div>&>>
   ) l2l in
-  let url = sprintf "%s/tag/%s" Config.baseurl l1 in
+  let url = sprintf "%s/wiki/tag/%s" Config.baseurl l1 in
   let l1h = match num.l1 l1 with
-    | 0   -> <:html< <div class="blog_bar_l1">$str:l1$</div> >>
-    | nl1 -> <:html< <div class="blog_bar_l1"><a href=$str:url$>$str:l1$</a></div> >> in
+    | 0   -> <:html<<div class="wiki_bar_l1">$str:l1$</div>&>>
+    | nl1 -> <:html<<div class="wiki_bar_l1"><a href=$str:url$>$str:l1$</a></div>&>> in
   <:html<
     $l1h$
     $list:l2h$
   >>
 
-let category_css = <:css<
-  .blog_bar_l1 {
+let short_category_css = <:css<
+  .wiki_bar_l1 {
     font-size: 1.2em;
     padding-right: 5px;
   }
-  .blog_bar_l2 {
+  .wiki_bar_l2 {
     font-size: 1em;
     margin-left: 1.5em;
   }
 >>
 
-(* The full right bar in blog *)
-let html_of_categories num categories =
-  let url = sprintf "%s/blog/" Config.baseurl in
+(* The full right bar in wiki *)
+let short_html_of_categories entries categories =
+  let num = num_of_entries entries in
+  let url = sprintf "%s/wiki/" Config.baseurl in
   <:html<
-    <div class="blog_bar">
-      <div class="blog_bar_l0"><a href=$str:url$>Index</a></div>
-      $list:List.map (html_of_category num) categories$
+    <div class="wiki_bar">
+      <div class="wiki_bar_l0"><a href=$str:url$>Index</a></div>
+      $list:List.map (short_html_of_category num) categories$
     </div>
  >>
 
-let categories_css = <:css<
-  .blog_bar {
+let short_categories_css = <:css<
+  .wiki_bar {
     text-align: right;
     border-right: 1px solid #eee;
     padding: 5px;
 
-    .blog_bar_l0 {
+    .wiki_bar_l0 {
       font-size: 2.0em;
       padding-right: 5px;
     }
-    $category_css$
+
+    $short_category_css$
   }
 >>
 
-(* Entries *)
+(* Index pages *)
 
-(* From a list of Html.t entries, wrap it in the Blog Html.t *)
-let html_of_entries ?disqus read_file categories num entries =
+let permalink e =
+  sprintf "%s/wiki/%s" Config.baseurl e.permalink
+
+let html_of_category entries (l1, l2) =
+  let equal (ll1, ll2) = match l2 with
+    | None    -> ll1=l1
+    | Some l2 -> ll1=l1 && ll2=l2 in
+  let l2_str = match l2 with
+    | None    -> ""
+    | Some l2 -> "/ " ^ l2 in
+  let entries = List.filter (fun e -> List.exists equal e.categories) entries in
+  let aux e = <:html<<li><a href=$str:permalink e$>$str:e.subject$</a> ($short_html_of_date e.updated$)</li>&>> in
+  match entries with
+  | []      -> []
+  | entries ->
+      <:html<
+        <div class="category_index">
+          <h3>$str:l1$ $str:l2_str$</h3>
+          <ul>$list:List.map aux entries$</ul>
+        </div>
+      >>
+
+let html_of_categories entries categories =
+  let categories =
+    List.fold_left
+      (fun accu (l1, ll2) -> List.map (fun l2 -> l1, Some l2) ll2 @ accu)
+      [] categories in
+  let categories = List.rev categories in
+  <:html<$list:List.map (html_of_category entries) categories$>>
+
+let category_css = <:css<
+  .category_index {
+    margin-left: 6px;
+    font-size: 1em;
+    h3 {
+      font-size: 1.2em;
+    }
+  }
+>>
+
+(* Main wiki page; disqus comments are for full entry pages *)
+let html_of_page ?disqus ~left_column ~right_column =
 
   (* The disqus comment *)
   let disqus_html permalink = <:html<
-    <div class="blog_entry_comments">
+    <div class="wiki_entry_comments">
     <div id="disqus_thread"/>
     <script type="text/javascript"> 
       var disqus_identifer = $str:permalink$; 
@@ -246,32 +292,29 @@ let html_of_entries ?disqus read_file categories num entries =
 
   let dh = match disqus with
      | Some perm -> disqus_html perm
-     | None -> <:html< >> in
+     | None      -> <:html< >> in
 
   <:html<
-  <div class="left_column_blog">
-    <div class="summary_information">
-      $list:List.map (html_of_entry read_file) entries$
+    <div class="left_column_wiki">
+      <div class="summary_information">$left_column$</div>
     </div>
-  </div>
-  <div class="right_column_blog">
-    $html_of_categories num categories$
-  </div>
-  $dh$
->>
+    <div class="right_column_wiki">$right_column$</div>
+    $dh$
+  >>
 
-let entries_css = <:css<
-  .left_column_blog {
+let page_css = <:css<
+  .left_column_wiki {
     float: left;
     width: 840px;
     $entry_css$;
-  }
-  .right_column_blog {
-    float: right;
-    width: 100px;
     $category_css$;
   }
-  .blog_entry_comments {
+  .right_column_wiki {
+    float: right;
+    width: 100px;
+    $short_categories_css$;
+  }
+  .wiki_entry_comments {
     float: left;
     width: 600px;
     position: relative;
@@ -314,12 +357,21 @@ let categories = [
   ];
 ]
 
+let index = {
+  updated    = date (2010, 10, 11, 15, 0);
+  author     = anil;
+  subject    = "Self-hosting Mirage website";
+  body       = "index.md";
+  permalink  = "self-hosting-mirage-website";
+  categories = [];
+}
+
 let entries = [
   { updated    = date (2010, 12, 13, 15, 0);
     author     = thomas;
     subject    = "OCaml + Web programming = Cow";
-    body       = "cow-introduction.md";
-    permalink  = "cow-introduction";
+    body       = "cow.md";
+    permalink  = "cow";
     categories = ["language","syntax"];
   };
   { updated    = date (2010, 11, 13, 18, 10);
@@ -342,16 +394,10 @@ let entries = [
     author     = thomas;
     subject    = "A (quick) introduction to HTCaML";
     categories = ["language","syntax"];
-    body       = "htcaml-part1.md";
-    permalink  = "introduction-to-htcaml";
+    body       = "htcaml.md";
+    permalink  = "htcaml";
   };
-  { updated    = date (2010, 10, 11, 15, 0);
-    author     = anil;
-    subject    = "Self-hosting Mirage website";
-    body       = "blog-welcome.md";
-    permalink  = "self-hosting-mirage-website";
-    categories = ["overview","website"];
-  };
+  index
 ]
 
 let num = num_of_entries entries
@@ -360,9 +406,6 @@ let cmp_ent a b = Atom.compare (atom_date a.updated) (atom_date b.updated)
 
 let entries = List.rev (List.sort cmp_ent entries)
 let _ = List.iter (fun x -> Printf.printf "ENT: %s\n%!" x.subject) entries
-
-let permalink e =
-  sprintf "%s/blog/%s" Config.baseurl e.permalink
 
 let permalink_exists x = List.exists (fun e -> e.permalink = x) entries
 
@@ -377,16 +420,15 @@ let atom_entry_of_ent filefn e =
   } in {
     Atom.entry = meta;
     summary    = None;
-    content    = filefn e.body
+    content    = filefn e.body;
   }
   
 let atom_feed filefn es = 
   let es = List.rev (List.sort cmp_ent es) in
   let updated = atom_date (List.hd es).updated in
-  let id = sprintf "%s/blog/" Config.baseurl in
-  let title = "openmirage blog" in
+  let id = sprintf "%s/wiki/" Config.baseurl in
+  let title = "openmirage wiki" in
   let subtitle = Some "a cloud operating system" in
   let feed = { Atom.id; title; subtitle; author=None; rights; updated } in
   let entries = List.map (atom_entry_of_ent filefn) es in
   { Atom.feed=feed; entries }
-
