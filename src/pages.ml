@@ -14,7 +14,6 @@ let html_file f =
   <:html<<div class="post">$Html.of_string f$</div>&>>
 
 let read_file f =
-  let f = "wiki/" ^ f in
   let suffix =
     try let n = String.rindex f '.' in
         String.sub f (n+1) (String.length f - n - 1)
@@ -68,6 +67,8 @@ module Wiki = struct
 
   (* the right column of wiki page is always the same *)
   let right_column = Wiki.short_html_of_categories entries categories
+
+  let read_file f = read_file ("wiki/" ^ f)
 
   (* Make a full Html.t including RSS link and headers from an wiki page *)
   let make ?title ?disqus left_column =
