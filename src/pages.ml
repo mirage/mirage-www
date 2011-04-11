@@ -62,6 +62,53 @@ module About = struct
   let t = Html.to_string (Template.t "About" "about" body)
 end
 
+module Blog = struct
+  open Blog
+
+ 
+  (* Make a full Html.t including RSS link and headers from a list
+     of Html.t entry fragments *)
+  let make ?title body =
+    let url = sprintf "%s/blog/atom.xml" Config.baseurl in
+    let extra_header = <:html<
+     <link rel="alternate" type="application/atom+xml" href=$str:url$ />
+    >> in
+    let title = "blog" ^ match title with None -> "" | Some x -> " :: " ^ x in
+    let html = Template.t ~extra_header "Blog" title body in
+    Html.to_string html
+
+  (* Main blog page Html.t fragment with all blog posts *)
+  let main_page =
+    make (Blog.html_of_entries read_file Blog.entries)
+
+  let ent_bodies = Hashtbl.create 1
+  let _ =
+    List.iter (fun entry ->
+      let title = entry.subject in
+      let body  = Blog.html_of_entries ~disqus:entry.permalink
+        read_file [entry] in
+      Hashtbl.add ent_bodies entry.permalink (make ~title body);
+    ) Blog.entries
+
+  let atom_feed =
+    let f = Blog.atom_feed read_file Blog.entries in
+    Xml.to_string (Atom.xml_of_feed ~self:(Config.baseurl ^ "/blog/atom.xml") f)
+
+  let not_found x =
+    sprintf "Not found: %s (known links: %s)"
+      (String.concat " ... " x)
+      (String.concat " "
+         (Hashtbl.fold (fun k v a -> k :: a)
+            ent_bodies []))
+
+  let t = function
+    | []                          -> [], main_page
+    | ["atom.xml"]                -> ["content-type","application/atom+xml; charset=UTF-8"], atom_feed
+    | [x] when permalink_exists x -> [], (Hashtbl.find ent_bodies x)
+    | x                           -> [], not_found x
+
+end
+ 
 module Wiki = struct
   open Wiki
 
@@ -84,7 +131,7 @@ module Wiki = struct
   (* Main wiki page Html.t fragment with the index page *)
   let main_page =
     let left_column = 
-      Wiki.html_of_entry read_file Wiki.index @
+      Wiki.html_of_index read_file Wiki.index @
       Wiki.html_of_categories Wiki.entries Wiki.categories in
     make ~title:Wiki.index.subject ~disqus:Wiki.index.permalink left_column
 

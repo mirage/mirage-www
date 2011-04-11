@@ -92,12 +92,12 @@ type entry = {
 }
 
 (* Convert a wiki record into an Html.t fragment *)
-let html_of_entry read_file e =
+let html_of_entry ?(want_date=true) read_file e =
   let permalink = sprintf "%s/wiki/%s" Config.baseurl e.permalink in
   let permalink_disqus = sprintf "%s/wiki/%s#disqus_thread" Config.baseurl e.permalink in
   <:html<
     <div class="wiki_entry">
-      $html_of_date e.updated$
+      $if want_date then html_of_date e.updated else []$
       <div class="wiki_entry_heading">
         <div class="wiki_entry_title">
           <a href=$str:permalink$>$str:e.subject$</a>
@@ -111,6 +111,13 @@ let html_of_entry read_file e =
    </div>
  >>
 
+let html_of_index read_file e =
+  <:html<
+    <div class="wiki_entry">
+     <div class="wiki_entry_body">$read_file e.body$</div>
+   </div>
+ >>
+ 
 let entry_css = <:css<
   .wiki_entry {
     margin-bottom: 20px;

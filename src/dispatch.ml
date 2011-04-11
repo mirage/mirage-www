@@ -18,6 +18,9 @@ module Resp = struct
     | ["index.html"]         -> dyn_xhtml req Pages.Index.t
     | ["resources"]          -> dyn_xhtml req Pages.Resources.t
     | ["about"]              -> dyn_xhtml req Pages.About.t
+    | "blog" :: tl ->
+        let headers, t = Pages.Blog.t tl in
+        dyn ~headers req t
     | "wiki" :: "tag" :: tl  -> dyn_xhtml req (Pages.Wiki.tag tl)
     | "wiki" :: page         ->
         let headers, t = Pages.Wiki.t page in
