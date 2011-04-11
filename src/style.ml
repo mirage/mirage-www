@@ -96,7 +96,7 @@ let content = <:css<
   }
 
   table {
-    border: 1px solid #aaa;
+    border: 0px solid #aaa;
     color: #222;
     margin: 10px 0px 10px 0px;
     min-width: 450px;
@@ -127,6 +127,10 @@ let content = <:css<
     
   a:hover {
     border-bottom: 1px solid #aaa;
+  }
+
+  .aboutPerson {
+    font-size: 0.8em;
   }
 
   $Pages.column_css$;
