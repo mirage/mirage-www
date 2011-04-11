@@ -55,11 +55,21 @@ let content = <:css<
   h2 {
     color: #222;
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-    font-size: 2.0em;
+    font-size: 1.5em;
     font-weight: normal;
     margin: 0px 0px 0px 0px;
-    padding: 1px 0px 0px 5px;
+    padding: 8px 3px 0px 0px;
   }
+
+  h3 {
+    color: #222;
+    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    font-size: 1.2em;
+    font-weight: normal;
+    margin: 0px 0px 0px 0px;
+    padding: 5px 2px 0px 0px;
+  }
+
 
   p {
     line-height: 130%;
@@ -112,7 +122,7 @@ let content = <:css<
   a {
     text-decoration: none;
     border-bottom: 1px dotted #ccc;
-    color: #000055;
+    color: #000077;
   }
     
   a:hover {

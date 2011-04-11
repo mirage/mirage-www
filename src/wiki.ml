@@ -376,7 +376,7 @@ let index = {
 let entries = [
   { updated    = date (2010, 12, 13, 15, 0);
     author     = thomas;
-    subject    = "OCaml + Web programming = Cow";
+    subject    = "COW: OCaml on the Web";
     body       = "cow.md";
     permalink  = "cow";
     categories = ["language","syntax"];
@@ -389,7 +389,7 @@ let entries = [
     categories = ["overview","usage"; "backend","unix"];
   };
 
-  { updated    = date (2010, 11, 10, 11, 0);
+  { updated    = date (2011, 04, 11, 11, 0);
     author     = anil;
     subject    = "Source code layout";
     body       = "repo-layout.md";
