@@ -213,7 +213,7 @@ let footer = <:css<
   }
 >>
 
-let t = Css.to_string <:css<
+let custom =Css.to_string <:css<
   $Css.reset_padding$;
 
   $Code.ocaml_css$;
@@ -239,3 +239,13 @@ let t = Css.to_string <:css<
   .impl_green  { background-color: #B0ECB0; }
 >>
 
+(*
+let t =
+  (* Include the iconize style and our custom site one *)
+  let icon = match Filesystem_templates.t "iconize.css.inc" with
+  |None -> assert false
+  |Some x -> x in
+  icon ^ custom
+*)
+
+let t = custom
