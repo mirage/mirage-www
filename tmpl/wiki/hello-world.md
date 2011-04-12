@@ -1,60 +1,75 @@
-First make sure you have followed the [installation instructions](/wiki/install) and have `mir-xen` on your `PATH`.
-Mirage uses `ocamlbuild` to build applications, with the `mir-*` scripts providing a convenient shell wrapper.
+First make sure you have followed the [installation instructions](/wiki/install) and have `mir-xen` in your `PATH`.
+Mirage uses `ocamlbuild` to build applications, with the `mir-*` scripts providing a convenient shell wrapper for each backend.
 
-To try out basic functionality, do `cd mirage.git/tests/basic/sleep`.
+!!First Steps
+To try out basic functionality and build a UNIX binary, do:
 
-Build a UNIX binary:
+{{
+    $ cd mirage.git/tests/basic/sleep
+    $ mir-unix-direct sleep.bin
+    $ ./_build/sleep.bin
+}}
 
-    mir-unix-direct sleep.bin
+This will run a simple thread sleeping test that will output to the console.
+Now build a Xen version of this:
 
-output will be in `_build/sleep.bin`
+{{
+    $ mir-xen sleep.xen
+}}
 
-Build a Xen kernel:
+output will be in `_build/sleep.xen`, and you can boot it up with a config file like:
 
-    mir-xen sleep.xen
-
-output will be in `_build/sleep.{bin,xen}`, and you can boot it up
-in Xen with a config file like:
-
+{{
+    $ cd _build
     $ cat > sleep.cfg
     name="sleep"
     memory=1024
     kernel="sleep.xen"
     <control-d>
     $ sudo xm create -c sleep.cfg
+}}
 
-This runs a simple interlocking sleep test which tries out the
-console and timer support for the various supported platforms.
+You should see the same output on the Xen console as you did on the UNIX version you ran earlier.
 
-Note that the `kernel` variable only accepts an absolute path or the
-name of a file in the current directory.
+!!Networking
 
-Network
--------
+Mirage networking is present in the `Net` module and can compile in two modes:
 
-Mirage networking is present in the Net module and can compile in two modes:
+* A `direct` mode that works from the Ethernet layer (the `OS.Netif` module). On Xen, this is the virtual Ethernet driver, and on UNIX this requires the `tuntap` interface. You can link in this `Net` module by using `mir-xen` or `mir-unix-direct` for Xen and UNIX respectively.
 
-A 'direct' mode that works from the Ethernet layer (the OS.Ethif
-module). On Xen, this is the virtual Ethernet driver, and on UNIX
-this requires the `tuntap` interface.
+* A subset of the Net modules (`Flow`, `Channel` and `Manager`) are available in 'socket' mode under UNIX. This maps the interfaces onto POSIX sockets, enabling easy comparison with normal kernels. This is only supported under UNIX via `mir-unix-socket`.
 
-A subset of the Net modules (Flow and Manager) are available in
-'socket' mode under UNIX. This maps the Flow interface onto POSIX
-sockets, enabling easy comparison with normal kernels.
+Try out the echo server test by:
 
-There are two echo servers available in:
-
-* `tests/net/flow`
-* `tests/net/flow_udp`
-
-You can compile these with:
-
+{{
+    $ cd tests/net/flow
     $ mir-unix-socket echo.bin
-    $ ./_build/echo.bin
+    $ sudo ./_build/echo.bin
+    $ telnet 127.0.0.1 8081
+}}
 
+Now that the socket version works, you can try the `mir-unix-direct` version that runs over `tuntap`.
+
+{{
     $ mir-unix-direct echo.bin
     $ sudo ./_build/echo.bin
+       <configure tap0 interface>
+    $ telnet 10.0.0.2 8081
+}}
 
+And similarly, the Xen version:
+
+{{
     $ mir-xen echo.xen
-    # boot the kernel in ./_build/echo.xen
+    $ cd _build
+    $ cat > echo.cfg
+    name="echo"
+    memory=128
+    kernel="echo.xen"
+    vifs=['bridge=eth0']
+     <control-d>
+    $ sudo xm create -c echo.cfg
+     <configure the bridge IP address>
+    $ telnet 10.0.0.2 8081
+}}
 
