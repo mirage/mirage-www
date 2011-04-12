@@ -217,9 +217,43 @@ let footer = <:css<
   }
 >>
 
+let date_css = <:css<
+  .date {
+    border: 1px solid #999;
+    line-height: 1;
+    width: 3em;
+    position: relative;
+    float: left;
+    margin-right: 15px;
+    text-align: center;
+    .month {
+      text-transform: uppercase;
+      font-size: 0.9em;
+      padding-top: 0.3em;
+    }
+    .day {
+      font-size: 1.3em;
+    }
+    .year {
+      background-color: #2358B8;
+      color: #FFF;
+      font-size: 0.9em;
+      padding: 0.3em 0;
+      margin-top: 0.3em;
+    }
+    .hour {
+      display: none;
+    }
+    .min {
+      display: none;
+    }
+  }
+>>
+
+
 let custom =Css.to_string <:css<
   $Css.reset_padding$;
-
+  $date_css$;
   $Code.ocaml_css$;
 
   body {

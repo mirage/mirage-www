@@ -28,39 +28,6 @@ let date (year, month, day, hour, min) =
 let atom_date d =
   ( d.year, d.month, d.day, d.hour, d.min)
 
-let date_css = <:css<
-  .date {
-    border: 1px solid #999; 
-    line-height: 1; 
-    width: 3em;
-    position: relative;
-    float: left;
-    margin-right: 15px;
-    text-align: center; 
-    .month {
-      text-transform: uppercase; 
-      font-size: 0.9em;
-      padding-top: 0.3em; 
-    }
-    .day {
-      font-size: 1.3em;
-    }
-    .year { 
-      background-color: #2358B8; 
-      color: #FFF; 
-      font-size: 0.9em; 
-      padding: 0.3em 0; 
-      margin-top: 0.3em;
-    }
-    .hour {
-      display: none;
-    }
-    .min {
-      display: none;
-    }
-  }
->>
-
 (* Entry *)
 
 let html_of_author author =
@@ -99,8 +66,6 @@ let entry_css = <:css<
   .blog_entry {
     margin-top: 0px;
     margin-bottom: 20px;
-
-    $date_css$;
 
     pre {
       padding-left: 15px;

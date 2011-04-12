@@ -31,40 +31,6 @@ let atom_date d =
 let short_html_of_date d =
   <:html<last modified on $int:d.day$ $html_of_month d.month$ $int:d.year$>>
 
-let date_css = <:css<
-  .date {
-    border: 1px solid #999; 
-    line-height: 1; 
-    width: 4em;
-    position: relative;
-    float: left;
-    margin-right: 15px;
-    text-align: center; 
-
-    .month {
-      text-transform: uppercase; 
-      font-size: 1.2em;
-      padding-top: 0.3em; 
-    }
-    .day {
-      font-size: 2em;
-    }
-    .year { 
-      background-color: #2358B8; 
-      color: #FFF; 
-      font-size: 1.2em; 
-      padding: 0.3em 0; 
-      margin-top: 0.3em;
-    }
-    .hour {
-      display: none;
-    }
-    .min {
-      display: none;
-    }
-  }
->>
-
 (* Entry *)
 
 let html_of_author author =
@@ -111,8 +77,8 @@ let html_of_entry ?(want_date=true) read_file e =
    </div>
  >>
 
-let html_of_index read_file e =
-  let body = body_of_entry read_file e in
+let html_of_index read_file =
+  let body = read_file "index.md" in
   <:html<
     <div class="wiki_entry">
      <div class="wiki_entry_body">$body$</div>
@@ -122,8 +88,6 @@ let html_of_index read_file e =
 let entry_css = <:css<
   .wiki_entry {
     margin-bottom: 20px;
-
-    $date_css$;
 
     pre {
       padding-left: 15px;
@@ -136,20 +100,21 @@ let entry_css = <:css<
     }
 
     .wiki_entry_heading {
-      margin-top: 0px;
-      margin-left: 4px;
-      margin-bottom: 4px;
+      margin-left: 0px;
+      margin-bottom: 0px;
     }
-    .wiki_entry_title { 
-      font-size: 2em; 
+    .wiki_entry_title {
+      font-size: 1.8em;
       font-weight: bold;
     }
     .wiki_entry_info {
-      font-size: 1em;
+      margin-top: 0px;
+      font-size: 1.0em;
     }
     .wiki_entry_body {
-      margin-left: 6px;
-      font-size: 1em;
+      margin-left: 0px;
+      margin-top: 3px;
+      font-size: 1.1em;
     }
   }
 >>
@@ -188,7 +153,7 @@ let short_html_of_category num (l1, l2l) =
     match num.l2 l1 l2 with 
       | 0   -> <:html<<div class="wiki_bar_l2">$str:l2$</div>&>>
       | nl2 ->
-        let num = <:html<<i>$str:sprintf "(%d)" nl2$</i>&>> in
+        let num = <:html<<i>$str:sprintf " (%d)" nl2$</i>&>> in
         let url = sprintf "%s/wiki/tag/%s/%s" Config.baseurl l1 l2 in
         <:html<<div class="wiki_bar_l2"><a href=$str:url$>$str:l2$</a>$num$</div>&>>
   ) l2l in
@@ -346,7 +311,7 @@ let rights = Some "All rights reserved by the author"
 
 let categories = [
   "overview", [
-      "website"; "usage"; "papers"
+      "media"; "usage"; "perf"
   ];
   "language", [
       "syntax"; "dyntype"
@@ -355,32 +320,32 @@ let categories = [
       "unix"; "xen"; "browser"; "arm"; "mips"
   ];
   "network", [
-      "ethernet"; "dhcp"; "arp"; "tcpip"; "dns"; "http"; "typeropes"
+      "ethernet"; "dhcp"; "arp"; "tcpip"; "dns"; "http";
   ];
   "storage", [
-      "block"; "files"; "orm"
+      "block"; "orm";
   ];
   "concurrency", [
       "threads"; "processes"
   ];
 ]
 
-let index = {
-  updated    = date (2010, 10, 11, 15, 0);
-  author     = anil;
-  subject    = "Self-hosting Mirage website";
-  body       = File "index.md";
-  permalink  = "self-hosting-mirage-website";
-  categories = [];
-}
-
 let entries = [
+
+  { updated    = date (2011, 04, 12, 10, 0);
+    author     = anil;
+    subject    = "DNS Performance Tests";
+    body       = Html Perf.dns;
+    permalink  = "performance";
+    categories = ["overview","perf"];
+  };
+
   { updated    = date (2011, 04, 12, 9, 0);
     author     = anil;
     subject    = "Papers and Related Work";
     body       = Html Paper.html;
     permalink  = "papers";
-    categories = ["overview","papers"];
+    categories = ["overview","media"];
   };
 
   { updated    = date (2011, 04, 12, 10, 0);
@@ -388,7 +353,7 @@ let entries = [
     subject    = "Tech Talks";
     body       = File "talks.md";
     permalink  = "talks";
-    categories = ["overview","usage"];
+    categories = ["overview","media"];
   };
 
   { updated    = date (2010, 12, 13, 15, 0);
@@ -398,7 +363,7 @@ let entries = [
     permalink  = "cow";
     categories = ["language","syntax"];
   };
-  { updated    = date (2010, 11, 13, 18, 10);
+  { updated    = date (2011, 04, 11, 18, 10);
     author     = anil;
     subject    = "Developing the Mirage networking stack on UNIX";
     body       = File "net-unix.md";
@@ -421,7 +386,6 @@ let entries = [
     body       = File "htcaml.md";
     permalink  = "htcaml";
   };
-  index
 ]
 
 let num = num_of_entries entries

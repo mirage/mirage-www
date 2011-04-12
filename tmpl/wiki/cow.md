@@ -7,7 +7,7 @@ error-prone.
 
 This post describes a library we developed to help solve these problems, dubbed
 [Cow](http://www.github.com/samoht/mirage/lib/cow) (for __Caml On the Web__).
-Cow generalises our previous post about [HTCaML](wiki/htcaml) by:
+Cow generalises our previous post about [HTCaML](/wiki/htcaml) by:
 
 * extending standard OCaml syntax with embedded web [DSLs](http://en.wikipedia.org/wiki/Domain-specific_language). It has a quotation mechanism which parses HTML, CSS or XML to OCaml, and also anti-quotations that form a template mechanism.
 

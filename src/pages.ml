@@ -5,7 +5,7 @@ open Lwt
 open Cow
 
 let md_file f =
-  let f = match Filesystem_templates.t f with |Some x -> x |None -> "" in
+  let f = match Filesystem_templates.t f with |Some x -> x |None -> failwith f in
   let md = Markdown.of_string f in
   Markdown.to_html md
  
@@ -131,9 +131,9 @@ module Wiki = struct
   (* Main wiki page Html.t fragment with the index page *)
   let main_page =
     let left_column = 
-      Wiki.html_of_index read_file Wiki.index @
+      Wiki.html_of_index read_file @
       Wiki.html_of_categories Wiki.entries Wiki.categories in
-    make ~title:Wiki.index.subject ~disqus:Wiki.index.permalink left_column
+    make ~title:"index" ~disqus:"/wiki" left_column
 
   let ent_bodies = Hashtbl.create 1
   let _ =
