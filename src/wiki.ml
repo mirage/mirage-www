@@ -348,6 +348,15 @@ let entries = [
     categories = ["overview","usage"];
   };
 
+  { updated    = date (2011, 04, 13, 21, 55);
+    author     = anil;
+    subject    = "Running Mirage Xen kernels";
+    body       = File "xen-boot.md";
+    permalink  = "xen-boot";
+    categories = ["overview","usage"; "backend", "xen"];
+  };
+
+
   { updated    = date (2011, 04, 12, 10, 0);
     author     = anil;
     subject    = "DNS Performance Tests";
