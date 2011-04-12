@@ -4,7 +4,8 @@ This page links to various technical talks and slide decks on Mirage.
 
 !!!LinkedIn
 
-Insert link to Vimeo here.
+<iframe src="http://player.vimeo.com/video/16189862" width="400" height="225" frameborder="0"></iframe>
+<p><a href="http://vimeo.com/16189862">LinkedIn Tech Talk</a> by <a href="http://anil.recoil.org/">Anil Madhavapeddy</a></p>
 
 !!!ICFP
 
