@@ -7,18 +7,10 @@ type month = int
 
 let html_of_month m =
   let str = match m with
-    | 1  -> "Jan"
-    | 2  -> "Feb"
-    | 3  -> "Mar"
-    | 4  -> "Apr"
-    | 5  -> "May"
-    | 6  -> "Jun"
-    | 7  -> "Jul"
-    | 8  -> "Aug"
-    | 9  -> "Sep"
-    | 10 -> "Oct"
-    | 11 -> "Nov"
-    | 12 -> "Dec"
+    | 1  -> "Jan" | 2  -> "Feb" | 3  -> "Mar"
+    | 4  -> "Apr" | 5  -> "May" | 6  -> "Jun"
+    | 7  -> "Jul" | 8  -> "Aug" | 9  -> "Sep"
+    | 10 -> "Oct" | 11 -> "Nov" | 12 -> "Dec"
     | _  -> "???" in
   <:html<$str:str$>>
 
@@ -82,18 +74,26 @@ let html_of_author author =
 
 type category = string * string  (* category, subcategory, see list of them below *)
 
+type body = 
+ |File of string
+ |Html of Html.t
+
 type entry = {
   updated    : date;
   author     : Atom.author;
   subject    : string;
   categories : category list;
-  body       : string;
+  body       : body;
   permalink  : string;
 }
+
+let body_of_entry read_file e =
+ match e.body with |File x -> read_file x |Html x -> x
 
 (* Convert a wiki record into an Html.t fragment *)
 let html_of_entry ?(want_date=true) read_file e =
   let permalink = sprintf "%s/wiki/%s" Config.baseurl e.permalink in
+  let body = body_of_entry read_file e in
   let permalink_disqus = sprintf "%s/wiki/%s#disqus_thread" Config.baseurl e.permalink in
   <:html<
     <div class="wiki_entry">
@@ -106,15 +106,16 @@ let html_of_entry ?(want_date=true) read_file e =
           <i>$html_of_author e.author$</i>
         </div>
      </div>
-     <div class="wiki_entry_body">$read_file e.body$</div>
+     <div class="wiki_entry_body">$body$</div>
      <a href=$str:permalink_disqus$>Comments</a>
    </div>
  >>
 
 let html_of_index read_file e =
+  let body = body_of_entry read_file e in
   <:html<
     <div class="wiki_entry">
-     <div class="wiki_entry_body">$read_file e.body$</div>
+     <div class="wiki_entry_body">$body$</div>
    </div>
  >>
  
@@ -368,7 +369,7 @@ let index = {
   updated    = date (2010, 10, 11, 15, 0);
   author     = anil;
   subject    = "Self-hosting Mirage website";
-  body       = "index.md";
+  body       = File "index.md";
   permalink  = "self-hosting-mirage-website";
   categories = [];
 }
@@ -377,14 +378,14 @@ let entries = [
   { updated    = date (2010, 12, 13, 15, 0);
     author     = thomas;
     subject    = "COW: OCaml on the Web";
-    body       = "cow.md";
+    body       = File "cow.md";
     permalink  = "cow";
     categories = ["language","syntax"];
   };
   { updated    = date (2010, 11, 13, 18, 10);
     author     = anil;
     subject    = "Developing the Mirage networking stack on UNIX";
-    body       = "net-unix.md";
+    body       = File "net-unix.md";
     permalink  = "running-ethernet-stack-on-unix";
     categories = ["overview","usage"; "backend","unix"];
   };
@@ -392,16 +393,16 @@ let entries = [
   { updated    = date (2011, 04, 11, 11, 0);
     author     = anil;
     subject    = "Source code layout";
-    body       = "repo-layout.md";
+    body       = File "repo-layout.md";
     permalink  = "source-code-layout";
     categories = ["overview","usage"];
   };
   { 
     updated    = date (2010, 11, 4, 16, 30);
     author     = thomas;
-    subject    = "A (quick) introduction to HTCaML";
+    subject    = "Introduction to HTCaML";
     categories = ["language","syntax"];
-    body       = "htcaml.md";
+    body       = File "htcaml.md";
     permalink  = "htcaml";
   };
   index
@@ -427,7 +428,7 @@ let atom_entry_of_ent filefn e =
   } in {
     Atom.entry = meta;
     summary    = None;
-    content    = filefn e.body;
+    content    = body_of_entry filefn e;
   }
   
 let atom_feed filefn es = 

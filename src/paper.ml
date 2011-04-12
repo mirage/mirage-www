@@ -152,6 +152,6 @@ let papers = [
 ]
 
 let html = <:html<
-  <h2>Academic Papers</h2>
+  <h2>The Papers</h2>
   $list:List.map html_of_paper papers$
 >>
