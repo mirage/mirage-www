@@ -332,6 +332,22 @@ let categories = [
 
 let entries = [
 
+  { updated    = date (2011, 04, 12, 13, 0);
+    author     = anil;
+    subject    = "Installation";
+    body       = File "install.md";
+    permalink  = "install";
+    categories = ["overview","usage"];
+  };
+
+  { updated    = date (2011, 04, 12, 12, 55);
+    author     = anil;
+    subject    = "Hello Mirage World";
+    body       = File "hello-world.md";
+    permalink  = "hello-world";
+    categories = ["overview","usage"];
+  };
+
   { updated    = date (2011, 04, 12, 10, 0);
     author     = anil;
     subject    = "DNS Performance Tests";
