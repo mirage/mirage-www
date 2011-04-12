@@ -151,7 +151,23 @@ let papers = [
   }
 ]
 
+let related_papers = [
+  { name     = "mainname";
+    items    = [ pdf "http://www.tjd.phlegethon.org/words/thesis.pdf" ];
+    title    = "The Main Name System";
+    authors  = [ tim ];
+    descr    = <:html< PhD Thesis, University of Cambridge, 2006. >>;
+    abstract = <:html<
+      This thesis describes the Main Name System, an approach to centralising DNS for improved reliability. The source
+      code for the Mirage DNS library is based directly off the data structures described in this thesis. >>;
+  }
+]
+
 let html = <:html<
-  <h2>The Papers</h2>
+  <br />
+  <p>This page lists any publications, technical reports and related work to Mirage. If you know of any work that should be listed here, please <a href="/about">contact</a> us.</p>
+  <h2>Publications</h2>
   $list:List.map html_of_paper papers$
+  <h2>Related Work</h2>
+  $list:List.map html_of_paper related_papers$
 >>

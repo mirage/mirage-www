@@ -37,7 +37,7 @@ We implement as much of Mirage in pure OCaml as possible, which can be found in:
 
 * [lib/net/](http://github.com/avsm/mirage/tree/master/lib/net/) contains the low-level networking code. There are two versions, [lib/net/direct/](http://github.com/avsm/mirage/tree/master/lib/net/direct) which implements Ethernet, ARP, UDP, TCP/IP and DHCP, and [lib/net/socket/](http://github.com/avsm/mirage/tree/master/lib/net/socket) that maps onto UNIX sockets. As with the OS module, pnly one of these is chosen at build-time depending on the backend in use: e.g. `xen-direct` uses the direct library, and `unix-socket` the socket version.
 
-* [lib/dns/](http://github.com/avsm/mirage/tree/master/lib/dns/) is a DNS server implementation. The data structures are described in Tim Deegan's PhD thesis on the [Main Name System](http://www.tjd.phlegethon.org/words/thesis.pdf).
+* [lib/dns/](http://github.com/avsm/mirage/tree/master/lib/dns/) is a DNS server implementation. The data structures are described in Tim Deegan's PhD thesis on the "[Main Name System](http://www.tjd.phlegethon.org/words/thesis.pdf)".
 
 * [lib/http/](http://github.com/avsm/mirage/tree/master/lib/http/) is a HTTP client and server, with support for HTTP/1.1, pipelining and chunked transfers. It is a fork of the [cohttp](http://github.com/avsm/ocaml-cohttp) library adapted for the Mirage namespace.
 

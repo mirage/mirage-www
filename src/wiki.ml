@@ -375,6 +375,22 @@ let index = {
 }
 
 let entries = [
+  { updated    = date (2011, 04, 12, 9, 0);
+    author     = anil;
+    subject    = "Papers and Related Work";
+    body       = Html Paper.html;
+    permalink  = "papers";
+    categories = ["overview","papers"];
+  };
+
+  { updated    = date (2011, 04, 12, 10, 0);
+    author     = anil;
+    subject    = "Tech Talks";
+    body       = File "talks.md";
+    permalink  = "talks";
+    categories = ["overview","usage"];
+  };
+
   { updated    = date (2010, 12, 13, 15, 0);
     author     = thomas;
     subject    = "COW: OCaml on the Web";

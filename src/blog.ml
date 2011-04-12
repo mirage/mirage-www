@@ -202,7 +202,7 @@ let entries = [
   };
   { updated    = date (2011, 04, 11, 15, 0);
     author     = anil;
-    subject    = "Spring Cleaning";
+    subject    = "A Spring Wiki Cleaning";
     body       = "blog/spring-cleaning.md";
     permalink  = "spring-cleaning";
   };
