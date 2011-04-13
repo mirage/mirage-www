@@ -168,11 +168,11 @@ let short_html_of_category num (l1, l2l) =
 
 let short_category_css = <:css<
   .wiki_bar_l1 {
-    font-size: 1.2em;
+    font-size: 1.1em;
     padding-right: 5px;
   }
   .wiki_bar_l2 {
-    font-size: 1em;
+    font-size: 0.9em;
     margin-left: 1.5em;
   }
 >>
@@ -192,10 +192,10 @@ let short_categories_css = <:css<
   .wiki_bar {
     text-align: right;
     border-right: 1px solid #eee;
-    padding: 5px;
+    padding-right: 2px;
 
     .wiki_bar_l0 {
-      font-size: 2.0em;
+      font-size: 1.4em;
       padding-right: 5px;
     }
 
@@ -317,7 +317,7 @@ let categories = [
       "syntax"; "dyntype"
   ];
   "backend", [
-      "unix"; "xen"; "browser"; "arm"; "mips"
+      "unix"; "xen"; "node";
   ];
   "network", [
       "ethernet"; "dhcp"; "arp"; "tcpip"; "dns"; "http";
@@ -355,7 +355,6 @@ let entries = [
     permalink  = "xen-boot";
     categories = ["overview","usage"; "backend", "xen"];
   };
-
 
   { updated    = date (2011, 04, 12, 10, 0);
     author     = anil;

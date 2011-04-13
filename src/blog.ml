@@ -82,7 +82,7 @@ let entry_css = <:css<
       margin-bottom: 0px;
     }
     .blog_entry_title { 
-      font-size: 1.8em; 
+      font-size: 1.6em; 
       font-weight: bold;
     }
     .blog_entry_info {
