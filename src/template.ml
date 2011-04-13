@@ -4,9 +4,9 @@ open Cow
 let bar cur =
   let bars = [
     "/","Home";
+    "/blog/","Blog";
     "/wiki/","Wiki"; 
     "http://github.com/avsm/mirage", "Code";
-    "/blog/","Blog";
     "/about/","About"
   ] in
   let one (href, title) =
