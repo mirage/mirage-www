@@ -60,7 +60,6 @@ let compare_dates e1 e2 =
   let d1 = e1.updated in let d2 = e2.updated in
   compare (d1.year,d1.month,d1.day) (d2.year,d2.month,d2.day)
 
-
 (* Convert a wiki record into an Html.t fragment *)
 let html_of_entry ?(want_date=true) read_file e =
   let permalink = sprintf "%s/wiki/%s" Config.baseurl e.permalink in
