@@ -30,6 +30,7 @@ output will be in `_build/sleep.xen`, and you can boot it up with a config file 
 }}
 
 You should see the same output on the Xen console as you did on the UNIX version you ran earlier.
+If you need more help getting a Xen kernel booted, try looking at the [Xen notes](/wiki/xen-boot) also.
 
 !!Networking
 

@@ -56,6 +56,11 @@ type entry = {
 let body_of_entry read_file e =
  match e.body with |File x -> read_file x |Html x -> x
 
+let compare_dates e1 e2 =
+  let d1 = e1.updated in let d2 = e2.updated in
+  compare (d1.year,d1.month,d1.day) (d2.year,d2.month,d2.day)
+
+
 (* Convert a wiki record into an Html.t fragment *)
 let html_of_entry ?(want_date=true) read_file e =
   let permalink = sprintf "%s/wiki/%s" Config.baseurl e.permalink in
@@ -116,6 +121,9 @@ let entry_css = <:css<
       margin-top: 3px;
       font-size: 1.1em;
     }
+  }
+  .wiki_updates {
+     font-size: 0.8em;
   }
 >>
 
@@ -244,6 +252,22 @@ let category_css = <:css<
     }
   }
 >>
+
+(* Recently updated list *)
+let html_of_recent_updates entries =
+  let ents = List.rev (List.sort compare_dates entries) in
+  let html_of_ent e = <:html<
+    <a href=$str:permalink e$>$str:e.subject$</a>
+    <i>($short_html_of_date e.updated$)</i>
+    <br />
+  >> in
+  <:html<
+    <div class="wiki_updates">
+    <p><b>Recently Updated</b><br />
+    $list:List.map html_of_ent ents$
+    </p>
+    </div>
+  >>
 
 (* Main wiki page; disqus comments are for full entry pages *)
 let html_of_page ?disqus ~left_column ~right_column =
