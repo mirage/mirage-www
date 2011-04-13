@@ -14,7 +14,7 @@ module Resp = struct
 
   (* dispatch non-file URLs *)
   let dispatch req = function
-    | [] 
+    | [] | [""]
     | ["index.html"]         -> dyn_xhtml req Pages.Index.t
     | ["resources"]          -> dyn_xhtml req Pages.Resources.t
     | ["about"]              -> dyn_xhtml req Pages.About.t

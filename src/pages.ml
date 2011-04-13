@@ -109,10 +109,10 @@ module Blog = struct
             ent_bodies []))
 
   let t = function
-    | []                          -> [], main_page
+    | []                          -> content_type_xhtml, main_page
     | ["atom.xml"]                -> ["content-type","application/atom+xml; charset=UTF-8"], atom_feed
-    | [x] when permalink_exists x -> [], (Hashtbl.find ent_bodies x)
-    | x                           -> [], not_found x
+    | [x] when permalink_exists x -> content_type_xhtml, (Hashtbl.find ent_bodies x)
+    | x                           -> content_type_xhtml, not_found x
 
 end
  
