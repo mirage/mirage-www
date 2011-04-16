@@ -25,7 +25,19 @@ Amazon has recently added support for booting [user-specified kernels](http://ec
 
 So to boot a Mirage kernel on EC2, it must first be wrapped in a block device. After that, the image needs to be bundled into an AMI, and then registered as a bootable image using the EC2 tools.
 
-There is a script that does most of this work for you in [scripts/ec2.sh](https://github.com/avsm/mirage/tree/master/scripts/ec2.sh). You need to install the command-line tools from Amazon, set the `EC2_PRIVATE_KEY`, `EC2_CERT`, `EC2_USER`, `EC2_ACCESS` and `EC2_ACCESS_SECRET` environment variables, and specify your `kernel.xen` file as the first argument to the script.
+!!!Command Line Tools
+
+First download the [tools](wget http://s3.amazonaws.com/ec2-downloads/ec2-ami-tools.zip) from Amazon.
+Edit your `.profile` to add the following variables:
+
+* `EC2_USER`: 12 digit account number (not email) obtained from the EC2 management console.
+* `EC2_ACCESS`: from Account/Access credentials in the EC2 management console.
+* `EC2_ACCESS_SECRET`: as above, in a different tab.
+* `EC2_CERT`: location of the certificate file you download from the Account/Access page.
+* `EC2_PRIVATE_KEY`: location of the private key.
+
+There is a script that then takes care of packaging up the Mirage kernel image and uploading it to Amazon automatically..
+It is in [scripts/ec2.sh](https://github.com/avsm/mirage/tree/master/scripts/ec2.sh), and you specify your `kernel.xen` file as the first argument to the script.
 
 This support can be improved a lot, and we should also wrap the kernel as an EBS image instead of an AMI so that it can be booted on the `m1.micro` (free-tier) instances that do not support AMI storage. Anyone sufficiently motivated, please send in a patch.
 
