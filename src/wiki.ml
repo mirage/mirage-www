@@ -77,7 +77,6 @@ let html_of_entry ?(want_date=true) read_file e =
         </div>
      </div>
      <div class="wiki_entry_body">$body$</div>
-     <a href=$str:permalink_disqus$>Comments</a>
    </div>
  >>
 
@@ -276,7 +275,7 @@ let html_of_page ?disqus ~left_column ~right_column =
     <div class="wiki_entry_comments">
     <div id="disqus_thread"/>
     <script type="text/javascript"> 
-      var disqus_identifer = $str:permalink$; 
+      var disqus_identifer = '/wiki/$str:permalink$'; 
       (function() { 
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
          dsq.src = 'http://openmirage.disqus.com/embed.js';
@@ -287,7 +286,7 @@ let html_of_page ?disqus ~left_column ~right_column =
   >> in
 
   let dh = match disqus with
-     | Some perm -> disqus_html perm
+     | Some _  (* -> disqus_html perm XXX broken *)
      | None      -> <:html< >> in
 
   <:html<
@@ -311,7 +310,6 @@ let page_css = <:css<
     $short_categories_css$;
   }
   .wiki_entry_comments {
-    float: left;
     width: 600px;
     position: relative;
   }

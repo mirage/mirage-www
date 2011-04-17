@@ -104,17 +104,18 @@ let html_of_entries ?disqus read_file entries =
 
   (* The disqus comment *)
   let disqus_html permalink = <:html<
-    <div class="blog_entry_comments">
-    <div id="disqus_thread"/>
-    <script type="text/javascript"> 
-      var disqus_identifer = $str:permalink$; 
-      (function() { 
+
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+     var disqus_shortname = 'openmirage';
+     var disqus_identifier = '/blog/$str:permalink$';
+     var disqus_url = 'http://openmirage.org/blog/$str:permalink$';
+     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-         dsq.src = 'http://openmirage.disqus.com/embed.js';
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-       })()
-    </script>
-    </div>
+     })();
+     </script>
   >> in
 
   let dh = match disqus with
@@ -136,8 +137,8 @@ let entries_css = <:css<
     width: 800px;
     $entry_css$;
   }
+
   .blog_entry_comments {
-    float: left;
     width: 600px;
     position: relative;
   }

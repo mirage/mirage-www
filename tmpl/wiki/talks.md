@@ -6,7 +6,7 @@ This page links to various technical talks and slide decks on Mirage.
 
 [Alex Feinberg](http://twitter.com/strlen) kindly hosted a Mirage talk at [LinkedIn](http://linkedin.com)'s Search Networks and Analytics Team ([blog](http://sna-projects.com/blog/2010/10/mirage/)).
 
-<iframe src="http://player.vimeo.com/video/16189862" width="400" height="225" frameborder="0"></iframe>
+<iframe src="http://player.vimeo.com/video/16189862" width="400" height="225" frameborder="0">&nbsp; </iframe>
 <p><a href="http://vimeo.com/16189862">LinkedIn Tech Talk</a> by <a href="http://anil.recoil.org/">Anil Madhavapeddy</a></p>
 
 !!!ICFP
