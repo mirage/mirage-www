@@ -352,7 +352,14 @@ let categories = [
 ]
 
 let entries = [
-
+  { updated    = date (2011, 06, 17, 18, 10);
+    author     = anil;
+    subject    = "Delimited Continuations vs Lwt for Threads";
+    body       = File "delimcc-vs-lwt.md";
+    permalink  = "delimcc-vs-lwt";
+    categories = ["concurrency","threads"];
+  };
+ 
   { updated    = date (2011, 04, 12, 13, 0);
     author     = anil;
     subject    = "Installation";
