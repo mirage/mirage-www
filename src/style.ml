@@ -70,7 +70,6 @@ let content = <:css<
     padding: 5px 2px 0px 0px;
   }
 
-
   p {
     line-height: 130%;
     color: #222;
@@ -89,6 +88,14 @@ let content = <:css<
     font-size: 1.2em;
     padding: 11px 20px 10px 20px;
     margin: 10px 0px 8px 20px;
+  }
+
+  code {
+    font-size: 90%;
+  }
+
+  p code {
+    font-size: 110%;
   }
 
   blockquote p {
