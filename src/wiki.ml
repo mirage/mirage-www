@@ -294,7 +294,7 @@ let html_of_page ?disqus ~left_column ~right_column =
     </div>
     <div class="right_column_wiki">$right_column$</div>
     <div style="clear:both;"></div>
-    <h3>Comments</h3>
+    <h2>Comments</h2>
     $dh$
   >>
 
