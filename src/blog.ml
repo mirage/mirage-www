@@ -104,8 +104,10 @@ let html_of_entries ?disqus read_file entries =
 
   (* The disqus comment *)
   let disqus_html permalink = <:html<
-
+    <div class="blog_comments">
+    <h2>Comments</h2>
     <div id="disqus_thread"></div>
+    </div>
     <script type="text/javascript">
      var disqus_shortname = 'openmirage';
      var disqus_identifier = '/blog/$str:permalink$';
@@ -128,6 +130,7 @@ let html_of_entries ?disqus read_file entries =
       $list:List.map (html_of_entry read_file) entries$
     </div>
   </div>
+  <div style="clear:both;"></div>
   $dh$
 >>
 
@@ -137,10 +140,8 @@ let entries_css = <:css<
     width: 800px;
     $entry_css$;
   }
-
-  .blog_entry_comments {
-    width: 600px;
-    position: relative;
+  .blog_comments {
+   width: 640px;
   }
 >>
 

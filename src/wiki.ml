@@ -64,7 +64,6 @@ let compare_dates e1 e2 =
 let html_of_entry ?(want_date=true) read_file e =
   let permalink = sprintf "%s/wiki/%s" Config.baseurl e.permalink in
   let body = body_of_entry read_file e in
-  let permalink_disqus = sprintf "%s/wiki/%s#disqus_thread" Config.baseurl e.permalink in
   <:html<
     <div class="wiki_entry">
       $if want_date then html_of_date e.updated else []$
@@ -77,7 +76,6 @@ let html_of_entry ?(want_date=true) read_file e =
         </div>
      </div>
      <div class="wiki_entry_body">$body$</div>
-     <a href=$str:permalink_disqus$>Comments</a>
    </div>
  >>
 
@@ -287,7 +285,7 @@ let html_of_page ?disqus ~left_column ~right_column =
   >> in
 
   let dh = match disqus with
-     | Some _  (* -> disqus_html perm XXX broken *)
+     | Some perm  -> disqus_html perm
      | None      -> <:html< >> in
 
   <:html<
@@ -295,6 +293,8 @@ let html_of_page ?disqus ~left_column ~right_column =
       <div class="summary_information">$left_column$</div>
     </div>
     <div class="right_column_wiki">$right_column$</div>
+    <div style="clear:both;"></div>
+    <h3>Comments</h3>
     $dh$
   >>
 
@@ -309,10 +309,6 @@ let page_css = <:css<
     float: right;
     width: 100px;
     $short_categories_css$;
-  }
-  .wiki_entry_comments {
-    width: 600px;
-    position: relative;
   }
 >>
 

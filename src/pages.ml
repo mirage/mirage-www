@@ -140,7 +140,7 @@ module Wiki = struct
     let left_column = 
       Wiki.html_of_index read_file @
       Wiki.html_of_recent_updates Wiki.entries in
-    make ~title:"index" ~disqus:"/wiki" left_column
+    make ~title:"index" left_column
 
   let ent_bodies = Hashtbl.create 1
   let _ =
