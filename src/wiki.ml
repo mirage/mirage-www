@@ -77,6 +77,7 @@ let html_of_entry ?(want_date=true) read_file e =
         </div>
      </div>
      <div class="wiki_entry_body">$body$</div>
+     <a href=$str:permalink_disqus$>Comments</a>
    </div>
  >>
 
