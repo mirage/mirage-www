@@ -85,7 +85,7 @@ let content = <:css<
   blockquote {
     background-color: #f2f2f2;
     border-left: 2px solid #aaa;
-    font-size: 1.2em;
+    font-size: 0.95em;
     padding: 11px 20px 10px 20px;
     margin: 10px 0px 8px 20px;
   }
