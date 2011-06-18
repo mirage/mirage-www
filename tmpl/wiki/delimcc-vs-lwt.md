@@ -168,3 +168,67 @@ This first benchmark was a little surprising for me:
 
 I need to stress that these benchmarks are very micro, and do not take into account other things like memory allocation. The standalone code for the tests is [online at Github](http://github.com/avsm/delimcc-vs-lwt), and I would be delighted to hear any feedback.
 
+!!Retesting recursion [18th Jun 2011]
+
+Jake Donham comments:
+> I speculated in my post that fibers might be faster if the copy/restore were amortized over a large stack. I wonder if you would repeat the experiment with versions where you call fn only in the base case of sum, instead of at every call. I think you're getting N^2 behavior here because you're copying and restoring the stack on each iteration.
+
+When writing the test, I figured that calling the thread waiting function more often wouldn't alter the result (careless). So I modified the test suite to have a `recurse` test that only waits a single time at the end of a long call stack (see below) as well as the original N^2 version (now called `recurse2`).
+
+{{
+  module Fiber = struct
+    let recurse fn depth =
+      let rec sum n = 
+        match n with
+        |0 -> Lwt_fiber.await (fn ()); 0
+        |n -> n + (sum (n-1)) 
+      in
+      for i = 1 to 15000 do
+        ignore(sum depth)
+      done
+
+    let run fn depth = 
+      Lwt_fiber.start (fun () -> recurse fn depth)
+  end
+}}
+
+The N^2 version below of course looks the same as the previously run tests, with delimcc getting much worse as it yields more often:
+
+<img src="http://chart.apis.google.com/chart?cht=lxy&amp;chs=600x250&amp;chtt=Recurse2%20vs%20basic&amp;chco=FF0000,00FF00,0000FF,FFAA00,AA00FF,00FFFF&amp;chxt=x,x,y,y&amp;chxl=1:|stack-depth|3:|seconds&amp;chds=a&amp;chg=10,10,1,5&amp;chd=t:50,100,200,300,400,600,800,1000|0.282,0.566,1.159,1.784,2.416,3.719,5.019,6.278|50,100,200,300,400,600,800,1000|0.658,1.587,4.426,8.837,14.508,31.066,60.438,94.708&amp;chdl=lwt-recurse2-slow|delimcc-recurse2-slow&amp;chdlp=t&amp;chls=2|2" /> 
+
+However, when we run the `recurse` test with a single yield at the end of the long callstack, the situation reverses itself and now `delimcc` is faster. Note that this test ran with more iterations than the `recurse2` test to make the results scale, and so the absolute time taken cannot be compared.
+
+<img src="http://chart.apis.google.com/chart?cht=lxy&amp;chs=600x250&amp;chtt=Recurse%20vs%20basic&amp;chco=00FF00,FF0000,0000FF,FFAA00,AA00FF,00FFFF&amp;chxt=x,x,y,y&amp;chxl=1:|stack-depth|3:|seconds&amp;chds=a&amp;chg=10,10,1,5&amp;chd=t:50,100,200,300,400,600,800,1000|0.162,0.216,0.341,0.499,0.622,0.875,1.194,1.435|50,100,200,300,400,600,800,1000|0.128,0.207,0.394,0.619,0.889,1.538,2.366,3.373&amp;chdl=delimcc-recurse-slow|lwt-recurse-slow&amp;chdlp=t&amp;chls=2|2" />
+
+The reason for Lwt being slower in this becomes more clear when we examine what the code looks like after it has been passed through the `pa_lwt` syntax extension. The code before looks like:
+
+{{
+  let recurse fn depth =
+    let rec sum n =
+      match n with
+      | 0 -> 
+          fn () >> return 0
+      | n ->
+          lwt n' = sum (n-1) in 
+          return (n + n') in
+}}
+
+and after `pa_lwt` macro-expands it:
+
+{{
+  let recurse fn depth =
+    let rec sum n =
+      match n with
+      | 0 ->
+          Lwt.bind (fn ()) (fun _ -> return 0)
+      | n ->
+          let __pa_lwt_0 = sum (n - 1)
+          in Lwt.bind __pa_lwt_0 (fun n' -> return (n + n')) in
+}}
+
+Every iteration of the recursive loop requires the allocation of a closure (the `Lwt.bind` call). In the `delimcc` case, the function operates as a normal recursive function that uses the stack, until the very end when it needs to save the stack in one pass.
+
+Overall, I'm convinced now that the performance difference is insignificant for the purposes of choosing one thread system over the other for Mirage.  Instead, the question of code interoperability is more important. Lwt-enabled protocol code will work unmodified in Javascript, and Delimcc code helps migrate existing code over.
+
+Interestingly, [Javascript 1.7](https://developer.mozilla.org/en/new_in_javascript_1.7) introduces a *yield* operator, which [has been shown](http://parametricity.net/dropbox/yield.subc.pdf) to have comparable expressive power to the *shift-reset* delimcc operators. Perhaps convergence isn't too far away after all...
+

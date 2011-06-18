@@ -349,7 +349,7 @@ let categories = [
 ]
 
 let entries = [
-  { updated    = date (2011, 06, 17, 18, 10);
+  { updated    = date (2011, 06, 18, 15, 47);
     author     = anil;
     subject    = "Delimited Continuations vs Lwt for Threads";
     body       = File "delimcc-vs-lwt.md";
