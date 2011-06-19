@@ -94,7 +94,7 @@ We invoke the run function with two arguments: a thread to use for blocking and 
   end
 }}
 
-We do not need to do anything special to launch a thread since we are already in the Lwt main loop, and the syntax extension makes the `for` loops like like the Fiber example above.
+We do not need to do anything special to launch a thread since we are already in the Lwt main loop, and the syntax extension makes the `for` loops look like the Fiber example above.
 
 The choice of blocking function is important. The first test runs using a fast `Lwt.return ()` that returns immediately:
 
