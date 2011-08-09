@@ -164,13 +164,13 @@ let entries = [
   { updated    = date (2010, 10, 11, 15, 0);
     author     = anil;
     subject    = "Self-hosting Mirage website";
-    body       = "blog/welcome.md";
+    body       = "/blog/welcome.md";
     permalink  = "self-hosting-mirage-website";
   };
   { updated    = date (2011, 04, 11, 15, 0);
     author     = anil;
     subject    = "A Spring Wiki Cleaning";
-    body       = "blog/spring-cleaning.md";
+    body       = "/blog/spring-cleaning.md";
     permalink  = "spring-cleaning";
   };
 ]

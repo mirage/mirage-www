@@ -21,7 +21,7 @@ let bar cur =
   <:html< <ul>$list:List.map one bars$</ul> >>
 
 let t ?extra_header page title content =
-  match Filesystem_templates.t "main.html" with
+  match Filesystem_templates.t "/main.html" with
     | Some main_html ->
       let templates = [
         "TITLE"       , <:html<$str:title$>>;

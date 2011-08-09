@@ -50,22 +50,22 @@ let content_type_xhtml = ["content-type","text/html"]
 module Index = struct
   let body = <:html<
     <div class="left_column">
-      $col_files (read_file "intro.md") none$
+      $col_files (read_file "/intro.md") none$
     </div> 
     <div class="right_column">
-      $col_files (read_file "intro-r.html") none$
+      $col_files (read_file "/intro-r.html") none$
     </div>
   >>
   let t = Html.to_string (Template.t "Home" "home" body)
 end
 
 module Resources = struct
-  let body = col_files (read_file "docs.md") Paper.html
+  let body = col_files (read_file "/docs.md") Paper.html
   let t = Html.to_string (Template.t "Resources" "resources" body)
 end 
 
 module About = struct
-  let body = col_files (read_file "about.md") none
+  let body = col_files (read_file "/about.md") none
   let t = Html.to_string (Template.t "About" "about" body)
 end
 
@@ -122,7 +122,7 @@ module Wiki = struct
   (* the right column of wiki page is always the same *)
   let right_column = Wiki.short_html_of_categories entries categories
 
-  let read_file f = read_file ("wiki/" ^ f)
+  let read_file f = read_file ("/wiki/" ^ f)
 
   (* Make a full Html.t including RSS link and headers from an wiki page *)
   let make ?title ?disqus left_column =
