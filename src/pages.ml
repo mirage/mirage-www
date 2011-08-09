@@ -5,12 +5,12 @@ open Lwt
 open Cow
 
 let md_file f =
-  let f = match Filesystem_templates.t f with |Some x -> x |None -> failwith f in
+  let f = match Filesystem_templates.t f with Some x -> x |None -> failwith f in
   let md = Markdown.of_string f in
   Markdown.to_html md
  
 let html_file f =
-  let f = match Filesystem_templates.t f with |Some x -> x |None -> "" in
+  let f = match Filesystem_templates.t f with Some x -> x |None -> failwith f in
   Html.of_string f
 
 let read_file f =
