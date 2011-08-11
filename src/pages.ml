@@ -4,14 +4,9 @@ open Log
 open Lwt
 open Cow
 
-let md_file f =
-  let f = match Filesystem_templates.t f with Some x -> x |None -> failwith f in
-  let md = Markdown.of_string f in
-  Markdown.to_html md
- 
-let html_file f =
-  let f = match Filesystem_templates.t f with Some x -> x |None -> failwith f in
-  Html.of_string f
+let file_template f = match Filesystem_templates.t f with
+  | Some content -> content
+  | None -> failwith (Printf.sprintf "File template not found: %s" f)
 
 let read_file f =
   let suffix =
@@ -19,8 +14,8 @@ let read_file f =
         String.sub f (n+1) (String.length f - n - 1)
     with _ -> "" in
   match suffix with
-    | "md"   -> md_file f
-    | "html" -> html_file f
+    | "md"   -> Markdown.to_html (Markdown.of_string (file_template f))
+    | "html" -> Html.of_string (file_template f)
     | _      -> []
 
 let col_files l r = <:html< 
