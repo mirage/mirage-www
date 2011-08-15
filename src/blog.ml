@@ -157,10 +157,21 @@ let thomas = {
   uri       = Some "http://gazagnaire.org";
   email     = Some "thomas@gazagnaire.org";
 }
+let raphael = {
+  Atom.name = "Raphael Proust";
+  uri       = Some "https://github.com/raphael-proust";
+  email     = Some "raphlalou@gmail.com";
+}
 
 let rights = Some "All rights reserved by the author"
 
 let entries = [
+  { updated    = date (2011, 08, 12, 15, 0);
+    author     = raphael;
+    subject    = "New regexps for Mirage";
+    body       = "/blog/ocaml-regexp.md";
+    permalink  = "ocaml-regexp";
+  };
   { updated    = date (2010, 10, 11, 15, 0);
     author     = anil;
     subject    = "Self-hosting Mirage website";
