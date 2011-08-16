@@ -324,6 +324,11 @@ let thomas = {
   uri       = Some "http://gazagnaire.org";
   email     = Some "thomas@gazagnaire.org";
 }
+let raphael = {
+  Atom.name = "Raphael Proust";
+  uri       = Some "https://github.com/raphael-proust";
+  email     = Some "raphlalou@gmail.com";
+}
 
 let rights = Some "All rights reserved by the author"
 
@@ -332,7 +337,7 @@ let categories = [
       "media"; "usage"; "perf"
   ];
   "language", [
-      "syntax"; "dyntype"
+      "syntax"; "dyntype"; "libraries"
   ];
   "backend", [
       "unix"; "xen"; "node";
@@ -349,6 +354,14 @@ let categories = [
 ]
 
 let entries = [
+  { updated    = date (2011, 08, 12, 15, 0);
+    author     = raphael;
+    subject    = "Portable Regular Expressions";
+    body       = File "ocaml-regexp.md";
+    permalink  = "ocaml-regexp";
+    categories = ["language","libraries"]
+  };
+
   { updated    = date (2011, 06, 18, 15, 47);
     author     = anil;
     subject    = "Delimited Continuations vs Lwt for Threads";
