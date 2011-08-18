@@ -329,6 +329,11 @@ let raphael = {
   uri       = Some "https://github.com/raphael-proust";
   email     = Some "raphlalou@gmail.com";
 }
+let balraj = {
+  Atom.name = "Balraj Singh";
+  uri       = None;
+  email     = Some "balraj.singh@cl.cam.ac.uk";
+}
 
 let rights = Some "All rights reserved by the author"
 
@@ -354,6 +359,14 @@ let categories = [
 ]
 
 let entries = [
+  { updated    = date (2011, 08, 18, 16, 0);
+    author     = balraj;
+    subject    = "Getting Started with Lwt threads";
+    body       = File "tutorial-lwt.md";
+    permalink  = "tutorial-lwt";
+    categories = ["concurrency", "threads"]
+  };
+
   { updated    = date (2011, 08, 12, 15, 0);
     author     = raphael;
     subject    = "Portable Regular Expressions";
