@@ -206,17 +206,123 @@ Here is a list of operators defined in the `Lwt` module:
   let (=|<) f t = Lwt.map f t
 }}
 
-!!Syntax extensions
+!!Syntax Extensions
 
-Here is an equivalence table for the syntax extension pa_lwt.
+Using Lwt does sometimes require significantly restructing code, and in particular
+doesn't work with many of the more imperative OCaml control structures such as 
+`for` and `while`.  Luckily, Lwt includes a comprehensive [pa_lwt](http://ocsigen.org/lwt/api/Pa_lwt)
+syntax extension that makes writing threaded code as convenient as vanialla OCaml.
+Mirage includes this extension by default, so you can use it anywhere you want.
 
---------------------------------------------------------------------------------
- Camlp4 extension form                 Preprocessed form
-------------------------------------- ------------------------------------------
- `lwt x = e1 in e2`                    `e1 >>= fun x -> e2`
 
- `match_lwt e1 with | p -> e2`         `e1 >>= function p -> e2`
---------------------------------------------------------------------------------
+!!!Anonymous Bind
+
+If you are chaining sequences of blocking I/O, a common pattern is to write:
+
+{{
+  write stdio "Foo" >>= fun () ->
+  write stdio "Bar" >>= fun () ->
+  write stdio "Done"
+}}
+
+You can replace these anonymous binds with with `>>` operator instead:
+
+{{
+  write stdio "Foo" >>
+  write stdio "Bar" >>
+  write stdio "Done"
+}}
+
+You have to be a little careful when using this shortcut, as it only works
+reliably when chaining to another function that returns an Lwt binding. If it
+doesnt work, the next extension provides a neat solution.
+
+!!!Lwt Bindings
+
+The binding operation reverses the normal `let` binding by specifying the name
+of the bound variable in the second argument. Consider a thread `e1`:
+
+{{
+  e1 >>= fun x -> e2
+}}
+
+Here, we wait for the result of `e1`, bind the result to `x` and continue into `e2`.  You can replace this with the more natural `lwt` syntax to act as a "blocking let":
+
+{{
+  lwt x = e1 in
+  e2
+}}
+
+Now, the code looks like just normal OCaml code, except that we substitute `lwt` for `let`, with the effect that the call blocks until the result of that thread is available.  Lets revisit our heads and tails example from above and see how it looks when rewritten with these syntax extensions:
+
+{{
+open Lwt 
+open OS
+
+let main () =
+  let heads =
+    Time.sleep 1.0 >>
+    return (Console.log "Heads");
+  in
+  let tails =
+    Time.sleep 2.0 >>
+    return (Console.log "Tails");
+  in
+  lwt () = heads <&> tails in
+  Console.log "Finished";
+  return ()
+
+let () =
+  Console.log ("Hello, world! Here we go..");
+  Main.run (main ())
+}}
+
+Now we define two threads, `heads` and `tails`, and block until they are both complete (via the `lwt ()` and the `<&>` join operator).
+If you want to print "Finished" before the previous threads are complete, just replace the `lwt ()` with `let _`, and it will not block.
+
+!!!Exceptions and Try/Catch
+
+One very, very important thing to remember with cooperative threading is that raising exceptions is not safe to do between yield points.
+In general, you should never call `raise` directly. Lwt provides an alternative syntax:
+
+{{
+  exception Foo
+  let main () =
+    try_lwt
+      let x = ... in
+      raise_lwt Foo
+    with
+      |Foo -> return (Console.log "Foo raised")
+}}
+
+This looks similar to normal OCaml code, except that the caught exception has an `Lwt.t` return type appended to it.
+
+!!!Control Flow
+
+Lwt also provides equivalents of `for` and `while` that block on each iteration, saving you the trouble of rewriting
+the code to use `bind` recursively.  Just use `for_lwt` and `while_lwt` instead; for example:
+
+{{
+  for_lwt i = 0 to 10 do
+    OS.Time.sleep 1.0 >>
+    return (OS.Console.log "foo")
+  done
+}}
+
+There is also a `match_lwt` which will bind the result of a thread and immediately pattern-match on its value.
+Thus, the two fragments of code are equivalent:
+
+{{
+  let e1 >>= function
+  |true -> ...
+  |false -> ...
+}}
+
+{{
+  match_lwt e1 with
+  |true -> ...
+  |false -> ...
+}}
 
 ##Lists and Streams
 
