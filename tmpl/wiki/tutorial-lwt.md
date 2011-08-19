@@ -175,7 +175,7 @@ v` right after `t` returns `v` instead of waiting for the timeout to expire.
 
 !!Using Mailboxes
 
-!!Mutexes
+!!Mutexes and cooperation
 
 With Lwt, it is often possible to avoid mutexes altogether! The web server from
 the [Ocsigen](http://ocsigen.org) project uses only two, and the Mirage source code
@@ -184,8 +184,15 @@ executing concurrently on a given piece of data. This can happen when a thread i
 preemptively interrupted and another one starts running. In Lwt, a thread executes
 serially until it explicitly yields (most commonly via `bind`); for this reason, Lwt
 threads are said to be [cooperative](http://en.wikipedia.org/wiki/Cooperative_multitasking#Cooperative_multitasking.2Ftime-sharing).
+From the coder point of view, it means that expressions without the `Lwt.t` type
+will *never* be interrupted. Thus instead of surrounding an expression with
+`lock` and `unlock` statements, in `Lwt` one can simply enforce the type not to
+be `Lwt.t`.
 
-TODO: thread to event loop transformation, Lwt.t type
+The danger associated to cooperative threading is having threads not
+cooperating: if an expression takes a lot of time to compute with no cooperation
+point, then the whole program hangs. The `Lwt.yield` function introduces an
+explicit cooperation point. `sleep`ing obviously makes the thread  coopearates.
 
 If locking a data structure is still needed between yield points, the `Lwt_mutex` module provides the necessary functions.
 
@@ -324,5 +331,7 @@ Thus, the two fragments of code are equivalent:
   |false -> ...
 }}
 
-!!Lists and Streams
+!!How does it work
+
+Understanding the basic principles behind `Lwt` can be helpful.
 
