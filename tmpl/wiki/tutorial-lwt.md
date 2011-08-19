@@ -59,8 +59,9 @@ to print to console use `OS.Console.log`.  Note that `OS` is a Mirage-specific
 module. If you are using `Lwt` in another context, use `Lwt_unix.sleep` and
 `Lwt_io.write`.
 
-You will need to have Mirage [installed](/install) and the script `mir-unix-socket` available
-in your search path.  Create a file `foo.ml` with the following content:
+You will need to have Mirage [installed](/install) and the script
+`mir-unix-socket` available in your search path.  Create a file
+`foo.ml` with the following content and edit it:
 
 {{
   open Lwt
@@ -153,27 +154,111 @@ Modify the `timeout` function so that it returns either `None` if `t` has not
 yet returned after `f` seconds or `Some v` if `t` returns `v` within `f` seconds.
 In order to achieve this behaviour it is possible (but not strictly necessary)
 to use the function `state` that, given a thread, returns the state it is in,
-either `Sleep`, `Return` or `Fail`^[The absence of state reflecting execution
-will be explained latter.].
+either `Sleep`, `Return` or `Fail`.
 
 !!!Solution
 
-todo
+{{
+  (*TODO*)
+}}
+
 
 !!!Challenge
 
-Does your solution match the one given here and return after `t` seconds? If
-not, you already solved this challenge and can move to the next one.
-
-This is highly inefficient, modify the function again so that it returns `Some
-v` right after `t` returns `v` instead of waiting for the timeout to expire.
+Does your solution match the one given here and always return after `f` seconds?
+If your solution is better and returns either after `f` seconds when the threads
+timeouts or before if the thread returns early, you can consider the present
+challenge completed. If not, modify your function so that it returns `Some v`
+right after `t` returns `v` instead of waiting for the timeout to expire. In
+order to test your solution, you can compile it to a mirage executable and run
+it using the skeleton provided for the first challenge.
 
 !!!Solution
 
+{{
+  (*TODO*)
+}}
+
+
 !!A Pipe example
+
+!!!Challenge
+
+Write an echo server, reading from a dummy input generator and, for each line it
+reads, writing it to the console. The server should never stop listening to the
+dummy input generator. Here is a basic dummy input generator:
+
+{{
+  let read_line () =
+    OS.Time.sleep (Random.float 2.5) >>= fun () ->
+    Lwt.return (String.create (Random.int 20))
+}}
+
+!!!Solution
+
+{{
+  (*TODO*)
+}}
+
+
 
 
 !!Using Mailboxes
+
+Among the different modules the Lwt library provides is `Lwt_mvar`. This module
+eases inter-thread communication. Any thread can place a value in a mailbox
+using the `put` function; dually, the `take` function remove a value from a
+mailbox and returns it. `take`'s type, `'a Lwt_mvar.t -> 'a Lwt.t`, indicates
+that a call to the function may block (and let other threads run). The function
+actually returns only when a value is available in the mailbox.
+
+Here are the needed functions from the `Lwt_mvar` module:
+
+> `type 'a t` (the type of a mailbox variable)
+>
+> `val create_empty : unit -> 'a t` (`create ()` creates a new empty mailbox
+> variable)
+>
+> `val put : 'a t -> 'a -> unit Lwt.t` (`put mvar value` puts a value into a
+> mailbox variable)
+>
+> `val take : 'a t -> 'a Lwt.t` (`take mvar` will take any currently available
+> value from the mailbox variable)
+
+!!!Challenge
+
+Write a small set of function to help doing pipeline parallelism. The interface
+to be implemented is the following (names should give away the appropriate
+semantic):
+
+{{
+  val map: ('a -> 'b Lwt.t) -> 'a Lwt_mvar.t -> 'b Lwt_mvar.t
+  val split : ('a * 'b) Lwt_mvar.t -> 'a Lwt_mvar.t * 'b Lwt_mvar.t
+  val filter: ('a -> bool Lwt.t) -> 'a Lwt_mvar.t -> 'a Lwt_mvar.t
+}}
+
+!!! Solution
+
+{{
+  (*TODO*)
+}}
+
+
+!!!Challenge
+
+Using the pipelining helpers, change the echo server into a string processing
+server. The new version should output each line of text uppercased
+(`String.uppercase` can help) after waiting for `l` seconds where `l` is the
+length of the string.
+
+!!!Solution
+
+{{
+  (*TODO*)
+}}
+
+
+
 
 !!Mutexes and cooperation
 
