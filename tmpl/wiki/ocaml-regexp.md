@@ -21,7 +21,7 @@ set of perks and drawbacks:
   the Javascript backend. This solution may be hard to maintain, especially if a
   fourth backend is to be included. Moreover each regexp library uses a slightly
   different convention for regexps (e.g. see the
-  [`magic`](http://vimdoc.sourceforge.net/htmldoc/pattern.html#/magic) option in
+  [magic](http://vimdoc.sourceforge.net/htmldoc/pattern.html#/magic) option in
   vim) which means that a lot of translation code might be needed.
 * Do string processing without regexps (using `String.index` and the likes).
   This solution is portable and potentially efficient. However, the potential
@@ -33,7 +33,7 @@ set of perks and drawbacks:
 !!Benchmarking `Str`
 
 There is a purely OCaml regexp library readily available, called `Regexp` and
-was developed by Claude Marché from the LRI laboratory. You can find the
+developed by Claude Marché from the LRI laboratory. You can find the
 documentation and the source on the associated
 [webpage](http://www.lri.fr/~marche/regexp/). After getting rid of mutexes
 (which, in Mirage, are of no use, because of the `Lwt` based
@@ -67,14 +67,14 @@ than `Str`. Why?
 The `Regexp` library is lightweight, and so far faster than its C based
 counterparts. One of the features `Regexp` lacks is "group capture": the ability
 to refer to blocks of a previously matched string. In `Pcre` it is possible to
-explicitly and selectively turn group capturing off by via special syntax,
+explicitly and selectively turn group capturing off via special syntax,
 instead of the regular parentheses. `Str` does not offer  this, and thus
 imposes the runtime cost of capture even when not necessary. In other words, the
-slowdown "is not a feature, it's a bug!"
+slowdown/group capturing "is not a feature, it's a bug!"
 
 !!!The Mirage Regexp library
 
-With the introduction of `Regexp` into the tree, the the libraries available to Mirage
+With the introduction of `Regexp` into the tree, the libraries available to Mirage
 applications are now `Str`-free and safer to use across multiple backends. The main
 drawback is a slight increase in verbosity of some parts of the code.
 Benchmarking the substitution operation is also necessary to assess the
