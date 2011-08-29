@@ -13,13 +13,8 @@ let spec = {
 }
 
 let main () =
+  Log.info "Server" "listening to HTTP on port %d" port;
   Net.Manager.create (fun mgr interface id ->
     let src = None, port in
     Http.Server.listen mgr (`TCPv4 (src, spec))
-  )
-
-let _ =
-  OS.Main.run ( 
-    Log.info "Server" "listening to HTTP on port %d" port;
-    main ()
   )

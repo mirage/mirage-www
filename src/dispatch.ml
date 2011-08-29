@@ -14,7 +14,8 @@ module Resp = struct
   let dyn_xhtml = dyn ~headers:Pages.content_type_xhtml
 
   (* dispatch non-file URLs *)
-  let dispatch req = function
+  let dispatch req =
+    function
     | [] | [""]
     | [""; "index.html"]         -> dyn_xhtml req Pages.Index.t
     | [""; "resources"]          -> dyn_xhtml req Pages.Resources.t

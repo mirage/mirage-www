@@ -3,13 +3,13 @@ all: filesystem_static.ml filesystem_templates.ml bin
 	@ :
 
 filesystem_static.ml: ../files/*
-	mlcrunch ../files > $@
+	mir-crunch ../files > $@
 
 filesystem_templates.ml: ../tmpl/*
-	mlcrunch ../tmpl > $@
+	mir-crunch ../tmpl > $@
 
 bin: filesystem_static.ml filesystem_templates.ml
-	mir-unix-socket mirage-www.bin
+	mir-build -j 5 unix-socket/server.bin
 
 .PHONY:clean
 clean:
