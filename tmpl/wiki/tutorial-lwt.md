@@ -60,7 +60,7 @@ module. If you are using `Lwt` in another context, use `Lwt_unix.sleep` and
 `Lwt_io.write`.
 
 You will need to have Mirage [installed](/install) and the script
-`mir-unix-socket` available in your search path.  Create a file
+`mir-build` available in your search path.  Create a file
 `foo.ml` with the following content and edit it:
 
 {{
@@ -69,45 +69,39 @@ You will need to have Mirage [installed](/install) and the script
 
   let main () =
       (* the guts go here *)
-
-  let _ =
-    OS.Console.log ("Hello, world! Here we go..");
-    OS.Main.run (main ())
 }}
 
 Create a file `bar.mir` with the following content:
 
 {{
-  Foo
+  Foo.main
 }}
 
-This project file contains the names of all the modules to link
-the final program to; in this case, just the one `Foo` module.
-To compile the application, execute `mir-unix-socket bar.bin`. You can now run
-your example by executing the `_build/bar.bin` file.
+This project file contains the name of the entry point of the program,
+in the form `Module.function`. The build system will automatically figure out
+all the dependencies required, so you do not need to specify them manually.
+To compile the application, execute `mir-build unix-socket/bar.bin`.
+You can now run your example by executing the `_build/unix-socket/bar.bin` file.
 
 !!!Solution
 
 {{
   open Lwt (* provides bind and join *)
-  open OS (* provides Time, Console and Main *)
+  open OS  (* provides Time, Console and Main *)
 
   let main () =
     bind (join [ 
       bind (Time.sleep 1.0) (fun () ->
         Console.log "Heads"; return ()
       );
-            bind (Time.sleep 2.0) (fun () -> 
+      bind (Time.sleep 2.0) (fun () -> 
         Console.log "Tails"; return ()
       );
     ]) (fun () -> 
       Console.log ("Finished"); return ()
     )
-
-  let () =
-    Console.log ("Hello, world! Here we go..");
-    Main.run (main ())
 }}
+This is `regress/lwt/heads1.ml` in the Mirage code repository.
 
 When opening the `Lwt` module, the infix operator `>>=` is also made available.
 This operator is an alternative to the `bind` function and often makes the code
@@ -117,19 +111,17 @@ solution more simply:
 
 {{
   open Lwt (* provides >>= and join *)
-  open OS (* provides Time, Console and Main *)
+  open OS  (* provides Time, Console and Main *)
 
   let main () =
-    (join [
-      Time.sleep 1.0 >>= fun () -> (Console.log "Heads"; return ());
-      Time.sleep 2.0 >>= fun () -> (Console.log "Tails"; return ())
-     ]) >>= fun () ->
-     Console.log ("Finished"); return ())
-
-  let () =
-    Console.log ("Hello, world! Here we go..");
-    Main.run (main ())
+    join [
+      (Time.sleep 1.0 >>= fun () -> (Console.log "Heads"; return ()));
+      (Time.sleep 2.0 >>= fun () -> (Console.log "Tails"; return ()));
+     ] >>= fun () ->
+       Console.log "Finished";
+       return ()
 }}
+This is `regress/lwt/heads2.ml` in the Mirage code repository.
 
 !!Cancelling
 
@@ -363,11 +355,8 @@ let main () =
   lwt () = heads <&> tails in
   Console.log "Finished";
   return ()
-
-let () =
-  Console.log ("Hello, world! Here we go..");
-  Main.run (main ())
 }}
+This is `regress/lwt/heads_syntax.ml` in the Mirage code repository.
 
 Now we define two threads, `heads` and `tails`, and block until they are both complete (via the `lwt ()` and the `<&>` join operator).
 If you want to print "Finished" before the previous threads are complete, just replace the `lwt ()` with `let _`, and it will not block.
