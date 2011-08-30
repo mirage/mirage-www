@@ -26,7 +26,7 @@
 <a class="aboutPerson" href="http://www.cs.nott.ac.uk/~rmm/">Richard Mortier</a>
 </td>
 <td>
-<a class="aboutPerson" href="https://github.com/">Raphael Proust</a>
+<a class="aboutPerson" href="https://github.com/raphael-proust">Raphael Proust</a>
 </td>
 </tr>
 </table>
