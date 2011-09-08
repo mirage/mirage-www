@@ -1,5 +1,6 @@
 open Printf
 open Cow
+open Lwt
 
 let bar cur =
   let bars = [
@@ -21,7 +22,12 @@ let bar cur =
   <:html< <ul>$list:List.map one bars$</ul> >>
 
 let t ?extra_header page title content =
-  match Filesystem_templates.t "/main.html" with
+  lwt tmpl = OS.Devices.find_kv_ro "templates" >>=
+    function
+    | None -> fail (Failure "no template device")
+    | Some x -> return x in
+  lwt content = content in
+  match_lwt tmpl#read "/main.html" with
     | Some main_html ->
       let templates = [
         "TITLE"       , <:html<$str:title$>>;
@@ -29,10 +35,8 @@ let t ?extra_header page title content =
         "EXTRA_HEADER", <:html<$opt:extra_header$>>;
         "CONTENT"     , <:html<$content$>>;
       ] in
-      Html.of_string ~templates main_html
+      Util.string_of_stream main_html >|= Html.of_string ~templates
     | None ->
       Printf.eprintf "[ERROR] Cannot find tmp/main.html\n";
       assert false
-
-
 

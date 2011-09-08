@@ -8,6 +8,7 @@ module Resp = struct
 
   (* dynamic response *)
   let dyn ?(headers=[]) req body =
+    lwt body = body in
     let status = `OK in
     Http.Server.respond ~body ~headers ~status ()
 
@@ -42,15 +43,16 @@ let rec remove_empty_tail = function
   | hd::tl -> hd :: remove_empty_tail tl
 
 (* main callback function *)
-let t conn_id req =
+let t static conn_id req =
   let path = Http.Request.path req in
   let path_elem =
     remove_empty_tail (Re.split_delim (Re.from_string "/") path)
   in
 
   (* determine if it is static or dynamic content *)
-  match Filesystem_static.t path with
+  match_lwt static#read path with
   |Some body ->
+     lwt body = Util.string_of_stream body in
      Http.Server.respond ~body ()
   |None ->
      Resp.dispatch req path_elem

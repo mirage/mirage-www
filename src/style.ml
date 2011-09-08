@@ -293,4 +293,4 @@ let t =
   icon ^ custom
 *)
 
-let t = custom
+let t = Lwt.return custom
