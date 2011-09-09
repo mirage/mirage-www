@@ -17,7 +17,7 @@ let read_file f =
         String.sub f (n+1) (String.length f - n - 1)
     with _ -> "" in
   match suffix with
-    | "md"   -> file_template f >|= Markdown.of_string >|= Markdown.to_html
+    | "md"   -> file_template f >|= Markdown.of_string >|= Markdown.to_html 
     | "html" -> file_template f >|= Html.of_string
     | _      -> return []
 
@@ -48,7 +48,7 @@ let content_type_xhtml = ["content-type","text/html"]
 module Index = struct
   let body =
     lwt l1 = read_file "/intro.md" >|= (fun l -> col_files l none) in 
-    lwt l2 = read_file "/intro-r.md" >|= (fun l -> col_files l none) in
+    lwt l2 = read_file "/intro-r.html" >|= (fun l -> col_files l none) in
     return (<:html<
     <div class="left_column">
       $l1$
@@ -57,7 +57,7 @@ module Index = struct
       $l2$
     </div>
     >>)
-  let t =Template.t "Home" "home" body >|= Html.to_string
+  let t = Template.t "Home" "home" body >|= Html.to_string
 end
 
 module Resources = struct
@@ -66,7 +66,7 @@ module Resources = struct
 end 
 
 module About = struct
-  let body = read_file "/docs.md" >|= (fun l -> col_files l none)
+  let body = read_file "/about.md" >|= (fun l -> col_files l none)
   let t = Template.t "About" "about" body >|= Html.to_string
 end
 
