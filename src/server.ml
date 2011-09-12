@@ -2,10 +2,6 @@ open Lwt
 
 let port = 80
 
-(* put in a reference to our fake filesystem so it gets compiled *)
-let _ = Filesystem_templates.size
-let _ = Filesystem_static.size
-
 let main () =
   Log.info "Server" "listening to HTTP on port %d" port;
   lwt static = OS.Devices.find_kv_ro "static" >>=
