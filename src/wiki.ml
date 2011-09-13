@@ -1,5 +1,6 @@
 open Cow
 open Printf
+open Lwt
 
 (* Date *)
 
@@ -54,7 +55,7 @@ type entry = {
 }
 
 let body_of_entry read_file e =
- match e.body with |File x -> read_file x |Html x -> x
+ match e.body with |File x -> read_file x |Html x -> return x
 
 let compare_dates e1 e2 =
   let d1 = e1.updated in let d2 = e2.updated in
@@ -63,8 +64,8 @@ let compare_dates e1 e2 =
 (* Convert a wiki record into an Html.t fragment *)
 let html_of_entry ?(want_date=true) read_file e =
   let permalink = sprintf "%s/wiki/%s" Config.baseurl e.permalink in
-  let body = body_of_entry read_file e in
-  <:html<
+  lwt body = body_of_entry read_file e in
+  return <:html<
     <div class="wiki_entry">
       $if want_date then html_of_date e.updated else []$
       <div class="wiki_entry_heading">
@@ -80,8 +81,8 @@ let html_of_entry ?(want_date=true) read_file e =
  >>
 
 let html_of_index read_file =
-  let body = read_file "index.md" in
-  <:html<
+  lwt body = read_file "index.md" in
+  return <:html<
     <div class="wiki_entry">
      <div class="wiki_entry_body">$body$</div>
    </div>
@@ -288,7 +289,8 @@ let html_of_page ?disqus ~left_column ~right_column =
      | Some perm  -> disqus_html perm
      | None      -> <:html< >> in
 
-  <:html<
+  lwt left_column = left_column in
+  return <:html<
     <div class="left_column_wiki">
       <div class="summary_information">$left_column$</div>
     </div>
@@ -324,6 +326,16 @@ let thomas = {
   uri       = Some "http://gazagnaire.org";
   email     = Some "thomas@gazagnaire.org";
 }
+let raphael = {
+  Atom.name = "Raphael Proust";
+  uri       = Some "https://github.com/raphael-proust";
+  email     = Some "raphlalou@gmail.com";
+}
+let balraj = {
+  Atom.name = "Balraj Singh";
+  uri       = None;
+  email     = Some "balraj.singh@cl.cam.ac.uk";
+}
 
 let rights = Some "All rights reserved by the author"
 
@@ -332,7 +344,7 @@ let categories = [
       "media"; "usage"; "perf"
   ];
   "language", [
-      "syntax"; "dyntype"
+      "syntax"; "dyntype"; "libraries"
   ];
   "backend", [
       "unix"; "xen"; "node";
@@ -349,6 +361,22 @@ let categories = [
 ]
 
 let entries = [
+  { updated    = date (2011, 08, 18, 16, 0);
+    author     = balraj;
+    subject    = "Getting Started with Lwt threads";
+    body       = File "tutorial-lwt.md";
+    permalink  = "tutorial-lwt";
+    categories = ["concurrency", "threads"]
+  };
+
+  { updated    = date (2011, 08, 12, 15, 0);
+    author     = raphael;
+    subject    = "Portable Regular Expressions";
+    body       = File "ocaml-regexp.md";
+    permalink  = "ocaml-regexp";
+    categories = ["language","libraries"]
+  };
+
   { updated    = date (2011, 06, 18, 15, 47);
     author     = anil;
     subject    = "Delimited Continuations vs Lwt for Threads";
@@ -447,6 +475,7 @@ let _ = List.iter (fun x -> Printf.printf "ENT: %s\n%!" x.subject) entries
 let permalink_exists x = List.exists (fun e -> e.permalink = x) entries
 
 let atom_entry_of_ent filefn e =
+  lwt content = body_of_entry filefn e in
   let meta = {
     Atom.id      = permalink e;
     title        = e.subject;
@@ -454,10 +483,11 @@ let atom_entry_of_ent filefn e =
     author       = Some e.author;
     updated      = atom_date e.updated;
     rights;
-  } in {
+  } in
+  return {
     Atom.entry = meta;
     summary    = None;
-    content    = body_of_entry filefn e;
+    content
   }
   
 let atom_feed filefn es = 
@@ -467,5 +497,5 @@ let atom_feed filefn es =
   let title = "openmirage wiki" in
   let subtitle = Some "a cloud operating system" in
   let feed = { Atom.id; title; subtitle; author=None; rights; updated } in
-  let entries = List.map (atom_entry_of_ent filefn) es in
-  { Atom.feed=feed; entries }
+  lwt entries = Lwt_list.map_s (atom_entry_of_ent filefn) es in
+  return { Atom.feed=feed; entries }

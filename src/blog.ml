@@ -1,5 +1,6 @@
 open Cow
 open Printf
+open Lwt
 
 (* Date *)
 
@@ -44,9 +45,10 @@ type entry = {
 }
 (* Convert a blog record into an Html.t fragment *)
 let html_of_entry read_file e =
+  lwt body = read_file e.body in
   let permalink = sprintf "%s/blog/%s" Config.baseurl e.permalink in
   let permalink_disqus = sprintf "%s/blog/%s#disqus_thread" Config.baseurl e.permalink in
-  <:html<
+  return <:html<
     <div class="blog_entry">
       $html_of_date e.updated$
       <div class="blog_entry_heading">
@@ -57,7 +59,7 @@ let html_of_entry read_file e =
           <i>$html_of_author e.author$</i>
         </div>
      </div>
-     <div class="blog_entry_body">$read_file e.body$</div>
+     <div class="blog_entry_body">$body$</div>
      <a href=$str:permalink_disqus$>Comments</a>
    </div>
  >>
@@ -123,11 +125,11 @@ let html_of_entries ?disqus read_file entries =
   let dh = match disqus with
      | Some perm -> disqus_html perm
      | None -> <:html< >> in
-
-  <:html<
+  lwt entries = Lwt_list.map_s (html_of_entry read_file) entries in
+  return <:html<
   <div class="left_column_blog">
     <div class="summary_information">
-      $list:List.map (html_of_entry read_file) entries$
+      $list:entries$
     </div>
   </div>
   <div style="clear:both;"></div>
@@ -157,6 +159,11 @@ let thomas = {
   uri       = Some "http://gazagnaire.org";
   email     = Some "thomas@gazagnaire.org";
 }
+let raphael = {
+  Atom.name = "Raphael Proust";
+  uri       = Some "https://github.com/raphael-proust";
+  email     = Some "raphlalou@gmail.com";
+}
 
 let rights = Some "All rights reserved by the author"
 
@@ -164,13 +171,13 @@ let entries = [
   { updated    = date (2010, 10, 11, 15, 0);
     author     = anil;
     subject    = "Self-hosting Mirage website";
-    body       = "blog/welcome.md";
+    body       = "/blog/welcome.md";
     permalink  = "self-hosting-mirage-website";
   };
   { updated    = date (2011, 04, 11, 15, 0);
     author     = anil;
     subject    = "A Spring Wiki Cleaning";
-    body       = "blog/spring-cleaning.md";
+    body       = "/blog/spring-cleaning.md";
     permalink  = "spring-cleaning";
   };
 ]
@@ -193,10 +200,12 @@ let atom_entry_of_ent filefn e =
     author       = Some e.author;
     updated      = atom_date e.updated;
     rights;
-  } in {
+  } in 
+  lwt content = filefn e.body in
+  return {
     Atom.entry = meta;
     summary    = None;
-    content    = filefn e.body
+    content
   }
   
 let atom_feed filefn es = 
@@ -206,6 +215,6 @@ let atom_feed filefn es =
   let title = "openmirage blog" in
   let subtitle = Some "a cloud operating system" in
   let feed = { Atom.id; title; subtitle; author=None; rights; updated } in
-  let entries = List.map (atom_entry_of_ent filefn) es in
-  { Atom.feed=feed; entries }
+  lwt entries = Lwt_list.map_s (atom_entry_of_ent filefn) es in
+  return { Atom.feed=feed; entries }
 

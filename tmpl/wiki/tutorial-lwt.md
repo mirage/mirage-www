@@ -1,11 +1,10 @@
 [Lwt](http://www.ocsigen.org/lwt) is a lightweight cooperative
 threading library for OCaml. A good way to understand Lwt and its use
 in Mirage is to write some simple code. This document introduces the
-basic concepts and suggests programs to write.
-
-Before starting, it is important to know that Lwt has a number of
-syntax extensions that are widely used in Mirage. These are introduced
-as you go along through the tutorial and summarized at the end.
+basic concepts and suggests programs to write.  Note that Lwt has a
+number of syntax extensions that are widely used in Mirage. These are
+introduced as you go along through the tutorial and summarized at the
+end.
 
 
 !!Tutorial
@@ -75,18 +74,26 @@ with the following content and edit it:
 }}
 
 
-Create a file `bar.mir` with the following content:
+To compile the application, execute `mir-build unix-socket/foo.bin`.
+
+You can now run your example by executing the
+`_build/unix-socket/foo.bin` file.
+
+The build system will automatically figure out all the dependencies
+required, so you do not need to specify them manually.  It will also
+automatically create a project file called `foo.mir` and in it it will
+put the default entry point of the program in the form
+`Module.function`:
 
 {{
   Foo.main
 }}
 
-This project file contains the name of the entry point of the program,
-in the form `Module.function`. The build system will automatically
-figure out all the dependencies required, so you do not need to
-specify them manually.  To compile the application, execute `mir-build
-unix-socket/bar.bin`.  You can now run your example by executing the
-`_build/unix-socket/bar.bin` file.
+If however a different entry point (not `main`) is to be used then it
+has to be explicitly specified.  This is done by putting the entry
+point in the required form in a `.mir` file, say `bar.mir`.  To
+compile the application, execute `mir-build unix-socket/bar.bin`.
+
 
 !!!Solution
 
@@ -158,19 +165,19 @@ is in, either `Sleep`, `Return` or `Fail`.
 
 {{
   let timeout f t =
-    Time.sleep f >>= fun () ->
-    match state t with 
-    | Return v -> return (Some v)
-    | _ -> cancel t; return None
+    Time.sleep f >>=
+    fun () ->
+      match state t with 
+      | Return v -> return (Some v)
+      | _ -> cancel t; return None
 }}
 
+This is used in `regress/lwt/timeout1.ml` in the Mirage code
+repository.
 
-!!!Challenge
 
 Does your solution match the one given here and always returns after
-`f` seconds?  In a typical timeout situation, if `t` returns before
-the timeout has expired, one would want it to return right away
-instead of waiting for the timeout to expire.
+`f` seconds, even when `t` returns within `f` seconds?  
 
 This is a good place to introduce a third operation to compose
 threads: `pick`.
@@ -182,22 +189,32 @@ threads: `pick`.
 `pick` behaves exactly like `choose` except that it cancels all other
 sleeping threads when one terminates.
 
-The next challenge is to modify the timeout function to return `Some
-v` right after `t` returns `v` instead of waiting for the timeout to
-expire.  In order to test your solution, you can compile it to a
-mirage executable and run it using the skeleton provided for the first
+
+!!!Challenge
+
+In a typical use of a timeout, if `t` returns before the timeout has
+expired, one would want the timeout to be cancelled right away.  The
+next challenge is to modify the timeout function to return `Some v`
+right after `t` returns.  Of course if the timeout does expire then it
+should cancel `t` and return `None`.
+
+In order to test your solution, you can compile it to a mirage
+executable and run it using the skeleton provided for the first
 challenge.
+
 
 !!!Solution
 
 {{
-let timeout f t =
-  let tmout = Time.sleep f in
-  pick [
-    (tmout >>= fun () -> return None);
-    (t >>= fun v -> return (Some v));
-  ]
+  let timeout f t =
+    let tmout = Time.sleep f in
+    pick [
+      tmout >>= fun () -> return None;
+      t >>= fun v -> return (Some v);
+    ]
 }}
+This is in `regress/lwt/timeout2.ml` in the Mirage code
+repository.
 
 
 !!A Pipe example
@@ -211,16 +228,23 @@ input generator:
 
 {{
   let read_line () =
-    OS.Time.sleep (Random.float 2.5) >>= fun () ->
-    Lwt.return (String.make (Random.int 20) 'a')
+    OS.Time.sleep (Random.float 2.5) >>=
+    fun () ->
+      Lwt.return (String.make (Random.int 20) 'a')
 }}
 
 !!!Solution
 
 {{
   let rec echo_server () =
-    read_line () >>= fun s -> Console.log s; echo_server ()
+    read_line () >>=
+    fun s ->
+      Console.log s;
+      echo_server ()
 }}
+
+This is in `regress/lwt/echoserver1.ml` in the Mirage code
+repository.
 
 
 
@@ -249,7 +273,7 @@ Here are the needed functions from the `Lwt_mvar` module:
 
 !!!Challenge
 
-Write a small set of function to help doing pipeline parallelism. The
+Write a small set of functions to help do pipeline parallelism. The
 interface to be implemented is the following (names should give away
 the appropriate semantic):
 
@@ -280,9 +304,9 @@ the appropriate semantic):
       Lwt_mvar.take mab >>=
         fun (va, vb) ->
           Lwt.join [
-	    Lwt_mvar.put ma va;
-	    Lwt_mvar.put mb vb;
-	  ] >>=
+            Lwt_mvar.put ma va;
+            Lwt_mvar.put mb vb;
+          ] >>=
           fun () -> split_h () in
     let t = split_h () in
     (ma, mb)
@@ -294,7 +318,7 @@ the appropriate semantic):
       fun v -> f v >>=
       fun w -> match w with
                | true -> (Lwt_mvar.put m v >>=
-	                  fun () -> filter_h ())
+                          fun () -> filter_h ())
                | false -> filter_h () in
     let t = filter_h () in
     m
@@ -304,8 +328,8 @@ Note that in each of the above a recursive Lwt thread is created and
 will run forever.  However, if the pipline ever needs to be torn down
 then this recusive thread needs to be cancelled.  This can be done by
 modifying the above funtions to also return the `'t Lwt.t` returned by
-`map_h`, `split_h` and `filter_h`.  Now, to tear down the pipline
-simply be cancel this thread.
+`map_h`, `split_h` and `filter_h`, which can then be cancelled when
+required.
 
 
 
@@ -338,18 +362,21 @@ where `l` is the length of the string.
   
   let echo_server () =
     let m = create_empty () in
-    let m_cap = map cap_str m in
-    let m_delayed = map wait_strlen m_cap in
-    let _ = print_mvar m_delayed in
+    let m_delayed = map wait_strlen m in
+    let m_cap = map cap_str m_delayed in
+    let _ = print_mvar m_cap in
     let rec one_line n = 
       read_line () >>=
       fun s ->
         let str = Printf.sprintf "%d: %s" n s in
-        Console.log str;
-        Lwt_mvar.put m str >>
-        one_line (n + 1) in
+          Console.log str;
+          Lwt_mvar.put m str >>
+          one_line (n + 1) in
     one_line 1
 }}
+
+This is in `regress/lwt/echoserver2.ml` in the Mirage code
+repository.
 
 
 !!!Challenge
@@ -357,21 +384,14 @@ where `l` is the length of the string.
 To exercise all the pipelining helpers, set up an integer processing
 server with the following stages:
 
-1. At the input: every second write a tupple containing a pair of
-   small random integers `(Random.int 1000, Random.int 1000)`.
-
-2. Process it through a stage that produces a tupple containing the
-   sum and the product of the input integers.
-
-3. `split` the tupple into two mvars.
-
-4. For each of the mvars insert a stage that simply prints the value
-   and then puts it to an output mvar.
-
-5. Insert a filter stage that only lets odd numbers through.
-
-6. Now insert a final stage that prints the word "Odd" if anything
-   reaches it.
+Every second write a tupple containing a pair of small random integers
+`(Random.int 1000, Random.int 1000)` into a mailbox.  Process it
+through a stage that produces a tupple containing the sum and the
+product of the input integers, `split` the tupple into two mvars and
+for each of the mvars insert a stage that simply prints the value and
+then puts it to an output mvar.  Next insert a filter stage that only
+lets odd numbers through.  Finally add a stage that prints the word
+"Odd" if anything reaches it.
 
 
 !!!Solution
@@ -411,6 +431,8 @@ server with the following stages:
     let _ = print_odd mm_p_f in
     inp ()
 }}
+
+This is in `regress/lwt/intserver.ml` in the Mirage code repository.
 
 
 
@@ -465,7 +487,6 @@ comprehensive [pa_lwt](http://ocsigen.org/lwt/api/Pa_lwt) syntax
 extension that makes writing threaded code as convenient as vanilla
 OCaml.  Mirage includes this extension by default, so you can use it
 anywhere you want.
-
 
 !!!Anonymous Bind
 
