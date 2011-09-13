@@ -102,14 +102,14 @@ compile the application, execute `mir-build unix-socket/bar.bin`.
   open OS  (* provides Time, Console and Main *)
 
   let main () =
-    bind (join [ 
+    bind (join [
       bind (Time.sleep 1.0) (fun () ->
         Console.log "Heads"; return ()
       );
-      bind (Time.sleep 2.0) (fun () -> 
+      bind (Time.sleep 2.0) (fun () ->
         Console.log "Tails"; return ()
       );
-    ]) (fun () -> 
+    ]) (fun () ->
       Console.log ("Finished"); return ()
     )
 }}
@@ -165,11 +165,9 @@ is in, either `Sleep`, `Return` or `Fail`.
 
 {{
   let timeout f t =
-    Time.sleep f >>=
-    fun () ->
-      match state t with 
-      | Return v -> return (Some v)
-      | _ -> cancel t; return None
+    Time.sleep f >>= fun () -> match state t with
+    | Return v -> return (Some v)
+    | _ -> cancel t; return None
 }}
 
 This is used in `regress/lwt/timeout1.ml` in the Mirage code
@@ -177,7 +175,7 @@ repository.
 
 
 Does your solution match the one given here and always returns after
-`f` seconds, even when `t` returns within `f` seconds?  
+`f` seconds, even when `t` returns within `f` seconds?
 
 This is a good place to introduce a third operation to compose
 threads: `pick`.
@@ -228,19 +226,17 @@ input generator:
 
 {{
   let read_line () =
-    OS.Time.sleep (Random.float 2.5) >>=
-    fun () ->
-      Lwt.return (String.make (Random.int 20) 'a')
+    OS.Time.sleep (Random.float 2.5) >>= fun () ->
+    Lwt.return (String.make (Random.int 20) 'a')
 }}
 
 !!!Solution
 
 {{
   let rec echo_server () =
-    read_line () >>=
-    fun s ->
-      Console.log s;
-      echo_server ()
+    read_line () >>= fun s ->
+    Console.log s;
+    echo_server ()
 }}
 
 This is in `regress/lwt/echoserver1.ml` in the Mirage code
@@ -289,37 +285,38 @@ the appropriate semantic):
   let map f m_in =
     let m_out = Lwt_mvar.create_empty () in
     let rec map_h () =
-      Lwt_mvar.take m_in >>=
-      f >>=
-      fun v -> Lwt_mvar.put m_out v >>=
-      fun () -> map_h () in
+      Lwt_mvar.take m_in   >>=
+      f                    >>= fun v ->
+      Lwt_mvar.put m_out v >>= fun () ->
+      map_h ()
+    in
     let t = map_h () in
     m_out
-   
- 
+
+
   let split mab =
     let ma = Lwt_mvar.create_empty () in
     let mb = Lwt_mvar.create_empty () in
     let rec split_h () =
-      Lwt_mvar.take mab >>=
-        fun (va, vb) ->
-          Lwt.join [
-            Lwt_mvar.put ma va;
-            Lwt_mvar.put mb vb;
-          ] >>=
-          fun () -> split_h () in
+      Lwt_mvar.take mab >>= fun (va, vb) ->
+      Lwt.join [
+          Lwt_mvar.put ma va;
+          Lwt_mvar.put mb vb;
+        ]               >>= fun () ->
+      split_h ()
+    in
     let t = split_h () in
     (ma, mb)
-   
- 
+
+
   let filter f a =
     let m = Lwt_mvar.create_empty () in
-    let rec filter_h () = Lwt_mvar.take a >>=
-      fun v -> f v >>=
-      fun w -> match w with
-               | true -> (Lwt_mvar.put m v >>=
-                          fun () -> filter_h ())
-               | false -> filter_h () in
+    let rec filter_h () =
+      Lwt_mvar.take a >>= fun v ->
+      f v             >>= function
+      | true -> (Lwt_mvar.put m v >>= fun () -> filter_h ())
+      | false -> filter_h ()
+    in
     let t = filter_h () in
     m
 }}
@@ -347,32 +344,38 @@ where `l` is the length of the string.
     Lwt.return (String.make (Random.int 20) 'a')
 
   let wait_strlen str =
-    OS.Time.sleep (float_of_int (String.length str)) >>=
-    fun () ->
-      Lwt.return str
+    OS.Time.sleep (float_of_int (String.length str)) >>= fun () ->
+    Lwt.return str
 
   let cap_str str =
     Lwt.return (String.uppercase str)
 
   let rec print_mvar m =
-    Lwt_mvar.take m >>=
-    fun s ->
-      Console.log s;
-      print_mvar m
-  
+    Lwt_mvar.take m >>= fun s ->
+    Console.log s;
+    print_mvar m
+
+  let ( |> ) x f = f x
+
   let echo_server () =
-    let m = create_empty () in
-    let m_delayed = map wait_strlen m in
-    let m_cap = map cap_str m_delayed in
-    let _ = print_mvar m_cap in
-    let rec one_line n = 
-      read_line () >>=
-      fun s ->
-        let str = Printf.sprintf "%d: %s" n s in
-          Console.log str;
-          Lwt_mvar.put m str >>
-          one_line (n + 1) in
-    one_line 1
+    (*define mailboxes*)
+    let m_input = create_empty () in
+    let m_output =
+      m |> map wait str_length |> map cap_str
+    in
+    (*define loops*)
+    let rec read () =
+      read_line ()             >>= fun s ->
+      Lwt_mvar.put m_input str >>=
+      feed
+    in
+    let rec write () =
+      Lwt_mvar.take m_output >>= fun r ->
+      Console.log r;
+      write ()
+    in
+    (*starts loops*)
+    join [(feed ()); (write ())]
 }}
 
 This is in `regress/lwt/echoserver2.ml` in the Mirage code
@@ -398,21 +401,19 @@ lets odd numbers through.  Finally add a stage that prints the word
 
 {{
   let add_mult (a, b) =
-    Lwt.return (a + b, a * b) 
+    Lwt.return (a + b, a * b)
 
   let print_and_go str a =
     Console.log (Printf.sprintf "%s %d" str a);
     Lwt.return a
 
   let test_odd a =
-    return (1 == (a mod 2))
+    return (1 = (a mod 2))
 
-  let rec print_odd m = 
-    Lwt_mvar.take m >>=
-    fun a -> 
-      Console.log (Printf.sprintf "Odd: %d" a);
-      print_odd m
-
+  let rec print_odd m =
+    Lwt_mvar.take m >>= fun a ->
+    Console.log (Printf.sprintf "Odd: %d" a);
+    print_odd m
 
   let main () =
     let m_input = Lwt_mvar.create_empty () in
@@ -424,9 +425,9 @@ lets odd numbers through.  Finally add a stage that prints the word
     let mm_p_f = filter test_odd mm_p in
     let rec inp () =
       Console.log "----";
-      Lwt_mvar.put m_input (Random.int 1000, Random.int 1000) >>=
-      fun () -> Time.sleep 1. >>=
-      fun () -> inp () in
+      Lwt_mvar.put m_input (Random.int 1000, Random.int 1000) >>= fun () ->
+      Time.sleep 1.                                           >>= fun () ->
+      inp () in
     let _ = print_odd ma_p_f in
     let _ = print_odd mm_p_f in
     inp ()
@@ -513,7 +514,7 @@ doesnt work, the next extension provides a neat solution.
 !!!Lwt Bindings
 
 The binding operation reverses the normal `let` binding by specifying the name
-of the bound variable in the second argument. Consider a thread `e1`:
+of the bound variable in the second argument. Consider the thread:
 
 {{
   e1 >>= fun x -> e2
@@ -535,7 +536,7 @@ tails example from above and see how it looks when rewritten with
 these syntax extensions:
 
 {{
-open Lwt 
+open Lwt
 open OS
 
 let main () =
@@ -557,7 +558,8 @@ This is `regress/lwt/heads_syntax.ml` in the Mirage code repository.
 Now we define two threads, `heads` and `tails`, and block until they
 are both complete (via the `lwt ()` and the `<&>` join operator).  If
 you want to print "Finished" before the previous threads are complete,
-just replace the `lwt ()` with `let _`, and it will not block.
+just put the print statement (`Console.log`) before the join statement
+(`... <&> ...`).
 
 !!!Exceptions and Try/Catch
 
@@ -574,10 +576,12 @@ alternative syntax:
       raise_lwt Foo
     with
       |Foo -> return (Console.log "Foo raised")
+      |exc -> raise_lwt exc
 }}
 
 This looks similar to normal OCaml code, except that the caught
-exception has an `Lwt.t` return type appended to it.
+exception has an `Lwt.t` return type appended to it. The last line of this
+example is here in order to propagate uncatched exceptions.
 
 !!!Control Flow
 
@@ -587,7 +591,7 @@ recursively.  Just use `for_lwt` and `while_lwt` instead; for example:
 
 {{
   for_lwt i = 0 to 10 do
-    OS.Time.sleep 1.0 >>
+    OS.Time.sleep (float_of_int i) >>
     return (OS.Console.log "foo")
   done
 }}
@@ -611,4 +615,15 @@ code are equivalent:
 !!How does it work
 
 Understanding the basic principles behind `Lwt` can be helpful.
+
+The core of Lwt is based on an event loop. In "standard" (non-Mirage)
+settings, this loop is started using the `Lwt_main.run` function, However,
+when using Mirage, the loop is automatically started using the program's
+entry point (as specified in the optional `.mir` file).
+
+Because it's based on an event loop, threads are actually very cheap in Lwt.
+(Hence the name.) Sleeping actually registers an event that will wake up the
+associated thread when possible. Depending on the backend, the event
+registering slightly differs.
+
 
