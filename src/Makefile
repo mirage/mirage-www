@@ -12,7 +12,7 @@ kv_ro: _build/unix-socket/kv_ro_server.bin *.ml
 run_crunch: crunch
 	sudo ./_build/unix-socket/crunch_server.bin
 
-run_kv_ro: crunch
+run_kv_ro: kv_ro
 	sudo mir-run -b unix-socket -kv_ro static:../files -kv_ro templates:../tmpl ./_build/unix-socket/kv_ro_server.bin
 
 filesystem_static.ml: ../files/*
