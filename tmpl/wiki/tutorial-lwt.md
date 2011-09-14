@@ -576,12 +576,10 @@ alternative syntax:
       raise_lwt Foo
     with
       |Foo -> return (Console.log "Foo raised")
-      |exc -> raise_lwt exc
 }}
 
 This looks similar to normal OCaml code, except that the caught
-exception has an `Lwt.t` return type appended to it. The last line of this
-example is here in order to propagate uncatched exceptions.
+exception has an `Lwt.t` return type appended to it.
 
 !!!Control Flow
 
