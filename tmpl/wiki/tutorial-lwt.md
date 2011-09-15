@@ -3,8 +3,7 @@ threading library for OCaml. A good way to understand Lwt and its use
 in Mirage is to write some simple code. This document introduces the
 basic concepts and suggests programs to write.  Note that Lwt has a
 number of syntax extensions that are widely used in Mirage. These are
-introduced as you go along through the tutorial and summarized at the
-end.
+introduced as you go along through the tutorial.
 
 
 !!Tutorial
@@ -48,6 +47,10 @@ same exception as the first to fail, after all threads terminate.
 
 `choose l` behaves as the first thread in l to terminate. If several
 threads are already terminated, one is chosen at random.
+
+The infix operators `<&>` and `<?>` are defined in the `Lwt` module, where
+ `a <&> b` is equivalent to `join [a; b]`, and
+ `a <?> b` is equivalent to `choose [a; b]`.
 
 !!Sleep and join
 
@@ -116,11 +119,22 @@ compile the application, execute `mir-build unix-socket/bar.bin`.
 
 This is `regress/lwt/heads1.ml` in the Mirage code repository.
 
-When opening the `Lwt` module, the infix operator `>>=` is also made
-available.  This operator is an alternative to the `bind` function and
-often makes the code more readable. E.g. consider `bind (bind (bind t
-f) g) h` and the operator based equivalent expression `t >>= f >>= g
->>= h`. We can rewrite the previous solution more simply:
+!!!Syntax Extensions
+
+Using Lwt does sometimes require significantly restructing code, and
+in particular doesn't work with many of the more imperative OCaml
+control structures such as `for` and `while`.  Luckily, Lwt includes a
+comprehensive [pa_lwt](http://ocsigen.org/lwt/api/Pa_lwt) syntax
+extension that makes writing threaded code as convenient as vanilla
+OCaml.  Mirage includes this extension by default, so you can use it
+anywhere you want.
+
+This is a good place to introduce some of these extensions.  When
+opening the `Lwt` module, the infix operator `>>=` is made available.
+This operator is an alternative to the `bind` function and often makes
+the code more readable. E.g. consider `bind (bind (bind t f) g) h` and
+the operator based equivalent expression `t >>= f >>= g >>= h`.  We
+can now rewrite the previous solution more simply:
 
 {{
   open Lwt (* provides >>= and join *)
@@ -135,6 +149,76 @@ f) g) h` and the operator based equivalent expression `t >>= f >>= g
        return ()
 }}
 This is `regress/lwt/heads2.ml` in the Mirage code repository.
+
+
+!!!Anonymous Bind
+
+If you are chaining sequences of blocking I/O, a common pattern is to write:
+
+{{
+  write stdio "Foo" >>= fun () ->
+  write stdio "Bar" >>= fun () ->
+  write stdio "Done"
+}}
+
+You can replace these anonymous binds with with `>>` operator instead:
+
+{{
+  write stdio "Foo" >>
+  write stdio "Bar" >>
+  write stdio "Done"
+}}
+
+!!!Lwt Bindings
+
+The binding operation reverses the normal `let` binding by specifying the name
+of the bound variable in the second argument. Consider the thread:
+
+{{
+  e1 >>= fun x -> e2
+}}
+
+Here, we wait for the result of `e1`, bind the result to `x` and
+continue into `e2`.  You can replace this with the more natural `lwt`
+syntax to act as a "blocking let":
+
+{{
+  lwt x = e1 in
+  e2
+}}
+
+Now, the code looks like just normal OCaml code, except that we
+substitute `lwt` for `let`, with the effect that the call blocks until
+the result of that thread is available.  Lets revisit our heads and
+tails example from above and see how it looks when rewritten with
+these syntax extensions:
+
+{{
+  open Lwt
+  open OS
+
+  let main () =
+    let heads =
+      Time.sleep 1.0 >>
+      return (Console.log "Heads");
+    in
+    let tails =
+      Time.sleep 2.0 >>
+      return (Console.log "Tails");
+    in
+    lwt () = heads <&> tails in
+    Console.log "Finished";
+    return ()
+}}
+
+This is `regress/lwt/heads_syntax.ml` in the Mirage code repository.
+
+Here we define two threads, `heads` and `tails`, and block until they
+are both complete (via the `lwt ()` and the `<&>` join operator).  If
+you want to print "Finished" before the previous threads are complete,
+just put the print statement (`Console.log`) before the join statement
+(`... <&> ...`).
+
 
 !!Cancelling
 
@@ -165,9 +249,10 @@ is in, either `Sleep`, `Return` or `Fail`.
 
 {{
   let timeout f t =
-    Time.sleep f >>= fun () -> match state t with
+    Time.sleep f >>
+    match state t with 
     | Return v -> return (Some v)
-    | _ -> cancel t; return None
+    | _        -> cancel t; return None
 }}
 
 This is used in `regress/lwt/timeout1.ml` in the Mirage code
@@ -207,8 +292,8 @@ challenge.
   let timeout f t =
     let tmout = Time.sleep f in
     pick [
-      tmout >>= fun () -> return None;
-      t >>= fun v -> return (Some v);
+      (tmout >>= fun () -> return None);
+      (t >>= fun v -> return (Some v));
     ]
 }}
 This is in `regress/lwt/timeout2.ml` in the Mirage code
@@ -226,7 +311,7 @@ input generator:
 
 {{
   let read_line () =
-    OS.Time.sleep (Random.float 2.5) >>= fun () ->
+    OS.Time.sleep (Random.float 2.5) >>
     Lwt.return (String.make (Random.int 20) 'a')
 }}
 
@@ -234,7 +319,7 @@ input generator:
 
 {{
   let rec echo_server () =
-    read_line () >>= fun s ->
+    lwt s = read_line () in
     Console.log s;
     echo_server ()
 }}
@@ -287,7 +372,7 @@ the appropriate semantic):
     let rec map_h () =
       Lwt_mvar.take m_in   >>=
       f                    >>= fun v ->
-      Lwt_mvar.put m_out v >>= fun () ->
+      Lwt_mvar.put m_out v >>
       map_h ()
     in
     let t = map_h () in
@@ -302,28 +387,29 @@ the appropriate semantic):
       Lwt.join [
           Lwt_mvar.put ma va;
           Lwt_mvar.put mb vb;
-        ]               >>= fun () ->
+        ]               >>
       split_h ()
     in
     let t = split_h () in
     (ma, mb)
 
 
-  let filter f a =
-    let m = Lwt_mvar.create_empty () in
+  let filter f m_in =
+    let m_out = Lwt_mvar.create_empty () in
     let rec filter_h () =
-      Lwt_mvar.take a >>= fun v ->
-      f v             >>= function
-      | true -> (Lwt_mvar.put m v >>= fun () -> filter_h ())
+      Lwt_mvar.take m_in >>= fun v ->
+      f v                >>= function
+      | true -> (Lwt_mvar.put m_out v >>
+                 filter_h ())
       | false -> filter_h ()
     in
     let t = filter_h () in
-    m
+    m_out
 }}
 
 Note that in each of the above a recursive Lwt thread is created and
 will run forever.  However, if the pipline ever needs to be torn down
-then this recusive thread needs to be cancelled.  This can be done by
+then this recusive thread should be cancelled.  This can be done by
 modifying the above funtions to also return the `'t Lwt.t` returned by
 `map_h`, `split_h` and `filter_h`, which can then be cancelled when
 required.
@@ -344,14 +430,14 @@ where `l` is the length of the string.
     Lwt.return (String.make (Random.int 20) 'a')
 
   let wait_strlen str =
-    OS.Time.sleep (float_of_int (String.length str)) >>= fun () ->
+    OS.Time.sleep (float_of_int (String.length str)) >>
     Lwt.return str
 
   let cap_str str =
     Lwt.return (String.uppercase str)
 
   let rec print_mvar m =
-    Lwt_mvar.take m >>= fun s ->
+    lwt s = Lwt_mvar.take m in
     Console.log s;
     print_mvar m
 
@@ -361,7 +447,7 @@ where `l` is the length of the string.
     (*define mailboxes*)
     let m_input = create_empty () in
     let m_output =
-      m |> map wait str_length |> map cap_str
+      m_input |> map wait str_length |> map cap_str
     in
     (*define loops*)
     let rec read () =
@@ -375,7 +461,7 @@ where `l` is the length of the string.
       write ()
     in
     (*starts loops*)
-    join [(feed ()); (write ())]
+    (read ()) <&> (write ())
 }}
 
 This is in `regress/lwt/echoserver2.ml` in the Mirage code
@@ -401,35 +487,31 @@ lets odd numbers through.  Finally add a stage that prints the word
 
 {{
   let add_mult (a, b) =
-    Lwt.return (a + b, a * b)
+    return (a + b, a * b)
 
   let print_and_go str a =
     Console.log (Printf.sprintf "%s %d" str a);
-    Lwt.return a
+    return a
 
   let test_odd a =
     return (1 = (a mod 2))
 
   let rec print_odd m =
-    Lwt_mvar.take m >>= fun a ->
+    lwt a = Lwt_mvar.take m in
     Console.log (Printf.sprintf "Odd: %d" a);
     print_odd m
 
-  let main () =
+  let ( |> ) x f = f x
+
+  let int_server () =
     let m_input = Lwt_mvar.create_empty () in
-    let m_add_mult = map add_mult m_input in
-    let (ma, mm) = split m_add_mult in
-    let ma_p = map (print_and_go "Add:") ma in
-    let ma_p_f = filter test_odd ma_p in
-    let mm_p = map (print_and_go "Mult:") mm in
-    let mm_p_f = filter test_odd mm_p in
+    let (ma, mm) = m_input |> map add_mult |> split in
+    let _ = ma |> map (print_and_go "Add:") |> filter test_odd |> print_odd in
+    let _ = mm |> map (print_and_go "Mult:") |> filter test_odd |> print_odd in
     let rec inp () =
-      Console.log "----";
-      Lwt_mvar.put m_input (Random.int 1000, Random.int 1000) >>= fun () ->
-      Time.sleep 1.                                           >>= fun () ->
+      Lwt_mvar.put m_input (Random.int 1000, Random.int 1000) >>
+      Time.sleep 1. >>
       inp () in
-    let _ = print_odd ma_p_f in
-    let _ = print_odd mm_p_f in
     inp ()
 }}
 
@@ -462,104 +544,7 @@ obviously makes the thread coopearates.
 If locking a data structure is still needed between yield points, the
 `Lwt_mutex` module provides the necessary functions.
 
-!!Operators
 
-Here is a list of operators defined in the `Lwt` module:
-
-{{
-  let (>>=) t f = Lwt.bind t f
-  let (=<<) f t = Lwt.bind t f
-
-  let ( >> ) t f = Lwt.bind t (fun _ -> f ())
-
-  let ( <?> ) t1 t2 = Lwt.choose [t1; t2]
-  let ( <&> ) t1 t2 = Lwt.join [t1; t2]
-
-  let (>|=) t f = Lwt.map f t
-  let (=|<) f t = Lwt.map f t
-}}
-
-!!Syntax Extensions
-
-Using Lwt does sometimes require significantly restructing code, and
-in particular doesn't work with many of the more imperative OCaml
-control structures such as `for` and `while`.  Luckily, Lwt includes a
-comprehensive [pa_lwt](http://ocsigen.org/lwt/api/Pa_lwt) syntax
-extension that makes writing threaded code as convenient as vanilla
-OCaml.  Mirage includes this extension by default, so you can use it
-anywhere you want.
-
-!!!Anonymous Bind
-
-If you are chaining sequences of blocking I/O, a common pattern is to write:
-
-{{
-  write stdio "Foo" >>= fun () ->
-  write stdio "Bar" >>= fun () ->
-  write stdio "Done"
-}}
-
-You can replace these anonymous binds with with `>>` operator instead:
-
-{{
-  write stdio "Foo" >>
-  write stdio "Bar" >>
-  write stdio "Done"
-}}
-
-You have to be a little careful when using this shortcut, as it only works
-reliably when chaining to another function that returns an Lwt binding. If it
-doesnt work, the next extension provides a neat solution.
-
-!!!Lwt Bindings
-
-The binding operation reverses the normal `let` binding by specifying the name
-of the bound variable in the second argument. Consider the thread:
-
-{{
-  e1 >>= fun x -> e2
-}}
-
-Here, we wait for the result of `e1`, bind the result to `x` and
-continue into `e2`.  You can replace this with the more natural `lwt`
-syntax to act as a "blocking let":
-
-{{
-  lwt x = e1 in
-  e2
-}}
-
-Now, the code looks like just normal OCaml code, except that we
-substitute `lwt` for `let`, with the effect that the call blocks until
-the result of that thread is available.  Lets revisit our heads and
-tails example from above and see how it looks when rewritten with
-these syntax extensions:
-
-{{
-open Lwt
-open OS
-
-let main () =
-  let heads =
-    Time.sleep 1.0 >>
-    return (Console.log "Heads");
-  in
-  let tails =
-    Time.sleep 2.0 >>
-    return (Console.log "Tails");
-  in
-  lwt () = heads <&> tails in
-  Console.log "Finished";
-  return ()
-}}
-
-This is `regress/lwt/heads_syntax.ml` in the Mirage code repository.
-
-Now we define two threads, `heads` and `tails`, and block until they
-are both complete (via the `lwt ()` and the `<&>` join operator).  If
-you want to print "Finished" before the previous threads are complete,
-just put the print statement (`Console.log`) before the join statement
-(`... <&> ...`).
 
 !!!Exceptions and Try/Catch
 
