@@ -1,5 +1,3 @@
-open Cow
-
 (* XXX: some of the following code can be factored out *)
 
 let content_type_css = [ "content-type", "text/css" ]
@@ -258,10 +256,10 @@ let date_css = <:css<
 >>
 
 
-let custom =Css.to_string <:css<
-  $Css.reset_padding$;
+let custom =Cow.Css.to_string <:css<
+  $Cow.Css.reset_padding$;
   $date_css$;
-  $Code.ocaml_css$;
+  $Cow.Code.ocaml_css$;
 
   body {
     background-image: url('../graphics/cloud-bg.png');
