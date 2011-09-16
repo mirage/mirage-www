@@ -121,7 +121,7 @@ This is `regress/lwt/heads1.ml` in the Mirage code repository.
 
 !!!Syntax Extensions
 
-Using Lwt does sometimes require significantly restructing code, and
+Using Lwt does sometimes require significantly restructuring code, and
 in particular doesn't work with many of the more imperative OCaml
 control structures such as `for` and `while`.  Luckily, Lwt includes a
 comprehensive [pa_lwt](http://ocsigen.org/lwt/api/Pa_lwt) syntax
@@ -161,7 +161,7 @@ If you are chaining sequences of blocking I/O, a common pattern is to write:
   write stdio "Done"
 }}
 
-You can replace these anonymous binds with with `>>` operator instead:
+You can replace these anonymous binds with the `>>` operator instead:
 
 {{
   write stdio "Foo" >>
@@ -341,16 +341,19 @@ actually returns only when a value is available in the mailbox.
 
 Here are the needed functions from the `Lwt_mvar` module:
 
-> `type 'a t` (the type of a mailbox variable)
->
-> `val create_empty : unit -> 'a t` (`create ()` creates a new empty mailbox
-> variable)
->
-> `val put : 'a t -> 'a -> unit Lwt.t` (`put mvar value` puts a value into a
-> mailbox variable)
->
-> `val take : 'a t -> 'a Lwt.t` (`take mvar` will take any currently available
-> value from the mailbox variable)
+{{  
+  (* type of a mailbox variable *)
+  type 'a t
+
+  (* creates a new empty mailbox variable *)
+  val create_empty : unit -> 'a t
+
+  (* puts a value into a mailbox variable, and blocks if it is full *)
+  val put : 'a t -> 'a -> unit Lwt.t
+
+  (* will take any available value and block if the mailbox is empty *)
+  val take : 'a t -> 'a Lwt.t 
+}}
 
 !!!Challenge
 
