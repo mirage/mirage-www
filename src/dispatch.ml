@@ -8,6 +8,7 @@ module Resp = struct
 
   (* dynamic response *)
   let dyn ?(headers=[]) req body =
+    printf "Dispatch: dynamic URL %s\n%!" (Http.Request.path req);
     lwt body = body in
     let status = `OK in
     Http.Server.respond ~body ~headers ~status ()
