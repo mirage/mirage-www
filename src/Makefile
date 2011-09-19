@@ -1,31 +1,15 @@
-.PHONY: crunch kv_ro run_crunch run_kv_ro
+# valid targets for various combinations :
+# run-socket_crunch
+# run-socket_fs
+# run-direct_crunch
+# run-direct_fs
+# run-xen_crunch
+# run-xen_fs
 
-all: run_kv_ro
-	@ :
+all: run-socket_crunch
 
-crunch: _build/unix-socket/crunch_server.bin *.ml
-	@ :
-
-kv_ro: _build/unix-socket/kv_ro_server.bin *.ml
-	@ :
-
-run_crunch: crunch
-	sudo ./_build/unix-socket/crunch_server.bin
-
-run_kv_ro: kv_ro
-	sudo mir-run -b unix-socket -kv_ro static:../files -kv_ro templates:../tmpl ./_build/unix-socket/kv_ro_server.bin
-
-filesystem_static.ml: ../files/*
-	mir-crunch -name "static" ../files > $@
-
-filesystem_templates.ml: ../tmpl/*
-	mir-crunch -name "templates" ../tmpl > $@
-
-_build/unix-socket/crunch_server.bin: filesystem_static.ml filesystem_templates.ml
-	mir-build -j 5 unix-socket/crunch_server.bin
-
-_build/unix-socket/kv_ro_server.bin:
-	mir-build -j 5 unix-socket/kv_ro_server.bin
+run-%:
+	./build_$*.sh
 
 .PHONY:clean
 clean:
