@@ -5,13 +5,19 @@ open Lwt
 open Cow
 
 let file_template f =
+  try_lwt begin
   lwt tmpl = OS.Devices.find_kv_ro "templates" >>= function
     |Some x -> return x |None -> raise_lwt (Failure "no templates dev") in
   match_lwt tmpl#read f with
   | Some content -> Util.string_of_stream content
   | None -> raise_lwt (Failure (sprintf "File template not found: %s" f))
+  end
+  with exn -> 
+    printf "Pages.read_file: exception %s\n%!" (Printexc.to_string exn);
+    exit 1
 
 let read_file f =
+  try_lwt
   let suffix =
     try let n = String.rindex f '.' in
         String.sub f (n+1) (String.length f - n - 1)
@@ -20,6 +26,9 @@ let read_file f =
     | "md"   -> file_template f >|= Markdown.of_string >|= Markdown.to_html 
     | "html" -> file_template f >|= Html.of_string
     | _      -> return []
+  with exn -> 
+    printf "Pages.read_file: exception %s\n%!" (Printexc.to_string exn);
+    exit 1
 
 let col_files l r = <:html< 
   <div class="left_column">
