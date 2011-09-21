@@ -19,3 +19,18 @@ make install
 }}
 
 The installation has the UNIX and Xen custom runtimes, if appropriate for the build platform.  You require 64-bit Linux to compile up Xen binaries (32-bit will not work).
+
+!!IDE integration
+
+!!!Emacs
+
+Mirage comes with a slightly modified version of the `caml-mode` to dispay type information. In order to install it, you can run
+
+{{
+make install-el
+}}
+
+!!!Vim
+
+You will the latest version [ocaml-annot](https://github.com/avsm/ocaml-annot) (>= 0.9.1), to be able to display type information for your Mirage projects.
+
