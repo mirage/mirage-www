@@ -4,7 +4,7 @@ Mirage has been tested on Debian Squeeze, Ubuntu Lucid and MacOS X 10.6. To comp
 
 You need to have the following installed and available on your `PATH`:
 
-* OCaml 3.12.0 (see [this page](/wiki/install-ocaml) if you don't have it already installed)
+* [OCaml](http://www.ocaml.org) 3.12.0 (see [this page](/wiki/install-ocaml) if you don't have it already installed)
 * (optional) [Js_of_ocaml](http://ocsigen.org/js_of_ocaml/install)
 
 !!Installation
@@ -32,5 +32,5 @@ make install-el
 
 !!!Vim
 
-You will the latest version [ocaml-annot](https://github.com/avsm/ocaml-annot) (>= 0.9.1), to be able to display type information for your Mirage projects.
+You will need the latest version [ocaml-annot](https://github.com/avsm/ocaml-annot) (>= 0.9.1), to be able to display type information for your Mirage projects.
 
