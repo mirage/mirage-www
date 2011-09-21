@@ -387,6 +387,14 @@ let entries = [
  
   { updated    = date (2011, 04, 12, 13, 0);
     author     = anil;
+    subject    = "OCaml Installation";
+    body       = File "install-ocaml.md";
+    permalink  = "install-ocaml";
+    categories = ["overview","usage"];
+  };
+
+  { updated    = date (2011, 09, 21, 17, 30);
+    author     = thomas;
     subject    = "Installation";
     body       = File "install.md";
     permalink  = "install";
