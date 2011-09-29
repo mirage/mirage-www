@@ -180,6 +180,12 @@ let entries = [
     body       = "/blog/spring-cleaning.md";
     permalink  = "spring-cleaning";
   };
+  { updated    = date (2011, 09, 29, 11, 10);
+    author     = anil;
+    subject    = "An Outing to CUFP 2011";
+    body       = "/blog/an-outing-to-cufp.md";
+    permalink  = "an-outing-to-cufp";
+  }
 ]
 
 let cmp_ent a b = Atom.compare (atom_date a.updated) (atom_date b.updated)
