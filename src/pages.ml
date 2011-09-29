@@ -75,7 +75,12 @@ module Resources = struct
 end 
 
 module About = struct
-  let body = read_file "/about.md" >|= (fun l -> col_files l none)
+  
+  let body =
+    lwt l = read_file "/about.md" in
+    lwt r = read_file "/about-r.md" in
+    return (col_files l r)
+
   let t = Template.t "About" "about" body >|= Html.to_string
 end
 

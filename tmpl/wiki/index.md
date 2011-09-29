@@ -12,12 +12,15 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 
 * [Technical Talks](/wiki/talks)
 * [Publications and Related Work](/wiki/papers)
+* [Tutorial Slides](http://tutorial.openmirage.org)
 
 !!Technical
 
-* [HTCaML](/wiki/htcaml)
-* [Caml on the Web (COW)](/wiki/cow)
-* [Developing the Mirage networking stack on UNIX](/wiki/running-ethernet-stack-on-unix)
-* [Delimited Continuations vs Lwt for Threads](/wiki/delimcc-vs-lwt)
+* *Threads*
+    * [introduction to Lwt](/wiki/tutorial-lwt)
+    * [delimited continuations vs explicit monadic threads](/wiki/delimcc-vs-lwt)
+* [Developing the networking stack on UNIX](/wiki/running-ethernet-stack-on-unix)
 * [DNS Performance Tests](/wiki/performance)
 * [Portable Regular Expressions](/wiki/ocaml-regexp)
+* [HTCaML](/wiki/htcaml)
+* [Caml on the Web (COW)](/wiki/cow)
