@@ -7,6 +7,7 @@
 * *Raphael Proust*, University of Cambridge
 * *Haris Rotsos*, University of Cambridge, [cl.cam.ac.uk](http://www.cl.cam.ac.uk/~cr409/)
 * *Balraj Singh*, University of Cambridge
+* *Jon Crowcroft*, University of Cambridge, [cl.cam.ac.uk](http://www.cl.cam.ac.uk/~jac22/)
 
 !!The Project
 
