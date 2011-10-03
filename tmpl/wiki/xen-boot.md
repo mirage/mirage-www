@@ -39,7 +39,33 @@ Edit your `.profile` to add the following variables:
 There is a script that then takes care of packaging up the Mirage kernel image and uploading it to Amazon automatically..
 It is in [scripts/ec2.sh](https://github.com/avsm/mirage/tree/master/scripts/ec2.sh), and you specify your `kernel.xen` file as the first argument to the script.
 
-This support can be improved a lot, and we should also wrap the kernel as an EBS image instead of an AMI so that it can be booted on the `m1.micro` (free-tier) instances that do not support AMI storage. Anyone sufficiently motivated, please send in a patch.
+!!! Using mirco instances
+
+To use the EC2 `t1.micro` instances the kernel needs to reside inside an EBS volume. To create a bootable EBS volume containing an Mirage kernel use the following steps:
+
+* Start a t1.micro instance: `ec2-run-instances ami-7f418316 -k mirage -t t1.micro` - We need this instance to access the EBS volume which will later contain our Mirage kernel
+* Create an EBS volume: `ec2-create-volume --size 1` - We use the smallest possible size: 1G
+* Attach volume to your instance: `ec2-attach-volume ${VOLUME} -i ${INSTANCE} -d /dev/sdh` - Where `$VOLUME` is your volume id and `$INSTANCE` is your instance id
+* Login to the miro instance using ssh: `ssh -i mirage-ssh-key.pem ec2-user@${PUBLIC-AWS-NAME}` - Where `$PUBLIC-AWS-NAME` is your public DNS name of your running micro instance
+* Create a partition on `/dev/sdh` and format it using `mkfs.ext2 /dev/sdh1` and mount the volume: `sudo mount /dev/sdh1 /mnt`
+* Copy a Xen Mirage kernel (e.g. the http example with DHCP enabled) to the running micro instance
+* Login via ssh and move the kernel to `/mnt/kernel`
+* Create grub directories `sudo mkdir -p /mnt/boot/grub/`
+* Create grub menu.lst file in `/mnt/boot/grub/menu.lst`
+
+    default 0
+    timeout 1
+    title Mirage-Test
+         root (hd0,0)
+         kernel /kernel 
+
+* Log out of instance
+* Create EBS snapshot `ec2-create-snapshot ${VOLUME}`
+* You can stop the running mirco instance now
+* Register your AMI using `ec2-register --snapshot ${SNAPSHOT} --kernel aki-4e7d9527 --architecture x86_64` Note the familiar kernel id: This is the pv-grub kernel that is also used in `script/ec2.sh`.
+* Start your EBS backed Mirage kernel in a micro instance: `ec2-run-instances ${EBSAMI} -k mirage -t t1.micro`
+
+This process could be put in a script easily. 
 
 !!Xen Cloud Platform
 
