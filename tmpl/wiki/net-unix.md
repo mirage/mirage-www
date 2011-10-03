@@ -2,7 +2,7 @@ Mirage applications can be compiled all into micro-kernels, and so have to handl
 
 Actually developing complex code in a micro-kernel environment is not terribly productive, as you do not have access to the usual UNIX debugging tools.  Luckily, many variants of UNIX provide the facility to "tap" Ethernet traffic into user-space directly via the [Tuntap](http://en.wikipedia.org/wiki/Tuntap) interface.  This page describes how to get Mirage up and running with Ethernet traffic under UNIX.
 
-* First, ensure you have a working Mirage installation by following the [INSTALL]("https://github.com/avsm/mirage/blob/master/INSTALL.md") file in the source repository. You can verify it by running `cd tests/basic/sleep && mir-unix-direct sleep.bin && ./_build/sleep.bin` from the root source directory.
+* First, ensure you have a working Mirage installation by following the [INSTALL](https://github.com/avsm/mirage/blob/master/INSTALL.md) file in the source repository. You can verify it by running `cd tests/basic/sleep && mir-unix-direct sleep.bin && ./_build/sleep.bin` from the root source directory.
 
 * Next, make sure your operating system supports the `tuntap` driver. On MacOS X, you will need to install [TunTapOSX](http://tuntaposx.sourceforge.net/). Most Linux distributions will have it already enabled by default. I havent had a chance to run this on *BSD yet; it will likely require a minor patch to the [driver](http://github.com/avsm/mirage/tree/master/lib/os/runtime_unix) as the `ioctl` interface varies between implementations.
 
@@ -19,10 +19,10 @@ Actually developing complex code in a micro-kernel environment is not terribly p
 * Once this is working, you can play around with the rest of the protocol stack in `lib/net/direct`:
 
 	* [ARP](http://en.wikipedia.org/wiki/Address_Resolution_Protocol) translates between Ethernet MAC addresses and IP addresses.
-	* [ICMP](http://en.wikipedia.org/wiki/Internet_Control_Message_Protocol) is a control protocol for IP, usually to send back errors.  [IPv4](http://en.wikipedia.org/wiki/Internet_Protocol_Suite) is in [lib/net/direct/ipv4.ml]("https://github.com/avsm/mirage/blob/master/lib/net/direct/ipv4.ml").
-	* The datagram protocol [UDP](http://en.wikipedia.org/wiki/User_Datagram_Protocol) is in [lib/net/direct/udp.ml]("https://github.com/avsm/mirage/blob/master/lib/net/direct/udp.ml"), and an experimental [TCP](http://en.wikipedia.org/wiki/Transmission_Control_Protocol) stack is in [lib/net/direct/tcp.ml]("https://github.com/avsm/mirage/blob/master/lib/net/direct/tcp.ml").
-	* If you have Ethernet bridging, you can use the [DHCP](http://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol) client in [lib/net/direct/dhcp/client.ml]("https://github.com/avsm/mirage/blob/master/lib/net/direct/dhcp/client.ml") to get an IP address.
-	* Finally, a full [DNS](http://en.wikipedia.org/wiki/Domain_Name_System) server exists in [lib/net/dns]("https://github.com/avsm/mirage/tree/master/lib/net/dns"). No DNS client exists, but it should be fairly easy to extend the server code.
+	* [ICMP](http://en.wikipedia.org/wiki/Internet_Control_Message_Protocol) is a control protocol for IP, usually to send back errors.  [IPv4](http://en.wikipedia.org/wiki/Internet_Protocol_Suite) is in [lib/net/direct/ipv4.ml](https://github.com/avsm/mirage/blob/master/lib/net/direct/ipv4.ml).
+	* The datagram protocol [UDP](http://en.wikipedia.org/wiki/User_Datagram_Protocol) is in [lib/net/direct/udp.ml](https://github.com/avsm/mirage/blob/master/lib/net/direct/udp.ml), and an experimental [TCP](http://en.wikipedia.org/wiki/Transmission_Control_Protocol) stack is in [lib/net/direct/tcp.ml](https://github.com/avsm/mirage/blob/master/lib/net/direct/tcp.ml).
+	* If you have Ethernet bridging, you can use the [DHCP](http://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol) client in [lib/net/direct/dhcp/client.ml](https://github.com/avsm/mirage/blob/master/lib/net/direct/dhcp/client.ml) to get an IP address.
+	* Finally, a full [DNS](http://en.wikipedia.org/wiki/Domain_Name_System) server exists in [lib/net/dns](https://github.com/avsm/mirage/tree/master/lib/net/dns). No DNS client exists, but it should be fairly easy to extend the server code.
 
 If you want to modify the code, then just edit any of those ML files, and type in `make && make install` at the top-level of the repository, and then rebuild the application. You should get familiar with the `tcpdump` utility, and graphical ones like [Wireshark](http://www.wireshark.org/). Run these against the `tap0` interface, for example:
 
