@@ -63,7 +63,7 @@ let compare_dates e1 e2 =
 
 (* Convert a wiki record into an Html.t fragment *)
 let html_of_entry ?(want_date=true) read_file e =
-  let permalink = sprintf "%s/wiki/%s" Config.baseurl e.permalink in
+  let permalink = sprintf "/wiki/%s" e.permalink in
   lwt body = body_of_entry read_file e in
   return <:html<
     <div class="wiki_entry">
@@ -160,10 +160,10 @@ let short_html_of_category num (l1, l2l) =
       | 0   -> <:html<<div class="wiki_bar_l2">$str:l2$</div>&>>
       | nl2 ->
         let num = <:html<<i>$str:sprintf " (%d)" nl2$</i>&>> in
-        let url = sprintf "%s/wiki/tag/%s/%s" Config.baseurl l1 l2 in
+        let url = sprintf "/wiki/tag/%s/%s" l1 l2 in
         <:html<<div class="wiki_bar_l2"><a href=$str:url$>$str:l2$</a>$num$</div>&>>
   ) l2l in
-  let url = sprintf "%s/wiki/tag/%s" Config.baseurl l1 in
+  let url = sprintf "/wiki/tag/%s" l1 in
   let l1h = match num.l1 l1 with
     | 0   -> <:html<<div class="wiki_bar_l1">$str:l1$</div>&>>
     | nl1 -> <:html<<div class="wiki_bar_l1"><a href=$str:url$>$str:l1$</a></div>&>> in
@@ -186,7 +186,7 @@ let short_category_css = <:css<
 (* The full right bar in wiki *)
 let short_html_of_categories entries categories =
   let num = num_of_entries entries in
-  let url = sprintf "%s/wiki/" Config.baseurl in
+  let url = "/wiki/" in
   <:html<
     <div class="wiki_bar">
       <div class="wiki_bar_l0"><a href=$str:url$>Index</a></div>
@@ -212,7 +212,7 @@ let short_categories_css = <:css<
 (* Index pages *)
 
 let permalink e =
-  sprintf "%s/wiki/%s" Config.baseurl e.permalink
+  sprintf "/wiki/%s" e.permalink
 
 let html_of_category entries (l1, l2) =
   let equal (ll1, ll2) = match l2 with
@@ -501,7 +501,7 @@ let atom_entry_of_ent filefn e =
 let atom_feed filefn es = 
   let es = List.rev (List.sort cmp_ent es) in
   let updated = atom_date (List.hd es).updated in
-  let id = sprintf "%s/wiki/" Config.baseurl in
+  let id = "/wiki/" in
   let title = "openmirage wiki" in
   let subtitle = Some "a cloud operating system" in
   let feed = { Atom.id; title; subtitle; author=None; rights; updated } in

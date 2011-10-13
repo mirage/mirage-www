@@ -75,7 +75,12 @@ module Resources = struct
 end 
 
 module About = struct
-  let body = read_file "/about.md" >|= (fun l -> col_files l none)
+  
+  let body =
+    lwt l = read_file "/about.md" in
+    lwt r = read_file "/about-r.md" in
+    return (col_files l r)
+
   let t = Template.t "About" "about" body >|= Html.to_string
 end
 
@@ -86,7 +91,7 @@ module Blog = struct
   (* Make a full Html.t including RSS link and headers from a list
      of Html.t entry fragments *)
   let make ?title body =
-    let url = sprintf "%s/blog/atom.xml" Config.baseurl in
+    let url = sprintf "/blog/atom.xml" in
     let extra_header = <:html<
      <link rel="alternate" type="application/atom+xml" href=$str:url$ />
     >> in
@@ -109,7 +114,7 @@ module Blog = struct
 
   let atom_feed =
     lwt f = Blog.atom_feed read_file Blog.entries in
-    return (Xml.to_string (Atom.xml_of_feed ~self:(Config.baseurl ^ "/blog/atom.xml") f))
+    return (Xml.to_string (Atom.xml_of_feed ~self:("/blog/atom.xml") f))
 
   let not_found x =
     sprintf "Not found: %s (known links: %s)"
@@ -136,7 +141,7 @@ module Wiki = struct
 
   (* Make a full Html.t including RSS link and headers from an wiki page *)
   let make ?title ?disqus left_column =
-    let url = sprintf "%s/wiki/atom.xml" Config.baseurl in
+    let url = sprintf "/wiki/atom.xml" in
     let extra_header = <:html< 
      <link rel="alternate" type="application/atom+xml" href=$str:url$ />
     >> in
@@ -181,7 +186,7 @@ module Wiki = struct
 
   let atom_feed = 
     lwt f = Wiki.atom_feed read_file Wiki.entries in
-    return (Xml.to_string (Atom.xml_of_feed ~self:(Config.baseurl ^ "/wiki/atom.xml") f))
+    return (Xml.to_string (Atom.xml_of_feed ~self:("/wiki/atom.xml") f))
 
   let not_found x =
     let left =

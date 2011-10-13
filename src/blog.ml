@@ -46,8 +46,8 @@ type entry = {
 (* Convert a blog record into an Html.t fragment *)
 let html_of_entry read_file e =
   lwt body = read_file e.body in
-  let permalink = sprintf "%s/blog/%s" Config.baseurl e.permalink in
-  let permalink_disqus = sprintf "%s/blog/%s#disqus_thread" Config.baseurl e.permalink in
+  let permalink = sprintf "/blog/%s" e.permalink in
+  let permalink_disqus = sprintf "/blog/%s#disqus_thread" e.permalink in
   return <:html<
     <div class="blog_entry">
       $html_of_date e.updated$
@@ -180,6 +180,12 @@ let entries = [
     body       = "/blog/spring-cleaning.md";
     permalink  = "spring-cleaning";
   };
+  { updated    = date (2011, 09, 29, 11, 10);
+    author     = anil;
+    subject    = "An Outing to CUFP 2011";
+    body       = "/blog/an-outing-to-cufp.md";
+    permalink  = "an-outing-to-cufp";
+  }
 ]
 
 let cmp_ent a b = Atom.compare (atom_date a.updated) (atom_date b.updated)
@@ -188,7 +194,7 @@ let entries = List.rev (List.sort cmp_ent entries)
 let _ = List.iter (fun x -> Printf.printf "ENT: %s\n%!" x.subject) entries
 
 let permalink e =
-  sprintf "%s/blog/%s" Config.baseurl e.permalink
+  sprintf "/blog/%s" e.permalink
 
 let permalink_exists x = List.exists (fun e -> e.permalink = x) entries
 
@@ -211,7 +217,7 @@ let atom_entry_of_ent filefn e =
 let atom_feed filefn es = 
   let es = List.rev (List.sort cmp_ent es) in
   let updated = atom_date (List.hd es).updated in
-  let id = sprintf "%s/blog/" Config.baseurl in
+  let id = "/blog/" in
   let title = "openmirage blog" in
   let subtitle = Some "a cloud operating system" in
   let feed = { Atom.id; title; subtitle; author=None; rights; updated } in
