@@ -521,6 +521,92 @@ lets odd numbers through.  Finally add a stage that prints the word
 This is in `regress/lwt/intserver.ml` in the Mirage code repository.
 
 
+!!Stream Processing
+
+The pipelining challenges of the previous section uses mailboxes provided by the
+`Lwt_mvar` module. One of the feature of such values is that no more than one
+message can be deposited in the mailbox. This is made obvious by the return type
+of `Lwr_mvar.put` being in `Lwt.t`. This provides a natural throttle mechanism
+to our pipeline. However, in specific cases, such a throttle is superfluous.
+
+Using the `Lwt_stream` module, one can devise a different pipeline with a
+greedier processing scheme. Several functions can be used to create a stream,
+all of them can be defined via:
+
+{{
+  val create : unit -> 'a t * ('a option -> unit)
+}}
+
+The `create` function returns a stream and a push function. The push function is
+the only available way to add content to the stream. Pushing `None` will close
+the stream, while pushing `Some x` will make `x` available in the stream.
+
+There are several ways to read from a stream. The most direct one being
+
+{{
+  val get : 'a t -> 'a option Lwt.t
+}}
+
+`get s` returns either `Some x` when `x` is available (which may be right away)
+or `None` when stream is closed. Order of elements in streams is preserved,
+meaning that elements are pulled in the order they are pushed.
+
+!!!Challenge
+
+Write the same pipelining library as in the mailbox challenge, replacing
+instances of `Lwt_mvar.t` by `Lwt_stream.t`:
+
+{{
+  val map: ('a -> 'b Lwt.t) -> 'a Lwt_stream.t -> 'b Lwt_stream.t
+  val split : ('a * 'b) Lwt_stream.t -> 'a Lwt_stream.t * 'b Lwt_stream.t
+  val filter: ('a -> bool Lwt.t) -> 'a Lwt_stream.t -> 'a Lwt_stream.t
+}}
+
+!!!Solution
+
+{{
+  let map f source =
+    let (s, push) = Lwt_stream.create () in
+    let rec aux () = match_lwt Lwt_stream.get source with
+      | None -> push None; return ()
+      | Some x -> lwt y = f x in push (Some y); aux ()
+    in
+    let _ = aux () in
+    s
+
+  let split source =
+    let (s1, push1) = Lwt_stream.create () in
+    let (s2, push2) = Lwt_stream.create () in
+    let rec aux () = match_lwt Lwt_stream.get source with
+      | None -> push1 None; push2 None; return ()
+      | Some (x,y) -> push1 (Some x); push2 (Some y); aux ()
+    in
+    let _ = aux () in
+    (s1, s2)
+
+  let filter f source =
+    let (s, push) = Lwt_stream.create () in
+    let rec aux () = match_lwt Lwt_stream.get source with
+      | None -> push None; return ()
+      | Some x -> match_lwt f x with
+        | true -> push (Some x); aux ()
+        | false -> aux ()
+    in
+    let _ = aux () in
+    s
+}}
+
+Notice, in the provided solution, the usage of `f` in `map`: only when `f`
+returns does the next element is polled and treated. (The same remark applies to
+`filter`.) This means that the elements of the stream are processed serially.
+
+The `Lwt_stream` library actually provides a number of processing functions.
+Some functions are suffixed with `_s` meaning that they operate sequentially
+over the elements, other with `_p` meaning that they operate in parallel over
+the elements. The module `Lwt_list` uses the same suffixing policy.
+
+
+
 
 !!Mutexes and cooperation
 
@@ -533,23 +619,30 @@ interrupted and another one starts running. In Lwt, a thread executes
 serially until it explicitly yields (most commonly via `bind`); for
 this reason, Lwt threads are said to be
 [cooperative](http://en.wikipedia.org/wiki/Cooperative_multitasking#Cooperative_multitasking.2Ftime-sharing).
-From the coder point of view, it means that expressions without the
-`Lwt.t` type will *never* be interrupted. Thus instead of surrounding
-an expression with `lock` and `unlock` statements, in `Lwt` one can
-simply enforce the type not to be `Lwt.t`.
+From the coder point of view, it means that the evaluation of expressions
+without the `Lwt.t` type will *never* be go through the scheduler. Note however,
+that it is possible to switch threads without executing the scheduler. This is
+what the `wakeup` function is for. Thus instead of surrounding an expression
+with `lock` and `unlock` statements, in `Lwt` one can simply enforce the type
+not to be `Lwt.t` and check for the absence of calls to `wakeup`. Finally, be
+aware that some functions from the `Lwt` libraries do use thread switching.
 
 The danger associated to cooperative threading is having threads not
 cooperating: if an expression takes a lot of time to compute with no
 cooperation point, then the whole program hangs. The `Lwt.yield`
 function introduces an explicit cooperation point. `sleep`ing
-obviously makes the thread coopearates.
+obviously makes the thread cooperate.
 
 If locking a data structure is still needed between yield points, the
-`Lwt_mutex` module provides the necessary functions.
+`Lwt_mutex` module provides the necessary functions. To obtain more information
+on thread switching (and how to prevent it) read the `Lwt` mailing list archive:
+[Lwt_stream, thread switch within push function](https://sympa.mancoosi.univ-paris-diderot.fr/wws/arc/ocsigen/2011-09/msg00029.html)
+which continues
+[here](https://sympa.mancoosi.univ-paris-diderot.fr/wws/arc/ocsigen/2011-10/msg00001.html).
 
 
 
-!!!Exceptions and Try/Catch
+!!Exceptions and Try/Catch
 
 One very, very important thing to remember with cooperative threading
 is that raising exceptions is not safe to do between yield points.  In
@@ -569,7 +662,7 @@ alternative syntax:
 This looks similar to normal OCaml code, except that the caught
 exception has an `Lwt.t` return type appended to it.
 
-!!!Control Flow
+!!Control Flow
 
 Lwt also provides equivalents of `for` and `while` that block on each
 iteration, saving you the trouble of rewriting the code to use `bind`
