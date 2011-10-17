@@ -619,18 +619,19 @@ interrupted and another one starts running. In Lwt, a thread executes
 serially until it explicitly yields (most commonly via `bind`); for
 this reason, Lwt threads are said to be
 [cooperative](http://en.wikipedia.org/wiki/Cooperative_multitasking#Cooperative_multitasking.2Ftime-sharing).
-From the coder point of view, it means that the evaluation of expressions
-without the `Lwt.t` type will *never* be go through the scheduler. Note however,
-that it is possible to switch threads without executing the scheduler. This is
-what the `wakeup` function is for. Thus instead of surrounding an expression
-with `lock` and `unlock` statements, in `Lwt` one can simply enforce the type
-not to be `Lwt.t` and check for the absence of calls to `wakeup`. Finally, be
-aware that some functions from the `Lwt` libraries do use thread switching.
 
-The danger associated to cooperative threading is having threads not
+From the coder's perspective, it means that the evaluation of expressions
+without the `Lwt.t` type will *never* go through the thread scheduler. Note however,
+that it is possible to switch threads without executing the scheduler via the
+`wakeup` function.
+This instead of surrounding an expression with `lock` and `unlock` statements, one can simply enforce that the type
+of the expression is not `Lwt.t` and check for the absence of calls to `wakeup`.
+Finally, be aware that some functions from the `Lwt` standard libraries do use thread switching.
+
+The obvious danger associated with cooperative threading is having threads not
 cooperating: if an expression takes a lot of time to compute with no
 cooperation point, then the whole program hangs. The `Lwt.yield`
-function introduces an explicit cooperation point. `sleep`ing
+function introduces an explicit cooperation point. `sleep`ing also
 obviously makes the thread cooperate.
 
 If locking a data structure is still needed between yield points, the
@@ -639,8 +640,6 @@ on thread switching (and how to prevent it) read the `Lwt` mailing list archive:
 [Lwt_stream, thread switch within push function](https://sympa.mancoosi.univ-paris-diderot.fr/wws/arc/ocsigen/2011-09/msg00029.html)
 which continues
 [here](https://sympa.mancoosi.univ-paris-diderot.fr/wws/arc/ocsigen/2011-10/msg00001.html).
-
-
 
 !!Exceptions and Try/Catch
 
