@@ -5,22 +5,24 @@ Mirage uses `ocamlbuild` to build applications, with the `mir-*` scripts providi
 To try out basic functionality and build a UNIX binary, do:
 
 {{
-    $ cd mirage.git/tests/basic/sleep
-    $ mir-unix-direct sleep.bin
-    $ ./_build/sleep.bin
+    $ cd mirage.git/regress
+    $ cat basic/sleep.ml
+    $ mir-build unix-direct/basic/sleep.bin
+    $ ./_build/unix-direct/basic/sleep.bin
 }}
 
 This will run a simple thread sleeping test that will output to the console.
 Now build a Xen version of this:
 
 {{
-    $ mir-xen sleep.xen
+    $ mir-build xen/basic/sleep.xen
 }}
 
 output will be in `_build/sleep.xen`, and you can boot it up with a config file like:
 
 {{
-    $ cd _build
+    $ mir-build xen/regress/sleep.xen 
+    $ cd _build/xen/regress
     $ cat > sleep.cfg
     name="sleep"
     memory=1024
@@ -36,33 +38,24 @@ If you need more help getting a Xen kernel booted, try looking at the [Xen notes
 
 Mirage networking is present in the `Net` module and can compile in two modes:
 
-* A `direct` mode that works from the Ethernet layer (the `OS.Netif` module). On Xen, this is the virtual Ethernet driver, and on UNIX this requires the `tuntap` interface. You can link in this `Net` module by using `mir-xen` or `mir-unix-direct` for Xen and UNIX respectively.
+* A `direct` mode that works from the Ethernet layer (the `OS.Netif` module). On Xen, this is the virtual Ethernet driver, and on UNIX this requires the `tuntap` interface. You can link in this `Net` module by using the `xen` or `unix-direct` backends for Xen and UNIX respectively.
 
-* A subset of the Net modules (`Flow`, `Channel` and `Manager`) are available in 'socket' mode under UNIX. This maps the interfaces onto POSIX sockets, enabling easy comparison with normal kernels. This is only supported under UNIX via `mir-unix-socket`.
+* A subset of the Net modules (`Flow`, `Channel` and `Manager`) are available in 'socket' mode under UNIX. This maps the interfaces onto POSIX sockets, enabling easy comparison with normal kernels. This is only supported under UNIX via the `unix-socket` backend.
 
-Try out the echo server test by:
-
-{{
-    $ cd tests/net/flow
-    $ mir-unix-socket echo.bin
-    $ sudo ./_build/echo.bin
-    $ telnet 127.0.0.1 8081
-}}
-
-Now that the socket version works, you can try the `mir-unix-direct` version that runs over `tuntap`.
+Try out the ping server test by:
 
 {{
-    $ mir-unix-direct echo.bin
-    $ sudo ./_build/echo.bin
-       <configure tap0 interface>
-    $ telnet 10.0.0.2 8081
+    $ cd mirage.git/regress
+    $ mir-build unix-direct/net/ping.bin
+    $ sudo ./_build/unix-direct/ping.bin
+    $ ping 10.0.0.2
 }}
 
 And similarly, the Xen version:
 
 {{
-    $ mir-xen echo.xen
-    $ cd _build
+    $ mir-build xen/net/ping.xen
+    $ cd _build/xen/net
     $ cat > echo.cfg
     name="echo"
     memory=128
