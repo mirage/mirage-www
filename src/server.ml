@@ -1,6 +1,6 @@
 open Lwt
 
-let port = 80
+let port = Config.port
 
 let ip =
   let open Net.Nettypes in
