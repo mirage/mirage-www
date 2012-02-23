@@ -60,10 +60,11 @@ The first thing to do is to pull Anil's patched Homebrew formula for
     git checkout -b new-findlib
 }}
 
-Next, install the Homebrew packages for OCaml and `findlib`:
+Next, install the Homebrew packages for `libev` (required by the `lwt`
+library), OCaml and `findlib`:
 
 {{
-    brew install objective-caml findlib
+    brew install libev objective-caml findlib
 }}
 
 Assuming you choose to put your source repositories in `$SRC`, then install my
