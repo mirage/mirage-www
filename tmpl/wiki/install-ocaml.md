@@ -40,3 +40,80 @@ There are then package conflicts with the following, which must be downloaded an
 
 Download them, and run `sudo dpkg -i *.deb` on them. After that, the Debian instructions above should work.
 To install the `tuntap` device, required for unix-direct, do `sudo modprobe tun`.
+
+!!! OSX
+
+Package management on Mac OSX is somewhat fragmented, to say the least. We
+choose to use [Homebrew](http://mxcl.github.com/homebrew/), and you should
+begin by following its
+[install instructions](https://github.com/mxcl/homebrew/wiki/installation). It
+also depends on [Ruby](http://www.ruby-lang.org/), and problems have been
+reported with the system installed version at least on OSX 10.6.x. Instead,
+install RVM, the Ruby Version Manager from
+[here](https://rvm.beginrescueend.com/).
+
+This will get you a working Homebrew installation. Next, you need to install
+`git` so that you can clone the main Homebrew repository and then setup Anil's
+patched Homebrew formula for `findlib`:
+
+{{
+    brew install git
+    cd $(brew --prefix)
+    git clone https://github.com/mxcl/homebrew .
+    git remote add -f avsm git://github.com/avsm/homebrew.git
+    git checkout -b new-findlib
+}}
+
+Next, install the Homebrew packages for `libev` (required by the `lwt`
+library), OCaml and `findlib`:
+
+{{
+    brew install libev objective-caml findlib
+}}
+
+Assuming you choose to put your source repositories in `$SRC`, then install my
+fork of the [ODB](https://github.com/thelema/odb) OCaml package manager:
+
+{{
+    cd $SRC
+    git clone git://github.com/mor1/odb
+    alias odb=ocaml $SRC/odb/odb.ml
+    
+    export OCAMLPATH=~/.odb/lib:$OCAMLPATH
+    export PATH=~/.odb/bin:$PATH
+}}
+
+You should then be able to install the following packages with `odb`:
+
+{{
+    odb oUnit
+    odb bitstring
+    odb lwt
+    odb fileutils
+    odb oasis
+    odb batteris
+
+    cd ~/.odb/lib && mv oasis/ oasis.ignore
+    cd ../bin && mv oasis oasis.ignore
+}}
+
+Finally, to be able to rebuild the Oasis setup for the various `ocaml-*`
+libraries, you need a patched version of Oasis:
+
+{{
+    cd $SRC
+    git clone git://github.com/mor1/oasis
+    cd oasis
+    ocaml setup.ml -configure
+    ocaml setup.ml -build
+    ocaml setup.ml -install
+}}
+
+And that should be it! Pull, say,
+[ocaml-dns](https://github.com/mor1/ocaml-dns) and execute:
+
+{{
+    oasis setup-clean
+    oasis setup
+    make
+}}

@@ -336,6 +336,11 @@ let balraj = {
   uri       = None;
   email     = Some "balraj.singh@cl.cam.ac.uk";
 }
+let mort = {
+  Atom.name = "Richard Mortier";
+  uri       = Some "http://mort.io/";
+  email     = Some "mort@cantab.net";
+}
 
 let rights = Some "All rights reserved by the author"
 
@@ -385,8 +390,8 @@ let entries = [
     categories = ["concurrency","threads"];
   };
  
-  { updated    = date (2011, 04, 12, 13, 0);
-    author     = anil;
+  { updated    = date (2012, 02, 23, 15, 0);
+    author     = mort; (* ++ anil -- need to add support for multiple authors *)
     subject    = "OCaml Installation";
     body       = File "install-ocaml.md";
     permalink  = "install-ocaml";
