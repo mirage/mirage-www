@@ -47,15 +47,19 @@ Package management on Mac OSX is somewhat fragmented, to say the least. We
 choose to use [Homebrew](http://mxcl.github.com/homebrew/), and you should
 begin by following its
 [install instructions](https://github.com/mxcl/homebrew/wiki/installation). It
-makes use of the system installed version of [Ruby](http://www.ruby-lang.org/)
--- if your system is missing it for some reason, install from
-[here](http://www.ruby-lang.org/en/downloads/).
+also depends on [Ruby](http://www.ruby-lang.org/), and problems have been
+reported with the system installed version at least on OSX 10.6.x. Instead,
+install RVM, the Ruby Version Manager from
+[here](https://rvm.beginrescueend.com/).
 
-The first thing to do is to pull Anil's patched Homebrew formula for
-`findlib`:
+This will get you a working Homebrew installation. Next, you need to install
+`git` so that you can clone the main Homebrew repository and then setup Anil's
+patched Homebrew formula for `findlib`:
 
 {{
+    brew install git
     cd $(brew --prefix)
+    git clone https://github.com/mxcl/homebrew .
     git remote add -f avsm git://github.com/avsm/homebrew.git
     git checkout -b new-findlib
 }}
