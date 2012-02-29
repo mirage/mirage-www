@@ -39,7 +39,9 @@ some sterling work by [Haris](http://www.cl.cam.ac.uk/~cr409/) and
 good though: the unoptimised Mirage controller implementation is only 30--40%
 lower performance than the highly optimised NOX *destiny-fast* branch, which
 drops most of the programmability and flexibility of NOX; but is about *six
-times* higher performance than the fully flexible current NOX release.
+times* higher performance than the fully flexible current NOX release. The
+switch's performance  running as a domU virtual machine is indistinguishable
+from the current [Open vSwitch](http://openvswitch.org/) release.
 
 For more details see [the paper](/docs/iccsdn12-mirage.pdf) or contact
 [Mort](mailto:mort@cantab.net),
