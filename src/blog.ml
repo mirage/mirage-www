@@ -194,8 +194,8 @@ let entries = [
   { updated    = date (2012, 02, 29, 11, 10);
     author     = mort;
     subject    = "Connected Cloud Control: OpenFlow in Mirage";
-    body       = "/blog/mirage-openflow.md";
-    permalink  = "mirage-openflow";
+    body       = "/blog/announcing-mirage-openflow.md";
+    permalink  = "announcing-mirage-openflow";
   }
 ]
 
