@@ -30,6 +30,47 @@ The switch is primarily intended as an experimental platform -- it is
 hopefully easier to extend than some of the existing software switches while
 still being sufficiently high performance to be interesting! 
 
+By way of a sample of how it fits together, here's a skeleton for a simple
+controller application:
+
+{{
+type mac_switch = {
+  addr: OP.eaddr; 
+  switch: OP.datapath_id;
+}
+
+type switch_state = {
+  mutable mac_cache: 
+        (mac_switch, OP.Port.t) Hashtbl.t;
+  mutable dpid: OP.datapath_id list
+}
+
+let switch_data = {
+  mac_cache = Hashtbl.create 7; 
+  dpid = [];
+} 
+
+let join_cb controller dpid evt =
+  let dp = match evt with
+      | OE.Datapath_join c -> c
+      | _ -> invalid_arg "bogus datapath_join"
+  in 
+  switch_data.dpid <- switch_data.dpid @ [dp]
+
+let packet_in_cb controller dpid evt =
+  (* algorithm details omitted for space *)
+
+let init ctrl = 
+  OC.register_cb ctrl OE.DATAPATH_JOIN join_cb;
+  OC.register_cb ctrl OE.PACKET_IN packet_in_cb
+
+let main () =
+  Net.Manager.create (fun mgr interface id ->
+    let port = 6633 in 
+    OC.listen mgr (None, port) init
+  )
+}}
+
 We've written up some of the gory details of the design, implementation and
 performance in a [short paper](/docs/iccsdn12-mirage.pdf) to the
 [ICC](http://www.ieee-icc.org/)
