@@ -61,7 +61,7 @@ patched Homebrew formula for `findlib`:
     cd $(brew --prefix)
     git clone https://github.com/mxcl/homebrew .
     git remote add -f avsm git://github.com/avsm/homebrew.git
-    git checkout -b new-findlib
+    git checkout new-findlib
 }}
 
 Next, install the Homebrew packages for `libev` (required by the `lwt`

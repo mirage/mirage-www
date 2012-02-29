@@ -164,6 +164,11 @@ let raphael = {
   uri       = Some "https://github.com/raphael-proust";
   email     = Some "raphlalou@gmail.com";
 }
+let mort = {
+  Atom.name = "Richard Mortier";
+  uri       = Some "http://www.cs.nott.ac.uk/~rmm/";
+  email     = Some "mort@cantab.net";
+}
 
 let rights = Some "All rights reserved by the author"
 
@@ -185,6 +190,12 @@ let entries = [
     subject    = "An Outing to CUFP 2011";
     body       = "/blog/an-outing-to-cufp.md";
     permalink  = "an-outing-to-cufp";
+  };
+  { updated    = date (2012, 02, 29, 11, 10);
+    author     = mort;
+    subject    = "Connected Cloud Control: OpenFlow in Mirage";
+    body       = "/blog/announcing-mirage-openflow.md";
+    permalink  = "announcing-mirage-openflow";
   }
 ]
 
