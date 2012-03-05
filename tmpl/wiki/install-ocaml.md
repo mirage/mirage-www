@@ -59,7 +59,8 @@ patched Homebrew formula for `findlib`:
 {{
     brew install git
     cd $(brew --prefix)
-    git clone https://github.com/mxcl/homebrew .
+    git clone https://github.com/mxcl/homebrew
+    mv homebrew/.git .
     git remote add -f avsm git://github.com/avsm/homebrew.git
     git checkout new-findlib
 }}
