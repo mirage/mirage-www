@@ -8,8 +8,9 @@
 * *Haris Rotsos*, University of Cambridge, [cl.cam.ac.uk](http://www.cl.cam.ac.uk/~cr409/)
 * *Balraj Singh*, University of Cambridge
 * *Jon Crowcroft*, University of Cambridge, [cl.cam.ac.uk](http://www.cl.cam.ac.uk/~jac22/)
+* *Steven Hand*, University of Cambridge, [cl.cam.ac.uk](http://www.cl.cam.ac.uk/~smh22/)
 
 !!The Project
 
 We acknowledge funding from the RCUK Horizon Digital Economy Research Hub grant, EP/G065802/1.
-Amazon also granted us an [Amazon in Education](http://aws.amazon.com/education/) award to test on EC2, and Verisign is [sponsoring](http://www.cl.cam.ac.uk/news/2011/03/anil-madhavapeddy-wins-verisign-grant/) work on the secure DNS library.
+Amazon also granted us an [Amazon in Education](http://aws.amazon.com/education/) award to test on EC2, and Verisign [sponsored](http://www.cl.cam.ac.uk/news/2011/03/anil-madhavapeddy-wins-verisign-grant/) work on the secure DNS library.
