@@ -21,8 +21,8 @@ Now build a Xen version of this:
 output will be in `_build/sleep.xen`, and you can boot it up with a config file like:
 
 {{
-    $ mir-build xen/regress/sleep.xen 
-    $ cd _build/xen/regress
+    $ mir-build xen/regress/basic/sleep.xen
+    $ cd _build/xen/basic
     $ cat > sleep.cfg
     name="sleep"
     memory=1024
@@ -47,7 +47,7 @@ Try out the ping server test by:
 {{
     $ cd mirage.git/regress
     $ mir-build unix-direct/net/ping.bin
-    $ sudo ./_build/unix-direct/ping.bin
+    $ sudo ./_build/unix-direct/net/ping.bin
     $ ping 10.0.0.2
 }}
 
@@ -56,13 +56,13 @@ And similarly, the Xen version:
 {{
     $ mir-build xen/net/ping.xen
     $ cd _build/xen/net
-    $ cat > echo.cfg
-    name="echo"
+    $ cat > ping.cfg
+    name="ping"
     memory=128
-    kernel="echo.xen"
-    vifs=['bridge=eth0']
+    kernel="ping.xen"
+    vif=['bridge=xenbr0']
      <control-d>
-    $ sudo xm create -c echo.cfg
+    $ sudo xm create -c ping.cfg
      <configure the bridge IP address>
     $ telnet 10.0.0.2 8081
 }}
