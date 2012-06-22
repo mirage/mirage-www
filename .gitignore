@@ -1,5 +1,5 @@
 mirage-www.bin
 filesystem_*.ml
 src/_build
-src/myocamlbuild.ml
+src/_config
 .*.swp
