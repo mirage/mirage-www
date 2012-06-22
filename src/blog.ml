@@ -6,14 +6,14 @@ open Lwt
 
 type month = int
 
-let html_of_month m =
+let xml_of_month m =
   let str = match m with
     | 1  -> "Jan" | 2  -> "Feb" | 3  -> "Mar"
     | 4  -> "Apr" | 5  -> "May" | 6  -> "Jun"
     | 7  -> "Jul" | 8  -> "Aug" | 9  -> "Sep"
     | 10 -> "Oct" | 11 -> "Nov" | 12 -> "Dec"
     | _  -> "???" in
-  <:html<$str:str$>>
+  <:xml<$str:str$>>
 
 type date = {
   month : month;
@@ -21,7 +21,7 @@ type date = {
   year  : int;
   hour  : int;
   min   : int;
-} with html
+} with xml
 
 let date (year, month, day, hour, min) =
   { month; day; year; hour; min }
@@ -33,8 +33,8 @@ let atom_date d =
 
 let html_of_author author =
   match author.Atom.uri with
-    | None     -> <:html<Posted by $str:author.Atom.name$>>
-    | Some uri -> <:html<Posted by <a href=$str:uri$>$str:author.Atom.name$</a>&>>
+    | None     -> <:xml<Posted by $str:author.Atom.name$>>
+    | Some uri -> <:xml<Posted by <a href=$str:uri$>$str:author.Atom.name$</a>&>>
 
 type entry = {
   updated    : date;
@@ -48,9 +48,9 @@ let html_of_entry read_file e =
   lwt body = read_file e.body in
   let permalink = sprintf "/blog/%s" e.permalink in
   let permalink_disqus = sprintf "/blog/%s#disqus_thread" e.permalink in
-  return <:html<
+  return <:xml<
     <div class="blog_entry">
-      $html_of_date e.updated$
+      $xml_of_date e.updated$
       <div class="blog_entry_heading">
         <div class="blog_entry_title">
           <a href=$str:permalink$>$str:e.subject$</a>
@@ -105,7 +105,7 @@ let entry_css = <:css<
 let html_of_entries ?disqus read_file entries =
 
   (* The disqus comment *)
-  let disqus_html permalink = <:html<
+  let disqus_html permalink = <:xml<
     <div class="blog_comments">
     <h2>Comments</h2>
     <div id="disqus_thread"></div>
@@ -124,9 +124,9 @@ let html_of_entries ?disqus read_file entries =
 
   let dh = match disqus with
      | Some perm -> disqus_html perm
-     | None -> <:html< >> in
+     | None -> <:xml< >> in
   lwt entries = Lwt_list.map_s (html_of_entry read_file) entries in
-  return <:html<
+  return <:xml<
   <div class="left_column_blog">
     <div class="summary_information">
       $list:entries$

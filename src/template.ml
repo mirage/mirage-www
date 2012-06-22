@@ -12,14 +12,14 @@ let bar cur =
   ] in
   let one (href, title) =
     if title=cur then
-      <:html<
+      <:xml<
         <li><a class="current_page" href=$str:href$>$str:title$</a></li>
       >>
     else
-      <:html<
+      <:xml<
         <li><a href=$str:href$>$str:title$</a></li>
       >> in
-  <:html< <ul>$list:List.map one bars$</ul> >>
+  <:xml< <ul>$list:List.map one bars$</ul> >>
 
 let t ?extra_header page title content =
   lwt tmpl = OS.Devices.find_kv_ro "templates" >>=
@@ -30,10 +30,10 @@ let t ?extra_header page title content =
   match_lwt tmpl#read "/main.html" with
     | Some main_html ->
       let templates = [
-        "TITLE"       , <:html<$str:title$>>;
-        "BAR"         , <:html<$bar page$>>;
-        "EXTRA_HEADER", <:html<$opt:extra_header$>>;
-        "CONTENT"     , <:html<$content$>>;
+        "TITLE"       , <:xml<$str:title$>>;
+        "BAR"         , <:xml<$bar page$>>;
+        "EXTRA_HEADER", <:xml<$opt:extra_header$>>;
+        "CONTENT"     , <:xml<$content$>>;
       ] in
       Util.string_of_stream main_html >|= Html.of_string ~templates
     | None ->

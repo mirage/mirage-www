@@ -1,6 +1,5 @@
 open Printf
-open Http
-open Log
+open Cohttp
 open Lwt
 open Cow
 
@@ -30,7 +29,7 @@ let read_file f =
     printf "Pages.read_file: exception %s\n%!" (Printexc.to_string exn);
     exit 1
 
-let col_files l r = <:html< 
+let col_files l r = <:xml< 
   <div class="left_column">
     <div class="summary_information"> $l$ </div>
   </div>
@@ -58,7 +57,7 @@ module Index = struct
   let body =
     lwt l1 = read_file "/intro.md" >|= (fun l -> col_files l none) in 
     lwt l2 = read_file "/intro-r.html" >|= (fun l -> col_files l none) in
-    return (<:html<
+    return (<:xml<
     <div class="left_column">
       $l1$
     </div> 
@@ -92,7 +91,7 @@ module Blog = struct
      of Html.t entry fragments *)
   let make ?title body =
     let url = sprintf "/blog/atom.xml" in
-    let extra_header = <:html<
+    let extra_header = <:xml<
      <link rel="alternate" type="application/atom+xml" href=$str:url$ />
     >> in
     let title = "blog" ^ match title with None -> "" | Some x -> " :: " ^ x in
@@ -142,7 +141,7 @@ module Wiki = struct
   (* Make a full Html.t including RSS link and headers from an wiki page *)
   let make ?title ?disqus left_column =
     let url = sprintf "/wiki/atom.xml" in
-    let extra_header = <:html< 
+    let extra_header = <:xml< 
      <link rel="alternate" type="application/atom+xml" href=$str:url$ />
     >> in
     let title = "wiki" ^ match title with 
@@ -195,7 +194,7 @@ module Wiki = struct
         (String.concat " " 
            (Hashtbl.fold (fun k v a -> k :: a) 
               ent_bodies [])) in
-    make ~title:"Not Found" (return <:html<$str:left$>>)
+    make ~title:"Not Found" (return <:xml<$str:left$>>)
 
   let t = function
     | []                          -> content_type_xhtml, main_page

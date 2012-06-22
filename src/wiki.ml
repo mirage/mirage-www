@@ -6,14 +6,14 @@ open Lwt
 
 type month = int
 
-let html_of_month m =
+let xml_of_month m =
   let str = match m with
     | 1  -> "Jan" | 2  -> "Feb" | 3  -> "Mar"
     | 4  -> "Apr" | 5  -> "May" | 6  -> "Jun"
     | 7  -> "Jul" | 8  -> "Aug" | 9  -> "Sep"
     | 10 -> "Oct" | 11 -> "Nov" | 12 -> "Dec"
     | _  -> "???" in
-  <:html<$str:str$>>
+  <:xml<$str:str$>>
 
 type date = {
   month : month;
@@ -21,7 +21,7 @@ type date = {
   year  : int;
   hour  : int;
   min   : int;
-} with html
+} with xml
 
 let date (year, month, day, hour, min) =
   { month; day; year; hour; min }
@@ -30,14 +30,14 @@ let atom_date d =
   ( d.year, d.month, d.day, d.hour, d.min)
 
 let short_html_of_date d =
-  <:html<last modified on $int:d.day$ $html_of_month d.month$ $int:d.year$>>
+  <:xml<last modified on $int:d.day$ $xml_of_month d.month$ $int:d.year$>>
 
 (* Entry *)
 
 let html_of_author author =
   match author.Atom.uri with
-    | None     -> <:html<Last modified by $str:author.Atom.name$>>
-    | Some uri -> <:html<Last modified by <a href=$str:uri$>$str:author.Atom.name$</a>&>>
+    | None     -> <:xml<Last modified by $str:author.Atom.name$>>
+    | Some uri -> <:xml<Last modified by <a href=$str:uri$>$str:author.Atom.name$</a>&>>
 
 type category = string * string  (* category, subcategory, see list of them below *)
 
@@ -65,9 +65,9 @@ let compare_dates e1 e2 =
 let html_of_entry ?(want_date=true) read_file e =
   let permalink = sprintf "/wiki/%s" e.permalink in
   lwt body = body_of_entry read_file e in
-  return <:html<
+  return <:xml<
     <div class="wiki_entry">
-      $if want_date then html_of_date e.updated else []$
+      $if want_date then xml_of_date e.updated else []$
       <div class="wiki_entry_heading">
         <div class="wiki_entry_title">
           <a href=$str:permalink$>$str:e.subject$</a>
@@ -82,7 +82,7 @@ let html_of_entry ?(want_date=true) read_file e =
 
 let html_of_index read_file =
   lwt body = read_file "index.md" in
-  return <:html<
+  return <:xml<
     <div class="wiki_entry">
      <div class="wiki_entry_body">$body$</div>
    </div>
@@ -157,17 +157,17 @@ let num_of_entries entries =
 let short_html_of_category num (l1, l2l) =
   let l2h = List.map (fun l2 ->
     match num.l2 l1 l2 with 
-      | 0   -> <:html<<div class="wiki_bar_l2">$str:l2$</div>&>>
+      | 0   -> <:xml<<div class="wiki_bar_l2">$str:l2$</div>&>>
       | nl2 ->
-        let num = <:html<<i>$str:sprintf " (%d)" nl2$</i>&>> in
+        let num = <:xml<<i>$str:sprintf " (%d)" nl2$</i>&>> in
         let url = sprintf "/wiki/tag/%s/%s" l1 l2 in
-        <:html<<div class="wiki_bar_l2"><a href=$str:url$>$str:l2$</a>$num$</div>&>>
+        <:xml<<div class="wiki_bar_l2"><a href=$str:url$>$str:l2$</a>$num$</div>&>>
   ) l2l in
   let url = sprintf "/wiki/tag/%s" l1 in
   let l1h = match num.l1 l1 with
-    | 0   -> <:html<<div class="wiki_bar_l1">$str:l1$</div>&>>
-    | nl1 -> <:html<<div class="wiki_bar_l1"><a href=$str:url$>$str:l1$</a></div>&>> in
-  <:html<
+    | 0   -> <:xml<<div class="wiki_bar_l1">$str:l1$</div>&>>
+    | nl1 -> <:xml<<div class="wiki_bar_l1"><a href=$str:url$>$str:l1$</a></div>&>> in
+  <:xml<
     $l1h$
     $list:l2h$
   >>
@@ -187,7 +187,7 @@ let short_category_css = <:css<
 let short_html_of_categories entries categories =
   let num = num_of_entries entries in
   let url = "/wiki/" in
-  <:html<
+  <:xml<
     <div class="wiki_bar">
       <div class="wiki_bar_l0"><a href=$str:url$>Index</a></div>
       $list:List.map (short_html_of_category num) categories$
@@ -222,11 +222,11 @@ let html_of_category entries (l1, l2) =
     | None    -> ""
     | Some l2 -> "/ " ^ l2 in
   let entries = List.filter (fun e -> List.exists equal e.categories) entries in
-  let aux e = <:html<<li><a href=$str:permalink e$>$str:e.subject$</a> ($short_html_of_date e.updated$)</li>&>> in
+  let aux e = <:xml<<li><a href=$str:permalink e$>$str:e.subject$</a> ($short_html_of_date e.updated$)</li>&>> in
   match entries with
   | []      -> []
   | entries ->
-      <:html<
+      <:xml<
         <div class="category_index">
           <h3>$str:l1$ $str:l2_str$</h3>
           <ul>$list:List.map aux entries$</ul>
@@ -239,7 +239,7 @@ let html_of_categories entries categories =
       (fun accu (l1, ll2) -> List.map (fun l2 -> l1, Some l2) ll2 @ accu)
       [] categories in
   let categories = List.rev categories in
-  <:html<$list:List.map (html_of_category entries) categories$>>
+  <:xml<$list:List.map (html_of_category entries) categories$>>
 
 let category_css = <:css<
   .category_index {
@@ -254,12 +254,12 @@ let category_css = <:css<
 (* Recently updated list *)
 let html_of_recent_updates entries =
   let ents = List.rev (List.sort compare_dates entries) in
-  let html_of_ent e = <:html<
+  let html_of_ent e = <:xml<
     <a href=$str:permalink e$>$str:e.subject$</a>
     <i>($short_html_of_date e.updated$)</i>
     <br />
   >> in
-  <:html<
+  <:xml<
     <div class="wiki_updates">
     <p><b>Recently Updated</b><br />
     $list:List.map html_of_ent ents$
@@ -271,7 +271,7 @@ let html_of_recent_updates entries =
 let html_of_page ?disqus ~left_column ~right_column =
 
   (* The disqus comment *)
-  let disqus_html permalink = <:html<
+  let disqus_html permalink = <:xml<
     <div class="wiki_entry_comments">
     <div id="disqus_thread"/>
     <script type="text/javascript"> 
@@ -287,10 +287,10 @@ let html_of_page ?disqus ~left_column ~right_column =
 
   let dh = match disqus with
      | Some perm  -> disqus_html perm
-     | None      -> <:html< >> in
+     | None      -> <:xml< >> in
 
   lwt left_column = left_column in
-  return <:html<
+  return <:xml<
     <div class="left_column_wiki">
       <div class="summary_information">$left_column$</div>
     </div>

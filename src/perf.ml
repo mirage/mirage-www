@@ -1,7 +1,7 @@
 open Cow
 
 let dns =
- <:html<
+ <:xml<
    <p>This page describes some of the measurements we have done <i>during</i> development of Mirage, and descriptions of some of the problems we encountered and how they were fixed. We use DNS serving performance as the first measure of I/O performance, for several reasons:</p>
     <ul>
      <li><p>UDP is more straightforward to implement than TCP and is stateless. This lets us test the performance of the event loop, Xen rings and the Ethernet/IPv4 stack without getting mixed up in the intricacies of TCP at the same time.</p></li>
