@@ -9,5 +9,5 @@ all:
 
 .PHONY:clean
 clean:
-	rm -f filesystem_static.ml filesystem_templates.ml
+	rm -f filesystem_static.ml filesystem_templates.ml mail.ml
 	ocamlbuild -clean
