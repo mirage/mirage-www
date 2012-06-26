@@ -409,10 +409,10 @@ let entries = [
     categories = ["overview","usage"];
   };
 
-  { updated    = date (2011, 09, 21, 17, 30);
-    author     = thomas;
+  { updated    = date (2012, 06, 26, 17, 30);
+    author     = anil;
     subject    = "Installation";
-    body       = File "install.md";
+    body       = File "install-opam.md";
     permalink  = "install";
     categories = ["overview","usage"];
   };
