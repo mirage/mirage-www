@@ -3,6 +3,9 @@
 all:
 	cd src && $(MAKE)
 
+xen:
+	cd src && $(MAKE) xen
+
 clean:
 	cd src && $(MAKE) clean
 
