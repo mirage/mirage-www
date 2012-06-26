@@ -1,4 +1,5 @@
 all: 
+	./cmd config
 	mir-crunch -name "static" ../files > filesystem_static.ml
 	mir-crunch -name "templates" ../tmpl > filesystem_templates.ml
 	echo open Filesystem_static > main.ml
