@@ -23,6 +23,17 @@ type date = {
   min   : int;
 } with xml
 
+let html_of_date d =
+  <:xml<
+    <div class="date">
+      <div class="month">$xml_of_month d.month$</div>
+      <div class="day">$int:d.day$</div>
+      <div class="year">$int:d.year$</div>
+      <div class="hour">$int:d.hour$</div>
+      <div class="min">$int:d.min$</div>
+    </div>
+  >>
+
 let date (year, month, day, hour, min) =
   { month; day; year; hour; min }
 
@@ -67,7 +78,7 @@ let html_of_entry ?(want_date=true) read_file e =
   lwt body = body_of_entry read_file e in
   return <:xml<
     <div class="wiki_entry">
-      $if want_date then xml_of_date e.updated else []$
+      $if want_date then html_of_date e.updated else []$
       <div class="wiki_entry_heading">
         <div class="wiki_entry_title">
           <a href=$str:permalink$>$str:e.subject$</a>
