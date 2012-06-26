@@ -5,3 +5,6 @@ all:
 
 clean:
 	cd src && $(MAKE) clean
+
+run:
+	sudo ./src/_build/main.native
