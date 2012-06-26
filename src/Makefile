@@ -8,7 +8,7 @@ all:
 	echo "let _ = OS.Main.run (main ())" >> main.ml
 	ocamlbuild -classic-display main.native
 
-all: 
+xen: 
 	./cmd config
 	mir-crunch -name "static" ../files > filesystem_static.ml
 	mir-crunch -name "templates" ../tmpl > filesystem_templates.ml
