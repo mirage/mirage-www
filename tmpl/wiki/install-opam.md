@@ -94,6 +94,7 @@ can use `opam switch` to swap between multiple cross-compilers.  If you are on
 {{
 $ opam switch -list
 $ opam switch -alias xen 3.12.1+mirage-xen
+$ opam install cow mirage-fs
 $ eval `opam config -env`
 }}
 
