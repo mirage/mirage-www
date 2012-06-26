@@ -21,7 +21,7 @@ Mirage has been tested on Debian Squeeze/Wheezy, Ubuntu Lucid and MacOS X
 {{
 # apt-get install build-essential ocaml ocaml-native-compilers git
 # git clone git://github.com/OCamlPro/opam.git
-# cd opam.git && make && make install
+# cd opam && make && make install
 }}
 
 Now skip to the next section to initialise OPAM.
