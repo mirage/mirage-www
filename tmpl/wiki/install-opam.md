@@ -21,7 +21,7 @@ Mirage has been tested on Debian Squeeze/Wheezy, Ubuntu Lucid and MacOS X
 {{
 # apt-get install build-essential ocaml ocaml-native-compilers git
 # git clone git://github.com/OCamlPro/opam.git
-# cd opam.git && make && make install
+# cd opam && make && make install
 }}
 
 Now skip to the next section to initialise OPAM.
@@ -94,6 +94,7 @@ can use `opam switch` to swap between multiple cross-compilers.  If you are on
 {{
 $ opam switch -list
 $ opam switch -alias xen 3.12.1+mirage-xen
+$ opam install cow mirage-fs
 $ eval `opam config -env`
 }}
 
