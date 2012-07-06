@@ -7,7 +7,7 @@ the libraries you need to get on with using Mirage.
 OPAM manages simultaneous OCaml compiler and library installations.  It tracks
 library versions across upgrades, and will recompile dependencies automatically
 if they get out of date.  There is a comprehensive
-[specification](https://github.com/OCamlPro/opam/blob/master/specs/roadmap.pdf)
+[specification](https://github.com/OCamlPro/opam/raw/master/doc/specs/roadmap.pdf)
 if you want to know more, but we will cover the basics to get you started here.
 
 !!Requirements
@@ -25,7 +25,7 @@ $ cd opam && make
 $ sudo make install
 }}
 
-You can use a custom `PREFIX` to install into your home directory and not require
+You can use a custom `BIN` to install into your home directory and not require
 root. Now skip to the next section to initialise OPAM.
 
 *MacOS X*
@@ -159,7 +159,7 @@ Each package requires three files:
 * `url/package.0.1` : the URL to the distribution file or git directory
 * `opam/package.0.1.opam` : the package commands to install and uninstall it
 * `descr/package.0.1` : a description of the library or application
-*Note*: we are considering swapping this directory layout to a simpler per-package directory. See [issue XXX](http://github.com/OCamlPro/issues/XXX).
-It's easiest to copy the files from an existing package and modify them to your needs (and read the [specification](https://github.com/OCamlPro/opam/blob/master/specs/roadmap.pdf) for more information). Once you're done, add and commit the files, issue an `opam update`, and the new package should be available for installation or upgrade.
+*Note*: we are considering swapping this directory layout to a simpler per-package directory. See [issue 25](http://github.com/OCamlPro/issues/25).
+It's easiest to copy the files from an existing package and modify them to your needs (and read the [specification](https://github.com/OCamlPro/opam/raw/master/doc/specs/roadmap.pdf) for more information). Once you're done, add and commit the files, issue an `opam update`, and the new package should be available for installation or upgrade.
 
 
