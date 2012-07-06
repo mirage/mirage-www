@@ -52,7 +52,7 @@ user to install packages.  Package listings are obtained through `remote`
 sources, so lets set up the two we will need for Mirage.
 
 {{
-$ opam init default http://mirage.github.com/opam
+$ opam init -kind curl default http://mirage.github.com/opam
 $ opam remote -kind git -add dev git://github.com/mirage/opam-repo-dev
 $ opam update
 }}
