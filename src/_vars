@@ -1,2 +1,2 @@
-DEPS="mirage-net cow cohttp mirage lwt.unix"
+DEPS="mirage-net cow cohttp mirage"
 SYNTAX_DEPS="lwt.syntax str dyntype dyntype.syntax cow.syntax"
