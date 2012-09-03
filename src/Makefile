@@ -1,18 +1,13 @@
-all: 
-	ocaml setup.ml -configure
-	ocaml setup.ml -build
+ifeq ($(MIRAGE_OS),xen)
+FLAGS=--enable-xen
+else
+FLAGS=--enable-unix
+endif
 
-xen: 
-	./cmd config
-	mir-crunch -name "static" ../files > filesystem_static.ml
-	mir-crunch -name "templates" ../tmpl > filesystem_templates.ml
-	echo open Filesystem_static > main.ml
-	echo open Filesystem_templates >> main.ml
-	echo open Server >> main.ml
-	echo "let _ = OS.Main.run (main ())" >> main.ml
-	ocamlbuild -classic-display main.xen
+all: 
+	ocaml setup.ml -configure $(FLAGS)
+	ocaml setup.ml -build
 
 .PHONY:clean
 clean:
-	rm -f filesystem_static.ml filesystem_templates.ml main.ml
 	ocamlbuild -clean

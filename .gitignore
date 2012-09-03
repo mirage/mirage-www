@@ -3,4 +3,5 @@ src/main.ml
 src/_build
 .*.swp
 *.native
-src/setup.*
+src/setup.data
+src/setup.log

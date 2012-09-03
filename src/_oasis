@@ -10,8 +10,12 @@ PostDistCleanCommand: $rm main.ml
 
 Flag unix
   Description: build UNIX binary
-  Default: true
+  Default: false
 
+Flag xen
+  Description: build Xen kernel
+  Default: false
+  
 Executable "mirage-www.unix"
   Path:               .
   MainIs:             main.ml
@@ -20,3 +24,13 @@ Executable "mirage-www.unix"
   CompiledObject:     native
   Install:            false
   BuildDepends:       cohttp, cohttp.mirage, uri, re, cow, lwt.unix
+
+Executable "mirage-www.xen"
+  Path:               .
+  MainIs:             main.ml
+  Build$:             flag(xen)
+  Custom:             true
+  CompiledObject:     native
+  Target:             xen
+  Install:            false
+  BuildDepends:       mirage, cohttp, cohttp.mirage, uri, re, dyntype.syntax, cow.syntax, cow
