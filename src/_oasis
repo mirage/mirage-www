@@ -23,7 +23,7 @@ Executable "mirage-www.unix"
   Custom:             true
   CompiledObject:     native
   Install:            false
-  BuildDepends:       cohttp, cohttp.mirage, uri, re, cow, lwt.unix
+  BuildDepends:       mirage, cohttp.mirage, uri, re, cow
 
 Executable "mirage-www.xen"
   Path:               .
@@ -33,4 +33,4 @@ Executable "mirage-www.xen"
   CompiledObject:     native
   Target:             xen
   Install:            false
-  BuildDepends:       mirage, cohttp, cohttp.mirage, uri, re, dyntype.syntax, cow.syntax, cow
+  BuildDepends:       mirage, cohttp.mirage, uri, re, cow

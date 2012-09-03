@@ -1,7 +1,7 @@
 ifeq ($(MIRAGE_OS),xen)
-FLAGS=--enable-xen
+FLAGS=--enable-xen --disable-unix
 else
-FLAGS=--enable-unix
+FLAGS=--enable-unix --disable-xen
 endif
 
 all: 
