@@ -19,16 +19,11 @@ let main () =
     |Some x -> return x in
   let callback = Dispatch.t static in
   let spec = {
-    Cohttp.Server.address = "0.0.0.0";
-    auth = `None;
-    callback;
-    conn_closed = (fun _ -> ());
-    port;
-    exn_handler = Dispatch.exn_handler;
-    timeout = Some 300.;
+    Cohttp_lwt_mirage.Server.callback;
+    conn_closed = (fun _ () -> ());
   } in
   Net.Manager.create (fun mgr interface id ->
     let src = None, port in
     Net.Manager.configure interface (`IPv4 ip) >>
-    Cohttp.Server.listen mgr (`TCPv4 (src, spec))
+    Cohttp_lwt_mirage.listen mgr src spec
   )

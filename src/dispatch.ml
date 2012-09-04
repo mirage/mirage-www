@@ -2,14 +2,18 @@ open Printf
 open Lwt
 open Cow
 
+module CL = Cohttp_lwt_mirage
+module C = Cohttp
+
 module Resp = struct
 
   (* dynamic response *)
   let dyn ?(headers=[]) req body =
-    printf "Dispatch: dynamic URL %s\n%!" (Cohttp.Request.path req);
+    printf "Dispatch: dynamic URL %s\n%!" (CL.Request.path req);
     lwt body = body in
     let status = `OK in
-    Cohttp.Server.respond ~body ~headers ~status ()
+    let headers = C.Header.of_list headers in
+    CL.Server.respond_string ~headers ~status ~body ()
 
   let dyn_xhtml = dyn ~headers:Pages.content_type_xhtml
 
@@ -28,7 +32,7 @@ module Resp = struct
         let headers, t = Pages.Wiki.t page in
         dyn ~headers req t
     | [""; "styles";"index.css"] -> dyn ~headers:Style.content_type_css req Style.t
-    | x                      -> Cohttp.Server.respond_not_found ~url:(Cohttp.Request.path req) ()
+    | x                      -> CL.Server.respond_not_found ~uri:(CL.Request.uri req) ()
 end
 
 (* handle exceptions with a 500 *)
@@ -42,8 +46,8 @@ let rec remove_empty_tail = function
   | hd::tl -> hd :: remove_empty_tail tl
 
 (* main callback function *)
-let t static conn_id req =
-  let path = Cohttp.Request.path req in
+let t static conn_id ?body req =
+  let path = CL.Request.path req in
   let path_elem =
     remove_empty_tail (Re_str.split_delim (Re_str.regexp_string "/") path)
   in
@@ -52,6 +56,6 @@ let t static conn_id req =
   match_lwt static#read path with
   |Some body ->
      lwt body = Util.string_of_stream body in
-     Cohttp.Server.respond ~body ()
+     CL.Server.respond_string ~status:`OK ~body ()
   |None ->
      Resp.dispatch req path_elem

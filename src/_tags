@@ -3,3 +3,4 @@
 not <syntax/*>: use_syntax
 true: camlp4o
 true: debug
+true: annot
