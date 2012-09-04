@@ -1,5 +1,6 @@
-mirage-www.bin
-filesystem_*.ml
+src/filesystem_*.ml
+src/main.ml
 src/_build
-src/_config
 .*.swp
+*.native
+src/setup.*

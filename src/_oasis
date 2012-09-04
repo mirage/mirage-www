@@ -1,0 +1,22 @@
+OASISFormat: 0.3
+Name:        mirage-www
+Version:     0.9.0
+Synopsis:    Mirage WWW infrastructure
+Authors:     Anil Madhavapeddy, Thomas Gazagnaire
+License:     ISC
+BuildTools:  ocamlbuild
+PostConfCommand: ./gen_main.sh
+PostDistCleanCommand: $rm main.ml
+
+Flag unix
+  Description: build UNIX binary
+  Default: true
+
+Executable "mirage-www.unix"
+  Path:               .
+  MainIs:             main.ml
+  Build$:             flag(unix)
+  Custom:             true
+  CompiledObject:     native
+  Install:            false
+  BuildDepends:       cohttp, cohttp.mirage, uri, re, cow, lwt.unix
