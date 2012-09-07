@@ -180,6 +180,11 @@ let mort = {
   uri       = Some "http://www.cs.nott.ac.uk/~rmm/";
   email     = Some "mort@cantab.net";
 }
+let dave = {
+  Atom.name = "Dave Scott";
+  uri       = Some "http://dave.recoil.org/";
+  email     = Some "dave@recoil.org";
+}
 
 let rights = Some "All rights reserved by the author"
 
@@ -207,7 +212,13 @@ let entries = [
     subject    = "Connected Cloud Control: OpenFlow in Mirage";
     body       = "/blog/announcing-mirage-openflow.md";
     permalink  = "announcing-mirage-openflow";
-  }
+  };
+  { updated    = date (2012, 9, 12, 0, 0);
+    author     = dave;
+    subject    = "Building a \"xenstore stub domain\" with mirage";
+    body       = "/blog/xenstore-stub.md";
+    permalink  = "xenstore-stub-domain";
+  };
 ]
 
 let cmp_ent a b = Atom.compare (atom_date a.updated) (atom_date b.updated)
