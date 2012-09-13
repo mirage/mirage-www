@@ -52,9 +52,8 @@ user to install packages.  Package listings are obtained through `remote`
 sources, so lets set up the two we will need for Mirage.
 
 {{
-$ opam init default http://mirage.github.com/opam
-$ opam remote -kind git -add dev git://github.com/mirage/opam-repo-dev
-$ opam update
+$ opam init
+$ opam remote -add dev git://github.com/mirage/opam-repo-dev
 }}
 
 The first command initialises OPAM and adds the `default` repository to your
@@ -67,7 +66,7 @@ required.
 {{
 $ eval `opam config -env`
 # add the above line to your ~/.profile
-$ opam --verbose install cow mirage-fs
+$ opam --verbose install mirage-www
 }}
 
 You now need to append the path to the OPAM installation to your system `PATH`.
@@ -96,8 +95,8 @@ can use `opam switch` to swap between multiple cross-compilers.  If you are on
 
 {{
 $ opam switch -list
-$ opam switch -alias xen 3.12.1+mirage-xen
-$ opam install cow mirage-fs
+$ opam switch 3.12.1+mirage-xen
+$ opam install mirage-www
 $ eval `opam config -env`
 }}
 
@@ -111,7 +110,7 @@ Now try to compile up a Xen version of this website, via:
 {{
 $ cd mirage-www
 $ make clean
-$ make xen
+$ make
 }}
 
 There will be a Xen microkernel in `./src/_build/main.xen`.  __todo: how to run it__.
@@ -120,8 +119,8 @@ is to compile a UNIX binary that uses the Mirage network stack
 instead of kernel sockets. This is the `unix-direct` compiler variant, and requires
 the `tuntap` interface to be available on the UNIX host.
 {{
-$ opam switch -alias unix-direct 3.12.1+mirage-unix-direct
-$ opam install cow mirage-fs
+$ opam switch 3.12.1+mirage-unix-direct
+$ opam install mirage-www
 $ eval `opam config -env`
 }}
 
@@ -152,14 +151,11 @@ $ git clone git@github.com:avsm/opam-repo-dev
 # remove the old dev remote
 $ opam remote -rm dev
 $ cd opam-repo-dev
-$ opam remote -kind git -add dev .
+$ opam remote -add dev .
 }}
 This will configure your local checkout as a development remote, and OPAM will pull from it on every update.
-Each package requires three files:
-* `url/package.0.1` : the URL to the distribution file or git directory
-* `opam/package.0.1.opam` : the package commands to install and uninstall it
-* `descr/package.0.1` : a description of the library or application
-*Note*: we are considering swapping this directory layout to a simpler per-package directory. See [issue 25](http://github.com/OCamlPro/issues/25).
+Each package lives in a directory named with the version, such as `packages/foo.0.1`, and requires three files inside it:
+* `foo.0.1/url` : the URL to the distribution file or git directory
+* `foo.0.1/opam` : the package commands to install and uninstall it
+* `foo.0.1/descr` : a description of the library or application
 It's easiest to copy the files from an existing package and modify them to your needs (and read the [specification](https://github.com/OCamlPro/opam/raw/master/doc/specs/roadmap.pdf) for more information). Once you're done, add and commit the files, issue an `opam update`, and the new package should be available for installation or upgrade.
-
-
