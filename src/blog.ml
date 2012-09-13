@@ -215,7 +215,7 @@ let entries = [
   };
   { updated    = date (2012, 9, 12, 0, 0);
     author     = dave;
-    subject    = "Building a \"xenstore stub domain\" with mirage";
+    subject    = "Building a \"xenstore stub domain\" with Mirage";
     body       = "/blog/xenstore-stub.md";
     permalink  = "xenstore-stub-domain";
   };
