@@ -87,7 +87,7 @@ The code is in two separate repositories:
 * [ocaml-xenstore](https://github.com/djs55/ocaml-xenstore): contains all the generic stuff
 * [ocaml-xenstore-xen](https://github.com/djs55/ocaml-xenstore-xen): contains the unix userspace
     and xen stub domain IO modules and "main" functions
-* (optional) To regenerate the OASIS file, grab the <tt>add-xen</tt> branch from this [OASIS fork](http://github.com/avsm/oasis).
+* (optional) To regenerate the OASIS file, grab the `add-xen` branch from this [OASIS fork](http://github.com/avsm/oasis).
 
 *Example build instructions*
 
@@ -98,7 +98,7 @@ First install OCaml and the usual build tools:
 {{
     apt-get install ocaml build-essential git curl rsync
 }}
-Then install the OCamlPro <tt>opam</tt> package manager to simplify the installation of extra packages
+Then install the OCamlPro `opam` package manager to simplify the installation of extra packages
 {{
     git clone git://github.com/OCamlPro/opam.git
     cd opam
@@ -139,7 +139,7 @@ Build the Xen stubdom
     cd ocaml-xenstore-xen
     make
 }}
-The binary now lives in <tt>xen/_build/src/server_xen.xen</tt>
+The binary now lives in `xen/_build/src/server_xen.xen`
 
 *Deploying on a Xen system*
 
@@ -151,9 +151,9 @@ the default) but for now you need the following:
 * A XSM/FLASK policy which allows the stubdom to call the "domctl getdomaininfo". For the moment it's safe to skip this step with the caveat that xenstored will leak connections when domains die.
 * a Xen-4.2-compatible toolstack (either the bundled xl/libxl or xapi with [some patches](http://github.com/djs55/xen-api/tree/xen-4.2))
 * Linux-3.5 PVops domain 0 kernel
-* the domain builder binary <tt>init-xenstore-domain</tt> from <tt>xen-4.2/tools/xenstore</tt>.
+* the domain builder binary `init-xenstore-domain` from `xen-4.2/tools/xenstore`.
 
-To turn the stub xenstored on, you need to edit whichever <tt>init.d</tt> script is currently starting xenstore and modify it to call
+To turn the stub xenstored on, you need to edit whichever `init.d` script is currently starting xenstore and modify it to call
 {{
     init-xenstore-domain /path/to/server_xen.xen 256 flask_label
 }}
