@@ -21,7 +21,7 @@ Mirage has been tested on Debian Squeeze/Wheezy, Ubuntu Lucid and MacOS X
 {{
 $ sudo apt-get install build-essential ocaml ocaml-native-compilers camlp4-extra git 
 $ git clone git://github.com/OCamlPro/opam.git
-$ cd opam && make
+$ cd opam && ./configure && make
 $ sudo make install
 }}
 
@@ -35,7 +35,7 @@ started quickly. Ensure you have a up-to-date Home version (via `brew update`),
 or the `brew tap` command below will fail.
 
 {{
-$ brew tap mirage/homebrew-ocaml
+$ brew update
 $ brew install opam
 }}
 
