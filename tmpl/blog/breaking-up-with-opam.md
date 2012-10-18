@@ -10,8 +10,8 @@ OPAM includes compiler variants for Mirage-friendly environments for Xen and the
 * [mirage-net](http://github.com/mirage/mirage-net) has the TCP/IP networking stack.
 * [ocaml-cstruct](http://github.com/mirage/ocaml-cstruct) has the camlp4 extension to manipulate memory like C `struct`s, but with type-safe accessors in OCaml.
 * [ocaml-xenstore](http://github.com/mirage/ocaml-xenstore) has a portable implementation of the Xenstore protocol to communicate with the Xen management stack from a VM (or even act as a [server in a stub domain](/blog/xenstore-stub-domain)).
-* [ocaml-dns](http://github.com/mirage/ocaml-dns) is a pure OCaml implementation of the DNS protocol.
-* [ocaml-dns](http://github.com/mirage/ocaml-re) is a pure OCaml version of several regular expression engines, including Perl compatibility.
+* [ocaml-dns](http://github.com/mirage/ocaml-dns) is a pure OCaml implementation of the DNS protocol, including a server and stub resolver.
+* [ocaml-re](http://github.com/mirage/ocaml-re) is a pure OCaml version of several regular expression engines, including Perl compatibility.
 * [ocaml-uri](http://github.com/mirage/ocaml-uri) handles parsing the surprisingly complex URI strings.
 * [ocaml-cohttp](http://github.com/mirage/ocaml-cohttp) is a portable HTTP parser, with backends for Mirage, Lwt and Core/Async. This is a good example of how to factor out OS-specific concerns using the OCaml type system (and I plan to blog more about this soon).
 * [ocaml-cow](http://github.com/mirage/ocaml-cow) is a set of syntax extensions for JSON, CSS, XML and XHTML, which are explained [here](/wiki/cow), and used by this site.
