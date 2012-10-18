@@ -219,6 +219,12 @@ let entries = [
     body       = "/blog/xenstore-stub.md";
     permalink  = "xenstore-stub-domain";
   };
+  { updated    = date (2012, 10, 17, 17, 30);
+    author     = anil;
+    subject    = "Breaking up is easy to do (with OPAM)";
+    body       = "/blog/breaking-up-with-opam.md";
+    permalink  = "breaking-up-is-easy-with-opam";
+  };
 ]
 
 let cmp_ent a b = Atom.compare (atom_date a.updated) (atom_date b.updated)
