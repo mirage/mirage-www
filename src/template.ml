@@ -7,7 +7,7 @@ let bar cur =
     "/","Home";
     "/blog/","Blog";
     "/wiki/","Wiki"; 
-    "http://github.com/avsm/mirage", "Code";
+    "http://github.com/mirage/", "Code";
     "/about/","About"
   ] in
   let one (href, title) =
