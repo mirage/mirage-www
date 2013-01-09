@@ -6,6 +6,7 @@ Authors:     Anil Madhavapeddy, Thomas Gazagnaire
 License:     ISC
 BuildTools:  ocamlbuild
 PostConfCommand: ./gen_main.sh
+PostBuildCommand: ./gen_xen.sh
 PostDistCleanCommand: $rm main.ml
 
 Flag unix
@@ -25,12 +26,11 @@ Executable "mirage-www.unix"
   Install:            false
   BuildDepends:       mirage, cohttp.mirage, uri, re, cow
 
-Executable "mirage-www.xen"
+Executable "mirage-www.nobj.o"
   Path:               .
   MainIs:             main.ml
   Build$:             flag(xen)
   Custom:             true
-  CompiledObject:     native
-  Target:             xen
+  CompiledObject:     native_object
   Install:            false
   BuildDepends:       mirage, cohttp.mirage, uri, re, cow
