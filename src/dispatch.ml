@@ -46,11 +46,17 @@ let rec remove_empty_tail = function
   | hd::tl -> hd :: remove_empty_tail tl
 
 (* main callback function *)
-let t static conn_id ?body req =
+let t conn_id ?body req =
   let path = CL.Request.path req in
   let path_elem =
     remove_empty_tail (Re_str.split_delim (Re_str.regexp_string "/") path)
   in
+  lwt static =
+    eprintf "finding the static kv_ro block device\n";
+    OS.Devices.find_kv_ro "static" >>=
+    function
+    | None   -> Printf.printf "fatal error, static kv_ro not found\n%!"; exit 1
+    | Some x -> return x in
 
   (* determine if it is static or dynamic content *)
   match_lwt static#read path with
