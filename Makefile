@@ -14,3 +14,4 @@ run:
 
 clean:
 	cd src && obuild clean
+	$(RM) mir-www
