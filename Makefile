@@ -6,7 +6,7 @@ all: build
 	@
 
 src/dist/setup:
-	cd src && mirari configure www.conf $(XEN)
+	cd src && mirari configure www.conf $(XEN) $(CONF_FLAGS)
 
 build: src/dist/setup
 	cd src && mirari build www.conf $(XEN)
