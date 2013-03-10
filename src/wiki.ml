@@ -422,8 +422,8 @@ let entries = [
     categories = ["overview","usage"];
   };
 
-  { updated    = date (2011, 04, 12, 12, 55);
-    author     = anil;
+  { updated    = date (2013, 03, 10, 12, 55);
+    author     = vb;
     subject    = "Hello Mirage World";
     body       = File "hello-world.md";
     permalink  = "hello-world";
