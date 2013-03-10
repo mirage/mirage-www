@@ -352,6 +352,11 @@ let mort = {
   uri       = Some "http://mort.io/";
   email     = Some "mort@cantab.net";
 }
+let vb = {
+  Atom.name = "Vincent Bernardoff";
+  uri       = Some "https://github.com/vbmithr";
+  email     = Some "vb@luminar.eu.org";
+}
 
 let rights = Some "All rights reserved by the author"
 
@@ -409,16 +414,16 @@ let entries = [
     categories = ["overview","usage"];
   };
 
-  { updated    = date (2012, 06, 26, 17, 30);
-    author     = anil;
+  { updated    = date (2013, 03, 10, 10, 30);
+    author     = vb;
     subject    = "Installation";
     body       = File "install-opam.md";
     permalink  = "install";
     categories = ["overview","usage"];
   };
 
-  { updated    = date (2011, 04, 12, 12, 55);
-    author     = anil;
+  { updated    = date (2013, 03, 10, 12, 55);
+    author     = vb;
     subject    = "Hello Mirage World";
     body       = File "hello-world.md";
     permalink  = "hello-world";
