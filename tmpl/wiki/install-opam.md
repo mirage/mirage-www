@@ -49,20 +49,20 @@ sources, so lets set up the two we will need for Mirage.
 
 {{
 $ opam init
-$ opam repo add dev git://github.com/mirage/opam-repo-dev
+$ opam remote add mirage-dev git://github.com/mirage/opam-repo-dev
 }}
 
-The first command initialises OPAM and adds the `default` repository to your
-package list. The second one is a `dev` remote that contains bleeding-edge
-packages that have not yet been released, but are directly available as git
-repositories. Whenever you issue an `opam update`, it will automatically
-attempt to upgrade those git repositories and recompile any dependencies as
-required.
+The first command initialises OPAM and adds the `default` repository
+to your package list. The second one is a `mirage-dev` remote that
+contains bleeding-edge packages that have not yet been released, but
+are directly available as git repositories. Whenever you issue an
+`opam update`, it will automatically attempt to upgrade those git
+repositories and recompile any dependencies as required.
 
 {{
 $ eval `opam config -env`
 # add the above line to your ~/.profile
-$ opam --verbose install mirage-www
+$ opam install mirari
 }}
 
 You now need to append the path to the OPAM installation to your system `PATH`.
@@ -70,9 +70,10 @@ An appropriate shell fragment is output via `opam config -env`.  If you add
 the `eval` line to your login shell (usually `~/.profile`), it will automatically import
 the correct PATH on every subsequent login.
 
-Finally, `opam install` will install the [CamlOnTheWeb](/wiki/cow) library
-and file system utilities, which are sufficient to build this website.  To
-run it on your local machine, do:
+Finally, `opam install mirari` will install the [Mirari](/blog/mirari)
+library that will in turn download all the necessary dependencies and
+setup the build system necessary to build `mirage-www`. To run it on
+your local machine, do:
 
 {{
 $ git clone git://github.com/mirage/mirage-www
@@ -92,7 +93,7 @@ can use `opam switch` to swap between multiple cross-compilers.  If you are on
 {{
 $ opam switch
 $ opam switch 4.00.1+mirage-xen
-$ opam install mirage-www
+$ opam install mirari
 $ eval `opam config -env`
 }}
 
@@ -119,7 +120,7 @@ compiler variant, and requires the `tuntap` interface to be available
 on the UNIX host.
 {{
 $ opam switch 4.00.1+mirage-unix
-$ opam install mirage-www
+$ opam install mirari
 $ eval `opam config -env`
 }}
 
@@ -144,16 +145,22 @@ There are two kinds of OPAM remote repositories: `stable` released versions of
 packages that have version numbers, and `dev` packages that are retrieved via
 git or darcs (and eventually, other version control systems too).
 
-To develop a new package, fork the [mirage/opam-repo-dev](http://github.com/mirage/opam-repo-dev) repository on Github, clone it locally, and add it as an OPAM remote.
+To develop a new package, fork the
+[mirage/opam-repo-dev](http://github.com/mirage/opam-repo-dev)
+repository on Github, clone it locally, and add it as an OPAM remote.
 {{
 $ git clone git@github.com:avsm/opam-repo-dev
 # remove the old dev remote
-$ opam repo remove dev
+$ opam remote remove dev
 $ cd opam-repo-dev
-$ opam repo add dev .
+$ opam remote add dev .
 }}
-This will configure your local checkout as a development remote, and OPAM will pull from it on every update.
-Each package lives in a directory named with the version, such as `packages/foo.0.1`, and requires three files inside it:
+
+This will configure your local checkout as a development remote, and
+OPAM will pull from it on every update. Each package lives in a
+directory named with the version, such as `packages/foo.0.1`, and
+requires three files inside it:
+
 * `foo.0.1/url` : the URL to the distribution file or git directory
 * `foo.0.1/opam` : the package commands to install and uninstall it
 * `foo.0.1/descr` : a description of the library or application
