@@ -414,8 +414,8 @@ let entries = [
     categories = ["overview","usage"];
   };
 
-  { updated    = date (2012, 06, 26, 17, 30);
-    author     = anil;
+  { updated    = date (2013, 03, 10, 10, 30);
+    author     = vb;
     subject    = "Installation";
     body       = File "install-opam.md";
     permalink  = "install";
