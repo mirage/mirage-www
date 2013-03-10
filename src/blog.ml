@@ -185,6 +185,11 @@ let dave = {
   uri       = Some "http://dave.recoil.org/";
   email     = Some "dave@recoil.org";
 }
+let vb = {
+  Atom.name = "Vincent Bernardoff";
+  uri       = Some "https://github.com/vbmithr";
+  email     = Some "vb@luminar.eu.org";
+}
 
 let rights = Some "All rights reserved by the author"
 
