@@ -27,14 +27,14 @@ This will create a symlink to `./dist/build/mir-hello/mir-hello.xen`,
 and you can boot it up with a config file like:
 
 {{
-    $ cd dist/build/mir-hello
     $ cat > hello.cfg
     name="hello"
-    memory=1024
+    memory=128
     kernel="mir-hello.xen"
+    vif=['bridge=xenbr0']
     <control-d>
     # Use xm instead of xl if you are using Xen 4.1 or older
-    $ sudo xl create -c sleep.cfg
+    $ sudo xl create -c hello.cfg
 }}
 
 You should see the same output on the Xen console as you did on the
@@ -56,31 +56,28 @@ Mirage networking is present in the `Net` module and can compile in two modes:
   POSIX sockets, enabling easy comparison with normal kernels. This is
   only supported under UNIX via the `unix-socket` backend.
 
-Try out the ping server test by:
+When building a Mirage unikernel, `mirari` automatically include
+boilerplate code that uses the `Net.Manager` module. On the `direct`
+mode, your kernel will answer ping requests, as you can verify by
+issuing the following commands:
+
+Unix:
 
 {{
-    $ cd mirage-skeleton/ping
     $ opam switch 4.00.1+mirage-unix
     $ eval `opam config env`
     $ make
-    $ sudo ./mir-ping
+    $ sudo ./mir-hello
     $ ping 10.0.0.2
 }}
 
-And similarly, the Xen version:
+Xen:
 
 {{
     $ opam switch 4.00.1+mirage-xen
     $ eval `opam config env`
     $ make
-    $ cd dist/build/mir-ping
-    $ cat > ping.cfg
-    name="ping"
-    memory=128
-    kernel="ping.xen"
-    vif=['bridge=xenbr0']
-     <control-d>
-    $ sudo xl create -c ping.cfg
+    $ sudo xl create -c hello.cfg
      <configure the bridge IP address>
     $ telnet 10.0.0.2 8081
 }}
