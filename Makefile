@@ -12,7 +12,7 @@ build: src/dist/setup
 	cd src && mirari build www.conf $(XEN)
 
 run:
-	./mir-www
+	cd src && ./mir-www
 
 clean:
 	cd src && obuild clean
