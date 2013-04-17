@@ -331,7 +331,7 @@ open People
 
 let categories = [
   "overview", [
-      "media"; "usage"; "perf"
+      "media"; "usage"; "perf"; "meetings"
   ];
   "language", [
       "syntax"; "dyntype"; "libraries"
@@ -351,6 +351,14 @@ let categories = [
 ]
 
 let entries = [
+  { updated    = date (2013, 04, 16, 16, 0);
+    author     = anil;
+    subject    = "Weekly Meeting: 2013-04-16 ";
+    body       = File "weekly/2013-04-16.md";
+    permalink  = "weekly-2013-04-16";
+    categories = ["overview","meetings"];
+  };
+
   { updated    = date (2011, 08, 18, 16, 0);
     author     = balraj;
     subject    = "Getting Started with Lwt threads";
