@@ -351,6 +351,15 @@ let categories = [
 ]
 
 let entries = [
+  { updated    = date (2013, 04, 23, 9, 0);
+    author     = anil;
+    subject    = "Developer Preview 1.0 Checklist";
+    body       = File "dev-preview-checklist.md";
+    permalink  = "dev-preview-checklist";
+    categories = ["overview","meetings"];
+  };
+
+
   { updated    = date (2013, 04, 16, 16, 0);
     author     = anil;
     subject    = "Weekly Meeting: 2013-04-16 ";
