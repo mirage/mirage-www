@@ -359,6 +359,13 @@ let entries = [
     categories = ["overview","meetings"];
   };
 
+  { updated    = date (2013, 04, 23, 16, 0);
+    author     = anil;
+    subject    = "Weekly Meeting: 2013-04-23 ";
+    body       = File "weekly/2013-04-23.md" ;
+    permalink  = "weekly-2013-04-23";
+    categories = ["overview","meetings"];
+  };
 
   { updated    = date (2013, 04, 16, 16, 0);
     author     = anil;

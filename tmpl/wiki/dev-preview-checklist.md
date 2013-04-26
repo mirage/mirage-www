@@ -16,19 +16,15 @@ All of these repositories need to be code-reviewed and run over with ocamldoc.  
 We need to close out this thread on a standard [repository format](https://lists.cam.ac.uk/pipermail/cl-mirage/2013-March/msg00099.html) for all these things.
 
 Core Unix/Xen libraries:
-* *shared-memory-ring*: can be used outside of xen, need to benchmark vs c. 4.01.0dev ocaml improves perf with bigarray builtins.
-* *ocaml-xenstore*: client and server in here I think.
-* *ocaml-fd-send-recv*: on djs repo only
-* *ocaml-vchan*: (in djs repo only)
-* *ocaml-qmp*: QEMU protocol (in djs repo only)
-* *ocaml-xen-block-driver*: (in djs repo only)
-* *ocaml-xen-net-driver*: todo, needs to compile in userspace too
-* *xenbigarray*: opam switch hack to eliminate unix dependency. shouldnt be externally visible.
-
-Cloud interfaces:
-* *aws*: ec2 bindings, need porting to cohttp
-* *ocaml-libvirt*: dave upstreaming
-* *xenopsd*: convenient single-host daemon for ubuntu-unstable.
+* *shared-memory-ring*: Builds shared memory-based point-to-point communication protocols. Is reasonably mature and can be released. Can be used outside of Xen, need to benchmark vs c. 4.01.0dev ocaml improves perf with bigarray builtins. Implements the Xen ABI, but needs examples in-tree. (Owner: djs). For 1.0.
+* *ocaml-xenstore*: Repo layout is confusing. Client and server in here, as well as Lwt bindings. Does build as stub domain and unix kernel. How can this stay in sync with xen-unstable? (Owner: djs). For 1.0.
+* *ocaml-fd-send-recv*: UNIX only and trivial. Released and stable. For 1.0. (Owner: djs/vb)
+* *ocaml-vchan*: Vchan communication channel between VMs.  Provides a socket-like interface between VMs.  For 1.0 (Owner: djs).  Post 2.0: vsock?
+* *ocaml-qmp*: QEMU message-passing protocol to command a running qemu. Not for 1.0, really for advanced use (Owner: djs).
+* *ocaml-gntshare*: Interface to mapping pages across Xen VMs. In ocaml-xen-lowlevel-libs, in good state, part of upstream xen-unstable and needs synching. (Owner: djs)
+* *ocaml-xen-block-driver*: Successfully moved out, and works in Xen. It once worked in userspace. (Owner: djs/jonludlam). For 1.0.
+* *ocaml-xen-net-driver*: Can be moved out, and works in Xen. It once worked in userspace. (Owner: djs/jonludlam). For 1.0.
+* *xenbigarray*: OPAM switch hack to eliminate unix dependency. shouldnt be externally visible. (Owner: anil). For 1.0.
 
 Core Mirage libraries and tools:
 * *mirage-platform*:
@@ -41,21 +37,21 @@ Core Mirage libraries and tools:
 * *cross-ref ocamldoc*: leo
 
 Storage libraries:
-* *mirage-fs*: FAT not working
-* *orm*:
-* *ocaml-crunch*:
-* *libvhd*: jon, suitable for block driver use?
-* *ocaml-iscsi*: djs?
-* *cagit*: git storage format
+* *mirage-fs*: FAT not working as depends on Bitstring. Post 1.0, break out FAT into separate library. VB expressed interest in FAT.
+* *orm*: Post 1.0, needs sqlite bindings
+* *ocaml-crunch*: Works.
+* *libvhd*: ?? Jon, suitable for block driver use?
+* *ocaml-iscsi*: Doesnt exist, but djs really wants it.
+* *cagit*: Needs a file system (Owner: tg).
 * *irminsule*: tg, not for 1.0
-* *arakoon*: dave did patch for asplos
+* *arakoon*: In-memory-only patch, Arakoon already functorised across the storage layer. For 1.0? to investigate
 
 RPC/coordination:
-* *rpc-light*: desire to replace with binprot?
-* *shelf*:
+* *rpc-light*: Works well, but slow and no wire protocol defined. Vb mentioned Thrift. Also have bin_io? No versioning story. Needs obuild help. (Owner: tg)
 * *ocaml-actor*: non existent!
 * *ocaml-fable*: on avsm repo only 
 * *message-switch*: 
+* *ocamlmq*: to investigate.
 * *logger*: need a vchan-based logger and CLI to access from other domain
 
 Protocols:
@@ -76,6 +72,12 @@ Webby libraries:
 * *ocaml-cow*:
 * *ocaml-uri*:
 * *ocaml-spdy*: out of date, not for 1.0
+
+Cloud interfaces:
+* *aws*: ec2 bindings, need porting to cohttp
+* *ocaml-libvirt*: dave upstreaming
+* *xenopsd*: convenient single-host daemon for ubuntu-unstable.
+
 
 Testing:
 * Ocamlot
