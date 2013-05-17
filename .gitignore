@@ -1,6 +1,9 @@
 src/filesystem_*.ml
 src/main.ml
+src/main.obuild
 src/_build
+src/mir-www
+src/dist
 .*.swp
 *.native
 src/setup.data
