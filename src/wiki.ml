@@ -327,42 +327,11 @@ let page_css = <:css<
 
 (* Data *)
 
-let anil = {
-  Atom.name = "Anil Madhavapeddy";
-  uri       = Some "http://anil.recoil.org";
-  email     = Some "anil@recoil.org";
-}
-let thomas = {
-  Atom.name = "Thomas Gazagnaire";
-  uri       = Some "http://gazagnaire.org";
-  email     = Some "thomas@gazagnaire.org";
-}
-let raphael = {
-  Atom.name = "Raphael Proust";
-  uri       = Some "https://github.com/raphael-proust";
-  email     = Some "raphlalou@gmail.com";
-}
-let balraj = {
-  Atom.name = "Balraj Singh";
-  uri       = None;
-  email     = Some "balraj.singh@cl.cam.ac.uk";
-}
-let mort = {
-  Atom.name = "Richard Mortier";
-  uri       = Some "http://mort.io/";
-  email     = Some "mort@cantab.net";
-}
-let vb = {
-  Atom.name = "Vincent Bernardoff";
-  uri       = Some "https://github.com/vbmithr";
-  email     = Some "vb@luminar.eu.org";
-}
-
-let rights = Some "All rights reserved by the author"
+open People
 
 let categories = [
   "overview", [
-      "media"; "usage"; "perf"
+      "media"; "usage"; "perf"; "meetings"
   ];
   "language", [
       "syntax"; "dyntype"; "libraries"
@@ -382,6 +351,39 @@ let categories = [
 ]
 
 let entries = [
+  { updated    = date (2013, 04, 23, 9, 0);
+    author     = anil;
+    subject    = "Developer Preview 1.0 Checklist";
+    body       = File "dev-preview-checklist.md";
+    permalink  = "dev-preview-checklist";
+    categories = ["overview","meetings"];
+  };
+
+  { updated    = date (2013, 04, 30, 16, 0);
+    author     = anil;
+    subject    = "Weekly Meeting: 2013-04-30";
+    body       = File "weekly/2013-04-30.md" ;
+    permalink  = "weekly-2013-04-30";
+    categories = ["overview","meetings"];
+  };
+
+
+  { updated    = date (2013, 04, 23, 16, 0);
+    author     = anil;
+    subject    = "Weekly Meeting: 2013-04-23";
+    body       = File "weekly/2013-04-23.md" ;
+    permalink  = "weekly-2013-04-23";
+    categories = ["overview","meetings"];
+  };
+
+  { updated    = date (2013, 04, 16, 16, 0);
+    author     = anil;
+    subject    = "Weekly Meeting: 2013-04-16";
+    body       = File "weekly/2013-04-16.md";
+    permalink  = "weekly-2013-04-16";
+    categories = ["overview","meetings"];
+  };
+
   { updated    = date (2011, 08, 18, 16, 0);
     author     = balraj;
     subject    = "Getting Started with Lwt threads";
