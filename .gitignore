@@ -1,11 +1,11 @@
 src/filesystem_*.ml
 src/main.ml
-src/_build
 src/main.obuild
+src/_build
+src/mir-www
 src/dist
 .*.swp
 *.native
 src/setup.data
 src/setup.log
 *~
-mir-www
