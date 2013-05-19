@@ -52,6 +52,9 @@ let derek   = "Derek McAuley"
 let jon     = "Jon Crowcroft"
 let alex    = "Alex Ho"
 let dave    = "David Scott"
+let haris   = "Charalampos Rotsos"
+let balraj  = "Balraj Singh"
+let smith   = "Steven Smith"
 
 let pdf href = {
   href;
@@ -78,6 +81,33 @@ let prezi path = {
 }
 
 let papers = [
+
+  { name     = "asplos";
+    items    = [
+      pdf "http://anil.recoil.org/papers/2013-asplos-mirage.pdf";
+      acm "2451116.2451167" ];
+    title    = "Unikernels: library operating systems for the cloud";
+    authors  = [ anil; richard; haris; dave; balraj; thomas; smith; steven; jon ];
+    descr    = <:xml<
+      Proceedings of the 18th International Conference on Architectural Support for Programming Languages and Operating Systems
+      <a href="http://asplos13.rice.edu/">ASPLOS '13</a>, April, 2013 >>;
+    abstract = <:xml<
+       We present <em>unikernels</em>, a new approach to deploying cloud services via
+       applications written in high-level source code. Unikernels are
+       single-purpose appliances that are compile-time specialised into
+       standalone kernels, and sealed against modification when deployed to a
+       cloud platform. In return they offer significant reduction in image
+       sizes, improved efficiency and security, and should reduce operational
+       costs. Our Mirage prototype compiles OCaml code into unikernels that
+       run on commodity clouds and offer an order of magnitude reduction in
+       code size without significant performance penalty. The architecture
+       combines static type-safety with a single address-space layout that can
+       be made immutable via a hypervisor extension. Mirage contributes a
+       suite of type-safe protocol libraries, and our results demonstrate that
+       the hypervisor is a platform that overcomes the hardware compatibility
+       issues that have made past library operating systems impractical to
+       deploy in the real-world. >>;
+  };
 
   { name     = "hotcloud";
     items    = [
