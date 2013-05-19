@@ -27,4 +27,5 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 * Weekly call [2013-04-16](/wiki/weekly-2013-04-16) on release, libvirt and Mirari.
 * Weekly call [2013-04-23](/wiki/weekly-2013-04-23) on Irminsule, revisions and release.
 * Weekly call [2013-04-30](/wiki/weekly-2013-04-30) on device drivers, SSL, actors and OpenFlow.
+* Weekly call [2013-05-14](/wiki/weekly-2013-05-14) on Ocamlot, actors and performance.
 

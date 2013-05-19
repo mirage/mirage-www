@@ -358,6 +358,13 @@ let entries = [
     permalink  = "dev-preview-checklist";
     categories = ["overview","meetings"];
   };
+  { updated    = date (2013, 05, 14, 16, 0);
+    author     = anil;
+    subject    = "Weekly Meeting: 2013-05-14";
+    body       = File "weekly/2013-05-14.md" ;
+    permalink  = "weekly-2013-05-14";
+    categories = ["overview","meetings"];
+  };
 
   { updated    = date (2013, 04, 30, 16, 0);
     author     = anil;
