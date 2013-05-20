@@ -199,6 +199,12 @@ let entries = [
     body       = "/blog/breaking-up-with-opam.md";
     permalink  = "breaking-up-is-easy-with-opam";
   };
+  { updated    = date (2013, 05, 20, 16, 20);
+    author     = anil;
+    subject    = "The road to a developer preview at OSCON 2013";
+    body       = "/blog/the-road-to-a-dev-release.md";
+    permalink  = "the-road-to-a-dev-release";
+  };
 ]
 
 let cmp_ent a b = Atom.compare (atom_date a.updated) (atom_date b.updated)

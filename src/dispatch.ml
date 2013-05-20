@@ -9,7 +9,8 @@ module Resp = struct
 
   (* dynamic response *)
   let dyn ?(headers=[]) req body =
-    printf "Dispatch: dynamic URL %s\n%!" (CL.Request.path req);
+    let path = Uri.path (C.Request.uri req) in
+    printf "Dispatch: dynamic URL %s\n%!" path;
     lwt body = body in
     let status = `OK in
     let headers = C.Header.of_list headers in
@@ -47,7 +48,7 @@ let rec remove_empty_tail = function
 
 (* main callback function *)
 let t conn_id ?body req =
-  let path = CL.Request.path req in
+  let path = Uri.path (C.Request.uri req) in
   let path_elem =
     remove_empty_tail (Re_str.split_delim (Re_str.regexp_string "/") path)
   in
