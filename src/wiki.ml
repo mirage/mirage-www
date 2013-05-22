@@ -513,6 +513,10 @@ let _ = List.iter (fun x -> Printf.printf "ENT: %s\n%!" x.subject) entries
 let permalink_exists x = List.exists (fun e -> e.permalink = x) entries
 
 let atom_entry_of_ent filefn e =
+  let links = [
+    Atom.mk_link ~rel:`alternate ~typ:"text/html"
+      (Uri.of_string (permalink e)) 
+  ] in
   lwt content = body_of_entry filefn e in
   let meta = {
     Atom.id      = permalink e;
@@ -520,6 +524,7 @@ let atom_entry_of_ent filefn e =
     subtitle     = None;
     author       = Some e.author;
     updated      = atom_date e.updated;
+    links;
     rights;
   } in
   return {
@@ -534,6 +539,10 @@ let atom_feed filefn es =
   let id = "/wiki/" in
   let title = "openmirage wiki" in
   let subtitle = Some "a cloud operating system" in
-  let feed = { Atom.id; title; subtitle; author=None; rights; updated } in
+  let links = [
+    Atom.mk_link (Config.mk_uri "/wiki/atom.xml");
+    Atom.mk_link ~rel:`alternate ~typ:"text/html" (Config.mk_uri "/wiki/")
+  ] in
+  let feed = { Atom.id; title; subtitle; author=None; rights; updated; links} in
   lwt entries = Lwt_list.map_s (atom_entry_of_ent filefn) es in
   return { Atom.feed=feed; entries }

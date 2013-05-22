@@ -57,14 +57,14 @@ type entry = {
 (* Convert a blog record into an Html.t fragment *)
 let html_of_entry read_file e =
   lwt body = read_file e.body in
-  let permalink = sprintf "/blog/%s" e.permalink in
+  let permalink = Config.mk_uri (sprintf "/blog/%s" e.permalink) in
   let permalink_disqus = sprintf "/blog/%s#disqus_thread" e.permalink in
   return <:xml<
     <div class="blog_entry">
       $html_of_date e.updated$
       <div class="blog_entry_heading">
         <div class="blog_entry_title">
-          <a href=$str:permalink$>$str:e.subject$</a>
+          <a href=$str:Uri.to_string permalink$>$str:e.subject$</a>
         </div>
         <div class="blog_entry_info">
           <i>$html_of_author e.author$</i>
@@ -218,12 +218,17 @@ let permalink e =
 let permalink_exists x = List.exists (fun e -> e.permalink = x) entries
 
 let atom_entry_of_ent filefn e =
+  let links = [
+    Atom.mk_link ~rel:`alternate ~typ:"text/html"
+      (Uri.of_string (permalink e)) 
+  ] in
   let meta = {
     Atom.id      = permalink e;
     title        = e.subject;
     subtitle     = None;
     author       = Some e.author;
     updated      = atom_date e.updated;
+    links;
     rights;
   } in 
   lwt content = filefn e.body in
@@ -239,7 +244,11 @@ let atom_feed filefn es =
   let id = "/blog/" in
   let title = "openmirage blog" in
   let subtitle = Some "a cloud operating system" in
-  let feed = { Atom.id; title; subtitle; author=None; rights; updated } in
+  let links = [
+    Atom.mk_link (Config.mk_uri "/blog/atom.xml");
+    Atom.mk_link ~rel:`alternate ~typ:"text/html" (Config.mk_uri "/blog/")
+  ] in
+  let feed = { Atom.id; title; subtitle; author=None; rights; updated; links } in
   lwt entries = Lwt_list.map_s (atom_entry_of_ent filefn) es in
   return { Atom.feed=feed; entries }
 
