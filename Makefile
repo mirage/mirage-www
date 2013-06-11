@@ -1,6 +1,6 @@
 .PHONY: all clean
 
-XEN?= $(shell if ocamlfind query lwt.unix >/dev/null 2>&1; then echo ""; else echo "--xen"; fi)
+XEN?= $(shell if ocamlfind query lwt.unix >/dev/null 2>&1; then echo "--unix"; else echo "--xen"; fi)
 
 all: build
 	@
@@ -12,7 +12,7 @@ build: src/dist/setup
 	cd src && mirari build www.conf $(XEN)
 
 run:
-	cd src && ./mir-www
+	cd src && sudo mirari run www.conf $(XEN)
 
 clean:
 	cd src && obuild clean
