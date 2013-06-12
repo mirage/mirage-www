@@ -16,7 +16,6 @@ clean:
 	cd src && obuild clean
 	rm -f mir-www
 
-
 xen-%:
 	$(MAKE) FLAGS=--xen $*
 
