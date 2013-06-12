@@ -24,7 +24,11 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 
 *Release Notes*
 * [Checklist for 1.0 Dev Preview](dev-preview-checklist)
-* Weekly call [2013-04-16](/wiki/weekly-2013-04-16) on release, libvirt and Mirari.
-* Weekly call [2013-04-23](/wiki/weekly-2013-04-23) on Irminsule, revisions and release.
+* Weekly call [2013-06-11](/wiki/weekly-2013-06-11) on the end of the start is finally in sight.
+* Weekly call [2013-06-04](/wiki/weekly-2013-06-04) on Amazon EC2, shared ring performance and outreach.
+* Weekly call [2013-05-28](/wiki/weekly-2013-05-28) on build pain reduced to mild ache, TryMirage and benchmarking.
+* Weekly call [2013-05-21](/wiki/weekly-2013-05-21) on build, build, and more build, argh.
+* Weekly call [2013-05-14](/wiki/weekly-2013-05-14) on Ocamlot, actors and performance.
 * Weekly call [2013-04-30](/wiki/weekly-2013-04-30) on device drivers, SSL, actors and OpenFlow.
-
+* Weekly call [2013-04-23](/wiki/weekly-2013-04-23) on Irminsule, revisions and release.
+* Weekly call [2013-04-16](/wiki/weekly-2013-04-16) on release, libvirt and Mirari.

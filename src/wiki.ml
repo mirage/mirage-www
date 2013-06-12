@@ -350,6 +350,16 @@ let categories = [
   ];
 ]
 
+let weekly ~y ~m ~d =
+  let s = sprintf "%4d-%02d-%02d" y m d in
+  { updated = date (y,m,d,16,0);
+    author  = anil;
+    subject = "Weekly Meeting: " ^ s;
+    body    = File (sprintf "weekly/%s.md" s);
+    permalink = "weekly-"^s;
+    categories = ["overview","meetings"]
+  }
+
 let entries = [
   { updated    = date (2013, 04, 23, 9, 0);
     author     = anil;
@@ -358,32 +368,14 @@ let entries = [
     permalink  = "dev-preview-checklist";
     categories = ["overview","meetings"];
   };
-
-  { updated    = date (2013, 04, 30, 16, 0);
-    author     = anil;
-    subject    = "Weekly Meeting: 2013-04-30";
-    body       = File "weekly/2013-04-30.md" ;
-    permalink  = "weekly-2013-04-30";
-    categories = ["overview","meetings"];
-  };
-
-
-  { updated    = date (2013, 04, 23, 16, 0);
-    author     = anil;
-    subject    = "Weekly Meeting: 2013-04-23";
-    body       = File "weekly/2013-04-23.md" ;
-    permalink  = "weekly-2013-04-23";
-    categories = ["overview","meetings"];
-  };
-
-  { updated    = date (2013, 04, 16, 16, 0);
-    author     = anil;
-    subject    = "Weekly Meeting: 2013-04-16";
-    body       = File "weekly/2013-04-16.md";
-    permalink  = "weekly-2013-04-16";
-    categories = ["overview","meetings"];
-  };
-
+  weekly ~y:2013 ~m:6 ~d:11;
+  weekly ~y:2013 ~m:6 ~d:4;
+  weekly ~y:2013 ~m:5 ~d:28;
+  weekly ~y:2013 ~m:5 ~d:21;
+  weekly ~y:2013 ~m:5 ~d:14;
+  weekly ~y:2013 ~m:4 ~d:30;
+  weekly ~y:2013 ~m:4 ~d:23;
+  weekly ~y:2013 ~m:4 ~d:16;
   { updated    = date (2011, 08, 18, 16, 0);
     author     = balraj;
     subject    = "Getting Started with Lwt threads";
@@ -506,6 +498,10 @@ let _ = List.iter (fun x -> Printf.printf "ENT: %s\n%!" x.subject) entries
 let permalink_exists x = List.exists (fun e -> e.permalink = x) entries
 
 let atom_entry_of_ent filefn e =
+  let links = [
+    Atom.mk_link ~rel:`alternate ~typ:"text/html"
+      (Uri.of_string (permalink e)) 
+  ] in
   lwt content = body_of_entry filefn e in
   let meta = {
     Atom.id      = permalink e;
@@ -513,6 +509,7 @@ let atom_entry_of_ent filefn e =
     subtitle     = None;
     author       = Some e.author;
     updated      = atom_date e.updated;
+    links;
     rights;
   } in
   return {
@@ -527,6 +524,10 @@ let atom_feed filefn es =
   let id = "/wiki/" in
   let title = "openmirage wiki" in
   let subtitle = Some "a cloud operating system" in
-  let feed = { Atom.id; title; subtitle; author=None; rights; updated } in
+  let links = [
+    Atom.mk_link (Config.mk_uri "/wiki/atom.xml");
+    Atom.mk_link ~rel:`alternate ~typ:"text/html" (Config.mk_uri "/wiki/")
+  ] in
+  let feed = { Atom.id; title; subtitle; author=None; rights; updated; links} in
   lwt entries = Lwt_list.map_s (atom_entry_of_ent filefn) es in
   return { Atom.feed=feed; entries }
