@@ -350,6 +350,16 @@ let categories = [
   ];
 ]
 
+let weekly ~y ~m ~d =
+  let s = sprintf "%4d-%02d-%02d" y m d in
+  { updated = date (y,m,d,16,0);
+    author  = anil;
+    subject = "Weekly Meeting: " ^ s;
+    body    = File (sprintf "weekly/%s.md" s);
+    permalink = "weekly-"^s;
+    categories = ["overview","meetings"]
+  }
+
 let entries = [
   { updated    = date (2013, 04, 23, 9, 0);
     author     = anil;
@@ -358,39 +368,14 @@ let entries = [
     permalink  = "dev-preview-checklist";
     categories = ["overview","meetings"];
   };
-  { updated    = date (2013, 05, 14, 16, 0);
-    author     = anil;
-    subject    = "Weekly Meeting: 2013-05-14";
-    body       = File "weekly/2013-05-14.md" ;
-    permalink  = "weekly-2013-05-14";
-    categories = ["overview","meetings"];
-  };
-
-  { updated    = date (2013, 04, 30, 16, 0);
-    author     = anil;
-    subject    = "Weekly Meeting: 2013-04-30";
-    body       = File "weekly/2013-04-30.md" ;
-    permalink  = "weekly-2013-04-30";
-    categories = ["overview","meetings"];
-  };
-
-
-  { updated    = date (2013, 04, 23, 16, 0);
-    author     = anil;
-    subject    = "Weekly Meeting: 2013-04-23";
-    body       = File "weekly/2013-04-23.md" ;
-    permalink  = "weekly-2013-04-23";
-    categories = ["overview","meetings"];
-  };
-
-  { updated    = date (2013, 04, 16, 16, 0);
-    author     = anil;
-    subject    = "Weekly Meeting: 2013-04-16";
-    body       = File "weekly/2013-04-16.md";
-    permalink  = "weekly-2013-04-16";
-    categories = ["overview","meetings"];
-  };
-
+  weekly ~y:2013 ~m:6 ~d:11;
+  weekly ~y:2013 ~m:6 ~d:4;
+  weekly ~y:2013 ~m:5 ~d:28;
+  weekly ~y:2013 ~m:5 ~d:21;
+  weekly ~y:2013 ~m:5 ~d:14;
+  weekly ~y:2013 ~m:4 ~d:30;
+  weekly ~y:2013 ~m:4 ~d:23;
+  weekly ~y:2013 ~m:4 ~d:16;
   { updated    = date (2011, 08, 18, 16, 0);
     author     = balraj;
     subject    = "Getting Started with Lwt threads";
