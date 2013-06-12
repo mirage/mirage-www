@@ -1,19 +1,27 @@
 .PHONY: all clean
 
-XEN?= $(shell if ocamlfind query lwt.unix >/dev/null 2>&1; then echo "--unix"; else echo "--xen"; fi)
-
 all: build
 	@
 
 src/dist/setup:
-	cd src && mirari configure www.conf $(XEN) $(CONF_FLAGS)
+	cd src && mirari configure www.conf $(FLAGS) $(CONF_FLAGS)
 
 build: src/dist/setup
-	cd src && mirari build www.conf $(XEN)
+	cd src && mirari build www.conf $(FLAGS)
 
 run:
-	cd src && sudo mirari run www.conf $(XEN)
+	cd src && sudo mirari run www.conf $(FLAGS)
 
 clean:
 	cd src && obuild clean
-	$(RM) mir-www
+	rm -f mir-www
+
+
+xen-%:
+	$(MAKE) FLAGS=--xen $*
+
+unix-socket-%:
+	$(MAKE) FLAGS="--unix --socket" $*
+
+unix-direct-%:
+	$(MAKE) FLAGS="--unix" $*
