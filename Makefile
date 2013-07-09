@@ -1,7 +1,7 @@
 .PHONY: all clean
 
 all: build
-	@
+	@ :
 
 src/dist/setup:
 	cd src && mirari configure www.conf $(FLAGS) $(CONF_FLAGS)
