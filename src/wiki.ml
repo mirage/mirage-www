@@ -400,11 +400,27 @@ let entries = [
     categories = ["concurrency","threads"];
   };
  
-  { updated    = date (2013, 03, 10, 10, 30);
+  { updated    = date (2013, 07, 17, 15, 00);
     author     = vb;
     subject    = "Installation";
     body       = File "install.md";
     permalink  = "install";
+    categories = ["overview","usage"];
+  };
+
+  { updated    = date (2013, 07, 17, 15, 00);
+    author     = vb;
+    subject    = "OPAM Libraries";
+    body       = File "opam.md";
+    permalink  = "opam";
+    categories = ["overview","usage"];
+  };
+
+  { updated    = date (2013, 07, 17, 15, 00);
+    author     = vb;
+    subject    = "Building `mirage-www`";
+    body       = File "mirage-www.md";
+    permalink  = "mirage-www";
     categories = ["overview","usage"];
   };
 
