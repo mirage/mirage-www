@@ -8,4 +8,5 @@ src/dist
 *.native
 src/setup.data
 src/setup.log
+src/backend.ml
 *~
