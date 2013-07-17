@@ -12,9 +12,7 @@ will cover the basics to get you started here.
 
 !!Requirements
 
-Mirage has been tested on Archlinux, Debian Wheezy, Ubuntu Lucid/Raring and
-MacOS X 10.8. To compile the Xen backend, you *must* have a 64-bit Linux host.
-32-bit is not supported at this time.
+Mirage has been tested on Archlinux, Debian Wheezy, Ubuntu Lucid/Raring and MacOS X 10.7 and 10.8. To compile the Xen backend, you *must* have a 64-bit Linux host. 32-bit is not supported at this time.
 
 Install OPAM for your operating system by following its [Quick Install Guide](http://opam.ocamlpro.com/doc/Quick_Install.html).
 
