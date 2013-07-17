@@ -201,7 +201,16 @@ Now if we rebuild and run something like:
   dist/build/xen-disk/xen-disk connect <myvm> --path disk.raw
 }}
 
-we should be able to mount the filesystem inside the VM, make changes and
+Inside the VM we should be able to do some basic speed testing:
+
+{{
+  # dd if=/dev/xvdb of=/dev/null bs=1M iflag=direct count=100
+  100+0 records in
+  100+0 records out
+  104857600 bytes (105 MB) copied, 0.125296 s, 837 MB/s
+}}
+
+Plus we should be able to mount the filesystem inside the VM, make changes and
 then disconnect (send SIGINT to xen-disk by hitting Control+C on your terminal)
 without disturbing the underlying disk contents.
 
