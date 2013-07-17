@@ -401,7 +401,7 @@ let entries = [
   };
  
   { updated    = date (2013, 07, 17, 15, 00);
-    author     = vb;
+    author     = mort; (* ++ vb -- need multiple author support *)
     subject    = "Installation";
     body       = File "install.md";
     permalink  = "install";
@@ -409,7 +409,7 @@ let entries = [
   };
 
   { updated    = date (2013, 07, 17, 15, 00);
-    author     = vb;
+    author     = mort;
     subject    = "OPAM Libraries";
     body       = File "opam.md";
     permalink  = "opam";
@@ -417,8 +417,8 @@ let entries = [
   };
 
   { updated    = date (2013, 07, 17, 15, 00);
-    author     = vb;
-    subject    = "Building `mirage-www`";
+    author     = mort;
+    subject    = "Building mirage-www";
     body       = File "mirage-www.md";
     permalink  = "mirage-www";
     categories = ["overview","usage"];

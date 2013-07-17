@@ -47,3 +47,15 @@ Finally, `opam install mirari` will install the [Mirari](/blog/mirari) tool
 that acts as a build frontend for Mirage applications. This gives you
 everything you need to [build the website for yourself!](/wiki/mirage-www)
 
+!! Switching Compiler Instances
+
+The default compiler installed by OPAM uses the system OCaml installation. You can use `opam switch` to swap between multiple cross-compilers. If you are on 64-bit Linux, let's get the Xen cross-compiler working.
+
+{{
+$ opam switch
+$ opam switch 4.00.1+xen -a 4.00.1
+$ opam install mirari
+$ eval `opam config env`
+}}
+
+The `opam switch` command will show you the available compilers. The `switch` will install the compiler into `~/.opam/4.00.1+mirage-xen`, with the compiler binaries in `~/.opam/4.00.1+mirage-xen/bin`, and any libraries installed into `~/.opam/4.00.1+mirage-xen/lib`. The `opam config` will detect the current compiler and output the correct PATH for your compiler installation.
