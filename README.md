@@ -1,4 +1,4 @@
-# mirage-www`
+# Mirage Website
 
 This repository contains the Mirage public website, <http://openmirage.org/>.
 
