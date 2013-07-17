@@ -400,19 +400,27 @@ let entries = [
     categories = ["concurrency","threads"];
   };
  
-  { updated    = date (2012, 02, 23, 15, 0);
-    author     = mort; (* ++ anil -- need to add support for multiple authors *)
-    subject    = "OCaml Installation";
-    body       = File "install-ocaml.md";
-    permalink  = "install-ocaml";
+  { updated    = date (2013, 07, 17, 15, 00);
+    author     = mort; (* ++ vb -- need multiple author support *)
+    subject    = "Installation";
+    body       = File "install.md";
+    permalink  = "install";
     categories = ["overview","usage"];
   };
 
-  { updated    = date (2013, 03, 10, 10, 30);
-    author     = vb;
-    subject    = "Installation";
-    body       = File "install-opam.md";
-    permalink  = "install";
+  { updated    = date (2013, 07, 17, 15, 00);
+    author     = mort;
+    subject    = "OPAM Libraries";
+    body       = File "opam.md";
+    permalink  = "opam";
+    categories = ["overview","usage"];
+  };
+
+  { updated    = date (2013, 07, 17, 15, 00);
+    author     = mort;
+    subject    = "Building mirage-www";
+    body       = File "mirage-www.md";
+    permalink  = "mirage-www";
     categories = ["overview","usage"];
   };
 
