@@ -10,6 +10,7 @@
 * *Jon Crowcroft*, University of Cambridge, [cl.cam.ac.uk](http://www.cl.cam.ac.uk/~jac22/)
 * *Steven Hand*, University of Cambridge, [cl.cam.ac.uk](http://www.cl.cam.ac.uk/~smh22/)
 * *Vincent Bernardoff*, Citrix Systems R&D
+* *Jon Ludlam*, Citrix Systems R&D
 
 !!The Project
 
