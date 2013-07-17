@@ -403,7 +403,7 @@ let entries = [
   { updated    = date (2013, 03, 10, 10, 30);
     author     = vb;
     subject    = "Installation";
-    body       = File "install-opam.md";
+    body       = File "install.md";
     permalink  = "install";
     categories = ["overview","usage"];
   };
