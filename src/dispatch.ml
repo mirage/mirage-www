@@ -20,19 +20,19 @@ module Resp = struct
   (* dispatch non-file URLs *)
   let dispatch req =
     function
-    | [] | [""]
-    | [""; "index.html"]         -> dyn_xhtml req Pages.Index.t
-    | [""; "resources"]          -> dyn_xhtml req Pages.Resources.t
-    | [""; "about"]              -> dyn_xhtml req Pages.About.t
-    | "" :: "blog" :: tl ->
-        let headers, t = Pages.Blog.t tl in
-        dyn ~headers req t
-    | "" :: "wiki" :: "tag" :: tl  -> dyn_xhtml req (Pages.Wiki.tag tl)
-    | "" :: "wiki" :: page         ->
-        let headers, t = Pages.Wiki.t page in
-        dyn ~headers req t
-    | [""; "styles";"index.css"] -> dyn ~headers:Style.content_type_css req Style.t
-    | x                      -> CL.Server.respond_not_found ~uri:(CL.Request.uri req) ()
+      | [] | [""] | [""; "index.html"] -> dyn_xhtml req Pages.Index.t
+      | [""; "resources"] -> dyn_xhtml req Pages.Resources.t
+      | [""; "about"] -> dyn_xhtml req Pages.About.t
+      | "" :: "blog" :: tl ->
+          let headers, t = Pages.Blog.t tl in
+          dyn ~headers req t
+      | "" :: "wiki" :: "tag" :: tl -> dyn_xhtml req (Pages.Wiki.tag tl)
+      | "" :: "wiki" :: page ->
+          let headers, t = Pages.Wiki.t page in
+          dyn ~headers req t
+      | [""; "styles";"index.css"] -> 
+          dyn ~headers:Style.content_type_css req Style.t
+      | x -> CL.Server.respond_not_found ~uri:(CL.Request.uri req) ()
 end
 
 (* handle exceptions with a 500 *)
