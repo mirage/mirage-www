@@ -22,13 +22,18 @@ $ opam init
 
 This initialises OPAM and adds the `default` repository to your package list. In the future, an `opam update` will refresh the package list, and an `opam upgrade` will recompile packages to the latest versions.
 
-Next, make sure you have OCaml 4.00.1 as your active compiler. This is generally the case on MacOS X, but Debian lags behind. But don't worry: if your compiler is out of date, just run `opam switch` to have it locally install the right version for you.
+Next, make sure you have OCaml 4.00.1 as your active compiler. This is
+generally the case on MacOS X, but Debian lags behind. But don't worry: if
+your compiler is out of date, just run `opam switch` to have it locally
+install the right version for you.
 
 {{
 $ ocaml -version
 # if it is not 4.00.1, then run this
 $ opam switch 4.00.1
 }}
+
+N.B. The above step is currently also necessary on MacOS X as the `opam` installation of `ocamlfind` assumes that `ocamlfind` is placed in the same directory as the `ocaml` compiler. When using the _system_ switch, this is not the case: `ocaml` is in `/usr/local/bin/ocaml` but `ocamlfind` is in `~/.opam/system/bin/ocamlfind`.
 
 Once you've got the right version, set up your current shell environment.
 
