@@ -400,14 +400,6 @@ let entries = [
     categories = ["concurrency","threads"];
   };
  
-  { updated    = date (2012, 02, 23, 15, 0);
-    author     = mort; (* ++ anil -- need to add support for multiple authors *)
-    subject    = "OCaml Installation";
-    body       = File "install-ocaml.md";
-    permalink  = "install-ocaml";
-    categories = ["overview","usage"];
-  };
-
   { updated    = date (2013, 03, 10, 10, 30);
     author     = vb;
     subject    = "Installation";
