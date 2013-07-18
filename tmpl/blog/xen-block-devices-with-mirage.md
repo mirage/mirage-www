@@ -204,7 +204,7 @@ achieve the behaviour we want i.e.
 Now if we rebuild and run something like:
 
 {{
-  dd if=/dev/zero of=disk.raw bs=1M seek=1024K count=1
+  dd if=/dev/zero of=disk.raw bs=1M seek=1024 count=1
   losetup /dev/loop0 disk.raw
   mkfs.ext3 /dev/loop0
   losetup -d /dev/loop0
