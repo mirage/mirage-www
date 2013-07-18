@@ -1,36 +1,61 @@
-Mirage has been tested on Debian Squeeze, Ubuntu Lucid and MacOS X 10.6. To compile the Xen backend, you *must* have a 64-bit Linux host.  32-bit is not supported at this time.
+Mirage consists of a set of OCaml libraries that link with a runtime to form either a standalone Xen operating system or a normal UNIX binary. These libraries are managed via the [OPAM](http://opam.ocamlpro.com) tool. We will first introduce the basics of OPAM, and then describe the libraries you need to get on with using Mirage.
+
+OPAM manages simultaneous OCaml compiler and library installations. It tracks library versions across upgrades, and will recompile dependencies automatically if they get out of date. Please refer to OPAM [documentation](https://opam.ocamlpro.com) if you want to know more, but we will cover the basics to get you started here.
 
 !!Requirements
 
-You need to have the following installed and available on your `PATH`:
+Mirage has been tested on Archlinux, Debian Wheezy, Ubuntu Lucid/Raring and MacOS X 10.7 and 10.8. To compile the Xen backend, you *must* have a 64-bit Linux host. 32-bit is not supported at this time.
 
-* [OCaml](http://www.ocaml.org) 3.12.0 (see [this page](/wiki/install-ocaml) if you don't have it already installed)
-* (optional) [Js_of_ocaml](http://ocsigen.org/js_of_ocaml/install)
+Install OPAM for your operating system by following its [Quick Install Guide](http://opam.ocamlpro.com/doc/Quick_Install.html).
 
-!!Installation
+If you're using MacOS X, you will also need the [tuntap](http://tuntaposx.sourceforge.net/) kernel module if you want to use the direct networking stack.
 
-Pick a location you want to install the binaries and add `$PREFIX/bin` to your `PATH`. The default `PREFIX` is `~/mir-inst` which does not require super-user access.
+!! Using OPAM
 
-Then run
-
-{{
-make PREFIX=<location>
-make install
-}}
-
-The installation has the UNIX and Xen custom runtimes, if appropriate for the build platform.  You require 64-bit Linux to compile up Xen binaries (32-bit will not work).
-
-!!IDE integration
-
-!!!Emacs
-
-Mirage comes with a slightly modified version of the `caml-mode` to dispay type information. In order to install it, you can run
+All the OPAM state is held in the `.opam` directory in your home directory, including compiler installations. You should never need to switch to a root user to install packages. Package listings are obtained through `remote` sources, which defaults to the contents of [github.com/OCamlPro/opam-repository](http://github.com/OCamlPro/opam-repository).
 
 {{
-make install-el
+$ opam init
 }}
 
-!!!Vim
+This initialises OPAM and adds the `default` repository to your package list. In the future, an `opam update` will refresh the package list, and an `opam upgrade` will recompile packages to the latest versions.
 
-You will need the latest version [ocaml-annot](https://github.com/avsm/ocaml-annot) (>= 0.9.1), to be able to display type information for your Mirage projects.
+Next, make sure you have OCaml 4.00.1 as your active compiler. This is
+generally the case on MacOS X, but Debian lags behind. But don't worry: if
+your compiler is out of date, just run `opam switch` to have it locally
+install the right version for you.
 
+{{
+$ ocaml -version
+# if it is not 4.00.1, then run this
+$ opam switch 4.00.1
+}}
+
+N.B. The above step is currently also necessary on MacOS X as the `opam` installation of `ocamlfind` assumes that `ocamlfind` is placed in the same directory as the `ocaml` compiler. When using the `system` switch, this is not the case: `ocaml` is in `/usr/local/bin/ocaml` but `ocamlfind` is in `~/.opam/system/bin/ocamlfind`.
+
+Once you've got the right version, set up your current shell environment.
+
+{{
+$ eval `opam config env`
+# add the above line to your startup shell profile
+$ opam install mirari
+}}
+
+This updates the variables in your shell to match the current OPAM installation, mainly by altering your system `PATH`. You can see the shell fragment by running `opam config env` at any time. If you add the `eval` line to your login shell (usually `~/.bash_profile`), it will automatically import the correct PATH on every subsequent login.
+
+Finally, `opam install mirari` will install the [Mirari](/blog/mirari) tool
+that acts as a build frontend for Mirage applications. This gives you
+everything you need to [build the website for yourself!](/wiki/mirage-www)
+
+!! Switching Compiler Instances
+
+The default compiler installed by OPAM uses the system OCaml installation. You can use `opam switch` to swap between multiple cross-compilers. If you are on 64-bit Linux, let's get the Xen cross-compiler working.
+
+{{
+$ opam switch
+$ opam switch 4.00.1+xen -a 4.00.1
+$ opam install mirari
+$ eval `opam config env`
+}}
+
+The `opam switch` command will show you the available compilers. The `switch` will install the compiler into `~/.opam/4.00.1+mirage-xen`, with the compiler binaries in `~/.opam/4.00.1+mirage-xen/bin`, and any libraries installed into `~/.opam/4.00.1+mirage-xen/lib`. The `opam config` will detect the current compiler and output the correct PATH for your compiler installation.
