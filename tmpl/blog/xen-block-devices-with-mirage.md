@@ -1,5 +1,5 @@
 [Mirage](http://www.openmirage.org/) is an
-[exokernel](http://en.wikipedia.org/wiki/Exokernel)
+[unikernel](http://anil.recoil.org/papers/2013-asplos-mirage.pdf)
 or "library
 operating system" that allows us to build applications
 which run anywhere: the same code can be linked to run as a regular
