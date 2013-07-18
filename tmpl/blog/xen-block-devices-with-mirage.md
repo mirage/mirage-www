@@ -235,5 +235,5 @@ then Mirage makes those experiments very easy too.
 
 If you come up with a cool example with Mirage, then send us a
 [pull request](https://github.com/mirage) or send us an email to the
-[Mirage mailing list](https://lists.cam.ac.uk/mailman/listinfo/cl-mirage) -- we'd
+[Mirage mailing list](http://www.openmirage.org/about/) -- we'd
 love to hear about it!
