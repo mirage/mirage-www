@@ -3,10 +3,10 @@
 all: build
 	@ :
 
-src/dist/setup:
+configure:
 	cd src && mirari configure www.conf $(FLAGS) $(CONF_FLAGS)
 
-build: src/dist/setup
+build: configure
 	cd src && mirari build www.conf $(FLAGS)
 
 run:
