@@ -83,7 +83,7 @@ and [OPAM](http://opam.ocamlpro.com/). Second initialise your system:
 
 {{
   opam init
-  eval `opam config -env`
+  eval `opam config env`
 }}
 
 At the time of writing, not all the libraries were released as upstream
