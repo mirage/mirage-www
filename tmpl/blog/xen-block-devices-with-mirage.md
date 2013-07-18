@@ -96,14 +96,14 @@ should not be necessary after the Mirage developer preview at
   opam remote add xapi-dev git://github.com/xapi-project/opam-repo-dev
 }}
 
-Install the unmodified "xen-disk" package, this will ensure all the build
+Install the unmodified `xen-disk` package, this will ensure all the build
 dependencies are installed:
 
 {{
   opam install xen-disk
 }}
 When this completes it will have installed a command-line tool called
-"xen-disk". If you start a VM using your Xen toolstack of choice
+`xen-disk`. If you start a VM using your Xen toolstack of choice
 ("xl create ..." or "xe vm-install ..." or "virsh create ...") then you
 should be able to run:
 
@@ -116,7 +116,7 @@ which will hotplug a fresh block device into the VM "<vmname>" using the
 but actually throws all data away. Obviously this backend should only be
 used for basic testing!
 
-Assuming that worked ok, clone and build the source for xen-disk yourself:
+Assuming that worked ok, clone and build the source for `xen-disk` yourself:
 
 {{
   git clone git://github.com/mirage/xen-disk
@@ -126,7 +126,7 @@ Assuming that worked ok, clone and build the source for xen-disk yourself:
 
 *Making a custom virtual disk implementation*
 
-The xen-disk program has a set of simple built-in virtual disk implementations.
+The `xen-disk` program has a set of simple built-in virtual disk implementations.
 Each one satisifies a simple signature, contained in
 [src/storage.mli](https://github.com/mirage/xen-disk/blob/master/src/storage.mli):
 
@@ -188,7 +188,7 @@ For extra safety we can also open the file read-only.
 
 Luckily there is already an
 ["mmap" implementation](https://github.com/mirage/xen-disk/blob/master/src/backend.ml#L63)
-in xen-disk; all we need to do is tweak it slightly.
+in `xen-disk`; all we need to do is tweak it slightly.
 In the "open-disk" function we simply need to set "shared" to "false" to
 achieve the behaviour we want i.e.
 
