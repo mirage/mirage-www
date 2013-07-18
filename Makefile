@@ -13,7 +13,7 @@ run:
 	cd src && sudo mirari run www.conf $(FLAGS)
 
 clean:
-	cd src && obuild clean
+	cd src && mirari clean www.conf
 	rm -f mir-www
 
 xen-%:
