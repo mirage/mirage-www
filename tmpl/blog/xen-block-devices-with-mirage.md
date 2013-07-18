@@ -1,8 +1,13 @@
-[Mirage](http://www.openmirage.org/) is an exokernel or a "library
+[Mirage](http://www.openmirage.org/) is an
+[exokernel](http://en.wikipedia.org/wiki/Exokernel)
+or "library
 operating system" that allows us to build applications
 which run anywhere: the same code can be linked to run as a regular
-Unix app, relinked to run as a FreeBSD kernel module, and even linked
-into a self-contained kernel which can run on a hypervisor like xen.
+Unix app, relinked to run as a
+[FreeBSD kernel module](https://github.com/pgj/mirage-kfreebsd),
+and even linked
+into a self-contained kernel which can run on the
+[xen hypervisor](http://www.xenproject.org/).
 
 Mirage has access to an extensive suite of pure OCaml libraries,
 covering everything from xen block and network virtual device drivers,
@@ -29,8 +34,8 @@ permit fast and efficient software implementations, avoiding the
 inefficiencies inherent in emulating physical hardware in software.
 The protocols are based on two primitives:
 
-  1. shared memory pages: used for sharing both data and metadata
-  2. event channels: similar to interrupts, these allow one side to signal the other
+* *shared memory pages*: used for sharing both data and metadata
+* *event channels*: similar to interrupts, these allow one side to signal the other
 
 In the disk block protocol, the protocol starts with the client
 ("frontend" in xen jargon) sharing a page with the server ("backend").
@@ -52,17 +57,21 @@ other domains and signalling event channels. There are two implementations
 of "xenctrl":
 [one that invokes xen "hypercalls" directly](https://github.com/mirage/mirage-platform/tree/master/xen/lib)
  and one which uses the [xen userspace library libxc](https://github.com/xapi-project/ocaml-xen-lowlevel-libs).
+Both implementations satisfy a common signature, so it's easy to write
+code which will work in both userspace and kernelspace.
 
 The ocamlfind library
 [shared-memory-ring](https://github.com/mirage/shared-memory-ring)
 provides functions to create and manipulate request/response rings in shared
-memory as used by the disk and network protocols, as well as streaming
-interface used by domain consoles and for xenstore access.
+memory as used by the disk and network protocols. This library is a mix of
+99.9% OCaml and 0.1% asm, where the asm is only needed to invoke memory
+barrier operations to ensure that metadata writes issued by one CPU core
+appear in the same order when viewed from another CPU core.
 
 Finally the ocamlfind library
 [xenblock](https://github.com/mirage/ocaml-xen-block-driver)
 provides functions to hotplug and hotunplug disk devices, together with an
-implementation of the disk block protocol.
+implementation of the disk block protocol itself.
 
 *Making custom virtual disk servers with Mirage*
 
@@ -152,14 +161,16 @@ end
 }}
 
 Let's make a virtual disk implementation which uses an existing disk
-image file as a "gold image", but uses copy-on-write so that all changes
-are non-persistent. This is a common configuration in Virtual Desktop
-Infrastructure deployments, is generally handy when you want to prevent anyone
-from permanently corrupting your disk with malware.
+image file as a "gold image", but uses copy-on-write so that no writes
+persist.
+This is a common configuration in Virtual Desktop Infrastructure deployments
+and is generally handy when you want to test a change quickly, and
+revert it cleanly afterwards.
 
-A useful Unix technique for file I/O is to "memory map" an existing file i.e.
-associate the file contents with virtual memory addresses so that reading
-or writing to memory can be used to read or write to the file contents.
+A useful Unix technique for file I/O is to "memory map" an existing file:
+this associates the file contents with a range of virtual memory addresses
+so that reading and writing within this address range will actually
+read or write the file contents.
 The "mmap" C function has a number of flags, which can be used to request
 "copy on write" behaviour. Reading the
 [OCaml manual Bigarray.map_file](http://caml.inria.fr/pub/docs/manual-ocaml/libref/Bigarray.Genarray.html)
@@ -173,17 +184,17 @@ it says:
 
 So we should be able to make a virtual disk implementation which memory
 maps the image file and achieves copy-on-write by setting "shared" to false.
+For extra safety we can also open the file read-only.
 
 Luckily there is already an
 ["mmap" implementation](https://github.com/mirage/xen-disk/blob/master/src/backend.ml#L63)
 in xen-disk; all we need to do is tweak it slightly.
-
 In the "open-disk" function we simply need to set "shared" to "false" to
 achieve the behaviour we want i.e.
 
 {{
   let open_disk configuration =
-    let fd = Unix.openfile configuration.filename [ Unix.O_RDWR ] 0o0 in
+    let fd = Unix.openfile configuration.filename [ Unix.O_RDONLY ] 0o0 in
     let stats = Unix.LargeFile.fstat fd in
     let mmap = Lwt_bytes.map_file ~fd ~shared:false () in
     Unix.close fd;
