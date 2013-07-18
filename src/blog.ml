@@ -205,6 +205,12 @@ let entries = [
     body       = "/blog/the-road-to-a-dev-release.md";
     permalink  = "the-road-to-a-dev-release";
   };
+  { updated    = date (2013, 07, 18, 11, 20);
+    author     = dave;
+    subject    = "Creating Xen block devices with Mirage";
+    body       = "/blog/xen-block-devices-with-mirage.md";
+    permalink  = "xen-block-devices-with-mirage";
+  };    
 ]
 
 let cmp_ent a b = Atom.compare (atom_date a.updated) (atom_date b.updated)
