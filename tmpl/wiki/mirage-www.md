@@ -28,8 +28,8 @@ These two packages conflict and so cannot be installed simultaneously in a singl
 
 {{
 $ opam switch 4.00.1+mirage -a 4.00.1
-$ opam install mirari
 $ eval `opam config -env`
+$ opam install mirari
 $ make clean unix-direct-build
 $ sudo make run
 }}
@@ -49,8 +49,8 @@ Now try to compile up a Xen version of this website, via:
 
 {{
 $ opam switch 4.00.1+xen -a 4.00.1
-$ opam install mirari
 $ eval `opam config -env`
+$ opam install mirari
 $ make clean xen-build
 }}
 

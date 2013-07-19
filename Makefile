@@ -1,4 +1,4 @@
-.PHONY: all clean
+.PHONY: all run clean test fs
 
 all: build
 	@ :
@@ -14,7 +14,12 @@ run:
 
 clean:
 	cd src && mirari clean www.conf
-	rm -f mir-www
+	$(RM) mir-www
+
+test: unix-socket-build unix-socket-run
+
+fs: 
+	mir-crunch -o src/filesystem_static.ml -name "static" ./files
 
 xen-%:
 	$(MAKE) FLAGS=--xen $*
