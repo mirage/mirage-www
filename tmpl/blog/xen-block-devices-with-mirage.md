@@ -1,18 +1,16 @@
-[Mirage](http://www.openmirage.org/) is an
+[Mirage](http://www.openmirage.org/) is a
 [unikernel](http://anil.recoil.org/papers/2013-asplos-mirage.pdf)
-or "library
-operating system" that allows us to build applications
-which run anywhere: the same code can be linked to run as a regular
-Unix app, relinked to run as a
-[FreeBSD kernel module](https://github.com/pgj/mirage-kfreebsd),
-and even linked
-into a self-contained kernel which can run on the
-[Xen hypervisor](http://www.xenproject.org/).
+or "library operating system" that allows us to build applications
+which can be compiled to very diverse environments: the same code can be linked
+to run as a regular Unix app, relinked to run as a [FreeBSD kernel module](https://github.com/pgj/mirage-kfreebsd),
+and even linked into a
+self-contained kernel which can run on the [Xen
+hypervisor](http://www.xenproject.org/).
 
-Mirage has access to an extensive suite of pure OCaml libraries,
-covering everything from Xen block and network virtual device drivers,
-a TCP/IP stack, OpenFlow learning switches and controllers, to
-SSH and HTTP server implementations.
+Mirage has access to an extensive suite of pure OCaml [libraries](https://github.com/mirage),
+covering everything from Xen [block](https://github.com/mirage/ocaml-xen-block-driver) and [network](https://github.com/mirage/mirage-platform/blob/master/xen/lib/netif.ml) virtual device drivers,
+a [TCP/IP stack](https://github.com/mirage/mirage-net), OpenFlow learning switches and controllers, to
+SSH and [HTTP](https://github.com/mirage/ocaml-cohttp) server implementations.
 
 I normally use Mirage to deploy applications as kernels on top of
 a [XenServer](http://www.xenserver.org/) hypervisor. I start by
@@ -27,7 +25,7 @@ experimental virtual disk devices for existing Xen VMs (which may
 themselves be Linux, *BSD, Windows or even Mirage kernels).
 The Mirage libraries let me easily
 experiment with different backend file formats and protocols, all while
-writing only type-safe OCaml code, which runs in userspace in a normal
+writing only type-safe OCaml code thats runs in userspace in a normal
 Linux domain 0.
 
 *Disk devices under Xen*
