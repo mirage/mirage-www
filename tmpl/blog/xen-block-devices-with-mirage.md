@@ -23,9 +23,12 @@ production.
 
 However Mirage is great for more than simply building Xen kernels.
 In this post I'll describe how I've been using Mirage to create
-experimental virtual disk devices for VMs. Mirage lets me easily
+experimental virtual disk devices for existing Xen VMs (which may
+themselves be Linux, *BSD, Windows or even Mirage kernels).
+The Mirage libraries let me easily
 experiment with different backend file formats and protocols, all while
-writing only type-safe OCaml code, running in userspace.
+writing only type-safe OCaml code, which runs in userspace in a normal
+Linux domain 0.
 
 *Disk devices under Xen*
 
@@ -252,7 +255,7 @@ without disturbing the underlying disk contents.
 *So what else can we do?*
 
 Thanks to Mirage it's now really easy to experiment with custom storage types
-for your VMs. If you have a cunning scheme where you want to hash block contents,
+for your existing VMs. If you have a cunning scheme where you want to hash block contents,
 and use the hashes as keys in some distributed datastructure -- go ahead, it's
 all easy to do. If you have ideas for improving the low-level block access protocol
 then Mirage makes those experiments very easy too.
