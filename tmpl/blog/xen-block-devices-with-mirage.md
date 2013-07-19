@@ -1,5 +1,5 @@
 [Mirage](http://www.openmirage.org/) is an
-[exokernel](http://en.wikipedia.org/wiki/Exokernel)
+[unikernel](http://anil.recoil.org/papers/2013-asplos-mirage.pdf)
 or "library
 operating system" that allows us to build applications
 which run anywhere: the same code can be linked to run as a regular
@@ -7,10 +7,10 @@ Unix app, relinked to run as a
 [FreeBSD kernel module](https://github.com/pgj/mirage-kfreebsd),
 and even linked
 into a self-contained kernel which can run on the
-[xen hypervisor](http://www.xenproject.org/).
+[Xen hypervisor](http://www.xenproject.org/).
 
 Mirage has access to an extensive suite of pure OCaml libraries,
-covering everything from xen block and network virtual device drivers,
+covering everything from Xen block and network virtual device drivers,
 a TCP/IP stack, OpenFlow learning switches and controllers, to
 SSH and HTTP server implementations.
 
@@ -18,18 +18,18 @@ I normally use Mirage to deploy applications as kernels on top of
 a [XenServer](http://www.xenserver.org/) hypervisor. I start by
 first using the Mirage libraries within a normal Unix userspace
 application -- where I have access to excellent debugging tools --
-and then finally link my app as a high-performance xen kernel for
+and then finally link my app as a high-performance Xen kernel for
 production.
 
-However Mirage is great for more than simply building xen kernels.
+However Mirage is great for more than simply building Xen kernels.
 In this post I'll describe how I've been using Mirage to create
 experimental virtual disk devices for VMs. Mirage lets me easily
 experiment with different backend file formats and protocols, all while
 writing only type-safe OCaml code, running in userspace.
 
-*Disk devices under xen*
+*Disk devices under Xen*
 
-The protocols used by xen disk and network devices are designed to
+The protocols used by Xen disk and network devices are designed to
 permit fast and efficient software implementations, avoiding the
 inefficiencies inherent in emulating physical hardware in software.
 The protocols are based on two primitives:
@@ -38,7 +38,7 @@ The protocols are based on two primitives:
 * *event channels*: similar to interrupts, these allow one side to signal the other
 
 In the disk block protocol, the protocol starts with the client
-("frontend" in xen jargon) sharing a page with the server ("backend").
+("frontend" in Xen jargon) sharing a page with the server ("backend").
 This single page will contain the request/response metadata, arranged
 as a circular buffer or "ring". The client ("frontend") can then start
 sharing pages containing disk blocks with the backend and pushing request
@@ -50,13 +50,13 @@ memory barriers to ensure consistency.
 
 *Xen disk devices in Mirage*
 
-Like everything else in Mirage, xen disk devices are implemented as
+Like everything else in Mirage, Xen disk devices are implemented as
 libraries. The ocamlfind library called "xenctrl" provides support for
 manipulating blocks of raw memory pages, "granting" access to them to
 other domains and signalling event channels. There are two implementations
 of "xenctrl":
-[one that invokes xen "hypercalls" directly](https://github.com/mirage/mirage-platform/tree/master/xen/lib)
- and one which uses the [xen userspace library libxc](https://github.com/xapi-project/ocaml-xen-lowlevel-libs).
+[one that invokes Xen "hypercalls" directly](https://github.com/mirage/mirage-platform/tree/master/xen/lib)
+ and one which uses the [Xen userspace library libxc](https://github.com/xapi-project/ocaml-xen-lowlevel-libs).
 Both implementations satisfy a common signature, so it's easy to write
 code which will work in both userspace and kernelspace.
 
@@ -78,12 +78,12 @@ implementation of the disk block protocol itself.
 Let's experiment with making our own virtual disk server based on
 the Mirage example program, [xen-disk](https://github.com/mirage/xen-disk).
 
-First, install [xen](http://www.xen.org/), [OCaml](http://www.ocaml.org/)
+First, install [Xen](http://www.xen.org/), [OCaml](http://www.ocaml.org/)
 and [OPAM](http://opam.ocamlpro.com/). Second initialise your system:
 
 {{
   opam init
-  eval `opam config -env`
+  eval `opam config env`
 }}
 
 At the time of writing, not all the libraries were released as upstream
@@ -96,14 +96,14 @@ should not be necessary after the Mirage developer preview at
   opam remote add xapi-dev git://github.com/xapi-project/opam-repo-dev
 }}
 
-Install the unmodified "xen-disk" package, this will ensure all the build
+Install the unmodified `xen-disk` package, this will ensure all the build
 dependencies are installed:
 
 {{
   opam install xen-disk
 }}
 When this completes it will have installed a command-line tool called
-"xen-disk". If you start a VM using your xen toolstack of choice
+`xen-disk`. If you start a VM using your Xen toolstack of choice
 ("xl create ..." or "xe vm-install ..." or "virsh create ...") then you
 should be able to run:
 
@@ -116,7 +116,7 @@ which will hotplug a fresh block device into the VM "<vmname>" using the
 but actually throws all data away. Obviously this backend should only be
 used for basic testing!
 
-Assuming that worked ok, clone and build the source for xen-disk yourself:
+Assuming that worked ok, clone and build the source for `xen-disk` yourself:
 
 {{
   git clone git://github.com/mirage/xen-disk
@@ -126,7 +126,7 @@ Assuming that worked ok, clone and build the source for xen-disk yourself:
 
 *Making a custom virtual disk implementation*
 
-The xen-disk program has a set of simple built-in virtual disk implementations.
+The `xen-disk` program has a set of simple built-in virtual disk implementations.
 Each one satisifies a simple signature, contained in
 [src/storage.mli](https://github.com/mirage/xen-disk/blob/master/src/storage.mli):
 
@@ -188,7 +188,7 @@ For extra safety we can also open the file read-only.
 
 Luckily there is already an
 ["mmap" implementation](https://github.com/mirage/xen-disk/blob/master/src/backend.ml#L63)
-in xen-disk; all we need to do is tweak it slightly.
+in `xen-disk`; all we need to do is tweak it slightly.
 In the "open-disk" function we simply need to set "shared" to "false" to
 achieve the behaviour we want i.e.
 
@@ -199,6 +199,24 @@ achieve the behaviour we want i.e.
     let mmap = Lwt_bytes.map_file ~fd ~shared:false () in
     Unix.close fd;
     return (Some (stats.Unix.LargeFile.st_size, Cstruct.of_bigarray mmap))
+}}
+
+The read and write functions can be left as they are:
+
+{{
+  let read (_, mmap) buf offset_sectors len_sectors =
+    let offset_sectors = Int64.to_int offset_sectors in
+    let len_bytes = len_sectors * sector_size in
+    let offset_bytes = offset_sectors * sector_size in
+    Cstruct.blit mmap offset_bytes buf 0 len_bytes;
+    return ()
+
+  let write (_, mmap) buf offset_sectors len_sectors =
+    let offset_sectors = Int64.to_int offset_sectors in
+    let offset_bytes = offset_sectors * sector_size in
+    let len_bytes = len_sectors * sector_size in
+    Cstruct.blit buf 0 mmap offset_bytes len_bytes;
+    return () 
 }}
 
 Now if we rebuild and run something like:
@@ -235,5 +253,5 @@ then Mirage makes those experiments very easy too.
 
 If you come up with a cool example with Mirage, then send us a
 [pull request](https://github.com/mirage) or send us an email to the
-[Mirage mailing list](https://lists.cam.ac.uk/mailman/listinfo/cl-mirage) -- we'd
+[Mirage mailing list](http://www.openmirage.org/about/) -- we'd
 love to hear about it!
