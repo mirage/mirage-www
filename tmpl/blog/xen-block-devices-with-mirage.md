@@ -201,6 +201,24 @@ achieve the behaviour we want i.e.
     return (Some (stats.Unix.LargeFile.st_size, Cstruct.of_bigarray mmap))
 }}
 
+The read and write functions can be left as they are:
+
+{{
+  let read (_, mmap) buf offset_sectors len_sectors =
+    let offset_sectors = Int64.to_int offset_sectors in
+    let len_bytes = len_sectors * sector_size in
+    let offset_bytes = offset_sectors * sector_size in
+    Cstruct.blit mmap offset_bytes buf 0 len_bytes;
+    return ()
+
+  let write (_, mmap) buf offset_sectors len_sectors =
+    let offset_sectors = Int64.to_int offset_sectors in
+    let offset_bytes = offset_sectors * sector_size in
+    let len_bytes = len_sectors * sector_size in
+    Cstruct.blit buf 0 mmap offset_bytes len_bytes;
+    return () 
+}}
+
 Now if we rebuild and run something like:
 
 {{
