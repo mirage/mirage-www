@@ -189,6 +189,12 @@ For extra safety we can also open the file read-only.
 Luckily there is already an
 ["mmap" implementation](https://github.com/mirage/xen-disk/blob/master/src/backend.ml#L63)
 in `xen-disk`; all we need to do is tweak it slightly.
+Note that the `xen-disk` program uses a co-operative threading library called
+[lwt](http://ocsigen.org/lwt/)
+which replaces functions from the OCaml standard library which might block
+with non-blocking variants. In
+particular `lwt` uses `Lwt_bytes.map_file` as a wrapper for the
+`Bigarray.Array1.map_file` function.
 In the "open-disk" function we simply need to set "shared" to "false" to
 achieve the behaviour we want i.e.
 
