@@ -23,9 +23,12 @@ production.
 
 However Mirage is great for more than simply building Xen kernels.
 In this post I'll describe how I've been using Mirage to create
-experimental virtual disk devices for VMs. Mirage lets me easily
+experimental virtual disk devices for existing Xen VMs (which may
+themselves be Linux, *BSD, Windows or even Mirage kernels).
+The Mirage libraries let me easily
 experiment with different backend file formats and protocols, all while
-writing only type-safe OCaml code, running in userspace.
+writing only type-safe OCaml code, which runs in userspace in a normal
+Linux domain 0.
 
 *Disk devices under Xen*
 
@@ -189,6 +192,12 @@ For extra safety we can also open the file read-only.
 Luckily there is already an
 ["mmap" implementation](https://github.com/mirage/xen-disk/blob/master/src/backend.ml#L63)
 in `xen-disk`; all we need to do is tweak it slightly.
+Note that the `xen-disk` program uses a co-operative threading library called
+[lwt](http://ocsigen.org/lwt/)
+which replaces functions from the OCaml standard library which might block
+with non-blocking variants. In
+particular `lwt` uses `Lwt_bytes.map_file` as a wrapper for the
+`Bigarray.Array1.map_file` function.
 In the "open-disk" function we simply need to set "shared" to "false" to
 achieve the behaviour we want i.e.
 
@@ -246,7 +255,7 @@ without disturbing the underlying disk contents.
 *So what else can we do?*
 
 Thanks to Mirage it's now really easy to experiment with custom storage types
-for your VMs. If you have a cunning scheme where you want to hash block contents,
+for your existing VMs. If you have a cunning scheme where you want to hash block contents,
 and use the hashes as keys in some distributed datastructure -- go ahead, it's
 all easy to do. If you have ideas for improving the low-level block access protocol
 then Mirage makes those experiments very easy too.
