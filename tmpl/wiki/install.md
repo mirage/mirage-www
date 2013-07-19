@@ -43,7 +43,7 @@ $ opam install mirari
 
 This updates the variables in your shell to match the current OPAM installation, mainly by altering your system `PATH`. You can see the shell fragment by running `opam config env` at any time. If you add the `eval` line to your login shell (usually `~/.bash_profile`), it will automatically import the correct PATH on every subsequent login.
 
-Finally, `opam install mirari` will install the [Mirari](/blog/mirari) tool
+Finally, `opam install mirari` will install the [Mirari](https://github.com/mirage/mirari) tool
 that acts as a build frontend for Mirage applications. This gives you
 everything you need to [build the website for yourself!](/wiki/mirage-www)
 
