@@ -10,6 +10,16 @@ Install OPAM for your operating system by following its [Quick Install Guide](ht
 
 If you're using MacOS X, you will also need the [tuntap](http://tuntaposx.sourceforge.net/) kernel module if you want to use the direct networking stack.
 
+If you're using Ubuntu/Debian, we recommend you also install the essential
+build tools (GNU make, etc) and GNU M4:
+
+{{
+$ apt-get install build-essential m4
+}}
+
+Also note that the `mirari` tool relies on the `xl` Xen toolstack to run
+virtual machines.
+
 !! Using OPAM
 
 All the OPAM state is held in the `.opam` directory in your home directory, including compiler installations. You should never need to switch to a root user to install packages. Package listings are obtained through `remote` sources, which defaults to the contents of [github.com/OCamlPro/opam-repository](http://github.com/OCamlPro/opam-repository).
