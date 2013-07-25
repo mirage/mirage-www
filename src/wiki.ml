@@ -361,6 +361,14 @@ let weekly ~y ~m ~d =
   }
 
 let entries = [
+  { updated    = date (2013, 07, 25, 17, 56);
+    author     = dave;
+    subject    = "Synthesizing virtual disks for xen";
+    body       = File "xen-synthesize-virtual-disk.md";
+    permalink  = "xen-synthesize-virtual-disk.md";
+    categories = ["overview","usage"; "backend", "xen"];
+  };
+
   { updated    = date (2013, 04, 23, 9, 0);
     author     = anil;
     subject    = "Developer Preview 1.0 Checklist";
