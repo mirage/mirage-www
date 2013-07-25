@@ -21,6 +21,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 * [Portable Regular Expressions](/wiki/ocaml-regexp)
 * [HTCaML](/wiki/htcaml)
 * [Caml on the Web (COW)](/wiki/cow)
+* [Synthesizing virtual disks for xen](/wiki/xen-synthesize-virtual-disk.md)
 
 *Release Notes*
 * [Checklist for 1.0 Dev Preview](dev-preview-checklist)
