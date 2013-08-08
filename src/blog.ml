@@ -210,7 +210,13 @@ let entries = [
     subject    = "Creating Xen block devices with Mirage";
     body       = "/blog/xen-block-devices-with-mirage.md";
     permalink  = "xen-block-devices-with-mirage";
-  };    
+  };
+  { updated    = date (2013, 08, 08, 16, 00);
+    author     = mort;
+    subject    = "OSCON'13 trip report";
+    body       = "/blog/oscon13-trip-report.md";
+    permalink  = "oscon13-trip-report";
+  };
 ]
 
 let cmp_ent a b = Atom.compare (atom_date a.updated) (atom_date b.updated)
