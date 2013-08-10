@@ -29,7 +29,7 @@ Finally, compile up a Xen version of this website; if you followed the [install]
 
 {{
 $ opam switch mirage-xen
-$ eval `opam config -env`
+$ eval `opam config env`
 $ opam install mirari
 $ make clean xen-build
 }}
