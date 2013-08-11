@@ -1,47 +1,45 @@
-First make sure you have followed the [installation
-instructions](/wiki/install).  Mirage uses [Mirari](/blog/mirari) to
-automate the configuration and setup the build system necessary to
-build Mirage unikernels.
+First make sure you have followed the [installation instructions](/wiki/install) to setup the different OPAM compiler switches for each Mirage platform target.
 
-!!First Steps
-To try out basic functionality and build a UNIX binary, do:
+The examples below are in the [`mirage-skeleton` repository](http://github.com/mirage/mirage-skeleton). Begin by cloning this and changing directory to it:
 
 {{
     $ git clone git://github.com/mirage/mirage-skeleton.git
-    $ cd mirage-skeleton/basic
-    $ cat basic/hello.ml
-    $ make
-    $ ./mir-hello
+    $ cd mirage-skeleton
 }}
 
-This will just starts up a Xen kernel that prints "hello world" with a
-short pause between words. Now build a Xen version of this:
+!! First Steps: Hello World!
+
+As a first step, build and run the Mirage "Hello World" unikernel as a simple POSIX binary -- this will print `Hello\nWorld\n` 5 times before terminating:
+
+{{
+    $ cat basic/hello.ml
+    $ make build-basic
+    $ make run-basic
+}}
+
+Cleanup with:
+
+{{
+    $ make clean-basic
+}}
+    
+To rebuild this as a Xen VM, simply `opam switch` and rebuild:
 
 {{
     $ opam switch 4.00.1+mirage-xen
     $ eval `opam config env`
-    $ make clean && make
+    $ make build-basic
 }}
 
-This will create a symlink to `./dist/build/mir-hello/mir-hello.xen`,
-and you can boot it up with a config file like:
+This results in a symlink `./basic/mir-hello.xen` to `./basic/_build/main.xen`. Boot it using Mirari:
 
 {{
-    $ cat > hello.cfg
-    name="hello"
-    memory=128
-    kernel="mir-hello.xen"
-    vif=['bridge=xenbr0']
-    <control-d>
-    # Use xm instead of xl if you are using Xen 4.1 or older
-    $ sudo xl create -c hello.cfg
+    $ make run-basic
 }}
 
-You should see the same output on the Xen console as you did on the
-UNIX version you ran earlier.  If you need more help getting a Xen
-kernel booted, try looking at the [Xen notes](/wiki/xen-boot) also.
+You should see the same output on the Xen console as you did on the UNIX version you ran earlier. If you need more help, or would like to boot your Xen VM on Amazon's EC2, [click here](/wiki/xen-boot).
 
-!!Networking
+!! Networking
 
 Mirage networking is present in the `Net` module and can compile in two modes:
 
