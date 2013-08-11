@@ -408,7 +408,7 @@ let entries = [
     categories = ["concurrency","threads"];
   };
  
-  { updated    = date (2013, 07, 17, 15, 00);
+  { updated    = date (2013, 08, 10, 15, 00);
     author     = mort; (* ++ vb -- need multiple author support *)
     subject    = "Installation";
     body       = File "install.md";
@@ -424,7 +424,7 @@ let entries = [
     categories = ["overview","usage"];
   };
 
-  { updated    = date (2013, 07, 17, 15, 00);
+  { updated    = date (2013, 08, 10, 15, 00);
     author     = mort;
     subject    = "Building mirage-www";
     body       = File "mirage-www.md";
@@ -440,7 +440,7 @@ let entries = [
     categories = ["overview","usage"];
   };
 
-  { updated    = date (2011, 04, 13, 21, 55);
+  { updated    = date (2013, 08, 10, 15, 00);
     author     = anil;
     subject    = "Running Mirage Xen kernels";
     body       = File "xen-boot.md";
@@ -487,13 +487,6 @@ let entries = [
     categories = ["overview","usage"; "backend","unix"];
   };
 
-  { updated    = date (2011, 04, 11, 11, 0);
-    author     = anil;
-    subject    = "Source code layout";
-    body       = File "repo-layout.md";
-    permalink  = "source-code-layout";
-    categories = ["overview","usage"];
-  };
   { 
     updated    = date (2010, 11, 4, 16, 30);
     author     = thomas;
