@@ -10,8 +10,8 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 
 *Media*
 * [Technical Talks](/wiki/talks)
-* [Publications and Related Work](/wiki/papers)
-* [Tutorial Slides](http://tutorial.openmirage.org)
+* [Publications](/wiki/papers)
+* [Presentations](http://decks.openmirage.org)
 
 *Technical*
 * Threads: [introduction to Lwt](/wiki/tutorial-lwt)
