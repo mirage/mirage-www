@@ -213,7 +213,7 @@ let entries = [
   };
   { updated    = date (2013, 08, 08, 16, 00);
     author     = mort;
-    subject    = "Mirage travels to OSCON'13: a trip report";
+    subject    = "Mirage travels to OSCON’13: a trip report";
     body       = "/blog/oscon13-trip-report.md";
     permalink  = "oscon13-trip-report";
   };

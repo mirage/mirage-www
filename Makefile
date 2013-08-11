@@ -13,8 +13,8 @@ run:
 	cd src && sudo mirari run www.conf $(FLAGS)
 
 clean:
-	cd src && mirari clean www.conf
-	$(RM) mir-www
+	if [ -r src/Makefile ]; then cd src && mirari clean www.conf ; fi
+	$(RM) src/myocamlbuild.ml
 
 test: unix-socket-build unix-socket-run
 
