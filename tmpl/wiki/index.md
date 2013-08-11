@@ -5,8 +5,6 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 
 * [Installation](/wiki/install)
 * [Hello Mirage World](/wiki/hello-world)
-* [Running Mirage Xen kernels in the cloud](/wiki/xen-boot)
-* [Source code layout](/wiki/source-code-layout)
 
 *Media*
 * [Technical Talks](/wiki/talks)
