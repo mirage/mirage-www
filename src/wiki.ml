@@ -432,15 +432,15 @@ let entries = [
     categories = ["overview","usage"];
   };
 
-  { updated    = date (2013, 03, 10, 12, 55);
-    author     = vb;
+  { updated    = date (2013, 08, 11, 15, 00);
+    author     = mort;
     subject    = "Hello Mirage World";
     body       = File "hello-world.md";
     permalink  = "hello-world";
     categories = ["overview","usage"];
   };
 
-  { updated    = date (2013, 08, 10, 15, 00);
+  { updated    = date (2013, 08, 11, 15, 00);
     author     = anil;
     subject    = "Running Mirage Xen kernels";
     body       = File "xen-boot.md";
@@ -458,7 +458,7 @@ let entries = [
 
   { updated    = date (2011, 04, 12, 9, 0);
     author     = anil;
-    subject    = "Papers and Related Work";
+    subject    = "Publications";
     body       = Html Paper.html;
     permalink  = "papers";
     categories = ["overview","media"];
@@ -466,7 +466,7 @@ let entries = [
 
   { updated    = date (2011, 04, 12, 10, 0);
     author     = anil;
-    subject    = "Tech Talks";
+    subject    = "Technical Talks";
     body       = File "talks.md";
     permalink  = "talks";
     categories = ["overview","media"];
