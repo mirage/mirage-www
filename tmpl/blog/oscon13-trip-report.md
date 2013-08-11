@@ -1,7 +1,7 @@
 Now that Mirage OS is rapidly converging on a
 [Developer Preview Release 1](http://github.com/avsm/mirage/issues/102), we
 took it for a first public outing at
-[OSCON'13](http://www.oscon.com/oscon2013/), the O’Reilly Open Source
+[OSCON'13](http://www.oscon.com/oscon2013/), the O'Reilly Open Source
 Conference. OSCON is in its 15th year now, and is a meeting place for
 developers, business people and investors. It was a great opportunity to show
 MirageOS off to some of the movers and shakers in the OSS world.
@@ -38,7 +38,7 @@ presentation style...).
 
 <iframe align="right" style="margin-left: 10px;" width="420" height="235" src="//www.youtube-nocookie.com/embed/2Mx8Bd5JYyo" frameborder="0" allowfullscreen="1"> </iframe>
 
-Probably the most interesting chat after the talk was with with Rust authors
+Probably the most interesting chat after the talk was with the Rust authors
 at Mozilla ([@pcwalton](http://twitter.com/pcwalton) and
 [@brson](https://github.com/brson)) about combining the Mirage
 [unikernel](http://anil.recoil.org/papers/2013-asplos-mirage.pdf) techniques
