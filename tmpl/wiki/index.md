@@ -4,6 +4,8 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 *Usage*
 
 * [Installation](/wiki/install)
+* [Building the Mirage Web](/wiki/mirage-www)
+* [Booting Mirage in the cloud](/wiki/xen-boot)
 * [Hello Mirage World](/wiki/hello-world)
 
 *Media*
