@@ -59,17 +59,26 @@ boilerplate code that uses the `Net.Manager` module. On the `direct`
 mode, your kernel will answer ping requests, as you can verify by
 issuing the following commands:
 
-Unix:
+!!! Unix:
+
+Switch to your UNIX direct networking compiler, and build and run the Hello World unikernel as a POSIX binary using the Mirage networking stack. Note that running it requires `root` privileges to access the `tuntap` device.
 
 {{
-    $ opam switch 4.00.1+mirage-unix
+    $ opam switch mirage-unix
     $ eval `opam config env`
-    $ make
-    $ sudo ./mir-hello
+    $ make build-basic_net
+    $ sudo make run-basic_net
+}}
+
+Then, in a different window:
+
+{{
     $ ping 10.0.0.2
 }}
 
-Xen:
+You should see output on the Hello World unikernel indicating that ARP request/responses occurred, and the `ping` command should be seeing responses generated via the `Net` module in the Hello World unikernel.
+
+!!! Xen:
 
 {{
     $ opam switch 4.00.1+mirage-xen
