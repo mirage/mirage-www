@@ -464,9 +464,9 @@ let entries = [
     categories = ["overview","media"];
   };
 
-  { updated    = date (2011, 04, 12, 10, 0);
-    author     = anil;
-    subject    = "Technical Talks";
+  { updated    = date (2013, 08, 14, 10, 0);
+    author     = mort;
+    subject    = "Presentations";
     body       = File "talks.md";
     permalink  = "talks";
     categories = ["overview","media"];
