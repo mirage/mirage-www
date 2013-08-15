@@ -480,14 +480,6 @@ let entries = [
     categories = ["language","syntax"];
   };
 
-  { updated    = date (2011, 04, 11, 18, 10);
-    author     = anil;
-    subject    = "Developing the Mirage networking stack on UNIX";
-    body       = File "net-unix.md";
-    permalink  = "running-ethernet-stack-on-unix";
-    categories = ["overview","usage"; "backend","unix"];
-  };
-
   { 
     updated    = date (2010, 11, 4, 16, 30);
     author     = thomas;
