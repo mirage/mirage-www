@@ -376,6 +376,7 @@ let entries = [
     permalink  = "dev-preview-checklist";
     categories = ["overview","meetings"];
   };
+  
   weekly ~y:2013 ~m:6 ~d:11;
   weekly ~y:2013 ~m:6 ~d:4;
   weekly ~y:2013 ~m:5 ~d:28;
@@ -384,7 +385,8 @@ let entries = [
   weekly ~y:2013 ~m:4 ~d:30;
   weekly ~y:2013 ~m:4 ~d:23;
   weekly ~y:2013 ~m:4 ~d:16;
-  { updated    = date (2011, 08, 18, 16, 0);
+  
+  { updated    = date (2013, 08, 15, 16, 0);
     author     = balraj;
     subject    = "Getting Started with Lwt threads";
     body       = File "tutorial-lwt.md";
