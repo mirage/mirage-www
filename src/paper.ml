@@ -43,18 +43,24 @@ let html_of_paper p = <:xml<
 >>
 
 let anil    = "Anil Madhavapeddy"
-let richard = "Richard Mortier"
+let mort    = "Richard Mortier"
 let rip     = "Ripduman Sohan"
 let thomas  = "Thomas Gazagnaire"
 let steven  = "Steven Hand"
 let tim     = "Tim Deegan"
-let derek   = "Derek McAuley"
+let mac     = "Derek McAuley"
+let derek   = "Derek Murray"
 let jon     = "Jon Crowcroft"
 let alex    = "Alex Ho"
 let dave    = "David Scott"
+let andrew = "Andrew Moore"
 let haris   = "Charalampos Rotsos"
 let balraj  = "Balraj Singh"
 let smith   = "Steven Smith"
+let malte   = "Malte Schwarzkopf"
+let theo    = "Theo Hong"
+let watson = "Robert Watson"
+let chris = "Chris Smowton"
 
 let pdf href = {
   href;
@@ -87,7 +93,7 @@ let papers = [
       pdf "http://anil.recoil.org/papers/2013-asplos-mirage.pdf";
       acm "2451116.2451167" ];
     title    = "Unikernels: library operating systems for the cloud";
-    authors  = [ anil; richard; haris; dave; balraj; thomas; smith; steven; jon ];
+    authors  = [ anil; mort; haris; dave; balraj; thomas; smith; steven; jon ];
     descr    = <:xml<
       Proceedings of the 18th International Conference on Architectural Support for Programming Languages and Operating Systems
       <a href="http://asplos13.rice.edu/">ASPLOS '13</a>, April, 2013 >>;
@@ -108,13 +114,40 @@ let papers = [
        issues that have made past library operating systems impractical to
        deploy in the real-world. >>;
   };
+  
+  { name = "openflow";
+    items = [
+      pdf "http://www.cs.nott.ac.uk/~rmm/papers/pdf/iccsdn12-mirageof.pdf";
+    ];
+    title = "Cost, Performance & Flexibility in OpenFlow: Pick Three";
+    authors = [ mort; haris; anil; balraj; andrew];
+    descr = <:xml<
+      Proceedings of IEEE ICC Software Defined Networking workshop, June 2012.
+        >>;
+    abstract = <:xml<
+      >>;
+  };
+
+  { name = "droplets";
+    items = [
+      pdf "http://www.cs.nott.ac.uk/~rmm/papers/pdf/icdcn11-droplets.pdf";
+    ];
+    title = "Unclouded Vision";
+    authors = [ jon; anil; malte; theo; mort ];
+    descr = <:xml<
+      Proceedings of 12th International Conference on Distributed Computing and Networking
+      <a href="http://icdcn2012.comp.polyu.edu.hk/">ICDCN '11</a>, January 2011. Invited paper. 
+      >>;
+    abstract = <:xml<
+      >>;
+  };
 
   { name     = "hotcloud";
     items    = [
       pdf "http://anil.recoil.org/papers/2010-hotcloud-lamp.pdf";
       acm "1863114" ];
     title    = "Turning down the LAMP: Software Specialisation for the Cloud";
-    authors  = [ anil; richard; rip; thomas; steven; tim; derek; jon ];
+    authors  = [ anil; mort; rip; thomas; steven; tim; mac; jon ];
     descr    = <:xml<
       2nd USENIX Workshop on Hot Topics in Cloud Computing
       <a href="http://www.usenix.org/events/hotcloud10/">HotCloud '10</a>, June 2010 >>;
@@ -124,12 +157,25 @@ let papers = [
        in the first release. >>;
   };
 
+  { name = "dustclouds";
+    items = [
+      pdf "http://www.cs.nott.ac.uk/~rmm/papers/pdf/iwsp10-dustclouds.pdf";
+    ];
+    title = "Using Dust Clouds to Enhance Anonymous Communication";
+    authors = [ mort; anil; theo; derek; malte ];
+    descr = <:xml<
+      Proceedings of the 18th International Workshop on Security Protocols (IWSP), April 2010
+      >>;
+    abstract = <:xml<
+      >>;
+  };
+
   { name     = "visions";
     items    = [
       pdf "http://anil.recoil.org/papers/2010-bcs-visions.pdf";
       bcs "nav.11980" ];
     title    = "Multiscale not Multicore: Efficient Heterogeneous Cloud Computing";
-    authors  = [ anil; richard; jon; steven ];
+    authors  = [ anil; mort; jon; steven ];
     descr    = <:xml<
       ACM/BCS <a href="http://www.bcs.org/server.php?show=nav.11980">Visions of Computer Science</a>, April 2010 >>;
     abstract = <:xml<
