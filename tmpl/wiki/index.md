@@ -15,7 +15,6 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 *Technical*
 * Threads: [introduction to Lwt](/wiki/tutorial-lwt)
 * Threads: [delimited continuations vs explicit monadic threads](/wiki/delimcc-vs-lwt)
-* [Developing the networking stack on UNIX](/wiki/running-ethernet-stack-on-unix)
 * [DNS Performance Tests](/wiki/performance)
 * [Portable Regular Expressions](/wiki/ocaml-regexp)
 * [HTCaML](/wiki/htcaml)
