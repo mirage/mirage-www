@@ -9,9 +9,8 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 * [Maintaining OPAM](/wiki/opam)
 
 *Media*
-* [Technical Talks](/wiki/talks)
+* [Presentations](/wiki/talks)
 * [Publications](/wiki/papers)
-* [Presentations](http://decks.openmirage.org)
 
 *Technical*
 * Threads: [introduction to Lwt](/wiki/tutorial-lwt)

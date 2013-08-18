@@ -1,3 +1,5 @@
+[*N.B.  Due to continuing development, some of the details in this blog post are now out-of-date. It is archived here.* ]
+
 Something we've been working on for a little while now that we're pretty
 excited about is an [OpenFlow](http://openflow.org/) implementation for
 Mirage. For those who're not networking types, in short, OpenFlow is a
