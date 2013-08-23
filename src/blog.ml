@@ -217,6 +217,12 @@ let entries = [
     body       = "/blog/oscon13-trip-report.md";
     permalink  = "oscon13-trip-report";
   };
+  { updated    = date (2013, 08, 23, 17, 43);
+    author     = vb;
+    subject    = "Introducing vchan";
+    body       = "/blog/introducing-vchan.md";
+    permalink  = "introducing-vchan";
+  };
 ]
 
 let cmp_ent a b = Atom.compare (atom_date a.updated) (atom_date b.updated)
