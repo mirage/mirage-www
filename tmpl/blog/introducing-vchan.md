@@ -15,8 +15,8 @@ that I quote here for convenience:
 > grant reference and event channels are shared in XenStore under a
 > user-specified path.
 
-This protocol is using shared memory for inter-domain communication,
-that is, between two VMs residing in the same Xen host, and uses Xen's
+This protocol uses shared memory for inter-domain communication,
+i.e. between two VMs residing in the same Xen host, and uses Xen's
 mechanisms -- more specifically,
 [ring buffers](http://www.informit.com/articles/article.aspx?p=1160234&seqNum=3)
 and
@@ -24,24 +24,23 @@ and
 -- in order to achieve its aims. *Datagram-based interface* simply
 means that the
 [interface](http://xenbits.xen.org/gitweb/?p=xen.git;a=blob;f=tools/libvchan/libxenvchan.h;h=6365d36a06f8c8f56454724cefc4c2f1d39beba2;hb=HEAD)
-ressemble the one of UDP, although there is support for stream based
-communication (like TCP) as well.
+resembles UDP, although there is support for stream based communication (like
+TCP) as well.
 
-Over the last two months or so, I worked on a
-[pure OCaml implementation](http://github.com/mirage/ocaml-vchan) of
-this library, meaning that mirage based unikernels can now take full
-advantage of *vchan* to communicate with neighboring VMs! If your
-endpoint -- a linux VM or another unikernel -- is on the same host, it
-is much more fast and efficient to use vchan rather than the network
-stack (although unfortunately, it is currently uncompatible with
-existing programs written against the `socket` library under UNIX or
-the `Flow` module of Mirage). If also provide a better level of
-security compared to network sockets as messages will never leave the
-host's shared memory.
+Over the last two months or so, I worked on a [pure OCaml
+implementation](http://github.com/mirage/ocaml-vchan) of this library, meaning
+that Mirage-based unikernels can now take full advantage of *vchan* to
+communicate with neighboring VMs! If your endpoint -- a Linux VM or another
+unikernel -- is on the same host, it is much faster and more efficient to use
+vchan rather than the network stack (although unfortunately, it is currently
+incompatible with existing programs written against the `socket` library under
+UNIX or the `Flow` module of Mirage, although this will improve). It also
+provides a higher level of security compared to network sockets as messages
+will never leave the host's shared memory.
 
 *Building the vchan echo domain*
 
-Provided that you have a Xen enabled machine, do the following from
+Provided that you have a Xen-enabled machine, do the following from
 dom0:
 
 {{
