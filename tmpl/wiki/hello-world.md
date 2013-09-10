@@ -26,7 +26,7 @@ Cleanup with:
 To rebuild this as a Xen VM, simply `opam switch` and rebuild:
 
 {{
-    $ opam switch 4.00.1+mirage-xen
+    $ opam switch mirage-xen
     $ eval `opam config env`
     $ make build-basic
 }}
@@ -81,7 +81,7 @@ You should see output on the Hello World unikernel indicating that ARP request/r
 !!! Xen:
 
 {{
-    $ opam switch 4.00.1+mirage-xen
+    $ opam switch mirage-xen
     $ eval `opam config env`
     $ make
     $ sudo xl create -c hello.cfg
