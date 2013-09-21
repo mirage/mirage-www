@@ -1,5 +1,5 @@
 # OPAM packages needed to build tests.
-OPAM_PACKAGES="mirage-unix mirage cow mirage-fs mirari cohttp"
+OPAM_PACKAGES="mirage-unix mirage cow mirage-fs mirari cohttp mirage-net"
 
 # Install OCaml and OPAM PPAs
 echo "yes" | sudo add-apt-repository ppa:avsm/ppa-testing
