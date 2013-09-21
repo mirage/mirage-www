@@ -1,3 +1,5 @@
+[ *Due to continuing development, some of the details in this blog post are now out-of-date. It is archived here.* ]
+
 On all hosts running [Xen](http://www.xen.org/), there is a critical service called [xenstore](http://wiki.xen.org/wiki/XenStore).
 Xenstore is used to allow *untrusted* user VMs to communicate with *trusted* system VMs, so that
 
