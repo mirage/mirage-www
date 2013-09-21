@@ -14,7 +14,7 @@ run:
 
 clean:
 	if [ -r src/Makefile ]; then cd src && mirari clean www.conf ; fi
-	$(RM) src/myocamlbuild.ml
+	$(RM) src/myocamlbuild.ml src/filesystem_static.ml
 
 test: unix-socket-build unix-socket-run
 
