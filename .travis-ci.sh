@@ -32,7 +32,7 @@ xen)
 *)
   echo Unknown backend $MIRAGE_BACKEND
   exit 1
-fi
+esac
 
 opam install $mirage_pkg ${OPAM_PACKAGES}
 
