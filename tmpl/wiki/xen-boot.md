@@ -79,6 +79,6 @@ The [Xen Cloud Platform](http://www.xen.org/products/cloudxen.html) is a distrib
 
 There is a script in [scripts/xcp.sh](https://github.com/avsm/mirage/tree/master/scripts/xcp.sh) that takes a `kernel.xen` output from Mirage and makes the appropriate API and SSH calls. Thanks to [Mike McClurg](https://twitter.com/mcclurmc) from Citrix for contributing this script.
 
-!! Rackspace
+!! Rackspace Cloud
 
 Noone has tried this yet. Get in touch if you do!

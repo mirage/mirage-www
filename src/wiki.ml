@@ -519,6 +519,7 @@ let atom_entry_of_ent filefn e =
   return {
     Atom.entry = meta;
     summary    = None;
+    base       = None;
     content
   }
   
