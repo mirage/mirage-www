@@ -253,7 +253,8 @@ let atom_entry_of_ent filefn e =
   return {
     Atom.entry = meta;
     summary    = None;
-    content
+    base       = None;
+    content;
   }
   
 let atom_feed filefn es = 
