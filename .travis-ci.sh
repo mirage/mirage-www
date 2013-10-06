@@ -60,9 +60,8 @@ if [ "$DEPLOY" = "1" ]; then
   cd mirage-www-deployment
   mkdir -p xen/$TRAVIS_COMMIT
   cp ../src/mir-www.xen ../src/mir-www.map xen/$TRAVIS_COMMIT
-  git add xen/$TRAVIS_COMMIT
   git pull --rebase
+  git add xen/$TRAVIS_COMMIT
   git commit -m "adding $TRAVIS_COMMIT"
   git push
 fi
-
