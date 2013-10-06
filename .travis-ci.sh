@@ -40,21 +40,29 @@ xen)
   exit 1
 esac
 
-# get the secure key out for deployment
-opam install travis-senv
-mkdir -p ~/.ssh
-SSH_DEPLOY_KEY=~/.ssh/id_dsa
-travis-senv decrypt > $SSH_DEPLOY_KEY
-chmod 600 $SSH_DEPLOY_KEY
-echo "Host mirdeploy github.com" >> ~/.ssh/config
-echo "   Hostname github.com" >> ~/.ssh/config
-echo "   StrictHostKeyChecking no" >> ~/.ssh/config
-echo "   CheckHostIP no" >> ~/.ssh/config
-echo "   UserKnownHostsFile=/dev/null" >> ~/.ssh/config
-git clone git@mirdeploy:mirage/mirage-www-deployment
-cd mirage-www-deployment
-cat README.md
-
 opam install $mirage_pkg ${OPAM_PACKAGES}
 cd $TRAVIS_BUILD_DIR
 ./default_build.sh
+
+if [ "$DEPLOY" = "1" ]; then
+  # get the secure key out for deployment
+  opam install travis-senv
+  mkdir -p ~/.ssh
+  SSH_DEPLOY_KEY=~/.ssh/id_dsa
+  travis-senv decrypt > $SSH_DEPLOY_KEY
+  chmod 600 $SSH_DEPLOY_KEY
+  echo "Host mirdeploy github.com" >> ~/.ssh/config
+  echo "   Hostname github.com" >> ~/.ssh/config
+  echo "   StrictHostKeyChecking no" >> ~/.ssh/config
+  echo "   CheckHostIP no" >> ~/.ssh/config
+  echo "   UserKnownHostsFile=/dev/null" >> ~/.ssh/config
+  git clone git@mirdeploy:mirage/mirage-www-deployment
+  cd mirage-www-deployment
+  mkdir -p xen/$TRAVIS_COMMIT
+  cp ../src/mir-www.xen ../src/mir-www.map xen/$TRAVIS_COMMIT
+  git add xen/$TRAVIS_COMMIT
+  git pull --rebase
+  git commit -m "adding $TRAVIS_COMMIT"
+  git push
+fi
+
