@@ -63,8 +63,10 @@ if [ "$DEPLOY" = "1" ]; then
   git config --global user.name "Travis the Build Bot"
   git clone git@mirdeploy:mirage/mirage-www-deployment
   cd mirage-www-deployment
+  rm -rf xen/$TRAVIS_COMMIT
   mkdir -p xen/$TRAVIS_COMMIT
   cp ../src/mir-www.xen ../src/mir-www.map ../src/www.conf xen/$TRAVIS_COMMIT
+  echo $TRAVIS_PULL_REQUEST > xen/$TRAVIS_COMMIT/pullreq
   bzip2 -9 xen/$TRAVIS_COMMIT/mir-www.xen
   git pull --rebase
   git add xen/$TRAVIS_COMMIT

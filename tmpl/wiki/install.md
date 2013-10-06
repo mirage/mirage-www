@@ -2,7 +2,7 @@ Mirage consists of a set of OCaml libraries that link with a runtime to form eit
 
 !!Requirements
 
-Mirage has been tested on ArchLinux, Debian Wheezy, Ubuntu Lucid/Raring and MacOS X 10.7 and 10.8. To compile the Xen backend, you *must* have a 64-bit Linux host. 32-bit is not supported at this time.
+Mirage has been tested on ArchLinux, Debian Wheezy, Ubuntu Lucid/Raring, CentOS 6.4 and MacOS X 10.7 and 10.8. To compile the Xen backend, you *must* have a 64-bit Linux host. 32-bit is not supported at this time.
 
 If you're using MacOS X, you will also need the [tuntap](http://tuntaposx.sourceforge.net/) kernel module if you want to use the direct networking stack.
 
@@ -11,6 +11,11 @@ If you're using Ubuntu/Debian, we recommend you also install the essential build
 {{
 $ apt-get install build-essential m4
 }}
+
+On CentOS 6.4, install the system compiler and libraries via:
+{{
+$ sudo yum groupinstall "Development Tools" "Development Libraries"
+]]
 
 Also note that the `mirari` configuration and deployment tool relies on the `xl` Xen toolstack to run virtual machines.
 
