@@ -1,13 +1,11 @@
 language: c
 script: bash -ex .travis-ci.sh
 env:
-<<<<<<< HEAD
   - OCAML_VERSION=4.01.0 MIRAGE_BACKEND=unix-direct OPAM_VERSION=1.0.0
   - OCAML_VERSION=4.01.0 MIRAGE_BACKEND=unix-socket OPAM_VERSION=1.1.0
   - OCAML_VERSION=4.00.1 MIRAGE_BACKEND=unix-direct OPAM_VERSION=1.0.0
   - OCAML_VERSION=4.00.1 MIRAGE_BACKEND=unix-socket OPAM_VERSION=1.1.0
   - OCAML_VERSION=4.00.1 MIRAGE_BACKEND=xen         OPAM_VERSION=1.0.0
-=======
   global:
   - secure: EpkOyqAPlX8ggtMbZnbXFUE2xmDG6wkAwSi0X1XuzQbEG/uSBUzog2//dry0v1TYlxBftAmKeFkvQrjO2596Uch+0npIJ6W8Y9gf4K+RfEdr1Ovgy6XhBtGmlz7zYbCN0+T6ZOfed1v45+MU77Y5AVITwvq3zkZgv3tG39FT7Lo=
   - secure: YlTjRhiSiGdCmZtB3U/0ZQLTuuJ2S0vtadRMaQ0QcH9UDpi4bR+reT/vEt+qVP+/V36NetAbt8FMKziJ42o2D+JOTJNL4Y9kUH/yAHfSHQBNWBGfVCmpe3hSPi/QPHOhbe6ZwD8VeXDdSz/YRgf5LZzFuIiaIwV7ruYvWl705wo=
@@ -22,4 +20,3 @@ env:
   - secure: HCsSNZzg7hf8snAZX4Npq5ogYoxIK38VtVh+XD94w++YC0pHgpud1HL7DgqPyTAZr5m/1q0gYFWui4eglcqCxiTY1vKV1Exlkmd9zh8EuhY/ZRVtG8A0j33pn+j7c35JJQ4Zdcvy+7sGBOGC6K2/2UxLqeCP6V/fs0M0kuWNsSQ=
   - secure: DsaMFWwRyaLpKy/eyYLs0UDwLrnDw0mf50sbc5QXf0oC4WGnMEQpnMfdARM3W33esDsXmkGOZilxynd0HeBHUoExszUa+yiq/C+NhpBnHPN0q+yQ/euXANS71FdJLfbxDsyVOttFhviSJ9rrKUP0U/zsQlg8nmuxIXlh2U5WX3Y=
   - secure: Du03GsGC6T/HGKoxAFLL/kHA+kifRiq/koRDOycYiMjFcQkTyDsG2CCUQ2IXKXYaCxPWVz0lNy/CrjWp/etGciL6Fybgt63nq2OufO3Vprw5eIm31TVnlCCy+BLLAaw5qRPjSCjhCuZxNY1jWf00wEF/DF4ClgNpx5HZx4SOkqo=
->>>>>>> travis-senv
