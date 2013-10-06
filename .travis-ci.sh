@@ -23,6 +23,7 @@ opam --version
 opam --git-version
 
 opam init 
+eval `opam config env`
 
 case "$MIRAGE_BACKEND" in
 unix-socket)
