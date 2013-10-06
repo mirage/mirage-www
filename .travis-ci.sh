@@ -56,6 +56,8 @@ if [ "$DEPLOY" = "1" ]; then
   echo "   StrictHostKeyChecking no" >> ~/.ssh/config
   echo "   CheckHostIP no" >> ~/.ssh/config
   echo "   UserKnownHostsFile=/dev/null" >> ~/.ssh/config
+  git config --global user.email "travis@openmirage.org"
+  git config --global user.name "Travis the Build Bot"
   git clone git@mirdeploy:mirage/mirage-www-deployment
   cd mirage-www-deployment
   mkdir -p xen/$TRAVIS_COMMIT
