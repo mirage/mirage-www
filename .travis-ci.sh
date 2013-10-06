@@ -43,6 +43,9 @@ esac
 opam install $mirage_pkg ${OPAM_PACKAGES}
 cd $TRAVIS_BUILD_DIR
 ./default_build.sh
+cp .travis-www.conf src/www.conf
+make clean
+./default_build.sh
 
 if [ "$DEPLOY" = "1" ]; then
   # get the secure key out for deployment
@@ -61,7 +64,8 @@ if [ "$DEPLOY" = "1" ]; then
   git clone git@mirdeploy:mirage/mirage-www-deployment
   cd mirage-www-deployment
   mkdir -p xen/$TRAVIS_COMMIT
-  cp ../src/mir-www.xen ../src/mir-www.map xen/$TRAVIS_COMMIT
+  cp ../src/mir-www.xen ../src/mir-www.map ../src/www.conf xen/$TRAVIS_COMMIT
+  bzip2 -9 xen/$TRAVIS_COMMIT/mir-www.xen
   git pull --rebase
   git add xen/$TRAVIS_COMMIT
   git commit -m "adding $TRAVIS_COMMIT"
