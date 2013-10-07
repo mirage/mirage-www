@@ -62,12 +62,21 @@ if [ "$DEPLOY" = "1" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
   git config --global user.email "travis@openmirage.org"
   git config --global user.name "Travis the Build Bot"
   git clone git@mirdeploy:mirage/mirage-www-deployment
-  cd mirage-www-deployment
-  mkdir -p xen/$TRAVIS_COMMIT
-  cp ../src/mir-www.xen ../src/mir-www.map ../src/www.conf xen/$TRAVIS_COMMIT
-  bzip2 -9 xen/$TRAVIS_COMMIT/mir-www.xen
-  git pull --rebase
-  git add xen/$TRAVIS_COMMIT
-  git commit -m "adding $TRAVIS_COMMIT"
+  case "$MIRAGE_BACKEND" in
+  xen)
+    cd mirage-www-deployment
+    mkdir -p xen/$TRAVIS_COMMIT
+    cp ../src/mir-www.xen ../src/mir-www.map ../src/www.conf xen/$TRAVIS_COMMIT
+    bzip2 -9 xen/$TRAVIS_COMMIT/mir-www.xen
+    git pull --rebase
+    echo $TRAVIS_COMMIT > xen/latest
+    git add xen/$TRAVIS_COMMIT xen/latest
+    ;;
+  *)
+    echo unsupported deploy mode: $MIRAGE_BACKEND
+    exit 1
+    ;;
+  esac
+  git commit -m "adding $TRAVIS_COMMIT for $MIRAGE_BACKEND"
   git push
 fi
