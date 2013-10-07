@@ -47,7 +47,7 @@ cp .travis-www.conf src/www.conf
 make clean
 ./default_build.sh
 
-if [ "$DEPLOY" = "1" ]; then
+if [ "$DEPLOY" = "1" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
   # get the secure key out for deployment
   opam install travis-senv
   mkdir -p ~/.ssh
