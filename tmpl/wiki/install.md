@@ -69,7 +69,7 @@ $ opam install mirari mirage-net-socket
 That's it. You now have everything required to start developing Mirage unikernels -- ones that will run as POSIX processes using your OS' network stack anyway. To go a step further, and develop unikernels that will run as POSIX processes but using the Mirage network stack, switch to a new compiler instance and install the `mirage-net-direct` package instead:
 
 {{
-$ opam switch mirage-unix -a system
+$ opam switch mirage-unix --alias-of system
 $ eval `opam config env`
 $ opam install mirari mirage-net-direct
 }}
@@ -81,7 +81,7 @@ The `switch` above installs the compiler into `~/.opam/mirage-unix`, with the co
 Finally, if you are on 64-bit Linux then to build Mirage unikernels that can be booted as standalone Xen VMs, in another compiler switch install the `mirage-xen` package:
 
 {{
-$ opam switch mirage-xen -a system
+$ opam switch mirage-xen --alias-of system
 $ eval `opam config env`
 $ opam install mirari mirage-xen
 }}
