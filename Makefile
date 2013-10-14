@@ -10,7 +10,7 @@ build: configure
 	cd src && mirari build www.conf $(FLAGS)
 
 run:
-	cd src && sudo mirari run www.conf $(FLAGS)
+	cd src && sudo `which mirari` run www.conf $(FLAGS)
 
 clean:
 	if [ -r src/Makefile ]; then cd src && mirari clean www.conf ; fi
