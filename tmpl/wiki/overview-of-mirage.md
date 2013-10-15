@@ -42,17 +42,17 @@ thousands of device drivers found in a traditional OS.
 Code can be developed in a high-level functional programming language (OCaml)
 on a desktop OS such as Linux or Mac OSX, and is then compiled into a 
 fully-standalone, specialised unikernel. These unikernels run directly 
-on Xen Project hypervisor APIs. Since the Xen Project powers most public 
+on Xen hypervisor APIs. Since the Xen powers most public 
 clouds such as [Amazon EC2](http://aws.amazon.com/ec2), 
 [Rackspace Cloud](http://www.rackspace.com/cloud/), and many others, Mirage 
-lets your servers run more cheaply, securely and faster in any Xen Project 
+lets your servers run more cheaply, securely and faster in any Xen 
 based cloud or hosting service.
 
 Mirage is based around the OCaml language, with syntax extensions and 
 [35+ libraries](https://github.com/mirage) which map directly to operating system constructs when being 
 compiled for production deployment. As such, Mirage includes clean-slate 
 functional implementations of protocols ranging from TCP/IP, DNS, SSH, 
-Openflow (switch/controller), HTTP, XMPP and Xen Project inter-VM transports.
+Openflow (switch/controller), HTTP, XMPP and Xen inter-VM transports.
 
 
 !! Where will Mirage be useful?
@@ -61,7 +61,7 @@ Openflow (switch/controller), HTTP, XMPP and Xen Project inter-VM transports.
 
 An example of a current Mirage appliance is this website
 which is a completely self-hosted site, deployed on the public cloud and 
-running directly on the Xen Project hypervisor (in this case, on 
+running directly on the Xen hypervisor (in this case, on 
 Amazon EC2). Such appliances could be auto-configured and deployed directly 
 to the public cloud (e.g. Rackspace or Amazon EC2) or pushed to embedded 
 devices. There is also 
@@ -113,8 +113,3 @@ efficiency and safety and is ideal for deploying to both the public could
 and embedded devices.  Together with [Signpost](http://nymote.org/software/signpost) and [Irminsule](http://nymote.org/software/irminsule), Mirage 
 forms a core piece of the Nymote toolstack to power the coming wave of 
 [Internet of Things devices](http://en.wikipedia.org/wiki/Internet_of_Things).  
-
-Mirage is primarily supported by [Horizon Digital Economy Research](http://www.horizon.ac.uk) - RCUK, and is also an 
-[Incubated Project](http://www.xenproject.org/developers/teams/mirage-os.html) 
-under the umberella of the [Xen Project](http://www.xenproject.org). 
-You can find the source code on [GitHub](http://github.com/mirage).
