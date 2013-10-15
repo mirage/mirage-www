@@ -361,6 +361,14 @@ let weekly ~y ~m ~d =
   }
 
 let entries = [
+  { updated    = date (2013, 10, 15, 16, 0);
+    author     = amir;
+    subject    = "Overview of Mirage";
+    body       = File "overview-of-mirage.md";
+    permalink  = "overview-of-mirage";
+    categories = ["overview","usage"];
+  };
+
   { updated    = date (2013, 07, 25, 17, 56);
     author     = dave;
     subject    = "Synthesizing virtual disks for xen";
