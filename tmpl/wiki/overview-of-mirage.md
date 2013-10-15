@@ -4,7 +4,7 @@ command line, The best way to learn about Mirage is to try out the
 
 !! What is Mirage and why is it important? 
 
-<a href="http://www.berndnaut.nl/images/NimbusNP3web.jpg"><img style="float:right; margin-left: 15px; margin-bottom: 15px;" width="500" src="/graphics/nimbus-np3-smilde.jpg"></img></a>
+<a href="http://www.berndnaut.nl/images/NimbusNP3web.jpg"><img style="float:right; margin-left: 15px; margin-bottom: 15px;" src="/graphics/nimbus-np3-smilde.jpg"></img></a>
 
 Most applications that run in the cloud aren't optimised to do so.  They 
 inherently carry assumptions about the underlying operating system with 
@@ -29,7 +29,7 @@ increased security and scalability.
 
 !! How does Mirage work?
 
-<a href="http://www.xenproject.org/developers/teams/hypervisor.html"><img style="float:left; margin-right: 15px;" width="300" src="/graphics/Xen-Panda-Ecosystem-1-500px.png"></img></a>
+<a href="http://www.xenproject.org/developers/teams/hypervisor.html"><img style="float:left; margin-right: 15px;" src="/graphics/Xen-Panda-Ecosystem-1.png"></img></a>
 
 Mirage is a unikernel for constructing secure, high-performance network 
 applications across a variety of cloud computing and mobile platforms. It 
@@ -57,7 +57,7 @@ Openflow (switch/controller), HTTP, XMPP and Xen Project inter-VM transports.
 
 !! Where will Mirage be useful?
 
-<a href="http://www.flickr.com/photos/radnezeoz/7343684238/"><img style="float:right; margin-left: 15px;" width="300" src="/graphics/cumulous-cruisin.jpg"></img></a>
+<a href="http://www.flickr.com/photos/radnezeoz/7343684238/"><img style="float:right; margin-left: 15px;" src="/graphics/cumulous-cruisin.jpg"></img></a>
 
 An example of a current Mirage appliance is this website
 which is a completely self-hosted site, deployed on the public cloud and 
@@ -86,7 +86,7 @@ therefore only spending what we actually need when we really need it.
 
 !!! Deployment to embedded devices
 
-<a href="http://www.flickr.com/photos/lukew/6171377827/"><img style="float:left; margin-right: 15px;" width="300" src="/graphics/device-love.jpg"></img></a>
+<a href="http://www.flickr.com/photos/lukew/6171377827/"><img style="float:left; margin-right: 15px;" src="/graphics/device-love.jpg"></img></a>
 
 Using Mirage, we can also create appliances that can run on embedded devices.
 Such appliances can be deployed into small devices that are scattered 
