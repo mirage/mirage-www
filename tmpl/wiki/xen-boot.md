@@ -33,7 +33,7 @@ So to boot a Mirage kernel on EC2, it must first be wrapped in a block device. A
 
 !!!Command Line Tools
 
-First download the [tools](wget http://s3.amazonaws.com/ec2-downloads/ec2-ami-tools.zip) from Amazon.
+First download the [tools](http://s3.amazonaws.com/ec2-downloads/ec2-ami-tools.zip) from Amazon.
 Edit your `.profile` to add the following variables:
 
 * `EC2_USER`: 12 digit account number (not email) obtained from the EC2 management console.
