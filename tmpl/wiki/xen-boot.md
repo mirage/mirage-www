@@ -43,7 +43,7 @@ Edit your `.profile` to add the following variables:
 * `EC2_PRIVATE_KEY`: location of the private key.
 
 There is a script that then takes care of packaging up the Mirage kernel image and uploading it to Amazon automatically..
-It is in [scripts/ec2.sh](https://github.com/avsm/mirage/tree/master/scripts/ec2.sh), and you specify your `kernel.xen` file as the first argument to the script.
+It is in [scripts/ec2.sh](https://raw.github.com/samoht/mirari/master/scripts/ec2.sh), and you specify your `kernel.xen` file as the first argument to the script.
 
 !!! Using micro instances
 
