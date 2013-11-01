@@ -33,7 +33,7 @@ So to boot a Mirage kernel on EC2, it must first be wrapped in a block device. A
 
 !!!Command Line Tools
 
-First download the [tools](wget http://s3.amazonaws.com/ec2-downloads/ec2-ami-tools.zip) from Amazon.
+First download the [API tools](http://aws.amazon.com/developertools/351) and [AMI tools](http://s3.amazonaws.com/ec2-downloads/ec2-ami-tools.zip) from Amazon.
 Edit your `.profile` to add the following variables:
 
 * `EC2_USER`: 12 digit account number (not email) obtained from the EC2 management console.
@@ -43,7 +43,7 @@ Edit your `.profile` to add the following variables:
 * `EC2_PRIVATE_KEY`: location of the private key.
 
 There is a script that then takes care of packaging up the Mirage kernel image and uploading it to Amazon automatically..
-It is in [scripts/ec2.sh](https://github.com/avsm/mirage/tree/master/scripts/ec2.sh), and you specify your `kernel.xen` file as the first argument to the script.
+It is found at [scripts/ec2.sh](https://raw.github.com/samoht/mirari/master/scripts/ec2.sh), and you specify your `kernel.xen` file as the first argument to the script.
 
 !!! Using micro instances
 
