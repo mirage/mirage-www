@@ -369,6 +369,14 @@ let entries = [
     categories = ["overview","usage"];
   };
 
+  { updated    = date (2013, 11, 10, 16, 0);
+    author     = ckoppelt;
+    subject    = "Technical Background of Mirage";
+    body       = File "technical_background.md";
+    permalink  = "technical_background";
+    categories = ["overview","technical"];
+  };
+
   { updated    = date (2013, 07, 25, 17, 56);
     author     = dave;
     subject    = "Synthesizing virtual disks for xen";
