@@ -94,8 +94,8 @@ let entry_css = <:css<
       margin-left: 0px;
       margin-bottom: 0px;
     }
-    .blog_entry_title { 
-      font-size: 1.6em; 
+    .blog_entry_title {
+      font-size: 1.6em;
       font-weight: bold;
     }
     .blog_entry_info {
@@ -238,7 +238,7 @@ let permalink_exists x = List.exists (fun e -> e.permalink = x) entries
 let atom_entry_of_ent filefn e =
   let links = [
     Atom.mk_link ~rel:`alternate ~typ:"text/html"
-      (Config.mk_uri (permalink e)) 
+      (Config.mk_uri (permalink e))
   ] in
   let meta = {
     Atom.id      = permalink e;
@@ -248,7 +248,7 @@ let atom_entry_of_ent filefn e =
     updated      = atom_date e.updated;
     links;
     rights;
-  } in 
+  } in
   lwt content = filefn e.body in
   return {
     Atom.entry = meta;
@@ -256,8 +256,8 @@ let atom_entry_of_ent filefn e =
     base       = None;
     content;
   }
-  
-let atom_feed filefn es = 
+
+let atom_feed filefn es =
   let es = List.rev (List.sort cmp_ent es) in
   let updated = atom_date (List.hd es).updated in
   let id = "/blog/" in
@@ -270,4 +270,3 @@ let atom_feed filefn es =
   let feed = { Atom.id; title; subtitle; author=None; rights; updated; links } in
   lwt entries = Lwt_list.map_s (atom_entry_of_ent filefn) es in
   return { Atom.feed=feed; entries }
-
