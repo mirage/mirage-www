@@ -101,8 +101,8 @@ and DARPA) for supporting such long-term research and making Mirage possible.
 have also contributed funding and expertise for an entire research group 
 called [OCaml Labs](http://www.cl.cam.ac.uk/projects/ocamllabs/) in the 
 Cambridge Computer Lab. to bolster the continued growth of the functional 
-programming ecosystem.  I've also recently published an O'Reilly book called 
-Real World OCaml that's freely available at 
+programming ecosystem.  Anil has also recently published an O'Reilly book 
+called Real World OCaml that's freely available at 
 [https://realworldocaml.org](https://realworldocaml.org).
 
 Last, but not least, it's simply more fun as a programmer to be able to 
