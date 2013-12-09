@@ -2,8 +2,8 @@ Welcome to the Mirage wiki. Feel free to subscribe to the [Atom](/wiki/atom.xml)
 Mirage is still in pre-alpha stage, but the infrastructure you see here is self-hosting. The authors hang on out #mirage on FreeNode IRC, so drop by with any questions you might have.
 
 *Overview*
-
 * [Overview of Mirage](/wiki/overview-of-mirage)
+* [Technical Background](/wiki/technical_background)
 
 *Usage*
 * [Installation](/wiki/install)
