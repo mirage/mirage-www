@@ -57,8 +57,8 @@ leading up to several use cases:
 
 Bear with us while we update all the documentation and start the blog posts off
 today (the final libraries for the 1.0 release are all being merged into OPAM
-while I write this).  I'll edit this post to contain links to the future posts
-as we post them.
+while I write this, and the usually excellent [Travis](http://travis-ci.org) continuous integration system is down due to a [bug](https://github.com/travis-ci/travis-ci/issues/1727) on their side).  I'll edit this post to contain links to the future posts
+as they happen.
 
 Since we're now also a proud Xen and Linux Foundation incubator project, our mailing
 list is shifting to [mirageos-devel@lists.xenproject.org](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel), and we very much
