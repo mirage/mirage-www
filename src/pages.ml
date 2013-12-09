@@ -11,7 +11,7 @@ let file_template f =
   | Some content -> Util.string_of_stream content
   | None -> raise_lwt (Failure (sprintf "File template not found: %s" f))
   end
-  with exn -> 
+  with exn ->
     printf "Pages.read_file: exception %s\n%!" (Printexc.to_string exn);
     exit 1
 
@@ -22,14 +22,14 @@ let read_file f =
         String.sub f (n+1) (String.length f - n - 1)
     with _ -> "" in
   match suffix with
-    | "md"   -> file_template f >|= Markdown.of_string >|= Markdown.to_html 
+    | "md"   -> file_template f >|= Markdown.of_string >|= Markdown.to_html
     | "html" -> file_template f >|= Html.of_string
     | _      -> return []
-  with exn -> 
+  with exn ->
     printf "Pages.read_file: exception %s\n%!" (Printexc.to_string exn);
     exit 1
 
-let col_files l r = <:xml< 
+let col_files l r = <:xml<
   <div class="left_column">
     <div class="summary_information"> $l$ </div>
   </div>
@@ -55,12 +55,12 @@ let content_type_xhtml = ["content-type","text/html"]
 
 module Index = struct
   let body =
-    lwt l1 = read_file "/intro.md" >|= (fun l -> col_files l none) in 
+    lwt l1 = read_file "/intro.md" >|= (fun l -> col_files l none) in
     lwt l2 = read_file "/intro-r.html" >|= (fun l -> col_files l none) in
     return (<:xml<
     <div class="left_column">
       $l1$
-    </div> 
+    </div>
     <div class="right_column">
       $l2$
     </div>
@@ -71,10 +71,10 @@ end
 module Resources = struct
   let body = read_file "/docs.md" >|= (fun l -> col_files l Paper.html)
   let t = Template.t "Resources" "resources" body >|= Html.to_string
-end 
+end
 
 module About = struct
-  
+
   let body =
     lwt l = read_file "/about.md" in
     lwt r = read_file "/about-r.md" in
@@ -86,7 +86,7 @@ end
 module Blog = struct
   open Blog
 
- 
+
   (* Make a full Html.t including RSS link and headers from a list
      of Html.t entry fragments *)
   let make ?title body =
@@ -129,7 +129,7 @@ module Blog = struct
     | x                           -> content_type_xhtml, return (not_found x)
 
 end
- 
+
 module Wiki = struct
   open Wiki
 
@@ -141,12 +141,12 @@ module Wiki = struct
   (* Make a full Html.t including RSS link and headers from an wiki page *)
   let make ?title ?disqus left_column =
     let url = sprintf "/wiki/atom.xml" in
-    let extra_header = <:xml< 
+    let extra_header = <:xml<
      <link rel="alternate" type="application/atom+xml" href=$str:url$ />
     >> in
-    let title = "wiki" ^ match title with 
+    let title = "wiki" ^ match title with
       |None -> "" |Some x -> " :: " ^ x in
-    let body = Wiki.html_of_page ?disqus ~left_column ~right_column in  
+    let body = Wiki.html_of_page ?disqus ~left_column ~right_column in
     Template.t ~extra_header "Wiki" title body >|= Html.to_string
 
   (* Main wiki page Html.t fragment with the index page *)
@@ -183,16 +183,16 @@ module Wiki = struct
       ) lt2s
     ) Wiki.categories
 
-  let atom_feed = 
+  let atom_feed =
     lwt f = Wiki.atom_feed read_file Wiki.entries in
     return (Xml.to_string (Atom.xml_of_feed ~self:("/wiki/atom.xml") f))
 
   let not_found x =
     let left =
       sprintf "Not found: %s (known links: wiki/%s)"
-        (String.concat " ... " x) 
-        (String.concat " " 
-           (Hashtbl.fold (fun k v a -> k :: a) 
+        (String.concat " ... " x)
+        (String.concat " "
+           (Hashtbl.fold (fun k v a -> k :: a)
               ent_bodies [])) in
     make ~title:"Not Found" (return <:xml<$str:left$>>)
 
@@ -208,4 +208,3 @@ module Wiki = struct
     | [lt1;lt2] -> (try Hashtbl.find lt2_bodies lt2 with Not_found -> not_found [lt2])
     | x         -> not_found x
 end
-

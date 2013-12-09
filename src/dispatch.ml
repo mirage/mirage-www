@@ -30,7 +30,7 @@ module Resp = struct
       | "" :: "wiki" :: page ->
           let headers, t = Pages.Wiki.t page in
           dyn ~headers req t
-      | [""; "styles";"index.css"] -> 
+      | [""; "styles";"index.css"] ->
           dyn ~headers:Style.content_type_css req Style.t
       | x -> CL.Server.respond_not_found ~uri:(CL.Request.uri req) ()
 end

@@ -52,7 +52,7 @@ let html_of_author author =
 
 type category = string * string  (* category, subcategory, see list of them below *)
 
-type body = 
+type body =
  |File of string
  |Html of Html.t
 
@@ -98,7 +98,7 @@ let html_of_index read_file =
      <div class="wiki_entry_body">$body$</div>
    </div>
  >>
- 
+
 let entry_css = <:css<
   .wiki_entry {
     margin-bottom: 20px;
@@ -167,7 +167,7 @@ let num_of_entries entries =
 (* One categorie on the right column *)
 let short_html_of_category num (l1, l2l) =
   let l2h = List.map (fun l2 ->
-    match num.l2 l1 l2 with 
+    match num.l2 l1 l2 with
       | 0   -> <:xml<<div class="wiki_bar_l2">$str:l2$</div>&>>
       | nl2 ->
         let num = <:xml<<i>$str:sprintf " (%d)" nl2$</i>&>> in
@@ -285,9 +285,9 @@ let html_of_page ?disqus ~left_column ~right_column =
   let disqus_html permalink = <:xml<
     <div class="wiki_entry_comments">
     <div id="disqus_thread"/>
-    <script type="text/javascript"> 
-      var disqus_identifer = '/wiki/$str:permalink$'; 
-      (function() { 
+    <script type="text/javascript">
+      var disqus_identifer = '/wiki/$str:permalink$';
+      (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
          dsq.src = 'http://openmirage.disqus.com/embed.js';
         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
@@ -400,7 +400,7 @@ let entries = [
     permalink  = "dev-preview-checklist";
     categories = ["overview","meetings"];
   };
-  
+
   weekly ~y:2013 ~m:6 ~d:11;
   weekly ~y:2013 ~m:6 ~d:4;
   weekly ~y:2013 ~m:5 ~d:28;
@@ -409,7 +409,7 @@ let entries = [
   weekly ~y:2013 ~m:4 ~d:30;
   weekly ~y:2013 ~m:4 ~d:23;
   weekly ~y:2013 ~m:4 ~d:16;
-  
+
   { updated    = date (2013, 08, 15, 16, 0);
     author     = balraj;
     subject    = "Getting Started with Lwt threads";
@@ -433,7 +433,7 @@ let entries = [
     permalink  = "delimcc-vs-lwt";
     categories = ["concurrency","threads"];
   };
- 
+
   { updated    = date (2013, 08, 10, 15, 00);
     author     = mort; (* ++ vb -- need multiple author support *)
     subject    = "Installation";
@@ -506,7 +506,7 @@ let entries = [
     categories = ["language","syntax"];
   };
 
-  { 
+  {
     updated    = date (2010, 11, 4, 16, 30);
     author     = thomas;
     subject    = "Introduction to HTCaML";
@@ -528,7 +528,7 @@ let permalink_exists x = List.exists (fun e -> e.permalink = x) entries
 let atom_entry_of_ent filefn e =
   let links = [
     Atom.mk_link ~rel:`alternate ~typ:"text/html"
-      (Uri.of_string (permalink e)) 
+      (Uri.of_string (permalink e))
   ] in
   lwt content = body_of_entry filefn e in
   let meta = {
@@ -546,8 +546,8 @@ let atom_entry_of_ent filefn e =
     base       = None;
     content
   }
-  
-let atom_feed filefn es = 
+
+let atom_feed filefn es =
   let es = List.rev (List.sort cmp_ent es) in
   let updated = atom_date (List.hd es).updated in
   let id = "/wiki/" in

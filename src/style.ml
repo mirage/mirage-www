@@ -33,7 +33,7 @@ let linkbar = <:css<
     height: 23px;
     padding: 8px 20px 0px 20px;
   }
-    
+
   li a.current_page {
     border-bottom: 5px solid #222;
     color: #222;
@@ -49,7 +49,7 @@ let content = <:css<
   padding-top: 10px;
   padding-bottom: 10px;
   font-size: 1.3em;
-  
+
   h2 {
     color: #222;
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
@@ -123,13 +123,13 @@ let content = <:css<
     font-size: 1.2em;
     padding: 2px 0px 2px 5px;
   }
-   
+
   a {
     text-decoration: none;
     border-bottom: 1px dotted #ccc;
     color: #000077;
   }
-    
+
   a:hover {
     border-bottom: 1px solid #aaa;
   }
@@ -182,7 +182,7 @@ let wrapper = <:css<
 
   #content { $content$; }
 >>
-    
+
 let footer = <:css<
   border-top: 1px solid #888;
   height: 30px;
