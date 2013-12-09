@@ -49,4 +49,4 @@ opam install mirage
 
 will install [Mirage](https://github.com/mirage/mirage)!
 
-That's it. You now have everything required to start developing Mirage unikernels that will run either as POSIX processes or as Xen VMs using the Mirage network stack. Next, why not try [building a Mirage `hello world`](/wiki/hello-world)?
+That's it. You now have everything required to start developing Mirage unikernels that will run either as POSIX processes or as Xen VMs using the Mirage network stack. Next, why not try [building a Mirage *hello world*](/wiki/hello-world)?
