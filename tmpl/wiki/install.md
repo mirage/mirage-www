@@ -1,4 +1,4 @@
-Mirage consists of a set of OCaml libraries that link with a runtime to form either a standalone Xen operating system or a normal UNIX binary. These libraries are managed via the [OPAM](http://opam.ocamlpro.com) tool. After describing Mirage's system requirements, we will introduce the basics of OPAM and setting up for Mirage. 
+Mirage consists of a set of OCaml libraries that link with a runtime to form either a standalone Xen operating system or a normal UNIX binary. These libraries are managed via the [OPAM](http://opam.ocamlpro.com) tool. After describing Mirage's system requirements, we will introduce the basics of OPAM and setting up for Mirage.
 
 !!Requirements
 
@@ -15,7 +15,7 @@ $ apt-get install build-essential m4
 On CentOS 6.4, install the system compiler and libraries via:
 {{
 $ sudo yum groupinstall "Development Tools" "Development Libraries"
-]]
+}}
 
 Also note that the `mirari` configuration and deployment tool relies on the `xl` Xen toolstack to run virtual machines.
 
@@ -60,7 +60,7 @@ OPAM manages compiler instances by installing them simultaneously and
 switching between them. The default installed compiler becomes the OPAM
 `system` switch. OPAM installs packages in the current compiler switch, and a
 compiler switch is customised to build for a specific Mirage target by
-installation of the correct OPAM packages. 
+installation of the correct OPAM packages.
 
 For example, let's get a basic Mirage development environment installed using
 your `system` compiler; in what follows,  if your `system` compiler is
