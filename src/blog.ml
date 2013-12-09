@@ -223,6 +223,12 @@ let entries = [
     body       = "/blog/introducing-vchan.md";
     permalink  = "introducing-vchan";
   };
+  { updated    = date (2013, 12, 09, 12, 0);
+    author     = anil;
+    subject    = "Mirage 1.0: not just a mirage!";
+    body       = "/blog/releasing-mirage.md";
+    permalink  = "announcing-mirage10";
+  };
 ]
 
 let cmp_ent a b = Atom.compare (atom_date a.updated) (atom_date b.updated)
