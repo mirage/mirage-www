@@ -9,7 +9,20 @@ The examples below are in the [`mirage-skeleton` repository](http://github.com/m
 
 !! First Steps: Hello World!
 
-As a first step, let's build and run the Mirage "Hello World" unikernel -- this will print `Hello\\nWorld\\n` 5 times before terminating.
+As a first step, let's build and run the Mirage "Hello World" unikernel -- this will print `hello\\nworld\\n` 5 times before terminating:
+
+{{
+    hello
+    world
+    hello
+    world
+    hello
+    world
+    hello
+    world
+    hello
+    world
+}}
 
 First, let's look at the code:
 
@@ -66,6 +79,12 @@ Unpacking the `Makefile` this translates to:
     $ mirage configure basic/config.ml --unix ## configuration
     $ mirage build basic/config.ml            ## build
     $ mirage run basic/config.ml              ## run
+}}
+
+Or, as `mirage` knows that it must first `configure` and then `build` before running, simply execute `make basic-run` which unpacks to:
+
+{{
+    $ mirage run basic/config.ml
 }}
 
 If you are on a 64-bit Linux system able to build Xen images, simply change `--unix` for `--xen` to build a Xen VM:
