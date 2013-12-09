@@ -1,6 +1,4 @@
-! Frequently asked questions
-
-!!! Is Mirage 'still' Linux? Does it require a Linux host on which to run?
+*Q: Is Mirage 'still' Linux? Does it require a Linux host on which to run?*
 
 Mirage is a '[library operating system](http://anil.recoil.org/papers/2013-asplos-mirage.pdf‎)',
 which means that it can run on any target for which a suitable bootloader
@@ -15,7 +13,7 @@ port other environments such as the Raspberry Pi, Docker, Linux kernel
 modules, or to other hypervisors such as KVM.
 
 
-!!! Is Mirage v1.0 'production ready'?
+*Q: Is Mirage v1.0 'production ready'*
 
 The 1.0 release is the first 'stable toolkit' release that is sufficient to
 self-host its infrastructure on the Internet.  It is a baseline for the
@@ -32,7 +30,7 @@ the team (and we hope others) will be using Mirage to create and manage
 their own VMs for websites and blogs!
 
 
-!!! How does Mirage compare against other cloud-friendly OS options (e.g  like OSv) and also different approaches like like containers (e.g Docker)?
+*Q: How does Mirage compare against other cloud-friendly OS options (e.g  like OSv) and also different approaches like like containers (e.g Docker)?*
 
 Mirage represents our desire for a radically simpler way of building complex
 distributed systems using a modern modular, functional and type-safe
@@ -53,7 +51,7 @@ continue to grow and mature its protocol implementations without sacrificing
 safety.
 
 
-!!! What's next for the Mirage project?
+*Q: What's next for the Mirage project?*
 
 Xen has thrown open the doors to experimental new operating systems such as
 ours, and it is fitting that we (as Xen developers too) improve the state of

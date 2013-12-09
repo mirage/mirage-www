@@ -1,5 +1,5 @@
 # OPAM packages needed to build tests.
-OPAM_PACKAGES="mirage.0.9.8 cstruct.0.8.1 mirage-net cow mirage-fs mirari cohttp"
+OPAM_PACKAGES="mirage.0.9.8 cstruct.0.8.1 mirage-net.0.9.4 cow mirage-fs mirari cohttp"
 
 case "$OCAML_VERSION,$OPAM_VERSION" in
 3.12.1,1.0.0) ppa=avsm/ocaml312+opam10 ;;
