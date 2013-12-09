@@ -21,7 +21,7 @@ Some example use cases for MirageOS include: (1) A lean webserver, for example t
 
 !!! How does MirageOS work?
 
-http://www.linux.com/images/stories/41373/CloudOSDiagram.png
+<img src="/graphics/comparison-vm-unikernel.png" alt="Comparison between vm and unikernel" width="50%"/>
 
 MirageOS works by treating the Xen hypervisor as a stable hardware platform and using libraries to provide the services and protocols we expect from a typical operating system, e.g. a networking stack. Application code is developed in a high-level functional programming language ([OCaml][ocaml.org]) on a desktop OS such as Linux or Mac OSX, and compiled into a fully-standalone, specialised unikernel. These unikernels run directly on Xen hypervisor APIs. Since Xen powers most public clouds such as Amazon EC2, Rackspace Cloud, and many others, MirageOS lets your servers run more cheaply, securely and faster on those services.
 
@@ -29,7 +29,7 @@ MirageOS is implemented in the OCaml language, with [50+ libraries][mirage-libs]
 
 An example of a MirageOS appliance is a DNS server and below is a comparison with one of the most widely deployed DNS servers on the internet, BIND 9. As you can see, the MirageOS appliance outperforms BIND 9 but in addition, the MirageOS VM is less than 200kB in size compared to over 450MB for the BIND VM. Moreover, the traditional VM contains 4-5 times more lines of code than the Mirage implementation, and lines of code are often considered correlated with attack surface. More detail about this comparison and others can be found in the associated [ASPLOS paper][].
 
-[Image at: https://dl.dropboxusercontent.com/u/486678/MirageDNS-500.png]
+<img src="/graphics/mirage-dns-bw-360.png" alt="Comparison between BIND and MirageDNS"/>
 
 For the DNS appliance above, the application code was written using OCaml and compiled with the relevant MirageOS libraries. To take full advantage of MirageOS it is necessary to design and construct applications using OCaml, which provides a number of additional benefits such as type-safety. For those new to OCaml, there are some excellent resources to get started with the language, including a new book [from O'Reilly][oreilly] and a range of [tutorials][] on the revamped [OCaml website][ocaml.org].
 
