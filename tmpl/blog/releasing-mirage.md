@@ -6,10 +6,11 @@ When we started hacking on Mirage back in 2009, it started off looking like a
 conventional OS, except written in OCaml.   The [monolithic
 repository](https://github.com/mirage/mirage/tree/old-master) contained all the
 libraries and boot code, and exposed a big `OS` module for applications to use.
-We used this to do several fun [tutorials](http://cufp.org/conference/sessions/2011/t3-building-functional-os) at conferences.
+We used this to do several fun [tutorials](http://cufp.org/conference/sessions/2011/t3-building-functional-os) at conferences
+such as ICFP/CUFP and get early feedback.
 
 As development continued though, we started to understand what it is we were
-building: a *library operating system*.  As the number of libraries grew,
+building: a *[library operating system](http://anil.recoil.org/papers/2013-asplos-mirage.pdf)*.  As the number of libraries grew,
 putting everything into one repository just wasn't scaling, and it made it hard
 to work with third-party code.  We spent some time developing tools to make
 Mirage fit into the broader OCaml ecosystem.
@@ -62,6 +63,14 @@ as we post them.
 Since we're now also a proud Xen and Linux Foundation incubator project, our mailing
 list is shifting to [mirageos-devel@lists.xenproject.org](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel), and we very much
 welcome comments and feedback on our efforts over there.
-
 The `#mirage` channel on FreeNode IRC is also growing increasingly popular, as
 is simply reporting issues on the main [Mirage GitHub](http://github.com/mirage/mirage) repository.
+
+Several people have also commented that they want to learn OCaml properly to
+start using Mirage.  I've just co-published an O'Reilly book called
+*[Real World OCaml](https://realworldocaml.org)* that's available for free online
+and also as hardcopy/ebook.  Our Cambridge colleague John Whittington has
+also written an excellent [introductory text](http://ocaml-book.com/), and
+you can generally find more resources [online](http://ocaml.org/docs/).
+Feel free to ask beginner OCaml questions on our mailing lists and we'll help
+as best we can.
