@@ -1,5 +1,5 @@
 # OPAM packages needed to build tests.
-OPAM_PACKAGES="mirage mirage-net cow mirage-fs mirari cohttp"
+OPAM_PACKAGES="mirage.0.9.8 mirage-net cow mirage-fs mirari cohttp"
 
 case "$OCAML_VERSION,$OPAM_VERSION" in
 3.12.1,1.0.0) ppa=avsm/ocaml312+opam10 ;;
@@ -22,7 +22,7 @@ echo OPAM versions
 opam --version
 opam --git-version
 
-opam init 
+opam init git://github.com/ocaml/opam-repository
 eval `opam config env`
 
 case "$MIRAGE_BACKEND" in
