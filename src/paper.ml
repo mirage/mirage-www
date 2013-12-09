@@ -114,7 +114,7 @@ let papers = [
        issues that have made past library operating systems impractical to
        deploy in the real-world. >>;
   };
-  
+
   { name = "openflow";
     items = [
       pdf "http://www.cs.nott.ac.uk/~rmm/papers/pdf/iccsdn12-mirageof.pdf";
@@ -136,7 +136,7 @@ let papers = [
     authors = [ jon; anil; malte; theo; mort ];
     descr = <:xml<
       Proceedings of 12th International Conference on Distributed Computing and Networking
-      <a href="http://icdcn2012.comp.polyu.edu.hk/">ICDCN '11</a>, January 2011. Invited paper. 
+      <a href="http://icdcn2012.comp.polyu.edu.hk/">ICDCN '11</a>, January 2011. Invited paper.
       >>;
     abstract = <:xml<
       >>;
