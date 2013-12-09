@@ -1,6 +1,6 @@
 
-**Background**: read the [overview](/wiki/overview-of-mirage) and
-[technical background](/wiki/technical_background).
+*First*: read the [overview](/wiki/overview-of-mirage) and
+[technical background](/wiki/technical_background) behind the project.
 
 When we started hacking on Mirage back in 2009, it started off looking like a
 conventional OS, except written in OCaml.   The [monolithic
@@ -53,7 +53,7 @@ leading up to several use cases:
   so we'll explain how to port Mirage to this target (which is rather different
   from either Unix or Xen, and serves to illustrate the portability of our approach).
 
-### How to get involved
+!!! How to get involved
 
 Bear with us while we update all the documentation and start the blog posts off
 today (the final libraries for the 1.0 release are all being merged into OPAM
