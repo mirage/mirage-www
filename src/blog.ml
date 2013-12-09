@@ -225,7 +225,7 @@ let entries = [
   };
   { updated    = date (2013, 12, 09, 12, 0);
     author     = anil;
-    subject    = "Mirage 1.0: not just a mirage!";
+    subject    = "Mirage 1.0: not just a hallucination!";
     body       = "/blog/releasing-mirage.md";
     permalink  = "announcing-mirage10";
   };
