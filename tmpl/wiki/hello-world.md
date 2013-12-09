@@ -22,7 +22,7 @@ Cleanup with:
 {{
     $ make clean-basic
 }}
-    
+
 To rebuild this as a Xen VM, simply `opam switch` and rebuild:
 
 {{
