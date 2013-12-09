@@ -48,8 +48,8 @@ clouds such as [Amazon EC2](http://aws.amazon.com/ec2),
 lets your servers run more cheaply, securely and faster in any Xen 
 based cloud or hosting service.
 
-Mirage is based around the OCaml language, with syntax extensions and 
-[35+ libraries](https://github.com/mirage) which map directly to operating system constructs when being 
+Mirage is based around the [OCaml language](http://ocaml.org), with syntax extensions and 
+[40+ libraries](https://github.com/mirage) which map directly to operating system constructs when being 
 compiled for production deployment. As such, Mirage includes clean-slate 
 functional implementations of protocols ranging from TCP/IP, DNS, SSH, 
 Openflow (switch/controller), HTTP, XMPP and Xen inter-VM transports.
@@ -66,9 +66,9 @@ Amazon EC2). Such appliances could be auto-configured and deployed directly
 to the public cloud (e.g. Rackspace or Amazon EC2) or pushed to embedded 
 devices. There is also 
 [http://decks.openmirage.org](http://decks.openmirage.org), where separate 
-Mirage unikernels are being used to present slides for conferences.  These 
-are both example of how Mirage is working right now and below are examples 
-of what we can do in the future.
+Mirage appliances are being used to present slides for conferences.  These 
+are both cases of how Mirage is being used right now and below are examples 
+of things we can do in the future.
 
 !!! Self-scaling architecture
 
