@@ -10,7 +10,7 @@ We used this to do several fun [tutorials](http://cufp.org/conference/sessions/2
 such as ICFP/CUFP and get early feedback.
 
 As development continued though, we started to understand what it is we were
-building: a *[library operating system](http://anil.recoil.org/papers/2013-asplos-mirage.pdf)*.  As the number of libraries grew,
+building: a ["library operating system"](http://anil.recoil.org/papers/2013-asplos-mirage.pdf).  As the number of libraries grew,
 putting everything into one repository just wasn't scaling, and it made it hard
 to work with third-party code.  We spent some time developing tools to make
 Mirage fit into the broader OCaml ecosystem.
