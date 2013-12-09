@@ -3,3 +3,5 @@ Mirage is a [unikernel](http://anil.recoil.org/papers/2013-asplos-mirage.pdf) fo
 Mirage is based around the [OCaml](http://ocaml.org/) language, with syntax extensions and libraries which provide networking, storage and concurrency support that are easy to use during development, and map directly into operating system constructs when being compiled for production deployment. The framework is fully event-driven, with no support for preemptive threading.
 
 Mirage is still in *pre-alpha stage*, but the infrastructure you see here is self-hosting. Check out the [wiki](/wiki) for an [installation](/wiki/install) guide, compile your [hello world microkernel](/wiki/hello-world), get started with the [public cloud](/wiki/xen-boot), or watch the [talk](/wiki/talks), view the [presentations](http://decks.openmirage.org/) and read the [papers](/wiki/papers).
+
+<img src="/graphics/xenpro.png" alt="Xen Project" />
