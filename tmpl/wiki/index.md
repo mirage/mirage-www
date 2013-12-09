@@ -4,6 +4,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 *Overview*
 * [Overview of Mirage](/wiki/overview-of-mirage)
 * [Technical Background](/wiki/technical_background)
+* [Frequently Asked Questions](/wiki/faq)
 
 *Usage*
 * [Installation](/wiki/install)

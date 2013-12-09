@@ -377,6 +377,14 @@ let entries = [
     categories = ["overview","technical"];
   };
 
+  { updated    = date (2013, 12, 09, 16, 0);
+    author     = anil;
+    subject    = "Frequently Asked Questions (FAQ)";
+    body       = File "faq.md";
+    permalink  = "faq";
+    categories = ["overview","technical"];
+  };
+
   { updated    = date (2013, 07, 25, 17, 56);
     author     = dave;
     subject    = "Synthesizing virtual disks for xen";
