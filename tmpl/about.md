@@ -11,6 +11,8 @@
 * *Steven Hand*, University of Cambridge, [cl.cam.ac.uk](http://www.cl.cam.ac.uk/~smh22/)
 * *Vincent Bernardoff*, Citrix Systems R&D
 * *Jon Ludlam*, Citrix Systems R&D
+* *David Sheets*, University of Cambridge
+* *Amir Chaudhry*, University of Cambridge, [amirchaudhry.com](http://amirchaudhry.com)
 
 !!The Project
 
