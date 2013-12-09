@@ -18,8 +18,9 @@ clean:
 
 test: unix-socket-build unix-socket-run
 
-fs: 
+fs:
 	mir-crunch -o src/filesystem_static.ml -name "static" ./files
+	mir-crunch -o src/filesystem_templates.ml -name "templates" ./tmpl
 
 xen-%:
 	$(MAKE) FLAGS=--xen $*
