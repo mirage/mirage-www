@@ -27,13 +27,13 @@ eval `opam config env`
 
 case "$MIRAGE_BACKEND" in
 unix-socket)
-  mirage_pkg="mirage-unix mirage-net-socket"
+  mirage_pkg="mirage-unix.0.9.8 mirage-net-socket"
   ;;
 unix-direct)
-  mirage_pkg="mirage-unix mirage-net-direct"
+  mirage_pkg="mirage-unix.0.9.8 mirage-net-direct"
   ;;
 xen)
-  mirage_pkg="mirage-xen"
+  mirage_pkg="mirage-xen.0.9.8"
   ;;
 *)
   echo Unknown backend $MIRAGE_BACKEND
