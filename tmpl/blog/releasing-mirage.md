@@ -52,11 +52,16 @@ leading up to several use cases:
   so we'll explain how to port Mirage to this target (which is rather different
   from either Unix or Xen, and serves to illustrate the portability of our approach).
 
+### How to get involved
+
 Bear with us while we update all the documentation and start the blog posts off
-today (the final libraries for the 1.0 release are all being merged into OPAM while I write
-this).   Since we're now also a proud Xen and Linux Foundation incubator project, our mailing
-list is shifting to **`mirageos-devel@lists.xenproject.org`**, and we very much
-welcome comments and feedback on our efforts over there.  The `#mirage` channel on
-FreeNode IRC is also growing increasingly popular, as is simply reporting issues
-on the main [Mirage GitHub](http://github.com/mirage/mirage) repository.  See you
-shortly for the introductory post!
+today (the final libraries for the 1.0 release are all being merged into OPAM
+while I write this).  I'll edit this post to contain links to the future posts
+as we post them.
+
+Since we're now also a proud Xen and Linux Foundation incubator project, our mailing
+list is shifting to [mirageos-devel@lists.xenproject.org](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel), and we very much
+welcome comments and feedback on our efforts over there.
+
+The `#mirage` channel on FreeNode IRC is also growing increasingly popular, as
+is simply reporting issues on the main [Mirage GitHub](http://github.com/mirage/mirage) repository.
