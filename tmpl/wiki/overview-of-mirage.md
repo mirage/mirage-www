@@ -24,6 +24,7 @@ Mirage is built in the OCaml language with syntax extensions and [35+ libraries]
 <a href="http://www.flickr.com/photos/radnezeoz/7343684238/"><img style="float:right; margin-left: 15px;" src="/graphics/cumulous-cruisin.jpg"></img></a>
 
 An example of a current Mirage appliance is this website
+<<<<<<< HEAD
 which is a completely self-hosted site, deployed on the public cloud and
 running directly on the Xen hypervisor (in this case, on
 Amazon EC2). Such appliances could be auto-configured and deployed directly
@@ -33,6 +34,27 @@ devices. There is also
 Mirage unikernels are being used to present slides for conferences.  These
 are both example of how Mirage is working right now and below are examples
 of what we can do in the future.
+||||||| merged common ancestors
+which is a completely self-hosted site, deployed on the public cloud and 
+running directly on the Xen hypervisor (in this case, on 
+Amazon EC2). Such appliances could be auto-configured and deployed directly 
+to the public cloud (e.g. Rackspace or Amazon EC2) or pushed to embedded 
+devices. There is also 
+[http://decks.openmirage.org](http://decks.openmirage.org), where separate 
+Mirage unikernels are being used to present slides for conferences.  These 
+are both example of how Mirage is working right now and below are examples 
+of what we can do in the future.
+=======
+which is a completely self-hosted site, deployed on the public cloud and 
+running directly on the Xen hypervisor (in this case, on 
+Amazon EC2). Such appliances could be auto-configured and deployed directly 
+to the public cloud (e.g. Rackspace or Amazon EC2) or pushed to embedded 
+devices. There is also 
+[http://decks.openmirage.org](http://decks.openmirage.org), where separate 
+Mirage appliances are being used to present slides for conferences.  These 
+are both cases of how Mirage is being used right now and below are examples 
+of things we can do in the future.
+>>>>>>> 249106754b7a82400e6b5c6a4d80a06d0c0ada3b
 
 !!! Self-scaling architecture
 
