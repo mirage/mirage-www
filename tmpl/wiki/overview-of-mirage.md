@@ -31,7 +31,7 @@ increased security and scalability.
 
 <a href="http://www.xenproject.org/developers/teams/hypervisor.html"><img style="float:left; margin-right: 15px;" src="/graphics/Xen-Panda-Ecosystem-1.png"></img></a>
 
-Mirage is a unikernel for constructing secure, high-performance network 
+Mirage is a 'library operating system' for constructing secure, high-performance network 
 applications across a variety of cloud computing and mobile platforms. It 
 works by treating the 
 [Xen hypervisor](http://www.xenproject.org/developers/teams/hypervisor.html)
