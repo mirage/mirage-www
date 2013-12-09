@@ -68,9 +68,9 @@ is simply reporting issues on the main [Mirage GitHub](http://github.com/mirage/
 
 Several people have also commented that they want to learn OCaml properly to
 start using Mirage.  I've just co-published an O'Reilly book called
-*[Real World OCaml](https://realworldocaml.org)* that's available for free online
+[Real World OCaml](https://realworldocaml.org) that's available for free online
 and also as hardcopy/ebook.  Our Cambridge colleague John Whittington has
 also written an excellent [introductory text](http://ocaml-book.com/), and
 you can generally find more resources [online](http://ocaml.org/docs/).
 Feel free to ask beginner OCaml questions on our mailing lists and we'll help
-as best we can.
+as best we can!
