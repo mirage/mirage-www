@@ -1,0 +1,20 @@
+# IP of the app
+ip-address: 128.232.97.54
+ip-netmask: 255.255.255.224 
+ip-gateway: 128.232.97.33 
+#ip-use-dhcp: true
+
+# TCP settings
+http-port: 80
+http-address: *
+
+# Filesystem
+fs-static: ../files
+fs-templates: ../tmpl
+
+# Main function
+main-http: Dispatch.t
+
+# Dependencies
+depends: cohttp.mirage, uri, re, cow.syntax, cow, ulex, uri, xmlm
+packages: cohttp, cow, mirage-fs, mirage-net, uri, xmlm
