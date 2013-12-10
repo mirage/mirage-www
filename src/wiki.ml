@@ -434,7 +434,7 @@ let entries = [
     categories = ["concurrency","threads"];
   };
 
-  { updated    = date (2013, 08, 10, 15, 00);
+  { updated    = date (2013, 12, 09, 12, 00);
     author     = mort; (* ++ vb -- need multiple author support *)
     subject    = "Installation";
     body       = File "install.md";
@@ -458,7 +458,7 @@ let entries = [
     categories = ["overview","usage"];
   };
 
-  { updated    = date (2013, 08, 11, 15, 00);
+  { updated    = date (2013, 12, 09, 12, 00);
     author     = mort;
     subject    = "Hello Mirage World";
     body       = File "hello-world.md";
