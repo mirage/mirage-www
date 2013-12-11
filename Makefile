@@ -1,32 +1,40 @@
-.PHONY: all run clean test fs
+-include Makefile.config
+# OASIS_START
+# DO NOT EDIT (digest: bc1e05bfc8b39b664f29dae8dbd3ebbb)
 
-all: build
-	@ :
+SETUP = ocaml setup.ml
 
-configure:
-	cd src && mirari configure www.conf $(FLAGS) $(CONF_FLAGS)
+build: setup.data
+	$(SETUP) -build $(BUILDFLAGS)
 
-build: configure
-	cd src && mirari build www.conf $(FLAGS)
+doc: setup.data build
+	$(SETUP) -doc $(DOCFLAGS)
 
-run:
-	cd src && sudo `which mirari` run www.conf $(FLAGS)
+test: setup.data build
+	$(SETUP) -test $(TESTFLAGS)
+
+all:
+	$(SETUP) -all $(ALLFLAGS)
+
+install: setup.data
+	$(SETUP) -install $(INSTALLFLAGS)
+
+uninstall: setup.data
+	$(SETUP) -uninstall $(UNINSTALLFLAGS)
+
+reinstall: setup.data
+	$(SETUP) -reinstall $(REINSTALLFLAGS)
 
 clean:
-	if [ -r src/Makefile ]; then cd src && mirari clean www.conf ; fi
-	$(RM) src/myocamlbuild.ml src/filesystem_static.ml
+	$(SETUP) -clean $(CLEANFLAGS)
 
-test: unix-socket-build unix-socket-run
+distclean:
+	$(SETUP) -distclean $(DISTCLEANFLAGS)
 
-fs:
-	mir-crunch -o src/filesystem_static.ml -name "static" ./files
-	mir-crunch -o src/filesystem_templates.ml -name "templates" ./tmpl
+setup.data:
+	$(SETUP) -configure $(CONFIGUREFLAGS)
 
-xen-%:
-	$(MAKE) FLAGS=--xen $*
+.PHONY: build doc test all install uninstall reinstall clean distclean configure
 
-unix-socket-%:
-	$(MAKE) FLAGS="--unix --socket" $*
-
-unix-direct-%:
-	$(MAKE) FLAGS="--unix" $*
+# OASIS_STOP
+-include Makefile.local
