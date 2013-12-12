@@ -1,8 +1,8 @@
 OASISFormat: 0.3
-Name:        mirage-www
+Name:        mirage-decks
 Version:     0.9.1
-Synopsis:    http://openmirage.org website
-Authors:     Thomas Gazagnaire, Anil Madhavapeddy, Richard Mortier
+Synopsis:    http://decks.openmirage.org website
+Authors:     Richard Mortier
 License:     ISC
 Plugins:     META (0.3), DevFiles (0.3)
 BuildTools:  ocamlbuild
