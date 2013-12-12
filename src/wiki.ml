@@ -554,8 +554,8 @@ let atom_feed filefn es =
   let title = "openmirage wiki" in
   let subtitle = Some "a cloud operating system" in
   let links = [
-    Atom.mk_link (Config.mk_uri "/wiki/atom.xml");
-    Atom.mk_link ~rel:`alternate ~typ:"text/html" (Config.mk_uri "/wiki/")
+    Atom.mk_link (Local_uri.mk_uri "/wiki/atom.xml");
+    Atom.mk_link ~rel:`alternate ~typ:"text/html" (Local_uri.mk_uri "/wiki/")
   ] in
   let feed = { Atom.id; title; subtitle; author=None; rights; updated; links} in
   lwt entries = Lwt_list.map_s (atom_entry_of_ent filefn) es in
