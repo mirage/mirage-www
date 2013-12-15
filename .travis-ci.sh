@@ -23,6 +23,7 @@ opam --version
 opam --git-version
 
 opam init git://github.com/ocaml/opam-repository >/dev/null 2>&1
+opam pin mirage git://github.com/avsm/mirage
 opam install ${OPAM_PACKAGES}
 eval `opam config env`
 make MODE=$MIRAGE_BACKEND
