@@ -3,3 +3,9 @@
 *~
 _build
 src/Makefile
+src/main.ml
+src/mir-main
+src/static_files.ml
+src/static_files.mli
+src/static_tmpl.ml
+src/static_tmpl.mli
