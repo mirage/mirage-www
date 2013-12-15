@@ -1,5 +1,5 @@
 # OPAM packages needed to build tests.
-OPAM_PACKAGES="mirage.0.9.8 cstruct.0.8.1 mirage-net.0.9.4 cow mirage-fs mirari cohttp"
+OPAM_PACKAGES="mirage cow"
 
 case "$OCAML_VERSION,$OPAM_VERSION" in
 3.12.1,1.0.0) ppa=avsm/ocaml312+opam10 ;;
@@ -23,29 +23,10 @@ opam --version
 opam --git-version
 
 opam init git://github.com/ocaml/opam-repository >/dev/null 2>&1
+opam pin mirage git://github.com/avsm/mirage
+opam install ${OPAM_PACKAGES}
 eval `opam config env`
-
-case "$MIRAGE_BACKEND" in
-unix-socket)
-  mirage_pkg="mirage-unix.0.9.8 mirage-net-socket"
-  ;;
-unix-direct)
-  mirage_pkg="mirage-unix.0.9.8 mirage-net-direct"
-  ;;
-xen)
-  mirage_pkg="mirage-xen.0.9.8"
-  ;;
-*)
-  echo Unknown backend $MIRAGE_BACKEND
-  exit 1
-esac
-
-opam install $mirage_pkg ${OPAM_PACKAGES}
-cd $TRAVIS_BUILD_DIR
-./default_build.sh
-cp .travis-www.conf src/www.conf
-make clean
-./default_build.sh
+make MODE=$MIRAGE_BACKEND
 
 if [ "$DEPLOY" = "1" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
   # get the secure key out for deployment
@@ -67,7 +48,7 @@ if [ "$DEPLOY" = "1" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
     cd mirage-www-deployment
     rm -rf xen/$TRAVIS_COMMIT
     mkdir -p xen/$TRAVIS_COMMIT
-    cp ../src/mir-www.xen ../src/mir-www.map ../src/www.conf xen/$TRAVIS_COMMIT
+    cp ../src/mir-main.xen ../src/www.conf xen/$TRAVIS_COMMIT
     bzip2 -9 xen/$TRAVIS_COMMIT/mir-www.xen
     git pull --rebase
     echo $TRAVIS_COMMIT > xen/latest

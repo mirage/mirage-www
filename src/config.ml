@@ -1,2 +1,25 @@
-let mk_uri x = Uri.of_string ("http://openmirage.org" ^ x)
-let mk_uri_string x = Uri.to_string (mk_uri x)
+open Mirage
+
+let fs =
+  Driver.KV_RO {
+    KV_RO.name = "files";
+    dirname    = "../files";
+  }
+
+let tmpl =
+  Driver.KV_RO {
+    KV_RO.name = "tmpl";
+    dirname    = "../tmpl";
+  }
+
+let http =
+  Driver.HTTP {
+    HTTP.port  = 80;
+    address    = None;
+    ip         = IP.local Network.Tap0;
+  }
+
+let () =
+  Job.register [
+    "Dispatch.Main", [Driver.console; fs; tmpl; http]
+  ]
