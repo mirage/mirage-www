@@ -48,8 +48,8 @@ if [ "$DEPLOY" = "1" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
     cd mirage-www-deployment
     rm -rf xen/$TRAVIS_COMMIT
     mkdir -p xen/$TRAVIS_COMMIT
-    cp ../src/mir-main.xen ../src/www.conf xen/$TRAVIS_COMMIT
-    bzip2 -9 xen/$TRAVIS_COMMIT/mir-www.xen
+    cp ../src/mir-main.xen xen/$TRAVIS_COMMIT
+    bzip2 -9 xen/$TRAVIS_COMMIT/mir-main.xen
     git pull --rebase
     echo $TRAVIS_COMMIT > xen/latest
     git add xen/$TRAVIS_COMMIT xen/latest
