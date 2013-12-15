@@ -1,40 +1,42 @@
--include Makefile.config
-# OASIS_START
-# DO NOT EDIT (digest: bc1e05bfc8b39b664f29dae8dbd3ebbb)
+# -*- mode: Makefile -*-
+#
+# Copyright (c) 2013 Anil Madhavapeddy <anil@recoil.org>
+# Copyright (c) 2013 Richard Mortier <mort@cantab.net>
+#
+# Permission to use, copy, modify, and distribute this software for any purpose
+# with or without fee is hereby granted, provided that the above copyright
+# notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+# REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+# AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+# INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+# LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+# OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+# PERFORMANCE OF THIS SOFTWARE.
+#
 
-SETUP = ocaml setup.ml
+MODE ?= unix
 
-build: setup.data
-	$(SETUP) -build $(BUILDFLAGS)
+CFLAGS ?=
+BFLAGS ?=
+RFLAGS ?=
 
-doc: setup.data build
-	$(SETUP) -doc $(DOCFLAGS)
+MIRAGE ?= mirage
 
-test: setup.data build
-	$(SETUP) -test $(TESTFLAGS)
+.PHONY: all configure build run clean
 
-all: 
-	$(SETUP) -all $(ALLFLAGS)
+all: build
+	@ :
 
-install: setup.data
-	$(SETUP) -install $(INSTALLFLAGS)
+configure:
+	$(MIRAGE) configure src/config.ml $(CFLAGS) --$(MODE)
 
-uninstall: setup.data
-	$(SETUP) -uninstall $(UNINSTALLFLAGS)
+build: configure
+	$(MIRAGE) build src/config.ml $(BFLAGS)
 
-reinstall: setup.data
-	$(SETUP) -reinstall $(REINSTALLFLAGS)
+run: build
+	$(MIRAGE) run src/config.ml $(RFLAGS)
 
-clean: 
-	$(SETUP) -clean $(CLEANFLAGS)
-
-distclean: 
-	$(SETUP) -distclean $(DISTCLEANFLAGS)
-
-setup.data:
-	$(SETUP) -configure $(CONFIGUREFLAGS)
-
-.PHONY: build doc test all install uninstall reinstall clean distclean configure
-
-# OASIS_STOP
--include Makefile.local
+clean:
+	$(MIRAGE) clean src/config.ml --no-opam
