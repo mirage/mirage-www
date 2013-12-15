@@ -54,6 +54,4 @@ let t ?extra_header tmpl_read page title content =
       _extra_headers , <:xml<$opt:extra_header$>>;
       _contents      , <:xml<$content$>>;
     ] in
-    Html.of_string main_html
-    |> replace templates
-    |> return
+    return (replace templates (Html.of_string main_html))
