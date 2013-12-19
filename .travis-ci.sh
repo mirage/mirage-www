@@ -26,6 +26,7 @@ opam init git://github.com/ocaml/opam-repository >/dev/null 2>&1
 opam pin mirage git://github.com/avsm/mirage
 opam install ${OPAM_PACKAGES}
 eval `opam config env`
+cp .travis-www.ml src/config.ml
 make MODE=$MIRAGE_BACKEND
 
 if [ "$DEPLOY" = "1" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
@@ -48,7 +49,7 @@ if [ "$DEPLOY" = "1" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
     cd mirage-www-deployment
     rm -rf xen/$TRAVIS_COMMIT
     mkdir -p xen/$TRAVIS_COMMIT
-    cp ../src/mir-main.xen xen/$TRAVIS_COMMIT
+    cp ../src/mir-main.xen ../src/config.ml xen/$TRAVIS_COMMIT
     bzip2 -9 xen/$TRAVIS_COMMIT/mir-main.xen
     git pull --rebase
     echo $TRAVIS_COMMIT > xen/latest
