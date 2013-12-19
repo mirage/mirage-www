@@ -8,12 +8,12 @@ If you're using MacOS X, you will also need the [tuntap](http://tuntaposx.source
 
 If you're using Ubuntu/Debian, we recommend you also install the essential build tools (GNU make, etc) and GNU M4:
 {{
-$ apt-get install build-essential m4
+apt-get install build-essential m4
 }}
 
 On CentOS 6.4, install the system compiler and libraries via:
 {{
-$ sudo yum groupinstall "Development Tools" "Development Libraries"
+sudo yum groupinstall "Development Tools" "Development Libraries"
 }}
 
 Also note that the `mirage` configuration and deployment tool relies on the `xl` Xen toolstack to run virtual machines.
