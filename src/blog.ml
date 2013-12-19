@@ -247,7 +247,7 @@ let atom_entry_of_ent filefn e =
       (Local_uri.mk_uri (permalink e))
   ] in
   let meta = {
-    Atom.id      = permalink e;
+    Atom.id      = Local_uri.mk_uri_string (permalink e);
     title        = e.subject;
     subtitle     = None;
     author       = Some e.author;
@@ -266,8 +266,8 @@ let atom_entry_of_ent filefn e =
 let atom_feed filefn es =
   let es = List.rev (List.sort cmp_ent es) in
   let updated = atom_date (List.hd es).updated in
-  let id = "/blog/" in
-  let title = "openmirage blog" in
+  let id = Local_uri.mk_uri_string "/blog/" in
+  let title = "MirageOS blog" in
   let subtitle = Some "a cloud operating system" in
   let links = [
     Atom.mk_link (Local_uri.mk_uri "/blog/atom.xml");
