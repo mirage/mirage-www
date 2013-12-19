@@ -528,11 +528,11 @@ let permalink_exists x = List.exists (fun e -> e.permalink = x) entries
 let atom_entry_of_ent filefn e =
   let links = [
     Atom.mk_link ~rel:`alternate ~typ:"text/html"
-      (Uri.of_string (permalink e))
+      (Local_uri.mk_uri (permalink e))
   ] in
   lwt content = body_of_entry filefn e in
   let meta = {
-    Atom.id      = permalink e;
+    Atom.id      = Local_uri.mk_uri_string (permalink e);
     title        = e.subject;
     subtitle     = None;
     author       = Some e.author;
@@ -550,7 +550,7 @@ let atom_entry_of_ent filefn e =
 let atom_feed filefn es =
   let es = List.rev (List.sort cmp_ent es) in
   let updated = atom_date (List.hd es).updated in
-  let id = "/wiki/" in
+  let id = Local_uri.mk_uri_string "/wiki/" in
   let title = "openmirage wiki" in
   let subtitle = Some "a cloud operating system" in
   let links = [
