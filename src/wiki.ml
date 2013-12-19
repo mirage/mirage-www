@@ -528,7 +528,7 @@ let permalink_exists x = List.exists (fun e -> e.permalink = x) entries
 let atom_entry_of_ent filefn e =
   let links = [
     Atom.mk_link ~rel:`alternate ~typ:"text/html"
-      (Uri.of_string (permalink e))
+      (Local_uri.mk_uri (permalink e))
   ] in
   lwt content = body_of_entry filefn e in
   let meta = {
