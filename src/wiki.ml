@@ -434,8 +434,8 @@ let entries = [
     categories = ["concurrency","threads"];
   };
 
-  { updated    = date (2013, 12, 09, 12, 00);
-    author     = mort; (* ++ vb -- need multiple author support *)
+  { updated    = date (2013, 12, 20, 23, 00);
+    author     = anil; (* ++ mort ++ vb -- need multiple author support *)
     subject    = "Installation";
     body       = File "install.md";
     permalink  = "install";
@@ -450,22 +450,21 @@ let entries = [
     categories = ["overview","usage"];
   };
 
-  { updated    = date (2013, 08, 10, 15, 00);
-    author     = mort;
+  { updated    = date (2013, 08, 20, 23, 50);
+    author     = anil;
     subject    = "Building mirage-www";
     body       = File "mirage-www.md";
     permalink  = "mirage-www";
     categories = ["overview","usage"];
   };
 
-  { updated    = date (2013, 12, 09, 12, 00);
+  { updated    = date (2013, 12, 20, 22, 00);
     author     = mort;
     subject    = "Hello Mirage World";
     body       = File "hello-world.md";
     permalink  = "hello-world";
     categories = ["overview","usage"];
   };
-
   { updated    = date (2013, 08, 11, 15, 00);
     author     = anil;
     subject    = "Running Mirage Xen kernels";

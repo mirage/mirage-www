@@ -142,4 +142,4 @@ You should see the same output on the Xen console as you did on the UNIX
 version you ran earlier. If you need more help, or would like to boot your Xen
 VM on Amazon's EC2, [click here](/wiki/xen-boot).
 
-Next, let's get the Mirage website up and running with a [networked application](/wiki/hello-network).
+Next, let's get the Mirage website up and running with a [networked application](/wiki/mirage-www).
