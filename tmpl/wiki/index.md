@@ -9,6 +9,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 *Usage*
 * [Installation](/wiki/install)
 * [Hello Mirage World](/wiki/hello-world)
+* [Building the Mirage website](/wiki/mirage-www)
 * [Maintaining OPAM](/wiki/opam)
 
 *Media*
@@ -24,7 +25,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 * [Caml on the Web (COW)](/wiki/cow)
 * [Synthesizing virtual disks for xen](/wiki/xen-synthesize-virtual-disk.md)
 
-*Release Notes*
+*Historical Release Notes*
 * [Checklist for 1.0 Dev Preview](dev-preview-checklist)
 * Weekly call [2013-06-11](/wiki/weekly-2013-06-11) on the end of the start is finally in sight.
 * Weekly call [2013-06-04](/wiki/weekly-2013-06-04) on Amazon EC2, shared ring performance and outreach.
