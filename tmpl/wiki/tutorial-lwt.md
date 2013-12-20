@@ -282,7 +282,7 @@ Write a small set of functions to help do pipeline parallelism. The interface to
   val filter: ('a -> bool Lwt.t) -> 'a Lwt_mvar.t -> 'a Lwt_mvar.t
 ```
 
-!!! Solution
+### Solution
 
 ```
 let map f m_in = 

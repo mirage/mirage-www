@@ -26,7 +26,7 @@ slide decks there soon, including resurrecting the tutorial! The source code
 for all this is in the [mirage-decks](http://github.com/mirage/mirage-decks)
 GitHub repo.
 
-!!! The Talk
+### The Talk
 
 The talk went down pretty well -- given we were in a graveyard slot on Friday
 after many people had left, attendance was fairly high (around 30-40), and the
@@ -49,7 +49,7 @@ that he'd really enjoyed the talk and thought it was a really exciting project
 -- never done something that achieved public acclaim from the streets before
 :)
 
-!!! Book Signing and Xen.org
+### Book Signing and Xen.org
 
 Anil also took some time to sit in a book signing for his forthcoming
 [Real World OCaml](http://realworldocaml.org) O'Reilly book.  This is
@@ -67,7 +67,7 @@ on tiny ARM devices.  There's a full report about this on the
 [xen.org](http://blog.xen.org/index.php/2013/07/31/the-xen-project-at-oscon/)
 blog post about OSCon.
 
-!!! Galois and HalVM
+### Galois and HalVM
 
 We also stopped by the [Galois](http://corp.galois.com) to chat with [Adam
 Wick](https://twitter.com/acwpdx), who is the leader of the

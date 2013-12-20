@@ -8,7 +8,7 @@ While this is useful in many situations, it adds yet another layer to an already
 Our goal with MirageOS is to restructure entire VMs - including all kernel and userspace code - into more modular components that are flexible, secure and reusable in the style of a library operating system.
 
 
-!! Unikernels & Library operating system
+## Unikernels & Library operating system
 
 Our architecture is dubbed unikernels. Unikernels are specialised OS kernels written in a high-level language which act as individual software components. A full application (or appliance) consists of a set of running unikernels working together as a distributed system.
 
@@ -21,7 +21,7 @@ The libOS architecture has several advantages over more conventional designs. Fo
 A libOS running as a VM needs to implement drivers for the virtual hardware devices provided by the hypervisor. Furthermore it needs to create the protocol libraries to replace the services of a traditional OS. 
 
 
-!! Why OCaml
+## Why OCaml
 
 Modern kernels are all written in C, which excels at low-level programs such as device drivers but lacks the abstraction facilities of higher-level languages and demands careful manual tracking of resources such as memory buffers. Beside this high-level languages are steadily gaining ground in general application development, some of them include:
 
@@ -36,7 +36,7 @@ Modern kernels are all written in C, which excels at low-level programs such as 
 We chose OCaml as the sole base language for MirageOS. It is a full-fledged systems programming language with a flexible programming model that supports functional, imperative and object-oriented styles. It also features a portable single-threaded runtime that makes it ideal for porting to restricted environments such as a barebones Xen VM. The compiler heavily emphasises static type checking, and the resulting binaries are fast native code with no runtime type information and the module system is among the most powerful in a general-purpose programming language in terms of permitting flexible and safe code reuse and refactoring. Finally, we had several examples of large-scale uses of OCaml in industry at Jane Street and within Xen itself, and the positive results were encouraging before embarking on the large multi-year project that MirageOS turned out to be.
 
 
-!! Modular OS Libraries
+## Modular OS Libraries
 
 Mirage provides modular OS libraries, which can be switched when needed.
 
@@ -45,7 +45,7 @@ Mirage provides modular OS libraries, which can be switched when needed.
 The application MyHomePage depends on an HTTP signature that is provided by the Cohttp library. A developer just starting out wants to explore their code interactively using a Unix-style development environment. The Cohttp library needs a TCP implementation to satisfy its module signature, which can be provided by the UnixSocket library. When development is finished, the on Unix is entirely dropped, and the application is recompiled using the MirNet module to directly link against a Xen network driver, which in turn pulls in all the dependencies it needs to boot on Xen.
 
 
-!! Development Workflow
+## Development Workflow
 
 * **Build System**: All source code dependencies of the input application
 are explicitly tracked, including all the libraries required to implement kernel functionality
@@ -57,7 +57,7 @@ event-driven via an I/O loop that polls Xen devices.
 the conventional virtualized equivalents, and are more  resource-efficient in terms of boot time, binary size and runtime performance.
 
 
-!! Other Unikernels
+## Other Unikernels
 MirageOS is certainly not the only unikernel for Xen that has emerged in the last few years:
 
 * Haskell: [HalVM](https://github.com/GaloisInc/HaLVM#readme)

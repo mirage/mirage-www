@@ -1,6 +1,6 @@
 Building a Mirage unikernel for Xen, e.g., as at [the end of how to build the Mirage website](/wiki/mirage-www) results in a Xen PV kernel with a `.xen` extension. This must be booted as a normal Xen domU kernel. The specifics vary based on your setup or cloud provider, and in some cases are wrapped up in the Mirari configuration and deployment tool.
 
-!! Open Source Xen
+## Open Source Xen
 
 When using open-source Xen, you need to create a configuration file, e.g., `app.cfg`, for the VM that looks something like:
 
@@ -20,7 +20,7 @@ Alternatively, for Xen versions greater than 4.1, you can simply invoke Mirari t
 
 where `app.conf` is the Mirari configuration file for your application. The [Mirage website](/wiki/mirage-www) contains an example.
 
-!! Amazon EC2
+## Amazon EC2
 
 Amazon has recently added support for booting [user-specified kernels](http://ec2-downloads.s3.amazonaws.com/user_specified_kernels.pdf). This involves a two-stage boot procedure behind the scenes:
 
@@ -45,7 +45,7 @@ Edit your `.profile` to add the following variables:
 There is a script that then takes care of packaging up the Mirage kernel image and uploading it to Amazon automatically..
 It is found at [scripts/ec2.sh](https://raw.github.com/samoht/mirari/master/scripts/ec2.sh), and you specify your `kernel.xen` file as the first argument to the script.
 
-!!! Using micro instances
+### Using micro instances
 
 To use the EC2 `t1.micro` instances the kernel needs to reside inside an EBS volume. To create a bootable EBS volume containing an Mirage kernel use the following steps:
 
@@ -73,12 +73,12 @@ To use the EC2 `t1.micro` instances the kernel needs to reside inside an EBS vol
 
 This process could be put in a script easily. 
 
-!! Xen Cloud Platform
+## Xen Cloud Platform
 
 The [Xen Cloud Platform](http://www.xen.org/products/cloudxen.html) is a distribution that provides cluster-wide support for multi-tenant VMs. It uses a command-line interface and an XML-RPC API to configure and control VMs.
 
 There is a script in [scripts/xcp.sh](https://github.com/avsm/mirage/tree/master/scripts/xcp.sh) that takes a `kernel.xen` output from Mirage and makes the appropriate API and SSH calls. Thanks to [Mike McClurg](https://twitter.com/mcclurmc) from Citrix for contributing this script.
 
-!! Rackspace Cloud
+## Rackspace Cloud
 
 Noone has tried this yet. Get in touch if you do!

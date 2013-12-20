@@ -7,7 +7,7 @@ The examples below are in the [`mirage-skeleton` repository](http://github.com/m
     $ cd mirage-skeleton
 ```
 
-!! First Steps: Hello World!
+## First Steps: Hello World!
 
 As a first step, let's build and run the Mirage "Hello World" unikernel -- this
 will print `hello\\nworld\\n` 5 times before terminating:

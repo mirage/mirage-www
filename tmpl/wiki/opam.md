@@ -1,10 +1,10 @@
-!!! Maintenance
+### Maintenance
 
 The `opam upgrade` command will refresh all your remote repositories, and recompile any outdated libraries. You will need to run this once per compiler installed, so switch between them.
 
 If you run into any problems with OPAM, then first ask on the Mirage [mailing list](/about), or report a [bug](http://github.com/OCamlPro/opam/issues). It is safe to delete `~/.opam` and just start the installation again if you run into an unrecoverable situation, as OPAM doesn't use any files outside of that space.
 
-!!! Development
+### Development
 
 There are two kinds of OPAM remote repositories: `stable` released versions of packages that have version numbers, and `dev` packages that are retrieved via git or darcs (and eventually, other version control systems too).
 

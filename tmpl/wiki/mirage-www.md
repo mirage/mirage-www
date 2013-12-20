@@ -11,7 +11,7 @@ less config.ml
 
 This `config.ml` is much more complex than the earlier one, but it also does a lot more!  We'll walk through it step by step.
 
-!! Building a Unix version
+## Building a Unix version
 
 The simplest development version to build is a Unix binary, with the data
 served off a local filesystem.  The two block drivers are defined in `config.ml` as follows.
@@ -96,7 +96,7 @@ If you see ping responses, then you are now communicating with the Mirage
 unikernel via the OCaml TCP/IP stack!  Point your web browser at `http://10.0.0.2`
 and you should be able to surf this website too.
 
-!! Serving the site from a FAT filesystem instead
+## Serving the site from a FAT filesystem instead
 
 This site won't quite compile to Xen yet.  Despite doing all networking via
 an OCaml TCP/IP stack, we still have a dependency on the Unix filesystem for
@@ -155,7 +155,7 @@ by the `ocaml-fat` package to build the FAT block image for you.
 If you now access the website, it is serving the traffic straight from the
 FAT image you just created, without requiring a Unix filesystem at all!
 
-!! Building a Xen kernel
+## Building a Xen kernel
 
 We're now ready to build a Xen kernel. 
 
@@ -175,7 +175,7 @@ much faster as a result.
 You can now boot the `mir-main.xen` kernel using `xl` (don't forget to supply
 it a VIF so that the network can work).
 
-!!! Modifying networking to use DHCP or static IP
+### Modifying networking to use DHCP or static IP
 
 Chances are that the Xen kernel you just built doesn't have a useful IP address,
 since it was hardcoded to `10.0.0.2`.  You can modify the HTTP driver to give

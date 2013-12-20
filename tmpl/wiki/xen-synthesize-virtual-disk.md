@@ -1,7 +1,7 @@
 This page describes how to create a synthetic, high-performance
 virtual disk implementation for xen based on the Mirage libraries.
 
-!!Disk devices under Xen
+## Disk devices under Xen
 
 The protocols used by Xen disk and network devices are designed to
 permit fast and efficient software implementations, avoiding the
@@ -22,7 +22,7 @@ ends start running simultaneously. There are no locks in the protocol so
 updates to the shared metadata must be handled carefully, using write
 memory barriers to ensure consistency.
 
-*Xen disk devices in Mirage*
+### Xen disk devices in Mirage
 
 Like everything else in Mirage, Xen disk devices are implemented as
 libraries. The ocamlfind library called "xenctrl" provides support for
@@ -48,7 +48,7 @@ provides functions to hotplug and hotunplug disk devices, together with an
 implementation of the disk block protocol itself.
 
 
-!!Userspace disk implementations
+## Userspace disk implementations
 
 First, install [Xen](http://www.xen.org/), [OCaml](http://www.ocaml.org/)
 and [OPAM](http://opam.ocamlpro.com/). Second initialise your system:
@@ -57,12 +57,14 @@ and [OPAM](http://opam.ocamlpro.com/). Second initialise your system:
   opam init
   eval `opam config env`
 ```
+
 Install the unmodified `xen-disk` package, this will ensure all the build
 dependencies are installed:
 
 ```
   opam install xen-disk
 ```
+
 When this completes it will have installed a command-line tool called
 `xen-disk`. If you start a VM using your Xen toolstack of choice
 ("xl create ..." or "xe vm-install ..." or "virsh create ...") then you
@@ -85,7 +87,7 @@ Assuming that worked ok, clone and build the source for `xen-disk` yourself:
   make
 ```
 
-!!Making a custom virtual disk implementation
+## Making a custom virtual disk implementation
 
 The `xen-disk` program has a set of simple built-in virtual disk implementations.
 Each one satisifies a simple signature, contained in
@@ -166,6 +168,7 @@ achieve the behaviour we want i.e.
     Unix.close fd;
     return (Some (stats.Unix.LargeFile.st_size, Cstruct.of_bigarray mmap))
 ```
+
 The read and write functions can be left as they are:
 
 ```
