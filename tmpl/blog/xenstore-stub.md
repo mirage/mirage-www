@@ -44,12 +44,12 @@ with clients, both Unix sockets and for a special Xen inter-domain shared memory
 painless process to extract the required socket-like IO signature and turn the bulk of the server into
 a [functor](http://caml.inria.fr/pub/docs/manual-ocaml-4.00/manual004.html). The IO signature ended up looking approximately like:
 
-{{
+```
     type t
     val read: t -> string -> int -> int -> int Lwt.t
     val write: t -> string -> int -> int -> unit Lwt.t
     val destroy: t -> unit Lwt.t
-}}
+```
 
 For now the dependency on [Lwt](http://ocsigen.org/lwt/) is explicit but in future I'll probably make it more abstract so we
 can use [Core Async](https://ocaml.janestreet.com/?q=node/100) too.
@@ -97,50 +97,50 @@ If you want to try building it yourself, try the following on a modern 64-bit OS
 instructions on a fresh install of Debian Wheezy.
 
 First install OCaml and the usual build tools:
-{{
+```
     apt-get install ocaml build-essential git curl rsync
-}}
+```
 Then install the OCamlPro `opam` package manager to simplify the installation of extra packages
-{{
+```
     git clone git://github.com/OCamlPro/opam.git
     cd opam
     make
     make install
     cd ..
-}}
+```
 Initialise OPAM with the default packages:
-{{
+```
     opam --yes init
     eval `opam config -env`
-}}
+```
 Add the "mirage" development package source (this step will not be needed once the package definitions are upstreamed)
-{{
+```
     opam remote -add dev git://github.com/mirage/opam-repo-dev
-}}
+```
 Switch to the special "mirage" version of the OCaml compiler
-{{
+```
     opam --yes switch -install 3.12.1+mirage-xen
     opam --yes switch 3.12.1+mirage-xen
     eval `opam config -env`
-}}
+```
 Install the generic Xenstore protocol libraries
-{{
+```
     opam --yes install xenstore
-}}
+```
 Install the Mirage development libraries
-{{
+```
     opam --yes install mirage
-}}
+```
 If this fails with "+ runtime/dietlibc/lib/atof.c:1: sorry, unimplemented: 64-bit mode not compiled in" it means you need a 64-bit build environment.
 Next, clone the xen stubdom tree
-{{
+```
     git clone git://github.com/djs55/ocaml-xenstore-xen
-}}
+```
 Build the Xen stubdom
-{{
+```
     cd ocaml-xenstore-xen
     make
-}}
+```
 The binary now lives in `xen/_build/src/server_xen.xen`
 
 *Deploying on a Xen system*
@@ -156,6 +156,6 @@ the default) but for now you need the following:
 * the domain builder binary `init-xenstore-domain` from `xen-4.2/tools/xenstore`.
 
 To turn the stub xenstored on, you need to edit whichever `init.d` script is currently starting xenstore and modify it to call
-{{
+```
     init-xenstore-domain /path/to/server_xen.xen 256 flask_label
-}}
+```

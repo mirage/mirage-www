@@ -53,7 +53,7 @@ leading up to several use cases:
   so we'll explain how to port Mirage to this target (which is rather different
   from either Unix or Xen, and serves to illustrate the portability of our approach).
 
-!!! How to get involved
+### How to get involved
 
 Bear with us while we update all the documentation and start the blog posts off
 today (the final libraries for the 1.0 release are all being merged into OPAM

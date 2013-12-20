@@ -10,7 +10,7 @@ let read_file tmpl_read f =
         String.sub f (n+1) (String.length f - n - 1)
     with _ -> "" in
   match suffix with
-    | "md"   -> tmpl_read f >|= Markdown.of_string >|= Markdown.to_html
+    | "md"   -> tmpl_read f >|= Markdown.of_string
     | "html" -> tmpl_read f >|= Html.of_string
     | _      -> return []
   with exn ->

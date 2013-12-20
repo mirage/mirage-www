@@ -4,29 +4,29 @@
 
 The full Lwt manual is available [elsewhere](http://ocsigen.org/lwt/manual/), but the minimal stuff needed to get started is here. The first useful function is the `return` statement, which constructs a constant thread:
 
-{{
+```
   val return: 'a -> 'a Lwt.t
-}}
+```
 
 It is used to construct a thread that immediately returns with the provided value. Once the value is wrapped in an Lwt thread, it cannot directly be used (as the thread may not have completed yet). This is where `bind` comes in:
 
-{{
+```
   val bind: 'a Lwt.t -> ('a -> 'b Lwt.t) -> 'b Lwt.t
-}}
+```
 
 `bind t f` creates a thread which waits for `t` to terminate, then passes the result to `f`. If `t` is a sleeping thread, then `bind t f` will be a sleeping thread too, until `t` terminates. If `t` fails, then the resulting thread will fail with the same exception.
 
 There are two important operations to compose threads: `join` and `choose`.
 
-{{
+```
   val join : unit Lwt.t list -> unit Lwt.t
-}}
+```
 
 `join` takes a list of threads and waits for all of them to terminate. If at least one thread fails then `join l` will fail with the same exception as the first to fail, after all threads terminate.
 
-{{
+```
  val choose : 'a t list -> 'a t
-}}
+```
 
 `choose l` behaves as the first thread in l to terminate. If several threads are already terminated, one is chosen at random.
 
@@ -40,36 +40,36 @@ Now write a program that spins off two threads, each of which sleep for some amo
 
 You will need to have Mirage [installed](/wiki/install). Create a file `foo.conf` with the following content:
 
-{{
+```
   main-noip: Foo.main
   depends: mirage
   packages: mirage
-}}
+```
 
 Add `foo.ml` with the following content and edit it:
 
-{{
+```
   open Lwt
   open OS
 
   let main () =
       (* the guts go here *)
-}}
+```
 
 
 Assuming you are building for POSIX using native kernel sockets, compile the application by:
 
-{{
+```
   mirari configure --unix --socket foo.conf
   mirari build --unix --socket foo.conf
   mirari run --unix --socket foo.conf
-}}
+```
 
 If you are building for a different Mirage platform, change the `--unix --socket` switches appropriately (presently either `--xen` or `--unix --direct`).
 
 !!!Solution
 
-{{
+```
   open Lwt (* provides bind and join *)
   open OS  (* provides Time, Console and Main *)
 
@@ -84,7 +84,7 @@ If you are building for a different Mirage platform, change the `--unix --socket
     ]) (fun () ->
       Console.log ("Finished"); return ()
     )
-}}
+```
 
 This is built via `lwt/src/heads1.conf` in the `mirage-skeleton` code repository.
 
@@ -94,7 +94,7 @@ Using Lwt does sometimes require significantly restructuring code, and in partic
 
 This is a good place to introduce some of these extensions. When opening the Lwt module, the infix operator `>>=` is made available. This operator is an alternative to the `bind` function and often makes the code more readable. E.g. consider `bind (bind (bind t f) g) h` and the operator based equivalent expression `t >>= f >>= g >>= h`. We can now rewrite the previous solution more simply:
 
-{{
+```
   open Lwt (* provides >>= and join *)
   open OS  (* provides Time, Console and Main *)
 
@@ -105,7 +105,7 @@ This is a good place to introduce some of these extensions. When opening the Lwt
      ] >>= fun () ->
        Console.log "Finished";
        return ()
-}}
+```
 
 This is built via `lwt/src/heads2.conf` in the repository.
 
@@ -114,38 +114,38 @@ This is built via `lwt/src/heads2.conf` in the repository.
 
 If you are chaining sequences of blocking I/O, a common pattern is to write:
 
-{{
+```
   write stdio "Foo" >>= fun () ->
   write stdio "Bar" >>= fun () ->
   write stdio "Done"
-}}
+```
 
 You can replace these anonymous binds with the `>>` operator instead:
 
-{{
+```
   write stdio "Foo" >>
   write stdio "Bar" >>
   write stdio "Done"
-}}
+```
 
 !!!Lwt Bindings
 
 The binding operation reverses the normal `let` binding by specifying the name of the bound variable in the second argument. Consider the thread:
 
-{{
+```
   e1 >>= fun x -> e2
-}}
+```
 
 Here, we wait for the result of `e1`, bind the result to `x` and continue into `e2`. You can replace this with the more natural `lwt` syntax to act as a "blocking let":
 
-{{
+```
   lwt x = e1 in
   e2
-}}
+```
 
 Now, the code looks like just normal OCaml code, except that we substitute `lwt` for `let`, with the effect that the call blocks until the result of that thread is available. Lets revisit our heads and tails example from above and see how it looks when rewritten with these syntax extensions:
 
-{{
+```
   open Lwt
   open OS
 
@@ -161,7 +161,7 @@ Now, the code looks like just normal OCaml code, except that we substitute `lwt`
     lwt () = heads <&> tails in
     Console.log "Finished";
     return ()
-}}
+```
 
 This is built via `lwt/src/heads3.conf` in the Mirage code repository.
 
@@ -172,12 +172,12 @@ Here we define two threads, `heads` and `tails`, and block until they are both c
 
 In order to cancel a thread, the function `cancel` (provided by the module Lwt) is needed. It has type `'a t -> unit` and does exactly what it says (except on certain complicated cases that are not in the scope of this tutorial). A simple timeout function that cancels a thread after a given number of seconds can be written easily:
 
-{{
+```
   (* In this examples and all those afterwards, we consider Lwt and OS to be  
      opened *)
   let timeout f t =
     Time.sleep f >>= fun () -> cancel t
-}}
+```
 
 !!!Challenge
 
@@ -187,13 +187,13 @@ Modify the `timeout` function so that it returns either `None` if `t` has not ye
 
 !!!Solution
 
-{{
+```
   let timeout f t =
     Time.sleep f >>
     match state t with 
     | Return v -> return (Some v)
     | _        -> cancel t; return None
-}}
+```
 
 This is built via `lwt/src/timeout1.ml` in the repository.
 
@@ -201,9 +201,9 @@ Does your solution match the one given here and always returns after `f` seconds
 
 This is a good place to introduce a third operation to compose threads: `pick`.
 
-{{
+```
   val pick : 'a t list -> 'a t
-}}
+```
 
 `pick` behaves exactly like `choose` except that it cancels all other sleeping threads when one terminates.
 
@@ -217,14 +217,14 @@ In order to test your solution, you can compile it to a mirage executable and ru
 
 !!!Solution
 
-{{
+```
   let timeout f t =
     let tmout = Time.sleep f in
     pick [
       (tmout >>= fun () -> return None);
       (t >>= fun v -> return (Some v));
     ]
-}}
+```
 
 This is built via `lwt/src/timeout2.conf` in the repository.
 
@@ -235,20 +235,20 @@ This is built via `lwt/src/timeout2.conf` in the repository.
 
 Write an echo server, reading from a dummy input generator and, for each line it reads, writing it to the console. The server should never stop listening to the dummy input generator. Here is a basic dummy input generator:
 
-{{
+```
   let read_line () =
     OS.Time.sleep (Random.float 2.5) >>
     Lwt.return (String.make (Random.int 20) 'a')
-}}
+```
 
 !!!Solution
 
-{{
+```
   let rec echo_server () =
     lwt s = read_line () in
     Console.log s;
     echo_server ()
-}}
+```
 
 This is built via `lwt/src/echoserver1.conf` in the repository.
 
@@ -258,7 +258,7 @@ Among the different modules the Lwt library provides is `Lwt_mvar`. This module 
 
 Here are the needed functions from the `Lwt_mvar` module:
 
-{{  
+```  
   (* type of a mailbox variable *)
   type 'a t
 
@@ -270,21 +270,21 @@ Here are the needed functions from the `Lwt_mvar` module:
 
   (* will take any available value and block if the mailbox is empty *)
   val take : 'a t -> 'a Lwt.t 
-}}
+```
 
 !!!Challenge
 
 Write a small set of functions to help do pipeline parallelism. The interface to be implemented is the following (names should give away the appropriate semantic):
 
-{{
+```
   val map: ('a -> 'b Lwt.t) -> 'a Lwt_mvar.t -> 'b Lwt_mvar.t
   val split : ('a * 'b) Lwt_mvar.t -> 'a Lwt_mvar.t * 'b Lwt_mvar.t
   val filter: ('a -> bool Lwt.t) -> 'a Lwt_mvar.t -> 'a Lwt_mvar.t
-}}
+```
 
-!!! Solution
+### Solution
 
-{{
+```
 let map f m_in = 
   let m_out = Lwt_mvar.create_empty () in
   let rec aux () = 
@@ -330,7 +330,7 @@ Using the pipelining helpers, change the echo server into a string processing se
 
 !!!Solution
 
-{{
+```
   let read_line () =
     Lwt.return (String.make (Random.int 20) 'a')
  
@@ -374,7 +374,7 @@ Every second write a tuple containing a pair of small random integers `(Random.i
 
 !!!Solution
 
-{{
+```
   let add_mult (a, b) =
     return (a + b, a * b)
 
@@ -402,7 +402,7 @@ Every second write a tuple containing a pair of small random integers `(Random.i
       Time.sleep 1. >>
       inp () in
     inp ()
-}}
+```
 
 This is in `regress/lwt/int_server.ml` in the Mirage code repository.
 
@@ -413,17 +413,17 @@ The pipelining challenges of the previous section uses mailboxes provided by the
 
 Using the `Lwt_stream` module, one can devise a different pipeline with a greedier processing scheme. Several functions can be used to create a stream, all of them can be defined via:
 
-{{
+```
   val create : unit -> 'a t * ('a option -> unit)
-}}
+```
 
 The `create` function returns a stream and a push function. The push function is the only available way to add content to the stream. Pushing `None` will close the stream, while pushing `Some x` will make `x` available in the stream.
 
 There are several ways to read from a stream. The most direct one being
 
-{{
+```
   val get : 'a t -> 'a option Lwt.t
-}}
+```
 
 `get s` returns either `Some x` when `x` is available (which may be right away) or `None` when stream is closed. Order of elements in streams is preserved, meaning that elements are pulled in the order they are pushed.
 
@@ -431,15 +431,15 @@ There are several ways to read from a stream. The most direct one being
 
 Write the same pipelining library as in the mailbox challenge, replacing instances of `Lwt_mvar.t` by `Lwt_stream.t`:
 
-{{
+```
   val map: ('a -> 'b Lwt.t) -> 'a Lwt_stream.t -> 'b Lwt_stream.t
   val split : ('a * 'b) Lwt_stream.t -> 'a Lwt_stream.t * 'b Lwt_stream.t
   val filter: ('a -> bool Lwt.t) -> 'a Lwt_stream.t -> 'a Lwt_stream.t
-}}
+```
 
 !!!Solution
 
-{{
+```
   let map f ins =
     let (outs, push) = Lwt_stream.create () in
     let rec aux () = match_lwt Lwt_stream.get ins with
@@ -469,7 +469,7 @@ Write the same pipelining library as in the mailbox challenge, replacing instanc
     in
     let _ = aux () in
     outs
-}}
+```
 
 Notice, in the provided solution, the usage of `f` in `map`: only when `f` returns does the next element is polled and treated. (The same remark applies to the predicate function `p` in `filter`.) This means that the elements of the stream are processed serially.
 
@@ -490,7 +490,7 @@ If locking a data structure is still needed between yield points, the `Lwt_mutex
 
 One very, very important thing to remember with cooperative threading is that raising exceptions is not safe to do between yield points. In general, you should never call `raise` directly. Lwt provides an alternative syntax:
 
-{{
+```
   exception Foo
   let main () =
     try_lwt
@@ -498,7 +498,7 @@ One very, very important thing to remember with cooperative threading is that ra
       raise_lwt Foo
     with
       |Foo -> return (Console.log "Foo raised")
-}}
+```
 
 This looks similar to normal OCaml code, except that the caught exception has an `Lwt.t` return type appended to it.
 
@@ -506,26 +506,26 @@ This looks similar to normal OCaml code, except that the caught exception has an
 
 Lwt also provides equivalents of `for` and `while` that block on each iteration, saving you the trouble of rewriting the code to use `bind` recursively. Just use `for_lwt` and `while_lwt` instead; for example:
 
-{{
+```
   for_lwt i = 0 to 10 do
     OS.Time.sleep (float_of_int i) >>
     return (OS.Console.log "foo")
   done
-}}
+```
 
 There is also a `match_lwt` which will bind the result of a thread and immediately pattern-match on its value. Thus, the two fragments of code are equivalent:
 
-{{
+```
   let e1 >>= function
   |true -> ...
   |false -> ...
-}}
+```
 
-{{
+```
   match_lwt e1 with
   |true -> ...
   |false -> ...
-}}
+```
 
 !!How does it work
 

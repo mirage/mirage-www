@@ -1,4 +1,4 @@
-[ *Due to continuing development, some of the details in this blog post are now out-of-date. It is archived here.* ]
+**Due to continuing development, some of the details in this blog post are now out-of-date. It is archived here.**
 
 Something we've been working on for a little while now that we're pretty
 excited about is an [OpenFlow](http://openflow.org/) implementation for
@@ -35,7 +35,7 @@ still being sufficiently high performance to be interesting!
 By way of a sample of how it fits together, here's a skeleton for a simple
 controller application:
 
-{{
+```
 type mac_switch = {
   addr: OP.eaddr; 
   switch: OP.datapath_id;
@@ -71,7 +71,7 @@ let main () =
     let port = 6633 in 
     OC.listen mgr (None, port) init
   )
-}}
+```
 
 We've written up some of the gory details of the design, implementation and
 performance in a [short paper](/docs/iccsdn12-mirage.pdf) to the

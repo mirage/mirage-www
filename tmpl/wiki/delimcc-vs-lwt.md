@@ -5,28 +5,28 @@ Event-driven systems are simple to implement, scalable to lots of network client
 OCaml has the excellent [Lwt](http://ocsigen.org) threading library that utilises a monadic approach to solving this.
 Consider this simplified signature:
 
-{{
+```
   val return : 'a -> 'a Lwt.t 
   val bind : 'a Lwt.t -> ('a -> 'b Lwt.t) -> 'b Lwt.t
   val run : 'a Lwt.t -> 'a
-}}
+```
 
 Threads have the type `'a Lwt.t`, which means that the thread will have a result of type `'a` when it finishes.
 The `return` function is the simplest way to construct such a thread from an OCaml value.
 
 If we then wish to use the value of thread, we must compose a function that will be called in the future when the thread completes. This is what the `bind` function above is for. For example, assume we have a function that will let us sleep for some time:
 
-{{
+```
   val sleep: int -> unit Lwt.t
-}}
+```
 
 We can now use the `bind` function to do something after the sleep is complete:
 
-{{
+```
   let x = sleep 5 in
   let y = bind x (fun () -> print_endline "awake!") in
   run y
-}}
+```
 
 `x` has the type `unit Lwt.t`, and the closure passed to `bind` will eventually be called with `unit` when the sleep finishes. Note that we also need a function to actually begin evaluating an Lwt thread, which is the `run` function.
 
@@ -40,10 +40,10 @@ Mirage currently uses Lwt extensively, and we have been very happy with using it
 
 Lwt addresses the first problem via a comprehensive [syntax extension](http://ocsigen.org/lwt/2.3.0/api/Pa_lwt) which provides Lwt equivalents for many common operations. For example, the above example with sleep can be written as:
 
-{{
+```
   lwt x = sleep 5 in
   print_endline "awake"
-}}
+```
 
 The `lwt` keyword indicates the result of the expression should be passed through `bind`, and this makes it possible to write code that looks more OCaml-like. There are also other keywords like `for_lwt` and `match_lwt` that similarly help with common control flow constructs.
 
@@ -54,10 +54,10 @@ Delimcc can be combined with Lwt very elegantly, and Jake Donham did just this w
 
 The interface for fibers is also simple:
 
-{{
+```
   val start: (unit -> 'a) -> 'a Lwt.t
   val await : 'a Lwt.t -> 'a
-}}
+```
 
 A fiber can be launched with `start`, and during its execution can block on another thread with `await`.  When it does block, a restartable exception saves the program stack back until the point that `start` was called, and it will be resumed when the thread it blocked on completes.
 
@@ -65,7 +65,7 @@ A fiber can be launched with `start`, and during its execution can block on anot
 
 I put together a few microbenchmarks to try out the performance of Lwt threads versus fibers. The fiber test looks like this:
 
-{{
+```
   module Fiber = struct
     let basic fn yields =
       for i = 1 to 15000 do
@@ -77,11 +77,11 @@ I put together a few microbenchmarks to try out the performance of Lwt threads v
     let run fn yields =
       Lwt_fiber.start (fun () -> basic fn yields)
   end
-}}
+```
 
 We invoke the run function with two arguments: a thread to use for blocking and the number of times we should yield serially (so we can confirm that an increasing number of yields scales linearly).  The Lwt version is pretty similar:
 
-{{
+```
   module LWT = struct
     let basic fn yields =
       for_lwt i = 1 to 15000 do
@@ -92,7 +92,7 @@ We invoke the run function with two arguments: a thread to use for blocking and 
   
     let run = basic
   end
-}}
+```
 
 We do not need to do anything special to launch a thread since we are already in the Lwt main loop, and the syntax extension makes the `for` loops look like the Fiber example above.
 
@@ -111,7 +111,7 @@ There are two blocking functions used in the graph above:
 
 Interestingly, using a fiber is slower than normal Lwt here, even though our callstack is not very deep.  I would have hoped that fibers would be significantly cheaper with a small callstack, as the amount of backtracking should be quite low.  Lets confirm that fibers do in fact slow down as the size of the callstack increases via this test:
 
-{{
+```
   module Fiber = struct
     let recurse fn depth =
       let rec sum n = 
@@ -127,11 +127,11 @@ Interestingly, using a fiber is slower than normal Lwt here, even though our cal
     let run fn depth = 
       Lwt_fiber.start (fun () -> recurse fn depth)
   end
-}}
+```
 
 The `recurse` function is deliberately not tail-recursive, so that the callstack increases as the `depth` parameter grows.  The Lwt equivalent is slightly more clunky as we have to rewrite the loop to bind and return:
 
-{{
+```
   module LWT = struct
     let recurse fn depth =
       let rec sum n =
@@ -149,7 +149,7 @@ The `recurse` function is deliberately not tail-recursive, so that the callstack
 
    let run = recurse
   end
-}}
+```
 
 We then run the experiment using the slow `Lwt_unix.sleep 0.0` function, and get this graph:
 
@@ -175,7 +175,7 @@ Jake Donham comments:
 
 When writing the test, I figured that calling the thread waiting function more often wouldn't alter the result (careless). So I modified the test suite to have a `recurse` test that only waits a single time at the end of a long call stack (see below) as well as the original N^2 version (now called `recurse2`).
 
-{{
+```
   module Fiber = struct
     let recurse fn depth =
       let rec sum n = 
@@ -190,7 +190,7 @@ When writing the test, I figured that calling the thread waiting function more o
     let run fn depth = 
       Lwt_fiber.start (fun () -> recurse fn depth)
   end
-}}
+```
 
 The N^2 version below of course looks the same as the previously run tests, with delimcc getting much worse as it yields more often:
 
@@ -202,7 +202,7 @@ However, when we run the `recurse` test with a single yield at the end of the lo
 
 The reason for Lwt being slower in this becomes more clear when we examine what the code looks like after it has been passed through the `pa_lwt` syntax extension. The code before looks like:
 
-{{
+```
   let recurse fn depth =
     let rec sum n =
       match n with
@@ -211,11 +211,11 @@ The reason for Lwt being slower in this becomes more clear when we examine what 
       | n ->
           lwt n' = sum (n-1) in 
           return (n + n') in
-}}
+```
 
 and after `pa_lwt` macro-expands it:
 
-{{
+```
   let recurse fn depth =
     let rec sum n =
       match n with
@@ -224,7 +224,7 @@ and after `pa_lwt` macro-expands it:
       | n ->
           let __pa_lwt_0 = sum (n - 1)
           in Lwt.bind __pa_lwt_0 (fun n' -> return (n + n')) in
-}}
+```
 
 Every iteration of the recursive loop requires the allocation of a closure (the `Lwt.bind` call). In the `delimcc` case, the function operates as a normal recursive function that uses the stack, until the very end when it needs to save the stack in one pass.
 

@@ -1,7 +1,7 @@
 This page describes how to create a synthetic, high-performance
 virtual disk implementation for xen based on the Mirage libraries.
 
-!!Disk devices under Xen
+## Disk devices under Xen
 
 The protocols used by Xen disk and network devices are designed to
 permit fast and efficient software implementations, avoiding the
@@ -22,7 +22,7 @@ ends start running simultaneously. There are no locks in the protocol so
 updates to the shared metadata must be handled carefully, using write
 memory barriers to ensure consistency.
 
-*Xen disk devices in Mirage*
+### Xen disk devices in Mirage
 
 Like everything else in Mirage, Xen disk devices are implemented as
 libraries. The ocamlfind library called "xenctrl" provides support for
@@ -48,29 +48,31 @@ provides functions to hotplug and hotunplug disk devices, together with an
 implementation of the disk block protocol itself.
 
 
-!!Userspace disk implementations
+## Userspace disk implementations
 
 First, install [Xen](http://www.xen.org/), [OCaml](http://www.ocaml.org/)
 and [OPAM](http://opam.ocamlpro.com/). Second initialise your system:
 
-{{
+```
   opam init
   eval `opam config env`
-}}
+```
+
 Install the unmodified `xen-disk` package, this will ensure all the build
 dependencies are installed:
 
-{{
+```
   opam install xen-disk
-}}
+```
+
 When this completes it will have installed a command-line tool called
 `xen-disk`. If you start a VM using your Xen toolstack of choice
 ("xl create ..." or "xe vm-install ..." or "virsh create ...") then you
 should be able to run:
 
-{{
+```
   xen-disk connect <vmname>
-}}
+```
 
 which will hotplug a fresh block device into the VM "<vmname>" using the
 "discard" backend, which returns "success" to all read and write requests,
@@ -79,19 +81,19 @@ used for basic testing!
 
 Assuming that worked ok, clone and build the source for `xen-disk` yourself:
 
-{{
+```
   git clone git://github.com/mirage/xen-disk
   cd xen-disk
   make
-}}
+```
 
-!!Making a custom virtual disk implementation
+## Making a custom virtual disk implementation
 
 The `xen-disk` program has a set of simple built-in virtual disk implementations.
 Each one satisifies a simple signature, contained in
 [src/storage.mli](https://github.com/mirage/xen-disk/blob/master/src/storage.mli):
 
-{{
+```
 type configuration = {
   filename: string;      (** path where the data will be stored *)
   format: string option; (** format of physical data *)
@@ -119,7 +121,7 @@ module type S = sig
   (** [write t buf offset_sectors len_sectors] copies [len_sectors]
       sectors from [buf] into [t] beginning at sector [offset_sectors]. *)
 end
-}}
+```
 
 Let's make a virtual disk implementation which uses an existing disk
 image file as a "gold image", but uses copy-on-write so that no writes
@@ -158,17 +160,18 @@ particular `lwt` uses `Lwt_bytes.map_file` as a wrapper for the
 In the "open-disk" function we simply need to set "shared" to "false" to
 achieve the behaviour we want i.e.
 
-{{
+```
   let open_disk configuration =
     let fd = Unix.openfile configuration.filename [ Unix.O_RDONLY ] 0o0 in
     let stats = Unix.LargeFile.fstat fd in
     let mmap = Lwt_bytes.map_file ~fd ~shared:false () in
     Unix.close fd;
     return (Some (stats.Unix.LargeFile.st_size, Cstruct.of_bigarray mmap))
-}}
+```
+
 The read and write functions can be left as they are:
 
-{{
+```
   let read (_, mmap) buf offset_sectors len_sectors =
     let offset_sectors = Int64.to_int offset_sectors in
     let len_bytes = len_sectors * sector_size in
@@ -182,27 +185,27 @@ The read and write functions can be left as they are:
     let len_bytes = len_sectors * sector_size in
     Cstruct.blit buf 0 mmap offset_bytes len_bytes;
     return () 
-}}
+```
 
 Now if we rebuild and run something like:
 
-{{
+```
   dd if=/dev/zero of=disk.raw bs=1M seek=1024 count=1
   losetup /dev/loop0 disk.raw
   mkfs.ext3 /dev/loop0
   losetup -d /dev/loop0
 
   dist/build/xen-disk/xen-disk connect <myvm> --path disk.raw
-}}
+```
 
 Inside the VM we should be able to do some basic speed testing:
 
-{{
+```
   # dd if=/dev/xvdb of=/dev/null bs=1M iflag=direct count=100
   100+0 records in
   100+0 records out
   104857600 bytes (105 MB) copied, 0.125296 s, 837 MB/s
-}}
+```
 
 Plus we should be able to mount the filesystem inside the VM, make changes and
 then disconnect (send SIGINT to xen-disk by hitting Control+C on your terminal)

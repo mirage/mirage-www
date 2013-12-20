@@ -2,17 +2,17 @@ First make sure you have followed the [installation instructions](/wiki/install)
 
 The examples below are in the [`mirage-skeleton` repository](http://github.com/mirage/mirage-skeleton). Begin by cloning this and changing directory to it:
 
-{{
+```
     $ git clone git://github.com/mirage/mirage-skeleton.git
     $ cd mirage-skeleton
-}}
+```
 
-!! First Steps: Hello World!
+## First Steps: Hello World!
 
 As a first step, let's build and run the Mirage "Hello World" unikernel -- this
 will print `hello\\nworld\\n` 5 times before terminating:
 
-{{
+```
     hello
     world
     hello
@@ -23,11 +23,11 @@ will print `hello\\nworld\\n` 5 times before terminating:
     world
     hello
     world
-}}
+```
 
 First, let's look at the code:
 
-{{
+```
     $ cat basic/hello.ml
     open Mirage_types.V1
 
@@ -42,7 +42,7 @@ First, let's look at the code:
         done
 
     end
-}}
+```
 
 To veteran OCaml programmers among you, this might look a little odd: we have a
 `Main` module parameterised by another module (`C`, of type `CONSOLE`) that
@@ -54,7 +54,7 @@ The concrete implementation of `CONSOLE` will be supplied at compile-time,
 depending on the target that you are compiling for.  This configuration is
 stored in `config.ml`, which is very simple for our first application.
 
-{{
+```
     $ cat basic/config.ml
     open Mirage
 
@@ -62,7 +62,7 @@ stored in `config.ml`, which is very simple for our first application.
       Job.register [
         "Hello.Main", [Driver.console]
       ]
-}}
+```
 
 The configuration registers a set of one or more jobs, each of which represent a
 process (with a start/stop lifecycle).  In this case, the entry point of the process
@@ -90,27 +90,27 @@ We invoke all this by configuring, building and finally running the resulting
 unikernel under Unix first.
 
 
-{{
+```
 cd basic
 mirage configure --unix
-}}
+```
 
 This will first check that you have all the right OPAM packages installed
 to build a Unix application, and install the if they're not present.
 It also creates a `Makefile` and `main.ml` by evaluating the `config.ml`.
 
-{{
+```
 make
-}}
+```
 
 This builds a UNIX binary called `mir-main` that contains the simple console
 application.
 
-{{
+```
 mirage run
 # or run the binary directly
 ./mir-main
-}}
+```
 
 Since this is a simple Unix application, you can just run it directly, and
 observe the exciting console commands that our `for` loop is generating.
@@ -118,9 +118,9 @@ observe the exciting console commands that our `for` loop is generating.
 If you are on a 64-bit Linux system able to build Xen images, simply change
 `--unix` for `--xen` to build a Xen VM:
 
-{{
+```
 mirage configure --xen
-}}
+```
 
 *Everything* else remains the same!  The `main.ml` and `Makefile` generated
 differ significantly, but since the source code of your application was 
@@ -130,9 +130,9 @@ using the Xen console driver instead of Unix.
 When you build the Xen version, you'll have a `mir-main.xen` unikernel that
 can be booted as a standalone kernel.
 
-{{
+```
 mirage run
-}}
+```
 
 This will generate a `main.xl` Xen configuration file.  You can run this
 via `xl create -c main.xl` (or, if you're still on the older Xen, swap

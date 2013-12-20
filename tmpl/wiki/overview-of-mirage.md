@@ -2,7 +2,7 @@ If you're familiar with the using the
 command line, The best way to learn about Mirage is to try out the 
 [installation instructions](http://openmirage.org/wiki/install) for yourself!
 
-!! What is Mirage and why is it important? 
+## What is Mirage and why is it important? 
 
 <a href="http://www.berndnaut.nl/images/NimbusNP3web.jpg"><img style="float:right; margin-left: 15px; margin-bottom: 15px;" src="/graphics/nimbus-np3-smilde.jpg"></img></a>
 
@@ -27,7 +27,7 @@ much smaller attack surface.  These appliances can be deployed directly to
 the cloud and embedded devices, with the benefits of reduced costs and 
 increased security and scalability.
 
-!! How does Mirage work?
+## How does Mirage work?
 
 <a href="http://www.xenproject.org/developers/teams/hypervisor.html"><img style="float:left; margin-right: 15px;" src="/graphics/Xen-Panda-Ecosystem-1.png"></img></a>
 
@@ -55,7 +55,7 @@ functional implementations of protocols ranging from TCP/IP, DNS, SSH,
 Openflow (switch/controller), HTTP, XMPP and Xen inter-VM transports.
 
 
-!! Where will Mirage be useful?
+## Where will Mirage be useful?
 
 <a href="http://www.flickr.com/photos/radnezeoz/7343684238/"><img style="float:right; margin-left: 15px;" src="/graphics/cumulous-cruisin.jpg"></img></a>
 
@@ -70,7 +70,7 @@ Mirage appliances are being used to present slides for conferences.  These
 are both cases of how Mirage is being used right now and below are examples 
 of things we can do in the future.
 
-!!! Self-scaling architecture
+### Self-scaling architecture
 
 We can create auto-scaling web-servers with very small footprints.  These 
 would be cheaper to run than current solutions due to the small size but 
@@ -84,7 +84,7 @@ automatically shut themselves down. Since these machines boot fast we can be
 more elastic, raising and lowering capacity to precisely meet demand and 
 therefore only spending what we actually need when we really need it.
 
-!!! Deployment to embedded devices
+### Deployment to embedded devices
 
 <a href="http://www.flickr.com/photos/lukew/6171377827/"><img style="float:left; margin-right: 15px;" src="/graphics/device-love.jpg"></img></a>
 
