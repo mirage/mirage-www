@@ -229,6 +229,12 @@ let entries = [
     body       = "/blog/releasing-mirage.md";
     permalink  = "announcing-mirage10";
   };
+  { updated    = date (2013, 12, 19, 23, 0);
+    author     = anil;
+    subject    = "Mirage 1.0.3 released; tutorial on building this website available";
+    body       = "/blog/mirage-1.0.3-released.md";
+    permalink  = "mirage-1.0.3-released";
+  };
 ]
 
 let cmp_ent a b = Atom.compare (atom_date a.updated) (atom_date b.updated)
