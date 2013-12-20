@@ -10,13 +10,13 @@ There are two kinds of OPAM remote repositories: `stable` released versions of p
 
 To develop a new package, create a new `opam-repository` Git repo.
 
-{{
+```
 $ mkdir opam-repository
 $ cd opam-repository
 $ git init
 $ mkdir packages
 $ opam remote add mypkg .
-}}
+```
 
 This will configure your local checkout as a development remote, and OPAM will pull from it on every update. Each package lives in a directory named with the version, such as `packages/foo.0.1`, and requires three files inside it:
 

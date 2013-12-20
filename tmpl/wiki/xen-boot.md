@@ -4,19 +4,19 @@ Building a Mirage unikernel for Xen, e.g., as at [the end of how to build the Mi
 
 When using open-source Xen, you need to create a configuration file, e.g., `app.cfg`, for the VM that looks something like:
 
-{{
+```
     name="app"
     kernel="app.xen"
-}}
+```
 
 You can launch this domain with `xm create -c app.cfg` (for Xen versions earlier than 4.1) and `xl create -c app.cfg` for Xen 4.1 or greater.
 
 Alternatively, for Xen versions greater than 4.1, you can simply invoke Mirari to do this for you:
 
-{{
+```
     $ sudo mirari configure --xen app.conf
     $ sudo mirari run --xen
-}}
+```
 
 where `app.conf` is the Mirari configuration file for your application. The [Mirage website](/wiki/mirage-www) contains an example.
 

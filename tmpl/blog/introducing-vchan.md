@@ -43,20 +43,20 @@ will never leave the host's shared memory.
 Provided that you have a Xen-enabled machine, do the following from
 dom0:
 
-{{
+```
     opam install mirari mirage-xen mirage vchan
-}}
+```
 
 This will install the library and its dependencies. `mirari` is
 necessary to build the *echo unikernel*:
 
-{{
+```
     git clone git://github.com/mirage/ocaml-vchan
     cd test
     mirari configure --xen --no-install
     mirari build --xen
     sudo mirari run --xen
-}}
+```
 
 This will boot a `vchan echo domain` for dom0, with connection
 parameters stored in xenstore at `/local/domain/<domid>/data/vchan`,
@@ -74,9 +74,9 @@ at `tools/libvchan`: Just type `make` in this directory. It will
 compile the executable `vchan-node2` that you can use to connect to
 our freshly created echo domain:
 
-{{
+```
     ./vchan-node2 client <domid>/local/domain/<domid>/data/vchan
-}}
+```
 
 If everything goes well, what you type in there will be echoed.
 

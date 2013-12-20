@@ -16,22 +16,22 @@ Let us start with an example. We would like to display a list of tweets
 stored locally. As for any OCaml program, we need to start thinking first
 about the data structures to use. So let us define one:
 
-{{
+```
 type author = {
  name : string;
  link : string;
 }
-}}
+```
 
 for the `author` type and:
 
-{{
+```
 type tweet = {
   author = author;
   date = Date.t;
   contents = Html.t
 }
-}}
+```
 
 for the `tweet` type. We assume here that we have already defined in our
 code a module `Date` which manipulates date formats. `Html.t` is
@@ -40,12 +40,12 @@ part of the HTCaML library and is the type of HTML fragments.
 We can now define the functions converting any value of type `tweet`
 into an HTML fragment. Let us start with `val html_of_author : author -> Html.t`:
 
-{{
+```
 let html_of_author a =
    <:html<
       <a href=$str:a.link$>$str:name$</a>
    >>
-}}
+```
 
 Fragments of code written between `$` are called "antiquotations", and
 are valid OCaml code not interpreted by the HTML parser; the
@@ -53,17 +53,17 @@ are valid OCaml code not interpreted by the HTML parser; the
 to understand the type of the value returned by the antiquotation. The
 code above will automatically be expanded by `camlp4` into:
 
-{{
+```
 let html_of_author a =
    Html.Tag ("a",
      Html.Prop(href,
        Html.String a.link),
      Html.String name)
-}}
+```
 
 Next, we can write the code for `val html_of_tweet : tweet -> Html.t`:
 
-{{
+```
 let html_of_tweet t =
    <:html<
       <div class="tweet">
@@ -72,7 +72,7 @@ let html_of_tweet t =
         <div class="contents">$t.contents$</div>
       </div>
    >>
-}}
+```
 
 Note that we do not need to add a prefix to the antiquotations here as
 the `html_of_*` functions already return a value of type `Html.t`, and so
@@ -82,7 +82,7 @@ Then, using `val Html.to_string : Html.t -> string`, it is
 straightforward to process a list of tweet values in order to generate
 a static HTML page:
 
-{{
+```
 let process tweets =
     let html = <:html<
       <html>
@@ -98,13 +98,13 @@ let process tweets =
     let chan = open_out "tweets.html" in
     output_string chan (Html.to_string html);
     close_out chan
-}}
+```
 
 Finally, we can use [CaSS](http://www.github.com/samoht/cass) to produce
 a very simple CSS files. CaSS provides CSS quotations to convert CSS
 fragments into an OCaml program:
 
-{{
+```
 let () =
   let color = <:css< black >> in
   let css  = <:css<
@@ -116,14 +116,14 @@ let () =
   let chan = open_out "style.css" in
   output_string chan (Css.to_string css);
   close_out chan
-}}
+```
 
 !!HTML Generator
  
 Some of the OCaml code we wrote in the last section is quite tedious
 to write. Let us consider `html_of_tweet` again:
 
-{{
+```
 let html_of_tweet t =
    <:html<
       <div class="tweet">
@@ -132,7 +132,7 @@ let html_of_tweet t =
         <div class="contents">$t.contents$</div>
       </div>
    >>
-}}
+```
 
 To write this code fragment, we had to reason by
 induction on the type structure of `tweet`. So this piece of code can
@@ -146,7 +146,7 @@ to be able to manually write the translation to HTML, as for the
 
 So we can rewrite the previous example:
 
-{{
+```
 type author = {
  name : string;
  link : string;
@@ -162,6 +162,6 @@ type tweet = {
   date = Date.t;
   contents = Html.t
 } with html
-}}
+```
 
 And `html_of_tweet` will pick the right definition of `html_of_author`.
