@@ -58,6 +58,8 @@ let drivers =
   | `Fat -> [Driver.console; fat_fs; fat_tmpl; http]
 
 let () =
+  Mirage.add_to_opam_packages ["cow"];
+  Mirage.add_to_ocamlfind_libraries ["cow.syntax";"cowabloga"];
   Job.register [
     "Dispatch.Main", drivers
   ]
