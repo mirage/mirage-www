@@ -1,0 +1,67 @@
+h1 {
+  font-size: 2.2rem;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  font-family: "Arial";
+}
+
+a {
+  color: #333399;
+}
+
+article a:hover {
+  color: #333333;
+  border-bottom: 1px dotted #999999;
+  display: inline;
+}
+
+body {
+  background-image: url(/images/cloud-bg.png);
+  background-repeat: repeat-x;
+}
+
+code {
+  font-weight: normal;
+  margin-bottom: 1em;
+  font-size: 90%;
+}
+  
+.side-nav li a { 
+  color: #333399;
+}
+
+.date {
+  border: 1px solid #999;
+  line-height: 1;
+  width: 3em;
+  position: relative;
+  float: left;
+  margin-right: 15px;
+  text-align: center;
+}
+.date .month {
+  text-transform: uppercase;
+  font-size: 0.9em;
+  padding-top: 0.3em;
+}
+
+.date .day {
+  font-size: 1.3em;
+}
+
+.date .year {
+  background-color: #2358B8;
+  color: #FFF;
+  font-size: 0.9em;
+  padding: 0.3em 0;
+  margin-top: 0.3em;
+}
+.date .hour {
+  display: none;
+}
+
+.date .min {
+  display: none;
+}
+
