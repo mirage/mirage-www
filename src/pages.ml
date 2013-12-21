@@ -35,7 +35,7 @@ module Global = struct
 
   let top_nav =
   Cowabloga.Foundation.top_nav 
-    ~title:"Mirage OS"
+    ~title:<:html<<img src="/graphics/mirage-logo-small.png" />&>>
     ~title_uri:(Uri.of_string "/") 
     ~nav_links:(Cowabloga.Foundation.Link.top_nav ~align:`Left nav_links)
 
@@ -89,10 +89,12 @@ module About = struct
 end
 
 module Wiki = struct
+  open Cowabloga.Wiki
+  open Data.Wiki
   open Wiki
 
   (* the right column of wiki page is always the same *)
-  let right_column = Wiki.short_html_of_categories entries categories
+  let right_column = short_html_of_categories entries categories
 
   let read_file read_fn f = read_file read_fn ("/wiki/" ^ f)
 
@@ -104,14 +106,14 @@ module Wiki = struct
     >> in
     let title = "wiki" ^ match title with
       |None -> "" |Some x -> " :: " ^ x in
-    let body = Wiki.html_of_page ?disqus ~left_column ~right_column in
+    let body = html_of_page ?disqus ~left_column ~right_column in
     Template.t ~extra_header read_fn "Wiki" title body
     >|= Html.to_string
 
   (* Main wiki page Html.t fragment with the index page *)
   let main_page read_fn =
-    lwt idx = Wiki.html_of_index (read_file read_fn) in
-    let idx2 = Wiki.html_of_recent_updates Wiki.entries in
+    lwt idx = html_of_index (read_file read_fn) in
+    let idx2 = html_of_recent_updates Wiki.entries in
     let left_column = idx @ idx2 in
     make ~title:"index" (return left_column) read_fn
 
@@ -119,19 +121,19 @@ module Wiki = struct
     let ent_bodies = Hashtbl.create 1 in
     List.iter (fun entry ->
       let title = entry.subject in
-      let left  = Wiki.html_of_entry (read_file read_fn) entry in
+      let left = html_of_entry (read_file read_fn) entry in
       let body = make ~title ~disqus:entry.permalink left read_fn in
       Hashtbl.add ent_bodies entry.permalink body
-    ) Wiki.entries;
+    ) entries;
     ent_bodies
 
   let init_lt1 read_fn =
     let lt1_bodies = Hashtbl.create 1 in
     List.iter (fun (lt1,_) ->
        let title = lt1 in
-       let left  = Wiki.html_of_category Wiki.entries (lt1, None) in
+       let left  = html_of_category Wiki.entries (lt1, None) in
        Hashtbl.add lt1_bodies lt1 (make ~title (return left) read_fn);
-    ) Wiki.categories;
+    ) categories;
     lt1_bodies
 
   let init_lt2 read_fn =
@@ -139,14 +141,14 @@ module Wiki = struct
     List.iter (fun (lt1,lt2s) ->
       List.iter (fun lt2 ->
          let title = lt1 ^ " :: " ^ lt2 in
-         let left = Wiki.html_of_category Wiki.entries (lt1, Some lt2) in
+         let left = html_of_category Wiki.entries (lt1, Some lt2) in
          Hashtbl.add lt2_bodies lt2 (make ~title (return left) read_fn);
       ) lt2s
-    ) Wiki.categories;
+    ) categories;
     lt2_bodies
 
   let atom_feed read_fn =
-    lwt f = Wiki.atom_feed (read_file read_fn) Wiki.entries in
+    lwt f = atom_feed (read_file read_fn) entries in
     return (Xml.to_string (Atom.xml_of_feed ~self:("/wiki/atom.xml") f))
 
   let not_found x ent_bodies read_fn =
