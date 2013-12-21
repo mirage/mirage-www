@@ -59,8 +59,10 @@ module Main (C:CONSOLE) (FS:KV_RO) (TMPL:KV_RO) (Server:Cohttp_lwt.Server) = str
       | "" :: "blog" :: tl ->
         let headers, t = blog_dispatch tl in
         dyn ~headers req t
+      | "" :: "docs" :: "tag" :: tl
       | "" :: "wiki" :: "tag" :: tl ->
         dyn_xhtml req (Pages.Wiki.tag wiki_entries wiki_lt1 wiki_lt2 read_tmpl tl)
+      | "" :: "docs" :: page
       | "" :: "wiki" :: page ->
         let headers, t = Pages.Wiki.t wiki_entries wiki_lt1 wiki_lt2 read_tmpl page in
         dyn ~headers req t
