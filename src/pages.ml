@@ -17,11 +17,6 @@ let read_file tmpl_read f =
     printf "Pages.read_file: exception %s\n%!" (Printexc.to_string exn);
     exit 1
 
-type pages = {
-  idx: string;
-}
-
- 
 let col_files l r = <:xml<
   <div class="left_column">
     <div class="summary_information"> $l$ </div>
@@ -44,6 +39,27 @@ let column_css = <:css<
 
 let none : Html.t = []
 
+module Global = struct
+   let nav_links = [
+    "Blog", Uri.of_string "/blog";
+    "Docs", Uri.of_string "/docs";
+    "API", Uri.of_string "/api";
+    "Community", Uri.of_string "/community";
+    "About", Uri.of_string "/about";
+  ] 
+
+  let top_nav =
+  Cowabloga.Foundation.top_nav 
+    ~title:"Mirage OS"
+    ~title_uri:(Uri.of_string "/") 
+    ~nav_links:(Cowabloga.Foundation.Link.top_nav ~align:`Left nav_links)
+
+  let page ~title ~headers ~content =
+    let content = top_nav @ content in
+    let body = Cowabloga.Foundation.body ~title ~headers ~content in
+    Cowabloga.Foundation.page ~body
+end
+
 module Index = struct
 
   let body read_fn =
@@ -54,18 +70,19 @@ module Index = struct
       read_file read_fn "/intro-r.html"
        >|= (fun l -> col_files l none) in
     return (<:xml<
-    <div class="left_column">
-      $l1$
-    </div>
-    <div class="right_column">
-      $l2$
+    <div class="row">
+      <div class="large-6 columns">$l1$</div>
+      <div class="large-6 columns">$l2$</div>
     </div>
     >>)
 
   let t read_fn =
-    Template.t read_fn "Home" "home" (body read_fn)
-    >|= Html.to_string
+    body read_fn
+    >|= fun content ->
+    Global.page ~title:"Mirage OS" ~headers:[] ~content
+
 end
+
 
 module Resources = struct
   let body read_fn =
@@ -89,6 +106,7 @@ module About = struct
     >|= Html.to_string
 end
 
+(*
 module Blog = struct
   open Blog
 
@@ -138,7 +156,7 @@ module Blog = struct
     | x -> content_type_xhtml, (not_found ent_bodies x)
 
 end
-
+*)
 module Wiki = struct
   open Wiki
 

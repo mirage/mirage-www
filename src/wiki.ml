@@ -327,7 +327,7 @@ let page_css = <:css<
 
 (* Data *)
 
-open People
+open Data.People
 
 let categories = [
   "overview", [
@@ -537,7 +537,7 @@ let atom_entry_of_ent filefn e =
     author       = Some e.author;
     updated      = atom_date e.updated;
     links;
-    rights;
+    rights =       Data.rights;
   } in
   return {
     Atom.entry = meta;
@@ -556,6 +556,6 @@ let atom_feed filefn es =
     Atom.mk_link (Local_uri.mk_uri "/wiki/atom.xml");
     Atom.mk_link ~rel:`alternate ~typ:"text/html" (Local_uri.mk_uri "/wiki/")
   ] in
-  let feed = { Atom.id; title; subtitle; author=None; rights; updated; links} in
+  let feed = { Atom.id; title; subtitle; author=None; rights=Data.rights; updated; links} in
   lwt entries = Lwt_list.map_s (atom_entry_of_ent filefn) es in
   return { Atom.feed=feed; entries }
