@@ -1,4 +1,5 @@
 open Cow
+open Printf
 
 module People = struct
   let anil = {
@@ -138,4 +139,196 @@ module Blog = struct
         permalink  = "mirage-1.0.3-released";
       };
     ]
+end
+
+module Wiki = struct
+
+  open People
+  open Cowabloga.Date
+  open Cowabloga.Wiki
+  let categories = [
+    "overview", [
+      "media"; "usage"; "perf"; "meetings"
+    ];
+    "language", [
+      "syntax"; "dyntype"; "libraries"
+    ];
+    "backend", [
+      "unix"; "xen"; "node";
+    ];
+    "network", [
+      "ethernet"; "dhcp"; "arp"; "tcpip"; "dns"; "http";
+    ];
+    "storage", [
+      "block"; "orm";
+    ];
+    "concurrency", [
+      "threads"; "processes"
+    ];
+  ]
+
+  let weekly ~y ~m ~d =
+    let s = sprintf "%4d-%02d-%02d" y m d in
+    { updated = date (y,m,d,16,0);
+      author  = anil;
+      subject = "Weekly Meeting: " ^ s;
+      body    = File (sprintf "weekly/%s.md" s);
+      permalink = "weekly-"^s;
+      categories = ["overview","meetings"]
+    }
+
+  let entries = [
+    { updated    = date (2013, 10, 15, 16, 0);
+      author     = amir;
+      subject    = "Overview of Mirage";
+      body       = File "overview-of-mirage.md";
+      permalink  = "overview-of-mirage";
+      categories = ["overview","usage"];
+    };
+
+    { updated    = date (2013, 11, 10, 16, 0);
+      author     = ckoppelt;
+      subject    = "Technical Background of Mirage";
+      body       = File "technical_background.md";
+      permalink  = "technical_background";
+      categories = ["overview","technical"];
+    };
+
+    { updated    = date (2013, 12, 09, 16, 0);
+      author     = anil;
+      subject    = "Frequently Asked Questions (FAQ)";
+      body       = File "faq.md";
+      permalink  = "faq";
+      categories = ["overview","technical"];
+    };
+
+    { updated    = date (2013, 07, 25, 17, 56);
+      author     = dave;
+      subject    = "Synthesizing virtual disks for xen";
+      body       = File "xen-synthesize-virtual-disk.md";
+      permalink  = "xen-synthesize-virtual-disk.md";
+      categories = ["overview","usage"; "backend", "xen"];
+    };
+
+    { updated    = date (2013, 04, 23, 9, 0);
+      author     = anil;
+      subject    = "Developer Preview 1.0 Checklist";
+      body       = File "dev-preview-checklist.md";
+      permalink  = "dev-preview-checklist";
+      categories = ["overview","meetings"];
+    };
+
+    weekly ~y:2013 ~m:6 ~d:11;
+    weekly ~y:2013 ~m:6 ~d:4;
+    weekly ~y:2013 ~m:5 ~d:28;
+    weekly ~y:2013 ~m:5 ~d:21;
+    weekly ~y:2013 ~m:5 ~d:14;
+    weekly ~y:2013 ~m:4 ~d:30;
+    weekly ~y:2013 ~m:4 ~d:23;
+    weekly ~y:2013 ~m:4 ~d:16;
+
+    { updated    = date (2013, 08, 15, 16, 0);
+      author     = balraj;
+      subject    = "Getting Started with Lwt threads";
+      body       = File "tutorial-lwt.md";
+      permalink  = "tutorial-lwt";
+      categories = ["concurrency", "threads"]
+    };
+
+    { updated    = date (2011, 08, 12, 15, 0);
+      author     = raphael;
+      subject    = "Portable Regular Expressions";
+      body       = File "ocaml-regexp.md";
+      permalink  = "ocaml-regexp";
+      categories = ["language","libraries"]
+    };
+
+    { updated    = date (2011, 06, 18, 15, 47);
+      author     = anil;
+      subject    = "Delimited Continuations vs Lwt for Threads";
+      body       = File "delimcc-vs-lwt.md";
+      permalink  = "delimcc-vs-lwt";
+      categories = ["concurrency","threads"];
+    };
+
+    { updated    = date (2013, 12, 20, 23, 00);
+      author     = anil; (* ++ mort ++ vb -- need multiple author support *)
+      subject    = "Installation";
+      body       = File "install.md";
+      permalink  = "install";
+      categories = ["overview","usage"];
+    };
+
+    { updated    = date (2013, 07, 17, 15, 00);
+      author     = mort;
+      subject    = "OPAM Libraries";
+      body       = File "opam.md";
+      permalink  = "opam";
+      categories = ["overview","usage"];
+    };
+
+    { updated    = date (2013, 08, 20, 23, 50);
+      author     = anil;
+      subject    = "Building mirage-www";
+      body       = File "mirage-www.md";
+      permalink  = "mirage-www";
+      categories = ["overview","usage"];
+    };
+
+    { updated    = date (2013, 12, 20, 22, 00);
+      author     = mort;
+      subject    = "Hello Mirage World";
+      body       = File "hello-world.md";
+      permalink  = "hello-world";
+      categories = ["overview","usage"];
+    };
+    { updated    = date (2013, 08, 11, 15, 00);
+      author     = anil;
+      subject    = "Running Mirage Xen kernels";
+      body       = File "xen-boot.md";
+      permalink  = "xen-boot";
+      categories = ["overview","usage"; "backend", "xen"];
+    };
+
+    { updated    = date (2011, 04, 12, 10, 0);
+      author     = anil;
+      subject    = "DNS Performance Tests";
+      body       = Html Perf.dns;
+      permalink  = "performance";
+      categories = ["overview","perf"];
+    };
+
+    { updated    = date (2011, 04, 12, 9, 0);
+      author     = anil;
+      subject    = "Publications";
+      body       = Html Paper.html;
+      permalink  = "papers";
+      categories = ["overview","media"];
+    };
+
+    { updated    = date (2013, 08, 14, 10, 0);
+      author     = mort;
+      subject    = "Presentations";
+      body       = File "talks.md";
+      permalink  = "talks";
+      categories = ["overview","media"];
+    };
+
+    { updated    = date (2010, 12, 13, 15, 0);
+      author     = thomas;
+      subject    = "COW: OCaml on the Web";
+      body       = File "cow.md";
+      permalink  = "cow";
+      categories = ["language","syntax"];
+    };
+
+    {
+      updated    = date (2010, 11, 4, 16, 30);
+      author     = thomas;
+      subject    = "Introduction to HTCaML";
+      categories = ["language","syntax"];
+      body       = File "htcaml.md";
+      permalink  = "htcaml";
+    };
+  ]
 end
