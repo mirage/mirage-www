@@ -24,8 +24,6 @@ let two_cols l r = <:html<
   </div>
 >>
 
-let none : Html.t = []
-
 module Global = struct
    let nav_links = [
     "Blog", Uri.of_string "/blog";
@@ -72,8 +70,9 @@ module Resources = struct
     >|= (fun l -> two_cols l Paper.html)
 
   let t read_fn =
-    Template.t read_fn "Resources" "resources" (body read_fn)
-    >|= Html.to_string
+    body read_fn
+    >|= fun content ->
+    Global.page ~title:"Resources" ~headers:[] ~content
 end
 
 module About = struct
@@ -84,8 +83,9 @@ module About = struct
     return (two_cols l r)
 
   let t read_fn =
-    Template.t read_fn "About" "about" (body read_fn)
-    >|= Html.to_string
+    body read_fn
+    >|= fun content ->
+    Global.page ~title:"About" ~headers:[] ~content
 end
 
 module Wiki = struct
