@@ -1,3 +1,1 @@
-Mirage uses the [OCaml](http://ocaml.org/) language, with libraries that provide networking, storage and concurrency support that work under Unix during development, but become operating system drivers when being compiled for production deployment. The framework is fully event-driven, with no support for preemptive threading.
-
 Mirage 1.0 is [being released through December](http://openmirage.org/blog/announcing-mirage10), and the infrastructure you see here is [self-hosted](https://github.com/mirage/mirage-www). Check out the [documentation](/wiki), compile your [hello world microkernel](/wiki/hello-world), get started with the [public cloud](/wiki/xen-boot), or watch the [talk](/wiki/talks).
