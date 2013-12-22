@@ -30,7 +30,7 @@ We can now use the `bind` function to do something after the sleep is complete:
 
 `x` has the type `unit Lwt.t`, and the closure passed to `bind` will eventually be called with `unit` when the sleep finishes. Note that we also need a function to actually begin evaluating an Lwt thread, which is the `run` function.
 
-!!Concerns
+##Concerns
 
 Mirage currently uses Lwt extensively, and we have been very happy with using it to build a network stack. However, I was surprised to hear a lot of debate at the [2011 OCaml Users Group](http://anil.recoil.org/2011/04/15/ocaml-users-group.html) meeting that Lwt is not to everyone's tastes. There are a few issues:
 
@@ -47,7 +47,7 @@ Lwt addresses the first problem via a comprehensive [syntax extension](http://oc
 
 The `lwt` keyword indicates the result of the expression should be passed through `bind`, and this makes it possible to write code that looks more OCaml-like. There are also other keywords like `for_lwt` and `match_lwt` that similarly help with common control flow constructs.
 
-!!Fibers
+##Fibers
 
 After the meeting, I did get thinking about using alternatives to Lwt in Mirage. One exciting option is the [delimcc](http://okmij.org/ftp/continuations/implementations.html) library which implements [delimited continuations](http://en.wikipedia.org/wiki/Delimited_continuation) for OCaml.  These can be used to implement restartable exceptions: a program can raise an exception which can be invoked to resume the execution as if the exception had never happened. 
 Delimcc can be combined with Lwt very elegantly, and Jake Donham did just this with the [Lwt_fiber](http://ambassadortothecomputers.blogspot.com/2010/08/mixing-monadic-and-direct-style-code.html) library. His post also has a detailed explanation of how `delimcc` works.
@@ -61,7 +61,7 @@ The interface for fibers is also simple:
 
 A fiber can be launched with `start`, and during its execution can block on another thread with `await`.  When it does block, a restartable exception saves the program stack back until the point that `start` was called, and it will be resumed when the thread it blocked on completes.
 
-!!Benchmarks
+##Benchmarks
 
 I put together a few microbenchmarks to try out the performance of Lwt threads versus fibers. The fiber test looks like this:
 
@@ -157,7 +157,7 @@ We then run the experiment using the slow `Lwt_unix.sleep 0.0` function, and get
 
 The above graph shows the recursive Lwt_fiber getting slower as the recursion depth increases, with normal Lwt staying linear.  The graph also overlays the non-recursing versions as a guideline (`*-basic-slow`).
 
-!!Thoughts
+##Thoughts
 
 This first benchmark was a little surprising for me:
 
@@ -168,7 +168,7 @@ This first benchmark was a little surprising for me:
 
 I need to stress that these benchmarks are very micro, and do not take into account other things like memory allocation. The standalone code for the tests is [online at Github](http://github.com/avsm/delimcc-vs-lwt), and I would be delighted to hear any feedback.
 
-!!Retesting recursion [18th Jun 2011]
+##Retesting recursion [18th Jun 2011]
 
 Jake Donham comments:
 > I speculated in my post that fibers might be faster if the copy/restore were amortized over a large stack. I wonder if you would repeat the experiment with versions where you call fn only in the base case of sum, instead of at every call. I think you're getting N^2 behavior here because you're copying and restoring the stack on each iteration.

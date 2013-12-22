@@ -37,31 +37,29 @@ module Main (C:CONSOLE) (FS:KV_RO) (TMPL:KV_RO) (Server:Cohttp_lwt.Server) = str
       Server.respond_string ~headers ~status ~body ()
     in
 
+    let blog_feed =
+      Site_config.blog (fun name -> read_tmpl name >|= Cow.Markdown.of_string) in
+
     let dyn_xhtml = dyn ~headers:["content-type","text/html"] in
 
-    let blog_entries = Pages.Blog.init read_tmpl in
-    let wiki_entries = Pages.Wiki.init read_tmpl in
-    let wiki_lt1     = Pages.Wiki.init_lt1 read_tmpl in
-    let wiki_lt2     = Pages.Wiki.init_lt2 read_tmpl in
+    lwt blog_dispatch = Blog.dispatch blog_feed Data.Blog.entries in
+    let wiki_entries  = Pages.Wiki.init read_tmpl in
 
     (* dispatch non-file URLs *)
     let dispatch req =
       function
       | [] | [""] | [""; "index.html"] ->
         dyn_xhtml req (Pages.Index.t read_tmpl)
-      | [""; "styles";"index.css"] ->
-        dyn ~headers:Style.content_type_css req Style.t
       | [""; "resources"] ->
         dyn_xhtml req (Pages.Resources.t read_tmpl)
       | [""; "about"] ->
         dyn_xhtml req (Pages.About.t read_tmpl)
       | "" :: "blog" :: tl ->
-        let headers, t = Pages.Blog.t blog_entries read_tmpl tl in
+        let headers, t = blog_dispatch tl in
         dyn ~headers req t
-      | "" :: "wiki" :: "tag" :: tl ->
-        dyn_xhtml req (Pages.Wiki.tag wiki_entries wiki_lt1 wiki_lt2 read_tmpl tl)
+      | "" :: "docs" :: page
       | "" :: "wiki" :: page ->
-        let headers, t = Pages.Wiki.t wiki_entries wiki_lt1 wiki_lt2 read_tmpl page in
+        let headers, t = Pages.Wiki.t wiki_entries read_tmpl page in
         dyn ~headers req t
       | x -> Server.respond_not_found ~uri:(Server.Request.uri req) ()
     in
