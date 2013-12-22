@@ -96,29 +96,28 @@ module Wiki = struct
   let read_file read_fn f = read_file read_fn ("/wiki/" ^ f)
 
   (* Make a full Html.t including RSS link and headers from an wiki page *)
-  let make ?title ?disqus content read_fn =
+  let make ?title ?disqus content sidebar read_fn =
     let url = sprintf "/wiki/atom.xml" in
     let headers = <:xml<
      <link rel="alternate" type="application/atom+xml" href=$str:url$ />
     >> in
     let title = "wiki" ^ match title with
       |None -> "" |Some x -> " :: " ^ x in
-    lwt content = html_of_page ?disqus ~content in
+    lwt content = html_of_page ?disqus ~content ~sidebar in
     return (Global.page ~title:"Documentation" ~headers ~content)
 
   (* Main wiki page Html.t fragment with the index page *)
   let main_page read_fn =
     lwt idx = html_of_index (read_file read_fn) in
-    let idx2 = html_of_recent_updates Wiki.entries in
-    let left_column = idx @ idx2 in
-    make ~title:"index" (return left_column) read_fn
+    let sidebar = html_of_recent_updates Wiki.entries in
+    make ~title:"index"  (return idx) sidebar read_fn
 
   let init read_fn =
     let ent_bodies = Hashtbl.create 1 in
     List.iter (fun entry ->
       let title = entry.subject in
       let left = html_of_entry (read_file read_fn) entry in
-      let body = make ~title ~disqus:entry.permalink left read_fn in
+      let body = make ~title ~disqus:entry.permalink left [] read_fn in
       Hashtbl.add ent_bodies entry.permalink body
     ) entries;
     ent_bodies
@@ -134,7 +133,7 @@ module Wiki = struct
         (String.concat " "
            (Hashtbl.fold (fun k v a -> k :: a)
               ent_bodies [])) in
-    make ~title:"Not Found" (return <:xml<$str:left$>>) read_fn
+    make ~title:"Not Found" (return <:xml<$str:left$>>) [] read_fn
 
   let content_type_xhtml = ["content-type", "text/html"]
   let t ents read_fn = function
