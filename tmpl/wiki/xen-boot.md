@@ -31,7 +31,7 @@ Amazon has recently added support for booting [user-specified kernels](http://ec
 
 So to boot a Mirage kernel on EC2, it must first be wrapped in a block device. After that, the image needs to be bundled into an AMI, and then registered as a bootable image using the EC2 tools.
 
-!!!Command Line Tools
+###Command Line Tools
 
 First download the [API tools](http://aws.amazon.com/developertools/351) and [AMI tools](http://s3.amazonaws.com/ec2-downloads/ec2-ami-tools.zip) from Amazon.
 Edit your `.profile` to add the following variables:

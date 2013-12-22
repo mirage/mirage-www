@@ -1,6 +1,6 @@
 !Developer Preview Checklist
 
-!!Scenarios
+##Scenarios
 
 Three scenarios need to work:
 
@@ -10,7 +10,7 @@ Three scenarios need to work:
 
 * Proof concept of distributed system (ideally can be demo'd for OSCON). Current thinking is something like OCamlot or Signpost. This would be a nice "Hello world!" demo as it requires actors and a persistent job queue. For example, i.e spawning new VMs in response to load, as evidenced by self-scaling web-server.
 
-!!Repositories
+##Repositories
 
 All of these repositories need to be code-reviewed and run over with ocamldoc.  Purge the TODO hacks when you go over them, or explicitly pull them out into a top-level TODO file.
 We need to close out this thread on a standard [repository format](https://lists.cam.ac.uk/pipermail/cl-mirage/2013-March/msg00099.html) for all these things.
@@ -88,7 +88,7 @@ Tutorials and examples:
 * *mirage-tutorial*: out-of-date
 * *mirage-www*: extract wiki/blog into library, make it not suck
 
-!!Misc
+##Misc
 
 * Integrate `ocaml-tuntap` into `mirage-platform` to remove tun hacks [vincent]
 * `mirari run` as a stateful process working with libvirt and EC2.

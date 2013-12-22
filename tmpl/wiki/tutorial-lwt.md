@@ -1,6 +1,6 @@
 [Lwt](http://www.ocsigen.org/lwt) is a lightweight cooperative threading library for OCaml. A good way to understand Lwt and its use in Mirage is to write some simple code. This document introduces the basic concepts and suggests programs to write. Note that Lwt has a number of syntax extensions that are widely used in Mirage. These are introduced as you go along through the tutorial. Code for all examples is to be found in the `mirage-skeleton/lwt` [repository](https://github.com/mirage/mirage-skeleton/tree/master/lwt).
 
-!!Tutorial
+##Tutorial
 
 The full Lwt manual is available [elsewhere](http://ocsigen.org/lwt/manual/), but the minimal stuff needed to get started is here. The first useful function is the `return` statement, which constructs a constant thread:
 
@@ -32,9 +32,9 @@ There are two important operations to compose threads: `join` and `choose`.
 
 The infix operators `<&>` and `<?>` are defined in the Lwt module, where `a <&> b` is equivalent to `join [a; b]`, and `a <?> b` is equivalent to `choose [a; b]`.
 
-!!Sleep and join
+##Sleep and join
 
-!!!Challenge
+###Challenge
 
 Now write a program that spins off two threads, each of which sleep for some amount of time, say 1 and 2 seconds and then one prints "Heads", the other "Tails". After both have finished, it prints "Finished" and exits. To sleep for some time use `OS.Time.sleep` and to print to console use `OS.Console.log`. Note that `OS` is a Mirage-specific module, if you are using Lwt in another context, use `Lwt_unix.sleep` and `Lwt_io.write`.
 
@@ -67,7 +67,7 @@ Assuming you are building for POSIX using native kernel sockets, compile the app
 
 If you are building for a different Mirage platform, change the `--unix --socket` switches appropriately (presently either `--xen` or `--unix --direct`).
 
-!!!Solution
+###Solution
 
 ```
   open Lwt (* provides bind and join *)
@@ -88,7 +88,7 @@ If you are building for a different Mirage platform, change the `--unix --socket
 
 This is built via `lwt/src/heads1.conf` in the `mirage-skeleton` code repository.
 
-!!!Syntax Extensions
+###Syntax Extensions
 
 Using Lwt does sometimes require significantly restructuring code, and in particular doesn't work with many of the more imperative OCaml control structures such as `for` and `while`. Luckily, Lwt includes a comprehensive [pa_lwt](http://ocsigen.org/lwt/api/Pa_lwt) syntax extension that makes writing threaded code as convenient as vanilla OCaml. Mirage includes this extension by default, so you can use it anywhere you want.
 
@@ -110,7 +110,7 @@ This is a good place to introduce some of these extensions. When opening the Lwt
 This is built via `lwt/src/heads2.conf` in the repository.
 
 
-!!!Anonymous Bind
+###Anonymous Bind
 
 If you are chaining sequences of blocking I/O, a common pattern is to write:
 
@@ -128,7 +128,7 @@ You can replace these anonymous binds with the `>>` operator instead:
   write stdio "Done"
 ```
 
-!!!Lwt Bindings
+###Lwt Bindings
 
 The binding operation reverses the normal `let` binding by specifying the name of the bound variable in the second argument. Consider the thread:
 
@@ -168,7 +168,7 @@ This is built via `lwt/src/heads3.conf` in the Mirage code repository.
 Here we define two threads, `heads` and `tails`, and block until they are both complete (via the `lwt ()` and the `<&>` join operator). If you want to print "Finished" before the previous threads are complete, just put the print statement (`Console.log`) before the join statement (`... <&> ...`).
 
 
-!!Cancelling
+##Cancelling
 
 In order to cancel a thread, the function `cancel` (provided by the module Lwt) is needed. It has type `'a t -> unit` and does exactly what it says (except on certain complicated cases that are not in the scope of this tutorial). A simple timeout function that cancels a thread after a given number of seconds can be written easily:
 
@@ -179,13 +179,13 @@ In order to cancel a thread, the function `cancel` (provided by the module Lwt) 
     Time.sleep f >>= fun () -> cancel t
 ```
 
-!!!Challenge
+###Challenge
 
 This `timeout` function does not allow one to use the result returned by the thread `t`.
 
 Modify the `timeout` function so that it returns either `None` if `t` has not yet returned after `f` seconds or `Some v` if `t` returns `v` within `f` seconds. In order to achieve this behaviour it is possible to use the function `state` that, given a thread, returns the state it is in, either `Sleep`, `Return` or `Fail`.
 
-!!!Solution
+###Solution
 
 ```
   let timeout f t =
@@ -208,14 +208,14 @@ This is a good place to introduce a third operation to compose threads: `pick`.
 `pick` behaves exactly like `choose` except that it cancels all other sleeping threads when one terminates.
 
 
-!!!Challenge
+###Challenge
 
 In a typical use of a timeout, if `t` returns before the timeout has expired, one would want the timeout to be cancelled right away. The next challenge is to modify the timeout function to return `Some v` right after `t` returns. Of course if the timeout does expire then it should cancel `t` and return `None`.
 
 In order to test your solution, you can compile it to a mirage executable and run it using the skeleton provided for the first challenge.
 
 
-!!!Solution
+###Solution
 
 ```
   let timeout f t =
@@ -229,9 +229,9 @@ In order to test your solution, you can compile it to a mirage executable and ru
 This is built via `lwt/src/timeout2.conf` in the repository.
 
 
-!!A Pipe example
+##A Pipe example
 
-!!!Challenge
+###Challenge
 
 Write an echo server, reading from a dummy input generator and, for each line it reads, writing it to the console. The server should never stop listening to the dummy input generator. Here is a basic dummy input generator:
 
@@ -241,7 +241,7 @@ Write an echo server, reading from a dummy input generator and, for each line it
     Lwt.return (String.make (Random.int 20) 'a')
 ```
 
-!!!Solution
+###Solution
 
 ```
   let rec echo_server () =
@@ -252,7 +252,7 @@ Write an echo server, reading from a dummy input generator and, for each line it
 
 This is built via `lwt/src/echoserver1.conf` in the repository.
 
-!!Using Mailboxes
+##Using Mailboxes
 
 Among the different modules the Lwt library provides is `Lwt_mvar`. This module eases inter-thread communication. Any thread can place a value in a mailbox using the `put` function; dually, the `take` function removes a value from a mailbox and returns it. `take`'s type, `'a Lwt_mvar.t -> 'a Lwt.t`, indicates that a call to the function may block (and let other threads run). The function actually returns only when a value is available in the mailbox.
 
@@ -272,7 +272,7 @@ Here are the needed functions from the `Lwt_mvar` module:
   val take : 'a t -> 'a Lwt.t 
 ```
 
-!!!Challenge
+###Challenge
 
 Write a small set of functions to help do pipeline parallelism. The interface to be implemented is the following (names should give away the appropriate semantic):
 
@@ -324,11 +324,11 @@ let filter f m_a =
 
 Note that in each of the above a recursive Lwt thread is created and will run forever. However, if the pipeline ever needs to be torn down then this recursive thread should be cancelled. This can be done by modifying the above functions to also return the `'t Lwt.t` returned by `aux` in each case, which can then be cancelled when required.
 
-!!!Challenge
+###Challenge
 
 Using the pipelining helpers, change the echo server into a string processing server. The new version should output each line of text uppercased (`String.uppercase` can help) after waiting for `l` seconds where `l` is the length of the string.
 
-!!!Solution
+###Solution
 
 ```
   let read_line () =
@@ -365,14 +365,14 @@ Using the pipelining helpers, change the echo server into a string processing se
     (read ()) <&> (write ())
 }
 
-!!!Challenge
+###Challenge
 
 To exercise all the pipelining helpers, set up an integer processing server with the following stages:
 
 Every second write a tuple containing a pair of small random integers `(Random.int 1000, Random.int 1000)` into a mailbox. Process it through a stage that produces a tuple containing the sum and the product of the input integers, `split` the tuple into two mvars and for each of the mvars insert a stage that simply prints the value and then puts it to an output mvar. Next insert a filter stage that only lets odd numbers through. Finally add a stage that prints the word "Odd" if anything reaches it.
 
 
-!!!Solution
+###Solution
 
 ```
   let add_mult (a, b) =
@@ -407,7 +407,7 @@ Every second write a tuple containing a pair of small random integers `(Random.i
 This is in `regress/lwt/int_server.ml` in the Mirage code repository.
 
 
-!!Stream Processing
+##Stream Processing
 
 The pipelining challenges of the previous section uses mailboxes provided by the `Lwt_mvar` module. One of the feature of such values is that no more than one message can be deposited in the mailbox. This is made obvious by the return type of `Lwt_mvar.put` being in `Lwt.t`. This provides a natural throttle mechanism to our pipeline. However, in specific cases, such a throttle is superfluous.
 
@@ -427,7 +427,7 @@ There are several ways to read from a stream. The most direct one being
 
 `get s` returns either `Some x` when `x` is available (which may be right away) or `None` when stream is closed. Order of elements in streams is preserved, meaning that elements are pulled in the order they are pushed.
 
-!!!Challenge
+###Challenge
 
 Write the same pipelining library as in the mailbox challenge, replacing instances of `Lwt_mvar.t` by `Lwt_stream.t`:
 
@@ -437,7 +437,7 @@ Write the same pipelining library as in the mailbox challenge, replacing instanc
   val filter: ('a -> bool Lwt.t) -> 'a Lwt_stream.t -> 'a Lwt_stream.t
 ```
 
-!!!Solution
+###Solution
 
 ```
   let map f ins =
@@ -476,7 +476,7 @@ Notice, in the provided solution, the usage of `f` in `map`: only when `f` retur
 The `Lwt_stream` library actually provides a number of processing functions. Some functions are suffixed with `_s` meaning that they operate sequentially over the elements, other with `_p` meaning that they operate in parallel over the elements. The module `Lwt_list` uses the same suffixing policy.
 
 
-!!Mutexes and cooperation
+##Mutexes and cooperation
 
 With Lwt, it is often possible to avoid mutexes altogether! The web server from the [Ocsigen](http://ocsigen.org) project uses only two, and the Mirage source code none. In usual concurrent systems, mutexes are used to prevent two (or more) threads executing concurrently on a given piece of data. This can happen when a thread is preemptively interrupted and another one starts running. In Lwt, a thread executes serially until it explicitly yields (most commonly via `bind`); for this reason, Lwt threads are said to be [cooperative](http://en.wikipedia.org/wiki/Cooperative_multitasking#Cooperative_multitasking.2Ftime-sharing).
 
@@ -486,7 +486,7 @@ The obvious danger associated with cooperative threading is having threads not c
 
 If locking a data structure is still needed between yield points, the `Lwt_mutex` module provides the necessary functions. To obtain more information on thread switching (and how to prevent it) read the Lwt mailing list archive: [Lwt_stream, thread switch within push function](https://sympa.mancoosi.univ-paris-diderot.fr/wws/arc/ocsigen/2011-09/msg00029.html) which continues [here](https://sympa.mancoosi.univ-paris-diderot.fr/wws/arc/ocsigen/2011-10/msg00001.html).
 
-!!Exceptions and Try/Catch
+##Exceptions and Try/Catch
 
 One very, very important thing to remember with cooperative threading is that raising exceptions is not safe to do between yield points. In general, you should never call `raise` directly. Lwt provides an alternative syntax:
 
@@ -502,7 +502,7 @@ One very, very important thing to remember with cooperative threading is that ra
 
 This looks similar to normal OCaml code, except that the caught exception has an `Lwt.t` return type appended to it.
 
-!!Control Flow
+##Control Flow
 
 Lwt also provides equivalents of `for` and `while` that block on each iteration, saving you the trouble of rewriting the code to use `bind` recursively. Just use `for_lwt` and `while_lwt` instead; for example:
 
@@ -527,7 +527,7 @@ There is also a `match_lwt` which will bind the result of a thread and immediate
   |false -> ...
 ```
 
-!!How does it work
+##How does it work
 
 Understanding the basic principles behind Lwt can be helpful.
 

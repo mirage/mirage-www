@@ -17,7 +17,7 @@ Most of the work is done at pre-processing time, so there is no runtime costs an
 
 <img src="/graphics/cow-schema.png" alt="schema" width="50%"/>
 
-!!!!Quotations and anti-quotations
+####Quotations and anti-quotations
 
 Camlp4 quotations are an easy way to manipulate the OCaml syntax tree and embed custom syntax.
 Quotations are named, and are enclosed between `<:name< ... >>`.
@@ -104,7 +104,7 @@ let js2 : Javascript.t =
 
 The `<:css< >>`, `<:xml< >>` and `<:html< >>` quotations are present in Mirage today, and the `<:js< >>` and `<:camlscript< >>` quotations will be integrated soon.  `js` uses Jake Donham's [ocamljs](https://github.com/jaked/ocamljs) and an early prototype of `camlscript` is [available](https://github.com/samoht/camlscript) on Github.
 
-!!!Type-driven Code Generation
+###Type-driven Code Generation
 
 In ML, we rely on the type-inferrer/checker as much as possible. Types are usually specified first, followed by the functions which manipulate values of those types.
 The static typing in OCaml means that type information is discarded at run-time, making it cheap to encode as much of the problem in the types as possible. 
@@ -190,7 +190,7 @@ auto-generating this. However, it may be possible to generate a CSS validator to
 check that the CSS fragment generated for a type does not define classes which are not defined
 in the type.
 
-!!!!More code generation
+####More code generation
 
 The next step is to use the Twitter API to actually read tweets? The API uses JSON, and most of the
 existing implementations use a JSON un-marshaler to association lists, and then build an ML object out of it
@@ -221,7 +221,7 @@ It is possible to combine multiple code generators by separating the annotations
 `type t = [..] with html,json`. It is thus possible to use Cow with the [ORM](https://www.github.com/mirage/orm)
 library to persist typed values with SQLite (this is not integrated into Mirage just yet, but will be soon).
 
-!!!!Mixing generated and hand-written code
+####Mixing generated and hand-written code
 
 Manual and automatic code generation can also be easily mixed. The code which is auto-generated simply calls
 into other functions with predictable names (e.g. `html_of_foo`). Since OCaml is lexically scoped, the user simply
