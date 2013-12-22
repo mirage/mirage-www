@@ -30,7 +30,6 @@ module Global = struct
     "Docs", Uri.of_string "/docs";
     "API", Uri.of_string "/api";
     "Community", Uri.of_string "/community";
-    "About", Uri.of_string "/about";
   ]
 
   let top_nav =
@@ -104,13 +103,23 @@ module About = struct
 
   let body read_fn =
     lwt l = read_file read_fn "/about.md" in
-    lwt r = read_file read_fn "/about-r.md" in
-    return (two_cols l r)
+    lwt r = read_file read_fn "/about-community.md" in
+    lwt b = read_file read_fn "/about-b.md" in
+    return <:html<
+    <div class="row">
+      <div class="small-12 columns"><h2>The Community</h2></div>
+      <div class="small-12 medium-6 columns">$l$</div>
+      <div class="small-12 medium-6 columns">$r$</div>
+    </div>
+    <div class="row">
+      <div class="small-12 columns">$b$</div>
+    </div>
+    >>
 
   let t read_fn =
     body read_fn
     >|= fun content ->
-    Global.page ~title:"About" ~headers:[] ~content
+    Global.page ~title:"Community" ~headers:[] ~content
 end
 
 module Wiki = struct
