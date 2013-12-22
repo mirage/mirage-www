@@ -103,8 +103,18 @@ module About = struct
 
   let body read_fn =
     lwt l = read_file read_fn "/about.md" in
-    lwt r = read_file read_fn "/about-r.md" in
-    return (two_cols l r)
+    lwt r = read_file read_fn "/about-community.md" in
+    lwt b = read_file read_fn "/about-b.md" in
+    return <:html<
+    <div class="row">
+      <div class="small-12 columns"><h2>The Community</h2></div>
+      <div class="small-12 medium-6 columns">$l$</div>
+      <div class="small-12 medium-6 columns">$r$</div>
+    </div>
+    <div class="row">
+      <div class="small-12 columns">$b$</div>
+    </div>
+    >>
 
   let t read_fn =
     body read_fn

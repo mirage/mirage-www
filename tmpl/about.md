@@ -1,5 +1,3 @@
-## The Crew
-
 ### Core Team
 
 One of us will review every patch that goes into the main distribution.
