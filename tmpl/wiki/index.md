@@ -1,22 +1,36 @@
 Welcome to the Mirage wiki. Feel free to subscribe to the [Atom](/wiki/atom.xml) feed to keep up-to-date with our progress.
 Mirage is still in pre-alpha stage, but the infrastructure you see here is self-hosting. The authors hang on out #mirage on FreeNode IRC, so drop by with any questions you might have.
 
-*Overview*
-* [Overview of Mirage](/wiki/overview-of-mirage)
-* [Technical Background](/wiki/technical_background)
-* [Frequently Asked Questions](/wiki/faq)
+<div class="row">
 
-*Usage*
-* [Installation](/wiki/install)
-* [Hello Mirage World](/wiki/hello-world)
-* [Building the Mirage website](/wiki/mirage-www)
-* [Maintaining OPAM](/wiki/opam)
+<div class="small-12 medium-5 large-5 column panel callout">
+<h5>Background</h5>
+<ul>
+<li><a href="/wiki/overview-of-mirage">Overview of Mirage</a></li>
+<li><a href="/wiki/technical-background">Technical Background</a></li>
+<li><a href="/wiki/faq">Frequently Asked Questions</a></li>
+<li><a href="/wiki/papers">Papers and Articles</a></li>
+<li><a href="/wiki/talks">Videos and Presentations</a></li>
+</ul>
+</div>
 
-*Media*
-* [Presentations](/wiki/talks)
-* [Publications](/wiki/papers)
+<div class="small-12 medium-5 large-5 column panel callout">
+<h5>Getting Started</h5>
+<ul>
+<li><a href="/wiki/install">Installation</a></li>
+<li><a href="/wiki/hello-world">Hello Mirage World</a></li>
+<li><a href="/wiki/mirage-www">Building the website</a></li>
+<li><a href="/wiki/opam">Keeping up-to-date</a></li>
+<li><a href="/wiki/deployment">Deploying to the cloud</a></li>
+</ul>
+</div>
 
-*Technical*
+</div>
+
+### Media
+
+#### Technical
+
 * Threads: [introduction to Lwt](/wiki/tutorial-lwt)
 * Threads: [delimited continuations vs explicit monadic threads](/wiki/delimcc-vs-lwt)
 * [DNS Performance Tests](/wiki/performance)
@@ -25,7 +39,8 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 * [Caml on the Web (COW)](/wiki/cow)
 * [Synthesizing virtual disks for xen](/wiki/xen-synthesize-virtual-disk.md)
 
-*Historical Release Notes*
+#### Historical Release Notes*
+
 * [Checklist for 1.0 Dev Preview](dev-preview-checklist)
 * Weekly call [2013-06-11](/wiki/weekly-2013-06-11) on the end of the start is finally in sight.
 * Weekly call [2013-06-04](/wiki/weekly-2013-06-04) on Amazon EC2, shared ring performance and outreach.
