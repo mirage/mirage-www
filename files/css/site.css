@@ -1,14 +1,8 @@
-h1 {
-  font-size: 2.2rem;
-}
+h1 { font-size: 2.2rem; }
 
-h1,h2,h3,h4,h5,h6 {
-  font-family: "Arial";
-}
+h1,h2,h3,h4,h5,h6 { font-family: "Arial"; }
 
-a {
-  color: #333399;
-}
+a { color: #333399; }
 
 article a:hover {
   color: #333333;
@@ -30,6 +24,14 @@ code {
 .side-nav li a { 
   color: #333399;
 }
+.side-nav li {
+  font-size: 90%;
+  line-height: 1.2;
+}
+.side-nav .lastmod {
+  font-size: 80%;
+  font-style: italic;
+}
 
 .date {
   border: 1px solid #999;
@@ -45,11 +47,9 @@ code {
   font-size: 0.9em;
   padding-top: 0.3em;
 }
-
 .date .day {
   font-size: 1.3em;
 }
-
 .date .year {
   background-color: #2358B8;
   color: #FFF;
@@ -60,8 +60,6 @@ code {
 .date .hour {
   display: none;
 }
-
 .date .min {
   display: none;
 }
-
