@@ -93,22 +93,18 @@ module Wiki = struct
   open Data.Wiki
   open Wiki
 
-  (* the right column of wiki page is always the same *)
-  let right_column = short_html_of_categories entries categories
-
   let read_file read_fn f = read_file read_fn ("/wiki/" ^ f)
 
   (* Make a full Html.t including RSS link and headers from an wiki page *)
-  let make ?title ?disqus left_column read_fn =
+  let make ?title ?disqus content read_fn =
     let url = sprintf "/wiki/atom.xml" in
-    let extra_header = <:xml<
+    let headers = <:xml<
      <link rel="alternate" type="application/atom+xml" href=$str:url$ />
     >> in
     let title = "wiki" ^ match title with
       |None -> "" |Some x -> " :: " ^ x in
-    let body = html_of_page ?disqus ~left_column ~right_column in
-    Template.t ~extra_header read_fn "Wiki" title body
-    >|= Html.to_string
+    lwt content = html_of_page ?disqus ~content in
+    return (Global.page ~title:"Documentation" ~headers ~content)
 
   (* Main wiki page Html.t fragment with the index page *)
   let main_page read_fn =
@@ -127,26 +123,6 @@ module Wiki = struct
     ) entries;
     ent_bodies
 
-  let init_lt1 read_fn =
-    let lt1_bodies = Hashtbl.create 1 in
-    List.iter (fun (lt1,_) ->
-       let title = lt1 in
-       let left  = html_of_category Wiki.entries (lt1, None) in
-       Hashtbl.add lt1_bodies lt1 (make ~title (return left) read_fn);
-    ) categories;
-    lt1_bodies
-
-  let init_lt2 read_fn =
-    let lt2_bodies = Hashtbl.create 1 in
-    List.iter (fun (lt1,lt2s) ->
-      List.iter (fun lt2 ->
-         let title = lt1 ^ " :: " ^ lt2 in
-         let left = html_of_category Wiki.entries (lt1, Some lt2) in
-         Hashtbl.add lt2_bodies lt2 (make ~title (return left) read_fn);
-      ) lt2s
-    ) categories;
-    lt2_bodies
-
   let atom_feed read_fn =
     lwt f = atom_feed (read_file read_fn) entries in
     return (Xml.to_string (Atom.xml_of_feed ~self:("/wiki/atom.xml") f))
@@ -161,15 +137,10 @@ module Wiki = struct
     make ~title:"Not Found" (return <:xml<$str:left$>>) read_fn
 
   let content_type_xhtml = ["content-type", "text/html"]
-  let t ents lt1 lt2 read_fn = function
+  let t ents read_fn = function
     | []                          -> content_type_xhtml, (main_page read_fn)
     | ["atom.xml"]                -> ["content-type","application/atom+xml; charset=UTF-8"], (atom_feed read_fn)
     | [x] when permalink_exists x -> content_type_xhtml, (Hashtbl.find ents x)
     | x                           -> content_type_xhtml, (not_found x ents read_fn)
 
-  let tag ents lt1_bodies lt2_bodies read_fn = function
-    | []        -> main_page read_fn
-    | [lt1]     -> (try Hashtbl.find lt1_bodies lt1 with Not_found -> not_found [lt1] ents read_fn)
-    | [lt1;lt2] -> (try Hashtbl.find lt2_bodies lt2 with Not_found -> not_found [lt2] ents read_fn)
-    | x         -> not_found x ents read_fn
 end

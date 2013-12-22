@@ -146,26 +146,6 @@ module Wiki = struct
   open People
   open Cowabloga.Date
   open Cowabloga.Wiki
-  let categories = [
-    "overview", [
-      "media"; "usage"; "perf"; "meetings"
-    ];
-    "language", [
-      "syntax"; "dyntype"; "libraries"
-    ];
-    "backend", [
-      "unix"; "xen"; "node";
-    ];
-    "network", [
-      "ethernet"; "dhcp"; "arp"; "tcpip"; "dns"; "http";
-    ];
-    "storage", [
-      "block"; "orm";
-    ];
-    "concurrency", [
-      "threads"; "processes"
-    ];
-  ]
 
   let weekly ~y ~m ~d =
     let s = sprintf "%4d-%02d-%02d" y m d in
@@ -174,7 +154,6 @@ module Wiki = struct
       subject = "Weekly Meeting: " ^ s;
       body    = File (sprintf "weekly/%s.md" s);
       permalink = "weekly-"^s;
-      categories = ["overview","meetings"]
     }
 
   let entries = [
@@ -183,7 +162,6 @@ module Wiki = struct
       subject    = "Overview of Mirage";
       body       = File "overview-of-mirage.md";
       permalink  = "overview-of-mirage";
-      categories = ["overview","usage"];
     };
 
     { updated    = date (2013, 11, 10, 16, 0);
@@ -191,7 +169,6 @@ module Wiki = struct
       subject    = "Technical Background of Mirage";
       body       = File "technical_background.md";
       permalink  = "technical_background";
-      categories = ["overview","technical"];
     };
 
     { updated    = date (2013, 12, 09, 16, 0);
@@ -199,7 +176,6 @@ module Wiki = struct
       subject    = "Frequently Asked Questions (FAQ)";
       body       = File "faq.md";
       permalink  = "faq";
-      categories = ["overview","technical"];
     };
 
     { updated    = date (2013, 07, 25, 17, 56);
@@ -207,7 +183,6 @@ module Wiki = struct
       subject    = "Synthesizing virtual disks for xen";
       body       = File "xen-synthesize-virtual-disk.md";
       permalink  = "xen-synthesize-virtual-disk.md";
-      categories = ["overview","usage"; "backend", "xen"];
     };
 
     { updated    = date (2013, 04, 23, 9, 0);
@@ -215,7 +190,6 @@ module Wiki = struct
       subject    = "Developer Preview 1.0 Checklist";
       body       = File "dev-preview-checklist.md";
       permalink  = "dev-preview-checklist";
-      categories = ["overview","meetings"];
     };
 
     weekly ~y:2013 ~m:6 ~d:11;
@@ -232,7 +206,6 @@ module Wiki = struct
       subject    = "Getting Started with Lwt threads";
       body       = File "tutorial-lwt.md";
       permalink  = "tutorial-lwt";
-      categories = ["concurrency", "threads"]
     };
 
     { updated    = date (2011, 08, 12, 15, 0);
@@ -240,7 +213,6 @@ module Wiki = struct
       subject    = "Portable Regular Expressions";
       body       = File "ocaml-regexp.md";
       permalink  = "ocaml-regexp";
-      categories = ["language","libraries"]
     };
 
     { updated    = date (2011, 06, 18, 15, 47);
@@ -248,7 +220,6 @@ module Wiki = struct
       subject    = "Delimited Continuations vs Lwt for Threads";
       body       = File "delimcc-vs-lwt.md";
       permalink  = "delimcc-vs-lwt";
-      categories = ["concurrency","threads"];
     };
 
     { updated    = date (2013, 12, 20, 23, 00);
@@ -256,7 +227,6 @@ module Wiki = struct
       subject    = "Installation";
       body       = File "install.md";
       permalink  = "install";
-      categories = ["overview","usage"];
     };
 
     { updated    = date (2013, 07, 17, 15, 00);
@@ -264,7 +234,6 @@ module Wiki = struct
       subject    = "OPAM Libraries";
       body       = File "opam.md";
       permalink  = "opam";
-      categories = ["overview","usage"];
     };
 
     { updated    = date (2013, 08, 20, 23, 50);
@@ -272,7 +241,6 @@ module Wiki = struct
       subject    = "Building mirage-www";
       body       = File "mirage-www.md";
       permalink  = "mirage-www";
-      categories = ["overview","usage"];
     };
 
     { updated    = date (2013, 12, 20, 22, 00);
@@ -280,14 +248,12 @@ module Wiki = struct
       subject    = "Hello Mirage World";
       body       = File "hello-world.md";
       permalink  = "hello-world";
-      categories = ["overview","usage"];
     };
     { updated    = date (2013, 08, 11, 15, 00);
       author     = anil;
       subject    = "Running Mirage Xen kernels";
       body       = File "xen-boot.md";
       permalink  = "xen-boot";
-      categories = ["overview","usage"; "backend", "xen"];
     };
 
     { updated    = date (2011, 04, 12, 10, 0);
@@ -295,7 +261,6 @@ module Wiki = struct
       subject    = "DNS Performance Tests";
       body       = Html Perf.dns;
       permalink  = "performance";
-      categories = ["overview","perf"];
     };
 
     { updated    = date (2011, 04, 12, 9, 0);
@@ -303,7 +268,6 @@ module Wiki = struct
       subject    = "Publications";
       body       = Html Paper.html;
       permalink  = "papers";
-      categories = ["overview","media"];
     };
 
     { updated    = date (2013, 08, 14, 10, 0);
@@ -311,7 +275,6 @@ module Wiki = struct
       subject    = "Presentations";
       body       = File "talks.md";
       permalink  = "talks";
-      categories = ["overview","media"];
     };
 
     { updated    = date (2010, 12, 13, 15, 0);
@@ -319,14 +282,12 @@ module Wiki = struct
       subject    = "COW: OCaml on the Web";
       body       = File "cow.md";
       permalink  = "cow";
-      categories = ["language","syntax"];
     };
 
     {
       updated    = date (2010, 11, 4, 16, 30);
       author     = thomas;
       subject    = "Introduction to HTCaML";
-      categories = ["language","syntax"];
       body       = File "htcaml.md";
       permalink  = "htcaml";
     };

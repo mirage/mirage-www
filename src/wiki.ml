@@ -6,8 +6,6 @@ open Data.People
 open Data.Wiki
 open Cowabloga.Wiki
 
-let num = num_of_entries entries
-
 let cmp_ent a b = Atom.compare (atom_date a.updated) (atom_date b.updated)
 
 let entries = List.rev (List.sort cmp_ent entries)
