@@ -3,18 +3,18 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 
 <div class="row">
 
-<div class="small-12 medium-5 large-5 column panel callout">
+<div class="small-12 medium-4 large-4 column">
 <h5>Background</h5>
 <ul>
 <li><a href="/wiki/overview-of-mirage">Overview of Mirage</a></li>
 <li><a href="/wiki/technical-background">Technical Background</a></li>
 <li><a href="/wiki/faq">Frequently Asked Questions</a></li>
 <li><a href="/wiki/papers">Papers and Articles</a></li>
-<li><a href="/wiki/talks">Videos and Presentations</a></li>
+<li><a href="/wiki/talks">Videos and Slides</a></li>
 </ul>
 </div>
 
-<div class="small-12 medium-5 large-5 column panel callout">
+<div class="small-12 medium-4 large-4 column">
 <h5>Getting Started</h5>
 <ul>
 <li><a href="/wiki/install">Installation</a></li>
@@ -26,8 +26,6 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 </div>
 
 </div>
-
-### Media
 
 #### Technical
 
