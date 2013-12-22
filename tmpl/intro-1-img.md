@@ -1,4 +1,4 @@
-<b>Try Mirage out</b>
+<b>Try Mirage out</b><br />
 <a class="th" href="#">
-  <img src="graphics/cumulous-cruisin.jpg" />
+  <img src="graphics/cumulous-cruisin.jpg"> </img>
 </a>
