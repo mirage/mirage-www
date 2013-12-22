@@ -30,7 +30,6 @@ module Global = struct
     "Docs", Uri.of_string "/docs";
     "API", Uri.of_string "/api";
     "Community", Uri.of_string "/community";
-    "About", Uri.of_string "/about";
   ]
 
   let top_nav =
@@ -110,7 +109,7 @@ module About = struct
   let t read_fn =
     body read_fn
     >|= fun content ->
-    Global.page ~title:"About" ~headers:[] ~content
+    Global.page ~title:"Community" ~headers:[] ~content
 end
 
 module Wiki = struct
