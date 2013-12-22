@@ -48,12 +48,22 @@ end
 module Index = struct
 
   let body read_fn =
-    lwt l1 = read_file read_fn "/intro.md" in
-    lwt l2 = read_file read_fn "/intro-r.html" in
+    lwt l1 = read_file read_fn "/intro-l.md" in
+    lwt l2 = read_file read_fn "/intro-r.md" in
+    lwt l3 = read_file read_fn "/intro-b.md" in
     return (<:xml<
     <div class="row">
-      <div class="large-6 columns">$l1$</div>
-      <div class="large-6 columns">$l2$</div>
+      <div class="small-12 column">
+        <h3>A programming framework for building type-safe, modular systems</h3>
+      </div>
+      <hr />
+    </div>
+    <div class="row">
+      <div class="small-12 medium-6 columns">$l1$</div>
+      <div class="small-12 medium-6 columns">$l2$</div>
+    </div>
+    <div class="row">
+      <div class="small-12 columns">$l3$</div>
     </div>
     >>)
 

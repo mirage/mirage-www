@@ -3,6 +3,7 @@ h1 { font-size: 2.2rem; }
 h1,h2,h3,h4,h5,h6 { font-family: "Arial"; }
 
 a { color: #333399; }
+p a { border-bottom: 1px dotted #999999; }
 
 article a:hover {
   color: #333333;

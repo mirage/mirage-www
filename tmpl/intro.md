@@ -1,7 +1,0 @@
-Mirage is a [unikernel](http://anil.recoil.org/papers/2013-asplos-mirage.pdf) for constructing secure, high-performance network applications across a variety of cloud computing and mobile platforms.  Code can be developed on a normal OS such as Linux or MacOS X, and then compiled into a fully-standalone, specialised kernel that runs under the [Xen](http://xen.org/) hypervisor.  Since Xen powers most public [cloud computing](http://en.wikipedia.org/Cloud_computing) infrastructure such as [Amazon EC2](http://aws.amazon.com), this lets your servers run more cheaply, securely and finer control than with a full software stack.
-
-Mirage is built using the [OCaml](http://ocaml.org/) language, with syntax extensions and libraries which provide networking, storage and concurrency support that are easy to use during development, and map directly into operating system constructs when being compiled for production deployment. The framework is fully event-driven, with no support for preemptive threading.
-
-Mirage 1.0 is [being released through December](http://openmirage.org/blog/announcing-mirage10), and the infrastructure you see here is [self-hosted](https://github.com/mirage/mirage-www). Check out the [wiki](/wiki) for an [installation](/wiki/install) guide, compile your [hello world microkernel](/wiki/hello-world), get started with the [public cloud](/wiki/xen-boot), or watch the [talk](/wiki/talks), view the [presentations](http://decks.openmirage.org/) and read the [papers](/wiki/papers).
-
-<img src="/graphics/xenpro.png" alt="Xen Project" />
