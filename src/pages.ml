@@ -31,12 +31,12 @@ module Global = struct
     "API", Uri.of_string "/api";
     "Community", Uri.of_string "/community";
     "About", Uri.of_string "/about";
-  ] 
+  ]
 
   let top_nav =
-  Cowabloga.Foundation.top_nav 
+  Cowabloga.Foundation.top_nav
     ~title:<:html<<img src="/graphics/mirage-logo-small.png" />&>>
-    ~title_uri:(Uri.of_string "/") 
+    ~title_uri:(Uri.of_string "/")
     ~nav_links:(Cowabloga.Foundation.Link.top_nav ~align:`Left nav_links)
 
   let page ~title ~headers ~content =
