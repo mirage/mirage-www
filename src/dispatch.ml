@@ -38,12 +38,16 @@ module Main (C:CONSOLE) (FS:KV_RO) (TMPL:KV_RO) (Server:Cohttp_lwt.Server) = str
     in
 
     let blog_feed =
-      Site_config.blog (fun name -> read_tmpl name >|= Cow.Markdown.of_string) in
-
+      Site_config.blog
+        (fun name -> read_tmpl name >|= Cow.Markdown.of_string) in
+    let wiki_feed =
+      Site_config.wiki
+        (fun name -> read_tmpl ("/wiki/"^name) >|= Cow.Markdown.of_string) in
+       
     let dyn_xhtml = dyn ~headers:["content-type","text/html"] in
 
     lwt blog_dispatch = Blog.dispatch blog_feed Data.Blog.entries in
-    let wiki_entries  = Wiki.init read_tmpl in
+    lwt wiki_dispatch = Wiki.dispatch wiki_feed Data.Wiki.entries in
 
     (* dispatch non-file URLs *)
     let dispatch req =
@@ -56,9 +60,9 @@ module Main (C:CONSOLE) (FS:KV_RO) (TMPL:KV_RO) (Server:Cohttp_lwt.Server) = str
       | "" :: "blog" :: tl ->
         let headers, t = blog_dispatch tl in
         dyn ~headers req t
-      | "" :: "docs" :: page
-      | "" :: "wiki" :: page ->
-        let headers, t = Wiki.t wiki_entries read_tmpl page in
+      | "" :: "docs" :: tl
+      | "" :: "wiki" :: tl ->
+        let headers, t = wiki_dispatch tl in
         dyn ~headers req t
       | x -> Server.respond_not_found ~uri:(Server.Request.uri req) ()
     in

@@ -1,5 +1,6 @@
 open Data
 open Lwt
+open Cowabloga.Atom_feed
 open Cowabloga.Blog
 
 (* Construct an HTTP dispatch function for the blog *)
@@ -13,6 +14,7 @@ let dispatch ({title; subtitle; rights} as feed) entries =
     let title = "Blog" ^ match title with None -> "" | Some x -> " :: " ^ x in
     Pages.Global.page ~title ~headers ~content in
 
+  (* TODO use a mime type db (from cohttp?) *)
   let content_type_xhtml = ["content-type", "text/html"] in
   let content_type_atom  = ["content-type", "application/atom+xml; charset=UTF-8"] in
 
