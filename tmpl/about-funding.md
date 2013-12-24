@@ -1,0 +1,4 @@
+## The Research Project
+
+Mirage started with funding in 2009 from the [RCUK](http://www.rcuk.ac.uk/) [Horizon Digital Economy](http://horizon.ac.uk) Research Hub grant, [EP/G065802/1](http://gow.epsrc.ac.uk/NGBOViewGrant.aspx?GrantRef=EP/G065802/1). Amazon also granted us an [Amazon in Education](http://aws.amazon.com/education/) award to test on EC2, Verisign [sponsored](http://www.cl.cam.ac.uk/news/2011/03/anil-madhavapeddy-wins-verisign-grant/) work via an [Internet Infrastructure Award](http://www.youtube.com/watch?v=5-4lbyD_Fvw), and [Rackspace](http://www.rackspace.com/cloud/) gives us developer resources on their cloud.  Work has also been supported by the [MRC2](http://www.cl.cam.ac.uk/research/srg/netos/mrc2/) and [OCaml Labs](http://ocaml.io) projects.  Publications are [open access](/docs/papers).
+

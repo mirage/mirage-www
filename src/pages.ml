@@ -40,6 +40,7 @@ module Global = struct
 
   let page ~title ~headers ~content =
     let font = <:html<
+      <link rel="stylesheet" href="/css/foundation-icons.css"> </link>
       <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700" rel="stylesheet" type="text/css"> </link>
     >> in
     let headers = font @ headers in
@@ -77,15 +78,20 @@ module About = struct
     lwt l = read_file read_fn "/about.md" in
     lwt r = read_file read_fn "/about-community.md" in
     lwt b = read_file read_fn "/about-b.md" in
+    lwt f = read_file read_fn "/about-funding.md" in
     let content = <:html<
     <div class="row">
-      <div class="small-12 columns">$i$</div>
-      <div class="small-12 medium-6 columns">$l$</div>
-      <div class="small-12 medium-6 columns">$r$</div>
+      <div class="small-12 medium-6 columns">$i$</div>
+      <div class="small-12 medium-6 columns">$f$</div>
     </div>
     <div class="row">
       <div class="small-12 columns">$b$</div>
-    </div> >> in
+    </div>
+    <div class="row">
+      <div class="small-12 medium-6 columns">$l$</div>
+      <div class="small-12 medium-6 columns">$r$</div>
+    </div>
+    >> in
     return (Global.page ~title:"Community" ~headers:[] ~content)
 end
 
