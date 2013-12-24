@@ -45,8 +45,7 @@ module Global = struct
 end
 
 module Index = struct
-
-  let body read_fn =
+  let t read_fn =
     lwt l1 = read_file read_fn "/intro-1.md" in
     lwt l1img = read_file read_fn "/intro-1-img.md" in
     lwt l2 = read_file read_fn "/intro-2.md" in
@@ -54,7 +53,7 @@ module Index = struct
     lwt l3 = read_file read_fn "/intro-3.md" in
     lwt l3img = read_file read_fn "/intro-3-img.md" in
     lwt footer = read_file read_fn "/intro-f.md" in
-    return (<:xml<
+    let content = <:xml<
     <div class="row">
       <div class="small-12 columns">
         <h3>A programming framework for building type-safe, modular systems</h3>
@@ -79,13 +78,8 @@ module Index = struct
     <div class="row">
       <div class="small-12 columns">$footer$</div>
     </div>
-    >>)
-
-  let t read_fn =
-    body read_fn
-    >|= fun content ->
-    Global.page ~title:"Mirage OS" ~headers:[] ~content
-
+    >> in
+    return (Global.page ~title:"Mirage OS" ~headers:[] ~content)
 end
 
 module Resources = struct
@@ -101,11 +95,11 @@ end
 
 module About = struct
 
-  let body read_fn =
+  let t read_fn =
     lwt l = read_file read_fn "/about.md" in
     lwt r = read_file read_fn "/about-community.md" in
     lwt b = read_file read_fn "/about-b.md" in
-    return <:html<
+    let content = <:html<
     <div class="row">
       <div class="small-12 columns"><h2>The Community</h2></div>
       <div class="small-12 medium-6 columns">$l$</div>
@@ -113,13 +107,8 @@ module About = struct
     </div>
     <div class="row">
       <div class="small-12 columns">$b$</div>
-    </div>
-    >>
-
-  let t read_fn =
-    body read_fn
-    >|= fun content ->
-    Global.page ~title:"Community" ~headers:[] ~content
+    </div> >> in
+    return (Global.page ~title:"Community" ~headers:[] ~content)
 end
 
 module Wiki = struct
