@@ -40,7 +40,7 @@ module Global = struct
 
   let page ~title ~headers ~content =
     let font = <:html<
-      <link rel="stylesheet" href="/css/foundation-icons.css"> </link>
+      <link rel="stylesheet" href="/css/font-awesome.css"> </link>
       <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700" rel="stylesheet" type="text/css"> </link>
     >> in
     let headers = font @ headers in
