@@ -28,7 +28,7 @@ module Global = struct
    let nav_links = [
     "Blog", Uri.of_string "/blog";
     "Docs", Uri.of_string "/docs";
-    "API", Uri.of_string "/api";
+    "API", Uri.of_string "https://mirage.github.io";  (* TODO integrate *)
     "Community", Uri.of_string "/community";
   ]
 
