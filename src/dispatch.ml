@@ -43,7 +43,7 @@ module Main (C:CONSOLE) (FS:KV_RO) (TMPL:KV_RO) (Server:Cohttp_lwt.Server) = str
     let dyn_xhtml = dyn ~headers:["content-type","text/html"] in
 
     lwt blog_dispatch = Blog.dispatch blog_feed Data.Blog.entries in
-    let wiki_entries  = Pages.Wiki.init read_tmpl in
+    let wiki_entries  = Wiki.init read_tmpl in
 
     (* dispatch non-file URLs *)
     let dispatch req =
@@ -58,7 +58,7 @@ module Main (C:CONSOLE) (FS:KV_RO) (TMPL:KV_RO) (Server:Cohttp_lwt.Server) = str
         dyn ~headers req t
       | "" :: "docs" :: page
       | "" :: "wiki" :: page ->
-        let headers, t = Pages.Wiki.t wiki_entries read_tmpl page in
+        let headers, t = Wiki.t wiki_entries read_tmpl page in
         dyn ~headers req t
       | x -> Server.respond_not_found ~uri:(Server.Request.uri req) ()
     in
