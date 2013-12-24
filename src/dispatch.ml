@@ -50,8 +50,6 @@ module Main (C:CONSOLE) (FS:KV_RO) (TMPL:KV_RO) (Server:Cohttp_lwt.Server) = str
       function
       | [] | [""] | [""; "index.html"] ->
         dyn_xhtml req (Pages.Index.t read_tmpl)
-      | [""; "resources"] ->
-        dyn_xhtml req (Pages.Resources.t read_tmpl)
       | [""; "about"]
       | [""; "community"] ->
         dyn_xhtml req (Pages.About.t read_tmpl)

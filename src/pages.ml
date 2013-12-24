@@ -28,7 +28,7 @@ module Global = struct
    let nav_links = [
     "Blog", Uri.of_string "/blog";
     "Docs", Uri.of_string "/docs";
-    "API", Uri.of_string "https://mirage.github.io";  (* TODO integrate *)
+    "API", Uri.of_string "http://mirage.github.io";  (* TODO integrate *)
     "Community", Uri.of_string "/community";
   ]
 
@@ -68,17 +68,6 @@ module Index = struct
     </div>
     >> in
     return (Global.page ~title:"Mirage OS" ~headers:[] ~content)
-end
-
-module Resources = struct
-  let body read_fn =
-    read_file read_fn "/docs.md"
-    >|= (fun l -> two_cols l Paper.html)
-
-  let t read_fn =
-    body read_fn
-    >|= fun content ->
-    Global.page ~title:"Resources" ~headers:[] ~content
 end
 
 module About = struct
