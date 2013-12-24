@@ -1,8 +1,10 @@
 ### Core Team
 
-One of us will review every patch that goes into the main distribution.
+One of us will review every patch that goes into the main distribution.  Get in
+touch with any of us individually if you're interested in a Mirage-related internship
+at our respective institutions.
 
-* *Anil Madhavapeddy*, University of Cambridge, [anil.recoil.org](http://anil.recoil.org)
-* *Thomas Gazagnaire*, OCamlPro, [thomas.gazagnaire.org](http://thomas.gazagnaire.org)
-* *Richard Mortier*, University of Nottingham, [cs.nott.ac.uk](http://www.cs.nott.ac.uk/~rmm/)
-* *David Scott*, Citrix Systems R&D, [dave.recoil.org](http://dave.recoil.org)
+* **[Anil Madhavapeddy](http://anil.recoil.org)**, University of Cambridge
+* **[David Scott](http://dave.recoil.org)**, Citrix Systems R&D
+* **[Thomas Gazagnaire](http://thomas.gazagnaire.org)**, University of Cambridge
+* **[Richard Mortier](http://www.cs.nott.ac.uk/~rmm/)**, University of Nottingham

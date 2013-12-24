@@ -236,7 +236,7 @@ module Wiki = struct
       permalink  = "opam";
     };
 
-    { updated    = date (2013, 08, 20, 23, 50);
+    { updated    = date (2013, 12, 21, 12, 50);
       author     = anil;
       subject    = "Building mirage-www";
       body       = File "mirage-www.md";
