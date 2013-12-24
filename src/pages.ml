@@ -33,12 +33,16 @@ module Global = struct
   ]
 
   let top_nav =
-  Cowabloga.Foundation.top_nav
-    ~title:<:html<<img src="/graphics/mirage-logo-small.png" />&>>
-    ~title_uri:(Uri.of_string "/")
-    ~nav_links:(Cowabloga.Foundation.Link.top_nav ~align:`Left nav_links)
+    Cowabloga.Foundation.top_nav
+      ~title:<:html<<img src="/graphics/mirage-logo-small.png" />&>>
+      ~title_uri:(Uri.of_string "/")
+      ~nav_links:(Cowabloga.Foundation.Link.top_nav ~align:`Left nav_links)
 
   let page ~title ~headers ~content =
+    let font = <:html<
+      <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700" rel="stylesheet" type="text/css"> </link>
+    >> in
+    let headers = font @ headers in
     let content = top_nav @ content in
     let body = Cowabloga.Foundation.body ~title ~headers ~content in
     Cowabloga.Foundation.page ~body
@@ -47,33 +51,17 @@ end
 module Index = struct
   let t read_fn =
     lwt l1 = read_file read_fn "/intro-1.md" in
-    lwt l1img = read_file read_fn "/intro-1-img.md" in
-    lwt l2 = read_file read_fn "/intro-2.md" in
-    lwt l2img = read_file read_fn "/intro-2-img.md" in
-    lwt l3 = read_file read_fn "/intro-3.md" in
-    lwt l3img = read_file read_fn "/intro-3-img.md" in
-    lwt footer = read_file read_fn "/intro-f.md" in
+    lwt l2 = read_file read_fn "/intro-3.md" in
+    lwt footer = read_file read_fn "/intro-f.html" in
     let content = <:xml<
     <div class="row">
       <div class="small-12 columns">
         <h3>A programming framework for building type-safe, modular systems</h3>
       </div>
-      <hr />
     </div>
     <div class="row">
-      <div class="small-8  medium-6 medium-offset-1 columns">$l1$</div>
-      <div class="small-4  medium-2 columns">$l1img$</div>
-      <div class="small-12 medium-3 columns"> </div>
-    </div>
-    <div class="row">
-      <div class="small-8  small-push-4 medium-6 medium-push-3 columns">$l2$</div>
-      <div class="small-4  small-pull-8 medium-2 medium-pull-5 columns">$l2img$</div>
-      <div class="small-12 medium-1 columns"> </div>
-    </div>
-    <div class="row">
-      <div class="small-8  medium-6 medium-offset-1 columns">$l3$</div>
-      <div class="small-4  medium-2 columns">$l3img$</div>
-      <div class="small-12 medium-3 columns"> </div>
+      <div class="small-12 medium-6 columns">$l1$</div>
+      <div class="small-12 medium-6 columns">$l2$</div>
     </div>
     <div class="row">
       <div class="small-12 columns">$footer$</div>
