@@ -30,7 +30,9 @@ opam install cowabloga
 eval `opam config env`
 cp .travis-www.ml src/config.ml
 cd src
+mirage --version
 mirage configure --unix
+cat Makefile
 make
 # make MODE=$MIRAGE_BACKEND
 cd ..
