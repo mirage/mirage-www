@@ -27,7 +27,11 @@ opam pin mirage git://github.com/avsm/mirage
 opam install ${OPAM_PACKAGES}
 eval `opam config env`
 cp .travis-www.ml src/config.ml
-make MODE=$MIRAGE_BACKEND
+cd src
+mirage configure --unix
+mirage build --unix
+# make MODE=$MIRAGE_BACKEND
+cd ..
 
 if [ "$DEPLOY" = "1" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
   # get the secure key out for deployment
