@@ -31,7 +31,7 @@ eval `opam config env`
 cp .travis-www.ml src/config.ml
 cd src
 mirage configure --unix
-mirage build --unix
+make
 # make MODE=$MIRAGE_BACKEND
 cd ..
 
