@@ -1,6 +1,6 @@
 h1 { font-size: 2.2rem; font-weight: bold; }
 h2 { font-size: 1.8rem; font-weight: bold; }
-h3 { font-size: 1.6rem; font-weight: bold; }
+h3 { font-size: 1.6rem; font-weight: 600; }
 h4,h5,h6 { color: #222222; font-size: 1.4rem; font-weight: 600; }
 
 .panel {
@@ -11,6 +11,7 @@ body,h1,h2,h3,h4,h5,h6 { font-family: "Source Sans Pro"; }
 
 a { color: #333399; }
 p a { border-bottom: 1px dotted #999999; }
+p { margin-top: 0.7rem; margin-bottom: 0.2rem; line-height: 1.4rem }
 
 article a:hover {
   color: #333333;

@@ -1,5 +1,3 @@
-*In Theory*
-
 Unless you are familiar with Xen's source code, there is little chance
 that you've ever heard of the *vchan* library or
 protocol. Documentation about it is very scarce: a description can be

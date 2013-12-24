@@ -73,12 +73,13 @@ end
 module About = struct
 
   let t read_fn =
+    lwt i = read_file read_fn "/about-intro.md" in
     lwt l = read_file read_fn "/about.md" in
     lwt r = read_file read_fn "/about-community.md" in
     lwt b = read_file read_fn "/about-b.md" in
     let content = <:html<
     <div class="row">
-      <div class="small-12 columns"><h2>The Community</h2></div>
+      <div class="small-12 columns">$i$</div>
       <div class="small-12 medium-6 columns">$l$</div>
       <div class="small-12 medium-6 columns">$r$</div>
     </div>
