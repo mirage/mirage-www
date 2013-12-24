@@ -3,6 +3,11 @@ h2 { font-size: 1.8rem; font-weight: bold; }
 h3 { font-size: 1.6rem; font-weight: 600; }
 h4,h5,h6 { color: #222222; font-size: 1.4rem; font-weight: 600; }
 
+.iconstyle {
+  font-size: 30px;
+  color: rgba(30,38,85,0.9);
+}
+
 .panel {
   padding-top: 0.5rem;
 }
