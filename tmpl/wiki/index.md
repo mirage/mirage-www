@@ -3,7 +3,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 
 <div class="row">
 
-<div class="small-12 medium-4 large-4 column">
+<div class="small-12 medium-5 large-5 column">
 <h5>Background</h5>
 <ul>
 <li><a href="/wiki/overview-of-mirage">Overview of Mirage</a></li>
@@ -14,7 +14,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 </ul>
 </div>
 
-<div class="small-12 medium-4 large-4 column">
+<div class="small-12 medium-5 large-5 column">
 <h5>Getting Started</h5>
 <ul>
 <li><a href="/wiki/install">Installation</a></li>
