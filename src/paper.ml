@@ -2,13 +2,13 @@ open Cow
 
 type item = {
   href : string;
-  img : string;
+  icon : string;
   alt : string;
 }
 
-let html_of_item i = <:xml<
-  <a href=$str:i.href$><img src=$str:i.img$ width="22" height="22" alt=$str:i.alt$/></a>
->>
+let html_of_item i =
+  let cl = Printf.sprintf "fa fa-%s" i.icon in
+  <:xml<<a href=$str:i.href$><i class=$str:cl$> </i></a> >>
 
 type author = string
 
@@ -27,19 +27,15 @@ type paper = {
   abstract : Html.t;
 }
 
-let html_of_paper p = <:xml<
-  <p>
-    <p>
-      <a name=$str:p.name$/>
-      $list:List.map html_of_item p.items$
-      <b>$str:p.title$</b>
-    </p>
+let html_of_paper p = <:html<
+    <h4>$str:p.title$ &nbsp; &nbsp;
+    <a name=$str:p.name$> </a>$list:List.map html_of_item p.items$ </h4>
     <p>
       <i>$html_of_authors p.authors$</i>.
+      <br />
       $p.descr$
     </p>
-     <p>$p.abstract$<hr/></p>
-  </p>
+     <blockquote>$p.abstract$</blockquote>
 >>
 
 let anil    = "Anil Madhavapeddy"
@@ -60,34 +56,52 @@ let smith   = "Steven Smith"
 let malte   = "Malte Schwarzkopf"
 let theo    = "Theo Hong"
 let watson = "Robert Watson"
-let chris = "Chris Smowton"
+let yminsky = "Yaron Minsky"
+let jhickey = "Jason Hickey"
 
 let pdf href = {
   href;
-  img = "/graphics/pdf.png";
+  icon = "cloud-download";
   alt = "PDF";
 }
 
 let acm id = {
   href = "http://portal.acm.org/citation.cfm?id=" ^ id;
-  img  = "/graphics/acm.png";
+  icon  = "external-link-square";
   alt  = "ACM Portal";
 }
 
 let bcs id = {
   href = "http://www.bcs.org/server.php?show=" ^ id;
-  img  = "/graphics/acm.png";
+  icon  = "external-link-square";
   alt  = "BCS homepage";
+}
+
+let ext id = {
+  href = id;
+  icon = "external-link-square";
+  alt = ""
 }
 
 let prezi path = {
   href = "http://prezi.com/" ^ path;
-  img  = "/graphics/prezi.png";
+  icon  = "desktop";
   alt  = "Prezi presentation";
 }
 
 let papers = [
+  { name     = "rwo";
+    items = [ ext "https://realworldocaml.org"; ];
+    title = "Real World OCaml: functional programming for the masses";
+    authors = [ anil; yminsky; jhickey ];
+    descr = <:xml< 
+      Published by O'Reilly Associates, 510 pages, Nov 2013.
+      >>;
+    abstract = <:xml<
+<p>This fast-moving tutorial introduces you to OCaml, an industrial-strength programming language designed for expressiveness, safety, and speed. Through the book’s many examples, you’ll quickly learn how OCaml stands out as a tool for writing fast, succinct, and readable systems code.
+Real World OCaml takes you through the concepts of the language at a brisk pace, and then helps you explore the tools and techniques that make OCaml an effective and practical tool. In the book’s third section, you’ll delve deep into the details of the compiler toolchain and OCaml’s simple and efficient runtime system.</p> >>
 
+  };   
   { name     = "asplos";
     items    = [
       pdf "http://anil.recoil.org/papers/2013-asplos-mirage.pdf";
@@ -193,7 +207,7 @@ let papers = [
     descr    = <:xml<
       <a href="http://wgt2010.elte.hu/">Workshop on Generative Technologies</a>, April 2010 >>;
     abstract = <:xml<
-      This paper defines the [dyntype](http://github.com/mirage/dyntype) dynamic typing extension we developed for
+      This paper defines the <a href="http://github.com/mirage/dyntype">dyntype</a> dynamic typing extension we developed for
       OCaml, and the SQL mapper that converts ML values directly into SQL calls. The approach is useful as it is
       purely meta-programming instead of compiler patching, and thus much easier to integrate with other OCaml code.
       There is an extended journal paper currently under review; please contact the authors if you wish to read it.>>;
@@ -240,9 +254,8 @@ let related_papers = [
 ]
 
 let html = <:xml<
-  <br />
   <p>This page lists any publications, technical reports and related work to Mirage. If you know of any work that should be listed here, please <a href="/about">contact</a> us.</p>
-  <h2>Publications</h2>
+  <hr />
   $list:List.map html_of_paper papers$
   <h2>Related Work</h2>
   $list:List.map html_of_paper related_papers$
