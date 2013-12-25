@@ -4,7 +4,7 @@ and explain how to use it to generate static HTML from within OCaml applications
 * a quotation mechanism to embed XML into an OCaml program.
 * a syntax extension to auto-generate boilerplate HTML definitions from OCaml type definitions.
 
-!!HTML quotations
+##HTML quotations
 
 Let us first focus on the quotation mechanism. This part is quite
 similar to the syntax extension provided by
@@ -118,7 +118,7 @@ let () =
   close_out chan
 ```
 
-!!HTML Generator
+##HTML Generator
  
 Some of the OCaml code we wrote in the last section is quite tedious
 to write. Let us consider `html_of_tweet` again:

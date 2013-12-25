@@ -23,11 +23,19 @@ opam --version
 opam --git-version
 
 opam init git://github.com/ocaml/opam-repository >/dev/null 2>&1
-opam pin mirage git://github.com/avsm/mirage
+# opam pin mirage git://github.com/avsm/mirage
+opam pin cowabloga git://github.com/mirage/cowabloga
 opam install ${OPAM_PACKAGES}
+opam install cowabloga
 eval `opam config env`
 cp .travis-www.ml src/config.ml
-make MODE=$MIRAGE_BACKEND
+cd src
+mirage --version
+mirage configure --unix
+cat Makefile
+make
+# make MODE=$MIRAGE_BACKEND
+cd ..
 
 if [ "$DEPLOY" = "1" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
   # get the secure key out for deployment

@@ -1,6 +1,6 @@
 Mirage consists of a set of OCaml libraries that link with a runtime to form either a standalone Xen operating system or a normal UNIX binary. These libraries are managed via the [OPAM](http://opam.ocaml.org) tool. After describing Mirage's system requirements, we will introduce the basics of OPAM and setting up for Mirage.
 
-!!Requirements
+##Requirements
 
 Mirage has been tested on ArchLinux, Debian Wheezy, Ubuntu Precise/Lucid/Raring/Saucy, CentOS 6.4 and MacOS X 10.8 and 10.9. To compile the Xen backend, you *must* have a 64-bit Linux host. 32-bit is not supported at this time.
 
