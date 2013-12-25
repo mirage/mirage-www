@@ -11,14 +11,17 @@ When using open-source Xen, you need to create a configuration file, e.g., `app.
 
 You can launch this domain with `xm create -c app.cfg` (for Xen versions earlier than 4.1) and `xl create -c app.cfg` for Xen 4.1 or greater.
 
-Alternatively, for Xen versions greater than 4.1, you can simply invoke Mirari to do this for you:
+Alternatively, for Xen versions greater than 4.1, you can simply invoke Mirage to do this for you:
 
 ```
-    $ sudo mirari configure --xen app.conf
-    $ sudo mirari run --xen
+    $ mirage configure --xen
+    $ mirage build
+    $ mirage run
 ```
 
-where `app.conf` is the Mirari configuration file for your application. The [Mirage website](/wiki/mirage-www) contains an example.
+The [Mirage website](/wiki/mirage-www) contains an example.  Thie `mirage run` will create an `xl` configuration file, and you will
+then need to edit it to add any VIFs or disks required by your application.  Consult the Xen documentation for your distro for
+the specifics on this.
 
 ## Amazon EC2
 

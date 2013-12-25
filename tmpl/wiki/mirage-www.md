@@ -219,4 +219,4 @@ While it's not instantly user-friendly, it's an extremely powerful way of
 assembling your own components for your unikernel for whatever specialised
 unikernels you want to build.
 
-We'll talk about the deployment scripts that run the [live site](http://openmirage.org) next.
+We'll talk about the deployment scripts that run the [live site](http://openmirage.org) in the [next article](/doc/deploying-via-ci).
