@@ -52,6 +52,7 @@ let dispatch ({title; subtitle; rights} as feed) entries =
     >|= Cow.Xml.to_string
   in
 
+  (* TODO this should be a 404! Bad API *)
   let not_found x =
     return (Printf.sprintf "Not found: %s (known links: %s)"
               (String.concat " ... " x)
