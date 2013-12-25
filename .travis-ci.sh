@@ -32,9 +32,10 @@ cp .travis-www.ml src/config.ml
 cd src
 mirage --version
 mirage configure --unix
-cat Makefile
 make
-# make MODE=$MIRAGE_BACKEND
+make clean
+mirage configure --xen
+make
 cd ..
 
 if [ "$DEPLOY" = "1" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
