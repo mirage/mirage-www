@@ -50,25 +50,63 @@ module Global = struct
 end
 
 module Index = struct
-  let t read_fn =
+
+  let t ~feeds read_fn =
     lwt l1 = read_file read_fn "/intro-1.md" in
     lwt l2 = read_file read_fn "/intro-3.md" in
     lwt footer = read_file read_fn "/intro-f.html" in
-    let content = <:xml<
+    lwt recent = Cowabloga.Feed.to_html ~limit:12 feeds in
+    let content = <:html<
     <div class="row">
       <div class="small-12 columns">
         <h3>A programming framework for building type-safe, modular systems</h3>
       </div>
     </div>
     <div class="row">
-      <div class="small-12 medium-6 columns">$l1$</div>
-      <div class="small-12 medium-6 columns">$l2$</div>
+      <div class="small-12 medium-6 columns">$l1$ $l2$</div>
+      <div class="small-12 medium-6 large-6 columns front_updates">
+        <h4><a href="/updates/atom.xml"><i class="fa fa-rss"> </i></a>
+         Recent Updates <small><a href="/updates/">(all)</a></small></h4>
+        $recent$
+      </div>
     </div>
     <div class="row">
       <div class="small-12 columns">$footer$</div>
     </div>
     >> in
     return (Global.page ~title:"Mirage OS" ~headers:[] ~content)
+
+  let content_type_xhtml = ["content-type", "text/html"] (* TODO combine *)
+  let content_type_atom  = ["content-type", "application/atom+xml; charset=UTF-8"]
+
+  (* TODO have a way of rewriting all the pages with an associated Atom feed *)
+  let make content =
+    (* TODO need a URL routing mechanism instead of assuming / *)
+    let uri = Uri.of_string "/updates/atom.xml" in
+    let headers =
+      <:xml<<link rel="alternate" type="application/atom+xml" href=$uri:uri$ /> >> in
+    let title = "Updates" in
+    Global.page ~title ~headers ~content
+
+  let dispatch ~feed ~feeds =
+    lwt atom =
+      Cowabloga.Feed.to_atom ~meta:feed ~feeds 
+      >|= Cow.Atom.xml_of_feed
+      >|= Cow.Xml.to_string
+    in
+    lwt recent = Cowabloga.Feed.to_html feeds in
+    let content = make <:html<
+       <div class="row">
+         <div class="small-12 medium-9 large-6 front_updates">
+         <h2>Site Updates <small>across the blogs and documentation</small></h2>
+          $recent$
+         </div>
+       </div> >> in
+    return (function
+     |[""]|[] -> content_type_xhtml, (return content)
+     |["atom.xml"] -> content_type_atom, (return atom)
+     |_ -> content_type_xhtml, (return "")
+    )
 end
 
 module About = struct

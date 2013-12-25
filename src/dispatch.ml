@@ -43,22 +43,33 @@ module Main (C:CONSOLE) (FS:KV_RO) (TMPL:KV_RO) (Server:Cohttp_lwt.Server) = str
     let wiki_feed =
       Site_config.wiki
         (fun name -> read_tmpl ("/wiki/"^name) >|= Cow.Markdown.of_string) in
-       
+    let updates_feed =
+      Site_config.updates
+        (fun name -> read_tmpl name >|= Cow.Markdown.of_string) in
+      
+    let feeds = [
+       `Blog (blog_feed, Data.Blog.entries);
+       `Wiki (wiki_feed, Data.Wiki.entries);
+    ] in
     let dyn_xhtml = dyn ~headers:["content-type","text/html"] in
 
     lwt blog_dispatch = Blog.dispatch blog_feed Data.Blog.entries in
     lwt wiki_dispatch = Wiki.dispatch wiki_feed Data.Wiki.entries in
-
+    lwt updates_dispatch = Pages.Index.dispatch ~feed:updates_feed ~feeds in
+ 
     (* dispatch non-file URLs *)
     let dispatch req =
       function
       | [] | [""] | [""; "index.html"] ->
-        dyn_xhtml req (Pages.Index.t read_tmpl)
+        dyn_xhtml req (Pages.Index.t ~feeds read_tmpl)
       | [""; "about"]
       | [""; "community"] ->
         dyn_xhtml req (Pages.About.t read_tmpl)
       | "" :: "blog" :: tl ->
         let headers, t = blog_dispatch tl in
+        dyn ~headers req t
+      | "" :: "updates" :: tl ->
+        let headers, t = updates_dispatch tl in
         dyn ~headers req t
       | "" :: "docs" :: tl
       | "" :: "wiki" :: tl ->
