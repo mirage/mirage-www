@@ -157,6 +157,13 @@ module Wiki = struct
     }
 
   let entries = [
+    { updated    = date (2013, 12, 25, 22, 0);
+      author     = amir;
+      subject    = "Deploying via Continuous Integration";
+      body       = File "deployment.md";
+      permalink  = "deploying-via-ci";
+    };
+
     { updated    = date (2013, 10, 15, 16, 0);
       author     = amir;
       subject    = "Overview of Mirage";

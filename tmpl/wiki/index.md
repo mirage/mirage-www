@@ -20,8 +20,8 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 <li><a href="/wiki/install">Installation</a></li>
 <li><a href="/wiki/hello-world">Hello Mirage World</a></li>
 <li><a href="/wiki/mirage-www">Building the website</a></li>
+<li><a href="/wiki/deploying-via-ci">Deploying via Continuous Integration</a></li>
 <li><a href="/wiki/opam">Keeping up-to-date</a></li>
-<li><a href="/wiki/deployment">Deploying to the cloud</a></li>
 </ul>
 </div>
 
