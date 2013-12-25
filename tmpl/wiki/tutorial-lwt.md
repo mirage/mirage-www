@@ -32,9 +32,9 @@ There are two important operations to compose threads: `join` and `choose`.
 
 The infix operators `<&>` and `<?>` are defined in the Lwt module, where `a <&> b` is equivalent to `join [a; b]`, and `a <?> b` is equivalent to `choose [a; b]`.
 
-##Sleep and join
+## Sleep and join
 
-###Challenge
+### Challenge
 
 Now write a program that spins off two threads, each of which sleep for some amount of time, say 1 and 2 seconds and then one prints "Heads", the other "Tails". After both have finished, it prints "Finished" and exits. To sleep for some time use `OS.Time.sleep` and to print to console use `OS.Console.log`. Note that `OS` is a Mirage-specific module, if you are using Lwt in another context, use `Lwt_unix.sleep` and `Lwt_io.write`.
 
@@ -321,14 +321,15 @@ let filter f m_a =
   in
   let t = aux () in
   m_out
+```
 
 Note that in each of the above a recursive Lwt thread is created and will run forever. However, if the pipeline ever needs to be torn down then this recursive thread should be cancelled. This can be done by modifying the above functions to also return the `'t Lwt.t` returned by `aux` in each case, which can then be cancelled when required.
 
-###Challenge
+### Challenge
 
 Using the pipelining helpers, change the echo server into a string processing server. The new version should output each line of text uppercased (`String.uppercase` can help) after waiting for `l` seconds where `l` is the length of the string.
 
-###Solution
+### Solution
 
 ```
   let read_line () =
@@ -364,6 +365,7 @@ Using the pipelining helpers, change the echo server into a string processing se
     in
     (read ()) <&> (write ())
 }
+```
 
 ###Challenge
 
