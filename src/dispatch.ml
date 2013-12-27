@@ -37,31 +37,29 @@ module Main (C:CONSOLE) (FS:KV_RO) (TMPL:KV_RO) (Server:Cohttp_lwt.Server) = str
       Server.respond_string ~headers ~status ~body ()
     in
 
-    let blog_feed =
-      Site_config.blog
-        (fun name -> read_tmpl name >|= Cow.Markdown.of_string) in
-    let wiki_feed =
-      Site_config.wiki
-        (fun name -> read_tmpl ("/wiki/"^name) >|= Cow.Markdown.of_string) in
-    let updates_feed =
-      Site_config.updates
-        (fun name -> read_tmpl name >|= Cow.Markdown.of_string) in
+     let read_entry = (fun name -> read_tmpl name >|= Cow.Markdown.of_string) in
+     let blog_feed = Site_config.blog read_entry in
+     let wiki_feed = Site_config.wiki
+         (fun name -> read_tmpl ("/wiki/"^name) >|= Cow.Markdown.of_string) in
+     let updates_feed = Site_config.updates read_entry in
+     let links_feed = Site_config.links read_entry in
 
-    let feeds = [
-       `Blog (blog_feed, Data.Blog.entries);
-       `Wiki (wiki_feed, Data.Wiki.entries);
-    ] in
-    let dyn_xhtml = dyn ~headers:["content-type","text/html"] in
+     let updates_feeds = [
+        `Blog (blog_feed, Data.Blog.entries);
+        `Wiki (wiki_feed, Data.Wiki.entries);
+     ] in
+     let dyn_xhtml = dyn ~headers:["content-type","text/html"] in
 
-    lwt blog_dispatch = Blog.dispatch blog_feed Data.Blog.entries in
-    lwt wiki_dispatch = Wiki.dispatch wiki_feed Data.Wiki.entries in
-    lwt updates_dispatch = Pages.Index.dispatch ~feed:updates_feed ~feeds in
+     lwt blog_dispatch    = Blog.dispatch blog_feed Data.Blog.entries in
+     lwt wiki_dispatch    = Wiki.dispatch wiki_feed Data.Wiki.entries in
+     lwt links_dispatch   = Pages.Links.dispatch links_feed Data.Links.entries in
+     lwt updates_dispatch = Pages.Index.dispatch ~feed:updates_feed ~feeds:updates_feeds in
 
     (* dispatch non-file URLs *)
     let dispatch req =
       function
       | [] | [""] | [""; "index.html"] ->
-        dyn_xhtml req (Pages.Index.t ~feeds read_tmpl)
+        dyn_xhtml req (Pages.Index.t ~feeds:updates_feeds read_tmpl)
       | [""; "about"]
       | [""; "community"] ->
         dyn_xhtml req (Pages.About.t read_tmpl)
@@ -75,6 +73,8 @@ module Main (C:CONSOLE) (FS:KV_RO) (TMPL:KV_RO) (Server:Cohttp_lwt.Server) = str
       | "" :: "wiki" :: tl ->
         let headers, t = wiki_dispatch tl in
         dyn ~headers req t
+      | "" :: "links" :: tl ->
+        links_dispatch tl
       | x -> Server.respond_not_found ~uri:(Server.Request.uri req) ()
     in
 

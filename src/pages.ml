@@ -25,18 +25,27 @@ let two_cols l r = <:html<
 >>
 
 module Global = struct
-   let nav_links = [
-    "Blog", Uri.of_string "/blog";
-    "Docs", Uri.of_string "/docs";
-    "API", Uri.of_string "http://mirage.github.io";  (* TODO integrate *)
-    "Community", Uri.of_string "/community";
-  ]
+  let nav_links = <:xml<
+    <ul class="left">
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href="/docs/">Docs</a></li>
+      <li><a href="http://mirage.github.io/">API</a></li>
+      <li class="has-dropdown">
+        <a href="/community/">Community</a>
+        <ul class="dropdown">
+          <li><a href="/community/">Background</a></li>
+          <li><a href="/community/">Contact</a></li>
+          <li><a href="/community/#team">Team</a></li>
+          <li><a href="/links/">Links</a></li>
+        </ul>
+      </li> 
+     </ul> >>
 
   let top_nav =
     Cowabloga.Foundation.top_nav
       ~title:<:html<<img src="/graphics/mirage-logo-small.png" />&>>
       ~title_uri:(Uri.of_string "/")
-      ~nav_links:(Cowabloga.Foundation.Link.top_nav ~align:`Left nav_links)
+      ~nav_links 
 
   let page ~title ~headers ~content =
     let font = <:html<
@@ -109,6 +118,39 @@ module Index = struct
     )
 end
 
+module Links = struct
+  let dispatch feed ls =
+    let open Cowabloga.Links in
+    lwt body = Cowabloga.Feed.to_html [ `Links (feed, ls) ] in
+    let content = <:html<
+
+      <div class="row">
+      <div class="small-12 medium-9 large-6 columns">
+      <h2>Around the Web</h2>
+        <p>This is a small link blog we maintain as we hear of stories or interesting
+         blog entries that may be useful for Mirage users.  If you'd like to
+        add one, please do <a href="/community/">get in touch</a>.</p>
+        <br />
+         $body$
+       </div>
+      </div>
+      >> in
+    let body = Global.page ~title:"Around the Web" ~headers:[] ~content in
+    let h = Hashtbl.create 1 in
+    List.iter (fun l -> Hashtbl.add h (sprintf "%s/%s" l.stream.name l.id) l.uri) ls;
+    return (
+      function
+      | [] -> HTTP.Server.respond_string ~status:`OK ~body ()
+      | [id;link] ->
+         let id = sprintf "%s/%s" id link in
+         if Hashtbl.mem h id then
+           HTTP.Server.respond_redirect ~uri:(Hashtbl.find h id) ()
+         else
+           fail (Failure (sprintf "link not found: %s|%s " id link))
+      | x -> fail (Failure (sprintf "link not found: %s" (String.concat "|" x)))
+    )
+end
+
 module About = struct
 
   let t read_fn =
@@ -118,17 +160,19 @@ module About = struct
     lwt b = read_file read_fn "/about-b.md" in
     lwt f = read_file read_fn "/about-funding.md" in
     let content = <:html<
+    <a name="about"> </a>
     <div class="row">
       <div class="small-12 medium-6 columns">$i$</div>
       <div class="small-12 medium-6 columns">$f$</div>
     </div>
+    <a name="participate"> </a>
     <div class="row">
       <div class="small-12 columns">$b$</div>
     </div>
+    <a name="team"> </a>
     <div class="row">
       <div class="small-12 medium-6 columns">$l$</div>
       <div class="small-12 medium-6 columns">$r$</div>
-    </div>
-    >> in
+    </div> >> in
     return (Global.page ~title:"Community" ~headers:[] ~content)
 end

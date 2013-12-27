@@ -31,3 +31,12 @@ let updates read_entry = {
   author = None;
   read_entry
 }
+let links read_entry = {
+  Cowabloga.Atom_feed.base_uri;
+  id = "";
+  title = "External articles about MirageOS";
+  subtitle = None;
+  rights;
+  author = None;
+  read_entry
+}
