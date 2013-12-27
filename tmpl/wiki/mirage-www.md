@@ -75,6 +75,18 @@ Note that although both `FS` and `TMPL` share the same `KV_RO` signature, they
 do not need to have the same implementation at all, and handles to one of them
 cannot be passed to the other module without causing a static type error.
 
+<br />
+<div class="panel callout">
+  <i class="fa fa-exclamation fa-3x pull-left"> </i> 
+  <p>Before building, you'll also need the latest Git version
+  of the <a href="http://github.com/mirage/cowabloga">cowabloga</a> library,
+  since we are refactoring the website to reuse it on our personal
+  homepages.  You can easily get it by running:</p>
+
+  <pre><code>opam remove cowabloga
+opam pin cowabloga git://github.com/mirage/cowabloga</code></pre>
+</div>
+
 Now you can build the unikernel using `mirage`.
 
 ```
