@@ -25,18 +25,27 @@ let two_cols l r = <:html<
 >>
 
 module Global = struct
-   let nav_links = [
-    "Blog", Uri.of_string "/blog";
-    "Docs", Uri.of_string "/docs";
-    "API", Uri.of_string "http://mirage.github.io";  (* TODO integrate *)
-    "Community", Uri.of_string "/community";
-  ]
+  let nav_links = <:xml<
+    <ul class="left">
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href="/docs/">Docs</a></li>
+      <li><a href="http://mirage.github.io/">API</a></li>
+      <li class="has-dropdown">
+        <a href="/community/">Community</a>
+        <ul class="dropdown">
+          <li><a href="/community/">Background</a></li>
+          <li><a href="/community/">Contact</a></li>
+          <li><a href="/community/#team">Team</a></li>
+          <li><a href="/links/">Links</a></li>
+        </ul>
+      </li> 
+     </ul> >>
 
   let top_nav =
     Cowabloga.Foundation.top_nav
       ~title:<:html<<img src="/graphics/mirage-logo-small.png" />&>>
       ~title_uri:(Uri.of_string "/")
-      ~nav_links:(Cowabloga.Foundation.Link.top_nav ~align:`Left nav_links)
+      ~nav_links 
 
   let page ~title ~headers ~content =
     let font = <:html<
