@@ -39,13 +39,13 @@ let fat_tmpl =
   }
 
 let http =
- let ip = 
-    let open IP in 
+ let ip =
+    let open IP in
     let address = Ipaddr.V4.of_string_exn "128.232.97.54" in
     let netmask = Ipaddr.V4.of_string_exn "255.255.255.224" in
     let gateway = [Ipaddr.V4.of_string_exn "128.232.97.33"] in
     let config = IPv4 { address; netmask; gateway } in
-    { name = "www4"; config; networks = [ Network.Tap0 ] } 
+    { name = "www4"; config; networks = [ Network.Tap0 ] }
   in
   Driver.HTTP {
     HTTP.port  = 80;

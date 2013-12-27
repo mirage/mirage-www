@@ -90,7 +90,7 @@ module Index = struct
 
   let dispatch ~feed ~feeds =
     lwt atom =
-      Cowabloga.Feed.to_atom ~meta:feed ~feeds 
+      Cowabloga.Feed.to_atom ~meta:feed ~feeds
       >|= Cow.Atom.xml_of_feed
       >|= Cow.Xml.to_string
     in
@@ -132,5 +132,3 @@ module About = struct
     >> in
     return (Global.page ~title:"Community" ~headers:[] ~content)
 end
-
-

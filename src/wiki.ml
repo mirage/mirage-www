@@ -15,7 +15,7 @@ let dispatch ({Cowabloga.Atom_feed.title; subtitle; rights} as feed) entries =
     let headers = <:xml<<link rel="alternate" type="application/atom+xml" href=$str:url$ />&>> in
     let title = "Docs " ^
       match title with
-      | None -> "" 
+      | None -> ""
       | Some x -> " :: " ^ x in
     lwt content = html_of_page ?disqus ~content ~sidebar in
     return (Pages.Global.page ~title ~headers ~content)
@@ -61,7 +61,7 @@ let dispatch ({Cowabloga.Atom_feed.title; subtitle; rights} as feed) entries =
   return (
     function
     | [] | [""] -> content_type_xhtml, main_page
-    | ["atom.xml"] -> content_type_atom, atom_feed 
+    | ["atom.xml"] -> content_type_atom, atom_feed
     | [x] when Hashtbl.mem doc_entries x -> content_type_xhtml, (Hashtbl.find doc_entries x)
     | x -> content_type_xhtml, not_found x
   )

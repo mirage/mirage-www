@@ -46,7 +46,7 @@ module Main (C:CONSOLE) (FS:KV_RO) (TMPL:KV_RO) (Server:Cohttp_lwt.Server) = str
     let updates_feed =
       Site_config.updates
         (fun name -> read_tmpl name >|= Cow.Markdown.of_string) in
-      
+
     let feeds = [
        `Blog (blog_feed, Data.Blog.entries);
        `Wiki (wiki_feed, Data.Wiki.entries);
@@ -56,7 +56,7 @@ module Main (C:CONSOLE) (FS:KV_RO) (TMPL:KV_RO) (Server:Cohttp_lwt.Server) = str
     lwt blog_dispatch = Blog.dispatch blog_feed Data.Blog.entries in
     lwt wiki_dispatch = Wiki.dispatch wiki_feed Data.Wiki.entries in
     lwt updates_dispatch = Pages.Index.dispatch ~feed:updates_feed ~feeds in
- 
+
     (* dispatch non-file URLs *)
     let dispatch req =
       function

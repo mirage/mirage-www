@@ -19,8 +19,8 @@ let dispatch ({title; subtitle; rights} as feed) entries =
   let content_type_atom  = ["content-type", "application/atom+xml; charset=UTF-8"] in
 
   let copyright =
-    match rights with 
-    | None -> [] 
+    match rights with
+    | None -> []
     | Some r -> [`Data r]
   in
 
@@ -29,7 +29,7 @@ let dispatch ({title; subtitle; rights} as feed) entries =
     let sidebar = Cowabloga.Foundation.Sidebar.t
         ~title:"Recent Posts" ~content:recent_posts in
     lwt posts = Cowabloga.Blog.to_html feed entries in
-    let content = Cowabloga.Blog_template.t ~title ~subtitle 
+    let content = Cowabloga.Blog_template.t ~title ~subtitle
         ~sidebar ~posts ~copyright () in
     return (make content)
   in
@@ -47,7 +47,7 @@ let dispatch ({title; subtitle; rights} as feed) entries =
   in
 
   let atom_index =
-    Cowabloga.Blog.to_atom ~feed ~entries 
+    Cowabloga.Blog.to_atom ~feed ~entries
     >|= Cow.Atom.xml_of_feed
     >|= Cow.Xml.to_string
   in
