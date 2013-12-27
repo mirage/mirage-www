@@ -94,14 +94,14 @@ let papers = [
     items = [ ext "https://realworldocaml.org"; ];
     title = "Real World OCaml: functional programming for the masses";
     authors = [ anil; yminsky; jhickey ];
-    descr = <:xml< 
+    descr = <:xml<
       Published by O'Reilly Associates, 510 pages, Nov 2013.
       >>;
     abstract = <:xml<
 <p>This fast-moving tutorial introduces you to OCaml, an industrial-strength programming language designed for expressiveness, safety, and speed. Through the book’s many examples, you’ll quickly learn how OCaml stands out as a tool for writing fast, succinct, and readable systems code.
 Real World OCaml takes you through the concepts of the language at a brisk pace, and then helps you explore the tools and techniques that make OCaml an effective and practical tool. In the book’s third section, you’ll delve deep into the details of the compiler toolchain and OCaml’s simple and efficient runtime system.</p> >>
 
-  };   
+  };
   { name     = "asplos";
     items    = [
       pdf "http://anil.recoil.org/papers/2013-asplos-mirage.pdf";
