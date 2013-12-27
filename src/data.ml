@@ -300,3 +300,38 @@ module Wiki = struct
     };
   ]
 end
+
+module Links = struct
+  open Cowabloga.Date
+  open Cowabloga.Links
+  let press = {
+     name="press-coverage";
+     icon="fa-pencil";
+  }
+
+  let entries = [
+    {
+      id="infoq-mirageos-2013";
+      uri=Uri.of_string "http://www.infoq.com/news/2013/12/mirageos";
+      title="InfoQ: Xen Project Releases 1.0 of Mirage OS";
+      date=day (2013,12,23);
+      stream=press;
+    };
+    {
+      id="eweek-mirageos-2013";
+      uri=Uri.of_string "http://www.eweek.com/cloud/xen-project-builds-its-own-cloud-os-mirage.html/";
+      title="eWeek: Xen Project Builds Its Own Cloud OS Mirage";
+      date=day (2013,12,09);
+      stream=press;
+    };
+    {
+      id="xenproject-mirageos-2013";
+      uri=Uri.of_string "http://www.xenproject.org/about/in-the-news/162-xen-project-releases-mirage-os-welcomes-arm-as-newest-member.html";
+      title="Xen Project Releases Mirage OS, Welcomes ARM as Newest Member";
+      date=day (2013,12,09);
+      stream=press;
+    };
+  ]
+
+  let streams = [ press ]
+end
