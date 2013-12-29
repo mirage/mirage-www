@@ -140,7 +140,7 @@ module Blog = struct
       };
       { updated    = date (2013, 12, 29, 17, 0);
         author     = dave;
-        subject    = "Understanding xen events with Mirage";
+        subject    = "Understanding Xen events with Mirage";
         body       = "/blog/xen-events.md";
         permalink  = "xen-events";
       };
