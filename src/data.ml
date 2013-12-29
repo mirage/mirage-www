@@ -138,6 +138,12 @@ module Blog = struct
         body       = "/blog/mirage-1.0.3-released.md";
         permalink  = "mirage-1.0.3-released";
       };
+      { updated    = date (2013, 12, 29, 17, 0);
+        author     = dave;
+        subject    = "Understanding xen events with Mirage";
+        body       = "/blog/xen-events.md";
+        permalink  = "xen-events";
+      };
     ]
 end
 
