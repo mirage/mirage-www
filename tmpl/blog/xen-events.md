@@ -11,7 +11,7 @@ to pre-empt them, or until they ask to block via a *hypercall*
 (a system call to the hypervisor).
 A typical
 domain has no hardware access, instead it performs I/O by talking to other
-priviledged *driver domains* (often domain 0) via Xen-specific 
+privileged *driver domains* (often domain 0) via Xen-specific 
 disk and network protocols. These protocols use two primitives:
 
  1. *granting* another domain access to your memory (which then
