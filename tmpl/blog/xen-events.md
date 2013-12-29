@@ -82,7 +82,7 @@ per event channel) bits:
 Note that all Mirage guests are single vCPU and therefore we can simplify things
 by relying on the (single) per-vCPU evtchn_upcall_mask rather than the fine-grained
 evtchn_mask (normally a multi-vCPU guest would use the evtchn_upcall_mask to
-control reentrant executation and the evtchn_mask to coalesce event wakeups).
+control reentrant execution and the evtchn_mask to coalesce event wakeups).
 
 Note the shared info page is shared between the domain and the hypervisor
 without any locks, so an architecture-specific protocol must be used to access
