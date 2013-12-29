@@ -163,7 +163,7 @@ in
 process_events channel Activations.program_start
 ```
 The Activations module keeps a counter and a condition variable per event channel,
-using the condition variable to wake any threads who are already blocked and the
+using the condition variable to wake any threads which are already blocked and the
 counter to prevent a thread from blocking just *after* an event has been received.
 
 If there is no "work to do", then control passes to
