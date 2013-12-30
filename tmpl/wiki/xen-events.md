@@ -61,7 +61,7 @@ How do event channels work?
 ---------------------------
 
 Every domain maps a special 
-[shared info](https://github.com/djs55/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/include/public/xen.h#L637)
+[shared info](https://github.com/mirage/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/include/public/xen.h#L637)
 page which contains bitmaps representing the state of each event channel. This
 per-channel state consists of:
 
@@ -72,7 +72,7 @@ per-channel state consists of:
     don't bother interrupting me until I clear the mask".
 
 Every vCPU has a
-[vcpu_info](https://github.com/djs55/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/include/public/xen.h#L588)
+[vcpu_info](https://github.com/mirage/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/include/public/xen.h#L588)
 record in the shared info page, which stores two relevant domain-global (not
 per event channel) bits:
 
@@ -90,34 +90,34 @@ it (usually via C macros with names like "test_and_set_bit")
 
 When a domain wants to transmit an event, it calls the
 calls the *EVTCHNOP_send* hypercall. Within Xen, this calls
-[xen/common/event_channel.c:evtchn_set_pending](https://github.com/djs55/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/common/event_channel.c#L616)
+[xen/common/event_channel.c:evtchn_set_pending](https://github.com/mirage/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/common/event_channel.c#L616)
 which tests the evtchn_pending bit for this event channel. If it's already set then
 no further work is needed and so it returns. If the bit isn't already set, then
 it is set and then evtchn_mask is queried.
 The evtchn_mask is always clear for
 Mirage guests, so control passes to
-[xen/arch/x86/domain.c:vcpu_mark_events_pending](https://github.com/djs55/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/arch/x86/domain.c#L2011)
+[xen/arch/x86/domain.c:vcpu_mark_events_pending](https://github.com/mirage/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/arch/x86/domain.c#L2011)
 which sets the per-vCPU evtchn_upcall_pending bit and then calls
-[xen/arch/x86/domain.c:vcpu_kick](https://github.com/djs55/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/arch/x86/domain.c#L1994) which calls
-[xen/common/schedule.c:vcpu_unblock](https://github.com/djs55/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/common/schedule.c#L386) which calls
-[xen/common/schedule.c:vcpu_wake](https://github.com/djs55/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/common/schedule.c#L363) which finally sets the vCPU to a "runnable" state.
+[xen/arch/x86/domain.c:vcpu_kick](https://github.com/mirage/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/arch/x86/domain.c#L1994) which calls
+[xen/common/schedule.c:vcpu_unblock](https://github.com/mirage/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/common/schedule.c#L386) which calls
+[xen/common/schedule.c:vcpu_wake](https://github.com/mirage/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/common/schedule.c#L363) which finally sets the vCPU to a "runnable" state.
 
 When a domain wishes to wait for an event,
 it can either call
 *SCHEDOP_block* to wait forever for any (unmasked) event, or call *SCHEDOP_poll* to wait
 for an event on a small set
-(specifically [less than or equal to 128](https://github.com/djs55/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/common/schedule.c#L712))
+(specifically [less than or equal to 128](https://github.com/mirage/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/common/schedule.c#L712))
  of listed ports up to a timeout (like select(2)). Since we don't want to limit
 ourselves to 128 ports, Mirage applications on Xen exclusively use SCHEDOP_block.
 The 
-[implementation of SCHEDOP_block](https://github.com/djs55/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/common/schedule.c#L874)
+[implementation of SCHEDOP_block](https://github.com/mirage/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/common/schedule.c#L874)
 simply calls
-[xen/common/schedule.c:vcpu_block_enable_events](https://github.com/djs55/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/common/schedule.c#L698)
+[xen/common/schedule.c:vcpu_block_enable_events](https://github.com/mirage/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/common/schedule.c#L698)
 which calls
-[xen/include/asm-x86/event.h:local_event_delivery_enable](https://github.com/djs55/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/include/asm-x86/event.h#L36)
+[xen/include/asm-x86/event.h:local_event_delivery_enable](https://github.com/mirage/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/include/asm-x86/event.h#L36)
 to clear the evtchn_upcall_mask bit
 and then calls
-[xen/common/schedule.c:vcpu_block](https://github.com/djs55/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/common/schedule.c#L680) which performs a final check for incoming events and takes the vCPU offline.
+[xen/common/schedule.c:vcpu_block](https://github.com/mirage/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/common/schedule.c#L680) which performs a final check for incoming events and takes the vCPU offline.
 
 How does Mirage handle Xen events?
 ---------------------------------
@@ -125,7 +125,7 @@ How does Mirage handle Xen events?
 Mirage applications running on Xen are linked with
 [a small C library](https://github.com/mirage/mirage-platform/tree/master/xen/runtime/kernel)
 derived from
-[mini-os](https://github.com/djs55/xen/tree/master/extras/mini-os). This library
+[mini-os](https://github.com/mirage/xen/tree/master/extras/mini-os). This library
 takes care of initial boot: mapping the shared info page and initialising the
 event channel state. Once the domain state is setup, the OCaml runtime is
 initialised and the
