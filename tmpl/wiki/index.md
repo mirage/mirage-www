@@ -27,7 +27,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 
 </div>
 
-#### Technical
+#### Libraries
 
 * Threads: [introduction to Lwt](/wiki/tutorial-lwt)
 * Threads: [delimited continuations vs explicit monadic threads](/wiki/delimcc-vs-lwt)
@@ -35,9 +35,13 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 * [Portable Regular Expressions](/wiki/ocaml-regexp)
 * [HTCaML](/wiki/htcaml)
 * [Caml on the Web (COW)](/wiki/cow)
-* [Synthesizing virtual disks for xen](/wiki/xen-synthesize-virtual-disk.md)
 
-#### Historical Release Notes*
+#### Xen Backend
+
+* [How the Xen VM event system works](/wiki/xen-events)
+* [Synthesizing virtual disks for Xen](/wiki/xen-synthesize-virtual-disk)
+
+#### Historical Release Notes
 
 * [Checklist for 1.0 Dev Preview](dev-preview-checklist)
 * Weekly call [2013-06-11](/wiki/weekly-2013-06-11) on the end of the start is finally in sight.
