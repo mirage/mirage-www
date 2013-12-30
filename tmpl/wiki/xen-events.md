@@ -2,17 +2,15 @@ This article is part of a series documenting how Mirage applications run under
 [Xen](http://www.xenproject.org/). This article is about "events"; i.e. how
 can an app wait for input to arrive and tell someone that output is available?
 
-Background: Xen, domains, I/O etc
----------------------------------
+#### Background: Xen, domains, I/O, etc
 
-A running virtual machine under Xen is known as a *domain*. A domain has
-a number of virtual CPUs (vCPUs) which run until the Xen scheduler decides
-to pre-empt them, or until they ask to block via a *hypercall*
-(a system call to the hypervisor).
-A typical
-domain has no hardware access, instead it performs I/O by talking to other
-privileged *driver domains* (often domain 0) via Xen-specific 
-disk and network protocols. These protocols use two primitives:
+A running virtual machine under Xen is known as a [domain](http://wiki.xen.org/wiki/Xen_Overview).
+A domain has a number of virtual CPUs (vCPUs) which run until the Xen scheduler
+decides to pre-empt them, or until they ask to block via a *hypercall* (a
+system call to the hypervisor).  A typical domain has no direct hardware access
+and instead performs I/O by talking to other privileged *driver domains* (often
+domain 0) via Xen-specific disk and network protocols. These protocols use two
+primitives:
 
  1. *granting* another domain access to your memory (which then
     may be *shared* or *copied*); and
@@ -22,16 +20,13 @@ disk and network protocols. These protocols use two primitives:
 This article focuses on how *events* work; a future article will describe how
 shared memory works.
 
-What is an event channel?
--------------------------
+#### What is an event channel?
 
-An *event channel* is a logical connection
-between (domain_1, port_1) and (domain_2, port_2) where port_1 and port_2
-are integers, like TCP port numbers or Unix file descriptors. An *event*
-sent from one domain will cause the other domain to unblock (if it hasn't been
-"masked").
-To understand how event channels are used, it's worth comparing I/O under
-Unix to I/O under Xen:
+An *event channel* is a logical connection between (domain_1, port_1) and
+(domain_2, port_2) where port_1 and port_2 are integers, like TCP port numbers
+or Unix file descriptors. An *event* sent from one domain will cause the other
+domain to unblock (if it hasn't been "masked").  To understand how event
+channels are used, it's worth comparing I/O under Unix to I/O under Xen:
 
 When a Unix process starts, it runs in a context with environment variables,
 pre-connected file descriptors and command-line arguments. When a Xen domain
@@ -45,20 +40,21 @@ care of talking protocols like TCP/IP. A Xen domain
 which wants to perform network I/O will share memory with- and then bind event
 channels to- *network driver domains*, and then exchange raw
 ethernet frames. The Xen domain will contain its own TCP/IP stack
-(such as
-[mirage-tcpip](https://github.com/mirage/mirage-tcpip)).
+(such as [mirage-tcpip](https://github.com/mirage/mirage-tcpip)).
 
 When a Unix process wants to read or write data via a file descriptor
-it can use select(2) to wait until data (or space) is available, and then use
-read(2) or write(2), passing pointers to buffers as arguments. When a Xen domain
-wants to wait for data (or space) it will block until an event arrives, and then
-send an event to signal that data has been produced or consumed. Note that neither
-blocking nor sending take buffers as arguments-- under Xen, data (or metadata)
-is placed into shared memory beforehand: the events are simply a way to say, "look
-at the shared buffers again".
+it can use *[select(2)](http://linux.die.net/man/2/select)* to wait until data
+(or space) is available, and then use
+*[read(2)](http://linux.die.net/man/2/read)* or
+[write(2)](http://linux.die.net/man/2/write), passing pointers to data buffers
+as arguments. When a Xen domain wants to wait for data (or space) it will block
+until an event arrives, and then send an event to signal that data has been
+produced or consumed. Note that neither blocking nor sending take buffers as
+arguments since under Xen, data (or metadata) is placed into shared memory
+beforehand. The events are simply a way to say, "look at the shared buffers
+again".
 
-How do event channels work?
----------------------------
+#### How do event channels work?
 
 Every domain maps a special 
 [shared info](https://github.com/mirage/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/include/public/xen.h#L637)
@@ -86,7 +82,7 @@ control reentrant execution and the evtchn_mask to coalesce event wakeups).
 
 Note the shared info page is shared between the domain and the hypervisor
 without any locks, so an architecture-specific protocol must be used to access
-it (usually via C macros with names like "test_and_set_bit")
+it (usually via C macros with names like `test_and_set_bit`)
 
 When a domain wants to transmit an event, it calls the
 calls the *EVTCHNOP_send* hypercall. Within Xen, this calls
@@ -102,10 +98,9 @@ which sets the per-vCPU evtchn_upcall_pending bit and then calls
 [xen/common/schedule.c:vcpu_unblock](https://github.com/mirage/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/common/schedule.c#L386) which calls
 [xen/common/schedule.c:vcpu_wake](https://github.com/mirage/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/common/schedule.c#L363) which finally sets the vCPU to a "runnable" state.
 
-When a domain wishes to wait for an event,
-it can either call
-*SCHEDOP_block* to wait forever for any (unmasked) event, or call *SCHEDOP_poll* to wait
-for an event on a small set
+When a domain wishes to wait for an event, it can either call *SCHEDOP_block*
+to wait forever for any (unmasked) event, or call *SCHEDOP_poll* to wait for an
+event on a small set
 (specifically [less than or equal to 128](https://github.com/mirage/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/common/schedule.c#L712))
  of listed ports up to a timeout (like select(2)). Since we don't want to limit
 ourselves to 128 ports, Mirage applications on Xen exclusively use SCHEDOP_block.
@@ -119,8 +114,7 @@ to clear the evtchn_upcall_mask bit
 and then calls
 [xen/common/schedule.c:vcpu_block](https://github.com/mirage/xen/blob/1e143e2ae8be3ba86c2e931a1ee8d91efca08f89/xen/common/schedule.c#L680) which performs a final check for incoming events and takes the vCPU offline.
 
-How does Mirage handle Xen events?
----------------------------------
+### How does Mirage handle Xen events?
 
 Mirage applications running on Xen are linked with
 [a small C library](https://github.com/mirage/mirage-platform/tree/master/xen/runtime/kernel)
@@ -177,8 +171,7 @@ In Mirage's case all we do is clear the vCPU's evtchn_upcall_pending flag and
 return, safe in the knowledge that the *SCHEDOP_block* call will now return, and
 the main OCaml loop will be executed again.
 
-Summary
--------
+#### Summary
 
 Now that you understand how events work under Xen and how Mirage uses them,
 what else do you need to know?
