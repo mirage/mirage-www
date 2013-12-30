@@ -157,6 +157,12 @@ module Wiki = struct
     }
 
   let entries = [
+    { updated    = date (2013, 12, 29, 17, 0);
+      author     = dave;
+      subject    = "Understanding Xen events with Mirage";
+      body       = File "xen-events.md";
+      permalink  = "xen-events";
+    };
     { updated    = date (2013, 12, 25, 22, 0);
       author     = amir;
       subject    = "Deploying via Continuous Integration";
