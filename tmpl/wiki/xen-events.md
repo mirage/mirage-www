@@ -182,7 +182,7 @@ Summary
 
 Now that you understand how events work under Xen and how Mirage uses them,
 what else do you need to know?
-Future blog posts in this series will answer the following questions:
+Future articles in this series will answer the following questions:
 
   * how do Xen guests share memory with each other?
   * how do the console and xenstore rings work?
