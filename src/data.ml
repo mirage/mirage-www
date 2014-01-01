@@ -138,6 +138,12 @@ module Blog = struct
         body       = "/blog/mirage-1.0.3-released.md";
         permalink  = "mirage-1.0.3-released";
       };
+      { updated    = date (2013, 12, 28, 19, 0);
+        author     = mort;
+        subject    = "Presenting Decks";
+        body       = "/blog/decks-n-drums.md";
+        permalink  = "decks-n-drums";
+      };
     ]
 end
 
