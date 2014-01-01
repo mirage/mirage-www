@@ -262,7 +262,7 @@ module Wiki = struct
       permalink  = "mirage-www";
     };
 
-    { updated    = date (2013, 12, 20, 22, 00);
+    { updated    = date (2013, 12, 31, 19, 00);
       author     = mort;
       subject    = "Hello Mirage World";
       body       = File "hello-world.md";
