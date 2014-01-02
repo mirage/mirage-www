@@ -54,7 +54,8 @@ module Global = struct
     >> in
     let headers = font @ headers in
     let content = top_nav @ content in
-    let body = Cowabloga.Foundation.body ~title ~headers ~content in
+    let google_analytics = Site_config.google_analytics in
+    let body = Cowabloga.Foundation.body ~google_analytics ~title ~headers ~content () in
     Cowabloga.Foundation.page ~body
 end
 
