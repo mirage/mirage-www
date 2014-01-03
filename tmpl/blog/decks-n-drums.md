@@ -1,16 +1,10 @@
-A few months ago, partly as a stunt, mostly because we could, Anil and I put
-together [a presentation][oscon-deck] for [OSCON'13][oscon] about Mirage in
-Mirage. That is, as a self-hosting Mirage web application that served up slides
-using [RevealJS][]. It was a bit of a hack, but it was cool (we thought!) and
-it worked. Several more presentations were written and given this way, at
-venues ranging from the [XenSummit 2012][xensummit] to [ACM FOCI 2013][foci] to
-the Cambridge Computer Lab's [MSc in Advanced Computer Science][acs].
+A few months ago, partly as a stunt, mostly because we could, Anil and I put together [a presentation][oscon-deck] for [OSCON'13][oscon] about Mirage in Mirage. That is, as a self-hosting Mirage web application that served up slides using [RevealJS][]. It was a bit of a hack, but it was cool (we thought!) and it worked. Several more presentations were written and given this way, at venues ranging from the [XenSummit 2013][xensummit] to [ACM FOCI 2013][foci] to the Cambridge Computer Lab's [MSc in Advanced Computer Science][acs].
 
 [oscon]: http://www.oscon.com/oscon2013/
 [oscon-deck]: http://decks.openmirage.org/oscon13/
 [revealjs]: http://lab.hakim.se/reveal-js/
-[foci]: https://www.usenix.org/conference/foci13
-[xensummit]: http://www-archive.xenproject.org/xensummit/xs12na_talks/M10b.html
+[foci]: https://www.usenix.org/conference/foci13‎
+[xensummit]: http://www.youtube.com/watch?v=3Jype6sP6MQ
 [acs]: http://decks.openmirage.org/cam13/
 
 With the [release of Mirage 1.0][mirage-release], [CoHTTP][], [Cowabloga][] and
