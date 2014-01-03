@@ -7,7 +7,17 @@ A few months ago, partly as a stunt, mostly because we could, Anil and I put tog
 [xensummit]: http://www.youtube.com/watch?v=3Jype6sP6MQ
 [acs]: http://decks.openmirage.org/cam13/
 
-With the [release of Mirage 1.0][mirage-release], [CoHTTP][], [Cowabloga][] and the new [Zurb Foundation][zurb] based [website][], it was time to refresh them and as a little seasonal gift, give them a shiny new index with some actual CSS styling. So [here they are][decks], a set of presentations that have been given by various members of the Mirage team over the last 6 months or so. They cover a range of topics, from general introductions to the Xen roadmap to more detailed technical background. And, of course, as Mirage is under constant rapid development, some of the older content may already be outdated. But [the code for the site itself][decks-code] serves as another example of a simple -- somewhat simpler than the [Mirage website][website] in fact -- Mirage web application.
+With the [release of Mirage 1.0][mirage-release], [CoHTTP][], [Cowabloga][] and
+the new [Zurb Foundation][zurb] based [website][], it was time to refresh them
+and as a little seasonal gift, give them a shiny new index with some actual CSS
+styling. So [here they are][decks], a set of presentations that have been given
+by various members of the Mirage team over the last 6 months or so. They cover
+a range of topics, from general introductions to the Xen roadmap to more
+detailed technical background. And, of course, as Mirage is under constant
+rapid development, some of the older content may already be outdated. But [the
+code for the site itself][decks-code] serves as another example of a simple --
+somewhat simpler than the [Mirage website][website] in fact -- Mirage web
+application.
 
 [mirage-release]: http://openmirage.org/blog/releasing-mirage
 [website]: http://openmirage.org/
