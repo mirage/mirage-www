@@ -47,7 +47,7 @@ module Main (C:CONSOLE) (FS:KV_RO) (TMPL:KV_RO) (Server:Cohttp_lwt.Server) = str
       `Blog (blog_feed, Data.Blog.entries);
       `Wiki (wiki_feed, Data.Wiki.entries);
     ] in
-    let dyn_xhtml = dyn ~headers:["content-type","text/html"] in
+    let dyn_xhtml = dyn ~headers:Cowabloga.Headers.html in
 
     lwt blog_dispatch    = Blog.dispatch blog_feed Data.Blog.entries in
     lwt wiki_dispatch    = Wiki.dispatch wiki_feed Data.Wiki.entries in

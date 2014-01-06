@@ -22,8 +22,8 @@ let dispatch ({Cowabloga.Atom_feed.title; subtitle; rights} as feed) entries =
   in
 
   (* TODO use a mime type db (from cohttp?) *)
-  let content_type_xhtml = ["content-type", "text/html"] in
-  let content_type_atom  = ["content-type", "application/atom+xml; charset=UTF-8"] in
+  let content_type_xhtml = Cowabloga.Headers.html in
+  let content_type_atom  = Cowabloga.Headers.atom in
 
   (* Main wiki page Html.t fragment with the index page *)
   let main_page =
