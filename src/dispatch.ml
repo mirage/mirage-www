@@ -53,7 +53,9 @@ module Main (C:CONSOLE) (FS:KV_RO) (TMPL:KV_RO) (Server:Cohttp_lwt.Server) = str
     lwt blog_dispatch    = Blog.dispatch blog_feed Data.Blog.entries in
     lwt wiki_dispatch    = Wiki.dispatch wiki_feed Data.Wiki.entries in
     lwt links_dispatch   = Pages.Links.dispatch links_feed Data.Links.entries in
-    lwt updates_dispatch = Pages.Index.dispatch ~feed:updates_feed ~feeds:updates_feeds in
+    lwt updates_dispatch =
+      Pages.Index.dispatch ~feed:updates_feed ~feeds:updates_feeds
+    in
 
     (* dispatch non-file URLs *)
     let dispatch req =

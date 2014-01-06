@@ -29,7 +29,7 @@ let dispatch ({Cowabloga.Atom_feed.title; subtitle; rights} as feed) entries =
   let main_page =
     lwt idx = html_of_index feed in
     let sidebar = html_of_recent_updates feed Data.Wiki.entries in
-    make ~title:"index"  (return idx) sidebar
+    make ~title:"index" (return idx) sidebar
   in
 
   lwt doc_entries =
