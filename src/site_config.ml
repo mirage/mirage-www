@@ -4,7 +4,7 @@ open Data
 let base_uri = "http://openmirage.org/"
 
 let google_analytics= ("UA-19610168-1", "openmirage.org")
- 
+
 let blog read_entry = {
   Cowabloga.Atom_feed.base_uri;
   id = "";
