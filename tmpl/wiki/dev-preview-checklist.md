@@ -1,6 +1,4 @@
-!Developer Preview Checklist
-
-##Scenarios
+## Scenarios
 
 Three scenarios need to work:
 
@@ -10,7 +8,7 @@ Three scenarios need to work:
 
 * Proof concept of distributed system (ideally can be demo'd for OSCON). Current thinking is something like OCamlot or Signpost. This would be a nice "Hello world!" demo as it requires actors and a persistent job queue. For example, i.e spawning new VMs in response to load, as evidenced by self-scaling web-server.
 
-##Repositories
+## Repositories
 
 All of these repositories need to be code-reviewed and run over with ocamldoc.  Purge the TODO hacks when you go over them, or explicitly pull them out into a top-level TODO file.
 We need to close out this thread on a standard [repository format](https://lists.cam.ac.uk/pipermail/cl-mirage/2013-March/msg00099.html) for all these things.
@@ -33,7 +31,7 @@ Core Mirage libraries and tools:
 * *opam-repo-dev*:
 * *dyntype*:
 * *ocaml-re*: stable, done
-* *opam*: 
+* *opam*:
 * *cross-ref ocamldoc*: leo
 
 Storage libraries:
@@ -49,8 +47,8 @@ Storage libraries:
 RPC/coordination:
 * *rpc-light*: Works well, but slow and no wire protocol defined. Vb mentioned Thrift. Also have bin_io? No versioning story. Needs obuild help. (Owner: tg)
 * *ocaml-actor*: non existent!
-* *ocaml-fable*: on avsm repo only 
-* *message-switch*: 
+* *ocaml-fable*: on avsm repo only
+* *message-switch*:
 * *ocamlmq*: to investigate.
 * *logger*: need a vchan-based logger and CLI to access from other domain
 
@@ -68,7 +66,7 @@ Security:
 * *ocaml-ssh*: still in mpl-land, not too hard to port
 
 Webby libraries:
-* *ocaml-cohttp*: 
+* *ocaml-cohttp*:
 * *ocaml-cow*:
 * *ocaml-uri*:
 * *ocaml-spdy*: out of date, not for 1.0
@@ -88,12 +86,10 @@ Tutorials and examples:
 * *mirage-tutorial*: out-of-date
 * *mirage-www*: extract wiki/blog into library, make it not suck
 
-##Misc
+## Misc
 
 * Integrate `ocaml-tuntap` into `mirage-platform` to remove tun hacks [vincent]
 * `mirari run` as a stateful process working with libvirt and EC2.
 * cohttp/ssl releases [anil]
 * obuild instead of oasis for core libraries for better cross-compilation/portability/speed
 * Jenga? [dave]
-
-

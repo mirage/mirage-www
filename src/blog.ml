@@ -10,13 +10,15 @@ let dispatch ({title; subtitle; rights} as feed) entries =
     (* TODO need a URL routing mechanism instead of assuming / *)
     let uri = Uri.of_string "/blog/atom.xml" in
     let headers =
-      <:xml<<link rel="alternate" type="application/atom+xml" href=$uri:uri$ /> >> in
+      <:xml<
+        <link rel="alternate" type="application/atom+xml" href=$uri:uri$ />
+      >>
+    in
     let title = "Blog" ^ match title with None -> "" | Some x -> " :: " ^ x in
     Pages.Global.page ~title ~headers ~content in
 
-  (* TODO use a mime type db (from cohttp?) *)
-  let content_type_xhtml = ["content-type", "text/html"] in
-  let content_type_atom  = ["content-type", "application/atom+xml; charset=UTF-8"] in
+  let content_type_xhtml = Cowabloga.Headers.html in
+  let content_type_atom  = Cowabloga.Headers.atom in
 
   let copyright =
     match rights with
@@ -26,11 +28,13 @@ let dispatch ({title; subtitle; rights} as feed) entries =
 
   let main_blog_index =
     let recent_posts = recent_posts feed entries in
-    let sidebar = Cowabloga.Foundation.Sidebar.t
-        ~title:"Recent Posts" ~content:recent_posts in
+    let sidebar =
+      Cowabloga.Foundation.Sidebar.t ~title:"Recent Posts" ~content:recent_posts
+    in
     lwt posts = Cowabloga.Blog.to_html feed entries in
-    let content = Cowabloga.Blog_template.t ~title ~subtitle
-        ~sidebar ~posts ~copyright () in
+    let content =
+      Cowabloga.Blog_template.t ~title ~subtitle ~sidebar ~posts ~copyright ()
+    in
     return (make content)
   in
 
@@ -38,9 +42,13 @@ let dispatch ({title; subtitle; rights} as feed) entries =
     Lwt_list.map_s (fun ent ->
         let module C = Cowabloga in
         let recent_posts = recent_posts feed entries in
-        let sidebar = C.Foundation.Sidebar.t ~title:"Recent Posts" ~content:recent_posts in
+        let sidebar =
+          C.Foundation.Sidebar.t ~title:"Recent Posts" ~content:recent_posts
+        in
         lwt posts = C.Blog.Entry.to_html feed ent in
-        let content = C.Blog_template.t ~title ~subtitle ~sidebar ~posts ~copyright () in
+        let content =
+          C.Blog_template.t ~title ~subtitle ~sidebar ~posts ~copyright ()
+        in
         let content = make content in
         return (ent.C.Blog.Entry.permalink, content)
       ) entries

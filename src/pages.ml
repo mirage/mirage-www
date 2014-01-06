@@ -38,14 +38,14 @@ module Global = struct
           <li><a href="/community/#team">Team</a></li>
           <li><a href="/links/">Links</a></li>
         </ul>
-      </li> 
+      </li>
      </ul> >>
 
   let top_nav =
     Cowabloga.Foundation.top_nav
       ~title:<:html<<img src="/graphics/mirage-logo-small.png" />&>>
       ~title_uri:(Uri.of_string "/")
-      ~nav_links 
+      ~nav_links
 
   let page ~title ~headers ~content =
     let font = <:html<
@@ -86,8 +86,8 @@ module Index = struct
     >> in
     return (Global.page ~title:"Mirage OS" ~headers:[] ~content)
 
-  let content_type_xhtml = ["content-type", "text/html"] (* TODO combine *)
-  let content_type_atom  = ["content-type", "application/atom+xml; charset=UTF-8"]
+  let content_type_xhtml = Cowabloga.Headers.html
+  let content_type_atom  = Cowabloga.Headers.atom
 
   (* TODO have a way of rewriting all the pages with an associated Atom feed *)
   let make content =

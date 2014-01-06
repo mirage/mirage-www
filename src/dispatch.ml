@@ -37,23 +37,24 @@ module Main (C:CONSOLE) (FS:KV_RO) (TMPL:KV_RO) (Server:Cohttp_lwt.Server) = str
       Server.respond_string ~headers ~status ~body ()
     in
 
-     let read_entry = (fun name -> read_tmpl name >|= Cow.Markdown.of_string) in
-     let blog_feed = Site_config.blog read_entry in
-     let wiki_feed = Site_config.wiki
-         (fun name -> read_tmpl ("/wiki/"^name) >|= Cow.Markdown.of_string) in
-     let updates_feed = Site_config.updates read_entry in
-     let links_feed = Site_config.links read_entry in
+    let read_entry = (fun name -> read_tmpl name >|= Cow.Markdown.of_string) in
+    let blog_feed = Site_config.blog (fun n -> read_entry ("/blog/"^n)) in
+    let wiki_feed = Site_config.wiki (fun n -> read_entry ("/wiki/"^n)) in
+    let updates_feed = Site_config.updates read_entry in
+    let links_feed = Site_config.links read_entry in
 
-     let updates_feeds = [
-        `Blog (blog_feed, Data.Blog.entries);
-        `Wiki (wiki_feed, Data.Wiki.entries);
-     ] in
-     let dyn_xhtml = dyn ~headers:["content-type","text/html"] in
+    let updates_feeds = [
+      `Blog (blog_feed, Data.Blog.entries);
+      `Wiki (wiki_feed, Data.Wiki.entries);
+    ] in
+    let dyn_xhtml = dyn ~headers:Cowabloga.Headers.html in
 
-     lwt blog_dispatch    = Blog.dispatch blog_feed Data.Blog.entries in
-     lwt wiki_dispatch    = Wiki.dispatch wiki_feed Data.Wiki.entries in
-     lwt links_dispatch   = Pages.Links.dispatch links_feed Data.Links.entries in
-     lwt updates_dispatch = Pages.Index.dispatch ~feed:updates_feed ~feeds:updates_feeds in
+    lwt blog_dispatch    = Blog.dispatch blog_feed Data.Blog.entries in
+    lwt wiki_dispatch    = Wiki.dispatch wiki_feed Data.Wiki.entries in
+    lwt links_dispatch   = Pages.Links.dispatch links_feed Data.Links.entries in
+    lwt updates_dispatch =
+      Pages.Index.dispatch ~feed:updates_feed ~feeds:updates_feeds
+    in
 
     (* dispatch non-file URLs *)
     let dispatch req =
@@ -84,8 +85,9 @@ module Main (C:CONSOLE) (FS:KV_RO) (TMPL:KV_RO) (Server:Cohttp_lwt.Server) = str
       let rec remove_empty_tail = function
         | [] | [""] -> []
         | hd::tl -> hd :: remove_empty_tail tl in
-      let path_elem = remove_empty_tail
-          (Re_str.(split_delim (regexp_string "/") path)) in
+      let path_elem =
+        remove_empty_tail (Re_str.(split_delim (regexp_string "/") path))
+      in
       C.log_s c (Printf.sprintf "URL: %s" path)
       >>= fun () ->
       try_lwt
