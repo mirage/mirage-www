@@ -38,9 +38,8 @@ module Main (C:CONSOLE) (FS:KV_RO) (TMPL:KV_RO) (Server:Cohttp_lwt.Server) = str
     in
 
     let read_entry = (fun name -> read_tmpl name >|= Cow.Markdown.of_string) in
-    let blog_feed = Site_config.blog read_entry in
-    let wiki_feed = Site_config.wiki
-                      (fun name -> read_tmpl ("/wiki/"^name) >|= Cow.Markdown.of_string) in
+    let blog_feed = Site_config.blog (fun n -> read_entry ("/blog/"^n)) in
+    let wiki_feed = Site_config.wiki (fun n -> read_entry ("/wiki/"^n)) in
     let updates_feed = Site_config.updates read_entry in
     let links_feed = Site_config.links read_entry in
 
