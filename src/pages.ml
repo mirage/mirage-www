@@ -38,14 +38,14 @@ module Global = struct
           <li><a href="/community/#team">Team</a></li>
           <li><a href="/links/">Links</a></li>
         </ul>
-      </li> 
+      </li>
      </ul> >>
 
   let top_nav =
     Cowabloga.Foundation.top_nav
       ~title:<:html<<img src="/graphics/mirage-logo-small.png" />&>>
       ~title_uri:(Uri.of_string "/")
-      ~nav_links 
+      ~nav_links
 
   let page ~title ~headers ~content =
     let font = <:html<
