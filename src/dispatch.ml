@@ -84,8 +84,9 @@ module Main (C:CONSOLE) (FS:KV_RO) (TMPL:KV_RO) (Server:Cohttp_lwt.Server) = str
       let rec remove_empty_tail = function
         | [] | [""] -> []
         | hd::tl -> hd :: remove_empty_tail tl in
-      let path_elem = remove_empty_tail
-                        (Re_str.(split_delim (regexp_string "/") path)) in
+      let path_elem =
+        remove_empty_tail (Re_str.(split_delim (regexp_string "/") path))
+      in
       C.log_s c (Printf.sprintf "URL: %s" path)
       >>= fun () ->
       try_lwt
