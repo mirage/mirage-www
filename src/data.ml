@@ -322,6 +322,19 @@ module Links = struct
   }
 
   let entries = [
+    { id="techweek-europe-2013";
+      uri=Uri.of_string "http://www.techweekeurope.co.uk/comment/xen-launches-mirage-cloud-os-133875";
+      title="Xen Launches The Mirage Cloud OS";
+      date=day(2013,12,11);
+      stream=press;
+    };
+    {
+      id="linuxcom-cloud-os-2013";
+      uri=Uri.of_string "http://www.linux.com/news/enterprise/cloud-computing/751156-are-cloud-operating-systems-the-next-big-thing-";
+      title="Linux.com: Are Cloud Operating Systems the Next Big Thing?";
+      date=day (2013,12,03);
+      stream=press;
+    };
     {
       id="infoq-mirageos-2013";
       uri=Uri.of_string "http://www.infoq.com/news/2013/12/mirageos";
