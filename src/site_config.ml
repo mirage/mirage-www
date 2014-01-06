@@ -28,7 +28,7 @@ let wiki read_entry = {
 (* Metadata for /updates/atom.xml *)
 let updates read_entry = {
   Cowabloga.Atom_feed.base_uri;
-  id = "";
+  id = "updates/";
   title = "Mirage OS updates";
   subtitle = None;
   rights;
