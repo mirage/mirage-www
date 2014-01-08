@@ -11,8 +11,8 @@ let mode =
   with Not_found ->
     `Crunch
 
-let fat_ro file =
-  kv_ro_of_fs (fat (block_of_file file))
+let fat_ro dir =
+  kv_ro_of_fs (fat_of_files ~dir ())
 
 let fs = match mode with
   | `Fat    -> fat_ro "files.img"
