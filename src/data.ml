@@ -322,6 +322,12 @@ module Links = struct
   }
 
   let entries = [
+    { id="infoq-rwo-2013";
+      uri=Uri.of_string "http://www.infoq.com/articles/real-world-ocaml-interview";
+      title="Book Review and Interview: Real World OCaml";
+      date=day(2014,01,08);
+      stream=press;
+    };
     { id="techweek-europe-2013";
       uri=Uri.of_string "http://www.techweekeurope.co.uk/comment/xen-launches-mirage-cloud-os-133875";
       title="Xen Launches The Mirage Cloud OS";
