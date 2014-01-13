@@ -322,6 +322,12 @@ module Links = struct
   }
 
   let entries = [
+    { id="infoworld-mirage-2014";
+      uri=Uri.of_string "http://www.infoworld.com/t/operating-systems/xen-mirage-the-less-more-cloud-os-233823";
+      title="Xen Mirage: The less-is-more cloud OS";
+      date=day(2014,01,09);
+      stream=press;
+    };
     { id="infoq-rwo-2013";
       uri=Uri.of_string "http://www.infoq.com/articles/real-world-ocaml-interview";
       title="Book Review and Interview: Real World OCaml";
