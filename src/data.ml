@@ -322,6 +322,12 @@ module Links = struct
   }
 
   let entries = [
+    { id="nymote-mirage-ann-2014";
+      uri=Uri.of_string "http://nymote.org/blog/2014/announcing-first-mirage-release/";
+      title="Nymote.org: Announcing the first major release of Mirage - the Cloud Operating System";
+      date=day(2014,01,13);
+      stream=press;
+    };
     { id="infoworld-mirage-2014";
       uri=Uri.of_string "http://www.infoworld.com/t/operating-systems/xen-mirage-the-less-more-cloud-os-233823";
       title="Xen Mirage: The less-is-more cloud OS";
