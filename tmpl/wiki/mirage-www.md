@@ -216,6 +216,7 @@ also make this DHCP instead, by:
 ```
 let http =
   let ip =
+    let open IP in
     let config = IP.DHCP in
     { name = "www4"; config; networks = [ Network.Tap0 ] } 
   in
