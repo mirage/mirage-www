@@ -1,5 +1,5 @@
 # OPAM packages needed to build tests.
-OPAM_PACKAGES="mirage cow"
+OPAM_PACKAGES="mirage cow ssl cowabloga ipaddr.1.0.0"
 
 case "$OCAML_VERSION,$OPAM_VERSION" in
 3.12.1,1.0.0) ppa=avsm/ocaml312+opam10 ;;
@@ -26,7 +26,6 @@ opam init git://github.com/ocaml/opam-repository >/dev/null 2>&1
 # opam pin mirage git://github.com/avsm/mirage
 opam pin cowabloga git://github.com/mirage/cowabloga
 opam install ${OPAM_PACKAGES}
-opam install cowabloga
 eval `opam config env`
 cp .travis-www.ml src/config.ml
 cd src
