@@ -38,31 +38,38 @@ The infix operators `<&>` and `<?>` are defined in the Lwt module, where `a <&> 
 
 Now write a program that spins off two threads, each of which sleep for some amount of time, say 1 and 2 seconds and then one prints "Heads", the other "Tails". After both have finished, it prints "Finished" and exits. To sleep for some time use `OS.Time.sleep` and to print to console use `OS.Console.log`. Note that `OS` is a Mirage-specific module, if you are using Lwt in another context, use `Lwt_unix.sleep` and `Lwt_io.write`.
 
-You will need to have Mirage [installed](/wiki/install). Create a file `foo.conf` with the following content:
+You will need to have Mirage [installed](/wiki/install). Create a file `config.ml` with the following content:
 
 ```
-  main-noip: Foo.main
-  depends: mirage
-  packages: mirage
+  open Mirage
+
+  let () =
+    Job.register [
+      "Foo.Main", [Driver.console]
+    ]
 ```
 
 Add `foo.ml` with the following content and edit it:
 
 ```
+  open Mirage_types.V1
   open Lwt
   open OS
 
-  let main () =
+  module Main (C : CONSOLE) = struct
+    let start c =
       (* the guts go here *)
+      return ()
+  end
 ```
 
 
 Assuming you are building for POSIX using native kernel sockets, compile the application by:
 
 ```
-  mirari configure --unix --socket foo.conf
-  mirari build --unix --socket foo.conf
-  mirari run --unix --socket foo.conf
+  mirage configure --unix --socket
+  mirage build
+  mirage run   # Or ./main.native
 ```
 
 If you are building for a different Mirage platform, change the `--unix --socket` switches appropriately (presently either `--xen` or `--unix --direct`).
@@ -70,20 +77,23 @@ If you are building for a different Mirage platform, change the `--unix --socket
 ###Solution
 
 ```
-  open Lwt (* provides bind and join *)
-  open OS  (* provides Time, Console and Main *)
+  open Mirage_types.V1 (* provides the CONSOLE signature *)
+  open Lwt             (* provides bind and join *)
+  open OS              (* provides Time, Console and Main *)
 
-  let main () =
-    bind (join [
-      bind (Time.sleep 1.0) (fun () ->
-        Console.log "Heads"; return ()
-      );
-      bind (Time.sleep 2.0) (fun () ->
-        Console.log "Tails"; return ()
-      );
-    ]) (fun () ->
-      Console.log ("Finished"); return ()
-    )
+  module Main (C : CONSOLE) = struct
+    let start c =
+      bind (join [
+        bind (Time.sleep 1.0) (fun () ->
+          Console.log c "Heads"; return ()
+        );
+        bind (Time.sleep 2.0) (fun () ->
+          Console.log c "Tails"; return ()
+        );
+      ]) (fun () ->
+        Console.log c "Finished"; return ()
+      )
+  end
 ```
 
 This is built via `lwt/src/heads1.conf` in the `mirage-skeleton` code repository.
@@ -95,16 +105,19 @@ Using Lwt does sometimes require significantly restructuring code, and in partic
 This is a good place to introduce some of these extensions. When opening the Lwt module, the infix operator `>>=` is made available. This operator is an alternative to the `bind` function and often makes the code more readable. E.g. consider `bind (bind (bind t f) g) h` and the operator based equivalent expression `t >>= f >>= g >>= h`. We can now rewrite the previous solution more simply:
 
 ```
+  open Mirage_types.V1 (* provides the CONSOLE signature *)
   open Lwt (* provides >>= and join *)
   open OS  (* provides Time, Console and Main *)
 
-  let main () =
-    join [
-      (Time.sleep 1.0 >>= fun () -> (Console.log "Heads"; return ()));
-      (Time.sleep 2.0 >>= fun () -> (Console.log "Tails"; return ()));
-     ] >>= fun () ->
-       Console.log "Finished";
-       return ()
+  module Main (C : CONSOLE) = struct
+    let start c =
+      join [
+        (Time.sleep 1.0 >>= fun () -> (Console.log c "Heads"; return ()));
+        (Time.sleep 2.0 >>= fun () -> (Console.log c "Tails"; return ()));
+       ] >>= fun () ->
+         Console.log c "Finished";
+         return ()
+  end
 ```
 
 This is built via `lwt/src/heads2.conf` in the repository.
@@ -146,21 +159,25 @@ Here, we wait for the result of `e1`, bind the result to `x` and continue into `
 Now, the code looks like just normal OCaml code, except that we substitute `lwt` for `let`, with the effect that the call blocks until the result of that thread is available. Lets revisit our heads and tails example from above and see how it looks when rewritten with these syntax extensions:
 
 ```
+  open Mirage_types.V1
   open Lwt
   open OS
 
-  let main () =
-    let heads =
-      Time.sleep 1.0 >>
-      return (Console.log "Heads");
-    in
-    let tails =
-      Time.sleep 2.0 >>
-      return (Console.log "Tails");
-    in
-    lwt () = heads <&> tails in
-    Console.log "Finished";
-    return ()
+  module Main (C : CONSOLE) = struct
+    let start c =
+
+      let heads =
+        Time.sleep 1.0 >>
+        return (Console.log c "Heads");
+      in
+      let tails =
+        Time.sleep 2.0 >>
+        return (Console.log c "Tails");
+      in
+      lwt () = heads <&> tails in
+      Console.log c "Finished";
+      return ()
+  end
 ```
 
 This is built via `lwt/src/heads3.conf` in the Mirage code repository.
@@ -173,7 +190,7 @@ Here we define two threads, `heads` and `tails`, and block until they are both c
 In order to cancel a thread, the function `cancel` (provided by the module Lwt) is needed. It has type `'a t -> unit` and does exactly what it says (except on certain complicated cases that are not in the scope of this tutorial). A simple timeout function that cancels a thread after a given number of seconds can be written easily:
 
 ```
-  (* In this examples and all those afterwards, we consider Lwt and OS to be  
+  (* In this examples and all those afterwards, we consider Lwt and OS to be
      opened *)
   let timeout f t =
     Time.sleep f >>= fun () -> cancel t
@@ -190,7 +207,7 @@ Modify the `timeout` function so that it returns either `None` if `t` has not ye
 ```
   let timeout f t =
     Time.sleep f >>
-    match state t with 
+    match state t with
     | Return v -> return (Some v)
     | _        -> cancel t; return None
 ```
@@ -258,7 +275,7 @@ Among the different modules the Lwt library provides is `Lwt_mvar`. This module 
 
 Here are the needed functions from the `Lwt_mvar` module:
 
-```  
+```
   (* type of a mailbox variable *)
   type 'a t
 
@@ -269,7 +286,7 @@ Here are the needed functions from the `Lwt_mvar` module:
   val put : 'a t -> 'a -> unit Lwt.t
 
   (* will take any available value and block if the mailbox is empty *)
-  val take : 'a t -> 'a Lwt.t 
+  val take : 'a t -> 'a Lwt.t
 ```
 
 ###Challenge
@@ -285,9 +302,9 @@ Write a small set of functions to help do pipeline parallelism. The interface to
 ### Solution
 
 ```
-let map f m_in = 
+let map f m_in =
   let m_out = Lwt_mvar.create_empty () in
-  let rec aux () = 
+  let rec aux () =
     Lwt_mvar.(
       take m_in   >>=
       f           >>= fun v ->
@@ -298,9 +315,9 @@ let map f m_in =
   let t = aux () in
   m_out
 
-let split m_ab = 
+let split m_ab =
   let m_a, m_b = Lwt_mvar.(create_empty (), create_empty ()) in
-  let rec aux () = 
+  let rec aux () =
     Lwt_mvar.take m_ab >>= fun (a, b) ->
     join [
       Lwt_mvar.put m_a a;
@@ -310,10 +327,10 @@ let split m_ab =
   let t = aux () in
   (m_a, m_b)
 
-    
+
 let filter f m_a =
   let m_out = Lwt_mvar.create_empty () in
-  let rec aux () = 
+  let rec aux () =
     Lwt_mvar.take m_a >>= fun a ->
     f a >>= function
       | true -> Lwt_mvar.put m_out a >> aux ()
@@ -334,33 +351,33 @@ Using the pipelining helpers, change the echo server into a string processing se
 ```
   let read_line () =
     Lwt.return (String.make (Random.int 20) 'a')
- 
+
   let wait_strlen str =
     OS.Time.sleep (float_of_int (String.length str)) >>
     Lwt.return str
 
-  let cap_str str = 
+  let cap_str str =
     Lwt.return (String.uppercase str)
 
-  let rec print_mvar m = 
+  let rec print_mvar c m =
     lwt s = Lwt_mvar.take m in
-    Console.log s;
-    print_mvar m
+    Console.log c s;
+    print_mvar c m
 
   let ( |> ) x f = f x
-  
-  let echo_server () = 
+
+  let echo_server c () =
     let m_input = Lwt_mvar.create_empty () in
     let m_output = m_input |> map wait_strlen |> map cap_str in
-  
-    let rec read () = 
-      read_line ()           >>= fun s -> 
+
+    let rec read () =
+      read_line ()           >>= fun s ->
       Lwt_mvar.put m_input s >>=
       read
     in
-    let rec write () = 
-      Lwt_mvar.take m_output >>= fun r -> 
-      Console.log r;
+    let rec write () =
+      Lwt_mvar.take m_output >>= fun r ->
+      Console.log c r;
       write ()
     in
     (read ()) <&> (write ())
@@ -380,25 +397,25 @@ Every second write a tuple containing a pair of small random integers `(Random.i
   let add_mult (a, b) =
     return (a + b, a * b)
 
-  let print_and_go str a =
-    Console.log (Printf.sprintf "%s %d" str a);
+  let print_and_go c str a =
+    Console.log c (Printf.sprintf "%s %d" str a);
     return a
 
   let test_odd a =
     return (1 = (a mod 2))
 
-  let rec print_odd m =
+  let rec print_odd c m =
     lwt a = Lwt_mvar.take m in
-    Console.log (Printf.sprintf "Odd: %d" a);
+    Console.log c (Printf.sprintf "Odd: %d" a);
     print_odd m
 
   let ( |> ) x f = f x
 
-  let int_server () =
+  let int_server c () =
     let m_input = Lwt_mvar.create_empty () in
     let (ma, mm) = m_input |> map add_mult |> split in
-    let _ = ma |> map (print_and_go "Add:") |> filter test_odd |> print_odd in
-    let _ = mm |> map (print_and_go "Mult:") |> filter test_odd |> print_odd in
+    let _ = ma |> map (print_and_go c "Add:") |> filter test_odd |> print_odd c in
+    let _ = mm |> map (print_and_go c "Mult:") |> filter test_odd |> print_odd c in
     let rec inp () =
       Lwt_mvar.put m_input (Random.int 1000, Random.int 1000) >>
       Time.sleep 1. >>
@@ -493,13 +510,20 @@ If locking a data structure is still needed between yield points, the `Lwt_mutex
 One very, very important thing to remember with cooperative threading is that raising exceptions is not safe to do between yield points. In general, you should never call `raise` directly. Lwt provides an alternative syntax:
 
 ```
+  open Mirage_types.V1
+  open Lwt
+  open OS
+
   exception Foo
-  let main () =
-    try_lwt
-      let x = ... in
-      raise_lwt Foo
-    with
-      |Foo -> return (Console.log "Foo raised")
+
+  module Main (C : CONSOLE) = struct
+    let start c =
+      try_lwt
+        let x = ... in
+        raise_lwt Foo
+      with
+        |Foo -> return (Console.log c "Foo raised")
+  end
 ```
 
 This looks similar to normal OCaml code, except that the caught exception has an `Lwt.t` return type appended to it.
@@ -511,7 +535,7 @@ Lwt also provides equivalents of `for` and `while` that block on each iteration,
 ```
   for_lwt i = 0 to 10 do
     OS.Time.sleep (float_of_int i) >>
-    return (OS.Console.log "foo")
+    return (OS.Console.log c "foo")
   done
 ```
 
