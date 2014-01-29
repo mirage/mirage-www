@@ -322,6 +322,12 @@ module Links = struct
   }
 
   let entries = [
+    { id="fosdem-2014";
+      uri=Uri.of_string "https://fosdem.org/2014/interviews/2014-anil-madhavapeddy-richard-mortier/";
+      title="Interview with Anil Madhavapeddy and Richard Mortier on MirageOS";
+      date=day(2014,01,29);
+      stream=press;
+    };
     { id="infoworld-mirage-2014";
       uri=Uri.of_string "http://www.infoworld.com/t/operating-systems/xen-mirage-the-less-more-cloud-os-233823";
       title="Xen Mirage: The less-is-more cloud OS";
