@@ -201,7 +201,7 @@ module Wiki = struct
       author     = dave;
       subject    = "Synthesizing virtual disks for xen";
       body       = File "xen-synthesize-virtual-disk.md";
-      permalink  = "xen-synthesize-virtual-disk.md";
+      permalink  = "xen-synthesize-virtual-disk";
     };
 
     { updated    = date (2013, 04, 23, 9, 0);
