@@ -1,7 +1,8 @@
 open Data
 open Lwt
-open Cowabloga.Atom_feed
-open Cowabloga.Blog
+module C = Cowabloga
+open C.Atom_feed
+open C.Blog
 
 (* Construct an HTTP dispatch function for the blog *)
 let dispatch ({title; subtitle; rights} as feed) entries =
@@ -17,8 +18,8 @@ let dispatch ({title; subtitle; rights} as feed) entries =
     let title = "Blog" ^ match title with None -> "" | Some x -> " :: " ^ x in
     Pages.Global.page ~title ~headers ~content in
 
-  let content_type_xhtml = Cowabloga.Headers.html in
-  let content_type_atom  = Cowabloga.Headers.atom in
+  let content_type_xhtml = C.Headers.html in
+  let content_type_atom  = C.Headers.atom in
 
   let copyright =
     match rights with
@@ -29,25 +30,24 @@ let dispatch ({title; subtitle; rights} as feed) entries =
   let main_blog_index =
     let recent_posts = recent_posts feed entries in
     let sidebar =
-      Cowabloga.Foundation.Sidebar.t ~title:"Recent Posts" ~content:recent_posts
+      C.Foundation.Sidebar.t ~title:"Recent Posts" ~content:recent_posts
     in
-    lwt posts = Cowabloga.Blog.to_html feed entries in
+    lwt posts = C.Blog.to_html feed entries in
     let content =
-      Cowabloga.Blog_template.t ~title ~subtitle ~sidebar ~posts ~copyright ()
+      C.Foundation.Blog.t ~title ~subtitle ~sidebar ~posts ~copyright ()
     in
     return (make content)
   in
 
   lwt blog_entries =
     Lwt_list.map_s (fun ent ->
-        let module C = Cowabloga in
         let recent_posts = recent_posts feed entries in
         let sidebar =
           C.Foundation.Sidebar.t ~title:"Recent Posts" ~content:recent_posts
         in
         lwt posts = C.Blog.Entry.to_html feed ent in
         let content =
-          C.Blog_template.t ~title ~subtitle ~sidebar ~posts ~copyright ()
+          C.Foundation.Blog.t ~title ~subtitle ~sidebar ~posts ~copyright ()
         in
         let content = make content in
         return (ent.C.Blog.Entry.permalink, content)
@@ -55,7 +55,7 @@ let dispatch ({title; subtitle; rights} as feed) entries =
   in
 
   let atom_index =
-    Cowabloga.Blog.to_atom ~feed ~entries
+    C.Blog.to_atom ~feed ~entries
     >|= Cow.Atom.xml_of_feed
     >|= Cow.Xml.to_string
   in

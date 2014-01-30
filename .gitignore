@@ -4,8 +4,9 @@
 *.bak
 *.img
 
+_build
+
 /log
-/_build
 /src/Makefile
 /src/main.ml
 /src/mir-main
@@ -13,6 +14,9 @@
 /src/static_files.mli
 /src/static_tmpl.ml
 /src/static_tmpl.mli
+/src/static[0-9].ml
+/src/static[0-9].mli
 /src/log
 /src/make-fat1-image.sh
 /src/make-fat2-image.sh
+/src/mir-www
