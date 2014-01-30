@@ -201,7 +201,7 @@ module Wiki = struct
       author     = dave;
       subject    = "Synthesizing virtual disks for xen";
       body       = File "xen-synthesize-virtual-disk.md";
-      permalink  = "xen-synthesize-virtual-disk.md";
+      permalink  = "xen-synthesize-virtual-disk";
     };
 
     { updated    = date (2013, 04, 23, 9, 0);
@@ -322,6 +322,30 @@ module Links = struct
   }
 
   let entries = [
+    { id="fosdem-2014";
+      uri=Uri.of_string "https://fosdem.org/2014/interviews/2014-anil-madhavapeddy-richard-mortier/";
+      title="Interview with Anil Madhavapeddy and Richard Mortier on MirageOS";
+      date=day(2014,01,29);
+      stream=press;
+    };
+    { id="nymote-mirage-ann-2014";
+      uri=Uri.of_string "http://nymote.org/blog/2014/announcing-first-mirage-release/";
+      title="Nymote.org: Announcing the first major release of Mirage - the Cloud Operating System";
+      date=day(2014,01,13);
+      stream=press;
+    };
+    { id="infoworld-mirage-2014";
+      uri=Uri.of_string "http://www.infoworld.com/t/operating-systems/xen-mirage-the-less-more-cloud-os-233823";
+      title="Xen Mirage: The less-is-more cloud OS";
+      date=day(2014,01,09);
+      stream=press;
+    };
+    { id="infoq-rwo-2013";
+      uri=Uri.of_string "http://www.infoq.com/articles/real-world-ocaml-interview";
+      title="Book Review and Interview: Real World OCaml";
+      date=day(2014,01,08);
+      stream=press;
+    };
     { id="techweek-europe-2013";
       uri=Uri.of_string "http://www.techweekeurope.co.uk/comment/xen-launches-mirage-cloud-os-133875";
       title="Xen Launches The Mirage Cloud OS";
