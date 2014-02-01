@@ -1,5 +1,7 @@
+[ updated 2014-02-01 for mirage.1.1.0 and xen-disk.1.2.1 ]
+
 This page describes how to create a synthetic, high-performance
-virtual disk implementation for xen based on the Mirage libraries.
+virtual disk implementation for Xen based on the Mirage libraries.
 
 ## Disk devices under Xen
 
@@ -25,40 +27,46 @@ memory barriers to ensure consistency.
 ### Xen disk devices in Mirage
 
 Like everything else in Mirage, Xen disk devices are implemented as
-libraries. The ocamlfind library called "xenctrl" provides support for
-manipulating blocks of raw memory pages, "granting" access to them to
-other domains and signalling event channels. There are two implementations
-of "xenctrl":
-[one that invokes Xen "hypercalls" directly](https://github.com/mirage/mirage-platform/tree/master/xen/lib)
- and one which uses the [Xen userspace library libxc](https://github.com/xapi-project/ocaml-xen-lowlevel-libs).
-Both implementations satisfy a common signature, so it's easy to write
-code which will work in both userspace and kernelspace.
+libraries. The following libraries are used:
+* [io-page](https://github.com/mirage/io-page):
+  for representing raw memory pages
+* [xen-gnt](https://github.com/xapi-project/ocaml-gnt):
+  APIs for "granting" pages to other domains and "mapping" pages granted to us
+* [xen-evtchn](https://github.com/xapi-project/ocaml-evtchn):
+  APIs for signalling other VMs
+* [shared-memory-ring](https://github.com/mirage/shared-memory-ring):
+  manipulates shared memory request/response queues
+  used for paravirtualised disk and network devices. This library is a mix of
+  99.9% OCaml and 0.1% asm, where the asm is only needed to invoke memory
+  barriers, to ensure that metadata writes issued by one CPU core appear
+  in the same order when viewed by another CPU core.
+* [mirage-block-xen](https://github.com/mirage/mirage-block-xen):
+  frontend ("blkfront") and backend ("blkback") implementations
 
-The ocamlfind library
-[shared-memory-ring](https://github.com/mirage/shared-memory-ring)
-provides functions to create and manipulate request/response rings in shared
-memory as used by the disk and network protocols. This library is a mix of
-99.9% OCaml and 0.1% asm, where the asm is only needed to invoke memory
-barrier operations to ensure that metadata writes issued by one CPU core
-appear in the same order when viewed from another CPU core.
-
-Finally the ocamlfind library
-[xenblock](https://github.com/mirage/ocaml-xen-block-driver)
-provides functions to hotplug and hotunplug disk devices, together with an
-implementation of the disk block protocol itself.
-
+Note that all these libraries work equally well in userspace (for development
+and debug) and kernelspace (for production): the target is chosen at
+link-time.
 
 ## Userspace disk implementations
 
-First, install [Xen](http://www.xen.org/), [OCaml](http://www.ocaml.org/)
-and [OPAM](http://opam.ocamlpro.com/). Second initialise your system:
+Userspace Mirage apps are ideal for development, since they have access to
+the full suite of Unix debug and profiling tools. Once written, the exact
+same code can be relinked and run directly in kernelspace for maximum
+performance.
+
+The [xen-disk](https://github.com/mirage/xen-disk) demonstrates how to
+create a synthetic Xen virtual disk. To compile it, first, install
+[Xen](http://www.xen.org/) (including the -dev, or -devel packages),
+[OCaml](http://www.ocaml.org/) and [OPAM](http://opam.ocamlpro.com/).
+
+Second initialise your system:
 
 ```
   opam init
   eval `opam config env`
 ```
 
-Install the unmodified `xen-disk` package, this will ensure all the build
+Third tnstall the unmodified `xen-disk` package, this will ensure all the build
 dependencies are installed:
 
 ```
@@ -74,7 +82,7 @@ should be able to run:
   xen-disk connect <vmname>
 ```
 
-which will hotplug a fresh block device into the VM "<vmname>" using the
+which will hotplug a fresh block device into the VM "vmname" using the
 "discard" backend, which returns "success" to all read and write requests,
 but actually throws all data away. Obviously this backend should only be
 used for basic testing!
@@ -89,39 +97,27 @@ Assuming that worked ok, clone and build the source for `xen-disk` yourself:
 
 ## Making a custom virtual disk implementation
 
-The `xen-disk` program has a set of simple built-in virtual disk implementations.
-Each one satisifies a simple signature, contained in
-[src/storage.mli](https://github.com/mirage/xen-disk/blob/master/src/storage.mli):
+The `xen-disk` program can use any Mirage disk implementation satisfying
+Mirage
+[BLOCK signature](https://github.com/mirage/mirage/blob/master/types/V1.mli#L134).
+The key functions are:
 
-```
-type configuration = {
-  filename: string;      (** path where the data will be stored *)
-  format: string option; (** format of physical data *)
-}
-(** Information needed to "open" a disk *)
+* [connect](https://github.com/mirage/mirage/blob/master/types/V1.mli#L40):
+  to open a connection to a named device
+* [read](https://github.com/mirage/mirage/blob/master/types/V1.mli#L164):
+  to fill application buffers with block device data
+* [write](https://github.com/mirage/mirage/blob/master/types/V1.mli#L170):
+  to write application buffers to the block device
 
-module type S = sig
-  (** A concrete mechanism to access and update a virtual disk. *)
+By default `xen-disk` uses the following disk implementations:
 
-  type t
-  (** An open virtual disk *)
-
-  val open_disk: configuration -> t option Lwt.t
-  (** Given a configuration, attempt to open a virtual disk *)
-
-  val size: t -> int64
-  (** [size t] is the size of the virtual disk in bytes. The actual
-      number of bytes stored on media may be different. *)
-
-  val read: t -> Cstruct.t -> int64 -> int -> unit Lwt.t
-  (** [read t buf offset_sectors len_sectors] copies [len_sectors]
-      sectors beginning at sector [offset_sectors] from [t] into [buf] *)
-
-  val write: t -> Cstruct.t -> int64 -> int -> unit Lwt.t
-  (** [write t buf offset_sectors len_sectors] copies [len_sectors]
-      sectors from [buf] into [t] beginning at sector [offset_sectors]. *)
-end
-```
+* [mirage-block-unix](https://github.com/mirage/mirage-block-unix): reads and writes
+  to/from an existing Unix file or block device
+* [vhd-format](https://github.com/djs55/ocaml-vhd): reads and writes data encoded
+  in the .vhd file format (as used by XenServer and Hyper-V)
+* [DISCARD](https://github.com/mirage/xen-disk/blob/master/src/backend.ml#L45):
+  returns `Ok ()` to all requests without doing any work (typically used for
+  performance testing the ring code)
 
 Let's make a virtual disk implementation which uses an existing disk
 image file as a "gold image", but uses copy-on-write so that no writes
@@ -149,62 +145,61 @@ maps the image file and achieves copy-on-write by setting "shared" to false.
 For extra safety we can also open the file read-only.
 
 Luckily there is already an
-["mmap" implementation](https://github.com/mirage/xen-disk/blob/master/src/backend.ml#L63)
+["mmap" implementation](https://github.com/mirage/xen-disk/blob/master/src/backend.ml#L72)
 in `xen-disk`; all we need to do is tweak it slightly.
-Note that the `xen-disk` program uses a co-operative threading library called
-[lwt](http://ocsigen.org/lwt/)
-which replaces functions from the OCaml standard library which might block
-with non-blocking variants. In
-particular `lwt` uses `Lwt_bytes.map_file` as a wrapper for the
-`Bigarray.Array1.map_file` function.
-In the "open-disk" function we simply need to set "shared" to "false" to
+In the "connect" function we simply need to set "shared" to "false" to
 achieve the behaviour we want i.e.
 
 ```
-  let open_disk configuration =
-    let fd = Unix.openfile configuration.filename [ Unix.O_RDONLY ] 0o0 in
-    let stats = Unix.LargeFile.fstat fd in
-    let mmap = Lwt_bytes.map_file ~fd ~shared:false () in
-    Unix.close fd;
-    return (Some (stats.Unix.LargeFile.st_size, Cstruct.of_bigarray mmap))
+let connect id =
+  let fd = Unix.openfile (filename_of_id id) [ Unix.O_RDONLY ] 0o0 in
+  let stats = Unix.LargeFile.fstat fd in
+  let mmap = Cstruct.of_bigarray (Lwt_bytes.map_file ~fd ~shared:false ()) in
+  Unix.close fd;
+  let size = stats.Unix.LargeFile.st_size in
+  return (`Ok { id; size; mmap })
 ```
 
 The read and write functions can be left as they are:
 
 ```
-  let read (_, mmap) buf offset_sectors len_sectors =
-    let offset_sectors = Int64.to_int offset_sectors in
-    let len_bytes = len_sectors * sector_size in
-    let offset_bytes = offset_sectors * sector_size in
-    Cstruct.blit mmap offset_bytes buf 0 len_bytes;
-    return ()
+let forall offset bufs f =
+  let rec loop offset = function
+  | [] -> ()
+  | b :: bs ->
+    f offset b;
+    loop (offset + (Cstruct.len b)) bs in
+  loop (Int64.to_int offset * 512) bufs;
+  return (`Ok ())
 
-  let write (_, mmap) buf offset_sectors len_sectors =
-    let offset_sectors = Int64.to_int offset_sectors in
-    let offset_bytes = offset_sectors * sector_size in
-    let len_bytes = len_sectors * sector_size in
-    Cstruct.blit buf 0 mmap offset_bytes len_bytes;
-    return () 
+let read t offset bufs =
+  forall offset bufs
+    (fun offset buf ->
+      Cstruct.blit t.mmap offset buf 0 (Cstruct.len buf)
+    )
+
+let write t offset bufs =
+  forall offset bufs
+    (fun offset buf ->
+      Cstruct.blit buf 0 t.mmap offset (Cstruct.len buf)
+    )
 ```
 
 Now if we rebuild and run something like:
 
 ```
   dd if=/dev/zero of=disk.raw bs=1M seek=1024 count=1
-  losetup /dev/loop0 disk.raw
-  mkfs.ext3 /dev/loop0
-  losetup -d /dev/loop0
 
-  dist/build/xen-disk/xen-disk connect <myvm> --path disk.raw
+  dist/build/xen-disk/xen-disk connect <myvm> --path disk.raw --backend mmap
 ```
 
 Inside the VM we should be able to do some basic speed testing:
 
 ```
-  # dd if=/dev/xvdb of=/dev/null bs=1M iflag=direct count=100
-  100+0 records in
-  100+0 records out
-  104857600 bytes (105 MB) copied, 0.125296 s, 837 MB/s
+  djs@ubuntu1310:~$ sudo dd if=/dev/xvdg of=/dev/null bs=1M
+  16+0 records in
+  16+0 records out
+  16777216 bytes (17 MB) copied, 0.0276625 s, 606 MB/s
 ```
 
 Plus we should be able to mount the filesystem inside the VM, make changes and
