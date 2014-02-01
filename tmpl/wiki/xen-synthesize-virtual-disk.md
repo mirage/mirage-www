@@ -1,4 +1,4 @@
-[ updated 2014-02-01 for mirage.1.1.0 and xen-disk.1.2.0 ]
+[ updated 2014-02-01 for mirage.1.1.0 and xen-disk.1.2.1 ]
 
 This page describes how to create a synthetic, high-performance
 virtual disk implementation for xen based on the Mirage libraries.
