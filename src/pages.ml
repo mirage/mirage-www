@@ -55,7 +55,10 @@ module Global = struct
     let headers = font @ headers in
     let content = top_nav @ content in
     let google_analytics = Site_config.google_analytics in
-    let body = Cowabloga.Foundation.body ~google_analytics ~title ~headers ~content () in
+    let body =
+      Cowabloga.Foundation.body
+        ~google_analytics ~title ~headers ~content ~trailers:[] ()
+    in
     Cowabloga.Foundation.page ~body
 end
 
@@ -124,36 +127,37 @@ module Links = struct
     let open Cowabloga.Links in
     lwt body = Cowabloga.Feed.to_html [ `Links (feed, ls) ] in
     let content = <:html<
-
       <div class="row">
-      <div class="small-12 medium-9 large-6 columns">
-      <h2>Around the Web</h2>
-        <p>This is a small link blog we maintain as we hear of stories or interesting
-         blog entries that may be useful for Mirage users.  If you'd like to
-        add one, please do <a href="/community/">get in touch</a>.</p>
-        <br />
-         $body$
-       </div>
+        <div class="small-12 medium-9 large-6 columns">
+          <h2>Around the Web</h2>
+          <p>
+            This is a small link blog we maintain as we hear of stories or
+            interesting blog entries that may be useful for Mirage users. If
+            you'd like to add one, please do <a href="/community/">get in
+            touch</a>.
+          </p>
+          <br />
+          $body$
+        </div>
       </div>
-      >> in
+    >> in
     let body = Global.page ~title:"Around the Web" ~headers:[] ~content in
     let h = Hashtbl.create 1 in
     List.iter (fun l -> Hashtbl.add h (sprintf "%s/%s" l.stream.name l.id) l.uri) ls;
     return (
       function
-      | [] -> HTTP.Server.respond_string ~status:`OK ~body ()
+      | [] -> `Html (return body)
       | [id;link] ->
-         let id = sprintf "%s/%s" id link in
-         if Hashtbl.mem h id then
-           HTTP.Server.respond_redirect ~uri:(Hashtbl.find h id) ()
-         else
-           fail (Failure (sprintf "link not found: %s|%s " id link))
-      | x -> fail (Failure (sprintf "link not found: %s" (String.concat "|" x)))
+        let id = sprintf "%s/%s" id link in
+        if Hashtbl.mem h id then
+          `Redirect (Uri.to_string (Hashtbl.find h id))
+        else
+          `Not_found id
+      | x -> `Not_found (String.concat "|" x)
     )
 end
 
 module About = struct
-
   let t read_fn =
     lwt i = read_file read_fn "/about-intro.md" in
     lwt l = read_file read_fn "/about.md" in

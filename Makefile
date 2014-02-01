@@ -23,6 +23,10 @@ BFLAGS ?=
 RFLAGS ?=
 
 MIRAGE ?= mirage
+MODE ?= unix
+FS ?= fat
+NET ?= direct
+IPADDR ?= static
 
 .PHONY: all configure build run clean
 
@@ -39,4 +43,4 @@ run: build
 	$(MIRAGE) run src/config.ml $(RFLAGS)
 
 clean:
-	$(MIRAGE) clean src/config.ml --no-opam
+	$(MIRAGE) clean src/config.ml $(BFLAGS)
