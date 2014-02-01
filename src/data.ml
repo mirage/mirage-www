@@ -56,6 +56,12 @@ module People = struct
     email     = Some "ch.ko123@gmail.com";
   }
 
+  let jonludlam = {
+    Atom.name = "Jon Ludlam";
+    uri       = Some "http://jon.recoil.org";
+    email     = Some "jon@recoil.org";
+  }
+
 end
 
 let rights = Some "All rights reserved by the author"
@@ -163,6 +169,12 @@ module Wiki = struct
     }
 
   let entries = [
+    { updated    = date (2014, 02, 01, 01, 0);
+      author     = jonludlam;
+      subject    = "How Xen suspend and resume works";
+      body       = File "xen-suspend.md";
+      permalink  = "xen-suspend";
+    };
     { updated    = date (2013, 12, 29, 17, 0);
       author     = dave;
       subject    = "Understanding Xen events with Mirage";
@@ -197,7 +209,7 @@ module Wiki = struct
       permalink  = "faq";
     };
 
-    { updated    = date (2013, 07, 25, 17, 56);
+    { updated    = date (2014, 02, 02, 17, 56);
       author     = dave;
       subject    = "Synthesizing virtual disks for xen";
       body       = File "xen-synthesize-virtual-disk.md";
