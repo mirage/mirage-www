@@ -158,7 +158,7 @@ achieve the behaviour we want i.e.
 
 ```
 let connect id =
-  let fd = Unix.openfile (filename_of_id id) [ Unix.O_RDWR ] 0o0 in
+  let fd = Unix.openfile (filename_of_id id) [ Unix.O_RDONLY ] 0o0 in
   let stats = Unix.LargeFile.fstat fd in
   let mmap = Cstruct.of_bigarray (Lwt_bytes.map_file ~fd ~shared:false ()) in
   Unix.close fd;
