@@ -2,9 +2,9 @@ This article is part of a series documenting how Mirage applications run under
 [Xen](http://www.xenproject.org/). This article is about suspend, resume and
 live migration.
 
-#### Background:
+#### Background
 
-One of the particularly important advantages of using virtual machines
+One of the important advantages of using virtual machines (VMs)
 over physical machines to run your operating systems is that
 management of VMs is simpler and more powerful than managing physical
 computers. One new tool in the management toolkit is that of
@@ -12,20 +12,21 @@ suspending and resuming to a state file. In many ways equivalent to
 shutting the lid on a laptop and having it go to sleep, a VM can be
 suspended such that it no longer consumes any memory or CPU resources
 on its host, and resumed at a later point when required. Unlike a
-laptop, the state of the virtual machine is encapsulated in a state
+laptop, the state of the VM is encapsulated in a state
 file on disk, which can be copied if you want to take a backup,
 replicated many times if you want to have multiple instances of your
 VM running, or copied to another physical host if you would like to
 run it elsewhere. This operation also forms the basis of live
 migration, where a running VM has its state replicated to another
-physical host in such a way that it's execution can be stopped on the
+physical host in such a way that its execution can be stopped on the
 original host and almost immediately started on the destination, and
 users of the services provided by that VM are none the wiser.
 
-For fully virtualised VMs, doing this is actually relatively
-straightforward. The VM is stopped from executing, then the memory
-is saved to disk, and the state of any device emulator (qemu, in
-xen's case) is also persisted to disk. To resume, load the qemu
+For VMs using hardware virtualization instead of
+[paravirtualization](http://en.wikipedia.org/wiki/Paravirtualization), doing
+this is actually relatively straightforward. The VM is stopped from executing,
+then the memory is saved to disk, and the state of any device emulator (qemu,
+in xen's case) is also persisted to disk. To resume, load the qemu
 state back in, restore the memory, and unpause your domain. The
 OS within the VM continues running, unaware that anything has
 changed.
@@ -213,8 +214,4 @@ disk, but this time unmarshalling them straight back into memory. When it [decid
 suspend logic above and sends through only the last few dirty
 pages, which will be much faster than the entire memory image. The
 resume logic is then invoked and the domain starts running again.
-
-
-
-
 
