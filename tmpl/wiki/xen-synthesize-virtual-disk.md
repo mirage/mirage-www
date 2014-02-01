@@ -32,7 +32,7 @@ libraries. The following libraries are used:
   for representing raw memory pages
 * [xen-gnt](https://github.com/xapi-project/ocaml-gnt):
   APIs for "granting" pages to other domains and "mapping" pages granted to us
-* [xen-evtchn](https://github.com/xapi-project/xen-evtchn):
+* [xen-evtchn](https://github.com/xapi-project/ocaml-evtchn):
   APIs for signalling other VMs
 * [shared-memory-ring](https://github.com/mirage/shared-memory-ring):
   manipulates shared memory request/response queues
@@ -82,7 +82,7 @@ should be able to run:
   xen-disk connect <vmname>
 ```
 
-which will hotplug a fresh block device into the VM "<vmname>" using the
+which will hotplug a fresh block device into the VM "vmname" using the
 "discard" backend, which returns "success" to all read and write requests,
 but actually throws all data away. Obviously this backend should only be
 used for basic testing!
@@ -147,18 +147,12 @@ For extra safety we can also open the file read-only.
 Luckily there is already an
 ["mmap" implementation](https://github.com/mirage/xen-disk/blob/master/src/backend.ml#L72)
 in `xen-disk`; all we need to do is tweak it slightly.
-Note that the `xen-disk` program uses a co-operative threading library called
-[lwt](http://ocsigen.org/lwt/)
-which replaces functions from the OCaml standard library which might block
-with non-blocking variants. In
-particular `lwt` uses `Lwt_bytes.map_file` as a wrapper for the
-`Bigarray.Array1.map_file` function.
 In the "connect" function we simply need to set "shared" to "false" to
 achieve the behaviour we want i.e.
 
 ```
 let connect id =
-  let fd = Unix.openfile (filename_of_id id) [ Unix.O_RDWR ] 0o0 in
+  let fd = Unix.openfile (filename_of_id id) [ Unix.O_RDONLY ] 0o0 in
   let stats = Unix.LargeFile.fstat fd in
   let mmap = Cstruct.of_bigarray (Lwt_bytes.map_file ~fd ~shared:false ()) in
   Unix.close fd;
