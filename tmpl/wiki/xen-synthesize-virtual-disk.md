@@ -1,7 +1,7 @@
 [ updated 2014-02-01 for mirage.1.1.0 and xen-disk.1.2.1 ]
 
 This page describes how to create a synthetic, high-performance
-virtual disk implementation for xen based on the Mirage libraries.
+virtual disk implementation for Xen based on the Mirage libraries.
 
 ## Disk devices under Xen
 
@@ -55,7 +55,7 @@ same code can be relinked and run directly in kernelspace for maximum
 performance.
 
 The [xen-disk](https://github.com/mirage/xen-disk) demonstrates how to
-create a synthetic xen virtual disk. To compile it, first, install
+create a synthetic Xen virtual disk. To compile it, first, install
 [Xen](http://www.xen.org/) (including the -dev, or -devel packages),
 [OCaml](http://www.ocaml.org/) and [OPAM](http://opam.ocamlpro.com/).
 
