@@ -32,7 +32,7 @@ libraries. The following libraries are used:
   for representing raw memory pages
 * [xen-gnt](https://github.com/xapi-project/ocaml-gnt):
   APIs for "granting" pages to other domains and "mapping" pages granted to us
-* [xen-evtchn](https://github.com/xapi-project/xen-evtchn):
+* [xen-evtchn](https://github.com/xapi-project/ocaml-evtchn):
   APIs for signalling other VMs
 * [shared-memory-ring](https://github.com/mirage/shared-memory-ring):
   manipulates shared memory request/response queues
