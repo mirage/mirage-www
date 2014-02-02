@@ -3,8 +3,8 @@ open Mirage
 let ipv4_config =
   let address = Ipaddr.V4.of_string_exn "128.232.97.54" in
   let netmask = Ipaddr.V4.of_string_exn "255.255.255.224" in
-  let gateway = [Ipaddr.V4.of_string_exn "128.232.97.33"] in
-  { address; netmask; gateway }
+  let gateways = [Ipaddr.V4.of_string_exn "128.232.97.33"] in
+  { address; netmask; gateways }
 
 (* If the Unix `MODE` is set, the choice of configuration changes:
    MODE=crunch (or nothing): use static filesystem via crunch
