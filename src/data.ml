@@ -98,7 +98,7 @@ module Blog = struct
       };
       { updated    = date (2012, 9, 12, 0, 0);
         author     = dave;
-        subject    = "Building a \"xenstore stub domain\" with Mirage";
+        subject    = "Building a \"Xenstore stub domain\" with Mirage";
         body       = "xenstore-stub.md";
         permalink  = "xenstore-stub-domain";
       };
@@ -211,7 +211,7 @@ module Wiki = struct
 
     { updated    = date (2014, 02, 02, 17, 56);
       author     = dave;
-      subject    = "Synthesizing virtual disks for xen";
+      subject    = "Synthesizing virtual disks for Xen";
       body       = File "xen-synthesize-virtual-disk.md";
       permalink  = "xen-synthesize-virtual-disk";
     };
