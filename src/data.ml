@@ -340,6 +340,12 @@ module Links = struct
       date=day(2014,01,29);
       stream=press;
     };
+    { id="osnews-2014";
+      uri=Uri.of_string "http://www.osnews.com/comments/27516?view=threaded&sort=&threshold=0";
+      title="OSNews: MirageOS: rise of the virtual library operating system";
+      date=day(2014,01,15);
+      stream=press;
+    };
     { id="nymote-mirage-ann-2014";
       uri=Uri.of_string "http://nymote.org/blog/2014/announcing-first-mirage-release/";
       title="Nymote.org: Announcing the first major release of Mirage - the Cloud Operating System";
