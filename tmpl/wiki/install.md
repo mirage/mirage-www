@@ -60,6 +60,6 @@ Finally, install the Mirage command-line tool.
     $ mirage --help
 
 This will install [Mirage](https://github.com/mirage/mirage)!
-If you're upgrading from an older beta installation of Mirage, then be sure that you have at least 1.0.0, or you'll get installation errors.  You can verify this by checking that the version number in the manual page from `mirage --help` is at least (as of the time of writing this page) 1.0.4.
+If you're upgrading from an older beta installation of Mirage, then be sure that you have at least 1.1.0, or you'll get installation errors.  You can verify this by checking that the version number in the manual page from `mirage --help` is at least (as of the time of writing this page) 1.1.0.
 
 That's it. You now have everything required to start developing Mirage unikernels that will run either as POSIX processes or as Xen VMs using the Mirage network stack. Next, why not try [building a Mirage *hello world*](/wiki/hello-world)?
