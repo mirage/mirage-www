@@ -1,8 +1,8 @@
 open Mirage
 
-(* If the Unix `MODE` is set, the choice of configuration changes:
-   MODE=crunch (or nothing): use static filesystem via crunch
-   MODE=fat: use FAT and block device (run ./make-fat-images.sh)
+(* If the Unix `FS` is set, the choice of configuration changes:
+   FS=crunch (or nothing): use static filesystem via crunch
+   FS=fat: use FAT and block device
  *)
 let mode =
   try match String.lowercase (Unix.getenv "FS") with
