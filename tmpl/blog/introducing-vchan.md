@@ -1,3 +1,6 @@
+*Editor*: Note that some of the toolchain details of this blog post are
+now out-of-date with Mirage 1.1, so we will update this shortly.
+
 Unless you are familiar with Xen's source code, there is little chance
 that you've ever heard of the *vchan* library or
 protocol. Documentation about it is very scarce: a description can be
