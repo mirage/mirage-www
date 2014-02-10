@@ -29,19 +29,18 @@ will print `hello\\nworld\\n` 5 times before terminating:
 First, let's look at the code:
 
 ```
-    $ cat basic/hello.ml
-    open Mirage_types.V1
+    $ cat console/unikernel.ml
+    open Lwt
 
-    module Main (C: CONSOLE) = struct
+    module Main (C: V1_LWT.CONSOLE) = struct
 
-      let start c =
-        for_lwt i = 0 to 4 do
-          C.log c "hello" ;
-          lwt () = OS.Time.sleep 2.0 in
-          C.log c "world" ;
-          Lwt.return ()
-        done
-
+    let start c =
+      for_lwt i = 0 to 4 do
+        C.log c "hello" ;
+        lwt () = OS.Time.sleep 1.0 in
+        C.log c "world" ;
+        return ()
+      done
     end
 ```
 
@@ -56,19 +55,28 @@ depending on the target that you are compiling for.  This configuration is
 stored in `config.ml`, which is very simple for our first application.
 
 ```
-    $ cat basic/config.ml
+    $ cat console/config.ml
     open Mirage
 
+    let main =
+      foreign "Unikernel.Main" (console @-> job)
+
     let () =
-      Job.register [
-        "Hello.Main", [Driver.console]
-      ]
+      register "console" [
+      main $ default_console
+    ]
 ```
 
-The configuration registers a set of one or more jobs, each of which represent a
-process (with a start/stop lifecycle).  In this case, the entry point of the process
-is the `Main` module that we defined earlier in `hello.ml`.  It takes a console
-as its only parameter.
+The configuration `register`s a set of one or more jobs, each of which represent
+a process (with a start/stop lifecycle).  Each job most likely depends on some
+device drivers; all the available device drivers are defined in the `Mirage`
+module (see [here](http://mirage.github.io/mirage/)).
+
+In this case, the `main` variable declares that the entry point of the process
+is the `Main` module from the file `unikernel.ml`.  The `@->` combinator is
+used to add a device driver to the list of functor arguments in the job
+definition (see `unikernel.ml`), and the final value of using this combinator
+should always be a `job` if you intend to register it.
 
 Notice that we refer to the module name as a string here, instead of directly
 as an OCaml value.  The `mirage` command-line tool evaluates this configuration
@@ -87,6 +95,12 @@ output, so we register a single `Job` consisting of the `Hello.Main` module
 (and, implicitly its `start` function) and passing it a single reference to a
 console.
 
+You can find the module signatures of all the device drivers (such as `CONSOLE`)
+in the [`types/`](https://github.com/mirage/mirage/tree/master/types) directory
+of the main Mirage repository.  Since you'll find yourself referring back to
+these quite often when building Mirage applications, it's worth bookmarking
+the [documentation](http://mirage.github.io) for this module.
+
 #### Building a Unix binary
 
 We invoke all this by configuring, building and finally running the resulting
@@ -94,7 +108,7 @@ unikernel under Unix first.
 
 
 ```
-cd basic
+cd console
 mirage configure --unix
 ```
 
@@ -106,19 +120,19 @@ It also creates a `Makefile` and `main.ml` by evaluating the `config.ml`.
 make
 ```
 
-This builds a UNIX binary called `mir-main` that contains the simple console
-application.  If you are on a multicore machine and want to do parallel
-builds, `export OPAMJOBS=4` (or some other value equal to the number of
-cores) will do the trick.
+This builds a UNIX binary called `mir-console` that contains the simple console
+application.  If you are on a multicore machine and want to do parallel builds,
+`export OPAMJOBS=4` (or some other value equal to the number of cores) will do
+the trick.
 
 ```
 mirage run
 # or run the binary directly
-./mir-main
+./mir-console
 ```
 
-Since this is a simple Unix application, you can just run it directly, and
-observe the exciting console commands that our `for` loop is generating.
+Since this is a normal Unix binary, you can just run it directly, and observe
+the exciting console commands that our `for` loop is generating.
 
 #### Building a Xen unikernel
 
@@ -134,7 +148,7 @@ differ significantly, but since the source code of your application was
 parameterised over the `CONSOLE` type, it doesn't need to be changed to run
 using the Xen console driver instead of Unix.
 
-When you build the Xen version, you'll have a `mir-main.xen` unikernel that
+When you build the Xen version, you'll have a `mir-console.xen` unikernel that
 can be booted as a standalone kernel.
 
 ```
@@ -153,9 +167,9 @@ builder = 'linux'
 memory = 256
 ```
 
-Edit this to customize the VM name or memory, and then run it via `xl create -c
-main.xl` (or, if you're still on the older Xen, swap the `xl` command for
-`xm`).  You should see the same output on the Xen console as you did on the
+Edit this to customize the VM name or memory, and then run it via `xl create -c main.xl`
+(or, if you're still on the older Xen, swap the `xl` command for `xm`).
+You should see the same output on the Xen console as you did on the
 UNIX version you ran earlier. If you need more help, or would like to boot your
 Xen VM on Amazon's EC2, [click here](/wiki/xen-boot).
 
