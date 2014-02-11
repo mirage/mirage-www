@@ -22,9 +22,9 @@ echo OPAM versions
 opam --version
 opam --git-version
 
-opam init git://github.com/ocaml/opam-repository >/dev/null 2>&1
+opam init >/dev/null 2>&1
 # opam pin mirage git://github.com/avsm/mirage
-# opam pin cowabloga git://github.com/mirage/cowabloga
+opam pin cowabloga git://github.com/mirage/cowabloga
 opam install ${OPAM_PACKAGES}
 eval `opam config env`
 cp .travis-www.ml src/config.ml
