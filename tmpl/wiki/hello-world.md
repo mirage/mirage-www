@@ -1,7 +1,8 @@
 First make sure you have followed the [installation
 instructions](/wiki/install) to get a working Mirage installation.  The
-examples below are in the [`mirage-skeleton` repository](http://github.com/mirage/mirage-skeleton). Begin by cloning 
-and changing directory to it:
+examples below are in the
+[mirage-skeleton](http://github.com/mirage/mirage-skeleton) repository. Begin
+by cloning and changing directory to it:
 
 ```
 $ git clone git://github.com/mirage/mirage-skeleton.git
@@ -11,7 +12,7 @@ $ cd mirage-skeleton
 ### First Steps: Hello World!
 
 As a first step, let's build and run the Mirage "Hello World" unikernel -- this
-will print `hello\\nworld\\n` 5 times before terminating:
+will print `hello\nworld\n` 5 times before terminating:
 
 ```
     hello
@@ -62,15 +63,14 @@ stored in `config.ml`, which is very simple for our first application.
       foreign "Unikernel.Main" (console @-> job)
 
     let () =
-      register "console" [
-      main $ default_console
-    ]
+      register "console" [ main $ default_console ]
 ```
 
-The configuration `register`s a set of one or more jobs, each of which represent
-a process (with a start/stop lifecycle).  Each job most likely depends on some
-device drivers; all the available device drivers are defined in the `Mirage`
-module (see [here](http://mirage.github.io/mirage/)).
+The configuration file is a normal OCaml module that calls `register` to create
+one or more jobs, each of which represent a process (with a start/stop
+lifecycle).  Each job most likely depends on some device drivers; all the
+available device drivers are defined in the `Mirage` module (see
+[here](http://mirage.github.io/mirage/)).
 
 In this case, the `main` variable declares that the entry point of the process
 is the `Main` module from the file `unikernel.ml`.  The `@->` combinator is
@@ -172,5 +172,205 @@ Edit this to customize the VM name or memory, and then run it via `xl create -c 
 You should see the same output on the Xen console as you did on the
 UNIX version you ran earlier. If you need more help, or would like to boot your
 Xen VM on Amazon's EC2, [click here](/wiki/xen-boot).
+
+### Step 2: Getting a block device
+
+Most useful unikernels will need to obtain data from the outside world, so
+we'll explain this subsystem next.
+
+#### Sector-addressible block devices
+
+The [block/](https://github.com/mirage/mirage-skeleton/tree/master/block)
+directory in `mirage-skeleton` contains an example of attaching a raw
+block device to your unikernel.
+The [V1.BLOCK](https://github.com/mirage/mirage/blob/1.1.0/types/V1.mli#L134)
+interface signature contains the operations that are possible on a block
+device: primarily reading and writing aligned buffers to a 64-bit offset within
+the device.
+
+On Unix, the development workflow to handle block devices is by mapping them
+onto local files.  The `config.ml` for the block example looks like this:
+
+```
+open Mirage
+
+let () =
+  let main = foreign "Unikernel.Block_test" (console @-> block @-> job) in
+  let img = block_of_file "disk.img" in
+  register "block_test" [main $ default_console $ img]
+```
+
+The `main` binding looks much like the earlier console example, except for thw
+addition of a `block` device in the list.  When we register the job, we supply
+a block device from a local file via `block_of_file`.
+
+<br />
+<div class="panel callout">
+  <i class="fa fa-info fa-3x pull-left"> </i>
+  <p>As an aside, if you have your editor configured with OCaml mode, you should be
+     able to see the inferred types for some of the variables in the
+     configuration file.  The <code>@-></code> and <code>$</code>
+     combinators are designed such that any mismatches in the declared
+     device driver types and the concrete registered implementations
+     will result in a type error at configuration time.</p>
+</div>
+
+
+Build this on Unix in the same way as the console example.
+
+```
+mirage configure --unix
+make
+./generate_block_device.sh
+./mir-block-test
+```
+
+The `generate_block_device.sh` script just calls `dd` to create an
+empty file that will act as our block device.   Once it runs,
+`mir-block-test` will write a series of patterns to the block device
+and read them back to check that they are the same (the logic for
+this is in `unikernel.ml` within the `Block_test` module).
+
+The Xen version of this is pretty similar, except that you will
+need to edit the VM configuration file to attach the `disk.img`
+as a virtual block device.  First build the Xen version.
+
+```
+mirage configure --xen
+make
+make run
+```
+
+This will output a Xen config file called `block_test.xl`.  Edit
+it to add a file-backed virtual block device, for example like
+this (obviously edit the paths to reflect your local setup):
+
+```
+name = 'block_test'
+kernel = '/home/avsm/src/git/avsm/mirage-skeleton/block/mir-block_test.xen'
+builder = 'linux'
+memory = 256
+disk = [ 'tap:aio:/home/avsm/src/git/avsm/mirage-skeleton/block/disk.img,xvda1,w']
+```
+
+Now you just need to `xl create -c block_test.xl`, and you should
+see the same output as you had for the Unix one.  The difference is
+that instead of going through the Linux or FreeBSD kernel, Mirage
+linked in the Xen [block device driver](https://github.com/mirage/mirage-block-xen)
+and mapped the unikernel block requests directly through to it.
+
+### Step 3: Key/value stores
+
+The earlier block device example shows how very low-level access can work.  Now
+let's move up to a more familiar abstraction: a key/value store that can
+retrieve buffers from string keys.  This is essential for many common uses
+such as retrieving configuration data or website HTML and images.
+
+The [kv_ro_crunch/](https://github.com/mirage/mirage-skeleton/tree/master/kv_ro_crunch)
+directory in `mirage-skeleton` contains the simplest key/value store example. The
+subdirectory `t/` contains a couple of data files that the unikernel uses.  Our
+example `unikernel.ml` reads in the data from one file and compares to the other
+file, printing out `YES` if the values match, and `NO` otherwise.
+
+The `config.ml` should look familiar after the earlier block and console examples:
+
+```
+open Mirage
+
+let main =
+  foreign "Unikernel.Main" (console @-> kv_ro @-> kv_ro @-> job)
+
+let disk1 = crunch "t"
+let disk2 = crunch "t"
+
+let () =
+  register "kv_ro" [ main $ default_console $ disk1 $ disk2 ]
+```
+
+We construct the `kv_ro` devices by using the `crunch` function.  This
+takes a single directory as its argument, and converts that entire directory
+into a static ML file that can respond with the file contents directly.
+This removes the need to have an external block device entirely and is
+very convenient indeed for small files.
+
+Build the example and run it in the usual way under either Unix or Xen.
+Because this no longer needs an external block device, you can run it
+under Xen without having to edit the `xl` configuration file at all.
+You can read the generated ML file by looking at the `static1.ml` file
+in your build tree.
+
+```
+mirage configure --unix
+make
+less static1.ml # the generated filesystem
+make run
+mirage configure --xen
+make
+make run
+sudo xl create -c kv_ro.xl
+```
+
+Of course, this scheme doesn't really scale up to large website, and
+we often need a more elaborate configuration for larger datasets depending
+on how we are deploying our unikernels (i.e. for development or production).
+Switch to the [kv_ro/](https://github.com/mirage/mirage-skeleton/tree/master/kv_ro)
+directory, which has exactly the same example as before, but with several
+new configuration options: it can generate a block device that contains
+a FAT filesystem that mirror the directory contents, or (when running under
+Unix) simply proxy calls dynamically to the underlying filesystem.
+
+Since the `config.ml` file is normal OCaml that is executed at build time,
+all of this selection logic is simple enough.
+
+```
+open Mirage
+
+let mode =
+  let x = try Unix.getenv "FS" with Not_found -> "crunch" in
+  match x with
+  | "fat" -> `Fat
+  | "crunch" -> `Crunch
+  | x -> failwith ("Unknown FS mode: " ^ x )
+
+let fat_ro dir =
+  kv_ro_of_fs (fat_of_files ~dir ())
+
+let disk =
+  match mode, get_mode () with
+  | `Fat   , _     -> fat_ro "t"
+  | `Crunch, `Xen  -> crunch "t"
+  | `Crunch, `Unix -> direct_kv_ro "t"
+
+let main =
+  foreign "Unikernel.Main" (console @-> kv_ro @-> kv_ro @-> job)
+
+let () =
+  register "kv_ro" [ main $ default_console $ disk $ disk ]
+```
+
+This example is controlled by setting the `FS` environment variable
+at build time.  If you set it to `fat`, then the configuration tool
+will generate the appropriate settings for external filesystem access.
+
+```
+$ env FS=fat mirage configure
+$ file fat1.img 
+fat1.img: x86 boot sector, code offset 0x0, OEM-ID "ocamlfat", 
+sectors/cluster 4, FAT  1, root entries 512, Media descriptor 0xf8,
+sectors/FAT 1, sectors 49 (volumes > 32 MB) , dos < 4.0 BootSector (0x0)
+```
+
+However, notice that the definition of `disk` now checks to see if the build is
+happening on Unix or Xen when crunch mode is requested.  If the build is Xen,
+then a statically linked filesystem is used. On Unix however, the overhead
+of building this can be removed by simply passing through to the underlying
+filesystem, which is done via the `direct_kv_ro` implementation.
+
+You should now be seeing the power of the Mirage configuration tool: we
+have built several applications that use fairly complex concepts such as
+filesystems and block devices that are independent of the implementations
+(by virtue of our application logic being a functor), and then are able
+to assemble several combinations of unikernels via relatively simple
+configuration files.
 
 Next, let's get the Mirage website up and running with a [networked application](/wiki/mirage-www).
