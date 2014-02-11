@@ -60,7 +60,9 @@ $ make NET=socket FS=crunch
 $ make run
 ```
 
-The website will now be available on `http://localhost/`.
+For the rest of the tutorial, we'll call `mirage` directly rather than use the
+`Makefile`, as this makes the tools usage clearer.  If you run the above
+commands, the website will now be available on `http://localhost/`.
 
 ## Building the direct networking version
 
@@ -71,7 +73,7 @@ as the hello world examples.
 $ cd src
 $ env NET=direct mirage configure --unix
 $ make
-$ sudo ./mir-main
+$ sudo ./mir-www
 ```
 
 This will open a [tap device](http://en.wikipedia.org/wiki/TUN/TAP) device and
@@ -103,11 +105,11 @@ mirage-www repository uses an environment variable to switch to these
 variables, so we can quickly try it as follows.
 
 ```
-env MODE=fat mirage configure --unix
-make
-./make-fat-images.sh
-sudo ./mir-main
-sudo ifconfig tap0 10.0.0.1 255.255.255.0
+$ cd src
+$ env FS=fat mirage configure --unix
+$ make
+$ sudo ./mir-www
+$ sudo ifconfig tap0 10.0.0.1 255.255.255.0
 ```
 
 The `make-fat-images.sh` script uses the `fat` command-line helper installed
@@ -115,13 +117,35 @@ by the `ocaml-fat` package to build the FAT block image for you.
 If you now access the website, it is serving the traffic straight from the
 FAT image you just created, without requiring a Unix filesystem at all!
 
-## Building a Xen kernel
-
-We're now ready to build a Xen kernel. 
+You can inspect the resulting FAT images for yourself by using the `fat`
+command line tool, and the `make-fat1-image.sh` script.
 
 ```
-mirage configure --xen
-make
+$ file fat1.img 
+fat1.img: x86 boot sector, code offset 0x0, OEM-ID "ocamlfat",
+sectors/cluster 4, FAT  1, root entries 512, Media descriptor 0xf8,
+sectors/FAT 2, sectors 1728 (volumes > 32 MB) , dos < 4.0 BootSector (0x0)
+
+$ fat list fat1.img 
+/wiki (DIR)(1856 bytes)
+/wiki/xen-synthesize-virtual-disk.md (FILE)(8082 bytes)
+/wiki/xen-suspend.md (FILE)(14120 bytes)
+/wiki/xen-events.md (FILE)(10921 bytes)
+/wiki/xen-boot.md (FILE)(5244 bytes)
+/wiki/weekly (DIR)(768 bytes)
+```
+
+## Building a Xen kernel
+
+We're now ready to build a Xen kernel.  This can use eithr FAT or a builtin
+crunch (to avoid the need for an external block device).  The latter is the
+default, for simplicity's sake.
+
+```
+$ cd src
+$ mirage configure --xen
+$ make
+$ make run
 ```
 
 This will build a static kernel that uses the `ocaml-crunch` tool to convert
@@ -132,7 +156,7 @@ very large).  The advantage of this mode is that you don't need to worry
 about configuring any external block devices for your VM, and boot times are
 much faster as a result.
 
-You can now boot the `mir-main.xen` kernel using `xl` (don't forget to supply
+You can now boot the `mir-www.xen` kernel using `xl` (don't forget to supply
 it a VIF so that the network can work).
 
 ### Modifying networking to use DHCP or static IP
