@@ -150,6 +150,12 @@ module Blog = struct
         body       = "decks-n-drums.md";
         permalink  = "decks-n-drums";
       };
+      { updated    = date (2014, 02, 11, 16, 0);
+        author     = anil;
+        subject    = "Mirage 1.1.0: the eat-your-own-dogfood release";
+        body       = "mirage-1.1-released.md";
+        permalink  = "mirage-1.1-released";
+      };
     ]
 end
 
