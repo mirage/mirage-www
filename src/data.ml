@@ -150,6 +150,12 @@ module Blog = struct
         body       = "decks-n-drums.md";
         permalink  = "decks-n-drums";
       };
+      { updated    = date (2014, 02, 11, 16, 0);
+        author     = anil;
+        subject    = "Mirage 1.1.0: the eat-your-own-dogfood release";
+        body       = "mirage-1.1-released.md";
+        permalink  = "mirage-1.1-released";
+      };
     ]
 end
 
@@ -338,6 +344,12 @@ module Links = struct
       uri=Uri.of_string "https://fosdem.org/2014/interviews/2014-anil-madhavapeddy-richard-mortier/";
       title="Interview with Anil Madhavapeddy and Richard Mortier on MirageOS";
       date=day(2014,01,29);
+      stream=press;
+    };
+    { id="osnews-2014";
+      uri=Uri.of_string "http://www.osnews.com/comments/27516?view=threaded&sort=&threshold=0";
+      title="OSNews: MirageOS: rise of the virtual library operating system";
+      date=day(2014,01,15);
       stream=press;
     };
     { id="nymote-mirage-ann-2014";

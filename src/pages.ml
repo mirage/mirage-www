@@ -56,7 +56,7 @@ module Global = struct
     let content = top_nav @ content in
     let google_analytics = Site_config.google_analytics in
     let body =
-      Cowabloga.Foundation.body
+      Cowabloga.Foundation.body ~highlight:"/css/magula.css"
         ~google_analytics ~title ~headers ~content ~trailers:[] ()
     in
     Cowabloga.Foundation.page ~body
