@@ -18,12 +18,12 @@ let fat_ro dir =
     files to avoid a huge crunch build time *)
 let fs =
   match mode, get_mode () with
-  | `Fat, _    -> fat_ro "files.img"
+  | `Fat, _    -> fat_ro "../files"
   | `Crunch, `Xen -> crunch "../files"
   | `Crunch, `Unix -> direct_kv_ro "../files"
 
 let tmpl = match mode with
-  | `Fat    -> fat_ro "tmpl.img"
+  | `Fat    -> fat_ro "../tmpl"
   | `Crunch -> crunch "../tmpl"
 
 let net =
