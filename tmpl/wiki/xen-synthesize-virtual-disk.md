@@ -66,7 +66,7 @@ Second initialise your system:
   eval `opam config env`
 ```
 
-Third tnstall the unmodified `xen-disk` package, this will ensure all the build
+Third install the unmodified `xen-disk` package, this will ensure all the build
 dependencies are installed:
 
 ```
