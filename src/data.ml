@@ -339,7 +339,18 @@ module Links = struct
     icon="fa-pencil";
   }
 
+  let talk = {
+    name="public-talk";
+    icon="fa-pencil";
+  }
+
   let entries = [
+    { id="fosdem-2014-video";
+      uri=Uri.of_string "http://bofh.nikhef.nl/events/FOSDEM//2014/Janson/Sunday/MirageOS_compiling_functional_library_operating_systems.webm";
+      title="FOSDEM 2014: MirageOS: compiling functional library operating systems";
+      date=day(2014,02,02);
+      stream=talk;
+    };
     { id="fosdem-2014";
       uri=Uri.of_string "https://fosdem.org/2014/interviews/2014-anil-madhavapeddy-richard-mortier/";
       title="Interview with Anil Madhavapeddy and Richard Mortier on MirageOS";
