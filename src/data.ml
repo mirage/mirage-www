@@ -335,8 +335,8 @@ module Links = struct
   open Cowabloga.Date
   open Cowabloga.Links
   let press = {
-     name="press-coverage";
-     icon="fa-pencil";
+    name="press-coverage";
+    icon="fa-pencil";
   }
 
   let entries = [
