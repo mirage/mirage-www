@@ -11,16 +11,16 @@ They inherently carry assumptions about the underlying operating
 system with them, including vulnerabilities and bloat.
 Compartmentalisation of large servers into smaller [virtual
 machines](http://en.wikipedia.org/wiki/Virtual_machine) has enabled
-many new businesses to get started and achieve scale.  This has been
+many new businesses to get started and achieve scale. This has been
 great for new services but many of those virtual machines are
 single-purpose and yet they contain largely complete operating systems
-which themselves run applications like web-servers.  This means a
-large part of the footprint is unused and unnecessary, which is both
-costly and a security risk (due to the larger attack surface).
+which themselves run applications like web-servers. This means a large
+part of the footprint is unused and unnecessary, which is both costly
+and a security risk (due to the larger attack surface).
 
 Mirage represents a new approach where only the necessary components
 of the OS are included and compiled along with the application into a
-[unikernel](http://nymote.org/docs/2013-asplos-mirage.pdf).  This
+[unikernel](http://nymote.org/docs/2013-asplos-mirage.pdf). This
 results in highly efficient and extremely lean
 [appliances](http://en.wikipedia.org/wiki/Virtual_appliance), with a
 much smaller attack surface.  These appliances can be deployed
@@ -76,9 +76,9 @@ now and below are examples of things we can do in the future.
 
 We can create auto-scaling web-servers with very small footprints.
 These would be cheaper to run than current solutions due to the small
-size but they would also be highly elastic.  If a sudden spike in
+size but they would also be highly elastic. If a sudden spike in
 traffic occurs, the web-servers can be configured to create and deploy
-copies of themselves to service the demand.  This auto-scaling happens
+copies of themselves to service the demand. This auto-scaling happens
 so quickly that an incoming connection can trigger the creation of new
 server and the *new server* can then handle that request before it
 times out (which is on the order of milliseconds). When the demand
@@ -92,7 +92,7 @@ spending what we actually need when we really need it.
 <a href="http://www.flickr.com/photos/lukew/6171377827/"><img style="float:left; margin-right: 15px;" src="/graphics/device-love.jpg"></img></a>
 
 Using Mirage, we can also create appliances that can run on embedded
-devices.  Such appliances can be deployed into small devices that are
+devices. Such appliances can be deployed into small devices that are
 scattered around your home, for example in plant pots to measure
 moisture levels to chemical sensors in your fridge, which tell you
 exactly what has gone off.  You could access the data from these
@@ -107,13 +107,13 @@ control.
 
 This same scenario can be deployed into a enterprise environment where
 sensors around a building can monitor environmental conditions, adjust
-lighting and many other things.  When additional computation is
+lighting and many other things. When additional computation is
 required, more appliances can automatically be created on a cloud
 provider for the short duration that they're needed.
 
 Overall, Mirage provides substantial benefits in terms of increased
 efficiency and safety and is ideal for deploying to both the public
-could and embedded devices.  Together with
+cloud and embedded devices. Together with
 [Signpost](http://nymote.org/software/signpost) and
 [Irminsule](http://nymote.org/software/irminsule), Mirage forms a core
 piece of the Nymote toolstack to power the coming wave of [Internet of
