@@ -204,8 +204,8 @@ module Wiki = struct
     { updated    = date (2013, 11, 10, 16, 0);
       author     = ckoppelt;
       subject    = "Technical Background of Mirage";
-      body       = File "technical_background.md";
-      permalink  = "technical_background";
+      body       = File "technical-background.md";
+      permalink  = "technical-background";
     };
 
     { updated    = date (2013, 12, 09, 16, 0);

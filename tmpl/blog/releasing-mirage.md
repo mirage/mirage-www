@@ -1,6 +1,6 @@
 
 *First*: read the [overview](/wiki/overview-of-mirage) and
-[technical background](/wiki/technical_background) behind the project.
+[technical background](/wiki/technical-background) behind the project.
 
 When we started hacking on Mirage back in 2009, it started off looking like a
 conventional OS, except written in OCaml.   The [monolithic
