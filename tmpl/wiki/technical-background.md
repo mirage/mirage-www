@@ -1,5 +1,4 @@
-(based on the paper: MirageOS: programming functional library operating systems by Anil Madhavapeddy and David J. Scott)
-
+(based on the [article](http://queue.acm.org/detail.cfm?id=2566628) by Anil Madhavapeddy and David J. Scott)
 
 Operating system virtualization such as Xen or VMWare allows to multiplex virtual machines (VMs) on a shared cluster of physical machines. Each VM presents as a self-contained computer, booting a standard OS kernel and running unmodified applications just as if it were executing on a physical machine.
 
