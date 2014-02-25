@@ -156,6 +156,12 @@ module Blog = struct
         body       = "mirage-1.1-released.md";
         permalink  = "mirage-1.1-released";
       };
+      { updated    = date (2014, 02, 25, 18, 0);
+        author     = anil;
+        subject    = "MirageOS is in Google Summer of Code 2014";
+        body       = "applying-for-gsoc2014.md";
+        permalink  = "applying-for-gsoc2014";
+      };
     ]
 end
 
