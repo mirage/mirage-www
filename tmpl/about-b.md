@@ -8,7 +8,7 @@
 
 <li><i class="fa fa-github-alt fa-2x pull-left"> </i> The source code is on GitHub at the <a href="https://github.com/mirage">Mirage</a> organization.  The main repository is at <a href="https://github.com/mirage/mirage">mirage/mirage</a>,  and issues should be reported on its <a href="https://github.com/mirage/mirage/issues">issue tracker</a>.</li>
 
-<li><i class="fa fa-rss fa-2x pull-left"> </i> Atom feeds are available for the <a href="blog/atom.xml">blog</a> and the <a href="wiki/atom.xml">documentation</a>.  Add these feeds to your news reader to keep up with updates, or follow the <a href="http://ocaml.org/community/planet.html">OCaml Planet</a> for a broader view.</li>
+<li><i class="fa fa-rss fa-2x pull-left"> </i> Atom feeds are available for the <a href="/blog/atom.xml">blog</a> and the <a href="/wiki/atom.xml">wiki</a>.  Add these feeds to your news reader to keep up with updates, or follow the <a href="http://ocaml.org/community/planet.html">OCaml Planet</a> for a broader view.</li>
 
 <li><i class="fa fa-twitter fa-2x pull-left"> </i> Follow our strangely silent camelbot <a href="http://twitter.com/openmirage">@openmirage</a> on Twitter.  We promise it will get more lively just as soon as we sort out SSL support for Mirage and can autotweet.</li>
 
