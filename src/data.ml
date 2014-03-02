@@ -181,6 +181,8 @@ module Wiki = struct
     }
 
   let entries = [
+    weekly ~y:2014 ~m:2 ~d:26 ~a:amir;
+    
     { updated    = date (2014, 02, 01, 01, 0);
       author     = jonludlam;
       subject    = "How Xen suspend and resume works";
