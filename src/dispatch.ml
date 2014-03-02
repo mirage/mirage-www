@@ -84,7 +84,7 @@ module Main
       in
 
       (* HTTP callback *)
-      let callback conn_id ?body request =
+      let callback conn_id request body =
         let uri = S.Request.uri request in
         let io = { Cowabloga.Dispatch.
                    log = (fun ~msg -> C.log c msg);
