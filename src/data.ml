@@ -171,10 +171,10 @@ module Wiki = struct
   open Cowabloga.Date
   open Cowabloga.Wiki
 
-  let weekly ~y ~m ~d =
+  let weekly ~y ~m ~d ~a =
     let s = sprintf "%4d-%02d-%02d" y m d in
     { updated = date (y,m,d,16,0);
-      author  = anil;
+      author  = a;
       subject = "Weekly Meeting: " ^ s;
       body    = File (sprintf "weekly/%s.md" s);
       permalink = "weekly-"^s;
@@ -235,14 +235,14 @@ module Wiki = struct
       permalink  = "dev-preview-checklist";
     };
 
-    weekly ~y:2013 ~m:6 ~d:11;
-    weekly ~y:2013 ~m:6 ~d:4;
-    weekly ~y:2013 ~m:5 ~d:28;
-    weekly ~y:2013 ~m:5 ~d:21;
-    weekly ~y:2013 ~m:5 ~d:14;
-    weekly ~y:2013 ~m:4 ~d:30;
-    weekly ~y:2013 ~m:4 ~d:23;
-    weekly ~y:2013 ~m:4 ~d:16;
+    weekly ~y:2013 ~m:6 ~d:11 ~a:anil;
+    weekly ~y:2013 ~m:6 ~d:4 ~a:anil;
+    weekly ~y:2013 ~m:5 ~d:28 ~a:anil;
+    weekly ~y:2013 ~m:5 ~d:21 ~a:anil;
+    weekly ~y:2013 ~m:5 ~d:14 ~a:anil;
+    weekly ~y:2013 ~m:4 ~d:30 ~a:anil;
+    weekly ~y:2013 ~m:4 ~d:23 ~a:anil;
+    weekly ~y:2013 ~m:4 ~d:16 ~a:anil;
 
     { updated    = date (2013, 08, 15, 16, 0);
       author     = balraj;
