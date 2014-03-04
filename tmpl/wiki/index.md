@@ -44,6 +44,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 
 #### Historical Release Notes
 
+* Weekly call [2014-03-04](/wiki/weekly-2014-03-04) on IP addresses and unikernel deployment.
 * Weekly call [2014-02-26](/wiki/weekly-2014-02-26) on homepages and Google Summer of Code.
 * [Checklist for 1.0 Dev Preview](dev-preview-checklist)
 * Weekly call [2013-06-11](/wiki/weekly-2013-06-11) on the end of the start is finally in sight.
