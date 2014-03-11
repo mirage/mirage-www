@@ -354,6 +354,12 @@ module Links = struct
   }
 
   let entries = [
+    { id="pcworld-2014-xenarm";
+      uri=Uri.of_string "http://www.pcworld.com/article/2106460/xen-hypervisor-moves-into-arm-space.html";
+      title="Xen hypervisor moves into ARM space";
+      date=day(2014,03,10);
+      stream=press;
+    };
     { id="fosdem-2014-video";
       uri=Uri.of_string "http://video.fosdem.org/2014/Janson/Sunday/MirageOS_compiling_functional_library_operating_systems.webm";
       title="FOSDEM 2014: MirageOS: compiling functional library operating systems";
