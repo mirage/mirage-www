@@ -203,6 +203,16 @@ This `timeout` function does not allow one to use the result returned by the thr
 
 Modify the `timeout` function so that it returns either `None` if `t` has not yet returned after `f` seconds or `Some v` if `t` returns `v` within `f` seconds. In order to achieve this behaviour it is possible to use the function `state` that, given a thread, returns the state it is in, either `Sleep`, `Return` or `Fail`.
 
+You can test your solution with this application, which creates a thread and that is cancelled before it returns:
+
+```
+  let t =  Time.sleep (Random.float 3.0) >> return "Heads" in
+    timeout 2.0 t >>= fun v ->
+    C.log c (match v with None -> "cancelled" | Some v -> v);
+    C.log c "Finished";
+    return ()
+```
+
 ###Solution
 
 ```
@@ -211,9 +221,10 @@ Modify the `timeout` function so that it returns either `None` if `t` has not ye
     match state t with
     | Return v -> return (Some v)
     | _        -> cancel t; return None
+ 
 ```
 
-This solution and an example application are found in `lwt/src/unikernels.ml` in the repository. Build with target `timeout1`.
+This solution and application are found in `lwt/src/unikernels.ml` in the repository. Build with target `timeout1`.
 
 Does your solution match the one given here and always returns after `f` seconds, even when `t` returns within `f` seconds?
 
