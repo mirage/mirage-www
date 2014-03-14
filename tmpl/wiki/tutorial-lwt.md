@@ -519,7 +519,7 @@ From the coder's perspective, it means that the evaluation of expressions withou
 
 The obvious danger associated with cooperative threading is having threads not cooperating: if an expression takes a lot of time to compute with no cooperation point, then the whole program hangs. The `Lwt.yield` function introduces an explicit cooperation point. `sleep`ing also obviously makes the thread cooperate.
 
-If locking a data structure is still needed between yield points, the `Lwt_mutex` module provides the necessary functions. To obtain more information on thread switching (and how to prevent it) read the Lwt mailing list archive: [Lwt_stream, thread switch within push function](https://sympa.mancoosi.univ-paris-diderot.fr/wws/arc/ocsigen/2011-09/msg00029.html) which continues [here](https://sympa.mancoosi.univ-paris-diderot.fr/wws/arc/ocsigen/2011-10/msg00001.html).
+If locking a data structure is still needed between yield points, the `Lwt_mutex` module provides the necessary functions. To obtain more information on thread switching (and how to prevent it) read the Lwt mailing list archive: [Lwt_stream, thread switch within push function](https://sympa.inria.fr/sympa/arc/ocsigen/2011-09/msg00029.html) which continues [here](https://sympa.inria.fr/sympa/arc/ocsigen/2011-10/msg00001.html).
 
 ##Exceptions and Try/Catch
 
