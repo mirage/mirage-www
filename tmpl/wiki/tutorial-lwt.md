@@ -1,4 +1,4 @@
-[Lwt](http://www.ocsigen.org/lwt) is a lightweight cooperative threading library for OCaml. A good way to understand Lwt and its use in Mirage is to write some simple code. This document introduces the basic concepts and suggests programs to write. Note that Lwt has a number of syntax extensions that are widely used in Mirage. These are introduced as you go along through the tutorial. Code for all examples is to be found in the `mirage-skeleton/lwt` [repository](https://github.com/mirage/mirage-skeleton/tree/master/lwt).
+[Lwt](http://www.ocsigen.org/lwt) is a lightweight cooperative threading library for OCaml. A good way to understand Lwt and its use in Mirage is to write some simple code. This document introduces the basic concepts and suggests programs to write. Note that Lwt has a number of syntax extensions that are widely used in Mirage. These are introduced as you go along through the tutorial. Code for all examples is in the `mirage-skeleton/lwt/src` [repository](https://github.com/mirage/mirage-skeleton/tree/master/lwt/src).
 
 ##Tutorial
 
@@ -44,15 +44,16 @@ You will need to have Mirage [installed](/wiki/install). Create a file `config.m
   open Mirage
 
   let () =
-    Job.register [
-      "Foo.Main", [Driver.console]
+    let main = foreign "Foo.Main" (console @-> job) in
+    register "Foo.Main" [
+      main $ default_console
     ]
 ```
 
 Add `foo.ml` with the following content and edit it:
 
 ```
-  open Mirage_types.V1
+  open V1_LWT
   open Lwt
   open OS
 
@@ -77,9 +78,9 @@ If you are building for a different Mirage platform, change the `--unix --socket
 ###Solution
 
 ```
-  open Mirage_types.V1 (* provides the CONSOLE signature *)
-  open Lwt             (* provides bind and join *)
-  open OS              (* provides Time, Console and Main *)
+  open V1_LWT (* provides the CONSOLE signature *)
+  open Lwt    (* provides bind and join *)
+  open OS     (* provides Time, Console and Main *)
 
   module Main (C : CONSOLE) = struct
     let start c =
@@ -96,7 +97,7 @@ If you are building for a different Mirage platform, change the `--unix --socket
   end
 ```
 
-This is built via `lwt/src/heads1.conf` in the `mirage-skeleton` code repository.
+This code is also found in `lwt/src/unikernels.ml` in the `mirage-skeleton` code repository. Build it by setting the TARGET environment variable to `heads1` before running `mirage configure`.
 
 ###Syntax Extensions
 
@@ -105,9 +106,9 @@ Using Lwt does sometimes require significantly restructuring code, and in partic
 This is a good place to introduce some of these extensions. When opening the Lwt module, the infix operator `>>=` is made available. This operator is an alternative to the `bind` function and often makes the code more readable. E.g. consider `bind (bind (bind t f) g) h` and the operator based equivalent expression `t >>= f >>= g >>= h`. We can now rewrite the previous solution more simply:
 
 ```
-  open Mirage_types.V1 (* provides the CONSOLE signature *)
-  open Lwt (* provides >>= and join *)
-  open OS  (* provides Time, Console and Main *)
+  open V1_LWT (* provides the CONSOLE signature *)
+  open Lwt    (* provides >>= and join *)
+  open OS     (* provides Time, Console and Main *)
 
   module Main (C : CONSOLE) = struct
     let start c =
@@ -120,7 +121,7 @@ This is a good place to introduce some of these extensions. When opening the Lwt
   end
 ```
 
-This is built via `lwt/src/heads2.conf` in the repository.
+This is in `lwt/src/unikernels.ml` in the repository. The target is `heads2`.
 
 
 ###Anonymous Bind
@@ -159,7 +160,7 @@ Here, we wait for the result of `e1`, bind the result to `x` and continue into `
 Now, the code looks like just normal OCaml code, except that we substitute `lwt` for `let`, with the effect that the call blocks until the result of that thread is available. Lets revisit our heads and tails example from above and see how it looks when rewritten with these syntax extensions:
 
 ```
-  open Mirage_types.V1
+  open V1_LWT
   open Lwt
   open OS
 
@@ -180,7 +181,7 @@ Now, the code looks like just normal OCaml code, except that we substitute `lwt`
   end
 ```
 
-This is built via `lwt/src/heads3.conf` in the Mirage code repository.
+This is in `lwt/src/unikernels.ml` in the Mirage code repository. The target is `heads3`.
 
 Here we define two threads, `heads` and `tails`, and block until they are both complete (via the `lwt ()` and the `<&>` join operator). If you want to print "Finished" before the previous threads are complete, just put the print statement (`Console.log`) before the join statement (`... <&> ...`).
 
@@ -202,6 +203,16 @@ This `timeout` function does not allow one to use the result returned by the thr
 
 Modify the `timeout` function so that it returns either `None` if `t` has not yet returned after `f` seconds or `Some v` if `t` returns `v` within `f` seconds. In order to achieve this behaviour it is possible to use the function `state` that, given a thread, returns the state it is in, either `Sleep`, `Return` or `Fail`.
 
+You can test your solution with this application, which creates a thread and that is cancelled before it returns:
+
+```
+  let t =  Time.sleep (Random.float 3.0) >> return "Heads" in
+    timeout 2.0 t >>= fun v ->
+    C.log c (match v with None -> "cancelled" | Some v -> v);
+    C.log c "Finished";
+    return ()
+```
+
 ###Solution
 
 ```
@@ -210,9 +221,10 @@ Modify the `timeout` function so that it returns either `None` if `t` has not ye
     match state t with
     | Return v -> return (Some v)
     | _        -> cancel t; return None
+ 
 ```
 
-This is built via `lwt/src/timeout1.ml` in the repository.
+This solution and application are found in `lwt/src/unikernels.ml` in the repository. Build with target `timeout1`.
 
 Does your solution match the one given here and always returns after `f` seconds, even when `t` returns within `f` seconds?
 
@@ -243,7 +255,7 @@ In order to test your solution, you can compile it to a mirage executable and ru
     ]
 ```
 
-This is built via `lwt/src/timeout2.conf` in the repository.
+Found in `lwt/src/unikernels.ml` in the repository. The target is `timeout2`.
 
 
 ##A Pipe example
@@ -267,7 +279,7 @@ Write an echo server, reading from a dummy input generator and, for each line it
     echo_server ()
 ```
 
-This is built via `lwt/src/echoserver1.conf` in the repository.
+This is in `lwt/src/unikernels.ml` in the repository. Build with the target `echo_server1`.
 
 ##Using Mailboxes
 
@@ -327,7 +339,6 @@ let split m_ab =
   let t = aux () in
   (m_a, m_b)
 
-
 let filter f m_a =
   let m_out = Lwt_mvar.create_empty () in
   let rec aux () =
@@ -339,6 +350,8 @@ let filter f m_a =
   let t = aux () in
   m_out
 ```
+
+This code can also be found in `lwt/src/mvar_unikernels.ml` in the `mirage-skeleton` repository.
 
 Note that in each of the above a recursive Lwt thread is created and will run forever. However, if the pipeline ever needs to be torn down then this recursive thread should be cancelled. This can be done by modifying the above functions to also return the `'t Lwt.t` returned by `aux` in each case, which can then be cancelled when required.
 
@@ -383,6 +396,7 @@ Using the pipelining helpers, change the echo server into a string processing se
     (read ()) <&> (write ())
 }
 ```
+This code can be found in `lwt/src/mvar_unikernels.ml` in the repository. Build with target `echo_server2`.
 
 ###Challenge
 
@@ -423,7 +437,7 @@ Every second write a tuple containing a pair of small random integers `(Random.i
     inp ()
 ```
 
-This is in `regress/lwt/int_server.ml` in the Mirage code repository.
+This is in `lwt/src/mvar_unikernels.ml` in the Mirage code repository. Build with target `int_server`.
 
 
 ##Stream Processing
@@ -490,7 +504,9 @@ Write the same pipelining library as in the mailbox challenge, replacing instanc
     outs
 ```
 
-Notice, in the provided solution, the usage of `f` in `map`: only when `f` returns does the next element is polled and treated. (The same remark applies to the predicate function `p` in `filter`.) This means that the elements of the stream are processed serially.
+This is in `lwt/src/stream_server.ml` in the repository. Build with target `stream_server`.
+
+Notice, in the provided solution, the usage of `f` in `map`: only when `f` returns is the next element polled and treated. (The same remark applies to the predicate function `p` in `filter`.) This means that the elements of the stream are processed serially.
 
 The `Lwt_stream` library actually provides a number of processing functions. Some functions are suffixed with `_s` meaning that they operate sequentially over the elements, other with `_p` meaning that they operate in parallel over the elements. The module `Lwt_list` uses the same suffixing policy.
 
@@ -499,18 +515,18 @@ The `Lwt_stream` library actually provides a number of processing functions. Som
 
 With Lwt, it is often possible to avoid mutexes altogether! The web server from the [Ocsigen](http://ocsigen.org) project uses only two, and the Mirage source code none. In usual concurrent systems, mutexes are used to prevent two (or more) threads executing concurrently on a given piece of data. This can happen when a thread is preemptively interrupted and another one starts running. In Lwt, a thread executes serially until it explicitly yields (most commonly via `bind`); for this reason, Lwt threads are said to be [cooperative](http://en.wikipedia.org/wiki/Cooperative_multitasking#Cooperative_multitasking.2Ftime-sharing).
 
-From the coder's perspective, it means that the evaluation of expressions without the `Lwt.t` type will *never* go through the thread scheduler. Note however, that it is possible to switch threads without executing the scheduler via the `wakeup` function. This instead of surrounding an expression with `lock` and `unlock` statements, one can simply enforce that the type of the expression is not `Lwt.t` and check for the absence of calls to `wakeup`. Finally, be aware that some functions from the Lwt standard libraries do use thread switching.
+From the coder's perspective, it means that the evaluation of expressions without the `Lwt.t` type will *never* go through the thread scheduler. Note however, that it is possible to switch threads without executing the scheduler via the `wakeup` function. As a result, instead of surrounding an expression with `lock` and `unlock` statements, one can simply enforce that the type of the expression is not `Lwt.t` and check for the absence of calls to `wakeup`. Finally, be aware that some functions from the Lwt standard libraries do use thread switching.
 
 The obvious danger associated with cooperative threading is having threads not cooperating: if an expression takes a lot of time to compute with no cooperation point, then the whole program hangs. The `Lwt.yield` function introduces an explicit cooperation point. `sleep`ing also obviously makes the thread cooperate.
 
-If locking a data structure is still needed between yield points, the `Lwt_mutex` module provides the necessary functions. To obtain more information on thread switching (and how to prevent it) read the Lwt mailing list archive: [Lwt_stream, thread switch within push function](https://sympa.mancoosi.univ-paris-diderot.fr/wws/arc/ocsigen/2011-09/msg00029.html) which continues [here](https://sympa.mancoosi.univ-paris-diderot.fr/wws/arc/ocsigen/2011-10/msg00001.html).
+If locking a data structure is still needed between yield points, the `Lwt_mutex` module provides the necessary functions. To obtain more information on thread switching (and how to prevent it) read the Lwt mailing list archive: [Lwt_stream, thread switch within push function](https://sympa.inria.fr/sympa/arc/ocsigen/2011-09/msg00029.html) which continues [here](https://sympa.inria.fr/sympa/arc/ocsigen/2011-10/msg00001.html).
 
 ##Exceptions and Try/Catch
 
 One very, very important thing to remember with cooperative threading is that raising exceptions is not safe to do between yield points. In general, you should never call `raise` directly. Lwt provides an alternative syntax:
 
 ```
-  open Mirage_types.V1
+  open V1_LWT
   open Lwt
   open OS
 
@@ -557,6 +573,6 @@ There is also a `match_lwt` which will bind the result of a thread and immediate
 
 Understanding the basic principles behind Lwt can be helpful.
 
-The core of Lwt is based on an event loop. In "standard" (non-Mirage) settings, this loop is started using the `Lwt_main.run` function, However, when using Mirage, the loop is automatically started by the entry point generated by Mirari.
+The core of Lwt is based on an event loop. In "standard" (non-Mirage) settings, this loop is started using the `Lwt_main.run` function. However, when using Mirage, the loop is automatically started by the entry point generated by Mirari.
 
 Because it's based on an event loop, threads are actually very cheap in Lwt. (Hence the name.) Sleeping actually registers an event that will wake up the associated thread when possible. Depending on the backend, the event registering slightly differs.
