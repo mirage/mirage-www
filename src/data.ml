@@ -354,7 +354,26 @@ module Links = struct
     icon="fa-pencil";
   }
 
+  let blog = {
+    name="public-blog";
+    icon="fa-user";
+  }
+
   let entries = [
+    { id="mindy-unikernel-1";
+      uri=Uri.of_string "http://www.somerandomidiot.com/blog/2014/03/14/its-a-mirage/";
+      title="It's a Mirage! (or, How to Shave a Yak.)";
+      date=day(2014,03,14);
+      stream=blog;
+    };
+
+    { id="amirmc-jekyll-1";
+      uri=Uri.of_string "http://amirchaudhry.com/from-jekyll-to-unikernel-in-fifty-lines/";
+      title="From Jekyll site to Unikernel in fifty lines of code";
+      date=day(2014,03,10);
+      stream=blog;
+    };
+
     { id="pcworld-2014-xenarm";
       uri=Uri.of_string "http://www.pcworld.com/article/2106460/xen-hypervisor-moves-into-arm-space.html";
       title="Xen hypervisor moves into ARM space";
