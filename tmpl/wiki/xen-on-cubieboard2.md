@@ -1,5 +1,3 @@
-# Running Xen on the Cubieboard2
-
 Author: Thomas Leonard
 
 Status: work-in-progress

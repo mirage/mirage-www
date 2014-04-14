@@ -41,6 +41,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 * [How the Xen VM event system works](/wiki/xen-events)
 * [Synthesizing virtual disks for Xen](/wiki/xen-synthesize-virtual-disk)
 * [How Suspend and Resume work](/wiki/xen-suspend)
+* [Installing Xen on the Cubieboard2](/wiki/xen-on-cubieboard2)
 
 #### Historical Release Notes
 

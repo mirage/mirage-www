@@ -62,6 +62,12 @@ module People = struct
     email     = Some "jon@recoil.org";
   }
 
+  let tal = {
+    Atom.name = "Thomas Leonard";
+    uri       = Some "http://roscidus.com/blog/";
+    email     = Some "talex5@gmail.com";
+  }
+
 end
 
 let rights = Some "All rights reserved by the author"
@@ -338,6 +344,14 @@ module Wiki = struct
       subject    = "Introduction to HTCaML";
       body       = File "htcaml.md";
       permalink  = "htcaml";
+    };
+
+    {
+      updated    = date (2014, 04, 14, 17, 30);
+      author     = tal;
+      subject    = "Running Xen on the Cubieboard2";
+      body       = File "xen-on-cubieboard2.md";
+      permalink  = "xen-on-cubieboard2";
     };
   ]
 end
