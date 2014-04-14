@@ -375,6 +375,13 @@ module Links = struct
   }
 
   let entries = [
+    { id="citirx-containers-xen";
+      uri=Uri.of_string "http://open.citrix.com/blog/328-are-containers-the-right-answer-to-the-wrong-question.html";
+      title="Are Containers the Right Answer to the Wrong Question?";
+      date=day(2014,04,08);
+      stream=blog;
+    };
+    
     { id="mindy-unikernel-1";
       uri=Uri.of_string "http://www.somerandomidiot.com/blog/2014/03/14/its-a-mirage/";
       title="It's a Mirage! (or, How to Shave a Yak.)";
