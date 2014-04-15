@@ -43,7 +43,10 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 * [How Suspend and Resume work](/wiki/xen-suspend)
 * [Installing Xen on the Cubieboard2](/wiki/xen-on-cubieboard2)
 
-#### Historical Release Notes
+#### Weekly calls and release notes
+
+*Calls take place every two weeks and are announced on the
+[mailing list](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel).*
 
 * Weekly call [2014-04-15](/wiki/weekly-2014-04-15) on GSoC, vchan, Mini-OS/ ARM, Irminsule.
 * Weekly call [2014-04-01](/wiki/weekly-2014-04-01) on Mini-OS, IOCaml and Xenstore.
