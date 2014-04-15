@@ -45,6 +45,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 
 #### Historical Release Notes
 
+* Weekly call [2014-04-15](/wiki/weekly-2014-04-15) on GSoC, vchan, Mini-OS/ ARM, Irminsule.
 * Weekly call [2014-04-01](/wiki/weekly-2014-04-01) on Mini-OS, IOCaml and Xenstore.
 * Weekly call [2014-03-18](/wiki/weekly-2014-03-18) on Crypto, GSoC and a Mirage tutorial day.
 * Weekly call [2014-03-04](/wiki/weekly-2014-03-04) on IP addresses and unikernel deployment.
