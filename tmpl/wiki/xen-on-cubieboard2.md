@@ -474,9 +474,11 @@ Source: [Add support for Xen ARM guest on FreeBSD](http://lists.freebsd.org/pipe
 
 I created a VM on my laptop and installed FreeBSD from [FreeBSD-10.0-RELEASE-amd64-bootonly.iso](http://www.freebsd.org/where.html). I then used that to cross-compile the Xen/ARM version. Your build VM will need to have at least 4 GB of disk space.
 
-Get the `xen-arm` branch:
+Get the `xen-arm-v2` branch:
 
-    git clone git://xenbits.xen.org/people/julieng/freebsd.git -b xen-arm
+    git clone git://xenbits.xen.org/people/julieng/freebsd.git -b xen-arm-v2
+
+Note: I tested with the `xen-arm` branch, but the `xen-arm-v2` branch has some useful fixes.
 
 Note: Installing Git using FreeBSD using ports on a clean system is very slow, uses a lot of disk space, requires many confirmations and, in my case, failed. So I suggest cloning the repository with your main system and then transferring the files directly to the FreeBSD build VM instead.
 
