@@ -348,7 +348,7 @@ module Wiki = struct
     };
 
     {
-      updated    = date (2014, 04, 14, 17, 30);
+      updated    = date (2014, 04, 16, 17, 30);
       author     = tal;
       subject    = "Running Xen on the Cubieboard2";
       body       = File "xen-on-cubieboard2.md";

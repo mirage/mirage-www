@@ -1,6 +1,6 @@
-Author: Thomas Leonard
+**Author:** Thomas Leonard, addendums from Anil Madhavapeddy
 
-Status: work-in-progress
+**Status:** work-in-progress
 
 These notes detail the process of setting up a Xen system on a Cubieboard2.
 They are based on the [Xen ARM with Virtualization Extensions/Allwinner](http://wiki.xen.org/wiki/Xen_ARM_with_Virtualization_Extensions/Allwinner) documentation, but try to collect everything into one place.
@@ -45,6 +45,10 @@ Write to microSD card with:
 
     dd if=cubieez_1.0.0_A20.img of=/dev/mmcblk0
 
+You will need to hook up the serial console on the Cubieboard, being careful not to connect up one of the pins.
+One good cable that is known is work can be bought [here](http://proto-pic.co.uk/usb-to-ttl-serial-cable-debug-console-cable-for-raspberry-pi/).
+Follow the instructions at the [Sunxi/TTL](http://linux-sunxi.org/Cubieboard/TTL) page to connect up 3 of the cables to the right pins.
+
 Connect the USB serial cable and run "screen" to monitor it:
 
     screen -h 10000 /dev/ttyUSB0 115200
@@ -70,21 +74,24 @@ To build the various binaries (U-Boot, Linux, Xen), we need an [ARM cross-compil
 
 [The A20 has hardware FPU](http://en.wikipedia.org/wiki/ARM_Cortex-A7_MPCore), so use the hf version of the cross-compiler for best performance.
 
-I'm using Arch Linux, but similar commands should work on other distributions:
+On Arch Linux, run:
 
     yaourt -S arm-linux-gnueabihf-gcc
+
+On a modern Ubuntu, run:
+
+    sudo apt-get install gcc-arm-linux-gnueabihf
 
 This installs files such as:
 
     /usr/bin/arm-linux-gnueabihf-ld
     /usr/bin/arm-linux-gnueabihf-gcc
 
-
 ## U-Boot
 
 Xen needs to be started in non-secure HYP mode. Use this U-Boot Git repository:
 
-    git clone git@github.com:jwrdegoede/u-boot-sunxi.git
+    git clone git://github.com/jwrdegoede/u-boot-sunxi.git
     cd u-boot-sunxi
     git checkout -b sunxi-next origin/sunxi-next
 
