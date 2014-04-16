@@ -6,6 +6,14 @@ These notes detail the process of setting up a Xen system on a Cubieboard2.
 They are based on the [Xen ARM with Virtualization Extensions/Allwinner](http://wiki.xen.org/wiki/Xen_ARM_with_Virtualization_Extensions/Allwinner) documentation, but try to collect everything into one place.
 I'm trying to document the exact steps I took (with the wrong turns removed); some changes will be needed for other systems.
 
+It covers:
+
+* Installing U-Boot, Xen and a Linux Dom0
+* Running a Linux DomU
+* Running a FreeBSD DomU
+* Running a Mini-OS DomU
+
+
 ## Glossary
 
 [ARMv7](http://en.wikipedia.org/wiki/ARM_architecture)
@@ -451,6 +459,78 @@ You should now be able to boot the Linux guest:
 
 Note: it stops for a long time (about 2 min) at `init: ureadahead main process (42) terminated with status 5`,
 but it does boot eventually. You can add `init=/bin/bash` to `extra` if you want to boot faster (this is almost instant).
+
+
+## FreeBSD guest
+
+Source: [Add support for Xen ARM guest on FreeBSD](http://lists.freebsd.org/pipermail/freebsd-xen/2014-January/001974.html)
+
+I created a VM on my laptop and installed FreeBSD from [FreeBSD-10.0-RELEASE-amd64-bootonly.iso](http://www.freebsd.org/where.html). I then used that to cross-compile the Xen/ARM version. Your build VM will need to have at least 4 GB of disk space.
+
+Get the `xen-arm` branch:
+
+    git clone git://xenbits.xen.org/people/julieng/freebsd.git -b xen-arm
+
+Note: Installing Git using FreeBSD using ports on a clean system is very slow, uses a lot of disk space, requires many confirmations and, in my case, failed. So I suggest cloning the repository with your main system and then transferring the files directly to the FreeBSD build VM instead.
+
+In the build FreeBSD (note: the build takes several hours; you might want to assign multiple CPUS to your VM and use `-j` here):
+
+    cd freebsd
+    truncate -s 512M xenvm.img
+    mdconfig -f xenvm.img -u0
+    newfs /dev/md0
+    mount /dev/md0 /mnt
+
+    make TARGET_ARCH=armv6 kernel-toolchain
+    make TARGET_ARCH=armv6 KERNCONF=XENHVM buildkernel
+    make TARGET_ARCH=armv6 buildworld
+    make TARGET_ARCH=armv6 DESTDIR=/mnt installworld distribution
+
+    echo "/dev/xbd0 / ufs rw 1 1" > /mnt/etc/fstab
+    echo 'xc0 "/usr/libexec/getty Pc" xterm on secure' >> /mnt/etc/ttys
+
+    umount /mnt
+    mdconfig -d -u0
+
+Then you can copy `xenvm.img` and the kernel (`/usr/obj/arm.armv6/root/freebsd/sys/XENHVM/kernel`) to dom0 on the Cubieboard2.
+You might want to rename the kernel (e.g. to `freebsd-kernel`).
+
+Create a new partition for it and copy the filesystem in:
+
+    lvcreate --name freebsd -L 512M vg0
+    dd if=xenvm.img of=/dev/vg0/freebsd
+
+Here's a suitable `freebsd.cfg` config file:
+
+    kernel="freebsd-kernel"
+    memory=64
+    name="freebsd"
+    vcpus=1
+    autoballon="off"
+    disk=[ 'phy:/dev/vg0/freebsd,xvda,w' ]
+
+If you try to start the domain with Debian's version of `xl`, you'll get `Unable to find arch FDT info for xen-3.0-unknown`.
+To fix this, you need to rebuild the Xen toolstack with these two patches (I applied them to the `stable-4.4` branch):
+
+- https://patches.linaro.org/22228/
+- https://patches.linaro.org/22227/
+
+Build it using the ARM build guest:
+
+    cd xen/tools
+    ./configure --prefix=/opt/xen-freebsd
+    make
+    make install
+
+Transfer `/opt/xen-freebsd` to dom0 and you can then start the FreeBSD domain with:
+
+    export LD_LIBRARY_PATH=/opt/xen-freebsd/lib/
+    /opt/xen-freebsd/sbin/xl create -c freebsd.cfg
+
+You should get a root prompt:
+
+    # uname -a
+    FreeBSD  11.0-CURRENT FreeBSD 11.0-CURRENT #2: Tue Apr 15 20:37:04 BST 2014     root@freebsd:/usr/obj/arm.armv6/root/freebsd/sys/XENHVM  arm
 
 
 ## Xen Mini-OS
