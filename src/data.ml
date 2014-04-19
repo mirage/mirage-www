@@ -376,6 +376,12 @@ module Links = struct
   }
 
   let entries = [
+    { id="nw-lang-mirageos";
+      uri=Uri.of_string "http://www.networkworld.com/slideshow/149127/beyond-the-usual-suspects-10-hot-programming-languages-on-the-rise.html#slide10";
+      title="Beyond the usual suspects: 10 hot programming languages on the rise";
+      date=day(2014,04,17);
+      stream=press;
+    };
     { id="citirx-containers-xen";
       uri=Uri.of_string "http://open.citrix.com/blog/328-are-containers-the-right-answer-to-the-wrong-question.html";
       title="Are Containers the Right Answer to the Wrong Question?";
