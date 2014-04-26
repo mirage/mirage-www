@@ -192,13 +192,14 @@ module Wiki = struct
     weekly ~y:2014 ~m:3 ~d:18 ~a:amir;
     weekly ~y:2014 ~m:3 ~d:4 ~a:amir;
     weekly ~y:2014 ~m:2 ~d:26 ~a:amir;
-    
+
     { updated    = date (2014, 02, 01, 01, 0);
       author     = jonludlam;
       subject    = "How Xen suspend and resume works";
       body       = File "xen-suspend.md";
       permalink  = "xen-suspend";
     };
+
     { updated    = date (2013, 12, 29, 17, 0);
       author     = dave;
       subject    = "Understanding Xen events with Mirage";
@@ -382,6 +383,7 @@ module Links = struct
       date=day(2014,04,17);
       stream=press;
     };
+
     { id="citirx-containers-xen";
       uri=Uri.of_string "http://open.citrix.com/blog/328-are-containers-the-right-answer-to-the-wrong-question.html";
       title="Are Containers the Right Answer to the Wrong Question?";
@@ -479,7 +481,13 @@ module Links = struct
       date=day (2013,12,09);
       stream=press;
     };
+    { id="voxoz-docker-2013";
+      uri=Uri.of_string "http://blog.docker.io/2013/09/powering-voxoz-ecosystem-with-docker/";
+      title="Powering Voxoz ecosystem with Docker";
+      date=day (2013,09,26);
+      stream=blog;
+    }
   ]
 
-  let streams = [ press ]
+  let streams = [ press; blog ]
 end
