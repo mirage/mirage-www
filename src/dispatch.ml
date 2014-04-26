@@ -51,6 +51,7 @@ module Main
 
       lwt blog_dispatch = Blog.dispatch blog_feed Data.Blog.entries in
       lwt wiki_dispatch = Wiki.dispatch wiki_feed Data.Wiki.entries in
+      lwt releases_dispatch = Pages.Releases.dispatch read_tmpl in
       lwt links_dispatch =
         Pages.Links.dispatch links_feed Data.Links.entries
       in
@@ -67,9 +68,10 @@ module Main
         | ["community"] ->
           return (`Html (Pages.About.t read_tmpl))
 
-        | "blog"    :: tl -> return (`Page (blog_dispatch tl))
-        | "links"   :: tl -> return (links_dispatch tl)
-        | "updates" :: tl -> return (`Page (updates_dispatch tl))
+        | "releases" :: tl -> return (`Page (releases_dispatch tl))
+        | "blog"     :: tl -> return (`Page (blog_dispatch tl))
+        | "links"    :: tl -> return (links_dispatch tl)
+        | "updates"  :: tl -> return (`Page (updates_dispatch tl))
 
         | "docs" :: tl
         | "wiki" :: tl -> return (`Page (wiki_dispatch tl))

@@ -192,13 +192,14 @@ module Wiki = struct
     weekly ~y:2014 ~m:3 ~d:18 ~a:amir;
     weekly ~y:2014 ~m:3 ~d:4 ~a:amir;
     weekly ~y:2014 ~m:2 ~d:26 ~a:amir;
-    
+
     { updated    = date (2014, 02, 01, 01, 0);
       author     = jonludlam;
       subject    = "How Xen suspend and resume works";
       body       = File "xen-suspend.md";
       permalink  = "xen-suspend";
     };
+
     { updated    = date (2013, 12, 29, 17, 0);
       author     = dave;
       subject    = "Understanding Xen events with Mirage";

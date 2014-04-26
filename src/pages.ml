@@ -181,3 +181,28 @@ module About = struct
     </div> >> in
     return (Global.page ~title:"Community" ~headers:[] ~content)
 end
+
+module Releases = struct
+
+  let content_type_xhtml = Cowabloga.Headers.html
+
+  let changelog read_fn =
+    lwt c = read_file read_fn "/changelog.md" in
+    let content = <:html<
+      <div class="row">
+        <div class="small-12 medium-12 large-9 columns">
+          <h2>Changelogs of ecosystem libraries</h2>
+          <p>MirageOS consists of numerous libraries that are independently developed
+             and released.  This page lists the chronological stream of releases, 
+             along with the summary of changes that went into each library.</p>
+          $c$
+        </div>
+      </div>
+    >> in
+    return (Global.page ~title:"Changelog" ~headers:[] ~content)
+
+  let dispatch read_fn =
+    return (function
+     |[""]|[] -> content_type_xhtml, (changelog read_fn)
+     |_ -> content_type_xhtml, (return ""))
+end
