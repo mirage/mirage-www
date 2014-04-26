@@ -196,7 +196,7 @@ module Releases = struct
           <p>MirageOS consists of numerous libraries that are independently developed
              and released.  This page lists the chronological stream of releases, 
              along with the summary of changes that went into each library.  The
-             main organization page at <https://github.com/mirage/> holds most
+             Mirage **[organization](https://github.com/mirage/) holds most
              of the major libraries if you just want to browse.</p>
           $c$
         </div>
