@@ -30,6 +30,7 @@ module Global = struct
       <li><a href="/blog/">Blog</a></li>
       <li><a href="/docs/">Docs</a></li>
       <li><a href="http://mirage.github.io/">API</a></li>
+      <li><a href="/releases/">Changes</a></li>
       <li class="has-dropdown">
         <a href="/community/">Community</a>
         <ul class="dropdown">
@@ -194,7 +195,9 @@ module Releases = struct
           <h2>Changelogs of ecosystem libraries</h2>
           <p>MirageOS consists of numerous libraries that are independently developed
              and released.  This page lists the chronological stream of releases, 
-             along with the summary of changes that went into each library.</p>
+             along with the summary of changes that went into each library.  The
+             main organization page at <https://github.com/mirage/> holds most
+             of the major libraries if you just want to browse.</p>
           $c$
         </div>
       </div>
