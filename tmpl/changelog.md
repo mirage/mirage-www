@@ -1,3 +1,11 @@
+### ocaml-cow-v0.10.0: Use `jsonm` library for all JSON handling
+
+Released on 2014-04-27 as [v0.10.0](https://github.com/mirage/ocaml-cow/releases/tag/v0.10.0). See <https://github.com/mirage/ocaml-cow> for full history.
+
+* Remove JSON parsing in favour of using `jsonm` instead.  This is an interface change that will break any existing users of the JSON portions of Cow, but it's worth making this change before a 1.0 release of Cow.
+* Stop testing OCaml 3.12.1 (although it may continue to work).
+
+
 ### ocaml-github-v0.8.4: Add `git-list-releases` binary
 
 Released on 2014-04-26 as [v0.8.4](https://github.com/avsm/ocaml-github/releases/tag/v0.8.4). See <https://github.com/avsm/ocaml-github> for full history.
@@ -109,7 +117,6 @@ Released on 2014-03-02 as [v1.0.0](https://github.com/mirage/ocaml-tuntap/releas
 
 Released on 2014-03-02 as [v0.8.0](https://github.com/avsm/ocaml-github/releases/tag/v0.8.0). See <https://github.com/avsm/ocaml-github> for full history.
 
-0.8.0 (2014-03-02):
 * Port to cohttp.0.10.x interfaces.
 * Make the `note` field in oAuth token creation mandatory to reflect GitHub API.
 * Pull requests are now allowed to have `null` bodys (#31).
