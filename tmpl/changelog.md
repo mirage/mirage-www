@@ -1,3 +1,37 @@
+### mirage-tcpip-v1.1.3: Expose IPV4 module in the STACKV4 functor
+
+Released on 2014-04-29 as [v1.1.3](https://github.com/mirage/mirage-tcpip/releases/tag/v1.1.3). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Expose IPV4 through the STACKV4 interface.
+
+This requires the corresponding mirage-types package in Mirage 1.1.2
+
+### mirage-tcpip-v1.1.3: Expose IPV4 module in the STACKV4 functor
+
+Released on 2014-04-29 as [v1.1.3](https://github.com/mirage/mirage-tcpip/releases/tag/v1.1.3). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Expose IPV4 through the STACKV4 interface.
+
+This requires the corresponding mirage-types package in Mirage 1.1.2
+
+### mirage-1.1.2: Improve STACKV4 module type, and EC2 deployment scripts
+
+Released on 2014-04-29 as [1.1.2](https://github.com/mirage/mirage/releases/tag/1.1.2). See <https://github.com/mirage/mirage> for full history.
+
+* Improvement to the Amazon EC2 deployment script.
+* [types] Augment STACKV4 with an IPV4 module in addition to TCPV4 and UDPV4.
+* Regenerate with OASIS 0.4.4 (which adds natdynlink support)
+
+### ocaml-uri-v1.6.0: More compatible escape encoding, link fixes and remove Uri_IP
+
+Released on 2014-04-28 as [v1.6.0](https://github.com/mirage/ocaml-uri/releases/tag/v1.6.0). See <https://github.com/mirage/ocaml-uri> for full history.
+
+* Remove `Uri_IP` module, superseded by the `ipaddr` package (#30).
+* Do not depend on `camlp4` for link-time, only compile time (#39).
+* Add `with_scheme` and `with_userinfo` functional setters (#40).
+* Always percent-escape semicolon in structured query encoding (#44).
+
+
 ### ocaml-cow-v0.10.0: Use `jsonm` library for all JSON handling
 
 Released on 2014-04-27 as [v0.10.0](https://github.com/mirage/ocaml-cow/releases/tag/v0.10.0). See <https://github.com/mirage/ocaml-cow> for full history.
