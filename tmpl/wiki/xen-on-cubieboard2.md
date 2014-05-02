@@ -425,10 +425,10 @@ Create a new LVM partition for the guest's root FS and format it:
 
 Note: we're going to make a fairly big VM, as we'll be using it as a build machine soon.
 
-Mount it and install an OS (e.g. Ubuntu 13.10 here):
+Mount it and install an OS (e.g. Ubuntu 14.04 here):
 
     mount /dev/vg0/linux-guest-1 /mnt
-    debootstrap --arch armhf saucy /mnt
+    debootstrap --arch armhf trusty /mnt
     chroot /mnt
     passwd
 
@@ -441,13 +441,18 @@ Edit `/etc/hostname`, `/etc/network/interfaces`:
 
     /dev/xvda       / ext4   rw,relatime,data=ordered       0 1
 
-Unmount:
+Add any extra software you want:
 
-    apt-get install openssh-server	# (and add authorized_keys)
-    exit
-    umount /mnt
+    apt-get install openssh-server
+    mkdir -m 0700 /root/.ssh
+    vi /root/.ssh/authorized_keys
 
 Note: openssh will fail to start as port 22 is taken, but it still installs.
+
+Unmount:
+
+    exit
+    umount /mnt
 
 Copy the Linux kernel image into /root (the dom0 one is fine). Create `domU_test`:
 
@@ -463,9 +468,6 @@ Copy the Linux kernel image into /root (the dom0 one is fine). Create `domU_test
 You should now be able to boot the Linux guest:
 
     xl create domU_test -c
-
-Note: it stops for a long time (about 2 min) at `init: ureadahead main process (42) terminated with status 5`,
-but it does boot eventually. You can add `init=/bin/bash` to `extra` if you want to boot faster (this is almost instant).
 
 
 ## FreeBSD guest
