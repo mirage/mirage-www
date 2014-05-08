@@ -6,7 +6,9 @@ These notes detail the process of setting up a Xen system on a Cubieboard2.
 They are based on the [Xen ARM with Virtualization Extensions/Allwinner](http://wiki.xen.org/wiki/Xen_ARM_with_Virtualization_Extensions/Allwinner) documentation, but try to collect everything into one place.
 I'm trying to document the exact steps I took (with the wrong turns removed); some changes will be needed for other systems.
 
-It covers:
+**TL;DR**: There is now a script available that generates an image with Xen, Ubuntu dom0, and the OCaml tools installed.  Just run the `make` instructions at [mirage/xen-arm-builder](https://github.com/mirage/xen-arm-builder) and copy the resulting image onto an SDcard and boot up your Cubieboard2 or Cubietruck (password `linaro`/`linaro` which you should change as the first thing you do).
+
+The remainder of this guide covers:
 
 * Installing U-Boot, Xen and a Linux Dom0
 * Running a Linux DomU
