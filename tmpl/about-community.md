@@ -9,3 +9,4 @@
 * *Haris Rotsos*, University of Cambridge, [cl.cam.ac.uk](http://www.cl.cam.ac.uk/~cr409/)
 * *David Sheets*, University of Cambridge, [github.com](https://github.com/dsheets)
 * *Balraj Singh*, University of Cambridge, [github.com](https://github.com/balrajsingh)
+* *Thomas Leonard*, University of Cambridge, [github.com](https://github.com/talex5)

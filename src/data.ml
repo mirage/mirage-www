@@ -168,6 +168,12 @@ module Blog = struct
         body       = "applying-for-gsoc2014.md";
         permalink  = "applying-for-gsoc2014";
       };
+      { updated    = date (2014, 05, 08, 18, 0);
+        author     = anil;
+        subject    = "Welcome to the summer Mirage hackers";
+        body       = "welcome-to-our-summer-hackers.md";
+        permalink  = "welcome-to-our-summer-hackers";
+      };
     ]
 end
 
