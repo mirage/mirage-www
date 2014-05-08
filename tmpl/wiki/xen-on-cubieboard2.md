@@ -425,10 +425,10 @@ Create a new LVM partition for the guest's root FS and format it:
 
 Note: we're going to make a fairly big VM, as we'll be using it as a build machine soon.
 
-Mount it and install an OS (e.g. Ubuntu 13.10 here):
+Mount it and install an OS (e.g. Ubuntu 14.04 here):
 
     mount /dev/vg0/linux-guest-1 /mnt
-    debootstrap --arch armhf saucy /mnt
+    debootstrap --arch armhf trusty /mnt
     chroot /mnt
     passwd
 
@@ -441,13 +441,18 @@ Edit `/etc/hostname`, `/etc/network/interfaces`:
 
     /dev/xvda       / ext4   rw,relatime,data=ordered       0 1
 
-Unmount:
+Add any extra software you want:
 
-    apt-get install openssh-server	# (and add authorized_keys)
-    exit
-    umount /mnt
+    apt-get install openssh-server
+    mkdir -m 0700 /root/.ssh
+    vi /root/.ssh/authorized_keys
 
 Note: openssh will fail to start as port 22 is taken, but it still installs.
+
+Unmount:
+
+    exit
+    umount /mnt
 
 Copy the Linux kernel image into /root (the dom0 one is fine). Create `domU_test`:
 
@@ -464,9 +469,6 @@ You should now be able to boot the Linux guest:
 
     xl create domU_test -c
 
-Note: it stops for a long time (about 2 min) at `init: ureadahead main process (42) terminated with status 5`,
-but it does boot eventually. You can add `init=/bin/bash` to `extra` if you want to boot faster (this is almost instant).
-
 
 ## FreeBSD guest
 
@@ -474,9 +476,11 @@ Source: [Add support for Xen ARM guest on FreeBSD](http://lists.freebsd.org/pipe
 
 I created a VM on my laptop and installed FreeBSD from [FreeBSD-10.0-RELEASE-amd64-bootonly.iso](http://www.freebsd.org/where.html). I then used that to cross-compile the Xen/ARM version. Your build VM will need to have at least 4 GB of disk space.
 
-Get the `xen-arm` branch:
+Get the `xen-arm-v2` branch:
 
-    git clone git://xenbits.xen.org/people/julieng/freebsd.git -b xen-arm
+    git clone git://xenbits.xen.org/people/julieng/freebsd.git -b xen-arm-v2
+
+Note: I tested with the `xen-arm` branch, but the `xen-arm-v2` branch has some useful fixes.
 
 Note: Installing Git using FreeBSD using ports on a clean system is very slow, uses a lot of disk space, requires many confirmations and, in my case, failed. So I suggest cloning the repository with your main system and then transferring the files directly to the FreeBSD build VM instead.
 
