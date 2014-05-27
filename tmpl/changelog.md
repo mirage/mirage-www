@@ -1,3 +1,68 @@
+### mirage-net-xen-v1.1.1: Better bounds checking for oversized frames
+
+Released on 2014-05-27 as [v1.1.1](https://github.com/mirage/mirage-net-xen/releases/tag/v1.1.1). See <https://github.com/mirage/mirage-net-xen> for full history.
+
+Do not send oversized frames to the backend Netfront (#9 from Edwin Torok).
+
+
+### ocaml-ctypes-ocaml-ctypes-0.3: ocaml-ctypes 0.3
+
+Released on 2014-05-22 as [ocaml-ctypes-0.3](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/ocaml-ctypes-0.3). See <https://github.com/ocamllabs/ocaml-ctypes> for full history.
+
+## What's new in ocaml-ctypes 0.3
+
+Thanks to Peter Zotov (@whitequark), David Sheets (@dsheets), Mike McClurg (@mcclurmc) and Anil Madhavapeddy (@avsm) for contributions to this release.
+
+### Major features
+
+#### Support for passing OCaml strings directly to C
+(Patch by Peter Zotov.)
+
+The implications are discussed [in the FAQ][strings_faq].
+
+[strings_faq]: https://github.com/ocamllabs/ocaml-ctypes/wiki/FAQ#strings
+
+#### Support for generating C stubs from names and type declarations.
+There are various examples available of packages which use stub support: see the [fts example][fts-example] in the distribution (which uses a custom Makefile), [this fork of async_ssl][async_ssl] (which uses OCamlMakefile), and [the cstubs branch of ocaml-lz4][ocaml-lz4] (which uses oasis and ocamlbuild).
+
+[fts-example]: https://github.com/ocamllabs/ocaml-ctypes/tree/master/examples/fts/stub-generation
+[async_ssl]: https://github.com/yallop/async_ssl/tree/stub-generation
+[ocaml-lz4]: https://github.com/whitequark/ocaml-lz4/tree/cstubs
+
+#### Support for turning OCaml modules into C libraries.
+See the [ocaml-ctypes-inverted-stubs-example][inverted-stubs-example] repository for a sample project which exposes a part of [Xmlm][xmlm]'s API to C.
+
+[inverted-stubs-example]: https://github.com/yallop/ocaml-ctypes-inverted-stubs-example/ 
+[xmlm]: http://erratique.ch/software/xmlm
+
+
+### Other features
+
+* Add a function [`string_from_ptr`][string_from_ptr] for creating a string from an address and length.
+* Generate [codes for libffi ABI specifications][libffi_abi].
+* Support for passing complex numbers to C using the stub generation backend.
+* Add [`raw_address_of_ptr`][raw_address_of_ptr], an inverse of [`ptr_of_raw_address`][ptr_of_raw_address].
+* Add a function [`typ_of_bigarray_kind`][typ_of_bigarray_kind] for converting `Bigarray.kind` values to `Ctypes.typ` values.
+* Improved [coercion][coercion] support
+
+[typ_of_bigarray_kind]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#VALtyp_of_bigarray_kind
+[string_from_ptr]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#VALstring_from_ptr
+[raw_address_of_ptr]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#VALraw_address_of_ptr
+[ptr_of_raw_address]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#VALptr_of_raw_address
+[CArray]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.Array.html
+[libffi_abi]: http://ocamllabs.github.io/ocaml-ctypes/Libffi_abi.html
+[coercion]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#VALcoerce
+
+
+### Backwards incompatibilities
+`Array` has been renamed to [`CArray`][CArray].
+
+### ocaml-github-v0.8.5: Fix optional schema field parsing
+
+Released on 2014-05-08 as [v0.8.5](https://github.com/avsm/ocaml-github/releases/tag/v0.8.5). See <https://github.com/avsm/ocaml-github> for full history.
+
+* The `master_branch` field in the `repo` is actually optional, to fix the schema to reflect this.
+
 ### mirage-tcpip-v1.1.3: Expose IPV4 module in the STACKV4 functor
 
 Released on 2014-04-29 as [v1.1.3](https://github.com/mirage/mirage-tcpip/releases/tag/v1.1.3). See <https://github.com/mirage/mirage-tcpip> for full history.
@@ -917,6 +982,57 @@ Released on 2013-11-07 as [v0.8.1](https://github.com/mirage/ocaml-cstruct/relea
 * Buffer elements can be any primitive integer, not just `uint8`.
 
 
+### ocaml-ctypes-ocaml-ctypes-0.2: ocaml-ctypes 0.2
+
+Released on 2013-11-07 as [ocaml-ctypes-0.2](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/ocaml-ctypes-0.2). See <https://github.com/ocamllabs/ocaml-ctypes> for full history.
+
+## What's new in ocaml-ctypes 0.2
+
+Thanks to Ivan Gotovchits, Greg Perkins, Daniel Bünzli, Rob Hoes and Anil Madhavapeddy for contributions to this release.
+
+### Major features
+
+#### Bigarray support.
+See [Bigarray types][bigarray-types] and [Bigarray values][bigarray-values] for details.
+
+[bigarray-types]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#4_Bigarraytypes
+[bigarray-values]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#4_Bigarrayvalues
+
+#### Give the user control over the lifetime of closures passed to C.
+See [the FAQ][faq-lifetime] for details.
+
+[faq-lifetime]: https://github.com/ocamllabs/ocaml-ctypes/wiki/FAQ#function-lifetime
+
+#### Top level printing for C values and types
+Loading the new findlib package `ctypes.top` in the toplevel will install custom printers for C types and values.
+
+### Other features
+
+* Basic [coercion][coercion] support
+* Remove `returning_checking_errno`; pass a flag to [`foreign`][foreign] instead.
+* Add an optional argument to [`Foreign.foreign`][foreign] that ignores absent symbols.
+  (Patch by Daniel Bünzli.)
+* More precise tests for whether types are 'passable'
+* Compulsory names for structure and union fields (`*:*` and `+:+` are deprecated, but still supported for now.)
+* [`UInt32.of_int32`][of_int32], [`UInt32.to_int32`][to_int32], [`UInt64.of_int64`][of_int64], and [`UInt64.to_int64`][to_int64] functions.
+* Finalisers for ctypes-allocated memory.
+* Add a [`string_opt`][string_opt] view
+  (Patch by Rob Hoes.)
+* Add the ['camlint'][camlint] basic type.
+* Complex number support
+* Abstract types [now have names][abstract].
+
+[foreign]: http://ocamllabs.github.io/ocaml-ctypes/Foreign.html#VALforeign
+[of_int32]: http://ocamllabs.github.io/ocaml-ctypes/Unsigned.Uint32.html#VALof_int32
+[to_int32]: http://ocamllabs.github.io/ocaml-ctypes/Unsigned.Uint32.html#VALto_int32
+[of_int64]: http://ocamllabs.github.io/ocaml-ctypes/Unsigned.Uint64.html#VALof_int64
+[to_int64]: http://ocamllabs.github.io/ocaml-ctypes/Unsigned.Uint64.html#VALto_int64
+[string_opt]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#VALstring_opt
+[camlint]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#VALcamlint
+[abstract]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#VALabstract
+[coercion]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#VALcoerce
+
+
 ### ocaml-uri-v1.3.11: Add relative/relative parsing
 
 Released on 2013-10-15 as [v1.3.11](https://github.com/mirage/ocaml-uri/releases/tag/v1.3.11). See <https://github.com/mirage/ocaml-uri> for full history.
@@ -1149,4 +1265,10 @@ Released on 2013-07-03 as [0.6.1](https://github.com/mirage/ocaml-cow/releases/t
 * Expose a `decl` option to make the `Xml.to_string` declaration prefix optional.
 * Do not output a `<?xml` declaration in `Html.to_string`.
 
+
+### ocaml-ctypes-ocaml-ctypes-0.1: ocaml-ctypes 0.1
+
+Released on 2013-06-05 as [ocaml-ctypes-0.1](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/ocaml-ctypes-0.1). See <https://github.com/ocamllabs/ocaml-ctypes> for full history.
+
+Initial release.
 
