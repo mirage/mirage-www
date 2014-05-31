@@ -385,6 +385,13 @@ module Links = struct
   }
 
   let entries = [
+    { id="se-radio-2014";
+      uri=Uri.of_string "http://www.se-radio.net/2014/05/episode-204-anil-madhavapeddy-on-the-mirage-cloud-operating-system-and-the-ocaml-language/";
+      title="Software Engineering Radio: podcast on MirageOS and OCaml with Anil Madhavapeddy";
+      date=day(2014,05,30);
+      stream=press;
+    };
+
     { id="nw-lang-mirageos";
       uri=Uri.of_string "http://www.networkworld.com/slideshow/149127/beyond-the-usual-suspects-10-hot-programming-languages-on-the-rise.html#slide10";
       title="Beyond the usual suspects: 10 hot programming languages on the rise";
