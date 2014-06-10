@@ -1,3 +1,31 @@
+### ocaml-cstruct-v1.2.0: Add `sexp` decorator for cenum values
+
+Released on 2014-06-08 as [v1.2.0](https://github.com/mirage/ocaml-cstruct/releases/tag/v1.2.0). See <https://github.com/mirage/ocaml-cstruct> for full history.
+
+Add a `sexp` optional decorator to `cenum` to output the values as s-expressions.
+This is compatible with the `sexplib` convention.  The syntax is;
+
+```
+cenum foo64 {
+  ONE64;
+  TWO64;
+  THREE64
+} as uint64_t(sexp)
+```
+
+And `sexp_of_foo64` and `foo64_of_sexp` functions will also be available.
+The representation of the Sexp is the string representation of the enum.
+
+
+### mirage-net-unix-v1.1.1: Improved error messages
+
+Released on 2014-05-30 as [v1.1.1](https://github.com/mirage/mirage-net-unix/releases/tag/v1.1.1). See <https://github.com/mirage/mirage-net-unix> for full history.
+
+* Improve error message for permission denied (#6).
+* Fix the order of linking to ensure `io-page.unix` comes first.
+  This works around a linking hack to ensure the C symbols load.
+
+
 ### mirage-net-xen-v1.1.1: Better bounds checking for oversized frames
 
 Released on 2014-05-27 as [v1.1.1](https://github.com/mirage/mirage-net-xen/releases/tag/v1.1.1). See <https://github.com/mirage/mirage-net-xen> for full history.
@@ -9,34 +37,40 @@ Do not send oversized frames to the backend Netfront (#9 from Edwin Torok).
 
 Released on 2014-05-22 as [ocaml-ctypes-0.3](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/ocaml-ctypes-0.3). See <https://github.com/ocamllabs/ocaml-ctypes> for full history.
 
-## What's new in ocaml-ctypes 0.3
+See [the release notes for 0.3](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/0.3).
+
+### ocaml-ctypes-0.3: ocaml-ctypes 0.3
+
+Released on 2014-05-22 as [0.3](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/0.3). See <https://github.com/ocamllabs/ocaml-ctypes> for full history.
+
+### What's new in ocaml-ctypes 0.3
 
 Thanks to Peter Zotov (@whitequark), David Sheets (@dsheets), Mike McClurg (@mcclurmc) and Anil Madhavapeddy (@avsm) for contributions to this release.
 
-### Major features
+#### Major features
 
-#### Support for passing OCaml strings directly to C
+##### Support for passing OCaml strings directly to C
 (Patch by Peter Zotov.)
 
 The implications are discussed [in the FAQ][strings_faq].
 
 [strings_faq]: https://github.com/ocamllabs/ocaml-ctypes/wiki/FAQ#strings
 
-#### Support for generating C stubs from names and type declarations.
+##### Support for generating C stubs from names and type declarations.
 There are various examples available of packages which use stub support: see the [fts example][fts-example] in the distribution (which uses a custom Makefile), [this fork of async_ssl][async_ssl] (which uses OCamlMakefile), and [the cstubs branch of ocaml-lz4][ocaml-lz4] (which uses oasis and ocamlbuild).
 
 [fts-example]: https://github.com/ocamllabs/ocaml-ctypes/tree/master/examples/fts/stub-generation
 [async_ssl]: https://github.com/yallop/async_ssl/tree/stub-generation
 [ocaml-lz4]: https://github.com/whitequark/ocaml-lz4/tree/cstubs
 
-#### Support for turning OCaml modules into C libraries.
+##### Support for turning OCaml modules into C libraries.
 See the [ocaml-ctypes-inverted-stubs-example][inverted-stubs-example] repository for a sample project which exposes a part of [Xmlm][xmlm]'s API to C.
 
 [inverted-stubs-example]: https://github.com/yallop/ocaml-ctypes-inverted-stubs-example/ 
 [xmlm]: http://erratique.ch/software/xmlm
 
 
-### Other features
+#### Other features
 
 * Add a function [`string_from_ptr`][string_from_ptr] for creating a string from an address and length.
 * Generate [codes for libffi ABI specifications][libffi_abi].
@@ -54,8 +88,9 @@ See the [ocaml-ctypes-inverted-stubs-example][inverted-stubs-example] repository
 [coercion]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#VALcoerce
 
 
-### Backwards incompatibilities
+#### Backwards incompatibilities
 `Array` has been renamed to [`CArray`][CArray].
+
 
 ### ocaml-github-v0.8.5: Fix optional schema field parsing
 
