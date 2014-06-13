@@ -30,5 +30,8 @@ mirage/ocaml-xenstore
 mirage/dyntype
 mirage/mirage-clock
 mirage/mirage-tcpip
+mirage/mirage-fs-unix
+mirage/irmin
+samoht/ocaml-git
 ocamllabs/ocaml-ctypes
 avsm/ocaml-github
