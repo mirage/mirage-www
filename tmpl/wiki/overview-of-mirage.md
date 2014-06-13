@@ -20,7 +20,7 @@ and a security risk (due to the larger attack surface).
 
 Mirage represents a new approach where only the necessary components
 of the OS are included and compiled along with the application into a
-[unikernel](http://nymote.org/docs/2013-asplos-mirage.pdf). This
+[unikernel](http://queue.acm.org/detail.cfm?id=2566628). This
 results in highly efficient and extremely lean
 [appliances](http://en.wikipedia.org/wiki/Virtual_appliance), with a
 much smaller attack surface.  These appliances can be deployed
@@ -50,7 +50,7 @@ your servers run more cheaply, securely and faster in any Xen based
 cloud or hosting service.
 
 Mirage is based around the [OCaml language](http://ocaml.org), with
-syntax extensions and [40+ libraries](https://github.com/mirage) which
+syntax extensions and [50+ libraries](https://github.com/mirage) which
 map directly to operating system constructs when being compiled for
 production deployment. As such, Mirage includes clean-slate functional
 implementations of protocols ranging from TCP/IP, DNS, SSH, Openflow
@@ -114,7 +114,7 @@ provider for the short duration that they're needed.
 Overall, Mirage provides substantial benefits in terms of increased
 efficiency and safety and is ideal for deploying to both the public
 cloud and embedded devices. Together with
-[Signpost](http://nymote.org/software/signpost) and
-[Irminsule](http://nymote.org/software/irminsule), Mirage forms a core
-piece of the Nymote toolstack to power the coming wave of [Internet of
+[Irminsule](http://nymote.org/software/irminsule) and
+[Signpost](http://nymote.org/software/signpost), Mirage forms a core
+piece of the Nymote/MISO toolstack to power the coming wave of [Internet of
 Things devices](http://en.wikipedia.org/wiki/Internet_of_Things).
