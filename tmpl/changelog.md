@@ -1,3 +1,31 @@
+### irmin-0.8.2: Support backend-specific push/pull protocols
+
+Released on 2014-06-11 as [0.8.2](https://github.com/mirage/irmin/releases/tag/0.8.2). See <https://github.com/mirage/irmin> for full history.
+
+* Support backend specific protocols for push/pull
+* The Irmin Git backend can now sync with remote Git repositories
+* Simplify the organisation of the libraries: irmin, irmin.backend,
+  irmin.server and irmin.unix (check how the example are compiled)
+* Small refactoring to ease the use of the API. Now use `open Irmin_unix`
+  at the top of your file and use less functor in your code (again,
+  check the examples)
+
+### ocaml-git-1.2.0: Compatibility with the Mirage's V1_LWT.FS signature
+
+Released on 2014-06-09 as [1.2.0](https://github.com/samoht/ocaml-git/releases/tag/1.2.0). See <https://github.com/samoht/ocaml-git> for full history.
+
+* Can consume Mirage's V1_LWT.FS signature to generate a
+  persistent store. This allows to store Git repos directly
+  inside raw block devices (no need of filesystem anymore).
+* Minor API refactoring to abstract the unix layer cleanly
+* Expose a filesystem functor to create filesystem backends
+  independent of unix
+* Simplify the ocamlfind packages: there's only git and git.unix
+
+### mirage-fs-unix-v1.1.0: Add FS_unix (loopback implementation of V1_LWT.FS)
+
+Released on 2014-06-09 as [v1.1.0](https://github.com/mirage/mirage-fs-unix/releases/tag/v1.1.0). See <https://github.com/mirage/mirage-fs-unix> for full history.
+
 ### ocaml-cstruct-v1.2.0: Add `sexp` decorator for cenum values
 
 Released on 2014-06-08 as [v1.2.0](https://github.com/mirage/ocaml-cstruct/releases/tag/v1.2.0). See <https://github.com/mirage/ocaml-cstruct> for full history.
@@ -17,6 +45,31 @@ And `sexp_of_foo64` and `foo64_of_sexp` functions will also be available.
 The representation of the Sexp is the string representation of the enum.
 
 
+### irmin-0.8.1: Javascript graphs & fix IrminMemory.create to create a shared store
+
+Released on 2014-06-02 as [0.8.1](https://github.com/mirage/irmin/releases/tag/0.8.1). See <https://github.com/mirage/irmin> for full history.
+
+* Fix the behavior of `IrminMemory.Make` to return an hanlder to a
+  shared datastore instead of creating a fresh one. Add
+  `IrminMemory.Fresh` to return a fresh in-memory datastore maker.
+* The HTTP server now outputs some nice graph (using dagre-d3). Don't
+  expect to display very large graphs
+* More friendly tag names in the Git backend (no need to prefix
+  everything by `refs/heads/` anymore)
+* Partial support for recursive stores (WIP)
+
+### ocaml-git-1.1.0: Basic push support (unix only for now on)
+
+Released on 2014-06-02 as [1.1.0](https://github.com/samoht/ocaml-git/releases/tag/1.1.0). See <https://github.com/samoht/ocaml-git> for full history.
+
+* Support for push (not optimized at all)
+* Fix the generation of `.dot` file representing the Git repo
+* Fix serialization of executable files in the cache
+* Fix reading the total number of keys in a pack index file
+* Use `ocaml-conduit` to set-up connections with remote repositories
+* USe `ocaml-uri` to specify Git Remote Identifiers
+
+
 ### mirage-net-unix-v1.1.1: Improved error messages
 
 Released on 2014-05-30 as [v1.1.1](https://github.com/mirage/mirage-net-unix/releases/tag/v1.1.1). See <https://github.com/mirage/mirage-net-unix> for full history.
@@ -25,6 +78,25 @@ Released on 2014-05-30 as [v1.1.1](https://github.com/mirage/mirage-net-unix/rel
 * Fix the order of linking to ensure `io-page.unix` comes first.
   This works around a linking hack to ensure the C symbols load.
 
+
+### irmin-0.8.0: Cleaner external API
+
+Released on 2014-05-27 as [0.8.0](https://github.com/mirage/irmin/releases/tag/0.8.0). See <https://github.com/mirage/irmin> for full history.
+
+* Spring clean-ups in the API. Separation in IrminBranch for
+  fork/join operations, IrminSnapshot for snapshot/revert
+  operations and IrminDump for import/export operations.
+  The later two implementation can be derived automaticaly
+  from a base IrminBranch implementation. The update and merge
+  operations are supported on each backend
+* IrminGit does not depend on unix anymore and can thus be
+  compile to javascript or xen with mirage
+* No need to have bin_io converter for contents anymore
+* No need to have JSON converter for contents anymore
+* No more IrminDispatch
+* Add an optional branch argument to Irmin.create to use
+  an already existing branch
+* Fix order of arguments in Irmin.merge
 
 ### mirage-net-xen-v1.1.1: Better bounds checking for oversized frames
 
@@ -98,6 +170,29 @@ Released on 2014-05-08 as [v0.8.5](https://github.com/avsm/ocaml-github/releases
 
 * The `master_branch` field in the `repo` is actually optional, to fix the schema to reflect this.
 
+### irmin-0.7.0: Support for views, speed improvement
+
+Released on 2014-05-02 as [0.7.0](https://github.com/mirage/irmin/releases/tag/0.7.0). See <https://github.com/mirage/irmin> for full history.
+
+* Feature: support for in-memory transactions. They are built
+  on top of views.
+* Feature: add support for views: these are temporary stores with
+  lazy reads + in-memory writes; they can be used to convert back
+  and forth an OCaml value into a store, or to have a fast stagging
+  area without the need to commit every operation to the store.
+* Support custom messages in commit messages
+* Improve the IrminMerge API
+* Backend: add a 'dispatch' backend for combining multiple backends
+  into one. This can be used to have a P2P store where there is
+  well-defined mapping between keys and host (as a DHT).
+* Fix: limit the number of simulteanous open files in the Git and
+  the file-system backend
+* Speed-up the in-memory store
+* Speed-up the import/export codepath
+* Speed-up the reads
+* Speed-up IrminValue.Mux
+* Deps: use ocaml-sha instead of cryptokit
+
 ### mirage-tcpip-v1.1.3: Expose IPV4 module in the STACKV4 functor
 
 Released on 2014-04-29 as [v1.1.3](https://github.com/mirage/mirage-tcpip/releases/tag/v1.1.3). See <https://github.com/mirage/mirage-tcpip> for full history.
@@ -160,6 +255,12 @@ Released on 2014-04-19 as [v0.8.1](https://github.com/mirage/ocaml-dns/releases/
 * Adapt `Dns_server_unix` to expose multiple zonebuf functions.
 
 
+### ocaml-git-1.0.2: Propagate Zlib inflation errors
+
+Released on 2014-04-19 as [1.0.2](https://github.com/samoht/ocaml-git/releases/tag/1.0.2). See <https://github.com/samoht/ocaml-git> for full history.
+
+*  Catch, improve and propagate Zlib inflation errors (which usually on incomplete files)
+
 ### ocaml-cohttp-v0.11.1: Add Lwt SimpleHTTPServer, and bugfixes
 
 Released on 2014-04-17 as [v0.11.1](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.11.1). See <https://github.com/mirage/ocaml-cohttp> for full history.
@@ -188,6 +289,26 @@ Released on 2014-04-13 as [v0.11.0](https://github.com/mirage/ocaml-cohttp/relea
 Released on 2014-04-13 as [v0.8.3](https://github.com/avsm/ocaml-github/releases/tag/v0.8.3). See <https://github.com/avsm/ocaml-github> for full history.
 
 This helps to synchronize Release metadata across two GitHub forks, and upload binary files to a Release.
+
+### irmin-0.6.0: Support for merge and user-defined contents
+
+Released on 2014-04-12 as [0.6.0](https://github.com/mirage/irmin/releases/tag/0.6.0). See <https://github.com/mirage/irmin> for full history.
+
+* Support for user-defined contents (with custom merge operators)
+* Support for merge operations
+* Rename `IrminTree` to `IrminNode` to reflect the fact that we
+  can support arbitrary immutable graphs (it's better if they are
+  DAGs but that's not mandatory)
+* Rename `IrminBlob` to `IrminContents` to reflect the fact that
+  we also support structured contents (as JSON objects)
+* Support for linking the library without linking to camlp4 as well (#23)
+
+### ocaml-git-1.0.1: Escape invalid chars in path names
+
+Released on 2014-04-10 as [1.0.1](https://github.com/samoht/ocaml-git/releases/tag/1.0.1). See <https://github.com/samoht/ocaml-git> for full history.
+
+* Escape invalid chars in path names
+* Do not link with camlp4 when using as a libray
 
 ### ocaml-github-v0.8.2: Deployment key and POSIX thread safety
 
@@ -256,6 +377,10 @@ Released on 2014-03-02 as [v0.8.0](https://github.com/avsm/ocaml-github/releases
 * Pull requests are now allowed to have `null` bodys (#31).
 
 
+### irmin-0.5.1: Support for cohttp 0.10.*
+
+Released on 2014-03-02 as [0.5.1](https://github.com/mirage/irmin/releases/tag/0.5.1). See <https://github.com/mirage/irmin> for full history.
+
 ### cowabloga-v0.0.5: Cohttp 0.10.x compatibility
 
 Released on 2014-03-02 as [v0.0.5](https://github.com/mirage/cowabloga/releases/tag/v0.0.5). See <https://github.com/mirage/cowabloga> for full history.
@@ -299,6 +424,23 @@ Released on 2014-02-24 as [v1.1.1](https://github.com/mirage/mirage-platform/rel
 * xen: support 4096 event channels (up from 8). Each device typically
   uses one event channel.
 
+
+### irmin-0.5.0: Support non-UTF8 blobs and consistent support for watches across backends
+
+Released on 2014-02-21 as [0.5.0](https://github.com/mirage/irmin/releases/tag/0.5.0). See <https://github.com/mirage/irmin> for full history.
+
+* More consistent support for notifications. `irmin watch` works
+  now for all backends.
+* Support for different blob formats on the command-line
+* Support for JSON blobs
+* More flexible `irmin fetch` command: we can now choose the backend to
+  import the data in
+* Fix import of Git objects when the blobs were not imported first
+* Support non-UTF8 strings as path name and blob contents (for all
+  backends, including the JSON one)
+* Speed-up the `slow` tests execution time
+* Improve the output graph when objects of different kinds might have
+  the same SHA1
 
 ### ocaml-dns-v0.8.0: IPv6 support and better portability
 
@@ -385,6 +527,13 @@ Released on 2014-02-10 as [v0.9.16](https://github.com/mirage/ocaml-cohttp/relea
 * Improve Travis tests to cover more upstream users of Cohttp.
 * Refactor build flags to let the portable Lwt-core be built independently of Lwt.unix.
 
+
+### ocaml-git-1.0.0: First release
+
+Released on 2014-02-10 as [1.0.0](https://github.com/samoht/ocaml-git/releases/tag/1.0.0). See <https://github.com/samoht/ocaml-git> for full history.
+
+- Full support for the format of all the Git objects
+- Partial support for the synchronisation protocols
 
 ### mirage-tcpip-v1.1.0: Rewritten interfaces that are now functorized over V1_LWT
 
@@ -506,6 +655,31 @@ No functional change beyond removing a mirage-types dependency (but bumping vers
 
 Released on 2014-01-30 as [1.0.0](https://github.com/mirage/mirage-www/releases/tag/1.0.0). See <https://github.com/mirage/mirage-www> for full history.
 
+### irmin-0.4.0: API changes and Git backend
+
+Released on 2014-01-21 as [0.4.0](https://github.com/mirage/irmin/releases/tag/0.4.0). See <https://github.com/mirage/irmin> for full history.
+
+* The command-line tool now looks in the environment for the variable
+  `IRMIN` to configure its default backend
+* Add a Git backend
+* Add Travis CI scripts to the repo
+* Use `Lwt_bytes` and `Lwt_unix` instead of the custom-made `IrminChannel`
+* Use `bin_prot` instead of a custom binary protocol
+* Major refactoring: `Value` is now `Blob`, `Revision` is now `Commit`
+   and `Tag` becomes `Reference` (rational: consistency with Git names)
+* Use `core_kernel` instead of building a custom `Identiable.S`
+* Use `dolog` instead of a custom log library
+* Use `mstruct` (mutable buffers on top of `cstruct`) which is now
+  released independently
+
+### ocaml-git-0.10.2: fix reading of reference files created by the Git command-line
+
+Released on 2014-01-20 as [0.10.2](https://github.com/samoht/ocaml-git/releases/tag/0.10.2). See <https://github.com/samoht/ocaml-git> for full history.
+
+* Strip the contents of references file (this fixes reading of reference files created by the Git command-line)
+* Improve the pretty-printing of SHA1 values
+* Add some info message when reading files in the local backend
+
 ### io-page-v1.0.0: Unify Xen/Unix into subpackages
 
 Released on 2014-01-16 as [v1.0.0](https://github.com/mirage/io-page/releases/tag/v1.0.0). See <https://github.com/mirage/io-page> for full history.
@@ -518,11 +692,31 @@ Released on 2014-01-16 as [v1.3.13](https://github.com/mirage/ocaml-uri/releases
 
 Expose s-expression accessors for most of the Uri external interface, to make it possible to serialize it to human readable form easily.
 
+### ocaml-git-0.10.1: Fix build and expose more functions
+
+Released on 2014-01-14 as [0.10.1](https://github.com/samoht/ocaml-git/releases/tag/0.10.1). See <https://github.com/samoht/ocaml-git> for full history.
+
+* Add missing files (fix build)
+* Add `GitTypes.S.mem_reference`
+* Add `GitTypes.S.remove_reference`
+* Add `GitTypes.S.mem` to check if an object exists in the store
+
 ### mirage-1.0.4: Improved debugging and IDE support
 
 Released on 2014-01-14 as [1.0.4](https://github.com/mirage/mirage/releases/tag/1.0.4). See <https://github.com/mirage/mirage> for full history.
 
 The Makefile generated by `mirage configure` now includes debugging, symbols and annotation support for both the new-style binary annotations and the old-style `.annot` files.
+
+### ocaml-git-0.10.0: fetch operation + in-memory store
+
+Released on 2014-01-14 as [0.10.0](https://github.com/samoht/ocaml-git/releases/tag/0.10.0). See <https://github.com/samoht/ocaml-git> for full history.
+
+* Support for in-memory stores
+* Add `ogit cat-file`
+* Add `ogit ls-remote`
+* Add `ogit fetch`
+* Add `ogit clone`
+* Switch non-blocking IO using Lwt
 
 ### ocaml-cohttp-v0.9.15: Cookie improvements, API consistency and better header parsing
 
@@ -537,6 +731,19 @@ Released on 2014-01-11 as [v0.9.15](https://github.com/mirage/ocaml-cohttp/relea
 * Make Header handling case-insensitive (by forcing lowercase) (#75).
 * Remove the `>>` operator as it was unused and had incorrect precedence (#79).
 
+
+### ocaml-git-0.9.0: Initial release
+
+Released on 2014-01-04 as [0.9.0](https://github.com/samoht/ocaml-git/releases/tag/0.9.0). See <https://github.com/samoht/ocaml-git> for full history.
+
+The basic things seems to work OK. You can clone a remote repository, inspect the object files in in git repository, decompress the pack files, draw some nice graphs and generate the filesystem corresponding to a given commit.
+
+What is missing before 1.0:
+* partial clone (ie. pull and fetch)
+* staging area
+* index of files
+* more testing
+* more users
 
 ### ocaml-github-v0.7.0: Releases support, more scopes and better debug control
 
@@ -632,6 +839,10 @@ Released on 2013-12-17 as [0.9.0](https://github.com/mirage/ocaml-fat/releases/t
 * add `Fat.KV_RO` which is a read-only subset of the filesystem.
 * Regenerate build files with OASIS 0.4.0.
 
+### mirage-fs-unix-v1.0.0: First public release
+
+Released on 2013-12-17 as [v1.0.0](https://github.com/mirage/mirage-fs-unix/releases/tag/v1.0.0). See <https://github.com/mirage/mirage-fs-unix> for full history.
+
 ### mirage-block-unix-1.1.0: Expose more low-level functions
 
 Released on 2013-12-16 as [1.1.0](https://github.com/mirage/mirage-block-unix/releases/tag/1.1.0). See <https://github.com/mirage/mirage-block-unix> for full history.
@@ -660,6 +871,16 @@ Released on 2013-12-15 as [v0.8.1](https://github.com/mirage/ocaml-cow/releases/
 * Fix META file to include `omd`.                                                                                                                                                 
 * Improve ocamldoc in CSS module and document quotations in README.
 * Add `merlin` editor file.
+
+### irmin-0.3.0: switch to oasis
+
+Released on 2013-12-13 as [0.3.0](https://github.com/mirage/irmin/releases/tag/0.3.0). See <https://github.com/mirage/irmin> for full history.
+
+CHANGES:
+* Fix a fd leak in the filesystem bakend
+* Functorize the CRUD interface over the HTTP client implementation
+* Use oasis to build the project
+* Use the now released separately `ezjsonm` and `alcotest` libraries
 
 ### ocaml-cow-v0.8.0: Proper Markdown support
 
