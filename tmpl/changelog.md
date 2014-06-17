@@ -1,3 +1,37 @@
+### ocaml-dns-v0.9.0: Fixes for Xen/Mirage backend
+
+Released on 2014-06-17 as [v0.9.0](https://github.com/mirage/ocaml-dns/releases/tag/v0.9.0). See <https://github.com/mirage/ocaml-dns> for full history.
+
+* Ensure that all `Dns.Buf.t` buffers are page-aligned, via `Io_page`.
+* Remove a Unix dependency that snuck into the `Dns_resolver` portable core, by adding a timeout argument to the `commfn` type.
+* Improve ocamldoc in `Dns_resolver_unix`.
+
+
+### ocaml-xenstore-clients-0.9.4: Now supports XENSTORED_PATH and the xenbus device
+
+Released on 2014-06-16 as [0.9.4](https://github.com/djs55/ocaml-xenstore-clients/releases/tag/0.9.4). See <https://github.com/djs55/ocaml-xenstore-clients> for full history.
+
+0.9.4 (16-Jun-2014):
+* use the xenbus device if the Unix domain socket isn't available
+* respect the XENSTORED_PATH environment variable
+
+### ocaml-uri-v1.7.0: Expose known services via values in Uri_services
+
+Released on 2014-06-16 as [v1.7.0](https://github.com/mirage/ocaml-uri/releases/tag/v1.7.0). See <https://github.com/mirage/ocaml-uri> for full history.
+
+Expose the list of known services in the `Uri_services` and `Uri_services_full` modules via new functions that list TCP, UDP and an association list of both.
+
+This permits libraries to fold over the list of services in their own uses.
+
+
+### mirage-1.1.3: Add FLOW signature
+
+Released on 2014-06-15 as [1.1.3](https://github.com/mirage/mirage/releases/tag/1.1.3). See <https://github.com/mirage/mirage> for full history.
+
+* Build OPAM packages in verbose mode by default.
+* [types] Add FLOW based on TCPV4
+* travis: build mirage-types from here, rather than 1.1.0
+
 ### irmin-0.8.2: Support backend-specific push/pull protocols
 
 Released on 2014-06-11 as [0.8.2](https://github.com/mirage/irmin/releases/tag/0.8.2). See <https://github.com/mirage/irmin> for full history.
@@ -517,6 +551,15 @@ The Mirage 1.1.0 release features a new combinator interface to make it easier t
 
 The `types` directory also now contains the `V1` and `V1_LWT` module types used throughout the Mirage libraries.
 
+### ocaml-mstruct-1.3.0: remove debug and duplicate bound checks in the hot path
+
+Released on 2014-02-10 as [1.3.0](https://github.com/samoht/ocaml-mstruct/releases/tag/1.3.0). See <https://github.com/samoht/ocaml-mstruct> for full history.
+
+* Remove debugging message in hot path
+* Remove duplicated bound checks (which were already done by cstruct)
+* Remove `Mstruct.dump`, replace it by `Mstruct.{hexdump,hexdump_to_buffer,debug}`
+  to share the same API as `Cstruct`
+
 ### ocaml-cohttp-v0.9.16: Sexp support for most types
 
 Released on 2014-02-10 as [v0.9.16](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.9.16). See <https://github.com/mirage/ocaml-cohttp> for full history.
@@ -758,6 +801,36 @@ Released on 2014-01-03 as [v0.7.0](https://github.com/avsm/ocaml-github/releases
 * Regenerate build files with OASIS 0.4.1.
 * OCamldoc improvements for the `GitHub` module.
 
+
+### ocaml-mstruct-1.2.0: Add little-endian primitives
+
+Released on 2014-01-03 as [1.2.0](https://github.com/samoht/ocaml-mstruct/releases/tag/1.2.0). See <https://github.com/samoht/ocaml-mstruct> for full history.
+
+* Export `Mstruct.index`
+* Add `Mstruct.get_le_uint16` and `Mstruct.set_le_uint16`
+* Add `Mstruct.get_le_uint32` and `Mstruct.set_le_uint32`
+* Add `Mstruct.get_le_uint64` and `Mstruct.set_le_uint64`
+* Rename `Mstruct.get_uint16` to `Mstruct.get_be_uint16`
+* Rename `Mstruct.get_uint32` to `Mstruct.get_be_uint32`
+* Rename `Mstruct.get_uint64` to `Mstruct.get_be_uint64`
+* Rename `Mstruct.set_uint16` to `Mstruct.set_be_uint16`
+* Rename `Mstruct.set_uint32` to `Mstruct.set_be_uint32`
+* Rename `Mstruct.set_uint64` to `Mstruct.set_be_uint64`
+
+### ocaml-mstruct-1.1.0: And to_string and of_string functions
+
+Released on 2014-01-03 as [1.1.0](https://github.com/samoht/ocaml-mstruct/releases/tag/1.1.0). See <https://github.com/samoht/ocaml-mstruct> for full history.
+
+* Add `Mstruct.to_string`
+* Add `Mstruct.of_string`
+
+### ocaml-mstruct-1.0.0: First release
+
+Released on 2014-01-02 as [1.0.0](https://github.com/samoht/ocaml-mstruct/releases/tag/1.0.0). See <https://github.com/samoht/ocaml-mstruct> for full history.
+
+### ocaml-lazy-trie-1.0.0: Initial release
+
+Released on 2014-01-02 as [1.0.0](https://github.com/samoht/ocaml-lazy-trie/releases/tag/1.0.0). See <https://github.com/samoht/ocaml-lazy-trie> for full history.
 
 ### ocaml-uri-v1.3.12: Be less strict about bad percent encoding
 
