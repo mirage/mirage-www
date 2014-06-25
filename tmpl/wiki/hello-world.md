@@ -113,7 +113,7 @@ mirage configure --unix
 ```
 
 This will first check that you have all the right OPAM packages installed
-to build a Unix application, and install the if they're not present.
+to build a Unix application, and install them if they're not present.
 It also creates a `Makefile` and `main.ml` by evaluating the `config.ml`.
 
 ```
