@@ -113,7 +113,7 @@ mirage configure --unix
 ```
 
 This will first check that you have all the right OPAM packages installed
-to build a Unix application, and install the if they're not present.
+to build a Unix application, and install them if they're not present.
 It also creates a `Makefile` and `main.ml` by evaluating the `config.ml`.
 
 ```
@@ -200,7 +200,7 @@ let () =
   register "block_test" [main $ default_console $ img]
 ```
 
-The `main` binding looks much like the earlier console example, except for thw
+The `main` binding looks much like the earlier console example, except for the
 addition of a `block` device in the list.  When we register the job, we supply
 a block device from a local file via `block_of_file`.
 
