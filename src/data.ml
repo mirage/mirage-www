@@ -387,6 +387,13 @@ module Links = struct
   }
 
   let entries = [
+     { id="digital-conversations-2014";
+      uri=Uri.of_string "http://www.brondbjerg.co.uk/blog/2014/06/building-the-next-generation-of-the-web/";
+      title="Digital Conversations - Building the Next Generation of the Web";
+      date=day(2014,06,12);
+      stream=press;
+    };
+  
     { id="se-radio-2014";
       uri=Uri.of_string "http://www.se-radio.net/2014/05/episode-204-anil-madhavapeddy-on-the-mirage-cloud-operating-system-and-the-ocaml-language/";
       title="Software Engineering Radio: podcast on MirageOS and OCaml with Anil Madhavapeddy";
