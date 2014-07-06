@@ -32,9 +32,11 @@ mirage/mirage-clock
 mirage/mirage-tcpip
 mirage/mirage-fs-unix
 mirage/irmin
-samoht/ocaml-git
+mirage/ocaml-vchan
+mirage/ocaml-git
 ocamllabs/ocaml-ctypes
 avsm/ocaml-github
 djs55/ocaml-xenstore-clients
-samoht/ocaml-lazy-trie
 samoht/ocaml-mstruct
+mirage/ocaml-lazy-trie
+mirage/merge-queues

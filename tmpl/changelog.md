@@ -1,3 +1,101 @@
+### ocaml-cstruct-v1.3.0: Sexp converters for Cstruct and improved bounds checking
+
+Released on 2014-07-05 as [v1.3.0](https://github.com/mirage/ocaml-cstruct/releases/tag/v1.3.0). See <https://github.com/mirage/ocaml-cstruct> for full history.
+
+* Add bounds checks for `Cstruct.BE/LE` functions that violate a view.
+  Previously, only bounds errors on the underlying buffers would raise.
+  Bug #25, reported by Mindy Preston in mirage/mirage-tcpip#56.
+* Add 'Lwt_cstruct.complete' to ensure that `read`/`write` operatiosn
+  run to completion.
+* Add `Sexplib` conversion functions to `Cstruct.t` values (#27 #22).
+
+
+### ocaml-uri-v1.7.1: Add support for IPv6 literals with zones
+
+Released on 2014-07-05 as [v1.7.1](https://github.com/mirage/ocaml-uri/releases/tag/v1.7.1). See <https://github.com/mirage/ocaml-uri> for full history.
+
+Add RFC6874 compliance for IPv6 literals with zones (#48 by @vbmithr).
+
+
+### ocaml-ctypes-0.3.2: ocaml-ctypes 0.3.2
+
+Released on 2014-07-04 as [0.3.2](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/0.3.2). See <https://github.com/ocamllabs/ocaml-ctypes> for full history.
+
+## What's new in ocaml-ctypes 0.3.2
+
+### Bug fixes
+
+* Add the missing `bytes` dependency to the META file.
+
+
+### ocaml-ctypes-0.3.1: ocaml-ctypes 0.3.1
+
+Released on 2014-07-03 as [0.3.1](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/0.3.1). See <https://github.com/ocamllabs/ocaml-ctypes> for full history.
+
+### What's new in ocaml-ctypes 0.3.1
+
+Thanks to Peter Zotov (@whitequark) and Maverick Woo (@maverickwoo) for contributions to this release.
+
+#### New features
+
+* Support for passing 'bytes' values directly to C (Patch by Peter Zotov)
+
+#### Bug fixes
+
+* Fix a bug in ctypes_call (issue #158)
+* Safely remove file generated during configuration (Patch by Maverick Woo)
+
+### mirage-tcpip-v1.1.5: Stability fixes to TCPv4 and DHCP handling
+
+Released on 2014-07-01 as [v1.1.5](https://github.com/mirage/mirage-tcpip/releases/tag/v1.1.5). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Ensure that DHCP completes before the application is started, so that
+  unikernels that establish outgoing connections can do so without a race.
+  (fix from Mindy Preston in #53, followup in #55)
+* Add `echo`, `chargen` and `discard` services into the `examples/`
+  directory. (from Mindy Preston in #52).
+* [tcp] Fully process the last `ACK` in a 3-way handshake for server connections.
+  This ensures that a `FIN` is correctly transmitted upon application-initiated
+  connection close. (fix from Mindy Preston in #51).
+
+
+
+### mirage-tcpip-v1.1.5: Stability fixes to TCPv4 and DHCP handling
+
+Released on 2014-07-01 as [v1.1.5](https://github.com/mirage/mirage-tcpip/releases/tag/v1.1.5). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Ensure that DHCP completes before the application is started, so that
+  unikernels that establish outgoing connections can do so without a race.
+  (fix from Mindy Preston in #53, followup in #55)
+* Add `echo`, `chargen` and `discard` services into the `examples/`
+  directory. (from Mindy Preston in #52).
+* [tcp] Fully process the last `ACK` in a 3-way handshake for server connections.
+  This ensures that a `FIN` is correctly transmitted upon application-initiated
+  connection close. (fix from Mindy Preston in #51).
+
+
+
+### irmin-0.8.3: Improve View.merge_path + dump graphs improvement
+
+Released on 2014-06-25 as [0.8.3](https://github.com/mirage/irmin/releases/tag/0.8.3). See <https://github.com/mirage/irmin> for full history.
+
+* Support backend specific protocols for push/pull
+* The Irmin Git backend can now sync with remote Git repositories
+* Simplify the organisation of the libraries: irmin, irmin.backend,
+  irmin.server and irmin.unix (check how the example are compiled)
+* Small refactoring to ease the use of the API. Now use `open Irmin_unix`
+  at the top of your file and use less functor in your code (again,
+  check the examples)
+
+### ocaml-vchan-v0.9.7: The Mirage FLOW release
+
+Released on 2014-06-18 as [v0.9.7](https://github.com/mirage/ocaml-vchan/releases/tag/v0.9.7). See <https://github.com/mirage/ocaml-vchan> for full history.
+
+* cli: server: choose a sensible default xenstore path
+* cli: server: set the xenstore permissions correctly
+* cli: client: don't assume we have perms to read the directory
+* Implement Mirage V1_LWT.FLOW signature
+
 ### ocaml-dns-v0.9.0: Fixes for Xen/Mirage backend
 
 Released on 2014-06-17 as [v0.9.0](https://github.com/mirage/ocaml-dns/releases/tag/v0.9.0). See <https://github.com/mirage/ocaml-dns> for full history.
@@ -24,6 +122,18 @@ Expose the list of known services in the `Uri_services` and `Uri_services_full` 
 This permits libraries to fold over the list of services in their own uses.
 
 
+### ocaml-lazy-trie-1.1.0: sexplib
+
+Released on 2014-06-15 as [1.1.0](https://github.com/mirage/ocaml-lazy-trie/releases/tag/1.1.0). See <https://github.com/mirage/ocaml-lazy-trie> for full history.
+
+* Add sexplib serializers to the trie.
+
+### ocaml-vchan-v0.9.6: Bugfix release
+
+Released on 2014-06-15 as [v0.9.6](https://github.com/mirage/ocaml-vchan/releases/tag/v0.9.6). See <https://github.com/mirage/ocaml-vchan> for full history.
+
+* depend on mirage-types.lwt rather than mirage
+
 ### mirage-1.1.3: Add FLOW signature
 
 Released on 2014-06-15 as [1.1.3](https://github.com/mirage/mirage/releases/tag/1.1.3). See <https://github.com/mirage/mirage> for full history.
@@ -31,6 +141,16 @@ Released on 2014-06-15 as [1.1.3](https://github.com/mirage/mirage/releases/tag/
 * Build OPAM packages in verbose mode by default.
 * [types] Add FLOW based on TCPV4
 * travis: build mirage-types from here, rather than 1.1.0
+
+### ocaml-vchan-v0.9.5: Build Unix CLI by default
+
+Released on 2014-06-14 as [v0.9.5](https://github.com/mirage/ocaml-vchan/releases/tag/v0.9.5). See <https://github.com/mirage/ocaml-vchan> for full history.
+
+0.9.5 (2014-06-14)
+* build the CLI by default
+
+0.9.4 (2014-04-29):
+* Update to mirage-1.1.0.
 
 ### irmin-0.8.2: Support backend-specific push/pull protocols
 
@@ -46,7 +166,7 @@ Released on 2014-06-11 as [0.8.2](https://github.com/mirage/irmin/releases/tag/0
 
 ### ocaml-git-1.2.0: Compatibility with the Mirage's V1_LWT.FS signature
 
-Released on 2014-06-09 as [1.2.0](https://github.com/samoht/ocaml-git/releases/tag/1.2.0). See <https://github.com/samoht/ocaml-git> for full history.
+Released on 2014-06-09 as [1.2.0](https://github.com/mirage/ocaml-git/releases/tag/1.2.0). See <https://github.com/mirage/ocaml-git> for full history.
 
 * Can consume Mirage's V1_LWT.FS signature to generate a
   persistent store. This allows to store Git repos directly
@@ -94,7 +214,7 @@ Released on 2014-06-02 as [0.8.1](https://github.com/mirage/irmin/releases/tag/0
 
 ### ocaml-git-1.1.0: Basic push support (unix only for now on)
 
-Released on 2014-06-02 as [1.1.0](https://github.com/samoht/ocaml-git/releases/tag/1.1.0). See <https://github.com/samoht/ocaml-git> for full history.
+Released on 2014-06-02 as [1.1.0](https://github.com/mirage/ocaml-git/releases/tag/1.1.0). See <https://github.com/mirage/ocaml-git> for full history.
 
 * Support for push (not optimized at all)
 * Fix the generation of `.dot` file representing the Git repo
@@ -291,7 +411,7 @@ Released on 2014-04-19 as [v0.8.1](https://github.com/mirage/ocaml-dns/releases/
 
 ### ocaml-git-1.0.2: Propagate Zlib inflation errors
 
-Released on 2014-04-19 as [1.0.2](https://github.com/samoht/ocaml-git/releases/tag/1.0.2). See <https://github.com/samoht/ocaml-git> for full history.
+Released on 2014-04-19 as [1.0.2](https://github.com/mirage/ocaml-git/releases/tag/1.0.2). See <https://github.com/mirage/ocaml-git> for full history.
 
 *  Catch, improve and propagate Zlib inflation errors (which usually on incomplete files)
 
@@ -339,7 +459,7 @@ Released on 2014-04-12 as [0.6.0](https://github.com/mirage/irmin/releases/tag/0
 
 ### ocaml-git-1.0.1: Escape invalid chars in path names
 
-Released on 2014-04-10 as [1.0.1](https://github.com/samoht/ocaml-git/releases/tag/1.0.1). See <https://github.com/samoht/ocaml-git> for full history.
+Released on 2014-04-10 as [1.0.1](https://github.com/mirage/ocaml-git/releases/tag/1.0.1). See <https://github.com/mirage/ocaml-git> for full history.
 
 * Escape invalid chars in path names
 * Do not link with camlp4 when using as a libray
@@ -573,7 +693,7 @@ Released on 2014-02-10 as [v0.9.16](https://github.com/mirage/ocaml-cohttp/relea
 
 ### ocaml-git-1.0.0: First release
 
-Released on 2014-02-10 as [1.0.0](https://github.com/samoht/ocaml-git/releases/tag/1.0.0). See <https://github.com/samoht/ocaml-git> for full history.
+Released on 2014-02-10 as [1.0.0](https://github.com/mirage/ocaml-git/releases/tag/1.0.0). See <https://github.com/mirage/ocaml-git> for full history.
 
 - Full support for the format of all the Git objects
 - Partial support for the synchronisation protocols
@@ -717,7 +837,7 @@ Released on 2014-01-21 as [0.4.0](https://github.com/mirage/irmin/releases/tag/0
 
 ### ocaml-git-0.10.2: fix reading of reference files created by the Git command-line
 
-Released on 2014-01-20 as [0.10.2](https://github.com/samoht/ocaml-git/releases/tag/0.10.2). See <https://github.com/samoht/ocaml-git> for full history.
+Released on 2014-01-20 as [0.10.2](https://github.com/mirage/ocaml-git/releases/tag/0.10.2). See <https://github.com/mirage/ocaml-git> for full history.
 
 * Strip the contents of references file (this fixes reading of reference files created by the Git command-line)
 * Improve the pretty-printing of SHA1 values
@@ -737,7 +857,7 @@ Expose s-expression accessors for most of the Uri external interface, to make it
 
 ### ocaml-git-0.10.1: Fix build and expose more functions
 
-Released on 2014-01-14 as [0.10.1](https://github.com/samoht/ocaml-git/releases/tag/0.10.1). See <https://github.com/samoht/ocaml-git> for full history.
+Released on 2014-01-14 as [0.10.1](https://github.com/mirage/ocaml-git/releases/tag/0.10.1). See <https://github.com/mirage/ocaml-git> for full history.
 
 * Add missing files (fix build)
 * Add `GitTypes.S.mem_reference`
@@ -752,7 +872,7 @@ The Makefile generated by `mirage configure` now includes debugging, symbols and
 
 ### ocaml-git-0.10.0: fetch operation + in-memory store
 
-Released on 2014-01-14 as [0.10.0](https://github.com/samoht/ocaml-git/releases/tag/0.10.0). See <https://github.com/samoht/ocaml-git> for full history.
+Released on 2014-01-14 as [0.10.0](https://github.com/mirage/ocaml-git/releases/tag/0.10.0). See <https://github.com/mirage/ocaml-git> for full history.
 
 * Support for in-memory stores
 * Add `ogit cat-file`
@@ -777,7 +897,7 @@ Released on 2014-01-11 as [v0.9.15](https://github.com/mirage/ocaml-cohttp/relea
 
 ### ocaml-git-0.9.0: Initial release
 
-Released on 2014-01-04 as [0.9.0](https://github.com/samoht/ocaml-git/releases/tag/0.9.0). See <https://github.com/samoht/ocaml-git> for full history.
+Released on 2014-01-04 as [0.9.0](https://github.com/mirage/ocaml-git/releases/tag/0.9.0). See <https://github.com/mirage/ocaml-git> for full history.
 
 The basic things seems to work OK. You can clone a remote repository, inspect the object files in in git repository, decompress the pack files, draw some nice graphs and generate the filesystem corresponding to a given commit.
 
@@ -830,7 +950,7 @@ Released on 2014-01-02 as [1.0.0](https://github.com/samoht/ocaml-mstruct/releas
 
 ### ocaml-lazy-trie-1.0.0: Initial release
 
-Released on 2014-01-02 as [1.0.0](https://github.com/samoht/ocaml-lazy-trie/releases/tag/1.0.0). See <https://github.com/samoht/ocaml-lazy-trie> for full history.
+Released on 2014-01-02 as [1.0.0](https://github.com/mirage/ocaml-lazy-trie/releases/tag/1.0.0). See <https://github.com/mirage/ocaml-lazy-trie> for full history.
 
 ### ocaml-uri-v1.3.12: Be less strict about bad percent encoding
 
@@ -1393,6 +1513,24 @@ Released on 2013-10-13 as [0.2.4](https://github.com/mirage/mirage-block-xen/rel
 * fix reading non-page aligned sectors
 
 
+### ocaml-vchan-v0.9.3: Bug fix release 0.9.3
+
+Released on 2013-10-09 as [v0.9.3](https://github.com/mirage/ocaml-vchan/releases/tag/v0.9.3). See <https://github.com/mirage/ocaml-vchan> for full history.
+
+0.9.3 (2013-10-09):
+* Fix an overflow in a client read from the vchan buffer.
+
+0.9.2 (2013-10-02):
+* Add Travis continuous integration scripts.
+* Add explicit dependency on OCaml 4.00+
+
+0.9.1 (2013-09-27):
+* Remove 'blocking' parameter
+
+0.9 (2013-08-23):
+* Initial public release.
+
+
 ### mirage-platform-v0.9.7: Xen performance and stability improvements
 
 Released on 2013-10-06 as [v0.9.7](https://github.com/mirage/mirage-platform/releases/tag/v0.9.7). See <https://github.com/mirage/mirage-platform> for full history.
@@ -1418,6 +1556,20 @@ Released on 2013-10-04 as [1.2.5](https://github.com/mirage/ocaml-xenstore/relea
 * Add Travis continuous integration scripts
 * fix a spurious EQUOTA failure when processing transactions
 
+
+### ocaml-vchan-0.9.2: Release 0.9.2
+
+Released on 2013-10-02 as [0.9.2](https://github.com/mirage/ocaml-vchan/releases/tag/0.9.2). See <https://github.com/mirage/ocaml-vchan> for full history.
+
+0.9.2 (2013-10-02):
+* Add Travis continuous integration scripts.
+* Add explicit dependency on OCaml 4.00+
+
+0.9.1 (2013-09-27):
+* Remove 'blocking' parameter
+
+0.9 (2013-08-23):
+* Initial public release.
 
 ### ocaml-tuntap-v0.7.0: Add FreeBSD support
 
