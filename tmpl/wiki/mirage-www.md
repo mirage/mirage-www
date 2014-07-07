@@ -49,6 +49,7 @@ using your favourite editor.
 ```
 $ cd src
 $ env NET=socket FS=crunch mirage configure --unix
+$ make depend
 $ make
 $ make run
 ```
@@ -72,6 +73,7 @@ as the hello world examples.
 ```
 $ cd src
 $ env NET=direct mirage configure --unix
+$ make depend
 $ make
 $ sudo ./mir-www
 ```
@@ -107,6 +109,7 @@ variables, so we can quickly try it as follows.
 ```
 $ cd src
 $ env FS=fat mirage configure --unix
+$ make depend
 $ make
 $ sudo ./mir-www
 $ sudo ifconfig tap0 10.0.0.1 255.255.255.0
@@ -144,6 +147,7 @@ default, for simplicity's sake.
 ```
 $ cd src
 $ mirage configure --xen
+$ make depend
 $ make
 $ make run
 ```

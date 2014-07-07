@@ -95,9 +95,11 @@ cp .travis-www.ml src/config.ml
 cd src
 mirage --version
 mirage configure --unix
+make depend
 make
 make clean
 mirage configure --xen
+make depend
 ```
 
 The test script also has to compile in the configuration of the live website
