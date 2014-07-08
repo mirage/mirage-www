@@ -34,6 +34,7 @@ all: build
 	@ :
 
 configure:
+	opam install crunch -y
 	$(MIRAGE) configure src/config.ml $(CFLAGS) --$(MODE)
 	cd src && $(MAKE) depend
 
