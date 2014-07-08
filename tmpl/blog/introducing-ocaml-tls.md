@@ -89,7 +89,11 @@ functional style, without any side effects.
 Subsequent blog posts [over the coming
 days](https://github.com/mirage/mirage/issues/257) will examine in more detail
 the design and implementation of the four libraries, as well as the security
-trade-offs and some TLS attacks and our mitigations against them.
+trade-offs and some TLS attacks and our mitigations against them.  For now
+though, we invite you to try out our **[demonstration server][^7]**
+running our stack over HTTPS.  We're particularly interested in feedback on our [issue tracker](https://github.com/mirleft/ocaml-tls) about
+clients that fail to connect, and any queries from anyone reviewing the [source code](https://github.com/mirleft/)
+of the constituent libraries. 
 
 [^1]: https://github.com/mirleft/ocaml-tls
 [^3]: http://www.openbsd.org/papers/bsdcan14-libressl/mgp00026.html)
