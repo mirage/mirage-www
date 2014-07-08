@@ -48,6 +48,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 *Calls take place every two weeks and are announced on the
 [mailing list](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel).*
 
+* Weekly call [2014-07-08](/wiki/weekly-2014-07-08) on More releases, ARM, Blog posts and OSCON prep.
 * Weekly call [2014-06-24](/wiki/weekly-2014-06-24) on Releases, ARM, TLS and Repos.
 * Weekly call [2014-06-10](/wiki/weekly-2014-06-10) on Irmin, Conduit, Deployment and Fist pumping.
 * Weekly call [2014-05-27](/wiki/weekly-2014-05-27) on Mirage on ARM, Irmin and Xen Hackathon.
