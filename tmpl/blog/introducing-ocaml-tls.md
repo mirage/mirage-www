@@ -68,16 +68,28 @@ Mirage, so applications can run directly as a Xen unikernel.
 
 ### Why a new TLS implementation?
 
+**Update:**
+Thanks to [Frama-C][frama-c] guys for [pointing][twitter-1] [out][twitter-2]
+that [CVE-2014-1266][] and [CVE-2014-0224][] are *not* memory safety issues, but
+logic errors. This article previously stated otherwise.
+
+[frama-c]: http://frama-c.com/
+[twitter-1]: https://twitter.com/spun_off/status/486535304426188800
+[twitter-2]: https://twitter.com/spun_off/status/486536572792090626
+
 There are only a few TLS implementations publicly available and most
 programming languages bind to OpenSSL, an open source implementation written
 in C. There are valid reasons to interface with an existing TLS library,
 rather than developing one from scratch, including protocol complexity and
-compatibility with different TLS versions and implementations.  However,
-the disadvantage of most existing libraries is that they are written in C
-and suffer from memory safety issues, which have
-catastrophic effects -- as recently observed by [Heartbleed][], Apple's goto fail
-([CVE-2014-1266][]), GnuTLS session identifier memory corruption ([CVE-2014-3466][]), and the
-OpenSSL change cipher suite attack ([CVE-2014-0224][]).
+compatibility with different TLS versions and implementations. But from our
+perspective the disadvantage of most existing libraries is that they
+are written in C, leading to:
+
+  * Memory safety issues, as recently observed by [Heartbleed][] and GnuTLS
+    session identifier memory corruption ([CVE-2014-3466][]) bugs;
+  * Control flow complexity (Apple's goto fail, [CVE-2014-1266][]);
+  * And difficulty in encoding state machines (OpenSSL change cipher suite
+    attack, [CVE-2014-0224][]).
 
 Our main reasons for `ocaml-tls` are that OCaml is a modern functional
 language, which allows concise and declarative descriptions of the
