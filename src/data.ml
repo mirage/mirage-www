@@ -68,6 +68,18 @@ module People = struct
     email     = Some "talex5@gmail.com";
   }
 
+  let hannes = {
+    Atom.name = "Hannes Mehnert";
+    uri       = Some "https://github.com/hannesm";
+    email     = Some "hm519@cam.ac.uk";
+  }
+
+  let dkaloper = {
+    Atom.name = "David Kaloper";
+    uri       = Some "https://github.com/pqwy";
+    email     = Some "david.mersinjak@cl.cam.ac.uk";
+  }
+
 end
 
 let rights = Some "All rights reserved by the author"
@@ -179,6 +191,12 @@ module Blog = struct
         subject    = "Mirage 1.2 released and the 2.0 runup begins";
         body       = "mirage-1.2-released.md";
         permalink  = "mirage-1.2-released";
+      };
+      { updated    = date (2014, 07, 08, 15, 0);
+        author     = hannes;
+        subject    = "Introducing ocaml-tls: transport layer security (TLS) in pure OCaml";
+        body       = "introducing-ocaml-tls.md";
+        permalink  = "introducing-ocaml-tls-implementation-in-pure-ocaml";
       };
     ]
 end
