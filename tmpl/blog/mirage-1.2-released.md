@@ -50,14 +50,15 @@ Scott](http://dave.recoil.org) and [Thomas Gazagnaire](http://gazagnaire.org)!)
 
 #### Upcoming talks and tutorials
 
-[Richard Mortier](http://mort.io) and myself will be galavanting around the world
+[Richard Mortier](http://mort.io) and myself will be gallivanting around the world
 to deliver a few talks this summer: 
 
 * The week of [OSCON](http://www.oscon.com/oscon2014) on July 20th-24th.  Please get in touch via the conference website or a direct e-mail, or [attend our talk](http://www.oscon.com/oscon2014/public/schedule/detail/35024) on Thursday morning.
 There's a [Real World OCaml](https://realworldocaml.org) book signing on Tuesday morning for the super keen as well.
 * The [ECOOP summer school](http://ecoop14.it.uu.se/programme/ecoop-school.php) in beautiful Uppsala in Sweden on Weds 30th July. 
 * I'll be presenting the Irmin and Xen integration at [Xen Project Developer Summit](http://events.linuxfoundation.org/events/xen-project-developer-summit) in
-  Chicago on Aug 18th (as part of LinuxCon North America).
+  Chicago on Aug 18th (as part of LinuxCon North America).  [Mort](http://mort.io) and [Mindy](http://somerandomidiot.com) (no jokes please) will be
+  joining the community panel about [GSoC/OPW](/blog/applying-for-gsoc2014) participation.
 
 As always, if there are any particular topics you would like to see more
 on, then please comment on the [tracking issue](https://github.com/mirage/mirage/issues/257)
