@@ -174,6 +174,12 @@ module Blog = struct
         body       = "welcome-to-our-summer-hackers.md";
         permalink  = "welcome-to-our-summer-hackers";
       };
+      { updated    = date (2014, 07, 08, 11, 0);
+        author     = anil;
+        subject    = "Mirage 1.2 released and the 2.0 runup begins";
+        body       = "mirage-1.2-released.md";
+        permalink  = "mirage-1.2-released";
+      };
     ]
 end
 
