@@ -35,6 +35,7 @@ all: build
 
 configure:
 	$(MIRAGE) configure src/config.ml $(CFLAGS) --$(MODE)
+	cd src && $(MAKE) depend
 
 build: configure
 	$(MIRAGE) build src/config.ml $(BFLAGS)
