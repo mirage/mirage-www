@@ -422,13 +422,21 @@ module Links = struct
       date=day(2014,07,08);
       stream=hn;
     };
+
     { id="digital-conversations-2014";
       uri=Uri.of_string "http://www.brondbjerg.co.uk/blog/2014/06/building-the-next-generation-of-the-web/";
       title="Digital Conversations - Building the Next Generation of the Web";
       date=day(2014,06,12);
       stream=press;
     };
-  
+
+    { id="linux-magazin-de-zero-install";
+      uri=Uri.of_string "http://www.linux-magazin.de/Ausgaben/2014/06/Ocaml/%28language%29/ger-DE/";
+      title="Programmieren in OCaml (German)";
+      date=day(2014,06,01);
+      stream=press;
+    };
+
     { id="se-radio-2014";
       uri=Uri.of_string "http://www.se-radio.net/2014/05/episode-204-anil-madhavapeddy-on-the-mirage-cloud-operating-system-and-the-ocaml-language/";
       title="Software Engineering Radio: podcast on MirageOS and OCaml with Anil Madhavapeddy";
