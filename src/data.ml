@@ -68,6 +68,18 @@ module People = struct
     email     = Some "talex5@gmail.com";
   }
 
+  let hannes = {
+    Atom.name = "Hannes Mehnert";
+    uri       = Some "https://github.com/hannesm";
+    email     = Some "hm519@cam.ac.uk";
+  }
+
+  let dkaloper = {
+    Atom.name = "David Kaloper";
+    uri       = Some "https://github.com/pqwy";
+    email     = Some "david.mersinjak@cl.cam.ac.uk";
+  }
+
 end
 
 let rights = Some "All rights reserved by the author"
@@ -173,6 +185,12 @@ module Blog = struct
         subject    = "Welcome to the summer Mirage hackers";
         body       = "welcome-to-our-summer-hackers.md";
         permalink  = "welcome-to-our-summer-hackers";
+      };
+      { updated    = date (2014, 07, 08, 12, 0);
+        author     = hannes;
+        subject    = "Introducing ocaml-tls - a transport layer security (TLS) implementation in pure OCaml";
+        body       = "introducing-ocaml-tls.md";
+        permalink  = "introducing-ocaml-tls-implementation-in-pure-ocaml";
       };
     ]
 end
