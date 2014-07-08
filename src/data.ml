@@ -410,8 +410,19 @@ module Links = struct
     icon="fa-user";
   }
 
+  let hn = {
+    name="hackernews";
+    icon="fa-hacker-news";
+  }
+
   let entries = [
-     { id="digital-conversations-2014";
+    { id="introducing-tls-hackernews";
+      uri=Uri.of_string "https://news.ycombinator.com/item?id=8005130";
+      title="HN: Introducing Transport Layer Security in pure OCaml";
+      date=day(2014,07,08);
+      stream=hn;
+    };
+    { id="digital-conversations-2014";
       uri=Uri.of_string "http://www.brondbjerg.co.uk/blog/2014/06/building-the-next-generation-of-the-web/";
       title="Digital Conversations - Building the Next Generation of the Web";
       date=day(2014,06,12);
