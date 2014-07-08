@@ -8,3 +8,4 @@ at our respective institutions.
 * **[David Scott](http://dave.recoil.org)**, Citrix Systems R&D
 * **[Thomas Gazagnaire](http://thomas.gazagnaire.org)**, University of Cambridge
 * **[Richard Mortier](http://www.cs.nott.ac.uk/~rmm/)**, University of Nottingham
+* Community Manager: **[Amir Chaudhry](http://amirchaudhry.com/)**, University of Cambridge
