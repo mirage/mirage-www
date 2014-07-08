@@ -194,9 +194,9 @@ module Blog = struct
       };
       { updated    = date (2014, 07, 08, 15, 0);
         author     = hannes;
-        subject    = "Introducing ocaml-tls: transport layer security (TLS) in pure OCaml";
+        subject    = "Introducing transport layer security (TLS) in pure OCaml";
         body       = "introducing-ocaml-tls.md";
-        permalink  = "introducing-ocaml-tls-implementation-in-pure-ocaml";
+        permalink  = "introducing-ocaml-tls";
       };
     ]
 end

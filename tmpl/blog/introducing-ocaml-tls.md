@@ -1,5 +1,6 @@
-We announce a **beta** release of `ocaml-tls`, a clean-slate
-implementation of Transport Layer Security (TLS) in OCaml.
+We announce a **beta** release of `ocaml-tls`, a clean-slate implementation of
+[Transport Layer Security](https://en.wikipedia.org/wiki/Transport_Layer_Security) (TLS) in
+OCaml.
 
 ### What is TLS?
 
@@ -7,7 +8,7 @@ Transport Layer Security (TLS) is probably the most widely deployed
 security protocol on the Internet. It provides communication privacy
 to prevent eavesdropping, tampering, and message forgery. Furthermore,
 it optionally provides authentication of the involved endpoints. TLS
-is commonly deployed for securing web services (HTTPS), emails,
+is commonly deployed for securing web services ([HTTPS](http://tools.ietf.org/html/rfc2818)), emails,
 virtual private networks, and wireless networks.
 
 TLS uses asymmetric cryptography to exchange a symmetric key, and
@@ -18,8 +19,8 @@ negotiated.
 
 ### TLS in OCaml
 
-Our implementation `ocaml-tls` is already able to interoperate with
-existing TLS implementations, and supports several TLS extensions,
+Our implementation [ocaml-tls](https://github.com/mirleft/ocaml-tls) is already able to interoperate with
+existing TLS implementations, and supports several important TLS extensions
 such as server name indication ([RFC4366][], enabling virtual hosting)
 and secure renegotiation ([RFC5746][]).
 
@@ -62,8 +63,8 @@ We should also mention the OCaml runtime, the OCaml compiler, the
 operating system on which the source is compiled and the binary is executed, as
 well as the underlying hardware. Two effectful frontends for
 the pure TLS core are implemented, dealing
-with side-effects such as reading and writing from the network: `lwt` and `mirage`. Mirage
-applications can run directly as Xen guest system.
+with side-effects such as reading and writing from the network: [Lwt_unix](http://ocsigen.org/lwt/api/Lwt_unix) and
+Mirage, so applications can run directly as a Xen unikernel.
 
 ### Why a new TLS implementation?
 
@@ -85,9 +86,10 @@ guard against programming errors. Its functional nature is extensively
 employed in our code: the core of the protocol is written in purely
 functional style, without any side effects.
 
-Subsequent blog posts over the coming days will examine in more detail the design and implementation of
-the four libraries, as well as the security trade-offs and some TLS attacks and
-our mitigations against them.
+Subsequent blog posts [over the coming
+days](https://github.com/mirage/mirage/issues/257) will examine in more detail
+the design and implementation of the four libraries, as well as the security
+trade-offs and some TLS attacks and our mitigations against them.
 
 [^1]: https://github.com/mirleft/ocaml-tls
 [^3]: http://www.openbsd.org/papers/bsdcan14-libressl/mgp00026.html)
