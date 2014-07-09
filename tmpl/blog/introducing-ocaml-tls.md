@@ -142,3 +142,13 @@ of the constituent libraries.
 [CVE-2014-1266]: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-1266
 [CVE-2014-3466]: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-3466
 [CVE-2014-0224]: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-0224
+
+****
+
+Posts in this TLS series:
+ 
+ - [Introducing transport layer security (TLS) in pure OCaml][tls-intro]
+ - [Introducing the nocrypto library][nocrypto-intro]
+
+[tls-intro]: http://openmirage.org/blog/introducing-ocaml-tls
+[nocrypto-intro]: http://openmirage.org/blog/introducing-nocrypto
