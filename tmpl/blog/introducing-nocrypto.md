@@ -336,7 +336,7 @@ hopes of making it more broadly usable.
 
 There are several specific problems with the library at this stage:
 
-As mentioned, we are seeking to replace some of the C code we use. The hash
+**C code** - As mentioned, we are seeking to replace some of the C code we use. The hash
 cores are underperforming by about a factor of 2 compared to some other
 implementations. AES implementation is on one hand vulnerable to a timing attack
 and, on the other hand, we'd like to make use of hardware acceleration for this
@@ -348,18 +348,18 @@ OpenSSL and trying to exploit their heavily optimized primitives, to bringing
 AES-NI into OCaml and redoing AES in OCaml. At this point, it is not clear which
 path we'll take.
 
-Looking further, the library still lacks support for elliptic curve cryptography
+**ECC** - Looking further, the library still lacks support for elliptic curve cryptography
 and we have several options for solving this. Since it is used by TLS, ECC is
 probably the missing feature we will concentrate on first.
 
-The entropy gathering on Xen is incomplete. The current prototype uses current
+**Entropy on Xen** - The entropy gathering on Xen is incomplete. The current prototype uses current
 time as the random seed and the effort to expose noisier sources like interrupt
-timings and the RNG from dom0's kernel is still ongoing.  Dave Scott has
+timings and the RNG from dom0's kernel is still ongoing.  Dave Scott, for example, has
 [submitted patches][rndpatches] to upstream Xen to make it easier to establish low-bandwidth
 channels to supplies guest VMs with strong entropy from a privileged domain
 that has access to physical devices and hence high-quality entropy sources.
 
-On top of that, there is the question of GC and timing attacks: whether doing
+**GC timing attacks?** - There is the question of GC and timing attacks: whether doing
 cryptography in a high-level language opens up a completely new surface for
 timing attacks, given that GC runs are very visible in the timing profile. The
 basic approach is to leave the core routines which we know are potentially
