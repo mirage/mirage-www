@@ -200,7 +200,7 @@ module Blog = struct
       };
       { updated    = date (2014, 07, 09, 16, 0);
         author     = dkaloper;
-        subject    = "Introducing the nocrypto library";
+        subject    = "OCaml-TLS: building the nocrypto library core";
         body       = "introducing-nocrypto.md";
         permalink  = "introducing-nocrypto";
       };
