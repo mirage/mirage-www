@@ -56,7 +56,7 @@ let aes_cbc = new Cryptokit.Block.cbc_encrypt ~iv aes
 
 let cip =
   let size =
-    int_of_float (ceil (float String.(length msg) /. 16.)) in
+    int_of_float (ceil (float String.(length msg) /. 16.) *. 16.) in
   String.create size
 
 let () = aes_cbc#transform msg 0 cip 0
