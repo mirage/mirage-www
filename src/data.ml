@@ -198,6 +198,12 @@ module Blog = struct
         body       = "introducing-ocaml-tls.md";
         permalink  = "introducing-ocaml-tls";
       };
+      { updated    = date (2014, 07, 09, 16, 0);
+        author     = dkaloper;
+        subject    = "OCaml-TLS: building the nocrypto library core";
+        body       = "introducing-nocrypto.md";
+        permalink  = "introducing-nocrypto";
+      };
     ]
 end
 
