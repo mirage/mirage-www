@@ -354,7 +354,10 @@ probably the missing feature we will concentrate on first.
 
 The entropy gathering on Xen is incomplete. The current prototype uses current
 time as the random seed and the effort to expose noisier sources like interrupt
-timings and the RNG from dom0's kernel is still ongoing.
+timings and the RNG from dom0's kernel is still ongoing.  Dave Scott has
+[submitted patches][rndpatches] to upstream Xen to make it easier to establish low-bandwidth
+channels to supplies guest VMs with strong entropy from a privileged domain
+that has access to physical devices and hence high-quality entropy sources.
 
 On top of that, there is the question of GC and timing attacks: whether doing
 cryptography in a high-level language opens up a completely new surface for
@@ -377,6 +380,7 @@ are free to check out our [issue tracker][issues] and invited to contribute
 comments, ideas, and especially audits and code.
 
 [issues]: https://github.com/mirleft/ocaml-nocrypto/issues?state=open
+[rndpatches]: http://lists.xen.org/archives/html/xen-devel/2014-06/msg01492.html
 
 ****
 
