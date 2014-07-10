@@ -138,7 +138,7 @@ of small issues in nearly all certificate verification stacks.
 Our implementation mitigates against some of the known attacks: we
 require a complete valid chain, check the extensions of a certificate,
 and implement hostname checking as specified in [RFC6125][]. We have a
-test suite with over 3200 tests and multiple CAs. We do not yet discard
+[test suite][testsuite] with over 3200 tests and multiple CAs. We do not yet discard
 certificates which use MD5 as hash algorithm. Our TLS stack
 requires certificates to have at least 1024 bit RSA keys.
 
@@ -148,6 +148,7 @@ requires certificates to have at least 1024 bit RSA keys.
 [trust_gnutls]: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-0092
 [most_dangerous]: https://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html
 [Frankencert]: http://www.cs.utexas.edu/~suman/publications/frankencert.pdf
+[testsuite]: https://github.com/mirleft/ocaml-x509/tree/master/tests
 
 ### X.509 library internals
 
@@ -285,9 +286,11 @@ We currently support only RSA certificates. We do not check revocation
 lists or use the online certificate status protocol ([OCSP][]). Our
 implementation does not handle name constraints and policies. However, if
 any of these extensions is marked critical, we refuse to validate the
-chain. To keep our main authentication free of side-effects, it
-currently uses the timestamp when the authenticator was created,
-rather than when it is used.
+chain. To keep our main authentication free of side-effects, it currently uses
+the timestamp when the authenticator was created rather than when it is used
+(this isn't a problem if lifetime of the OCaml-TLS process is short, as in the
+worst case the lifetime of the certificates can be extended by the lifetime of
+the process).
 
 [OCSP]: http://en.wikipedia.org/wiki/Online_Certificate_Status_Protocol
 
