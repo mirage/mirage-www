@@ -206,7 +206,7 @@ module Blog = struct
       };
       { updated    = date (2014, 07, 10, 13, 0);
         author     = hannes;
-        subject    = "OCaml-TLS: building the X.509 library";
+        subject    = "OCaml-TLS: X.509 and adventures in certificate parsing and validation";
         body       = "introducing-x509.md";
         permalink  = "introducing-x509";
       };
