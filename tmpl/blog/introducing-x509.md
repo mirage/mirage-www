@@ -288,9 +288,9 @@ implementation does not handle name constraints and policies. However, if
 any of these extensions is marked critical, we refuse to validate the
 chain. To keep our main authentication free of side-effects, it currently uses
 the timestamp when the authenticator was created rather than when it is used
-(this isn't a problem if lifetime of the OCaml-TLS process is short, as in the
-worst case the lifetime of the certificates can be extended by the lifetime of
-the process).
+(this isn't a problem if lifetime of the OCaml-TLS process is comparatively
+short, as in the worst case the lifetime of the certificates can be extended by
+the lifetime of the process).
 
 [OCSP]: http://en.wikipedia.org/wiki/Online_Certificate_Status_Protocol
 
