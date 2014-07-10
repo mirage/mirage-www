@@ -138,7 +138,7 @@ of small issues in nearly all certificate verification stacks.
 Our implementation mitigates against some of the known attacks: we
 require a complete valid chain, check the extensions of a certificate,
 and implement hostname checking as specified in [RFC6125][]. We have a
-test suite with over 3200 tests and multiple CAs. We do not yet discard
+[test suite][] with over 3200 tests and multiple CAs. We do not yet discard
 certificates which use MD5 as hash algorithm. Our TLS stack
 requires certificates to have at least 1024 bit RSA keys.
 
@@ -148,6 +148,7 @@ requires certificates to have at least 1024 bit RSA keys.
 [trust_gnutls]: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-0092
 [most_dangerous]: https://crypto.stanford.edu/~dabo/pubs/abstracts/ssl-client-bugs.html
 [Frankencert]: http://www.cs.utexas.edu/~suman/publications/frankencert.pdf
+[test suite]: https://github.com/mirleft/ocaml-x509/tree/master/tests
 
 ### X.509 library internals
 
