@@ -3,12 +3,12 @@ You might like to begin with the [introduction][tls-intro].*
 
 ### The problem of authentication
 
-When establishing a secure connection to a remote server, often the
-authenticity of the remote server should be verified. Otherwise an
+The authenticity of the remote server needs to be verified while
+establishing a secure connection to it, or else an
 attacker ([MITM][^0]) between the client and the server can eavesdrop on
 the transmitted data. To the best of our knowledge, authentication
 cannot be done solely in-band, but needs external
-infrastructure. Various methods are used in practice, which rely on
+infrastructure. The most common methods used in practice rely on
 public key encryption.
 
 *Web of trust* (used by [OpenPGP][^1]) is a decentralised public key
