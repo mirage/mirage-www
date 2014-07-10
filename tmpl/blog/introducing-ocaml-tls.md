@@ -148,7 +148,9 @@ of the constituent libraries.
 Posts in this TLS series:
  
  - [Introducing transport layer security (TLS) in pure OCaml][tls-intro]
- - [Introducing the nocrypto library][nocrypto-intro]
+ - [OCaml-TLS: building the nocrypto library core][nocrypto-intro]
+ - [OCaml-TLS: building the X.509 library][x509-intro]
 
 [tls-intro]: http://openmirage.org/blog/introducing-ocaml-tls
 [nocrypto-intro]: http://openmirage.org/blog/introducing-nocrypto
+[x509-intro]: http://openmirage.org/blog/introducing-x509
