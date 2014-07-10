@@ -282,12 +282,14 @@ basic constraints extension which value is true.
 ### Current status of ocaml-x509
 
 We currently support only RSA certificates. We do not check revocation
-lists or use the online certificate status protocol (OCSP). Our
+lists or use the online certificate status protocol ([OCSP][]). Our
 implementation does not handle name constraints and policies. However, if
 any of these extensions is marked critical, we refuse to validate the
 chain. To keep our main authentication free of side-effects, it
 currently uses the timestamp when the authenticator was created,
 rather than when it is used.
+
+[OCSP]: http://en.wikipedia.org/wiki/Online_Certificate_Status_Protocol
 
 We invite people to read through the
 [certificate verification][certificate] and the
