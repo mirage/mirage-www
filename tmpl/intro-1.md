@@ -1,4 +1,4 @@
-Mirage constructs [unikernels](http://queue.acm.org/detail.cfm?id=2566628)
+Mirage OS is a library operating system that constructs [unikernels](http://queue.acm.org/detail.cfm?id=2566628)
 for secure, high-performance network applications across a variety
 of cloud computing and mobile platforms.  Code can be developed on a normal OS
 such as Linux or MacOS X, and then compiled into a fully-standalone,
