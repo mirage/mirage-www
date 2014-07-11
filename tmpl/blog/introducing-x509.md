@@ -13,7 +13,7 @@ public key encryption.
 
 *Web of trust* (used by [OpenPGP][^1]) is a decentralised public key
 infrastructure. It relies on out-of-band verification of public keys
-and transitivity of trust. If Alice signed Bob's public key, and
+and transitivity of trust. If Bob signed Alice's public key, and
 Charlie trusts Bob (and signed his public key), then Charlie can trust
 that Alice's public key is hers.
 
