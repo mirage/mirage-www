@@ -311,15 +311,17 @@ on the [GitHub issue tracker][issues].
 [^3]: https://en.wikipedia.org/wiki/X.509
 [RFC6125]: https://tools.ietf.org/html/rfc6125
 
+
 ****
 
 Posts in this TLS series:
  
  - [Introducing transport layer security (TLS) in pure OCaml][tls-intro]
  - [OCaml-TLS: building the nocrypto library core][nocrypto-intro]
- - [OCaml-TLS: X.509 and adventures in certificate parsing and validation][x509-intro]
+ - [OCaml-TLS: adventures in X.509 certificate parsing and validation][x509-intro]
  - [OCaml-TLS: ASN.1 and notation embedding][asn1-intro]
 
 [tls-intro]: http://openmirage.org/blog/introducing-ocaml-tls
 [nocrypto-intro]: http://openmirage.org/blog/introducing-nocrypto
 [x509-intro]: http://openmirage.org/blog/introducing-x509
+[asn1-intro]: http://openmirage.org/blog/introducing-asn1
