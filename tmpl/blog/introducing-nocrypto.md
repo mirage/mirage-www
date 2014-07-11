@@ -382,6 +382,7 @@ comments, ideas, and especially audits and code.
 [issues]: https://github.com/mirleft/ocaml-nocrypto/issues?state=open
 [rndpatches]: http://lists.xen.org/archives/html/xen-devel/2014-06/msg01492.html
 
+
 ****
 
 Posts in this TLS series:
@@ -394,3 +395,4 @@ Posts in this TLS series:
 [tls-intro]: http://openmirage.org/blog/introducing-ocaml-tls
 [nocrypto-intro]: http://openmirage.org/blog/introducing-nocrypto
 [x509-intro]: http://openmirage.org/blog/introducing-x509
+[asn1-intro]: http://openmirage.org/blog/introducing-asn1
