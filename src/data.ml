@@ -210,6 +210,12 @@ module Blog = struct
         body       = "introducing-x509.md";
         permalink  = "introducing-x509";
       };
+      { updated    = date (2014, 07, 11, 12, 0);
+        author     = dkaloper;
+        subject    = "OCaml-TLS: Introducing the ASN1 library";
+        body       = "introducing-asn1.md";
+        permalink  = "introducing-asn1";
+      };
     ]
 end
 
