@@ -211,7 +211,7 @@ module Blog = struct
         permalink  = "introducing-x509";
       };
       { updated    = date (2014, 07, 11, 12, 0);
-        author     = dkaloper;
+        authors    = [dkaloper];
         subject    = "OCaml-TLS: ASN.1 and notation embedding";
         body       = "introducing-asn1.md";
         permalink  = "introducing-asn1";

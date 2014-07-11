@@ -2,18 +2,19 @@
 You might like to begin with the [introduction][tls-intro].*
 
 [asn1-combinators][asn1-combinators] is a library that allows one to express
-ASN.1 grammars directly in OCaml, manipulate them as first-class entities,
+[ASN.1][asn-wiki] grammars directly in OCaml, manipulate them as first-class entities,
 combine them with one of several ASN encoding rules and use the result to parse
 or serialize values.
 
 It is the parsing and serialization backend for our [X.509][ocaml-x509]
 certificate library, which in turn provides certificate handling for
 [ocaml-tls][ocaml-tls].
-We wrote about the X.509 certificate handling [yesterday][x509-intro]
+We wrote about the X.509 certificate handling [yesterday][x509-intro].
 
 [asn1-combinators]: https://github.com/mirleft/ocaml-asn1-combinators
 [ocaml-x509]: https://github.com/mirleft/ocaml-x509
 [ocaml-tls]: https://github.com/mirleft/ocaml-tls
+[asn-wiki]: https://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One
 
 ### What is ASN.1, really? ###
 
