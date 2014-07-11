@@ -212,7 +212,7 @@ module Blog = struct
       };
       { updated    = date (2014, 07, 11, 12, 0);
         author     = dkaloper;
-        subject    = "OCaml-TLS: Introducing the ASN1 library";
+        subject    = "OCaml-TLS: ASN.1 and notation embedding";
         body       = "introducing-asn1.md";
         permalink  = "introducing-asn1";
       };

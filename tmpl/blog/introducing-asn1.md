@@ -233,7 +233,7 @@ Again, ASN is a language with a number of built-in primitives, a few combining
 constructs, (recursive) name-binding and a module system. Our target language is
 a language with a perfectly good module system and it can certainly express
 combining constructs. It includes an abstraction mechanism arguably far simpler
-and easier to use than those of ASN, namely, functions. And the OCaml compiler
+and easier to use than those of ASN, namely, functions. And the OCaml compilers
 can already parse OCaml sources. So why not just reuse this machinery?
 
 The idea is familiar. Creating embedded languages for highly declarative
@@ -277,7 +277,7 @@ Fortunately, due to the regular structure of ASN, we don't really *need* the
 full expressive power of monadic parsing. The only occurrence of sequential
 parsing is within `SEQUENCE` and related constructs, and we don't need
 look-ahead. All we need to do is provide a few specialized combinators to handle
-those cases -- combinators the likes of which would be defined as derived in a
+those cases -- combinators the likes of which would be derived in a
 more typical setting.
 
 So if we imagine we had a few values, like:
@@ -308,7 +308,7 @@ A small wrinkle is that `SEQUENCE` allows for more contextual information on its
 components (so does `CHOICE` in reality, but we ignore that): elements can carry
 labels (which are not used for parsing) and can be marked as optional. So
 instead of working directly on the grammars, our `sequence` must work on their
-annotated versions. Obviously, there is the arity problem.
+annotated versions. A second wrinkle is the arity of the `sequence` combinator.
 
 Thus we introduce the type of annotated grammars, `'a element`, which
 corresponds to one `,`-delimited syntactic element in ASN's own `SEQUENCE`
@@ -350,7 +350,7 @@ val map : ('a -> 'b) -> ('b -> 'a) -> 'a t -> 'b t
 
 Keeping in line with the general theme of bidirectionality, we require functions
 to come in pairs. The deceptively called `map` could also be called `iso`, and
-comes with a nice property: if the two functions are truly bijective inverses,
+comes with a nice property: if the two functions are truly inverses,
 the serialization process is fully reversible, and so is parsing, under
 single-representation encodings (DER)!
 
@@ -427,7 +427,7 @@ But this won't work. Being just trees of applications, our definitions never
 contain [statically constructive][rec-defn] parts -- this expression could never
 terminate in a strict language.
 
-We can get around that by wrapping grammars in `Lazy.t` (or just thunks), but
+We can get around that by wrapping grammars in `Lazy.t` (or just closures), but
 this would be too awkward to use. Like many other similar libraries, we need to
 provide a fixpoint combinator:
 
@@ -519,12 +519,12 @@ number of hand-written cases then check the conformance to the actual ASN.
 As for security, there were two concerns we were aware of. There is a history of
 catastrophic [buffer overruns][windows-asn-vuln] in some ASN.1 implementations,
 but -- assuming our compiler and runtime system are correct -- we are immune to
-these as the buffer primitive we use (`Cstruct`) enforces bounds-checking. And
+these as we are subject to bounds-checking. And
 there are some documented [problems][oid-issues] with security of X.509
 certificate verification due to overflows of numbers in ASN OID types, which we
 explicitly guard against.
 
-You can check our security status on our [issue tracker][].
+You can check our security status on our [issue tracker][tracker].
 
 [x509-asn-grammars]: https://github.com/mirleft/ocaml-x509/blob/6c96f11a2c7911ae0b308af9b328aee38f48b270/lib/asn_grammars.ml
 [polar-core-x509]: https://github.com/polarssl/polarssl/blob/b9e4e2c97a2e448090ff3fcc0f99b8f6dbc08897/library/x509_crt.c#L531
@@ -560,7 +560,7 @@ Posts in this TLS series:
  - [Introducing transport layer security (TLS) in pure OCaml][tls-intro]
  - [OCaml-TLS: building the nocrypto library core][nocrypto-intro]
  - [OCaml-TLS: adventures in X.509 certificate parsing and validation][x509-intro]
- - [OCaml-TLS: ASN.1][asn1-intro]
+ - [OCaml-TLS: ASN.1 and notation embedding][asn1-intro]
 
 [tls-intro]: http://openmirage.org/blog/introducing-ocaml-tls
 [nocrypto-intro]: http://openmirage.org/blog/introducing-nocrypto
