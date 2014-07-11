@@ -150,6 +150,7 @@ Posts in this TLS series:
  - [Introducing transport layer security (TLS) in pure OCaml][tls-intro]
  - [OCaml-TLS: building the nocrypto library core][nocrypto-intro]
  - [OCaml-TLS: adventures in X.509 certificate parsing and validation][x509-intro]
+ - [OCaml-TLS: ASN.1 and notation embedding][asn1-intro]
 
 [tls-intro]: http://openmirage.org/blog/introducing-ocaml-tls
 [nocrypto-intro]: http://openmirage.org/blog/introducing-nocrypto
