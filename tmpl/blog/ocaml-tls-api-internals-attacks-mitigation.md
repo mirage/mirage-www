@@ -529,7 +529,7 @@ size is nearly two orders of magnitude smaller than OpenSSL, the most
 widely used open source library (written in C, which a lot of
 programming languages wrap instead of providing their own TLS
 implementation). Our code base seems to be robust -- the [demo
-server][demo] successfully finished over 30000 sessions in less than a
+server][demo] successfully finished over 22500 sessions in less than a
 week, with only 11 failing traces.
 
 There is a huge need for high quality TLS implementations, because
