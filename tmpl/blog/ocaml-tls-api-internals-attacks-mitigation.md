@@ -558,7 +558,7 @@ It is not yet intended for use in any security critical applications.**
 
 Since this is the final post in our series, we would like to thank all
 people who reported issues so far: [Anil Madhavapeddy][anil], [Török
-Edwin][edwin], [Andreas Bogk][andreas], [Gregor Kopf][greg], [Graham
+Edwin][edwin], [Daniel Bünzli][daniel], [Andreas Bogk][andreas], [Gregor Kopf][greg], [Graham
 Steel][graham], [Jerome Vouillon][vouillon], [Amir Chaudhry][amir],
 [Ashish Agarwal][ashish]. Additionally, we want to thank the
 [miTLS][mitls] team (especially Cedric and Karthikeyan) for fruitful
@@ -579,6 +579,7 @@ Mirleft, Morocco.
 [peter]: http://www.cl.cam.ac.uk/~pes20/
 [ashish]: http://ashishagarwal.org
 [amir]: http://amirchaudhry.com/
+[daniel]: http://erratique.ch/
 [vouillon]: https://github.com/vouillon
 [graham]: https://twitter.com/graham_steel
 [greg]: http://gregorkopf.de/blog/
