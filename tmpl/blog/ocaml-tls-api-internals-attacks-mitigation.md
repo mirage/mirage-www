@@ -564,12 +564,13 @@ Steel][graham], [Jerome Vouillon][vouillon], [Amir Chaudhry][amir],
 [miTLS][mitls] team (especially Cedric and Karthikeyan) for fruitful
 discussions, as well as the [OCaml Labs][ocamllabs] and
 [Mirage][mirage] teams. And thanks to [Peter Sewell][peter] and
-[Richard Mortier][mort] for funding within the [REMS][] and [UCN][]
+[Richard Mortier][mort] for funding within the [REMS][rems], [UCN][ucn], and [Horizon][horizon]
 projects. The software was started in [Aftas beach house][aftas] in
 Mirleft, Morocco.
 
 <img src="/graphics/aftas-mirleft.jpg" alt="Aftas Beach" />
 
+[horizon]: http://www.horizon.ac.uk
 [mirage]: http://www.openmirage.org
 [ocamllabs]: http://www.cl.cam.ac.uk/projects/ocamllabs/
 [aftas]: http://www.aftasmirleft.com/
