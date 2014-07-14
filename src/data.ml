@@ -218,7 +218,7 @@ module Blog = struct
       };
       { updated    = date (2014, 07, 14, 12, 0);
         authors    = [dkaloper; hannes];
-        subject    = "OCaml-TLS: architecture of OCaml-TLS and mitigations to known attacks";
+        subject    = "OCaml-TLS: the protocol implementation and mitigations to known attacks";
         body       = "ocaml-tls-api-internals-attacks-mitigation.md";
         permalink  = "ocaml-tls-api-internals-attacks-mitigation";
       };
