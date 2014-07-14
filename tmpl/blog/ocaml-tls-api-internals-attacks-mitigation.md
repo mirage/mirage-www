@@ -564,7 +564,7 @@ Steel][graham], [Jerome Vouillon][vouillon], [Amir Chaudhry][amir],
 [miTLS][mitls] team (especially Cedric and Karthikeyan) for fruitful
 discussions, as well as the [OCaml Labs][ocamllabs] and
 [Mirage][mirage] teams. And thanks to [Peter Sewell][peter] and
-[Richard Mortier][mort] for funding within the [rems][] and [ucn][]
+[Richard Mortier][mort] for funding within the [REMS][] and [UCN][]
 projects. The software was started in [Aftas beach house][aftas] in
 Mirleft, Morocco.
 
