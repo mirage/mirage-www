@@ -41,7 +41,7 @@ Storage libraries:
 * *libvhd*: ?? Jon, suitable for block driver use?
 * *ocaml-iscsi*: Doesnt exist, but djs really wants it.
 * *cagit*: Needs a file system (Owner: tg).
-* *irminsule*: tg, not for 1.0
+* *irmin*: tg, not for 1.0
 * *arakoon*: In-memory-only patch, Arakoon already functorised across the storage layer. For 1.0? to investigate
 
 RPC/coordination:

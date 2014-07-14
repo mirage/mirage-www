@@ -127,7 +127,7 @@ Last, but not least, [Thomas Gazagnaire](http://gazagnaire.org) has been buildin
 
 * [lazy-trie](https://github.com/samoht/ocaml-lazy-trie/) is a lazy version of the Trie data structure, useful for exposing Git graphs.
 * [git](https://github.com/samoht/ocaml-git) is a now-fairly complete implementation of the Git protocol in pure OCaml, which can interoperate with normal Git servers via the `ogit` command-line tool that it installs.
-* [irminsule](https://github.com/samoht/irminsule) is the main library that abstracts Git DAGs into an OCaml programming API.  The homepage has [instructions](https://github.com/samoht/irminsule/wiki/Getting-Started) on how to play with the command-line frontend to experiment with the database.
+* [irmin](https://github.com/mirage/irmin) is the main library that abstracts Git DAGs into an OCaml programming API.  The homepage has [instructions](https://github.com/mirage/irmin/wiki/Getting-Started) on how to play with the command-line frontend to experiment with the database.
 * [git2fat](https://github.com/samoht/git2fat) converts a Git checkout into a FAT block image, useful when bundling up unikernels.
 
 We'd also like to thank several conference organizers for giving us the opportunity to demonstrate Mirage.  The talk video from [QCon SF](http://www.infoq.com/presentations/mirage-os) is now live, and we also had a *great* time at [FOSDEM](http://fosdem.org) recently (summarized by Amir [here](http://nymote.org/blog/2014/fosdem-summary/)). 

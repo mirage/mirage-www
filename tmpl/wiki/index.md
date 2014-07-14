@@ -52,8 +52,8 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 * Weekly call [2014-06-24](/wiki/weekly-2014-06-24) on Releases, ARM, TLS and Repos.
 * Weekly call [2014-06-10](/wiki/weekly-2014-06-10) on Irmin, Conduit, Deployment and Fist pumping.
 * Weekly call [2014-05-27](/wiki/weekly-2014-05-27) on Mirage on ARM, Irmin and Xen Hackathon.
-* Weekly call [2014-04-29](/wiki/weekly-2014-04-29) on GSoC, Irminsule and Mirage Tutorial.
-* Weekly call [2014-04-15](/wiki/weekly-2014-04-15) on GSoC, vchan, Mini-OS/ ARM, Irminsule.
+* Weekly call [2014-04-29](/wiki/weekly-2014-04-29) on GSoC, Irmin and Mirage Tutorial.
+* Weekly call [2014-04-15](/wiki/weekly-2014-04-15) on GSoC, vchan, Mini-OS/ ARM, Irmin.
 * Weekly call [2014-04-01](/wiki/weekly-2014-04-01) on Mini-OS, IOCaml and Xenstore.
 * Weekly call [2014-03-18](/wiki/weekly-2014-03-18) on Crypto, GSoC and a Mirage tutorial day.
 * Weekly call [2014-03-04](/wiki/weekly-2014-03-04) on IP addresses and unikernel deployment.
@@ -65,5 +65,5 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 * Weekly call [2013-05-21](/wiki/weekly-2013-05-21) on build, build, and more build, argh.
 * Weekly call [2013-05-14](/wiki/weekly-2013-05-14) on Ocamlot, actors and performance.
 * Weekly call [2013-04-30](/wiki/weekly-2013-04-30) on device drivers, SSL, actors and OpenFlow.
-* Weekly call [2013-04-23](/wiki/weekly-2013-04-23) on Irminsule, revisions and release.
+* Weekly call [2013-04-23](/wiki/weekly-2013-04-23) on Irmin, revisions and release.
 * Weekly call [2013-04-16](/wiki/weekly-2013-04-16) on release, libvirt and Mirari.
