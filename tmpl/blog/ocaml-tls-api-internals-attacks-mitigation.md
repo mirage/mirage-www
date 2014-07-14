@@ -45,7 +45,7 @@ contain front-ends that tie the core to `Mirage` and `Lwt_unix`.
 
 ### Core
 
-The core library is purely functional. A TLS session is represented by the
+The [core][tls-engine-mli] library is purely functional. A TLS session is represented by the
 abstract type `Tls.Engine.state`, and various functions consume this session
 type together with raw bytes (`Cstruct.t` -- which is by itself mutable, but
 `ocaml-tls` eschews this) and produce new session values and resulting buffers.
@@ -59,7 +59,8 @@ the application:
 type state
 
 type ret = [
-  | `Ok of [ `Ok of state | `Eof | `Alert of alert ] * [ `Response of Cstruct.t ] * [ `Data of Cstruct.t option ]
+  | `Ok of [ `Ok of state | `Eof | `Alert of alert ] *
+      [ `Response of Cstruct.t ] * [ `Data of Cstruct.t option ]
   | `Fail of alert * [ `Response of Cstruct.t ]
 ]
 
@@ -254,18 +255,17 @@ similar vein.
 
 ### Attacks on TLS
 
-As the most used security protocol, TLS is widely deployed and 
-at over 15 years, it is also quite old.
-As such, many researchers are interested in
-its security properties and its flaws. Various
-vulnerabilities on different layers of TLS have been found - some are implementation
-specific ([Heartbleed][heartbleed]), others are due to
-advancements in cryptoanalysis ([collisions of
-MD5][md5_collision]), and even others are due to incorrect usage of TLS
-([truncation attack][truncation] or
+As the most used security protocol, TLS is widely deployed and it was
+standardized in 1999, thus it is also quite old.  As such, many
+researchers are interested in its security properties and its
+flaws. Various vulnerabilities on different layers of TLS have been
+found - [heartbleed][] and others are implementation specific,
+advancements in cryptoanalysis such as [collisions of
+MD5][md5_collision] lead to vulnerabilities, and even others are due
+to incorrect usage of TLS ([truncation attack][truncation] or
 [BREACH][breach]). Finally, some weaknesses are in the protocol
-itself. An overview of [attacks on TLS][tls_attacks] is available,
-with another one on the [miTLS website][mitls_attacks].
+itself. Extensive [overviews][tls_attacks] of [attacks on
+TLS][mitls_attacks] are available.
 
 We look at protocol level attacks of TLS and how [ocaml-tls][ocaml-tls]
 implements mitigations against these.  [TLS 1.2 RFC][RFC5246] provides an
@@ -274,17 +274,19 @@ covering them. This is slightly out of date as the RFC is roughly six years old 
 in the meantime more attacks have been published, such as the [renegotiation
 flaw][understanding_reneg].
 
-As [already mentioned][tls-intro], we track all our security issues
-([checked][closed] and [unchecked][open]) on our GitHub issue tracker.
+As [already mentioned][tls-intro], we track all our
+[mitigated][closed] and [open][open] security issues on our GitHub
+issue tracker.
 
 Due to the choice of using OCaml, a memory managed programming
-language, we obstruct certain bug classes (temporal and spatial memory
-safety).
+language, we obstruct entire bug classes, namely temporal and spatial
+memory safety.
 
-On a general note, there are some weak ciphers, such as RC4 and 3DES
-(see [issue 8][issue8] and [issue 10][issue10]). If we phase these two
-ciphers out, a TLS-1.0 implementation (such as Windows XP) wouldn't have
-any ciphersuite to talk to us anymore.
+Cryptoanalysis and improvement of computational power weaken some
+ciphers, such as RC4 and 3DES (see [issue 8][issue8] and [issue
+10][issue10]). If we phase these two ciphers out, there wouldn't be
+any ciphersuite left to communicate with some compliant TLS-1.0
+implementations.
 
 [issue8]: https://github.com/mirleft/ocaml-tls/issues/8
 [issue10]: https://github.com/mirleft/ocaml-tls/issues/10
@@ -433,7 +435,7 @@ messages. You can find further discussion in [issue 3][issue3].
 TLS 1.0 reuses the last ciphertext block as IV in CBC mode. If an attacker
 has a (partially) known plaintext, she can find the remaining plaintext.
 This is known as the [BEAST][] attack and there is a [long discussion][mozilla-bug]
-about mitigations. Our mitigation is to always prepend a TLS-1.0
+about mitigations. Our mitigation is to prepend each TLS-1.0
 application data fragment with an empty fragment to randomize the IV.
 We do this exactly [here][empty_iv]. There is further discussion in
 [issue 2][issue2].
@@ -468,8 +470,9 @@ cannot do anything to mitigate BREACH.
 
 Due to limited amount of padding data, the actual size of transmitted
 data can be recovered. The mitigation is to implement [length hiding
-policies][length_hiding].
+policies][length_hiding]. This is tracked as [issue 162][issue162].
 
+[issue162]: https://github.com/mirleft/ocaml-tls/issues/162
 [length_hiding]: http://tools.ietf.org/html/draft-pironti-tls-length-hiding-02
 
 **Version rollback**
@@ -524,7 +527,7 @@ There is a huge need for high quality TLS implementations, because
 several TLS implementations suffered this year from severe security
 problems, such as [heartbleed][], [goto fail][CVE-2014-1266], [session
 id][CVE-2014-3466], [Bleichenbacher][java], [change cipher
-suite][CVE-2014-0224] and [GCM DoS][polar]). The main cause is
+suite][CVE-2014-0224] and [GCM DoS][polar]. The main cause is
 implementation complexity due to lack of abstraction, and memory
 safety issues.
 
