@@ -216,6 +216,12 @@ module Blog = struct
         body       = "introducing-asn1.md";
         permalink  = "introducing-asn1";
       };
+      { updated    = date (2014, 07, 14, 12, 0);
+        authors    = [dkaloper; hannes];
+        subject    = "OCaml-TLS: Discussion of API, known attacks and our mitigations";
+        body       = "ocaml-tls-api-internals-attacks-mitigation.md";
+        permalink  = "ocaml-tls-api-internals-attacks-mitigation";
+      };
     ]
 end
 
