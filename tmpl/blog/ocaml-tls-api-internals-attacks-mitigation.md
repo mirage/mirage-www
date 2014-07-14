@@ -574,7 +574,7 @@ Mirleft, Morocco.
 [ocamllabs]: http://www.cl.cam.ac.uk/projects/ocamllabs/
 [aftas]: http://www.aftasmirleft.com/
 [ucn]: http://usercentricnetworking.eu/
-[rems]: http://rems.op
+[rems]: http://rems.io
 [mort]: http://www.cs.nott.ac.uk/~rmm/
 [peter]: http://www.cl.cam.ac.uk/~pes20/
 [ashish]: http://ashishagarwal.org
