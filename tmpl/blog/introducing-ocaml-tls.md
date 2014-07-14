@@ -152,8 +152,10 @@ Posts in this TLS series:
  - [OCaml-TLS: building the nocrypto library core][nocrypto-intro]
  - [OCaml-TLS: adventures in X.509 certificate parsing and validation][x509-intro]
  - [OCaml-TLS: ASN.1 and notation embedding][asn1-intro]
+ - [OCaml-TLS: architecture of OCaml-TLS and mitigations to known attacks][tls-api]
 
 [tls-intro]: http://openmirage.org/blog/introducing-ocaml-tls
 [nocrypto-intro]: http://openmirage.org/blog/introducing-nocrypto
 [x509-intro]: http://openmirage.org/blog/introducing-x509
 [asn1-intro]: http://openmirage.org/blog/introducing-asn1
+[tls-api]: http://openmirage.org/blog/ocaml-tls-api-internals-attacks-mitigation
