@@ -114,7 +114,7 @@ provider for the short duration that they're needed.
 Overall, Mirage provides substantial benefits in terms of increased
 efficiency and safety and is ideal for deploying to both the public
 cloud and embedded devices. Together with
-[Irminsule](http://nymote.org/software/irminsule) and
+[Irmin](http://nymote.org/software/irmin) and
 [Signpost](http://nymote.org/software/signpost), Mirage forms a core
 piece of the Nymote/MISO toolstack to power the coming wave of [Internet of
 Things devices](http://en.wikipedia.org/wiki/Internet_of_Things).
