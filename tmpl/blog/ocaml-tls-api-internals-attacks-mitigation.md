@@ -265,7 +265,7 @@ similar vein.
 
 TLS the most widely deployed security protocol on the Internet and, at
 over 15 years, is also showing its age. As such, a flaw is a valuable
-commodity due to the commercial sensitive nature of data that is
+commodity due to the commercially sensitive nature of data that is
 encrypted with TLS. Various vulnerabilities on different layers of TLS
 have been found - [heartbleed][] and others are implementation
 specific, advancements in cryptanalysis such as [collisions of
