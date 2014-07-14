@@ -158,8 +158,8 @@ the client starts the session.
 `Tls.Config` synthesizes configurations, separately for client and server
 endpoints, through the functions `client_exn` and `server_exn`. They take a
 number of parameters that define a TLS session, check them for consistency, and
-return the sanitized `config` value which can be used to create `state`s and,
-thus, sessions. If the check fails, they raise an exception.
+return the sanitized `config` value which can be used to create a `state` and,
+thus, a session. If the check fails, they raise an exception.
 
 The parameters include the pair of a certificate and its private key for the
 server, and an `X509.Authenticator.t` for the client, both produced by our
