@@ -1,10 +1,12 @@
 *This is the fifth in a series of posts that introduce new libraries for a pure OCaml implementation of TLS.
 You might like to begin with the [introduction][tls-intro].*
 
-[ocaml-tls][] is the new, clean-slate implementation of TLS in OCaml that we've
-been working on for the past six months. In this post we try to document some of
-its internal design, the reasons for the decisions we made, and
-the current security status of that work.
+[ocaml-tls][] is the new, clean-slate implementation of TLS in OCaml
+that we've been working on for the past six months. In this post we
+try to document some of its internal design, the reasons for the
+decisions we made, and the current security status of that work. Try
+our [live interactive demonstration server][demo] which visualises TLS
+sessions.
 
 ### The OCaml-TLS architecture
 
@@ -41,7 +43,7 @@ contain front-ends that tie the core to `Mirage` and `Lwt_unix`.
 
 [ocaml-unix]: http://caml.inria.fr/pub/docs/manual-ocaml/libref/Unix.html
 [lwt]: http://ocsigen.org/lwt/
-[async]: https://ocaml.janestreet.com/ocaml-core/111.17.00/doc/async/
+[async]: https://realworldocaml.org/v1/en/html/concurrent-programming-with-async.html
 
 ### Core
 
@@ -67,7 +69,7 @@ type ret = [
 val handle_tls : state -> Cstruct.t -> ret
 ```
 
-As the signature shows, errors are signalled through the `ret` type. This
+As the signature shows, errors are signalled through the `ret` type, which is a [polymorphic variant][poly]. This
 reflects the actual internal structure: all the errors are represented as
 values, and operations are composed using an error [monad][monad-ml].
 
@@ -76,23 +78,26 @@ state and input bytes into the later state and output bytes.
 
 Here's a rough outline of what happens in `handle_tls`:
 
-TLS packets consist of a header, which contains the protocol version, length,
-and content type, and the payload of the given content type. Once inside our
-[main handler][handle_tls], we [separate][separate_records] the buffer into
-TLS records, and [process][handle_raw_record] each individually. We first
-check that the version number is correct, then [decrypt][decrypt], and [verify
-the mac][verify_mac].
+- TLS packets consist of a header, which contains the protocol
+  version, length, and content type, and the payload of the given
+  content type. Once inside our [main handler][handle_tls], we
+  [separate][separate_records] the buffer into TLS records, and
+  [process][handle_raw_record] each individually. We first check that
+  the version number is correct, then [decrypt][decrypt], and [verify
+  the mac][verify_mac].
 
-Decrypted data is then [dispatched][handle_packet] to one of four sub-protocol
-handlers (Handshake, Change Cipher Spec, Alert and Application Data). Each
-handler can [return][return_types] a new handshake state, outgoing data,
-application data, the new decryption state or an error (with the outgoing data
-being an interleaved list of buffers and new encryption states).
+- Decrypted data is then [dispatched][handle_packet] to one of four
+  sub-protocol handlers (Handshake, Change Cipher Spec, Alert and
+  Application Data). Each handler can [return][return_types] a new
+  handshake state, outgoing data, application data, the new decryption
+  state or an error (with the outgoing data being an interleaved list
+  of buffers and new encryption states).
 
-The outgoing buffers and the encryption states are [traversed][encrypt] to
-produce the final output to be sent to the communication partner, and the final
-encryption, decryption and handshake states are combined into a new overall
-state which is returned to the caller.
+- The outgoing buffers and the encryption states are
+  [traversed][encrypt] to produce the final output to be sent to the
+  communication partner, and the final encryption, decryption and
+  handshake states are combined into a new overall state which is
+  returned to the caller.
 
 Handshake is (by far) the most complex TLS sub-protocol, with an elaborate state
 machine. Our [client][client_handshake] and [server][server_handshake] encode
@@ -107,6 +112,7 @@ renegotiation data, and possibly a handshake fragment.
 Logic of both handshake handlers is very localised, and does not mutate any
 global data structures.
 
+[poly]: https://realworldocaml.org/v1/en/html/variants.html#polymorphic-variants
 [monad-ml]: https://github.com/mirleft/ocaml-tls/blob/6dc9258a38489665abf2bd6cdbed8a1ba544d522/lib/control.ml
 [return_types]: https://github.com/mirleft/ocaml-tls/blob/6dc9258a38489665abf2bd6cdbed8a1ba544d522/lib/state.ml#L109
 [encrypt]: https://github.com/mirleft/ocaml-tls/blob/6dc9258a38489665abf2bd6cdbed8a1ba544d522/lib/engine.ml#L48
@@ -126,8 +132,10 @@ global data structures.
 
 ### Core API
 
-Our public API for the core library consists of the [Tls.Engine][tls-engine-mli]
-and [Tls.Config][tls-config-mli] modules.
+OCaml permits the implementation a module to be exported via a more
+abstract *signature* that hides the internal representation
+details. Our public API for the core library consists of the
+[Tls.Engine][tls-engine-mli] and [Tls.Config][tls-config-mli] modules.
 
 `Tls.Engine` contains the basic reactive function `handle_tls`, mentioned above,
 which processes incoming data and optionally produces a response, together with
@@ -160,7 +168,7 @@ server, and an `X509.Authenticator.t` for the client, both produced by our
 This design reflects our attempts to make the API as close to "fire and forget"
 as we could, given the complexity of TLS: we wanted the library to be relatively
 straightforward to use, have a minimal API footprint and, above all, fail very
-early and very loudly when mis-configured.
+early and very loudly when misconfigured.
 
 [tls-engine-mli]: https://github.com/mirleft/ocaml-tls/blob/6dc9258a38489665abf2bd6cdbed8a1ba544d522/lib/engine.mli
 
@@ -213,10 +221,10 @@ struct
     | `Ok tls ->
       TLS.read tls >>= function
       | `Ok buf ->
-        TLS.write tls buf >> TLS.close buf
+        TLS.write tls buf >>= fun () -> TLS.close buf
 
   let start stack e kv =
-    TLS.attach_entropy e >>
+    TLS.attach_entropy e >>= fun () ->
     lwt authenticator = X509.authenticator kv `Default in
     let conf          = Tls.Config.server_exn ~authenticator () in
     Stack.listen_tcpv4 stack 4433 (accept conf) ;
@@ -235,16 +243,16 @@ number of bytes read. The surrounding module, `Tls_lwt`, provides a simpler,
 
 ```OCaml
 let main host port =
-  Tls_lwt.rng_init () >>
+  Tls_lwt.rng_init () >>= fun () ->
   lwt authenticator = X509_lwt.authenticator (`Ca_dir nss_trusted_ca_dir) in
   lwt (ic, oc)      = Tls_lwt.connect ~authenticator (host, port) in
   let req = String.concat "\r\n" [
     "GET / HTTP/1.1" ; "Host: " ^ host ; "Connection: close" ; "" ; ""
   ] in
-  Lwt_io.(write oc req >> read ic >>= print)
+  Lwt_io.(write oc req >>= fun () -> read ic >>= print)
 ```
 
-We have further plans to provide wrappers for `Async` and plain `Unix` in a
+We have further plans to provide wrappers for [`Async`][async] and plain [`Unix`][ocaml-unix] in a
 similar vein.
 
 [tls_mirage_types_mli]: https://github.com/mirleft/ocaml-tls/blob/6dc9258a38489665abf2bd6cdbed8a1ba544d522/mirage/tls_mirage_types.mli
@@ -255,12 +263,12 @@ similar vein.
 
 ### Attacks on TLS
 
-As the most used security protocol, TLS is widely deployed and it was
-standardized in 1999, thus it is also quite old.  As such, many
-researchers are interested in its security properties and its
-flaws. Various vulnerabilities on different layers of TLS have been
-found - [heartbleed][] and others are implementation specific,
-advancements in cryptoanalysis such as [collisions of
+TLS the most widely deployed security protocol on the Internet and, at
+over 15 years, is also showing its age. As such, a flaw is a valuable
+commodity due to the commercial sensitive nature of data that is
+encrypted with TLS. Various vulnerabilities on different layers of TLS
+have been found - [heartbleed][] and others are implementation
+specific, advancements in cryptanalysis such as [collisions of
 MD5][md5_collision] lead to vulnerabilities, and even others are due
 to incorrect usage of TLS ([truncation attack][truncation] or
 [BREACH][breach]). Finally, some weaknesses are in the protocol
@@ -282,11 +290,11 @@ Due to the choice of using OCaml, a memory managed programming
 language, we obstruct entire bug classes, namely temporal and spatial
 memory safety.
 
-Cryptoanalysis and improvement of computational power weaken some
+Cryptanalysis and improvement of computational power weaken some
 ciphers, such as RC4 and 3DES (see [issue 8][issue8] and [issue
 10][issue10]). If we phase these two ciphers out, there wouldn't be
-any ciphersuite left to communicate with some compliant TLS-1.0
-implementations.
+any matching ciphersuite left to communicate with some compliant TLS-1.0
+implementations, such as Windows XP, that do not support AES.
 
 [issue8]: https://github.com/mirleft/ocaml-tls/issues/8
 [issue10]: https://github.com/mirleft/ocaml-tls/issues/10
@@ -515,13 +523,14 @@ fragmented alerts.
 
 Within six months, two hackers managed to develop a clean-slate TLS
 stack, together with required crypto primitives, ASN.1, and X.509
-handling, in a high-level pure language. We interoperate
-with widely deployed TLS stacks, as shown by our [demo server][demo].
-The code size is nearly two orders of magnitude smaller than OpenSSL,
-the most widely used open source library (written in C, which a lot of
+handling, in a high-level pure language. We interoperate with widely
+deployed TLS stacks, as shown by our [demo server][demo].  The code
+size is nearly two orders of magnitude smaller than OpenSSL, the most
+widely used open source library (written in C, which a lot of
 programming languages wrap instead of providing their own TLS
 implementation). Our code base seems to be robust -- the [demo
-server][demo] was hit by hacker news.
+server][demo] successfully finished over 30000 sessions in less than a
+week, with only 11 failing traces.
 
 There is a huge need for high quality TLS implementations, because
 several TLS implementations suffered this year from severe security
