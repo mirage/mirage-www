@@ -86,6 +86,11 @@ module People = struct
     email     = Some "jeremy.yallop@cl.cam.ac.uk";
   }
 
+  let yomimono = {
+    Atom.name = "Mindy Preston";
+    uri       = Some "https://github.com/yomimono";
+    email     = Some "interblag@somerandomidiot.com";
+  }
 end
 
 let rights = Some "All rights reserved by the author"
@@ -233,6 +238,12 @@ module Blog = struct
         subject    = "Modular foreign function bindings";
         body       = "modular-foreign-function-bindings.md";
         permalink  = "modular-foreign-function-bindings";
+      };
+      { updated    = date (2014, 07, 17, 13, 0);
+        authors    = [yomimono];
+        subject    = "Introduction to Mirage's TCP/IP stack";
+        body       = "intro-tcpip.md";
+        permalink  = "intro-tcpip";
       };
     ]
 end
