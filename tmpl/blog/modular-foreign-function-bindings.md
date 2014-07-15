@@ -167,8 +167,7 @@ let end_handler _ _ =
   decr depth
 
 let () =
-  parse_string ~start_handler ~end_handler
-    Batteries.(Enum.fold (^) "" (File.lines_of Sys.argv.(1)))
+  parse_string ~start_handler ~end_handler (In_channel.input_all stdin)
 ```
 
 The full source of the program is [available on github][xml-example-source].
@@ -176,10 +175,10 @@ The full source of the program is [available on github][xml-example-source].
 Here's the program in action:
 
 ```bash
-$ ocamlfind opt -package batteries,ctypes.foreign expat_example.ml \
-  -linkpkg -cclib -lexpat -o expat_example
+$ ocamlfind opt -thread -package core,ctypes.foreign expat_example.ml \
+   -linkpkg -cclib -lexpat -o expat_example
 $ wget -q http://openmirage.org/blog/atom.xml -O /dev/stdout \
-  | ./expat_example /dev/stdin
+  | ./expat_example
 feed
    id
    title
