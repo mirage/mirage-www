@@ -76,7 +76,7 @@ typedef xml_ParserStruct *xml_Parser;
 In ctypes these become calls to the `structure` and `ptr` functions:
 
 ```ocaml
-let parser_struct = structure "xml_ParserStruct"
+let parser_struct : [`XML_ParserStruct] structure typ = structure "xml_ParserStruct"
 let xml_Parser = ptr parser_struct
 ```
 
