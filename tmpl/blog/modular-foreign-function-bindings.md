@@ -173,6 +173,8 @@ let () =
     Batteries.(Enum.fold (^) "" (File.lines_of Sys.argv.(1)))
 ```
 
+The full source of the program is [available on github][xml-example-source].
+
 Here's the program in action:
 
 ```bash
@@ -353,3 +355,4 @@ available via the [home page][ocaml-ctypes].
 [ctypes-0.3.2]: https://github.com/ocamllabs/ocaml-ctypes/releases/tag/0.3.2
 [expat]: http://www.libexpat.org/
 [rwo-19]: https://realworldocaml.org/v1/en/html/foreign-function-interface.html
+[xml-example-source]: https://github.com/yallop/ocaml-ctypes-expat-example
