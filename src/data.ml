@@ -222,6 +222,12 @@ module Blog = struct
         body       = "ocaml-tls-api-internals-attacks-mitigation.md";
         permalink  = "ocaml-tls-api-internals-attacks-mitigation";
       };
+      { updated    = date (2014, 07, 15, 12, 0);
+        authors    = [yallop];
+        subject    = "Modular foreign function bindings";
+        body       = "modular-foreign-function-bindings.md";
+        permalink  = "modular-foreign-function-bindings";
+      };
     ]
 end
 

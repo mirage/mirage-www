@@ -1,5 +1,3 @@
-## Modular foreign function bindings
-
 One of the most frequent questions about MirageOS from developers is
 "do I really need to write all my code in OCaml"?  There are, of
 course, very good reasons to build the core system in pure OCaml: the
