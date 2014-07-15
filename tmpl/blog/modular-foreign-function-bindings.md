@@ -197,7 +197,7 @@ feed
 
 Since this is just a high-level overview we've passed over a number of
 details.  The interested reader can find a more comprehensive introduction to
-using ctypes in [Chapter 19 of Real World OCaml][rwo-19].
+using ctypes in [Chapter 19: Foreign Function Interface][rwo-19] of [Real World OCaml][rwo].
 
 ### Dynamic vs static
 
@@ -353,4 +353,5 @@ available via the [home page][ocaml-ctypes].
 [ctypes-0.3.2]: https://github.com/ocamllabs/ocaml-ctypes/releases/tag/0.3.2
 [expat]: http://www.libexpat.org/
 [rwo-19]: https://realworldocaml.org/v1/en/html/foreign-function-interface.html
+[rwo]: https://realworldocaml.org
 [xml-example-source]: https://github.com/yallop/ocaml-ctypes-expat-example
