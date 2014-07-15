@@ -319,7 +319,9 @@ linking strategy: we can run C code in an entirely separate process
 `Bindings` with a strategy that forwards calls to the process using
 standard inter-process communication.  (The remote calling strategy is
 not supported in the [current release][ctypes-0.3.2] of ctypes, but
-it's scheduled for a future version.)
+it's scheduled for a future version.  As with the switch from dynamic
+to static bindings, we anticipate that updating existing bindings to
+use cross-process calls will be straightforward.)
 
 ### Further examples
 
