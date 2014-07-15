@@ -260,11 +260,12 @@ dynamically-constructed bindings that we've been using so far.  However, there
 are now other possibilities available.  In particular, we can instantiate
 `Bindings` with code generators that output code to expose the bound functions
 to OCaml.  The actual instantiation is hidden behind a couple of convenient
-functions, `write_c` and `write_ml`, which accept `Bindings` as a parameter:
+functions, `write_c` and `write_ml`, which accept `Bindings` as a parameter
+and write to a [formatter][formatter]:
 
 ```ocaml
-write_c formatter ~prefix:"expat" ~bindings:(module Bindings)
-write_ml formatter ~prefix:"expat" ~bindings:(module Bindings)
+Cstubs.write_c formatter ~prefix:"expat" ~bindings:(module Bindings)
+Cstubs.write_ml formatter ~prefix:"expat" ~bindings:(module Bindings)
 ```
 
 Generating code in this way eliminates the concerns associated with
@@ -355,3 +356,4 @@ available via the [home page][ocaml-ctypes].
 [rwo-19]: https://realworldocaml.org/v1/en/html/foreign-function-interface.html
 [rwo]: https://realworldocaml.org
 [xml-example-source]: https://github.com/yallop/ocaml-ctypes-expat-example
+[formatter]: http://caml.inria.fr/pub/docs/manual-ocaml/libref/Format.html#TYPEformatter
