@@ -80,6 +80,12 @@ module People = struct
     email     = Some "david.mersinjak@cl.cam.ac.uk";
   }
 
+  let yallop = {
+    Atom.name = "Jeremy Yallop";
+    uri       = Some "https://github.com/yallop";
+    email     = Some "jeremy.yallop@cl.cam.ac.uk";
+  }
+
 end
 
 let rights = Some "All rights reserved by the author"
