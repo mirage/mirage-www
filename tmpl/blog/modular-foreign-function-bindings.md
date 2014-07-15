@@ -1,5 +1,28 @@
 ## Modular foreign function bindings
 
+One of the most frequent questions about MirageOS from developers is
+"do I really need to write all my code in OCaml"?  There are, of
+course, very good reasons to build the core system in pure OCaml: the
+module system permits reusing algorithmic abstractions at scale, and
+OCaml's static type checking makes it possible to enforce lightweight
+invariants across interfaces.  However, it's ultimately necessary to
+support interfacing to existing code, and this blog post will describe
+what we're doing to make this possible this without sacrificing the
+security benefits afforded by unikernels.
+
+A MirageOS application works by abstracting the *logic* of the
+application from the details of *platform* that it is compiled for.
+The `mirage` CLI tool parses a configuration file that represents the
+desired hardware target, which can be a Unix binary or a specialized
+Xen guest OS.  Our foreign function interface design elaborates on
+these design principles by separating the *description* of the C
+foreign functions from how we *link* to that code.  For instance, a
+Unix unikernel could use the normal `ld.so` to connect to a shared
+library, while in Xen we would need to interface to that C library
+through some other mechanism (for instance, a separate VM could be
+spawned to run the untrusted OpenSSL code).  If you're curious about
+how this works, this blog post is for you!
+
 ### Introducing ctypes
 
 [ocaml-ctypes][ocaml-ctypes] ("ctypes" for short) is a library for
