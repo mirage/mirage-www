@@ -327,6 +327,14 @@ it's scheduled for a future version.  As with the switch from dynamic
 to static bindings, we anticipate that updating existing bindings to
 use cross-process calls will be straightforward.
 
+This introductory post should give you a sense of the power of the unikernel
+approach in Mirage.  By turning the FFI into just another library (for the C
+interface description) and protocol (for the linkage model), we can use code
+generation to map application logic onto the privilege model most suitable for
+the target hardware platform.  This starts with Unix processes, continues onto Xen
+paravirtualization, and could even extend into [CHERI] fine-grained
+compartmentalization.
+
 ### Further examples
 
 Although ctypes is a fairly new library, it's already in use in a
@@ -356,3 +364,4 @@ available via the [home page][ocaml-ctypes].
 [rwo]: https://realworldocaml.org
 [xml-example-source]: https://github.com/yallop/ocaml-ctypes-expat-example
 [formatter]: http://caml.inria.fr/pub/docs/manual-ocaml/libref/Format.html#TYPEformatter
+[CHERI]: http://www.cl.cam.ac.uk/research/security/ctsrd/cheri/
