@@ -285,8 +285,8 @@ even for code that was originally written without parameterisation.
 Bindings written using early releases of ctypes used the dynamic
 strategy exclusively, since dynamic binding was then the only option
 available.  The commit logs for projects that switched over to static
-generation and linking (e.g. [1][lz4-cstubs-switch],
-[2][async-ssl-cstubs-switch]) when it became available show that
+generation and linking (e.g. [ocaml-lz4][lz4-cstubs-switch] and
+[async-ssl][async-ssl-cstubs-switch]) when it became available show that
 moving to the new approach involved only straightforward and localised
 changes.
 
