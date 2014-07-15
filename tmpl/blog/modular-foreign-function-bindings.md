@@ -254,13 +254,13 @@ end
 ```
 
 The `Bindings` module accepts a single parameter of type `FOREIGN`, which
-encodes the binding strategy to use.  Instantiating `Bindings` with the
-`foreign` function used above recovers the dynamically-constructed bindings
-that we've been using so far.  However, there are now other possibilities
-available.  In particular, we can instantiate `Bindings` with code generators
-that output code to expose the bound functions to OCaml.  The actual
-instantiation is hidden behind a couple of convenient functions, `write_c` and
-`write_ml`, which accept `Bindings` as a parameter:
+encodes the binding strategy to use.  Instantiating `Bindings` with a module
+containing the `foreign` function used above recovers the
+dynamically-constructed bindings that we've been using so far.  However, there
+are now other possibilities available.  In particular, we can instantiate
+`Bindings` with code generators that output code to expose the bound functions
+to OCaml.  The actual instantiation is hidden behind a couple of convenient
+functions, `write_c` and `write_ml`, which accept `Bindings` as a parameter:
 
 ```ocaml
 write_c formatter ~prefix:"expat" ~bindings:(module Bindings)
