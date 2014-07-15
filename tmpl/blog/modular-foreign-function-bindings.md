@@ -81,9 +81,11 @@ let xml_Parser = ptr parser_struct
 ```
 
 Next, we'll use the type representations to bind some functions.  The
-`XML_ParserCreate` and `XML_ParserFree` functions construct and destroy parser
-objects.  As with `puts`, each function binding involves a simple call to
-`foreign`:
+[`XML_ParserCreate`](http://www.xml.com/pub/a/1999/09/expat/reference.html#parsercreate)
+and
+[`XML_ParserFree`](http://www.xml.com/pub/a/1999/09/expat/reference.html#parserfree)
+functions construct and destroy parser objects.  As with `puts`, each
+function binding involves a simple call to `foreign`:
 
 ```ocaml
 let parser_create = foreign "XML_ParserCreate"
@@ -111,7 +113,7 @@ let end_handler =
 ```
 
 We can use the `start_handler` and `end_handler` type representations to bind
-`XML_SetElementHandler`, the callback-registration function:
+[`XML_SetElementHandler`](http://www.xml.com/pub/a/1999/09/expat/reference.html#elementhandler), the callback-registration function:
 
 ```ocaml
 let set_element_handler = foreign "XML_SetElementHandler"
@@ -129,9 +131,11 @@ val set_element_handler :
   (unit ptr -> string -> unit) -> unit
 ```
 
-There's one remaining function to bind, then we're ready to use the library.
-The `XML_Parse` function performs the actual parsing, invoking the callbacks
-when tags are encountered:
+There's one remaining function to bind, then we're ready to use the
+library.  The
+[`XML_Parse`](http://www.xml.com/pub/a/1999/09/expat/reference.html#parse)
+function performs the actual parsing, invoking the callbacks when tags
+are encountered:
 
 ```ocaml
 let parse = foreign "XML_Parse"
