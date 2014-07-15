@@ -221,10 +221,10 @@ There are three main drawbacks:
   the C function.
 
 * Dynamically constructing calls introduces a certain *interpretative
-  overhead*.  (The overhead is actually much less than might be supposed,
+  overhead*.  In mitigation, this overhead is much less than might be supposed,
   since much of the work can be done when the function is bound rather than
   when the call is made, and `foreign` has been used to bind C functions in
-  [performance-sensitive applications][tgls] without problems.)
+  [performance-sensitive applications][tgls] without problems.
 
 * The implementation of `foreign` uses a low-level library, [libffi][libffi],
   to deal with calling conventions across platforms.  While libffi is mature
@@ -321,11 +321,11 @@ ctypes means that privilege separation can be treated as one more
 linking strategy: we can run C code in an entirely separate process
 (or for Mirage/Xen, in a separate virtual machine), and instantiate
 `Bindings` with a strategy that forwards calls to the process using
-standard inter-process communication.  (The remote calling strategy is
+standard inter-process communication.  The remote calling strategy is
 not supported in the [current release][ctypes-0.3.2] of ctypes, but
 it's scheduled for a future version.  As with the switch from dynamic
 to static bindings, we anticipate that updating existing bindings to
-use cross-process calls will be straightforward.)
+use cross-process calls will be straightforward.
 
 ### Further examples
 
