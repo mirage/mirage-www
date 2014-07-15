@@ -80,6 +80,12 @@ module People = struct
     email     = Some "david.mersinjak@cl.cam.ac.uk";
   }
 
+  let yallop = {
+    Atom.name = "Jeremy Yallop";
+    uri       = Some "https://github.com/yallop";
+    email     = Some "jeremy.yallop@cl.cam.ac.uk";
+  }
+
 end
 
 let rights = Some "All rights reserved by the author"
@@ -221,6 +227,12 @@ module Blog = struct
         subject    = "OCaml-TLS: the protocol implementation and mitigations to known attacks";
         body       = "ocaml-tls-api-internals-attacks-mitigation.md";
         permalink  = "ocaml-tls-api-internals-attacks-mitigation";
+      };
+      { updated    = date (2014, 07, 15, 12, 0);
+        authors    = [yallop];
+        subject    = "Modular foreign function bindings";
+        body       = "modular-foreign-function-bindings.md";
+        permalink  = "modular-foreign-function-bindings";
       };
     ]
 end
