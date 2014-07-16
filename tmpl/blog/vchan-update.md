@@ -1,6 +1,6 @@
-This is an update to Vincent's
+Today's post is an update to [Vincent Bernardoff's](https://github.com/vbmithr)
 [introducing vchan](http://openmirage.org/blog/introducing-vchan) blog
-post, updated to use the new build system for mirage. I thought I'd
+post, updated to use the new build system for Mirage. I thought I'd
 also take the opportunity to describe the
 [Ubuntu-Trusty](http://releases.ubuntu.com/14.04/) environment for
 developing and running [Xen](http://www.xenproject.org/) unikernels.
@@ -8,8 +8,8 @@ developing and running [Xen](http://www.xenproject.org/) unikernels.
 ### Installing Xen on Ubuntu
 
 Ubuntu 14.04 has good support for running Xen 4.4, the most recent release (at time of writing).
-For running VMs, it's a good idea to install Ubuntu on an LVM volume rather than directly on a
-partition - this allows the use of LVs as the virtual disks for your VMs. On my system I have
+For running VMs it's a good idea to install Ubuntu on an LVM volume rather than directly on a
+partition, which allows the use of LVs as the virtual disks for your VMs. On my system I have
 a 40 Gig partition for '/', an 8 Gig swap partition and the rest is free for my VMs:
 
 ```
@@ -19,6 +19,7 @@ a 40 Gig partition for '/', an 8 Gig swap partition and the rest is free for my 
        swap_1 st28-vg -wi-ao---  7.99g
 ```
 
+In this particular walkthough I won't be using disks, but later posts will.
 Install Xen via the meta-package. This brings in all you will need to run VMs:
 
 ```
@@ -57,7 +58,7 @@ Once again, update-grub and reboot.
 
 ### Mirage
 
-Now lets get mirage up and running. Install ocaml, opam and set up the opam environment:
+Now lets get Mirage up and running. Install ocaml, opam and set up the opam environment:
 
 ```
     jludlam@st28:~$ sudo apt-get install ocaml opam ocaml-native-compilers
@@ -68,7 +69,7 @@ Now lets get mirage up and running. Install ocaml, opam and set up the opam envi
 ```
 
 Don't forget the `ocaml-native-compilers` - without this we can't
-compile the unikernels. Now we are almost ready to install mirage - we
+compile the unikernels. Now we are almost ready to install Mirage - we
 need two more dependencies, and then we're good to go.
 
 ```
@@ -81,13 +82,37 @@ unix variants of the xen-evtchn and xen-gnt libraries. Without these
 installing vchan will complain that there is no `xen-evtchn.lwt`
 library installed.
 
-This second line installs the various mirage and vchan libraries, but
+This second line installs the various Mirage and vchan libraries, but
 doesn't build the demo unikernel and unix cli, so to get them clone
 the ocaml-vchan repository:
 
 ```
     jludlam@st28:~$ git clone http://github.com/mirage/ocaml-vchan
 ```
+
+The demo unikernel is a very straightforward capitalizing echo server.
+The [main function](https://github.com/mirage/ocaml-vchan/blob/master/test/echo.ml#L13) simply consists of
+
+```
+    let (>>=) = Lwt.bind
+
+    let (>>|=) m f = m >>= function
+    | `Ok x -> f x
+    | `Eof -> Lwt.fail (Failure "End of file")
+    | `Error (`Not_connected state) -> Lwt.fail (Failure (Printf.sprintf "Not in a connected state: %s" (Sexplib.Sexp.to_string (Node.V.sexp_of_state state))))
+
+    let rec echo vch =
+        Node.V.read vch >>|= fun input_line ->
+        let line = String.uppercase (Cstruct.to_string input_line) in
+        let buf = Cstruct.create (String.length line) in
+        Cstruct.blit_from_string line 0 buf 0 (String.length line);
+        Node.V.write vch buf >>|= fun () ->
+        echo vch
+
+```
+
+where we've defined an error-handling monadic bind (```>>|=```) which
+is then used to sequence the read and write operations.
 
 Building the CLI is done simply via `make`.
 
