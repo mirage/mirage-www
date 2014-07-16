@@ -49,7 +49,7 @@ partition, which allows the use of LVs as the virtual disks for your VMs. On my 
 a 40 Gig partition for '/', an 8 Gig swap partition and the rest is free for my VMs:
 
 ```
-    jludlam@st28:~$ sudo lvs
+    $ sudo lvs
        LV     VG      Attr      LSize  Pool Origin Data%  Move Log Copy%  Convert
        root   st28-vg -wi-ao--- 37.25g
        swap_1 st28-vg -wi-ao---  7.99g
@@ -67,7 +67,7 @@ by default, but this is no longer necessary. Once the machine has rebooted, you
 should be able to verify you're running virtualized by invoking 'xl':
 
 ```
-    jludlam@st28:~$ sudo xl list
+    $ sudo xl list
 	Name                                        ID   Mem VCPUs      State   Time(s)
     Domain-0                                     0  7958     6     r-----       9.7
 ```
@@ -77,8 +77,8 @@ my dom0, so I'll need to either balloon down dom0 or reboot with a lower maximum
 memory. Ballooning is the most straightfoward:
 
 ```
-    jludlam@st28:~$ sudo xenstore-write /local/domain/0/memory/target 4096000
-    jludlam@st28:~$ sudo xl list
+    $ sudo xenstore-write /local/domain/0/memory/target 4096000
+    $ sudo xl list
     Name                                        ID   Mem VCPUs      State   Time(s)
     Domain-0                                     0  4000     6     r-----      12.2
 ```
@@ -97,54 +97,55 @@ Once again, update-grub and reboot.
 Now lets get Mirage up and running. Install ocaml, opam and set up the opam environment:
 
 ```
-    jludlam@st28:~$ sudo apt-get install ocaml opam ocaml-native-compilers
+	$ sudo apt-get install ocaml opam ocaml-native-compilers camlp4-extra
 	...
-	jludlam@st28:~$ opam init
+	$ opam init
 	...
-	jludlam@st28:~$ eval `opam config env`
+	$ eval `opam config env`
 ```
 
-Don't forget the `ocaml-native-compilers` - without this we can't
-compile the unikernels. Now we are almost ready to install Mirage - we
+Don't forget the `ocaml-native-compilers`, as without this we can't
+compile the unikernels. Now we are almost ready to install Mirage; we
 need two more dependencies, and then we're good to go.
 
 ```
-    jludlam@st28:~$ sudo apt-get install m4 libxen-dev
-    jludlam@st28:~$ opam install mirage mirage-xen mirage-unix vchan
+    $ sudo apt-get install m4 libxen-dev
+    $ opam install mirage mirage-xen mirage-unix vchan
 ```
 
-Where m4 is for ocamlfind, and libxen-dev is required to compile the
-unix variants of the xen-evtchn and xen-gnt libraries. Without these
+Where `m4` is for ocamlfind, and `libxen-dev` is required to compile the
+unix variants of the `xen-evtchn` and `xen-gnt` libraries. Without these
 installing vchan will complain that there is no `xen-evtchn.lwt`
 library installed.
 
 This second line installs the various Mirage and vchan libraries, but
-doesn't build the demo unikernel and unix cli, so to get them clone
+doesn't build the demo unikernel and Unix CLI.  To get them, clone
 the ocaml-vchan repository:
 
 ```
-    jludlam@st28:~$ git clone http://github.com/mirage/ocaml-vchan
+    $ git clone https://github.com/mirage/ocaml-vchan
 ```
 
 The demo unikernel is a very straightforward capitalizing echo server.
 The [main function](https://github.com/mirage/ocaml-vchan/blob/master/test/echo.ml#L13) simply consists of
 
 ```
-    let (>>=) = Lwt.bind
+let (>>=) = Lwt.bind
 
-    let (>>|=) m f = m >>= function
-    | `Ok x -> f x
-    | `Eof -> Lwt.fail (Failure "End of file")
-    | `Error (`Not_connected state) -> Lwt.fail (Failure (Printf.sprintf "Not in a connected state: %s" (Sexplib.Sexp.to_string (Node.V.sexp_of_state state))))
+let (>>|=) m f = m >>= function
+| `Ok x -> f x
+| `Eof -> Lwt.fail (Failure "End of file")
+| `Error (`Not_connected state) ->
+    Lwt.fail (Failure (Printf.sprintf "Not in a connected state: %s"
+      (Sexplib.Sexp.to_string (Node.V.sexp_of_state state))))
 
-    let rec echo vch =
-        Node.V.read vch >>|= fun input_line ->
-        let line = String.uppercase (Cstruct.to_string input_line) in
-        let buf = Cstruct.create (String.length line) in
-        Cstruct.blit_from_string line 0 buf 0 (String.length line);
-        Node.V.write vch buf >>|= fun () ->
-        echo vch
-
+let rec echo vch =
+  Node.V.read vch >>|= fun input_line ->
+  let line = String.uppercase (Cstruct.to_string input_line) in
+  let buf = Cstruct.create (String.length line) in
+  Cstruct.blit_from_string line 0 buf 0 (String.length line);
+  Node.V.write vch buf >>|= fun () ->
+  echo vch
 ```
 
 where we've defined an error-handling monadic bind (```>>|=```) which
@@ -153,26 +154,25 @@ is then used to sequence the read and write operations.
 Building the CLI is done simply via `make`.
 
 ```
-    jludlam@st28:~/ocaml-vchan$ make
-    ...
-    jludlam@st28:~/ocaml-vchan$ ls -l node_cli.native
-	lrwxrwxrwx 1 jludlam jludlam 52 Jul 14 14:56 node_cli.native -> /home/jludlam/ocaml-vchan/_build/cli/node_cli.native
-	
+$ make
+  ...
+$ ls -l node_cli.native
+lrwxrwxrwx 1 jludlam jludlam 52 Jul 14 14:56 node_cli.native -> /home/jludlam/ocaml-vchan/_build/cli/node_cli.native
 ```
 
 Building the unikernel is done via the `mirage` tool:
 
 ```
-    jludlam@st28:~/ocaml-vchan$ cd test
-    jludlam@st28:~/ocaml-vchan$ mirage configure --xen
-    ...
-    jludlam@st28:~/ocaml-vchan$ make depend
-    ...
-    jludlam@st28:~/ocaml-vchan$ make
-    ...
-    jludlam@st28:~/ocaml-vchan/test$ ls -l mir-echo.xen echo.xl
-    -rw-rw-r-- 1 jludlam jludlam     596 Jul 14 14:58 echo.xl
-    -rwxrwxr-x 1 jludlam jludlam 3803982 Jul 14 14:59 mir-echo.xen
+$ cd test
+$ mirage configure --xen
+...
+$ make depend
+...
+$ make
+...
+$ ls -l mir-echo.xen echo.xl
+-rw-rw-r-- 1 jludlam jludlam     596 Jul 14 14:58 echo.xl
+-rwxrwxr-x 1 jludlam jludlam 3803982 Jul 14 14:59 mir-echo.xen
 ```
 
 This make both the unikernel binary (the mir-echo.xen file) and a convenient
@@ -180,7 +180,7 @@ xl script to run it. To run, we use the xl tool, passing '-c' to connect
 directly to the console so we can see what's going on:
 
 ```
-    jludlam@st28:~/ocaml-vchan/test$ sudo xl create -c echo.xl
+$ sudo xl create -c echo.xl
 	Parsing config from echo.xl
 	kernel.c: Mirage OS!
 	kernel.c:   start_info: 0x11cd000(VA)
@@ -236,7 +236,7 @@ unikernel server is hard-coded to talk to domain 0, so we only need to
 know the domain ID of our echo server. In another terminal,
 
 ```
-    jludlam@st28:~/ocaml-vchan/test$ sudo xl list
+    $ sudo xl list
     Name                                        ID   Mem VCPUs      State   Time(s)
     Domain-0                                     0  4095     6     r-----    1602.9
     echo                                         2   256     1     -b----       0.0
@@ -245,7 +245,7 @@ know the domain ID of our echo server. In another terminal,
 In this case, the domain ID is 2, so we invoke the CLI as follows:
 
 ```
-    jludlam@st28:~/ocaml-vchan$ sudo ./node_cli.native 2
+    $ sudo ./node_cli.native 2
 	Client initializing: Received gntref = 8, evtchn = 4
 	Mapped the ring shared page:
 
