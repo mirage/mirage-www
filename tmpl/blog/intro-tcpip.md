@@ -1,23 +1,6 @@
-A critical part of any unikernel is its network stack -- it's difficult to think of a project that needs a cloud platform or runs on a set-top box with no network communications. Mirage provides a number of module types that abstract interfaces at different layers of the network stack, allowing unikernels to assemble their own network stack, customised to their own needs. Depending on the abstractions your unikernel uses, you can fulfil these abstract interfaces with implementations ranging from the native Unix Sockets API to the native OCaml Mirage TCP/IP stack.
+A critical part of any unikernel is its network stack -- it's difficult to think of a project that needs a cloud platform or runs on a set-top box with no network communications. Mirage provides a number of module types that abstract interfaces at different layers of the network stack, allowing unikernels to assemble their own network stack, customised to their own needs. Depending on the abstractions your unikernel uses, you can fulfill these abstract interfaces with implementations ranging from the native Unix Sockets API to the native OCaml Mirage TCP/IP stack.
 
-```
-$ grep "module type" V1_LWT.mli 
-module type TIME = TIME
-module type FLOW = FLOW
-module type NETWORK = NETWORK
-module type ETHIF = ETHIF
-module type IPV4 = IPV4
-module type UDPV4 = UDPV4
-module type TCPV4 = TCPV4
-module type CHANNEL = CHANNEL
-module type KV_RO = KV_RO
-module type CONSOLE = CONSOLE
-module type BLOCK = BLOCK
-module type FS = FS
-module type STACKV4 = STACKV4
-```
-
-Of 13 such module types, 6 comprise the network stack (and `CHANNEL` is usable in the context of the network stack as well).  A Mirage unikernel will not use all these interfaces, but will pick those that are appropriate. For example, if your unikernel just needs a standard TCP/IP stack, the `STACKV4` abstraction will be sufficient. However, if you want more control over the implementation of the different layers in the stack or you don't need TCP support, you might construct your stack by hand using just the `NETWORK`, `ETHIF`, `IPV4` and `UDPV4` interfaces.
+A Mirage unikernel will not use all these interfaces, but will pick those that are appropriate. For example, if your unikernel just needs a standard TCP/IP stack, the `STACKV4` abstraction will be sufficient. However, if you want more control over the implementation of the different layers in the stack or you don't need TCP support, you might construct your stack by hand using just the `NETWORK`, `ETHIF`, `IPV4` and `UDPV4` interfaces.
 
 ## How a Stack Looks to a Mirage Application
 
@@ -84,7 +67,7 @@ module STACKV4_socket: CONFIGURABLE with
 
 `socket` implementations rely on an underlying operating system to provide the transport, network, and data link layers, and therefore can't be used for a Xen guest VM deployment.  Currently, the only way to use `socket` is by configuring your Mirage project for Unix with `mirage configure --unix`.
 
-There are a few Mirage functions which provide an interface to network operations usable from your application code (a type of `stack impl`).  The `stack impl` is generated in `config.ml` by some logic set when the program is `mirage configure`'d - often by matching an environment variable.  This means it's easy to flip between different `stack impl`s when developing an application.  The `config.ml` below allows the developer to build socket code with `NET=socket make` and direct code with `NET=direct make`.
+There are a few Mirage functions which provide an interface to network operations (of type `stackv4 impl`), usable from your application code.  The `stackv4 impl` is generated in `config.ml` by some logic set when the program is `mirage configure`'d - often by matching an environment variable.  This means it's easy to flip between different `stackv4 impl`s when developing an application.  The `config.ml` below allows the developer to build socket code with `NET=socket make` and direct code with `NET=direct make`.
 
 ```OCaml
 let main = foreign "Services.Main" (console @-> stackv4 @-> job)
@@ -197,4 +180,4 @@ An OCaml HTTP server, [Cohttp](http://www.github.com/mirage/ocaml-cohttp), is cu
 
 ## The future
 
-Mirage's TCP/IP stack is still evolving!  Some low-level details are still stubbed out, and we're working on implementing some of the trickier corners of TCP.  There are few automated tests for the stack and they're not currently integrated into the workflow for testing `mirage-tcpip`.  IPv6 support is also on the horizon.
+Mirage's TCP/IP stack is under active development!  [Some low-level details](https://github.com/mirage/mirage-tcpip/search?q=TODO&ref=cmdform) are still stubbed out, and we're working on implementing some of the trickier corners of TCP, as well as [doing automated testing](http://somerandomidiot.com/blog/2014/05/22/throwing-some-fuzzy-dice/) on the stack.  We welcome testing tools, bug reports, bug fixes, and new protocol implementations!  
