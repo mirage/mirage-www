@@ -256,7 +256,13 @@ module Blog = struct
         subject    = "Introducing Irmin: Git-like distributed, branchable storage";
         body       = "introducing-irmin.md";
         permalink  = "introducing-irmin";
-      }
+      };
+      { updated    = date (2014, 07, 19, 12, 0);
+        authors    = [dave];
+        subject    = "Introducting Irmin in Xenstore";
+        body       = "introducing-irmin-in-xenstore.md";
+        permalink  = "introducing-irmin-in-xenstore";
+      };
     ]
 end
 
