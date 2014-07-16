@@ -1,4 +1,4 @@
-Mirage provides a number of module types for abstracting interfaces to various devices that an application or unikernel might need.
+A critical part of any unikernel is its network stack -- it's difficult to think of a project that needs a cloud platform or runs on a set-top box with no network communications. Mirage provides a number of module types that abstract interfaces at different layers of the network stack, allowing unikernels to assemble their own network stack, customised to their own needs. Depending on the abstractions your unikernel uses, you can fulfil these abstract interfaces with implementations ranging from the native Unix Sockets API to the native OCaml Mirage TCP/IP stack.
 
 ```
 $ grep "module type" V1_LWT.mli 
@@ -17,7 +17,7 @@ module type FS = FS
 module type STACKV4 = STACKV4
 ```
 
-Of 13 such module types, 6 comprise the network stack (and `CHANNEL` is usable in the context of the network stack as well).  The network stack's primacy among Mirage's concerns is no accident - it's difficult to think of a project that needs a cloud platform, but no network communications.
+Of 13 such module types, 6 comprise the network stack (and `CHANNEL` is usable in the context of the network stack as well).  A Mirage unikernel will not use all these interfaces, but will pick those that are appropriate. For example, if your unikernel just needs a standard TCP/IP stack, the `STACKV4` abstraction will be sufficient. However, if you want more control over the implementation of the different layers in the stack or you don't need TCP support, you might construct your stack by hand using just the `NETWORK`, `ETHIF`, `IPV4` and `UDPV4` interfaces.
 
 ## How a Stack Looks to a Mirage Application
 
