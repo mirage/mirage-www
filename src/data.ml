@@ -234,6 +234,12 @@ module Blog = struct
         body       = "modular-foreign-function-bindings.md";
         permalink  = "modular-foreign-function-bindings";
       };
+      { updated    = date (2014, 07, 16, 12, 0);
+        authors    = [jonludlam];
+        subject    = "Update on Vchan"
+        body       = "update-on-vchan.md";
+        permalink  = "update-on-vchan";
+      };
     ]
 end
 
