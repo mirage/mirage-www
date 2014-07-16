@@ -236,7 +236,7 @@ module Blog = struct
       };
       { updated    = date (2014, 07, 16, 12, 0);
         authors    = [jonludlam];
-        subject    = "Update on Vchan";
+        subject    = "Vchan: Low-latency inter-VM communication channels";
         body       = "update-on-vchan.md";
         permalink  = "update-on-vchan";
       };
