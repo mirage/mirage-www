@@ -239,12 +239,18 @@ module Blog = struct
         body       = "modular-foreign-function-bindings.md";
         permalink  = "modular-foreign-function-bindings";
       };
+      { updated    = date (2014, 07, 16, 12, 0);
+        authors    = [jonludlam];
+        subject    = "Vchan: Low-latency inter-VM communication channels";
+        body       = "update-on-vchan.md";
+        permalink  = "update-on-vchan";
+      };
       { updated    = date (2014, 07, 17, 13, 0);
         authors    = [yomimono];
         subject    = "Introduction to Mirage's TCP/IP stack";
         body       = "intro-tcpip.md";
         permalink  = "intro-tcpip";
-      };
+      }
     ]
 end
 
