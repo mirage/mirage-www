@@ -48,7 +48,7 @@ For running VMs it's a good idea to install Ubuntu on an LVM volume rather than 
 partition, which allows the use of LVs as the virtual disks for your VMs. On my system I have
 a 40 Gig partition for '/', an 8 Gig swap partition and the rest is free for my VMs:
 
-```
+```console
     $ sudo lvs
        LV     VG      Attr      LSize  Pool Origin Data%  Move Log Copy%  Convert
        root   st28-vg -wi-ao--- 37.25g
@@ -58,15 +58,15 @@ a 40 Gig partition for '/', an 8 Gig swap partition and the rest is free for my 
 In this particular walkthough I won't be using disks, but later posts will.
 Install Xen via the meta-package. This brings in all you will need to run VMs:
 
-```
-    jludlam@st28:~$ sudo apt-get install xen-system-amd64
+```console
+    $ sudo apt-get install xen-system-amd64
 ```
 
 It used to be necessary to reorder the grub entries to make sure Xen was started
 by default, but this is no longer necessary. Once the machine has rebooted, you
 should be able to verify you're running virtualized by invoking 'xl':
 
-```
+```console
     $ sudo xl list
 	Name                                        ID   Mem VCPUs      State   Time(s)
     Domain-0                                     0  7958     6     r-----       9.7
@@ -76,7 +76,7 @@ My machine has 8 Gigs of memory, and this list shows that it's all being used by
 my dom0, so I'll need to either balloon down dom0 or reboot with a lower maximum
 memory. Ballooning is the most straightfoward:
 
-```
+```console
     $ sudo xenstore-write /local/domain/0/memory/target 4096000
     $ sudo xl list
     Name                                        ID   Mem VCPUs      State   Time(s)
@@ -86,7 +86,7 @@ memory. Ballooning is the most straightfoward:
 This is handy for quick testing, but is [discouraged](http://wiki.xenproject.org/wiki/Xen_Project_Best_Practices) by the Xen folks. So alternatively, change the xen command line by
 editing `/etc/default/grub` and add the line:
 
-```
+```console
     GRUB_CMDLINE_XEN_DEFAULT="dom0_mem=4096M,max:4096M"
 ```
 
@@ -96,7 +96,7 @@ Once again, update-grub and reboot.
 
 Now lets get Mirage up and running. Install ocaml, opam and set up the opam environment:
 
-```
+```console
 	$ sudo apt-get install ocaml opam ocaml-native-compilers camlp4-extra
 	...
 	$ opam init
@@ -108,7 +108,7 @@ Don't forget the `ocaml-native-compilers`, as without this we can't
 compile the unikernels. Now we are almost ready to install Mirage; we
 need two more dependencies, and then we're good to go.
 
-```
+```console
     $ sudo apt-get install m4 libxen-dev
     $ opam install mirage mirage-xen mirage-unix vchan
 ```
@@ -122,14 +122,14 @@ This second line installs the various Mirage and vchan libraries, but
 doesn't build the demo unikernel and Unix CLI.  To get them, clone
 the ocaml-vchan repository:
 
-```
+```console
     $ git clone https://github.com/mirage/ocaml-vchan
 ```
 
 The demo unikernel is a very straightforward capitalizing echo server.
 The [main function](https://github.com/mirage/ocaml-vchan/blob/master/test/echo.ml#L13) simply consists of
 
-```
+```ocaml
 let (>>=) = Lwt.bind
 
 let (>>|=) m f = m >>= function
@@ -153,7 +153,7 @@ is then used to sequence the read and write operations.
 
 Building the CLI is done simply via `make`.
 
-```
+```console
 $ make
   ...
 $ ls -l node_cli.native
@@ -162,7 +162,7 @@ lrwxrwxrwx 1 jludlam jludlam 52 Jul 14 14:56 node_cli.native -> /home/jludlam/oc
 
 Building the unikernel is done via the `mirage` tool:
 
-```
+```console
 $ cd test
 $ mirage configure --xen
 ...
@@ -179,7 +179,7 @@ This make both the unikernel binary (the mir-echo.xen file) and a convenient
 xl script to run it. To run, we use the xl tool, passing '-c' to connect
 directly to the console so we can see what's going on:
 
-```
+```console
 $ sudo xl create -c echo.xl
 	Parsing config from echo.xl
 	kernel.c: Mirage OS!
@@ -235,7 +235,7 @@ client and server in order to set up the communications. The test
 unikernel server is hard-coded to talk to domain 0, so we only need to
 know the domain ID of our echo server. In another terminal,
 
-```
+```console
     $ sudo xl list
     Name                                        ID   Mem VCPUs      State   Time(s)
     Domain-0                                     0  4095     6     r-----    1602.9
@@ -244,7 +244,7 @@ know the domain ID of our echo server. In another terminal,
 
 In this case, the domain ID is 2, so we invoke the CLI as follows:
 
-```
+```console
     $ sudo ./node_cli.native 2
 	Client initializing: Received gntref = 8, evtchn = 4
 	Mapped the ring shared page:
@@ -258,15 +258,15 @@ In this case, the domain ID is 2, so we invoke the CLI as follows:
 We're now connected via vchan to the Mirage domain. The test server
 is simply a capitalisation service:
 
-```
+```console
     hello from dom0
 	HELLO FROM DOM0
 ```
 
 Ctrl-C to get out of the CLI, and destroy the domain with an `xl destroy`:
 
-```
-    jludlam@st28:~/ocaml-vchan$ sudo xl destroy test
+```console
+    $ sudo xl destroy test
 ```
 
 `vchan` is a very low-level communication mechanism, and so our next post on
