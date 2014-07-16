@@ -67,7 +67,7 @@ module STACKV4_socket: CONFIGURABLE with
 
 `socket` implementations rely on an underlying operating system to provide the transport, network, and data link layers, and therefore can't be used for a Xen guest VM deployment.  Currently, the only way to use `socket` is by configuring your Mirage project for Unix with `mirage configure --unix`.
 
-There are a few Mirage functions which provide an interface to network operations (of type `stackv4 impl`), usable from your application code.  The `stackv4 impl` is generated in `config.ml` by some logic set when the program is `mirage configure`'d - often by matching an environment variable.  This means it's easy to flip between different `stackv4 impl`s when developing an application.  The `config.ml` below allows the developer to build socket code with `NET=socket make` and direct code with `NET=direct make`.
+There are a few Mirage functions that provide IPv4 (and UDP/TCP) stack implementations (of type `stackv4 impl`), usable from your application code.  The `stackv4 impl` is generated in `config.ml` by some logic set when the program is `mirage configure`'d - often by matching an environment variable.  This means it's easy to flip between different `stackv4 impl`s when developing an application.  The `config.ml` below allows the developer to build socket code with `NET=socket make` and direct code with `NET=direct make`.
 
 ```OCaml
 let main = foreign "Services.Main" (console @-> stackv4 @-> job)
