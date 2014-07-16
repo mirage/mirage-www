@@ -1,9 +1,45 @@
-Today's post is an update to [Vincent Bernardoff's](https://github.com/vbmithr)
+*Today's post is an update to [Vincent Bernardoff's](https://github.com/vbmithr)
 [introducing vchan](http://openmirage.org/blog/introducing-vchan) blog
-post, updated to use the new build system for Mirage. I thought I'd
-also take the opportunity to describe the
-[Ubuntu-Trusty](http://releases.ubuntu.com/14.04/) environment for
-developing and running [Xen](http://www.xenproject.org/) unikernels.
+post, updated to use the modern build scheme for Mirage.*
+
+Unless you are familiar with Xen's source code, there is little chance
+that you've ever heard of the *vchan* library or
+protocol. Documentation about it is very scarce: a description can be
+found on vchan's
+[public header file](http://xenbits.xen.org/gitweb/?p=xen.git;a=blob;f=xen/include/public/io/libxenvchan.h;hb=HEAD),
+that I quote here for convenience:
+
+> Originally borrowed from the
+> [Qubes OS Project](http://www.qubes-os.org), this code (i.e. libvchan)
+> has been substantially rewritten [...]
+> This is a library for inter-domain communication.  A standard Xen ring
+> buffer is used, with a datagram-based interface built on top.  The
+> grant reference and event channels are shared in XenStore under a
+> user-specified path.
+
+This protocol uses shared memory for inter-domain communication,
+i.e. between two VMs residing in the same Xen host, and uses Xen's
+mechanisms -- more specifically,
+[ring buffers](http://www.informit.com/articles/article.aspx?p=1160234&seqNum=3)
+and
+[event channels](http://xenbits.xen.org/gitweb/?p=xen.git;a=blob;f=tools/libxc/xenctrl.h;h=f2cebafc9ddd4815ffc73fcf9e0d292b1d4c91ff;hb=HEAD#l934)
+-- in order to achieve its aims. The term *datagram-based interface* simply
+means that the
+[interface](http://xenbits.xen.org/gitweb/?p=xen.git;a=blob;f=tools/libvchan/libxenvchan.h;h=6365d36a06f8c8f56454724cefc4c2f1d39beba2;hb=HEAD)
+resembles UDP, although there is support for stream based communication (like
+TCP) as well.
+
+The `vchan` protocol is an important feature in MirageOS 2.0 since it
+forms the foundational communication mechanism for **building distributed
+clusters of unikernels** that cooperate to solve problems that are beyond
+the power of a single node.  Instead of forcing communication between
+nodes via a conventional wire protocol like TCP, it permits highly efficient
+low-overhead communication to nodes that are colocated on the same Xen
+host machine.
+
+Before diving into vchan, I thought I'd also take the opportunity to describe the
+[Ubuntu-Trusty](http://releases.ubuntu.com/14.04/) environment for developing
+and running [Xen](http://www.xenproject.org/) unikernels.
 
 ### Installing Xen on Ubuntu
 
@@ -233,5 +269,7 @@ Ctrl-C to get out of the CLI, and destroy the domain with an `xl destroy`:
     jludlam@st28:~/ocaml-vchan$ sudo xl destroy test
 ```
 
-
-
+`vchan` is a very low-level communication mechanism, and so our next post on
+this topic will address how to use it in combination with a name resolver
+to intelligently map connection requests to use `vchan` if available, and
+otherwise fall back to normal TCP or TCP+TLS.
