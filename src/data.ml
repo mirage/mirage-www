@@ -247,7 +247,7 @@ module Blog = struct
       };
       { updated    = date (2014, 07, 17, 13, 0);
         authors    = [yomimono];
-        subject    = "Introduction to Mirage's TCP/IP stack";
+        subject    = "Fitting the modular Mirage TCP/IP stack together";
         body       = "intro-tcpip.md";
         permalink  = "intro-tcpip";
       }
