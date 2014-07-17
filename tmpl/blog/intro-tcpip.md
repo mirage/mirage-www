@@ -1,10 +1,30 @@
-A critical part of any unikernel is its network stack -- it's difficult to think of a project that needs a cloud platform or runs on a set-top box with no network communications. Mirage provides a number of module types that abstract interfaces at different layers of the network stack, allowing unikernels to assemble their own network stack, customised to their own needs. Depending on the abstractions your unikernel uses, you can fulfill these abstract interfaces with implementations ranging from the venerable and much-imitated Unix sockets API to a clean-slate OCaml Mirage TCP/IP stack.
+A critical part of any unikernel is its network stack -- it's difficult to
+think of a project that needs a cloud platform or runs on a set-top box with no
+network communications.
 
-A Mirage unikernel will not use all these interfaces, but will pick those that are appropriate. For example, if your unikernel just needs a standard TCP/IP stack, the `STACKV4` abstraction will be sufficient. However, if you want more control over the implementation of the different layers in the stack or you don't need TCP support, you might construct your stack by hand using just the `NETWORK`, `ETHIF`, `IPV4` and `UDPV4` interfaces.
+Mirage provides a number of [module
+types](https://github.com/mirage/mirage/tree/master/types) that abstract
+interfaces at different layers of the network stack, allowing unikernels to
+customise their own stack based on their deployment needs. Depending on the
+abstractions your unikernel uses, you can fulfill these abstract interfaces
+with implementations ranging from the venerable and much-imitated Unix sockets
+API to a clean-slate Mirage [TCP/IP
+stack](https://github.com/mirage/mirage-tcpip) written from the ground up in
+pure OCaml!
+
+A Mirage unikernel will not use *all* these interfaces, but will pick those that
+are appropriate for the particular application at hand. If your unikernel just
+needs a standard TCP/IP stack, the `STACKV4` abstraction will be sufficient.
+However, if you want more control over the implementation of the different
+layers in the stack or you don't need TCP support, you might construct your
+stack by hand using just the [NETWORK](https://github.com/mirage/mirage/blob/8b59fbf0b223b3c5c70d4939b5674ecdd7521804/types/V1.mli#L263), [ETHIF](https://github.com/mirage/mirage/blob/8b59fbf0b223b3c5c70d4939b5674ecdd7521804/types/V1.mli#L316), [IPV4](https://github.com/mirage/mirage/blob/8b59fbf0b223b3c5c70d4939b5674ecdd7521804/types/V1.mli#L368) and [UDPV4](https://github.com/mirage/mirage/blob/8b59fbf0b223b3c5c70d4939b5674ecdd7521804/types/V1.mli#L457) interfaces.
 
 ## How a Stack Looks to a Mirage Application
 
-Mirage provides an interface to a network stack through the module type `STACKV4`.  (Currently this can be included with `open V1_LWT`, but soon `open V2_LWT` will also bring this module type into scope as well.)
+Mirage provides a high-level interface to a TCP/IP network stack through the module type
+[STACKV4](https://github.com/mirage/mirage/blob/8b59fbf0b223b3c5c70d4939b5674ecdd7521804/types/V1.mli#L581).
+(Currently this can be included with `open V1_LWT`, but soon `open
+V2_LWT` will also bring this module type into scope as well when Mirage 2.0 is released.)
 
 ```OCaml
 (** Single network stack *)                                                     
@@ -15,7 +35,7 @@ module type STACKV4 = STACKV4
    and type buffer = Cstruct.t 
 ```
 
-`STACKV4` has a useful high-level functions, a subset of which are reproduced below:
+`STACKV4` has useful high-level functions, a subset of which are reproduced below:
 
 ```OCaml
     val listen_udpv4 : t -> port:int -> UDPV4.callback -> unit
@@ -50,9 +70,22 @@ as well as submodules that include functions for data transmission:
         val input : t -> listeners:(int -> callback option) -> ipv4input
 ```
 
+These should look rather familiar if you've used the Unix sockets
+API before, with one notable difference: the stack accepts functional
+callbacks to react to events such as a new connection request.  This
+permits callers of the library to define the precise datastructures that
+are used to store intermediate state (such as active connections).
+This becomes important when building very scalable systems that have
+to deal with [lots of concurrent connections](https://en.wikipedia.org/wiki/C10k_problem)
+efficiently.
+
 ## Configuring a Stack
 
-There are currently two implementations for `STACKV4` - `direct` and `socket`.
+The `STACKV4` signature shown so far is just a module signature, and you
+need to find a concrete module that satisfies that signature.  The known
+implementations of a module can be found in the `mirage` CLI frontend,
+which provids the [configuration API](https://github.com/mirage/mirage/blob/8b59fbf0b223b3c5c70d4939b5674ecdd7521804/lib/mirage.mli#L266) for unikernels.  
+There are currently two implementations for `STACKV4`: `direct` and `socket`.
 
 ```OCaml
 module STACKV4_direct: CONFIGURABLE with                                        
@@ -62,12 +95,30 @@ module STACKV4_socket: CONFIGURABLE with
   type t = console impl * Ipaddr.V4.t list  
 ```
 
-`direct` implementations use the `mirage-tcpip` implementations of the transport, network, and data link layers.
-`direct` will work with either a Xen guest VM (provided there's a valid network configuration for the unikernel's running environment), or a Unix program if there's a valid `nettap` interface.  `direct` works with both `mirage configure --xen` and `mirage configure --unix` as long as there is a corresponding available device.
+The `socket` implementations rely on an underlying OS kernel to provide the
+transport, network, and data link layers, and therefore can't be used for a Xen
+guest VM deployment.  Currently, the only way to use `socket` is by configuring
+your Mirage project for Unix with `mirage configure --unix`.  This is the mode
+you will most often use when developing high-level application logic that doesn't
+need to delve into the innards of the network stack (e.g. a REST website).
 
-`socket` implementations rely on an underlying operating system to provide the transport, network, and data link layers, and therefore can't be used for a Xen guest VM deployment.  Currently, the only way to use `socket` is by configuring your Mirage project for Unix with `mirage configure --unix`.
+The `direct` implementations use the [mirage-tcpip](https://github.com/mirage/mirage-tcpip) implementations of the
+transport, network, and data link layers.  When you use this stack, all the network
+traffic from the Ethernet level up will be handled in pure OCaml.  This means that the
+`direct` stack will work with either a Xen
+guest VM (provided there's a valid network configuration for the unikernel's
+running environment of course), or a Unix program if there's a valid [tuntap](https://en.wikipedia.org/wiki/TUN/TAP) interface.
+`direct` this works with both `mirage configure --xen` and `mirage configure --unix`
+as long as there is a corresponding available device when the unikernel is run.
 
-There are a few Mirage functions that provide IPv4 (and UDP/TCP) stack implementations (of type `stackv4 impl`), usable from your application code.  The `stackv4 impl` is generated in `config.ml` by some logic set when the program is `mirage configure`'d - often by matching an environment variable.  This means it's easy to flip between different `stackv4 impl`s when developing an application.  The `config.ml` below allows the developer to build socket code with `NET=socket make` and direct code with `NET=direct make`.
+There are a few Mirage functions that provide IPv4 (and UDP/TCP) stack
+implementations (of type `stackv4 impl`), usable from your application code.
+The `stackv4 impl` is generated in `config.ml` by some logic set when the
+program is `mirage configure`'d - often by matching an environment variable.
+This means it's easy to flip between different stack implementations when
+developing an application just be recompiling the application.  The `config.ml`
+below allows the developer to build socket code with `NET=socket make` and
+direct code with `NET=direct make`.
 
 ```OCaml
 let main = foreign "Services.Main" (console @-> stackv4 @-> job)
@@ -98,7 +149,12 @@ let () =
   ]
 ```
 
-Moreover, it's possible to configure multiple stacks individually for use in the same program, and to `register` multiple modules from the same `config.ml`.  This means functions can be written such that they're aware of the network stack they ought to be using, and no other - a far cry from developing network code over most socket interfaces, where it can be quite difficult to separate concerns nicely.
+Moreover, it's possible to configure multiple stacks individually for use in
+the same program, and to `register` multiple modules from the same `config.ml`.
+This means functions can be written such that they're aware of the network
+stack they ought to be using, and no other - a far cry from developing network
+code over most socket interfaces, where it can be quite difficult to separate
+concerns nicely.
 
 ```OCaml
 let client = foreign "Unikernel.Client" (console @-> stackv4 @-> job)
@@ -120,13 +176,23 @@ let () =
 
 ## Acting on Stacks
 
-Most network applications will either want to listen for incoming connections and respond to that traffic with information, or to connect to some remote host, execute a query, and recieve information.  `STACKV4` offers simple ways to define functions implementing either of these patterns.
+Most network applications will either want to listen for incoming connections
+and respond to that traffic with information, or to connect to some remote
+host, execute a query, and receive information.  `STACKV4` offers simple ways
+to define functions implementing either of these patterns.
 
 ### Establishing and Communicating Across Connections
 
-`STACKV4` offers `listen_tcpv4` and `listen_udpv4` functions for establishing listeners on specific ports.  Both take a `stack impl`, a named `port`, and a `callback` function.  
+`STACKV4` offers `listen_tcpv4` and `listen_udpv4` functions for establishing
+listeners on specific ports.  Both take a `stack impl`, a named `port`, and a
+`callback` function.  
 
-For UDP listeners, which are datagram-based rather than connection-based, `callback` is a function of the source IP, destination IP, source port, and the `Cstruct.t` that contains the payload data.  Applications that wish to respond to incoming UDP packets with their own UDP responses (e.g., DNS servers) can use this information to construct reply packets and send them with `UDPV4.write` from within the callback function.
+For UDP listeners, which are datagram-based rather than connection-based,
+`callback` is a function of the source IP, destination IP, source port, and the
+`Cstruct.t` that contains the payload data.  Applications that wish to respond
+to incoming UDP packets with their own UDP responses (e.g., DNS servers) can
+use this information to construct reply packets and send them with
+`UDPV4.write` from within the callback function.
 
 For TCP listeners, `callback` is a function of `TCPV4.flow -> unit Lwt.t`.  `STACKV4.TCPV4` offers `read`, `write`, and `close` on `flow`s for application writers to build higher-level protocols on top of. 
 
@@ -136,7 +202,7 @@ For TCP listeners, `callback` is a function of `TCPV4.flow -> unit Lwt.t`.  `STA
 
 Some very simple examples of user-level TCP code are included in [mirage-tcpip/examples](https://github.com/mirage/mirage-tcpip/tree/master/examples).  `config.ml` is identical to the first configuration example above, and will build a `direct` stack by default.
 
-Imagine a very simple application - one which simply repeats any data back to the sender, until the sender gets bored and wanders off.
+Imagine a very simple application - one which simply repeats any data back to the sender, until the sender gets bored and wanders off ([RFC 862](https://en.wikipedia.org/wiki/Echo_Protocol), for the curious).
 
 ```OCaml
 open Lwt
