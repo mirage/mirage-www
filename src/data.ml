@@ -250,6 +250,12 @@ module Blog = struct
         subject    = "Fitting the modular Mirage TCP/IP stack together";
         body       = "intro-tcpip.md";
         permalink  = "intro-tcpip";
+      };
+      { updated    = date (2014, 07, 21, 13, 0);
+        authors    = [thomas];
+        subject    = "Irmin: a Git-like distributed database";
+        body       = "introducing-irmin.md";
+        permalink  = "introducing-irmin";
       }
     ]
 end
@@ -511,7 +517,7 @@ module Links = struct
       date=day(2014,04,08);
       stream=blog;
     };
-    
+
     { id="mindy-unikernel-1";
       uri=Uri.of_string "http://www.somerandomidiot.com/blog/2014/03/14/its-a-mirage/";
       title="It's a Mirage! (or, How to Shave a Yak.)";
