@@ -22,9 +22,11 @@ let fs =
   | `Crunch, `Xen -> crunch "../files"
   | `Crunch, `Unix -> direct_kv_ro "../files"
 
-let tmpl = match mode with
-  | `Fat    -> fat_ro "../tmpl"
-  | `Crunch -> crunch "../tmpl"
+let tmpl =
+  match mode, get_mode () with
+  | `Fat, _    -> fat_ro "../tmpl"
+  | `Crunch, `Xen -> crunch "../tmpl"
+  | `Crunch, `Unix -> direct_kv_ro "../tmpl"
 
 let net =
   try match Sys.getenv "NET" with
