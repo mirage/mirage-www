@@ -251,9 +251,9 @@ module Blog = struct
         body       = "intro-tcpip.md";
         permalink  = "intro-tcpip";
       };
-      { updated    = date (2014, 07, 21, 13, 0);
+      { updated    = date (2014, 07, 18, 13, 0);
         authors    = [thomas];
-        subject    = "Irmin: a Git-like distributed database";
+        subject    = "Introducing Irmin: Git-like distributed, branchable storage";
         body       = "introducing-irmin.md";
         permalink  = "introducing-irmin";
       }
