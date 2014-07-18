@@ -76,7 +76,7 @@ Copy the image to the SDcard, connect the network cable and power, and the
 board will boot Xen.
 
 Once booted you can ssh to Dom0, the privileged Linux domain used to manage
-the system [install Mirage][mirage-install], and build your unikernel just
+the system, [install Mirage][mirage-install], and build your unikernel just
 as on x86.
 Currently, you need to select the Git versions of some components.
 The following commands will install the necessary versions if you're using
