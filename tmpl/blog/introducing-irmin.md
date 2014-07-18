@@ -135,6 +135,8 @@ structure in the heap that sharees most of its contents with the previous
 one. This style of programming is appealing when implementing complex
 [protocols][tls] as it leads to better compositional properties.
 
+<img src="/graphics/irmin-stores.png" alt="Irmin Stores" style="float:right; border: 5px" width="250px" />
+
 However, this makes sharing information between processes much more
 difficult, as you need a way to "inject" the state of one structure in an
 other processes memory. In order to do so, Irmin borrows the concept of
@@ -144,8 +146,6 @@ The Irmin *tag store* is the only mutable part of the whole system and
 is responsible for mapping some global (branch) names to blocks in the
 block store. These tag names can then be used to pass block references between
 different processes.
-
-<img src="/graphics/irmin-stores.png" alt="Irmin Stores" />
 
 A block store and a tag store can be combined to build
 a higher-level store (the Irmin store) with fine concurrency control
@@ -220,7 +220,7 @@ contains the list of its predecessors as well as the actual data it
 associated to. As it is purely functional, we can (and we do) store
 that graph in an Irmin block store.
 
-<img src="/graphics/irmin-merges.png" alt="Finding a common ancestor" />
+<img src="/graphics/irmin-merge.png" alt="Finding a common ancestor" style="float:right; border:5px" width="150px" />
 
 Having a persistent and immutable history is good for various obvious
 reasons, such as access to a forensics if an error occurs or
