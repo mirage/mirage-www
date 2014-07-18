@@ -302,3 +302,4 @@ as a Git repository which is live-updated!  Here's a sneak preview...
 [xirminstore]: https://www.youtube.com/watch?v=DSzvFwIVm5s
 [xenstore]: http://wiki.xen.org/wiki/XenStoreReference
 [rwo-heap]: https://realworldocaml.org/v1/en/html/memory-representation-of-values.html
+[cas]: http://en.wikipedia.org/wiki/Content-addressable_storage
