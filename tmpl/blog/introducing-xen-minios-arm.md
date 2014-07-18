@@ -64,7 +64,7 @@ adding ARM support:
 You'll need an ARM device with the Virtualization Extensions.
 I've been testing using the Cubieboard 2 (and CubieTruck):
 
-  ![Cubieboard2](Cubieboard2.jpg)
+![Cubieboard2](/graphics/cubieboard2.jpg)
 
 The first step is to install Xen.
 [Running Xen on the Cubieboard2](http://openmirage.org/wiki/xen-on-cubieboard2)
