@@ -1,71 +1,72 @@
-## Introducing Irmin
-
-> This is the first post in a series which will describe Irmin, the
-  new storage layer of Mirage 2.0. In this post, I will give an
-  high-level description on the project and its overall
-  architecture. Later posts will detail how to use Irmin in
-  real systems.
+> This is the first post in a series which will describe [Irmin][irmin],
+  the new Git-like storage layer for Mirage OS 2.0. This post gives a
+  high-level description on Irmin and its overall architecture, and
+  later posts will detail how to use Irmin in real systems.
 
 [Irmin][irmin] is a library to persist and synchronize distributed
-data structures both on disk and in memory. It enables a style of
+data structures both on-disk and in-memory. It enables a style of
 programming very similar to the [Git](git) workflow, where
-distributed *agents* fork, fetch, merge and push data between
-each-other. The general idea is that you want every active "agent" to
+distributed nodes fork, fetch, merge and push data between
+each other. The general idea is that you want every active node to
 get a local (partial) copy of a global database and always be very
-explicit about how and when data are shared and migrated.
+explicit about how and when data is shared and migrated.
 
-Irmin is *not*, stricly speaking, a proper database engine. Indeed, it
-is, as all others components of the Mirage OS, a collection of
+Irmin is *not*, strictly speaking, a full database engine. It
+is, as are all others components of the Mirage OS, a collection of
 libraries designed to solve different flavors of the challenges raised
-by the [CAP][cap] theorem. Each application can then pick the right
-combination of libraries to solve its specific use-case. More
+by the [CAP][cap] theorem. Each application can select the right
+combination of libraries to solve its particular distributed problem. More
 precisely, Irmin consists of a core of well-defined low-level
-constructs and design principles, which specify how data might persist
-and be shared. It also define algorithms to synchronize efficiently
-those distributed low-level constructs. And finally, it offers a
-collection of useful higher-level data structures that can be used
-transparently by developers, i.e., without having to know precisely
-how Irmin works underneath.
+data structures that  specify how data should be persisted
+and be shared across nodes. It defines algorithms for efficient
+synchronization of those distributed low-level constructs. It also
+builds a collection of higher-level data structures (like persistent
+[mergeable queues][merge-queues]) that can be used by developers without
+having to know precisely how Irmin works underneath.
 
-Irmin does not make strong assumptions on how the low-level constructs
-are implemented. This makes the system very portable: what I explain
-below holds for in-memory databases and for fancy disk serialization
-like disk browser local-storage or the Git format.
+Since it's a part of Mirage OS, Irmin does not make strong assumptions on the
+OS environment that it runs in. This makes the system very portable, and the
+details below hold for in-memory databases as well as for slower persistent
+serialization such as SSDs, hard drives, web browser local storage, or even
+the Git file format.
 
 ### Persistent Data Structures
 
 Persistent data structures are well known and used pervasively in many
-different areas. The *Programming Languages* community has
-investigated the concepts [widely][okasaki] -- and this is [not
-limited][shallow] to functional programming folks -- in the meantime,
-the *Systems* community experimented with various persistent
-strategies for memory and storage, such and [copy-on-write][cow]
-filesystems. In all of these systems, the main concern is to optimize
-the space complexity by maximizing the sharing of immutable
-sub-structures.
+different areas. The programming language community has
+investigated the concepts [widely][okasaki] (and this is [not
+limited][shallow] to functional programming), and in the meantime,
+the systems community experimented with various persistent
+strategies such as [copy-on-write][cow] filesystems. In most of these
+systems, the main concern is how to optimize the space complexity by
+maximizing the sharing of immutable sub-structures.
 
-Irmin design ideas share roots with previous works on persistent data
+The Irmin design ideas share roots with previous works on persistent data
 structures, as it provides an efficient way to *fork* data structures,
 but it also explores new strategies and mechanisms to be able to
 efficiently *merge* back these forked structures. This offers
 programming constructs very similar to the Git workflow.
- Irmin focuses on two main aspects:
-(i) *Semantics*, what properties the resulting merged objects should
-verify; and (ii) *Complexity*, how to design efficient merge and
-synchronization primitives, taking advantage of the immutable nature
-of the underlying objects.
+
+Irmin focuses on two main aspects:
+
+* **Semantics**: what properties the resulting merged objects should
+verify.
+
+* **Complexity**: how to design efficient merge and synchronization
+primitives, taking advantage of the immutable nature of the underlying 
+objects.
 
 Although it is pervasively used, *data persistence* has a very broad and
 fuzzy meaning. In this blog post, I will refer to data persistence as
-a way:
+a way for:
 
-- For a single process, to lazily populate a process memory on startup --
-  you need this when you want the process to be able to resume while
+- a single process to lazily populate a process memory on startup.
+  You need this when you want the process to be able to resume while
   holding part of its previous state if it crashes
 
-- For concurrent processes, to share references between objects living in
+- concurrent processes to share references between objects living in
   a global pool of data. Sharing references, as opposed to sharing
-  value, leads to better performance and allow different processes to
+  values, reduces memory copies and allow different processes to
   concurrently update a shared store.
 
 In both cases, you need a global pool of data (the Irmin *block store*)
@@ -79,23 +80,26 @@ low-level memory graph blocks. One of the strength of [OCaml][ocaml]
 is the very simple and deterministic mapping from high-level data
 structures to low-level block representations (the *heap*): see for
 instance, the excellent series of blog posts on [OCaml
-internals][runtime] by Richard W. Jones. An Irmin *block store* can be
-seen as a virtual OCaml heap, using a more abstract way of relating
-heap blocks together. Instead of using the concrete physical memory
-addresses of these, Irmin uses the hash of the block contents as an
-address. As for any [content-addressable storage][cas], this gives to
-Irmin block-stores a lot of nice properties and greatly simplify the
-way distributed stores can be synchronized.
+internals][runtime] by Richard W. Jones, or the
+[Real World OCaml chapter][rwo-heap].
 
-*Persistent* data structures are immutable: once a block is created in
-the block store, its contents will never change again. In that
-context, updating a data structure means returning a completely new
+An Irmin *block store* can be seen as a virtual OCaml heap that uses a more
+abstract way of connecting heap blocks. Instead of using the concrete physical
+memory addresses of blocks, Irmin uses the hash of the block contents as an
+address. As for any [content-addressable storage][cas], this gives to Irmin
+block stores a lot of nice properties and greatly simplify the way distributed
+stores can be synchronized.
+
+*Persistent* data structures are immutable, and once a block is created in
+the block store, its contents will never change again. 
+Updating an immutable data structure means returning a completely new
 structure, while trying to share common sub-parts to avoid the cost of
 making new allocations as much as possible. For instance, modifying a
 value in a persistent tree means creating a chain of new blocks, from
 the root of the tree to the modified leaf. For convenience (and also
-because it is hard, in a non-lazy pure language to generate complex
-cyclic value), Irmin only considers acyclic block graphs.
+because it is difficult in a non-lazy pure language to generate complex
+cyclic values with reasonable space usage), Irmin only considers acyclic
+block graphs.
 
 Conceptually, an Irmin block store has the following signature:
 
@@ -118,37 +122,37 @@ val add: t -> key -> value -> t
 location [k]. *)
 ```
 
-Persistent data structure are very efficient to store in memory and on
-disk as you do not need [write barriers][barriers] and writes
-can be done [sequentially][seq-writes], easing the interaction with
-filesystem caches.
+Persistent data structures are very efficient to store in memory and on
+disk as you do not need [write barriers][barriers], and updates
+can be written [sequentially][seq-writes] instead of requiring random
+access into the data structure.
 
 ### The Tag Store: Controlled Mutability and Concurrency
 
-So far, we have only discussed a purely functional data structure,
+So far, we have only discussed purely functional data structures,
 where updating a structure means returning a pointer to a new
-structure in the heap, sharing most of its contents with the previous
+structure in the heap that sharees most of its contents with the previous
 one. This style of programming is appealing when implementing complex
 [protocols][tls] as it leads to better compositional properties.
 
-However, in that context, sharing information between processes is
-difficult: you need a way to "inject" the state of one structure in an
-other process memory. In order to do so, Irmin borrows the concept of
-*branches* from Git: in practice every operation is related to a given
-branch name, and it can modify the tip of the branch if it has
-side-effects. The *tag store*, in Irmin, is the only mutable part of
-the whole system and it is responsible to map some global (branch)
-names to blocks in the block store -- these names can then be used to
-pass block references between different processes.
+However, this makes sharing information between processes much more
+difficult, as you need a way to "inject" the state of one structure in an
+other processes memory. In order to do so, Irmin borrows the concept of
+*branches* from Git by relating every operation to a branch name, and 
+modifying the tip of the branch if it has side-effects.
+The Irmin *tag store* is the only mutable part of the whole system and 
+is responsible for mapping some global (branch) names to blocks in the
+block store. These tag names can then be used to pass block references between
+different processes.
 
-It is then possible to combine a block store and a tag store to build
+A block store and a tag store can be combined to build
 a higher-level store (the Irmin store) with fine concurrency control
 and atomicity guarantees. As mutation happens only in the tag store,
 we can ensure that as long a given tag is not updated, no change done
 in the block store will be visible by anyone. This also gives a nice
 story for concurrency: as in Git, creating a concurrent view of the
-store is straightforward: it is simply a matter of creating a new tag,
-denoting a new branch. All concurrent operations can then happen on
+store is the straightforward operation of creating a new tag that
+denotes a new branch. All concurrent operations can then happen on
 different branches:
 
 ```ocaml
@@ -176,9 +180,9 @@ val update: t -> ?branch:tag -> key -> value -> unit
 
 Interactions between concurrent processes are completely explicit and
 need to happen via synchronization points and merge events (more on
-this below). It is also possible to emulate the behavior of
-transactions by recording the sequence of operations (`read`s and
-`update`s) on a given branch -- that sequence is used before a merge
+this below). It is also possible to emulate the behaviour of
+transactions by recording the sequence of operations (`read` and
+`update`) on a given branch -- that sequence is used before a merge
 to check that all the operations are valid (i.e. that all reads in the
 transaction still return the same result on the current tip of the
 store) and it can be discarded after the merge takes place.
@@ -193,20 +197,21 @@ possible) in a sensible way and then applied again back on the initial
 state, in order to get the new merged state. This mechanism sounds
 nice, but in practice it has two major drawbacks:
 
-1. It does not say how we find the initial state from two diverging
-   states -- this is generally not possible (think of diverging
-   counters); and
-2. It means we need to compute the sequence of `update`s which leads
-   from one state to an other -- which is easier than 1. but it is
-   generally not very efficient.
+* It does not specify how we find the initial state from two diverging
+  states -- this is generally not possible (think of diverging
+  counters); and
+* It means we need to compute the sequence of `update` operations 
+  that leads from one state to an other.  This is easier than finding
+  the common initial state between two branches, but is still generally
+  not very efficient.
 
 In Irmin, we solve these problems using two mechanisms.
 
 First of all, an interesting observation is that that we can model the
 sequence of store tips as a purely functional data-structure. We model
 the partial order of tips as a directed acyclic graph where nodes are
-the tips and there is an edge between two tips if either (i) one is
-the result of applying a sequence of `update`s to the other, or (ii)
+the tips, and there is an edge between two tips if either *(i)* one is
+the result of applying a sequence of `update`s to the other, or *(ii)*
 one is the result of a merge operation between the other and some
 other tips. Practically speaking, that means that every tip should
 contains the list of its predecessors as well as the actual data it
@@ -214,10 +219,10 @@ associated to. As it is purely functional, we can (and we do) store
 that graph in an Irmin block store.
 
 Having a persistent and immutable history is good for various obvious
-reasons, such as access to a nice forensic tool if an error occurs or
-snapshot and rollback features for free. But an other less obvious
-nice property is the fact that we can now find the greatest common
-ancestors of two data structures. This solves the first point above.
+reasons, such as access to a forensics if an error occurs or
+snapshot and rollback features for free. But another less obvious
+useful property is that we can now find the greatest common
+ancestors of two data structures without an expensive global search.
 
 The second mechanism is that we require the data structures used in
 Irmin to be equipped with a well-defined 3-way merge operation, which
@@ -227,14 +232,14 @@ conflict (similar to the `EAGAIN` exception that you get when you try
 to commit a conflicting transaction in more traditional transactional
 databases). Having access to the common ancestors makes a great
 difference when designing new merge functions, as usually no
-modification is required to the data-structure itself. At the
-opposite, the usual approach is more invasive as it requires to
-enrich the data-structure itself to carry more information about the
-operation history, see for instance the [conflict-free replicated
-datatypes][crdt], which relies on unbounded vector clocks.
+modification is required to the data-structure itself. In contrast,
+the conventional approach is more invasive as it requires the data
+structure to carry more information about the operation history
+(for instance [conflict-free replicated
+datatypes][crdt], which relies on unbounded vector clocks).
 
-We started to design interesting data structure equipped with a 3-way merge, as
-counters, [queues][merge-queues] and ropes.
+We have thus been designing interesting data structure equipped with a 3-way
+merge, such as counters, [queues][merge-queues] and ropes.
 
 This is what the implementation of distributed and mergeable counters
 looks like:
@@ -250,24 +255,26 @@ let merge ~old t1 t2 = old + (t1-old) + (t2-old)
    - and add these two increments to [old]. *)
 ```
 
-### Conclusion
+### Next steps, how to git at your data
 
-From a designer point-of-view, having access to the history means it
-is easier to design complex data structure with good compositional
-properties, to use in an application using Mirage and Irmin. Moreover,
-as we made little assumptions on how the substrate of the low-level
-constructs needs to be implemented, we hope to see the Irmin
-engine to be ported to a lot of different backends: this is just a
-matter of implementing a rather trivial [signature][irmin-AO].
+From a design perspective, having access to the history makes it easier to
+design complex data structures with good compositional properties to use in
+unikernels. Moreover, as we made few assumptions on how the substrate of the
+low-level constructs needs to be implemented, the Irmin engine can be be ported
+to many exotic backends such as JavaScript or anywhere else that Mirage OS
+runs: this is just a matter of implementing a rather trivial
+[signature][irmin-AO].
 
-From an end-user point of view, this means that the full history of
-operations is available to inspect, and that the history model is very
-similar to the Git workflow. So similar, in fact, that we've developed
-a bi-directional mapping between Irmin data structure and the Git
-format! See for instance what [Dave Scott][dave] did with the new version of
-[xenstore][xenstore], booting a Xen VM, where the internal database is
-stored in a prefix-tree Irmin data-structure and exposed as
-a Git repository which is live-updated:
+From a developer perspective, this means that the full history of operations is
+available to inspect, and that the history model is very similar to the Git
+workflow that is increasingly familiar. So similar, in fact, that we've
+developed a bidirectional mapping between Irmin data structure and the Git
+format to permit the `git` command-line to interact with.
+
+The next post in our series will explain what [Dave Scott][dave] has been doing
+with the new version of the [Xenstore][xenstore] database that powers every Xen host,
+where the entire database is stored in a prefix-tree Irmin data-structure and exposed
+as a Git repository which is live-updated!  Here's a sneak preview...
 
 <center>
 <iframe width="480" height="360" src="//www.youtube-nocookie.com/embed/DSzvFwIVm5s" frameborder="0" allowfullscreen="1"> &nbsp; </iframe>
@@ -290,3 +297,4 @@ a Git repository which is live-updated:
 [tls]: http://openmirage.org/blog/ocaml-tls-api-internals-attacks-mitigation
 [xirminstore]: https://www.youtube.com/watch?v=DSzvFwIVm5s
 [xenstore]: http://wiki.xen.org/wiki/XenStoreReference
+[rwo-heap]: https://realworldocaml.org/v1/en/html/memory-representation-of-values.html
