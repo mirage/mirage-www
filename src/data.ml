@@ -256,6 +256,12 @@ module Blog = struct
         subject    = "Introducing Irmin: Git-like distributed, branchable storage";
         body       = "introducing-irmin.md";
         permalink  = "introducing-irmin";
+      };
+      { updated    = date (2014, 07, 21, 13, 0);
+        authors    = [tal];
+        subject    = "Introducing Xen MiniOS on ARM";
+        body       = "introducing-xen-minios-arm.md";
+        permalink  = "introducing-xen-minios-arm";
       }
     ]
 end
