@@ -250,7 +250,13 @@ module Blog = struct
         subject    = "Fitting the modular Mirage TCP/IP stack together";
         body       = "intro-tcpip.md";
         permalink  = "intro-tcpip";
-      }
+      };
+      { updated    = date (2014, 07, 18, 13, 0);
+        authors    = [tal];
+        subject    = "Introducing Xen MiniOS on ARM";
+        body       = "introducing-xen-minios-arm.md";
+        permalink  = "introducing-xen-minios-arm";
+      };
     ]
 end
 
