@@ -13,13 +13,13 @@ providing hardware support for running virtual machines on ARM devices, and
 Xen's [ARM Hypervisor][xen-arm] uses this to support hardware accelerated
 ARM guests.
 
-[Mini-OS] is a tiny OS kernel designed specifically for running under Xen.
+[Mini-OS][mini-os] is a tiny OS kernel designed specifically for running under Xen.
 It provides code to initialise the CPU, display messages on the console,
 allocate memory (malloc), and not much else. It is used as the low-level
 core of Mirage's Xen implementation.
 
-Mirage 1 was built on an old version of Mini-OS which didn't support ARM.
-For Mirage 2, we have added ARM support to the current Mini-OS (completing
+Mirage v1 was built on an old version of Mini-OS which didn't support ARM.
+For Mirage v2, we have added ARM support to the current Mini-OS (completing
 Karim Allah Ahmed's [initial ARM port][karim-minios]) and made Mirage depend
 on it as an external library.
 This means that Mirage will automatically gain support for other
@@ -32,13 +32,13 @@ We are currently working with the Xen developers to get
 [karim-minios]: http://lists.xen.org/archives/html/xen-devel/2014-01/msg00249.html
 [tal-minios]: https://github.com/talex5/xen
 
-In a similar way, we have replaced Mirage 1's bundled maths library with a
+In a similar way, we have replaced Mirage v1's bundled maths library with a
 dependency on the external
 [OpenLibm](https://github.com/JuliaLang/openlibm), which we also extended
 with ARM support (this was just a case of fixing the build system; the code
 is from FreeBSD's libm, which already supported ARM).
 
-Mirage 1 also bundled [dietlibc][] to provide its standard C library.
+Mirage v1 also bundled [dietlibc][] to provide its standard C library.
 A nice side-effect of this work came when we were trying to separate out the
 dietlibc headers from the old Mini-OS headers in Mirage.
 These had rather grown together over time and the work was proving
@@ -136,7 +136,7 @@ This assembler code performs a few basic boot tasks:
 With the Virtualization Extensions, there are two stages to converting a
 virtual memory address (used by application code) to a physical address in
 RAM.
-The first stage is under the control the guest VM, mapping the virtual
+The first stage is under the control of the guest VM, mapping the virtual
 address to what the guest believes is the physical address (this address is
 referred to as the *Intermediate Physical Address* or *IPA*).
 The second stage, under the control of Xen, maps the IPA to the real
