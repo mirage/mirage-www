@@ -49,7 +49,7 @@ let dispatch ({title; subtitle; rights} as feed) entries =
         let content =
           C.Foundation.Blog.t ~title ~subtitle ~sidebar ~posts ~copyright ()
         in
-        let content = make content in
+        let content = make ~title content in
         return (ent.C.Blog.Entry.permalink, content)
       ) entries
   in
