@@ -52,7 +52,9 @@ We replaced that by taking the small `fmt_fp` function from
 Here's the final diffstat of the changes to [mirage-platform][]
 adding ARM support:
 
-    778 files changed, 1949 insertions(+), 59689 deletions(-)
+```
+778 files changed, 1949 insertions(+), 59689 deletions(-)
+```
 
 [dietlibc]: http://www.fefe.de/dietlibc/
 [musl]: http://www.musl-libc.org/
@@ -81,14 +83,16 @@ Currently, you need to select the Git versions of some components.
 The following commands will install the necessary versions if you're using
 the xen-arm-builder image:
 
-    $ opam init
-    $ git clone https://github.com/mirage/mirage-xen-libs
-    $ cd mirage-xen-libs
-    $ ./install.sh
-    $ opam pin mirage https://github.com/talex5/mirage.git#link_c_stubs
-    $ opam pin mirage-xen https://github.com/mirage/mirage-platform
-    $ opam pin tcpip https://github.com/talex5/mirage-tcpip.git#checksum
-    $ opam install mirage
+```bash
+$ opam init
+$ git clone https://github.com/mirage/mirage-xen-libs
+$ cd mirage-xen-libs
+$ ./install.sh
+$ opam pin mirage https://github.com/talex5/mirage.git#link_c_stubs
+$ opam pin mirage-xen https://github.com/mirage/mirage-platform
+$ opam pin tcpip https://github.com/talex5/mirage-tcpip.git#checksum
+$ opam install mirage
+```
 
 [mirage-install]: http://openmirage.org/wiki/install
 
@@ -153,11 +157,12 @@ For example, on Xen/unstable, we configure the beginning of the virtual
 address space to look like this (on Xen 4.4, the physical addresses would
 start at 80000000 instead):
 
-| Virtual address  |  Physical address (IPA)  | Purpose
-| ---------------: | -----------------------: | --------
-|        400000    | 40000000                 | Stack (16 KB)
-|        404000    | 40004000                 | Translation tables (16 KB)
-|        408000    | 40008000                 | Kernel image
+<table>
+  <tr><th>Virtual address</th><th>Physical address (IPA)</th><th>Purpose</th></tr>
+  <tr><td>400000</td><td>40000000</td><td>Stack (16 KB)</td></tr>
+  <tr><td>404000</td><td>40004000</td><td>Translation tables (16 KB)</td></tr>
+  <tr><td>408000</td><td>40008000</td><td>Kernel image</td></tr>
+</table>
 
 The physical address is always at a fixed offset from the virtual address and
 the addresses wrap around, so virtual address c0400000 maps back to physical
