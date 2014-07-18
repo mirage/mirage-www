@@ -53,7 +53,7 @@ Irmin focuses on two main aspects:
 verify.
 
 * **Complexity**: how to design efficient merge and synchronization
-primitives, taking advantage of the immutable nature of the underlying 
+primitives, taking advantage of the immutable nature of the underlying
 objects.
 
 Although it is pervasively used, *data persistence* has a very broad and
@@ -91,7 +91,7 @@ block stores a lot of nice properties and greatly simplify the way distributed
 stores can be synchronized.
 
 *Persistent* data structures are immutable, and once a block is created in
-the block store, its contents will never change again. 
+the block store, its contents will never change again.
 Updating an immutable data structure means returning a completely new
 structure, while trying to share common sub-parts to avoid the cost of
 making new allocations as much as possible. For instance, modifying a
@@ -138,12 +138,14 @@ one. This style of programming is appealing when implementing complex
 However, this makes sharing information between processes much more
 difficult, as you need a way to "inject" the state of one structure in an
 other processes memory. In order to do so, Irmin borrows the concept of
-*branches* from Git by relating every operation to a branch name, and 
+*branches* from Git by relating every operation to a branch name, and
 modifying the tip of the branch if it has side-effects.
-The Irmin *tag store* is the only mutable part of the whole system and 
+The Irmin *tag store* is the only mutable part of the whole system and
 is responsible for mapping some global (branch) names to blocks in the
 block store. These tag names can then be used to pass block references between
 different processes.
+
+<img src="/graphics/irmin-stores.png" alt="Irmin Stores" />
 
 A block store and a tag store can be combined to build
 a higher-level store (the Irmin store) with fine concurrency control
@@ -200,7 +202,7 @@ nice, but in practice it has two major drawbacks:
 * It does not specify how we find the initial state from two diverging
   states -- this is generally not possible (think of diverging
   counters); and
-* It means we need to compute the sequence of `update` operations 
+* It means we need to compute the sequence of `update` operations
   that leads from one state to an other.  This is easier than finding
   the common initial state between two branches, but is still generally
   not very efficient.
@@ -217,6 +219,8 @@ other tips. Practically speaking, that means that every tip should
 contains the list of its predecessors as well as the actual data it
 associated to. As it is purely functional, we can (and we do) store
 that graph in an Irmin block store.
+
+<img src="/graphics/irmin-merges.png" alt="Finding a common ancestor" />
 
 Having a persistent and immutable history is good for various obvious
 reasons, such as access to a forensics if an error occurs or
