@@ -11,7 +11,7 @@ to other VMs.
 
 The current version of Xenstore is [already written in OCaml](http://xenbits.xen.org/gitweb/?p=xen.git;a=tree;f=tools/ocaml/xenstored;h=0d762f2a61de098c0100814e0c140575b51688a3;hb=stable-4.4)
 and documented in the paper
-[OXenstored: an efficient hierarchical and transactional database using functional programming with reference cell comparisons](http://web.cecs.pdx.edu/~apt/icfp09_accepted_papers/83.html) presented at ICFP2009.
+[OXenstored: an efficient hierarchical and transactional database using functional programming with reference cell comparisons](http://gazagnaire.org/pub/GH09.pdf) presented at ICFP2009.
 The existing code works really well but
 there is always room for improvement; and this is where Irmin, 
 the storage layer of Mirage 2.0, can
