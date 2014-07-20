@@ -183,7 +183,7 @@ $ git log --pretty=oneline --abbrev-commit --graph
 ```
 You can then 'zoom in' and show the exact state change with commands like:
 ```
- git show bd44e03
+$ git show bd44e03
 commit bd44e0388696380cafd048eac49474f68d41bd3a
 Author: 448 <irminsule@openmirage.org>
 Date:   Thu Jan 1 00:09:26 1970 +0000
