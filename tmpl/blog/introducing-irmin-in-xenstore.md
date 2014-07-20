@@ -31,7 +31,7 @@ The Xenstore service is a reliable component and very rarely crashes. However, i
 a crash does occur, the impact is quite severe: there is no protocol for a running VM to close
 its connection to a Xenstore and open a new one, so if Xenstore crashes then running
 VMs are simply left orphaned. VMs in this state are impossible to manage properly:
-there is no way to shutdown cleanly, to suspend/resume or migrate, or to configure
+there is no way to shut them down cleanly, to suspend/resume or migrate, or to configure
 any disk or network interfaces. Typically when Xenstore crashes the host is rebooted
 shortly after.
 
