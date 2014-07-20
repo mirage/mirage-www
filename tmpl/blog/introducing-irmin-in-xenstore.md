@@ -19,16 +19,23 @@ help.
 
 But first, a quick Xenstore primer:
 
-Xenstore in 30 seconds
-----------------------
+Xen and Xenstore in 30 seconds
+------------------------------
 
-Xenstore is a hierarchical key-value store containing VM metadata.
-Every Xen VM has an integer domain id, shortened to domid, which acts like a Unix process id.
-Every VM has a subtree of Xenstore, named `/local/domain/<domid>`, which acts like a Unix user's home directory.
-The Xen hypervisor doesn't perform I/O on behalf of VMs. Instead privileged VMs act as I/O
-servers for unpriviledged VMs.
-VM device configuration consists of key=value pairs for both the client VM and server VM, and
-the keys are distributed across both VM home directories.
+The Xen hypervisor focuses on isolating VMs from each-other; the hypervisor provides a virtual CPU scheduler
+and a memory allocator but does not perform I/O on behalf of guest VMs.
+On a Xen host, priviliged server VMs perform I/O on behalf of client VMs.
+The I/O configuration -- which server VM handles which client VMs etc. -- is stored in Xenstore, as
+key=value pairs. The following diagram shows a Xen host with a single client and server VM, with a
+single virtual device in operation.
+Disk blocks and network packets flow via shared memory between Xen-aware drivers in the VMs,
+shown in the lower-half.
+The control-plane, shown in the upper-half, contains the metadata about the datapath: how the device
+should appear in the client VM; where the I/O should go in the server VM; where the shared memory
+control structures are etc.
+
+<img src="/graphics/xenstore-diagram.png" alt="Device configuration is stored in Xenstore as key=value pairs." />
+
 The Xenstore device attach protocol insists that all device keys are added atomically
 as a transaction and that transactions are isolated from each other.
 A Xenstore server must abort transactions whose operations were not successfully
