@@ -5,6 +5,7 @@ running [Xen](http://www.xen.org/). Xenstore is necessary to
   * signal VMs during shutdown, suspend, resume, migrate etc.
 
 Xenstore must be **reliable**: if it fails then the host is unmanageable and must be rebooted.
+
 Xenstore must be **secure**: if it is compromised by a VM then that VM can access data belonging
 to other VMs.
 
