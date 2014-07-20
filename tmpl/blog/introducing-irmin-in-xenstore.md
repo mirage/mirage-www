@@ -36,7 +36,7 @@ control structures are etc.
 
 <img src="/graphics/xenstore-diagram.png" alt="Device configuration is stored in Xenstore as key=value pairs." />
 
-The Xenstore device attach protocol insists that all device keys are added atomically
+The Xenstore device attach protocol insists that all device keys are added
 through atomic transactions, i.e. partial updates are never visible to clients and transactions
 cannot interfere with each other.
 A Xenstore server must abort transactions whose operations were not successfully
