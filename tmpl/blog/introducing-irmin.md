@@ -280,9 +280,9 @@ with the new version of the [Xenstore][xenstore] database that powers every Xen 
 where the entire database is stored in a prefix-tree Irmin data-structure and exposed
 as a Git repository which is live-updated!  Here's a sneak preview...
 
-<center>
-<iframe width="480" height="360" src="//www.youtube-nocookie.com/embed/DSzvFwIVm5s" frameborder="0" allowfullscreen="1"> &nbsp; </iframe>
-</center>
+<div class="flex-video">
+  <iframe width="480" height="360" src="//www.youtube-nocookie.com/embed/DSzvFwIVm5s" frameborder="0" allowfullscreen="1"> &nbsp; </iframe>
+</div>
 
 [irmin-AO]: https://github.com/mirage/irmin/blob/4b06467ddee1e20c35bad64812769587fb9fa8a4/lib/core/irminStore.mli#L61
 [dave]: http://dave.recoil.org/
