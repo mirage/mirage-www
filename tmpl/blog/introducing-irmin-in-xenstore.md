@@ -37,7 +37,8 @@ control structures are etc.
 <img src="/graphics/xenstore-diagram.png" alt="Device configuration is stored in Xenstore as key=value pairs." />
 
 The Xenstore device attach protocol insists that all device keys are added atomically
-as a transaction and that transactions are isolated from each other.
+through atomic transactions, i.e. partial updates are never visible to clients and transactions
+cannot interfere with each other.
 A Xenstore server must abort transactions whose operations were not successfully
 isolated from other transactions. After an abort, the client is expected to retry.
 Each key=value write is communicated to the server as a single request/response, so transactions
@@ -56,7 +57,7 @@ Irmin Xenstore design goals
 ---------------------------
 
 The design goals of the Irmin-based Mirage Xenstore server are:
-  1. safely restart after a crash-- currently if xenstored stops for any reason then the host must be rebooted;
+  1. safely restart after a crash;
   2. make system debugging easy; and
   3. go really fast!
 
@@ -70,8 +71,7 @@ a crash does occur, the impact is quite severe: there is no protocol for a runni
 its connection to a Xenstore and open a new one, so if Xenstore crashes then running
 VMs are simply left orphaned. VMs in this state are impossible to manage properly:
 there is no way to shut them down cleanly, to suspend/resume or migrate, or to configure
-any disk or network interfaces. Typically when Xenstore crashes the host is rebooted
-shortly after.
+any disk or network interfaces. If Xenstore crashes, the host must be rebooted shortly after.
 
 Irmin can help make Xenstore recoverable after a crash. Irmin
 is a library which applications can use to persist and synchronise
@@ -241,7 +241,6 @@ index 0000000..aa38106
 +++ b/*0/bench.dir/local.dir/domain.dir/7.dir/control.dir/shutdown.value
 @@ -0,0 +1 @@
 +((creator 0)(perms((owner 7)(other NONE)(acl())))(value halt))
-\ No newline at end of file
 ```
 Last but not least, you can `git checkout` to the exact time the problem occurred and examine
 the state of the store.
@@ -254,7 +253,7 @@ Xenstore is part of the control-plane of a Xen system and is most heavily stress
 of VMs are being started in parallel. Each VM has multiple devices and each device is added in a
 separate transaction. These transactions remain open for multiple client-server round-trips, as
 each individual operation is sent to Xenstore as a separate RPC. 
-To provide isolation, each Xenstore transaction is represented by an Irmin `View.t` which
+To provide isolation, each Xenstore transaction is represented by an Irmin `VIEW.t` which
 is persisted on disk as a git branch.
 When starting lots of VMs in
 parallel, lots of branches are created and must be merged back together. If a branch cannot
