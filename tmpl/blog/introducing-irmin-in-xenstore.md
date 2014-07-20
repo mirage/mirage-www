@@ -27,8 +27,8 @@ How does Irmin help achieve these goals?
 Restarting after crashes
 ------------------------
 
-The Xenstore service is a reliable component and very rarely crashes. However the
-impact of a crash is quite severe: there is no protocol for a running VM to close
+The Xenstore service is a reliable component and very rarely crashes. However, if
+a crash does occur, the impact is quite severe: there is no protocol for a running VM to close
 its connection to a Xenstore and open a new one, so if Xenstore crashes then running
 VMs are simply left orphaned. VMs in this state are impossible to manage properly:
 there is no way to shutdown cleanly, to suspend/resume or migrate, or to configure
