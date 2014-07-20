@@ -170,6 +170,9 @@ The resulting [Irmin glue module](https://github.com/mirage/ocaml-xenstore-serve
           return false
     end in
 ```
+The `write` function simply calls through to Irmin's `update` function, while the `merge` function
+calls Irmin's `merge_path`. If Irmin cannot merge the transaction then our `merge` function will
+return `false` and this will be signalled to the client, which is expected to retry.
 
 Now all that remains is to carefully adjust the I/O code so that effects (reading and writing packets
 along the persistent connections) are interleaved properly with persisted state changes and
