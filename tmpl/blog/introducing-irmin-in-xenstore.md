@@ -88,11 +88,20 @@ module type VIEW = sig
 end
 ```
 The main 'business logic' of Xenstore can then be functorised over this signature relatively easily.
-All we need is to write the top-levels: one for Mirage userspace and one for kernelspace
-which use the Irmin libraries to implement this signature and persist the data somewhere sensible.
+All we need is to instantiate the functor using Irmin to persist the data somewhere sensible.
+Eventually we will need two instantiations: one which runs as a userspace application and which
+writes to the filesystem; and a second which will run as a
+native Xen kernel (known as a [xenstore stub domain](xenstore-stub.md))
+and which will write to a fixed memory region (like a ramdisk).
+The choice of which to use is left to the system administrator. Currently most (if not all)
+distribution packagers choose to run Xenstore in userspace. Administrators who wish to
+further secure their hosts are encouraged to run the kernelspace version to isolate Xenstore
+from other processes (where a VM offers more isolation than a container, which offers more
+isolation than a chroot). Note this choice is invisible to the guest VMs.
 
-In the userspace top-level we use Irmin to persist the data in a
-[git](http://git-scm.com) format repository in the filesystem as follows:
+So far in the Irmin Xenstore integration only the userspace instantiation has been implemented.
+The runes to configure Irmin to write
+[git](http://git-scm.com) format data to the filesystem are as follows:
 ```
     let open Irmin_unix in
     let module Git = IrminGit.FS(struct
@@ -102,7 +111,8 @@ In the userspace top-level we use Irmin to persist the data in a
     let module DB = Git.Make(IrminKey.SHA1)(IrminContents.String)(IrminTag.String) in
     DB.create () >>= fun db ->
 ```
-and then our `VIEW.t` is simply an Irmin `DB.View.t`. All that remains is to implement
+where keys and values will be mapped into OCaml `strings`, and our
+`VIEW.t` is simply an Irmin `DB.View.t`. All that remains is to implement
 `read`, `list`, `write`, `rm` by
   1. mapping Xenstore `Protocol.Path.t` values onto Irmin keys; and
   2. mapping Xenstore `Node.contents` records onto Irmin values.
