@@ -259,7 +259,7 @@ module Blog = struct
       };
       { updated    = date (2014, 07, 19, 12, 0);
         authors    = [dave];
-        subject    = "Introducting Irmin in Xenstore";
+        subject    = "Using Irmin to add fault-tolerance to the Xenstore database";
         body       = "introducing-irmin-in-xenstore.md";
         permalink  = "introducing-irmin-in-xenstore";
       };
