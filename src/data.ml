@@ -257,12 +257,12 @@ module Blog = struct
         body       = "introducing-irmin.md";
         permalink  = "introducing-irmin";
       };
-      { updated    = date (2014, 07, 21, 13, 0);
-        authors    = [tal];
-        subject    = "Introducing Xen MiniOS on ARM";
-        body       = "introducing-xen-minios-arm.md";
-        permalink  = "introducing-xen-minios-arm";
-      }
+      { updated    = date (2014, 07, 21, 11, 0);
+        authors    = [dave];
+        subject    = "Using Irmin to add fault-tolerance to the Xenstore database";
+        body       = "introducing-irmin-in-xenstore.md";
+        permalink  = "introducing-irmin-in-xenstore";
+      };
     ]
 end
 

@@ -5,26 +5,26 @@
 
 [Irmin][irmin] is a library to persist and synchronize distributed
 data structures both on-disk and in-memory. It enables a style of
-programming very similar to the [Git](git) workflow, where
+programming very similar to the [Git][git] workflow, where
 distributed nodes fork, fetch, merge and push data between
 each other. The general idea is that you want every active node to
 get a local (partial) copy of a global database and always be very
 explicit about how and when data is shared and migrated.
 
 Irmin is *not*, strictly speaking, a full database engine. It
-is, as are all others components of the Mirage OS, a collection of
-libraries designed to solve different flavors of the challenges raised
-by the [CAP][cap] theorem. Each application can select the right
+is, as are all other components of Mirage OS, a collection of
+libraries designed to solve different flavours of the challenges raised
+by the [CAP theorem][cap]. Each application can select the right
 combination of libraries to solve its particular distributed problem. More
 precisely, Irmin consists of a core of well-defined low-level
-data structures that  specify how data should be persisted
+data structures that specify how data should be persisted
 and be shared across nodes. It defines algorithms for efficient
 synchronization of those distributed low-level constructs. It also
-builds a collection of higher-level data structures (like persistent
-[mergeable queues][merge-queues]) that can be used by developers without
+builds a collection of higher-level data structures, like persistent
+[mergeable queues][merge-queues], that can be used by developers without
 having to know precisely how Irmin works underneath.
 
-Since it's a part of Mirage OS, Irmin does not make strong assumptions on the
+Since it's a part of Mirage OS, Irmin does not make strong assumptions about the
 OS environment that it runs in. This makes the system very portable, and the
 details below hold for in-memory databases as well as for slower persistent
 serialization such as SSDs, hard drives, web browser local storage, or even
@@ -53,7 +53,7 @@ Irmin focuses on two main aspects:
 verify.
 
 * **Complexity**: how to design efficient merge and synchronization
-primitives, taking advantage of the immutable nature of the underlying 
+primitives, taking advantage of the immutable nature of the underlying
 objects.
 
 Although it is pervasively used, *data persistence* has a very broad and
@@ -76,30 +76,31 @@ and a way to name values in that pool (the Irmin *tag store*).
 
 Even high-level data structures need to be allocated in memory, and it
 is the purpose of the runtime to map such high-level constructs into
-low-level memory graph blocks. One of the strength of [OCaml][ocaml]
+low-level memory graph blocks. One of the strengths of [OCaml][ocaml]
 is the very simple and deterministic mapping from high-level data
 structures to low-level block representations (the *heap*): see for
 instance, the excellent series of blog posts on [OCaml
-internals][runtime] by Richard W. Jones, or the
-[Real World OCaml chapter][rwo-heap].
+internals][runtime] by Richard W. Jones, or
+[Chapter 20: Memory Representation of Values][rwo-heap] in
+[Real World OCaml][rwo].
 
 An Irmin *block store* can be seen as a virtual OCaml heap that uses a more
 abstract way of connecting heap blocks. Instead of using the concrete physical
 memory addresses of blocks, Irmin uses the hash of the block contents as an
-address. As for any [content-addressable storage][cas], this gives to Irmin
-block stores a lot of nice properties and greatly simplify the way distributed
+address. As for any [content-addressable storage][cas], this gives Irmin
+block stores a lot of nice properties and greatly simplifies the way distributed
 stores can be synchronized.
 
 *Persistent* data structures are immutable, and once a block is created in
-the block store, its contents will never change again. 
+the block store, its contents will never change again.
 Updating an immutable data structure means returning a completely new
 structure, while trying to share common sub-parts to avoid the cost of
 making new allocations as much as possible. For instance, modifying a
 value in a persistent tree means creating a chain of new blocks, from
-the root of the tree to the modified leaf. For convenience (and also
-because it is difficult in a non-lazy pure language to generate complex
-cyclic values with reasonable space usage), Irmin only considers acyclic
-block graphs.
+the root of the tree to the modified leaf.
+For convenience, Irmin only considers acyclic block graphs --
+it is difficult in a non-lazy pure language to generate complex cyclic
+values with reasonable space usage.
 
 Conceptually, an Irmin block store has the following signature:
 
@@ -131,16 +132,17 @@ access into the data structure.
 
 So far, we have only discussed purely functional data structures,
 where updating a structure means returning a pointer to a new
-structure in the heap that sharees most of its contents with the previous
-one. This style of programming is appealing when implementing complex
-[protocols][tls] as it leads to better compositional properties.
+structure in the heap that shares most of its contents with the previous
+one. This style of programming is appealing when implementing
+[complex protocols][tls] as it leads to better compositional properties.
+
+<img src="/graphics/irmin-stores.png" alt="Irmin Stores" style="float:right; border: 5px" width="250px" />
 
 However, this makes sharing information between processes much more
-difficult, as you need a way to "inject" the state of one structure in an
-other processes memory. In order to do so, Irmin borrows the concept of
-*branches* from Git by relating every operation to a branch name, and 
+difficult, as you need a way to "inject" the state of one structure into another process's memory. In order to do so, Irmin borrows the concept of
+*branches* from Git by relating every operation to a branch name, and
 modifying the tip of the branch if it has side-effects.
-The Irmin *tag store* is the only mutable part of the whole system and 
+The Irmin *tag store* is the only mutable part of the whole system and
 is responsible for mapping some global (branch) names to blocks in the
 block store. These tag names can then be used to pass block references between
 different processes.
@@ -148,7 +150,7 @@ different processes.
 A block store and a tag store can be combined to build
 a higher-level store (the Irmin store) with fine concurrency control
 and atomicity guarantees. As mutation happens only in the tag store,
-we can ensure that as long a given tag is not updated, no change done
+we can ensure that as long a given tag is not updated, no change made
 in the block store will be visible by anyone. This also gives a nice
 story for concurrency: as in Git, creating a concurrent view of the
 store is the straightforward operation of creating a new tag that
@@ -200,7 +202,7 @@ nice, but in practice it has two major drawbacks:
 * It does not specify how we find the initial state from two diverging
   states -- this is generally not possible (think of diverging
   counters); and
-* It means we need to compute the sequence of `update` operations 
+* It means we need to compute the sequence of `update` operations
   that leads from one state to an other.  This is easier than finding
   the common initial state between two branches, but is still generally
   not very efficient.
@@ -217,6 +219,8 @@ other tips. Practically speaking, that means that every tip should
 contains the list of its predecessors as well as the actual data it
 associated to. As it is purely functional, we can (and we do) store
 that graph in an Irmin block store.
+
+<img src="/graphics/irmin-merge.png" alt="Finding a common ancestor" style="float:right; border:5px" width="150px" />
 
 Having a persistent and immutable history is good for various obvious
 reasons, such as access to a forensics if an error occurs or
@@ -260,7 +264,7 @@ let merge ~old t1 t2 = old + (t1-old) + (t2-old)
 From a design perspective, having access to the history makes it easier to
 design complex data structures with good compositional properties to use in
 unikernels. Moreover, as we made few assumptions on how the substrate of the
-low-level constructs needs to be implemented, the Irmin engine can be be ported
+low-level constructs need to be implemented, the Irmin engine can be be ported
 to many exotic backends such as JavaScript or anywhere else that Mirage OS
 runs: this is just a matter of implementing a rather trivial
 [signature][irmin-AO].
@@ -268,17 +272,17 @@ runs: this is just a matter of implementing a rather trivial
 From a developer perspective, this means that the full history of operations is
 available to inspect, and that the history model is very similar to the Git
 workflow that is increasingly familiar. So similar, in fact, that we've
-developed a bidirectional mapping between Irmin data structure and the Git
+developed a bidirectional mapping between Irmin data structures and the Git
 format to permit the `git` command-line to interact with.
 
-The next post in our series will explain what [Dave Scott][dave] has been doing
+The [next post in our series][irmin-xen] explains what [Dave Scott][dave] has been doing
 with the new version of the [Xenstore][xenstore] database that powers every Xen host,
 where the entire database is stored in a prefix-tree Irmin data-structure and exposed
 as a Git repository which is live-updated!  Here's a sneak preview...
 
-<center>
-<iframe width="480" height="360" src="//www.youtube-nocookie.com/embed/DSzvFwIVm5s" frameborder="0" allowfullscreen="1"> &nbsp; </iframe>
-</center>
+<div class="flex-video">
+  <iframe width="480" height="360" src="//www.youtube-nocookie.com/embed/DSzvFwIVm5s" frameborder="0" allowfullscreen="1"> &nbsp; </iframe>
+</div>
 
 [irmin-AO]: https://github.com/mirage/irmin/blob/4b06467ddee1e20c35bad64812769587fb9fa8a4/lib/core/irminStore.mli#L61
 [dave]: http://dave.recoil.org/
@@ -297,4 +301,7 @@ as a Git repository which is live-updated!  Here's a sneak preview...
 [tls]: http://openmirage.org/blog/ocaml-tls-api-internals-attacks-mitigation
 [xirminstore]: https://www.youtube.com/watch?v=DSzvFwIVm5s
 [xenstore]: http://wiki.xen.org/wiki/XenStoreReference
+[rwo]: https://realworldocaml.org
 [rwo-heap]: https://realworldocaml.org/v1/en/html/memory-representation-of-values.html
+[cas]: http://en.wikipedia.org/wiki/Content-addressable_storage
+[irmin-xen]: http://openmirage.org/blog/introducing-irmin-in-xenstore
