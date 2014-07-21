@@ -263,6 +263,12 @@ module Blog = struct
         body       = "introducing-irmin-in-xenstore.md";
         permalink  = "introducing-irmin-in-xenstore";
       };
+      { updated    = date (2014, 07, 22, 10, 0);
+        authors    = [tal];
+        subject    = "Introducing Xen MiniOS on ARM";
+        body       = "introducing-xen-minios-arm.md";
+        permalink  = "introducing-xen-minios-arm";
+      };
     ]
 end
 
