@@ -21,8 +21,7 @@ storage layer of Mirage 2.0, can help.
 
 But first, a quick Xenstore primer:
 
-Xen and Xenstore in 30 seconds
-------------------------------
+### Xen and Xenstore in 30 seconds
 
 The Xen hypervisor focuses on isolating VMs from each-other; the hypervisor provides a virtual CPU scheduler
 and a memory allocator but does not perform I/O on behalf of guest VMs.
@@ -56,8 +55,7 @@ causing the clients to retry, the system will make little progress and may appea
 The challenge for a Xenstore implementation is to minimise the number of aborted
 transactions and retries, without compromising on the isolation guarantee.
 
-Irmin Xenstore design goals
----------------------------
+### Irmin Xenstore design goals
 
 The design goals of the Irmin-based Mirage Xenstore server are:
   1. safely restart after a crash;
@@ -66,8 +64,7 @@ The design goals of the Irmin-based Mirage Xenstore server are:
 
 How does Irmin help achieve these goals?
 
-Restarting after crashes
-------------------------
+### Restarting after crashes
 
 The Xenstore service is a reliable component and very rarely crashes. However,
 if a crash does occur, the impact is severe on currently running virtual
@@ -196,8 +193,7 @@ Now all that remains is to carefully adjust the I/O code so that effects (readin
 along the persistent connections) are interleaved properly with persisted state changes and
 voilà, we now have a xenstore which can recover after a restart.
 
-Easy system debugging
----------------------
+### Easy system debugging with Git
 
 When something goes wrong on a Xen system it's standard procedure to
   1. take a snapshot of the current state of Xenstore; and
@@ -215,7 +211,7 @@ update has a compact one-line summary, a more verbose multi-line explanation and
 the full state change is available on demand.
 
 For example you can view the history in a highly-summarised form with:
-```
+```console
 $ git log --pretty=oneline --abbrev-commit --graph
 * 2578013 Closing connection -1 to domain 0
 * d4728ba Domain 0: rm /bench/local/domain/0/backend/vbd/10 = ()
@@ -257,8 +253,7 @@ Last but not least, you can `git checkout` to the exact time the problem occurre
 the state of the store.
 
 
-Going really fast
------------------
+### Going really fast
 
 Xenstore is part of the control-plane of a Xen system and is most heavily stressed when lots
 of VMs are being started in parallel. Each VM has multiple devices and each device is added in a
@@ -271,17 +266,20 @@ parallel, lots of branches are created and must be merged back together. If a br
 be merged then an abort signal is sent to the client and it must retry.
 
 Earlier versions of Xenstore had naive transaction merging algorithms
-which aborted many of these transactions, causing the clients to re-issue them. This led to a live-lock
-where clients were constantly reissuing the same transactions again and again. Happily Irmin's
-default merging strategy is much better: by default Irmin records the results of every operation
-and replays the operations on merge (similar to 'git rebase'). Irmin will only generate a `Conflict` and signal an abort if
-the client would now see different results to those it has already received (imagine reading a key twice within an isolated transaction
-and seeing two different values). In the case of parallel VM starts, the keys are disjoint by construction
-so all transactions are merged trivially; clients never receive abort signals; and therefore
-the system makes steady, predictable progress starting the VMs.
+which aborted many of these transactions, causing the clients to re-issue them.This led to a live-lock
+where clients were constantly reissuing the same transactions again and again.
 
-Trying it out
--------------
+Happily Irmin's default merging strategy is much better: by default Irmin
+records the results of every operation and replays the operations on merge
+(similar to `git rebase`). Irmin will only generate a `Conflict` and signal an
+abort if the client would now see different results to those it has already
+received (imagine reading a key twice within an isolated transaction and seeing
+two different values). In the case of parallel VM starts, the keys are disjoint
+by construction so all transactions are merged trivially; clients never receive
+abort signals; and therefore the system makes steady, predictable progress
+starting the VMs.
+
+### Trying it out
 
 The Irmin Xenstore is under [active development](https://github.com/mirage/ocaml-xenstore-server)
 but you can try it by:
