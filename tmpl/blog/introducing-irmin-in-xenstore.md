@@ -11,11 +11,10 @@ to other VMs.
 
 The current version of Xenstore is [already written in OCaml](http://xenbits.xen.org/gitweb/?p=xen.git;a=tree;f=tools/ocaml/xenstored;h=0d762f2a61de098c0100814e0c140575b51688a3;hb=stable-4.4)
 and documented in the paper
-[OXenstored: an efficient hierarchical and transactional database using functional programming with reference cell comparisons](http://gazagnaire.org/pub/GH09.pdf) presented at ICFP2009.
-The existing code works really well but
-there is always room for improvement; and this is where Irmin, 
-the storage layer of Mirage 2.0, can
-help.
+[OXenstored: an efficient hierarchical and transactional database using functional programming with reference cell comparisons](http://gazagnaire.org/pub/GH09.pdf) presented at ICFP 2009.
+The existing code works very reliably, but there is always room for improvement
+for debuggability of such a complex system component. This is where Irmin, the
+storage layer of Mirage 2.0, can help.
 
 But first, a quick Xenstore primer:
 
@@ -24,15 +23,16 @@ Xen and Xenstore in 30 seconds
 
 The Xen hypervisor focuses on isolating VMs from each-other; the hypervisor provides a virtual CPU scheduler
 and a memory allocator but does not perform I/O on behalf of guest VMs.
-On a Xen host, priviliged server VMs perform I/O on behalf of client VMs.
-The I/O configuration -- which server VM handles which client VMs etc. -- is stored in Xenstore, as
-key=value pairs. The following diagram shows a Xen host with a single client and server VM, with a
-single virtual device in operation.
-Disk blocks and network packets flow via shared memory between Xen-aware drivers in the VMs,
-shown in the lower-half.
-The control-plane, shown in the upper-half, contains the metadata about the datapath: how the device
-should appear in the client VM; where the I/O should go in the server VM; where the shared memory
-control structures are etc.
+On a Xen host, privileged server VMs perform I/O on behalf of client VMs.
+The configuration for calculating which server VM services requests for which client VMs is stored in Xenstore, as
+key/value pairs.
+
+The following diagram shows a Xen host with a single client and server VM, with
+a single virtual device in operation.  Disk blocks and network packets flow via
+shared memory between Xen-aware drivers in the VMs, shown in the lower-half.
+The control-plane, shown in the upper-half, contains the metadata about the
+datapath: how the device should appear in the client VM; where the I/O should
+go in the server VM; where the shared memory control structures are etc.
 
 <img src="/graphics/xenstore-diagram.png" alt="Device configuration is stored in Xenstore as key=value pairs." />
 
@@ -66,18 +66,20 @@ How does Irmin help achieve these goals?
 Restarting after crashes
 ------------------------
 
-The Xenstore service is a reliable component and very rarely crashes. However, if
-a crash does occur, the impact is quite severe: there is no protocol for a running VM to close
-its connection to a Xenstore and open a new one, so if Xenstore crashes then running
-VMs are simply left orphaned. VMs in this state are impossible to manage properly:
-there is no way to shut them down cleanly, to suspend/resume or migrate, or to configure
-any disk or network interfaces. If Xenstore crashes, the host must be rebooted shortly after.
+The Xenstore service is a reliable component and very rarely crashes. However,
+if a crash does occur, the impact is severe on currently running virtual
+machines. There is no protocol for a running VM to close its connection to a
+Xenstore and open a new one, so if Xenstore crashes then running VMs are simply
+left orphaned. VMs in this state are impossible to manage properly: there is no
+way to shut them down cleanly, to suspend/resume or migrate, or to configure
+any disk or network interfaces. If Xenstore crashes, the host must be rebooted
+shortly after.
 
-Irmin can help make Xenstore recoverable after a crash. Irmin
-is a library which applications can use to persist and synchronise
-distributed data structures on disk and in memory. If we use Irmin to persist all our state 
-somewhere sensible and take care to manage our I/O carefully then the server process
-becomes stateless and can be restarted at will.
+Irmin helps make Xenstore recoverable after a crash, by providing a library
+that applications can use to persist and synchronise distributed data
+structures on disk and in memory. By using Irmin to persist all our state
+somewhere sensible and taking care to manage our I/O carefully, then the server
+process becomes stateless and can be restarted at will.
 
 To make Xenstore use Irmin,
 the first task is to enumerate all the different kinds of state in the running process.
@@ -107,13 +109,16 @@ module type VIEW = sig
       A VIEW tracks state queries and updates and acts like a branch
       which has an explicit [merge]. *)
 
-  val read: t -> Protocol.Path.t -> [ `Ok of Node.contents | `Enoent of Protocol.Path.t ] Lwt.t
+  val read: t -> Protocol.Path.t -> 
+    [ `Ok of Node.contents | `Enoent of Protocol.Path.t ] Lwt.t
   (** Read a single key *)
 
-  val list: t -> Protocol.Path.t -> [ `Ok of string list | `Enoent of Protocol.Path.t ] Lwt.t
+  val list: t -> Protocol.Path.t -> 
+    [ `Ok of string list | `Enoent of Protocol.Path.t ] Lwt.t
   (** List all the children of a key *)
 
-  val write: t -> Protocol.Path.t -> Node.contents -> [ `Ok of unit ] Lwt.t
+  val write: t -> Protocol.Path.t -> Node.contents -> 
+    [ `Ok of unit ] Lwt.t
   (** Update a single key *)
 
   val mem: t -> Protocol.Path.t -> bool Lwt.t
@@ -139,6 +144,8 @@ from other processes (where a VM offers more isolation than a container, which o
 isolation than a chroot). Note this choice is invisible to the guest VMs.
 
 So far in the Irmin Xenstore integration only the userspace instantiation has been implemented.
+One of the most significant user-visible features is that all of the operations done through
+Irmin can be inspected using the standard `git` command line tool.
 The runes to configure Irmin to write
 [git](http://git-scm.com) format data to the filesystem are as follows:
 ```
@@ -260,9 +267,9 @@ When starting lots of VMs in
 parallel, lots of branches are created and must be merged back together. If a branch cannot
 be merged then an abort signal is sent to the client and it must retry.
 
- Earlier versions of Xenstore had naieve transaction merging algorithms
+Earlier versions of Xenstore had naive transaction merging algorithms
 which aborted many of these transactions, causing the clients to re-issue them. This led to a live-lock
-where clients were constantly re-issuing the same transactions again and again. Happily Irmin's
+where clients were constantly reissuing the same transactions again and again. Happily Irmin's
 default merging strategy is much better: by default Irmin records the results of every operation
 and replays the operations on merge (similar to 'git rebase'). Irmin will only generate a `Conflict` and signal an abort if
 the client would now see different results to those it has already received (imagine reading a key twice within an isolated transaction
@@ -313,4 +320,4 @@ Next check out the git repo generated by Irmin:
   git log
 ```
 
-Comments and/or contributions are welcome-- join the [Mirage email list](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel) and say hi!
+Comments and/or contributions are welcome: join the [Mirage email list](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel) and say hi!
