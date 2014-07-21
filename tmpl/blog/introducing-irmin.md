@@ -275,7 +275,7 @@ workflow that is increasingly familiar. So similar, in fact, that we've
 developed a bidirectional mapping between Irmin data structures and the Git
 format to permit the `git` command-line to interact with.
 
-The next post in our series will explain what [Dave Scott][dave] has been doing
+The [next post in our series][irmin-xen] explains what [Dave Scott][dave] has been doing
 with the new version of the [Xenstore][xenstore] database that powers every Xen host,
 where the entire database is stored in a prefix-tree Irmin data-structure and exposed
 as a Git repository which is live-updated!  Here's a sneak preview...
@@ -304,3 +304,4 @@ as a Git repository which is live-updated!  Here's a sneak preview...
 [rwo]: https://realworldocaml.org
 [rwo-heap]: https://realworldocaml.org/v1/en/html/memory-representation-of-values.html
 [cas]: http://en.wikipedia.org/wiki/Content-addressable_storage
+[irmin-xen]: http://openmirage.org/blog/introducing-irmin-in-xenstore

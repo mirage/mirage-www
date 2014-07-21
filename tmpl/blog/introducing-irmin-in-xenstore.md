@@ -1,3 +1,6 @@
+*This is the second in a series of posts that introduces the [Irmin][https://github.com/mirage/irmin] distributed storage engine.
+You might like to begin with the [introduction][http://openmirage.org/blog/introducing-irmin].*
+
 [Xenstore](http://wiki.xen.org/wiki/XenStore) is a critical service found on all hosts
 running [Xen](http://www.xen.org/). Xenstore is necessary to
   * configure all VM I/O devices such as disk controllers and network interface cards;
