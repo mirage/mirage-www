@@ -38,6 +38,8 @@ release to!  And finally, the lifeblood of Mirage is about sharing and
 [publishing libraries](http://opam.ocaml.org/doc/Packaging.html) that add new functionality to the framework, so do get
 involved and open-source your own efforts.
 
+*Breaking news*: [Richard Mortier][mort] and I will be speaking at [OSCON](http://www.oscon.com) this week on Thursday morning about the new features [in F150 in the Cloud Track](http://www.oscon.com/oscon2014/public/schedule/detail/35024). Come along if you are in rainy Portland at the moment!
+
 [blog-track]: https://github.com/mirage/mirage/issues/257
 [team]: http://openmirage.org/community
 [nymote]: http://nymote.org
@@ -55,3 +57,4 @@ involved and open-source your own efforts.
 [jludlam]: http://jon.recoil.org
 [yallop]: https://github.com/yallop
 [amirmc]: http://amirchaudhry.com
+[mort]: http://mort.io
