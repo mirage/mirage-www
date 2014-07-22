@@ -265,7 +265,7 @@ module Blog = struct
       };
       { updated    = date (2014, 07, 22, 10, 0);
         authors    = [tal];
-        subject    = "Introducing Xen MiniOS on ARM";
+        subject    = "Building an ARMy of Xen unikernels";
         body       = "introducing-xen-minios-arm.md";
         permalink  = "introducing-xen-minios-arm";
       };
