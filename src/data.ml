@@ -269,14 +269,12 @@ module Blog = struct
         body       = "introducing-xen-minios-arm.md";
         permalink  = "introducing-xen-minios-arm";
       };
-      (* PLACEHOLDER FOR RELEASE ANNOUNCEMENT
       { updated    = date (2014, 07, 22, 11, 0);
         authors    = [anil];
-        subject    = "Announcing Mirage v2.0!";
+        subject    = "Mirage v2.0: a recap of the new features";
         body       = "announcing-mirage-20-release.md";
         permalink  = "announcing-mirage-20-release";
       };
-    *)
     ]
 end
 
