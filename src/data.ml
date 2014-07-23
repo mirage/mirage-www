@@ -494,6 +494,13 @@ module Links = struct
   }
 
   let entries = [
+    { id="seedhack-experience";
+      uri=Uri.of_string "http://seedcamp.com/seedhack-5-0/";
+      title="The Seedhack Experience";
+      date=day(2014,07,23);
+      stream=blog;
+    };
+
     { id="hn-introducing-irmin";
       uri=Uri.of_string "https://news.ycombinator.com/item?id=8053687";
       title="HN: Irmin: Git-like distributed, branchable storage";
