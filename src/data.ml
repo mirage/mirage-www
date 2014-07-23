@@ -494,7 +494,56 @@ module Links = struct
   }
 
   let entries = [
-    { id="introducing-tls-hackernews";
+    { id="hn-introducing-irmin";
+      uri=Uri.of_string "https://news.ycombinator.com/item?id=8053687";
+      title="HN: Irmin: Git-like distributed, branchable storage";
+      date=day(2014,07,18);
+      stream=hn;
+    };
+
+    { id="hn-introducing-asn1";
+      uri=Uri.of_string "https://news.ycombinator.com/item?id=8020125";
+      title="HN: OCaml-TLS: ASN.1 and notation embedding";
+      date=day(2014,07,11);
+      stream=hn;
+    };
+
+    { id="hn-mirage-os-unikernel-for-xen-hypervisor";
+      uri=Uri.of_string "https://news.ycombinator.com/item?id=7726748";
+      title="HN: Mirage OS: A Unikernel For The Xen Hypervisor";
+      date=day(2014,05,10);
+      stream=hn;
+    };
+
+    { id="hn-ocaml-tls-api-internals-attacks-mitigation";
+      uri=Uri.of_string "https://news.ycombinator.com/item?id=8031368";
+      title="HN: OCaml-TLS: the protocol implementation and mitigations to known attacks";
+      date=day(2014,07,14);
+      stream=hn;
+    };
+
+    { id="hn-announcing-mirage-20-release";
+      uri=Uri.of_string "https://news.ycombinator.com/item?id=8069132";
+      title="HN: Mirage v2.0: a recap of the new features";
+      date=day(2014,07,22);
+      stream=hn;
+    };
+
+    { id="hn-acm-queue-01";
+      uri=Uri.of_string "https://news.ycombinator.com/item?id=7053638";
+      title="HN: Unikernels: Rise of the Virtual Library Operating System";
+      date=day(2014,01,14);
+      stream=hn;
+    };
+
+    { id="hn-acm-queue-02";
+      uri=Uri.of_string "https://news.ycombinator.com/item?id=8025493";
+      title="HN: Unikernels: Rise of the Virtual Library Operating System";
+      date=day(2014,07,12);
+      stream=hn;
+    };
+
+    { id="hn-introducing-tls";
       uri=Uri.of_string "https://news.ycombinator.com/item?id=8005130";
       title="HN: Introducing Transport Layer Security in pure OCaml";
       date=day(2014,07,08);
