@@ -18,15 +18,13 @@
 
 MODE ?= unix
 
-CFLAGS ?=
-BFLAGS ?=
-RFLAGS ?=
-
 MIRAGE ?= mirage
-MODE ?= unix
-FS ?= fat
-NET ?= direct
+MODE   ?= unix
+FS     ?= fat
+NET    ?= direct
 IPADDR ?= static
+
+FLAGS  ?=
 
 .PHONY: all configure build run clean
 
@@ -34,16 +32,17 @@ all: build
 	@ :
 
 configure:
-	$(MIRAGE) configure src/config.ml $(CFLAGS) --$(MODE)
+	$(MIRAGE) configure src/config.ml $(FLAGS) --$(MODE)
 
 depend:
-	cd src && $(MAKE) depend
+	cd src && make depend
 
-build: configure
-	$(MIRAGE) build src/config.ml $(BFLAGS)
+build:
+	cd src && make build
 
-run: build
-	$(MIRAGE) run src/config.ml $(RFLAGS)
+run:
+	cd src && sudo NET=$(NET) IPADDR=$(IPADDR) FS=$(FS) make run
 
 clean:
-	$(MIRAGE) clean src/config.ml $(BFLAGS)
+	cd src && make clean
+	$(RM) log
