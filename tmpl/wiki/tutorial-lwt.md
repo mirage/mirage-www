@@ -275,7 +275,7 @@ Write an echo server, reading from a dummy input generator and, for each line it
 ```
   let rec echo_server () =
     lwt s = read_line () in
-    Console.log s;
+    Console.log c s;
     echo_server ()
 ```
 
