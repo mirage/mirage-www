@@ -372,11 +372,6 @@ Using the pipelining helpers, change the echo server into a string processing se
   let cap_str str =
     Lwt.return (String.uppercase str)
 
-  let rec print_mvar c m =
-    lwt s = Lwt_mvar.take m in
-    Console.log c s;
-    print_mvar c m
-
   let ( |> ) x f = f x
 
   let echo_server c () =
