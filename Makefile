@@ -41,8 +41,8 @@ build:
 	cd src && make build
 
 run:
-	cd src && sudo NET=$(NET) IPADDR=$(IPADDR) FS=$(FS) make run
+	cd src && sudo make run
 
 clean:
 	cd src && make clean
-	$(RM) log
+	$(RM) log src/mir-www src/*.img src/make-fat*.sh
