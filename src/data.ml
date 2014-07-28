@@ -494,6 +494,118 @@ module Links = struct
   }
 
   let entries = [
+    { id="mirage-20-pr-congoo";
+      uri=Uri.of_string "http://www.congoo.com/news/addstorycomment.aspx?st=291376442&Channel_ID=8&Category_ID=-1";
+      title="Xen Project Introduces New Mirage OS Release";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-reuters";
+      uri=Uri.of_string "http://www.reuters.com/article/2014/07/22/idUSnMKWyFRLBa+1de+MKW20140722";
+      title="Xen Project Introduces New Mirage OS Release";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-phoronix";
+      uri=Uri.of_string "http://www.phoronix.com/scan.php?page=news_item&px=MTc0NjY";
+      title="Xen Project Announces Mirage OS 2.0";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-linux-embedded";
+      uri=Uri.of_string "https://www.linux.com/news/embedded-mobile/mobile-linux/781359-xen-project-announces-mirage-os-20";
+      title="Xen Project Announces Mirage OS 2.0";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-slashdot";
+      uri=Uri.of_string "http://beta.slashdot.org/submission/3717339/news-mirage-os-20----compile-your-own-cloud";
+      title="News: Mirage OS 2.0 -- Compile Your Own Cloud";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-vmblog";
+      uri=Uri.of_string "http://vmblog.com/archive/2014/07/22/xen-project-introduces-new-mirage-os-release.aspx";
+      title="Xen Project Introduces New Mirage OS Release";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-lastminutegeek";
+      uri=Uri.of_string "http://www.lastminutegeek.com/english/77-linuxtoday/1151651-mirage-os-v20-the-new-features.html";
+      title="Mirage OS v2.0: The new features";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-techinvestornews";
+      uri=Uri.of_string "http://www.techinvestornews.com/Cloud/Latest-Cloud-Computing-News/xen-unveils-mirage-os-2.0-for-open-source-virtual-cloud-apps";
+      title="Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-slashdot-2";
+      uri=Uri.of_string "http://beta.slashdot.org/submission/3720459/xen-unveils-mirage-os-20-for-open-source-virtual-cloud-apps";
+      title="Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-linuxtoday";
+      uri=Uri.of_string "http://www.linuxtoday.com/high_performance/mirage-os-v2.0-the-new-features.html";
+      title="Mirage OS v2.0: The new features";
+      date=day(2014,07,23);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-twit";
+      uri=Uri.of_string "https://plus.google.com/+TWiT/posts/6DkCPz3TSdd";
+      title="FLOSS Weekly 302 | TWiT.TV";
+      date=day(2014,07,23);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-cloudcomputinginfo";
+      uri=Uri.of_string "http://cloudcomputing.info/en/news/2014/07/xen-project-releases-mirage-os-2-0.html";
+      title="Xen Project releases Mirage OS 2.0";
+      date=day(2014,07,23);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-vibriefing";
+      uri=Uri.of_string "http://www.vibriefing.com/xen-unveils-mirage-os-2-0-for-open-source-virtual-cloud-apps/";
+      title="Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps";
+      date=day(2014,07,25);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-marketwatch";
+      uri=Uri.of_string "http://www.marketwatch.com/story/xen-project-introduces-new-mirage-os-release-2014-07-22";
+      title="Xen Project Introduces New Mirage OS Release";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-linuxquestions";
+      uri=Uri.of_string "http://www.linuxquestions.org/questions/syndicated-linux-news-67/lxer-xen-unveils-mirage-os-2-0-for-open-source-virtual-cloud-apps-4175512075/";
+      title="LXer: Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-4-traders";
+      uri=Uri.of_string "http://www.4-traders.com/news/Xen-Project-Introduces-New-Mirage-OS-Release--18774589/";
+      title=" Xen Project Introduces New Mirage OS Release";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
     { id="mirage-20-pr-release";
       uri=Uri.of_string "http://www.marketwired.com/press-release/xen-project-introduces-new-mirage-os-release-1931602.htm";
       title="Xen Project Introduces New Mirage OS Release";
