@@ -416,7 +416,7 @@ Every second write a tuple containing a pair of small random integers `(Random.i
   let rec print_odd c m =
     lwt a = Lwt_mvar.take m in
     Console.log c (Printf.sprintf "Odd: %d" a);
-    print_odd m
+    print_odd c m
 
   let ( |> ) x f = f x
 
