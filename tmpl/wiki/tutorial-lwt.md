@@ -221,7 +221,7 @@ You can test your solution with this application, which creates a thread and tha
     match state t with
     | Return v -> return (Some v)
     | _        -> cancel t; return None
- 
+
 ```
 
 This solution and application are found in `lwt/src/unikernels.ml` in the repository. Build with target `timeout1`.
