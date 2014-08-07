@@ -1,5 +1,3 @@
-<hr/>
-
 <ul class="small-block-grid-1 medium-block-grid-3 large-block-grid-3">
 
 <li><i class="fa fa-envelope fa-2x pull-left"> </i> Join the e-mail developer <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> or search the <a href="http://lists.xenproject.org/archives/html/mirageos-devel/">past archives</a>.  This is a fairly low-volume list, and beginner questions are welcome.</li>
@@ -16,4 +14,3 @@
 
 </ul>
 
-<hr />
