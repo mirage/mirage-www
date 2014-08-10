@@ -494,6 +494,13 @@ module Links = struct
   }
 
   let entries = [
+    { id="miso-talk-entrepreneur-first";
+      uri=Uri.of_string "http://amirchaudhry.com/describing-miso-entrepreneur-first-2014/";
+      title="Describing the MISO stack at Entrepreneur First";
+      date=day(2014,07,25);
+      stream=blog;
+    };
+
     { id="mirage-20-pr-congoo";
       uri=Uri.of_string "http://www.congoo.com/news/addstorycomment.aspx?st=291376442&Channel_ID=8&Category_ID=-1";
       title="Xen Project Introduces New Mirage OS Release";
