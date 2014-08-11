@@ -10,10 +10,10 @@ Partly because MirageOS is about synthesising extremely specialised guest
 kernels from high-level code, and partly because both Anil and I are
 constitutionally incapable of taking the easy way out, we self-hosted the
 slide deck on Mirage: after some last-minute hacking -- on content not Mirage
-I should add! -- we built a self-contained microkernel of the talk.
+I should add! -- we built a self-contained unikernel of the talk.
 
 This was what you might call a "full stack" presentation: the custom
-microkernel (flawlessly!) ran a type-safe
+unikernel (flawlessly!) ran a type-safe
 [network device driver](https://github.com/mirage/mirage-platform/blob/master/xen/lib/netif.ml),
 OCaml [TCP/IP stack](http://github.com/mirage/mirage-net) supporting an OCaml
 [HTTP](http://github.com/mirage/ocaml-cohttp) framework that served slides

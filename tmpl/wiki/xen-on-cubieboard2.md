@@ -1,12 +1,10 @@
 **Author:** Thomas Leonard, addendums from Anil Madhavapeddy
 
-**Status:** work-in-progress
-
-These notes detail the process of setting up a Xen system on a Cubieboard2.
+These notes detail the process of setting up a Xen system on a Cubieboard2 (or Cubietruck).
 They are based on the [Xen ARM with Virtualization Extensions/Allwinner](http://wiki.xen.org/wiki/Xen_ARM_with_Virtualization_Extensions/Allwinner) documentation, but try to collect everything into one place.
 I'm trying to document the exact steps I took (with the wrong turns removed); some changes will be needed for other systems.
 
-**TL;DR**: There is now a script available that generates an image with Xen, Ubuntu dom0, and the OCaml tools installed.  Just run the `make` instructions at [mirage/xen-arm-builder](https://github.com/mirage/xen-arm-builder) and copy the resulting image onto an SDcard and boot up your Cubieboard2 or Cubietruck (password `linaro`/`linaro` which you should change as the first thing you do).
+**TL;DR**: There is now a script available that generates an image with Xen, Ubuntu dom0, and the OCaml tools installed.  Just run the `make` instructions at [mirage/xen-arm-builder](https://github.com/mirage/xen-arm-builder) and copy the resulting image onto an SDcard and boot up your Cubieboard2 or Cubietruck (password `mirage`/`mirage` which you should change as the first thing you do). The script is kept more up-to-date than the instructions on this page.
 
 The remainder of this guide covers:
 
@@ -162,9 +160,7 @@ Run `make` to build `boot.scr`.
 
 ## Building Linux
 
-Get [linux-sunxi Git tree](https://github.com/linux-sunxi/linux-sunxi), sunxi-devel branch.
-
-Note: DO NOT use the "sunxi-next" branch! Only the "sunxi-devel" branch has MMC support.
+Get my [Linux Git tree](https://github.com/talex5/linux.git), master branch. This fork has a few extra patches we need.
 
 Configure:
 
@@ -229,11 +225,10 @@ Then:
 
 ## Building Xen
 
-You can use the official [Xen 4.4 release](http://www.xenproject.org/downloads/xen-archives/xen-44-series/xen-440.html), but I used the Git version:
+Currently, some minor patches are needed to the official [Xen 4.4 release](http://www.xenproject.org/downloads/xen-archives/xen-44-series/xen-440.html), so use this Git version:
 
-    git clone git://xenbits.xen.org/xen.git
+    git clone -b stable-4.4 https://github.com/talex5/xen.git
     cd xen
-    git checkout stable-4.4
 
 Edit `Config.mk` and turn debug on: `debug ?= y`.
 This enables some features that are useful when debugging guests, such as allowing guests to write debug messages to the Xen console.
@@ -288,10 +283,10 @@ Mount the fat partition and copy in boot.scr, the Linux kernel, the FDT and Xen:
 
 The wiki's links to the prebuilt root images are broken, but a bit of searching turns up some alternatives.
 
-I used [linaro-saucy-developer-20140406-651.tar.gz](https://snapshots.linaro.org/ubuntu/images/developer/latest/linaro-saucy-developer-20140406-651.tar.gz).
+I used [linaro-trusty-developer-20140522-661.tar.gz](http://releases.linaro.org/14.05/ubuntu/trusty-images/developer/linaro-trusty-developer-20140522-661.tar.gz).
 
     cd /mnt/mmc2
-    sudo tar xf /data/arm/linaro-saucy-developer-20140406-651.tar.gz
+    sudo tar xf /data/arm/linaro-trusty-developer-20140522-661.tar.gz
     sudo mv binary/* .
     sudo rmdir binary
 
@@ -388,14 +383,7 @@ You should now be able to ssh in directly.
 
 ## Xen toolstack
 
-The Ubuntu 13.10 image comes with Xen 4.3, so we need to upgrade:
-
-    apt-get install update-manager-core python-apt
-    do-release-upgrade -d
-
-Reboot and fix any problems. Edit `/etc/init/rc-sysinit.conf` if you need to change the default runlevel - for some reason, booting to level 1 and then doing `init 2` works for me, but booting directly to level 2 doesn't.
-
-Then install the new Xen tools:
+Install the Xen tools:
 
     apt-get install xen-utils-4.4
 
@@ -460,7 +448,7 @@ Copy the Linux kernel image into /root (the dom0 one is fine). Create `domU_test
 
     kernel = "/root/zImage"
     memory = 512
-    name = "Ubuntu-13.10"
+    name = "Ubuntu-14.04"
     vcpus = 2
     serial="pty"
     disk = [ 'phy:/dev/vg0/linux-guest-1,xvda,w' ]
@@ -555,7 +543,7 @@ You'll need to install a few things to build it:
 
 Clone the repository and build:
 
-    git clone https://github.com/talex5/xen.git
+    git clone -b devel https://github.com/talex5/xen.git
     cd xen/extras/mini-os
     make
 
@@ -594,4 +582,4 @@ On success, it will write lots of text to the Xen console (note: this requires a
     (d6) Initialising timer interface
     ...
 
-(to be continued...)
+You can now try [running a Mirage unikernel](/blog/introducing-xen-minios-arm).

@@ -47,8 +47,14 @@ let stack console =
   | `Direct, false -> direct_stackv4_with_default_ipv4 console tap0
   | `Socket, _     -> socket_stackv4 console [Ipaddr.V4.any]
 
+let port =
+  try match Sys.getenv "PORT" with
+    | "" -> 80
+    | s  -> int_of_string s
+  with Not_found -> 80
+
 let server =
-  http_server 80 (stack default_console)
+  http_server port (stack default_console)
 
 let main =
   let libraries = [ "cow.syntax"; "cowabloga" ] in
