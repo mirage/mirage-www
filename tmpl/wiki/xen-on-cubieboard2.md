@@ -78,14 +78,22 @@ On Arch Linux, run:
 
     yaourt -S arm-linux-gnueabihf-gcc
 
+On Debian testing, run (as root):
+
+    apt-get install gcc-arm-none-eabi
+
 On a modern Ubuntu, run:
 
     sudo apt-get install gcc-arm-linux-gnueabihf
 
-This installs files such as:
+This installs files such as, say, on Ubuntu:
 
     /usr/bin/arm-linux-gnueabihf-ld
     /usr/bin/arm-linux-gnueabihf-gcc
+
+Take note of the common prefix.  Define a variable to hold it:
+
+    export CROSS_COMPILE=arm-linux-gnueabihf-
 
 ## U-Boot
 
@@ -99,9 +107,8 @@ Note: only the "sunxi-next" branch has the required hypervisor support; DO NOT u
 
 Configure and build U-Boot using the ARM toolchain:
 
-    make CROSS_COMPILE=arm-linux-gnueabihf- Cubieboard2_config
-    make CROSS_COMPILE=arm-linux-gnueabihf- -j 4
-
+    make CROSS_COMPILE=$CROSS_COMPILE Cubieboard2_config
+    make CROSS_COMPILE=$CROSS_COMPILE -j 4
 
 ## U-Boot configuration
 
@@ -227,7 +234,8 @@ Here are the settings I used (check it works with just these settings and whethe
 
 A simpler alternative to `make ARCH=arm menuconfig` is to copy
 [`config-cubie2`](https://github.com/mirage/xen-arm-builder/blob/master/config/config-cubie2)
-to `.config`.
+to `.config`
+(note that `CONFIG_CROSS_COMPILE` *must* have the value of `$CROSS_COMPILE`).
 
 Then:
 
@@ -247,7 +255,7 @@ Note: If you already built Xen without debug, `make clean` is NOT sufficient! Us
 
 Compile with:
 
-    make dist-xen XEN_TARGET_ARCH=arm32 CROSS_COMPILE=arm-linux-gnueabihf- CONFIG_EARLY_PRINTK=sun7i -j4
+    make dist-xen XEN_TARGET_ARCH=arm32 CROSS_COMPILE=$CROSS_COMPILE CONFIG_EARLY_PRINTK=sun7i -j4
 
 
 ## Partitioning the SD card
