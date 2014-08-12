@@ -468,6 +468,12 @@ module Wiki = struct
       body       = File "xen-on-cubieboard2.md";
       permalink  = "xen-on-cubieboard2";
     };
+    { updated    = date (2014, 08, 12, 22, 56);
+      author     = yomimono;
+      subject    = "Contributing to Mirage";
+      body       = File "contributing.md";
+      permalink  = "contributing";
+    };
   ]
 end
 
