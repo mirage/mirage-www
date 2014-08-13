@@ -144,10 +144,14 @@ Create a directory for the boot commands (e.g. "boot"). Create
 
 The above is the template from the wiki, but configured to:
 
-- Load Xen, the FDT and Linux from mmcblk0p1
+- Load Xen, the FDT and Linux from `mmcblk0p1`
 - Use mmcblk0p2 as Linux's root FS
 - Wait for the device (`rootwait`)
 - Run /bin/bash as init.
+
+More information on
+[the format of this file](http://www.denx.de/wiki/view/DULG/UBoot)
+is available on the [denx site](http://www.denx.de/wiki/view/DULG/Manual).
 
 Create a `Makefile` to compile it using
 [mkimage](https://github.com/jwrdegoede/u-boot-sunxi/blob/sunxi/doc/mkimage.1):
