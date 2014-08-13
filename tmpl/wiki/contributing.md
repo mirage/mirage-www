@@ -1,10 +1,10 @@
-Mirage welcomes contributions from anyone interested in the project.  If you are planning a large contribution, be it a piece of documentation, a patch to the software, a new driver, or something else, please do send a note to [the MirageOS development mailing list](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel) describing your planned contribution - you may discover that other contributors are willing to help.
+Mirage OS welcomes contributions from anyone interested in the project.  If you are planning a large contribution, be it a piece of documentation, a patch to the software, a new driver, or something else, please do send a note to [the Mirage development mailing list](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel) describing your planned contribution - you may discover that other contributors are willing to help.
 
 More information on being in touch with other Mirage contributors [is available](http://www.openmirage.org/community).
 
 ## Reporting Issues
 
-Issues (e.g. bugs in the software, unclear documentation, missing functionality) are best reported on the relevant GitHub repository.  If it's not clear which repository is most relevant or the issue is one that affects Mirage generally, post the issue to the [Mirage repository](http://www.github.com/mirage/mirage/issues).
+Issues (e.g. bugs in the software, unclear documentation, missing functionality) are best reported on the main [Mirage repository](http://www.github.com/mirage/mirage/issues) at GitHub.  
 
 When reporting an issue, please try to include any information you think may be relevant, including 
 
@@ -19,10 +19,11 @@ Mirage uses the [pull request](https://help.github.com/articles/using-pull-reque
 
 The mechanics for submitting a pull request are as follows: 
 
-* [Set up a GitHub account](https://github.com/signup)
-* [fork](https://help.github.com/articles/fork-a-repo) the repository to which you intend to commit your code.  (For example, a patch to the TCP/IP stack in Mirage should fork [mirage-tcpip](http://www.github.com/mirage/mirage-tcpip), and a patch correcting a problem with the website's documentation should fork [mirage-www](http://www.github.com/mirage/mirage-www).)
+* [Set up a free GitHub account](https://github.com/signup).
+* [Fork](https://help.github.com/articles/fork-a-repo) the repository to which you intend to commit your code.  Forexample, a patch to the TCP/IP stack in Mirage should fork [mirage-tcpip](http://www.github.com/mirage/mirage-tcpip), and a patch correcting a problem with the website's documentation should fork [mirage-www](http://www.github.com/mirage/mirage-www).
 * Make a [branch](https://github.com/blog/1377-create-and-delete-branches) with a descriptive name for the changes you plan to make.
 * If you are making code changes, you may wish to point `opam` to your local repository for that code with `opam pin`.  [More details on using opam when developing are available at the `opam` site.](https://opam.ocaml.org/doc/Developing.html)
-* Make changes in your local repository.  When you're satisfied that they're ready to be submitted, [push your changes to GitHub](https://help.github.com/articles/pushing-to-a-remote).
+* Make changes in your local repository.  [Here are some simple guidelines on commit messages.](https://wiki.gnome.org/Git/CommitMessages)  
+* When you're satisfied that your changes are ready to be submitted, [push your changes to GitHub](https://help.github.com/articles/pushing-to-a-remote).  
 * The web view for your repository should now have a button labeled `submit pull request`, where you can view the summary of your change and request that it be merged into the main repository.
-* Keep an eye on your pull request!  Other contributors may have questions or comments that they'd like to discuss with you before merging your changes.
+* Keep an eye out for notifications on your pull request!  By default, GitHub will email you when other contributors have questions or comments that they'd like to discuss with you before merging your changes.
