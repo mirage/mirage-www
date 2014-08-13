@@ -401,24 +401,39 @@ Add your ssh key:
     mkdir .ssh
     vi .ssh/authorized_keys
 
-You should now be able to connect with e.g.
+Install Avahi:
 
-    ssh root@192.168.1.79
+    apt-get install avahi-daemon libnss-mdns
 
-You can do a local scan on your network to discover the IP address of
-your Cubieboard2 (run `nmap -sn 192.168.0.0/24` on your computer).  If
-you do not see it, check that the network is up:
+You must also install these packages and `avahi-utils` on your
+computer.
+
+You probably want to give your Cubieboard a nice name.  Edit
+`/etc/hostname` and replace the existing name with the one of your
+choice — `cubie2` for the following.
+(You should also change `linaro-developer` in `/etc/hosts`
+to `cubie2`.)
+For the changes to take effect, you can either reboot or run
+`hostname cubie2` followed by `/etc/init.d/avahi-daemon restart`.
+You should now be able to connect with e.g., from your computer
+
+    ssh root@cubie2.local
+
+To see the list of Avahi services on your network, do `avahi-browse
+-alr`.  If you do not see your Cubieboard, check that its network is
+up: doing
 
     ip addr show
 
-should display a line starting with `br0:
+at the Cubieboard root prompt, should output some information
+including a line starting with `br0:
 <BROADCAST,MULTICAST,UP,LOWER_UP>`.  If it doesn't try
 
     brctl addbr br0
 
 If you get `add bridge failed: Package not installed`, you forgot to
-include Ethernet bridging in your kernel (it is included in the
-recommended `.config` file above).
+include Ethernet bridging in your kernel (it is included with the
+recommended `.config` file above so this should not happen).
 
 Kill the network and shut down:
 
@@ -432,7 +447,7 @@ You should now be able to ssh in directly.
 
 ## Xen toolstack
 
-Install the Xen tools:
+Ssh to your Cubieboard and install the Xen tools:
 
     apt-get install xen-utils-4.4
 
@@ -440,7 +455,7 @@ Once Xen 4.4 is installed, you can list your domains:
 
     # xl list
     Name                                        ID   Mem VCPUs      State   Time(s)
-    Domain-0                                     0   128     2     r-----      15.8
+    Domain-0                                     0   512     2     r-----      19.7
 
 
 ## LVM configuration
