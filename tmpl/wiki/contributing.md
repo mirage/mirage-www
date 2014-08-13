@@ -4,7 +4,7 @@ More information on being in touch with other Mirage contributors [is available]
 
 ## Reporting Issues
 
-Issues (e.g. bugs in the software, unclear documentation, missing functionality) are best reported on the main [Mirage repository](http://www.github.com/mirage/mirage/issues) at GitHub.  
+Issues (e.g. bugs in the software, unclear documentation, missing functionality) are best reported on the main [Mirage repository](http://www.github.com/mirage/mirage/issues) at GitHub, unless the issue is clearly contained in, and only relevant to, another specific repository.
 
 When reporting an issue, please try to include any information you think may be relevant, including 
 
