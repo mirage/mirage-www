@@ -122,7 +122,7 @@ Create a directory for the boot commands (e.g. "boot"). Create
     
     # Load xen/xen to ${xen_addr_r}.
     fatload mmc 0 ${xen_addr_r} /xen
-    setenv bootargs "console=dtuart dtuart=/soc@01c00000/serial@01c28000 dom0_mem=128M"
+    setenv bootargs "console=dtuart dtuart=/soc@01c00000/serial@01c28000 dom0_mem=256M"
     
     # Load appropriate .dtb file to ${fdt_addr}
     fatload mmc 0 ${fdt_addr} /sun7i-a20-cubieboard2.dtb
