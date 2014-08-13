@@ -105,7 +105,8 @@ Configure and build U-Boot using the ARM toolchain:
 
 ## U-Boot configuration
 
-Create a directory for the boot commands (e.g. "boot"). Create "boot/boot.cmd" with:
+Create a directory for the boot commands (e.g. "boot"). Create
+"boot/[boot.cmd](https://github.com/mirage/xen-arm-builder/blob/master/boot/boot-cubieboard2.cmd)" with:
 
     # SUNXI Xen Boot Script
     
@@ -148,7 +149,8 @@ The above is the template from the wiki, but configured to:
 - Wait for the device (`rootwait`)
 - Run /bin/bash as init.
 
-Create a `Makefile` to compile it:
+Create a `Makefile` to compile it using
+[mkimage](https://github.com/jwrdegoede/u-boot-sunxi/blob/sunxi/doc/mkimage.1):
 
     all: boot.scr
 
@@ -167,7 +169,7 @@ Configure:
     make ARCH=arm multi_v7_defconfig
     make ARCH=arm menuconfig
 
-Here are the settings I used (TODO: this is extracted from `config.working`; check it works with just these settings and whether they're all actually necessary):
+Here are the settings I used (check it works with just these settings and whether they're all actually necessary):
 
     CONFIG_CROSS_COMPILE="/usr/bin/arm-linux-gnueabihf-"
     CONFIG_XEN_DOM0=y
@@ -218,6 +220,10 @@ Here are the settings I used (TODO: this is extracted from `config.working`; che
     CONFIG_BLK_DEV_DM=y
     CONFIG_DM_BUFIO=y
     CONFIG_DM_SNAPSHOT=y
+
+A simpler alternative to `make ARCH=arm menuconfig` is to copy
+[`config-cubie2`](https://github.com/mirage/xen-arm-builder/blob/master/config/config-cubie2)
+to `.config`.
 
 Then:
 
