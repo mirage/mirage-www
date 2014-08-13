@@ -221,7 +221,7 @@ Here are the settings I used (TODO: this is extracted from `config.working`; che
 
 Then:
 
-    make ARCH=arm zImage dtbs -j 4
+    make ARCH=arm zImage dtbs modules -j 4
 
 ## Building Xen
 
@@ -289,6 +289,10 @@ I used [linaro-trusty-developer-20140522-661.tar.gz](http://releases.linaro.org/
     sudo tar xf /data/arm/linaro-trusty-developer-20140522-661.tar.gz
     sudo mv binary/* .
     sudo rmdir binary
+
+Go back to the directory where you compiled your Linux kernel and do:
+
+    make ARCH=arm INSTALL_MOD_PATH='/mnt/mmc2' modules_install
 
 `/mnt/mmc2/etc/fstab` should contain:
 
