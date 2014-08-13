@@ -405,6 +405,21 @@ You should now be able to connect with e.g.
 
     ssh root@192.168.1.79
 
+You can do a local scan on your network to discover the IP address of
+your Cubieboard2 (run `nmap -sn 192.168.0.0/24` on your computer).  If
+you do not see it, check that the network is up:
+
+    ip addr show
+
+should display a line starting with `br0:
+<BROADCAST,MULTICAST,UP,LOWER_UP>`.  If it doesn't try
+
+    brctl addbr br0
+
+If you get `add bridge failed: Package not installed`, you forgot to
+include Ethernet bridging in your kernel (it is included in the
+recommended `.config` file above).
+
 Kill the network and shut down:
 
     ifdown eth0
@@ -420,8 +435,6 @@ You should now be able to ssh in directly.
 Install the Xen tools:
 
     apt-get install xen-utils-4.4
-
-Note: if you get `add bridge failed: Package not installed`, you forgot to include Ethernet bridging in your kernel.
 
 Once Xen 4.4 is installed, you can list your domains:
 
