@@ -160,20 +160,24 @@ More information on
 [the format of this file](http://www.denx.de/wiki/view/DULG/UBoot)
 is available on the [denx site](http://www.denx.de/wiki/view/DULG/Manual).
 
-Create a `Makefile` to compile it using
+Create a `boot/Makefile` to compile it using
 [mkimage](https://github.com/jwrdegoede/u-boot-sunxi/blob/sunxi/doc/mkimage.1):
 
     all: boot.scr
 
     %.scr: %.cmd
-    	mkimage -C none -A arm -T script -d "$<" "$@"
+        ../tools/mkimage -C none -A arm -T script -d "$<" "$@"
 
-Run `make` to build `boot.scr`.
+Go to `boot` and run `make` to build `boot.scr`.
 
 
 ## Building Linux
 
 Get my [Linux Git tree](https://github.com/talex5/linux.git), master branch. This fork has a few extra patches we need.
+
+    cd ../..
+    git clone https://github.com/talex5/linux.git
+    cd linux
 
 Configure:
 
@@ -245,6 +249,7 @@ Then:
 
 Currently, some minor patches are needed to the official [Xen 4.4 release](http://www.xenproject.org/downloads/xen-archives/xen-44-series/xen-440.html), so use this Git version:
 
+    cd ..
     git clone -b stable-4.4 https://github.com/talex5/xen.git
     cd xen
 
@@ -287,15 +292,21 @@ Write the U-Boot SPL and main program:
 
     dd if=u-boot-sunxi-with-spl.bin of=/dev/mmcblk0 bs=1024 seek=8
 
-Mount the fat partition and copy in boot.scr, the Linux kernel, the FDT and Xen:
+Mount the fat partition and copy in `boot.scr`, the Linux kernel, the
+FDT and Xen (you must create `/mnt/mmc1` if it does not exist):
 
     mount /dev/mmcblk0p1 /mnt/mmc1
-    cp boot/boot.scr /mnt/mmc1/
+    cp u-boot-sunxi/boot/boot.scr /mnt/mmc1/
     cp linux/arch/arm/boot/zImage /mnt/mmc1/vmlinuz
     cp linux/arch/arm/boot/dts/sun7i-a20-cubieboard2.dtb /mnt/mmc1/
     cp xen/xen/xen /mnt/mmc1/
     umount /mnt/mmc1
 
+For the Cubietruck, replace the third line with:
+
+    cp linux/arch/arm/boot/dts/sun7i-a20-cubietruck.dtb /mnt/mmc1/
+
+(You must run these commands as root or prefix them with `sudo`.)
 
 ## Root FS
 
@@ -303,8 +314,9 @@ The wiki's links to the prebuilt root images are broken, but a bit of searching 
 
 I used [linaro-trusty-developer-20140522-661.tar.gz](http://releases.linaro.org/14.05/ubuntu/trusty-images/developer/linaro-trusty-developer-20140522-661.tar.gz).
 
+    mount /dev/mmcblk0p2 /mnt/mmc2
     cd /mnt/mmc2
-    sudo tar xf /data/arm/linaro-trusty-developer-20140522-661.tar.gz
+    sudo tar xf /your/path/to/linaro-trusty-developer-20140522-661.tar.gz
     sudo mv binary/* .
     sudo rmdir binary
 
@@ -389,9 +401,39 @@ Add your ssh key:
     mkdir .ssh
     vi .ssh/authorized_keys
 
-You should now be able to connect with e.g.
+Install Avahi:
 
-    ssh root@192.168.1.79
+    apt-get install avahi-daemon libnss-mdns
+
+You must also install these packages and `avahi-utils` on your
+computer.
+
+You probably want to give your Cubieboard a nice name.  Edit
+`/etc/hostname` and replace the existing name with the one of your
+choice — `cubie2` for the following.
+(You should also change `linaro-developer` in `/etc/hosts`
+to `cubie2`.)
+For the changes to take effect, you can either reboot or run
+`hostname cubie2` followed by `/etc/init.d/avahi-daemon restart`.
+You should now be able to connect with e.g., from your computer
+
+    ssh root@cubie2.local
+
+To see the list of Avahi services on your network, do `avahi-browse
+-alr`.  If you do not see your Cubieboard, check that its network is
+up: doing
+
+    ip addr show
+
+at the Cubieboard root prompt, should output some information
+including a line starting with `br0:
+<BROADCAST,MULTICAST,UP,LOWER_UP>`.  If it doesn't try
+
+    brctl addbr br0
+
+If you get `add bridge failed: Package not installed`, you forgot to
+include Ethernet bridging in your kernel (it is included with the
+recommended `.config` file above so this should not happen).
 
 Kill the network and shut down:
 
@@ -405,17 +447,15 @@ You should now be able to ssh in directly.
 
 ## Xen toolstack
 
-Install the Xen tools:
+Ssh to your Cubieboard and install the Xen tools:
 
     apt-get install xen-utils-4.4
-
-Note: if you get `add bridge failed: Package not installed`, you forgot to include Ethernet bridging in your kernel.
 
 Once Xen 4.4 is installed, you can list your domains:
 
     # xl list
     Name                                        ID   Mem VCPUs      State   Time(s)
-    Domain-0                                     0   128     2     r-----      15.8
+    Domain-0                                     0   512     2     r-----      19.7
 
 
 ## LVM configuration
