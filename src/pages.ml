@@ -37,6 +37,7 @@ module Global = struct
           <li><a href="/community/">Background</a></li>
           <li><a href="/community/">Contact</a></li>
           <li><a href="/community/#team">Team</a></li>
+          <li><a href="/community/#blogroll">Blogroll</a></li>
           <li><a href="/links/">Links</a></li>
         </ul>
       </li>
@@ -165,6 +166,7 @@ module About = struct
     lwt r = read_file read_fn "/about-community.md" in
     lwt b = read_file read_fn "/about-b.md" in
     lwt f = read_file read_fn "/about-funding.md" in
+    lwt br = read_file read_fn "/about-blogroll.md" in
     let content = <:html<
     <a name="about"> </a>
     <div class="row">
@@ -174,11 +176,17 @@ module About = struct
     <a name="participate"> </a>
     <div class="row">
       <div class="small-12 columns">$b$</div>
+      <hr />
     </div>
     <a name="team"> </a>
     <div class="row">
       <div class="small-12 medium-6 columns">$l$</div>
       <div class="small-12 medium-6 columns">$r$</div>
+      <hr />
+    </div>
+    <a name="blogroll"> </a>
+    <div class="row">
+      <div class="small-12 medium-6 columns">$br$</div>
     </div> >> in
     return (Global.page ~title:"Community" ~headers:[] ~content)
 end
