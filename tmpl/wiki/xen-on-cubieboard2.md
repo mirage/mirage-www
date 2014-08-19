@@ -140,6 +140,18 @@ Create a `boot/Makefile` to compile it using
 
 Go to `boot` and run `make` to build `boot.scr`.
 
+Remark: You may have noticed that the above `.cmd` files allocate a
+rather large amount of memory to `dom0` (look at the `dom0_mem`
+parameter).  This is needed to compile large libraries like
+[Core](https://github.com/janestreet/core).
+However, if you use `autoballoon=on` in
+[`/etc/xen/xl.conf`](http://xenbits.xen.org/docs/unstable/man/xl.conf.5.html),
+`xl` will automatically reduce the amount of memory assigned to dom0
+to free memory for new domains.  An OCaml daemon
+[squeezed](https://github.com/xapi-project/squeezed), currently in
+development (and based on
+[xenopsd](https://github.com/xapi-project/xenopsd)), will dynamically
+move memory between dom0 and VMs to satisfy their needs.
 
 ## Building Linux
 
