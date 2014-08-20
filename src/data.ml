@@ -294,6 +294,7 @@ module Wiki = struct
     }
 
   let entries = [
+    weekly ~y:2014 ~m:8 ~d:20 ~a:amir;
     weekly ~y:2014 ~m:8 ~d:7 ~a:amir;
     weekly ~y:2014 ~m:7 ~d:8 ~a:amir;
     weekly ~y:2014 ~m:6 ~d:24 ~a:amir;
