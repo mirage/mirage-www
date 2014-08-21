@@ -474,6 +474,12 @@ module Wiki = struct
       body       = File "contributing.md";
       permalink  = "contributing";
     };
+    { updated    = date (2014, 08, 21, 11, 19);
+      author     = yomimono;
+      subject    = "Libvirt On Cubieboard";
+      body       = File "libvirt-on-cubieboard.md";
+      permalink  = "libvirt-on-cubieboard";
+    };
   ]
 end
 
