@@ -176,6 +176,7 @@ virsh -c xen://cubie0/system create www.xml
 
 **/etc/default/libvirt-bin**
 
+```
 # Defaults for libvirt-bin initscript (/etc/init.d/libvirt-bin)
 # This is a POSIX shell fragment
 
@@ -187,7 +188,7 @@ libvirtd_opts="-d -l"
 
 # pass in location of kerberos keytab
 #export KRB5_KTNAME=/etc/libvirt/libvirt.keytab
-
+```
 
 **/etc/init.d/libvirt-bin**
 
