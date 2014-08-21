@@ -91,6 +91,12 @@ module People = struct
     uri       = Some "https://github.com/yomimono";
     email     = Some "interblag@somerandomidiot.com";
   }
+
+  let nick = {
+    Atom.name = "Nick Betteridge";
+    uri       = Some "https://github.com/buzzheavyyear";
+    email     = Some "buzzheavyyear@hotmail.com";
+  }
 end
 
 let rights = Some "All rights reserved by the author"
