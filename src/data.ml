@@ -91,6 +91,12 @@ module People = struct
     uri       = Some "https://github.com/yomimono";
     email     = Some "interblag@somerandomidiot.com";
   }
+
+  let nick = {
+    Atom.name = "Nick Betteridge";
+    uri       = Some "https://github.com/buzzheavyyear";
+    email     = Some "buzzheavyyear@hotmail.com";
+  }
 end
 
 let rights = Some "All rights reserved by the author"
@@ -474,6 +480,12 @@ module Wiki = struct
       subject    = "Contributing to Mirage";
       body       = File "contributing.md";
       permalink  = "contributing";
+    };
+    { updated    = date (2014, 08, 21, 11, 19);
+      author     = nick;
+      subject    = "Libvirt On Cubieboard";
+      body       = File "libvirt-on-cubieboard.md";
+      permalink  = "libvirt-on-cubieboard";
     };
   ]
 end
