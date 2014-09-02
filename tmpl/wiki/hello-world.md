@@ -145,6 +145,7 @@ If you are on a 64-bit Linux system able to build Xen images, simply change
 ```
 mirage configure --xen
 make depend
+make
 ```
 
 *Everything* else remains the same!  The `main.ml` and `Makefile` generated
