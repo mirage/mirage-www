@@ -259,7 +259,7 @@ name = 'block_test'
 kernel = '/home/avsm/src/git/avsm/mirage-skeleton/block/mir-block_test.xen'
 builder = 'linux'
 memory = 256
-disk = [ 'file:/home/avsm/src/git/avsm/mirage-skeleton/block/disk.img,xvda1,w']
+disk = [ 'file:/home/avsm/src/git/avsm/mirage-skeleton/block/disk.img,,xvda1,w']
 ```
 
 Now you just need to `xl create -c block_test.xl`, and you should
@@ -268,6 +268,11 @@ that instead of going through the Linux or FreeBSD kernel, Mirage
 linked in the Xen [block device driver](https://github.com/mirage/mirage-block-xen)
 and mapped the unikernel block requests directly through to it.
 
+For ARM, if `qemu` is not available, it might be better do it through `losetup` so that you can access the 'disk'. 
+
+```
+disk = [ '/dev/loop0,,xvda1,w']
+```
 
 ### Step 3: Key/value stores
 
