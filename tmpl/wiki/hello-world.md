@@ -384,7 +384,7 @@ filesystems and block devices that are independent of the implementations
 to assemble several combinations of unikernels via relatively simple
 configuration files.
 
-### Step 3: Networking
+### Step 4: Networking
 
 Block devices don't require a huge amount of configuration, but now we
 move onto networking, which sadly has far more knobs attached.  There
