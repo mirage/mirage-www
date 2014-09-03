@@ -266,6 +266,8 @@ that instead of going through the Linux or FreeBSD kernel, Mirage
 linked in the Xen [block device driver](https://github.com/mirage/mirage-block-xen)
 and mapped the unikernel block requests directly through to it.
 
+If you are using an ARM processor, such as the Cubie Board, you will need some extra pins that can be found [here](http://openmirage.org/blog/introducing-xen-minios-arm).
+
 ### Step 3: Key/value stores
 
 The earlier block device example shows how very low-level access can work.  Now
