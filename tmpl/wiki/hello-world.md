@@ -178,6 +178,8 @@ You should see the same output on the Xen console as you did on the
 UNIX version you ran earlier. If you need more help, or would like to boot your
 Xen VM on Amazon's EC2, [click here](/wiki/xen-boot).
 
+If you are using an ARM processor, such as the Cubie Board, you will need some extra pins that can be found [here](http://openmirage.org/blog/introducing-xen-minios-arm).
+
 ### Step 2: Getting a block device
 
 Most useful unikernels will need to obtain data from the outside world, so
@@ -266,7 +268,6 @@ that instead of going through the Linux or FreeBSD kernel, Mirage
 linked in the Xen [block device driver](https://github.com/mirage/mirage-block-xen)
 and mapped the unikernel block requests directly through to it.
 
-If you are using an ARM processor, such as the Cubie Board, you will need some extra pins that can be found [here](http://openmirage.org/blog/introducing-xen-minios-arm).
 
 ### Step 3: Key/value stores
 
@@ -348,7 +349,7 @@ let fat_ro dir =
 
 let disk =
   match mode, get_mode () with
-  | `Fat   , _     -> fat_ro "t"
+  | `Fat   , _     -> fat_ro "t"s
   | `Crunch, `Xen  -> crunch "t"
   | `Crunch, `Unix -> direct_kv_ro "t"
 
