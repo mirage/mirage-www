@@ -269,7 +269,11 @@ that instead of going through the Linux or FreeBSD kernel, Mirage
 linked in the Xen [block device driver](https://github.com/mirage/mirage-block-xen)
 and mapped the unikernel block requests directly through to it.
 
-For ARM, if `qemu` is not available, it might be better do it through `losetup` so that you can access the 'disk'. 
+For ARM, if `qemu` is not available, it might be better do it through `losetup` so that you can access the 'disk'.
+```
+sudo losetup -f ../block/disk.img
+sudo losetup -a
+```
 
 ```
 disk = [ '/dev/loop0,,xvda1,w']
