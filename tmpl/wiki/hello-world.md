@@ -479,7 +479,7 @@ $ sudo make run
 
 This Unix application is now listening simultaneously on the local
 HTTP port, and also via a direct tuntap interface.  Let's test the
-socket interface first by retrieving something via HTTP.
+socket interface first by retrieving something via HTTP, probably best using a different terminal.
 
 ```
 $ curl http://localhost
