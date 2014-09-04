@@ -226,6 +226,7 @@ a block device from a local file via `block_of_file`.
 Build this on Unix in the same way as the console example.
 
 ```
+cd block
 mirage configure --unix
 make depend
 make
@@ -315,6 +316,7 @@ You can read the generated ML file by looking at the `static1.ml` file
 in your build tree.
 
 ```
+cd kv_ro_crunch
 mirage configure --unix
 make depend
 make
