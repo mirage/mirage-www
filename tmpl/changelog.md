@@ -1,3 +1,175 @@
+### ocaml-dns-v0.10.0: Mirage DNS resolver support and more examples
+
+Released on 2014-08-28 as [v0.10.0](https://github.com/mirage/ocaml-dns/releases/tag/v0.10.0). See <https://github.com/mirage/ocaml-dns> for full history.
+
+* Add `Dns_resolver_mirage` module for making stub resolution requests
+  using the Mirage module types.
+* `Dns.Resolvconf` parses `/etc/resolv.conf` entries using `Ipaddr.t`
+  instead of `string` values now.
+* Adapt `Dns_resolver` and `Dns_resolver_unix` to use `Ipaddr.t` more.
+* Improve `mldig` to use `Ipaddr` more and add more RR printing to
+  match the conventional `dig` tool behaviour.
+* Expose `Dns.Packet.Not_implemented` exception rather than a pattern
+  match failure.
+* Depend on external `Base64` package instead of bundling one inside
+  the `Dns` packed module.
+* Add a local `opam` file for easier pinning.
+* Add an `examples/` directory with a DNS forwarder sample (#21).
+
+
+### ocaml-cow-v1.0.0: First stable release
+
+Released on 2014-08-26 as [v1.0.0](https://github.com/mirage/ocaml-cow/releases/tag/v1.0.0). See <https://github.com/mirage/ocaml-cow> for full history.
+
+* Fix OCaml 4.02 compatibility by not exposing a `Location` module
+  in syntax extensions to avoid a namespace clash. We now rename them
+  to `Xml_location` and `Css_location` and pack those instead.
+* Fix BSD compatibility using `$(MAKE)` instead of `make` (since the
+  GNU make binary is actually `gmake` on Free/Net/OpenBSD).
+* Reduce the verbosity of the build by default.
+* Travis: Add OCaml 4.02 and OPAM 1.2.0 tests
+
+
+### ocaml-uri-v1.7.2: Functional mutator bug fixes
+
+Released on 2014-08-10 as [v1.7.2](https://github.com/mirage/ocaml-uri/releases/tag/v1.7.2). See <https://github.com/mirage/ocaml-uri> for full history.
+
+* Fix empty-but-existing query ("?") parsing bug
+* Fix `with_userinfo` against hostless URI representation bug
+* Fix `with_port` against hostless URI representation bug
+* Fix `with_path` with relative path against hosted URI representation bug (#51)
+* Fix `make` without host but with userinfo or port representation bug
+* Fix `make` with host, userinfo, or port and relative path representation bug
+
+In sum, the library will now try to guide the user to using an abstract value that is actually serializable.
+
+### ocaml-cstruct-v1.4.0: Comprehensive bounds checking for all operations
+
+Released on 2014-08-10 as [v1.4.0](https://github.com/mirage/ocaml-cstruct/releases/tag/v1.4.0). See <https://github.com/mirage/ocaml-cstruct> for full history.
+
+Comprehensive addition of bounds checking to all cstruct operations (from @pqwy in #33).  The major API-facing changes are:
+* Disallow negative indexing with all cstruct accessors.
+* Disallow negative `sub` and `shift` operations.
+* Make sure `of_bigarray` cannot create invalid `cstruct` values.
+
+This may break some older `cstruct` consumers that assumed that negative shifts were allowed, and so the version has been bumped to 1.4.0.
+
+
+### ocaml-cow-v0.10.1: Xml.of_string "" bugfix release
+
+Released on 2014-08-10 as [v0.10.1](https://github.com/mirage/ocaml-cow/releases/tag/v0.10.1). See <https://github.com/mirage/ocaml-cow> for full history.
+
+`Cow.Xml.of_string ""` was throwing `Invalid_argument` due to the assumption that the string to parse was not zero length in the check for a trailing ampersand. This release fixes that bug and turns debugging information on by default.
+
+### ocaml-github-v0.8.6: Add git-create-release
+
+Released on 2014-08-10 as [v0.8.6](https://github.com/avsm/ocaml-github/releases/tag/v0.8.6). See <https://github.com/avsm/ocaml-github> for full history.
+
+* Fix `pull_action_type` `synchronize` tag typo (#33 from Philipp Gesang).
+* Add a `git create-release` to create a GitHub release, including binary assets
+  (#32 from Markus Mottl).
+
+
+### mirage-net-xen-v1.1.3: Restore parallel writes to net ring
+
+Released on 2014-08-08 as [v1.1.3](https://github.com/mirage/mirage-net-xen/releases/tag/v1.1.3). See <https://github.com/mirage/mirage-net-xen> for full history.
+
+Revert the serialization in 1.1.2 as Xen/ARM (4.5 and backport to 4.4) has been fixed to support granting the same page multiple times. Backport is in https://github.com/mirage/xen-arm-builder.
+
+
+### ocaml-ctypes-0.3.3: ocaml-ctypes 0.3.3
+
+Released on 2014-08-01 as [0.3.3](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/0.3.3). See <https://github.com/ocamllabs/ocaml-ctypes> for full history.
+
+## What's new in ocaml-ctypes 0.3.3
+
+### Bug fixes
+
+* Fix a bug (#165) causing pointer offsets to be lost when passing pointers to generated stubs.  
+  Thanks to David Kaloper (@pqwy) for reporting and fixing the bug.
+
+### ocaml-dns-v0.9.1: Fix file descriptor leak in resolver
+
+Released on 2014-07-29 as [v0.9.1](https://github.com/mirage/ocaml-dns/releases/tag/v0.9.1). See <https://github.com/mirage/ocaml-dns> for full history.
+
+Fix file descriptor leak in resolver (#15, #16) by expanding `commfn` with a cleanup function.
+
+### mirage-net-xen-v1.1.2: Writev blocking semantics improved
+
+Released on 2014-07-23 as [v1.1.2](https://github.com/mirage/mirage-net-xen/releases/tag/v1.1.2). See <https://github.com/mirage/mirage-net-xen> for full history.
+
+Wait for packets to be processed by the backend before returning from a `writev` call. Without this, the caller has no way to know when it's safe to reuse the buffer (#11).
+
+
+### mirage-fs-unix-v1.1.1: Implement POSIX root directory semantics
+
+Released on 2014-07-21 as [v1.1.1](https://github.com/mirage/mirage-fs-unix/releases/tag/v1.1.1). See <https://github.com/mirage/mirage-fs-unix> for full history.
+
+Traversal outside of the exposed POSIX directory is now prohibited. Additionally, the root directory is now its own parent, i.e. `/../ -> /`.
+
+### mirage-tcpip-v1.1.6: More robust TCP options parsing
+
+Released on 2014-07-20 as [v1.1.6](https://github.com/mirage/mirage-tcpip/releases/tag/v1.1.6). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Quieten down the stack logging rate by not announcing IPv6 packet discards.
+* Raise exception `Bad_option` for unparseable or invalid TCPv4 options (#57).
+* Fix linking error with module `Tcp_checksum` by lifting it into top library (#60).
+* Add `opam` file to permit easier local pinning, and fix Travis to use this.
+
+
+### mirage-tcpip-v1.1.6: More robust TCP options parsing
+
+Released on 2014-07-20 as [v1.1.6](https://github.com/mirage/mirage-tcpip/releases/tag/v1.1.6). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Quieten down the stack logging rate by not announcing IPv6 packet discards.
+* Raise exception `Bad_option` for unparseable or invalid TCPv4 options (#57).
+* Fix linking error with module `Tcp_checksum` by lifting it into top library (#60).
+* Add `opam` file to permit easier local pinning, and fix Travis to use this.
+
+
+### ocaml-vchan-v1.0.0: Stable release
+
+Released on 2014-07-16 as [v1.0.0](https://github.com/mirage/ocaml-vchan/releases/tag/v1.0.0). See <https://github.com/mirage/ocaml-vchan> for full history.
+
+* test VM: uses the V1_LWT.FLOW signature
+
+
+### shared-memory-ring-1.1.0: Interface now supports xenstore ring reconnection
+
+Released on 2014-07-16 as [1.1.0](https://github.com/mirage/shared-memory-ring/releases/tag/1.1.0). See <https://github.com/mirage/shared-memory-ring> for full history.
+
+In order to reconnect to an existing (xenstore) ring after a restart we must avoid (i) removing data which we haven't persisted somewhere; and (ii) avoid writing the same chunk of data twice. We make this possible by exposing a 'type position' and using this in both 'read' and 'write'. The position represents the current offset in the data stream. The position is manually advanced by the client via the 'advance' function.
+
+### cowabloga-v0.0.7: Support multiple authors
+
+Released on 2014-07-12 as [v0.0.7](https://github.com/mirage/cowabloga/releases/tag/v0.0.7). See <https://github.com/mirage/cowabloga> for full history.
+
+Add support for multi-author blog posts (#19 via @pqwy).
+
+### ocaml-cstruct-v1.3.1: Bounds checks on single-byte views
+
+Released on 2014-07-10 as [v1.3.1](https://github.com/mirage/ocaml-cstruct/releases/tag/v1.3.1). See <https://github.com/mirage/ocaml-cstruct> for full history.
+
+Also bounds test single-byte operations on views (#31 via @pqwy).
+
+
+### mirage-v1.2.0: Simpler configuration and Entropy interface
+
+Released on 2014-07-07 as [v1.2.0](https://github.com/mirage/mirage/releases/tag/v1.2.0). See <https://github.com/mirage/mirage> for full history.
+
+The Mirage frontend tool now generates a Makefile with a `make depend`
+target, instead of directly invoking OPAM as part of `mirage configure`.
+This greatly improves usability on slow platforms such as ARM, since the
+output of OPAM as it builds can be inspected more easily.  Users will now
+need to run `make depend` to ensure they have the latest package set,
+before building their unikernel with `make` as normal.
+
+* Improve format of generated Makefile, and also colours in terminal output.
+* Add `make depend` target to generated Makefile.
+* Set `OPAMVERBOSE` and `OPAMYES` in the Makefile, which can be overridden.
+* Add an `ENTROPY` device type for strong random sources (#256).
+
+
 ### ocaml-cstruct-v1.3.0: Sexp converters for Cstruct and improved bounds checking
 
 Released on 2014-07-05 as [v1.3.0](https://github.com/mirage/ocaml-cstruct/releases/tag/v1.3.0). See <https://github.com/mirage/ocaml-cstruct> for full history.
@@ -671,15 +843,6 @@ The Mirage 1.1.0 release features a new combinator interface to make it easier t
 
 The `types` directory also now contains the `V1` and `V1_LWT` module types used throughout the Mirage libraries.
 
-### ocaml-mstruct-1.3.0: remove debug and duplicate bound checks in the hot path
-
-Released on 2014-02-10 as [1.3.0](https://github.com/samoht/ocaml-mstruct/releases/tag/1.3.0). See <https://github.com/samoht/ocaml-mstruct> for full history.
-
-* Remove debugging message in hot path
-* Remove duplicated bound checks (which were already done by cstruct)
-* Remove `Mstruct.dump`, replace it by `Mstruct.{hexdump,hexdump_to_buffer,debug}`
-  to share the same API as `Cstruct`
-
 ### ocaml-cohttp-v0.9.16: Sexp support for most types
 
 Released on 2014-02-10 as [v0.9.16](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.9.16). See <https://github.com/mirage/ocaml-cohttp> for full history.
@@ -921,32 +1084,6 @@ Released on 2014-01-03 as [v0.7.0](https://github.com/avsm/ocaml-github/releases
 * Regenerate build files with OASIS 0.4.1.
 * OCamldoc improvements for the `GitHub` module.
 
-
-### ocaml-mstruct-1.2.0: Add little-endian primitives
-
-Released on 2014-01-03 as [1.2.0](https://github.com/samoht/ocaml-mstruct/releases/tag/1.2.0). See <https://github.com/samoht/ocaml-mstruct> for full history.
-
-* Export `Mstruct.index`
-* Add `Mstruct.get_le_uint16` and `Mstruct.set_le_uint16`
-* Add `Mstruct.get_le_uint32` and `Mstruct.set_le_uint32`
-* Add `Mstruct.get_le_uint64` and `Mstruct.set_le_uint64`
-* Rename `Mstruct.get_uint16` to `Mstruct.get_be_uint16`
-* Rename `Mstruct.get_uint32` to `Mstruct.get_be_uint32`
-* Rename `Mstruct.get_uint64` to `Mstruct.get_be_uint64`
-* Rename `Mstruct.set_uint16` to `Mstruct.set_be_uint16`
-* Rename `Mstruct.set_uint32` to `Mstruct.set_be_uint32`
-* Rename `Mstruct.set_uint64` to `Mstruct.set_be_uint64`
-
-### ocaml-mstruct-1.1.0: And to_string and of_string functions
-
-Released on 2014-01-03 as [1.1.0](https://github.com/samoht/ocaml-mstruct/releases/tag/1.1.0). See <https://github.com/samoht/ocaml-mstruct> for full history.
-
-* Add `Mstruct.to_string`
-* Add `Mstruct.of_string`
-
-### ocaml-mstruct-1.0.0: First release
-
-Released on 2014-01-02 as [1.0.0](https://github.com/samoht/ocaml-mstruct/releases/tag/1.0.0). See <https://github.com/samoht/ocaml-mstruct> for full history.
 
 ### ocaml-lazy-trie-1.0.0: Initial release
 
