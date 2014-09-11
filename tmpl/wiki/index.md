@@ -43,6 +43,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 * [Synthesizing virtual disks for Xen](/wiki/xen-synthesize-virtual-disk)
 * [How Suspend and Resume work](/wiki/xen-suspend)
 * [Installing Xen on the Cubieboard2](/wiki/xen-on-cubieboard2)
+* [LibVirt on Cubieboard2](/wiki/libvirt-on-cubieboard)
 
 #### Weekly calls and release notes
 
