@@ -91,6 +91,12 @@ module People = struct
     uri       = Some "https://github.com/yomimono";
     email     = Some "interblag@somerandomidiot.com";
   }
+
+  let nick = {
+    Atom.name = "Nick Betteridge";
+    uri       = Some "https://github.com/buzzheavyyear";
+    email     = Some "buzzheavyyear@hotmail.com";
+  }
 end
 
 let rights = Some "All rights reserved by the author"
@@ -294,6 +300,8 @@ module Wiki = struct
     }
 
   let entries = [
+    weekly ~y:2014 ~m:8 ~d:20 ~a:amir;
+    weekly ~y:2014 ~m:8 ~d:7 ~a:amir;
     weekly ~y:2014 ~m:7 ~d:8 ~a:amir;
     weekly ~y:2014 ~m:6 ~d:24 ~a:amir;
     weekly ~y:2014 ~m:6 ~d:10 ~a:amir;
@@ -467,6 +475,18 @@ module Wiki = struct
       body       = File "xen-on-cubieboard2.md";
       permalink  = "xen-on-cubieboard2";
     };
+    { updated    = date (2014, 08, 12, 22, 56);
+      author     = yomimono;
+      subject    = "Contributing to Mirage";
+      body       = File "contributing.md";
+      permalink  = "contributing";
+    };
+    { updated    = date (2014, 08, 21, 11, 19);
+      author     = nick;
+      subject    = "Libvirt On Cubieboard";
+      body       = File "libvirt-on-cubieboard.md";
+      permalink  = "libvirt-on-cubieboard";
+    };
   ]
 end
 
@@ -494,7 +514,252 @@ module Links = struct
   }
 
   let entries = [
-    { id="introducing-tls-hackernews";
+    { id="miso-talk-entrepreneur-first";
+      uri=Uri.of_string "http://amirchaudhry.com/describing-miso-entrepreneur-first-2014/";
+      title="Describing the MISO stack at Entrepreneur First";
+      date=day(2014,07,25);
+      stream=blog;
+    };
+
+    { id="mirage-20-pr-congoo";
+      uri=Uri.of_string "http://www.congoo.com/news/addstorycomment.aspx?st=291376442&Channel_ID=8&Category_ID=-1";
+      title="Xen Project Introduces New Mirage OS Release";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-reuters";
+      uri=Uri.of_string "http://www.reuters.com/article/2014/07/22/idUSnMKWyFRLBa+1de+MKW20140722";
+      title="Xen Project Introduces New Mirage OS Release";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-phoronix";
+      uri=Uri.of_string "http://www.phoronix.com/scan.php?page=news_item&px=MTc0NjY";
+      title="Xen Project Announces Mirage OS 2.0";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-linux-embedded";
+      uri=Uri.of_string "https://www.linux.com/news/embedded-mobile/mobile-linux/781359-xen-project-announces-mirage-os-20";
+      title="Xen Project Announces Mirage OS 2.0";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-slashdot";
+      uri=Uri.of_string "http://beta.slashdot.org/submission/3717339/news-mirage-os-20----compile-your-own-cloud";
+      title="News: Mirage OS 2.0 -- Compile Your Own Cloud";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-vmblog";
+      uri=Uri.of_string "http://vmblog.com/archive/2014/07/22/xen-project-introduces-new-mirage-os-release.aspx";
+      title="Xen Project Introduces New Mirage OS Release";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-lastminutegeek";
+      uri=Uri.of_string "http://www.lastminutegeek.com/english/77-linuxtoday/1151651-mirage-os-v20-the-new-features.html";
+      title="Mirage OS v2.0: The new features";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-techinvestornews";
+      uri=Uri.of_string "http://www.techinvestornews.com/Cloud/Latest-Cloud-Computing-News/xen-unveils-mirage-os-2.0-for-open-source-virtual-cloud-apps";
+      title="Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-slashdot-2";
+      uri=Uri.of_string "http://beta.slashdot.org/submission/3720459/xen-unveils-mirage-os-20-for-open-source-virtual-cloud-apps";
+      title="Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-linuxtoday";
+      uri=Uri.of_string "http://www.linuxtoday.com/high_performance/mirage-os-v2.0-the-new-features.html";
+      title="Mirage OS v2.0: The new features";
+      date=day(2014,07,23);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-twit";
+      uri=Uri.of_string "https://plus.google.com/+TWiT/posts/6DkCPz3TSdd";
+      title="FLOSS Weekly 302 | TWiT.TV";
+      date=day(2014,07,23);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-cloudcomputinginfo";
+      uri=Uri.of_string "http://cloudcomputing.info/en/news/2014/07/xen-project-releases-mirage-os-2-0.html";
+      title="Xen Project releases Mirage OS 2.0";
+      date=day(2014,07,23);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-vibriefing";
+      uri=Uri.of_string "http://www.vibriefing.com/xen-unveils-mirage-os-2-0-for-open-source-virtual-cloud-apps/";
+      title="Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps";
+      date=day(2014,07,25);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-marketwatch";
+      uri=Uri.of_string "http://www.marketwatch.com/story/xen-project-introduces-new-mirage-os-release-2014-07-22";
+      title="Xen Project Introduces New Mirage OS Release";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-linuxquestions";
+      uri=Uri.of_string "http://www.linuxquestions.org/questions/syndicated-linux-news-67/lxer-xen-unveils-mirage-os-2-0-for-open-source-virtual-cloud-apps-4175512075/";
+      title="LXer: Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-4-traders";
+      uri=Uri.of_string "http://www.4-traders.com/news/Xen-Project-Introduces-New-Mirage-OS-Release--18774589/";
+      title=" Xen Project Introduces New Mirage OS Release";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="mirage-20-pr-release";
+      uri=Uri.of_string "http://www.marketwired.com/press-release/xen-project-introduces-new-mirage-os-release-1931602.htm";
+      title="Xen Project Introduces New Mirage OS Release";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="yahoo-pr-mirage-20-release";
+      uri=Uri.of_string "http://finance.yahoo.com/news/xen-project-introduces-mirage-os-120000542.html";
+      title="Yahoo Finance - Xen Project Introduces New Mirage OS Release";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="cloud-computing-mirage-20";
+      uri=Uri.of_string "http://cloudcomputing.info/en/news/2014/07/xen-project-releases-mirage-os-2-0.html";
+      title="CloudComputing - Xen Project releases Mirage OS 2.0";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="xenblog-mirage-20-release";
+      uri=Uri.of_string "http://blog.xen.org/index.php/2014/07/22/mirage-os-v2-0-the-new-features/";
+      title="XenBlog: Mirage OS v2.0: The new features";
+      date=day(2014,07,22);
+      stream=blog;
+    };
+
+    { id="varguy-mirage-20-release";
+      uri=Uri.of_string "http://thevarguy.com/virtualization-applications-and-technologies/072314/xen-unveils-mirage-os-20-open-source-virtual-cloud-apps";
+      title="Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps";
+      date=day(2014,07,23);
+      stream=press;
+    };
+
+    { id="mirage-20-release-linux-magazin-de";
+      uri=Uri.of_string "http://www.linux-magazin.de/NEWS/Ocaml-Cloud-OS-Mirage-OS-2.0-erhoeht-Sicherheit";
+      title="(german) OCaml-Cloud-OS Mirage OS 2.0 erhöht Sicherheit";
+      date=day(2014,07,23);
+      stream=press;
+    };
+
+    { id="mirage-20-release-yc-isvoc";
+      uri=Uri.of_string "http://yc.isvoc.com/201407231852-xen-project-introduces-new-mirage-os-release.html#.U9AWkhZD3nc";
+      title="(chinese) Xen项目推出新的幻影操作系统版本";
+      date=day(2014,07,23);
+      stream=press;
+    };
+
+    { id="mirage-20-release-admin-magazin-de";
+      uri=Uri.of_string "http://www.admin-magazin.de/News/Mirage-OS-2.0-veroeffentlicht";
+      title="(german) Mirage OS 2.0 veröffentlicht";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="bww-mirage-20-release";
+      uri=Uri.of_string "http://www.broadwayworld.com/bwwgeeks/article/Xen-Project-Introduces-New-Mirage-OS-Release-20140722#.U9AX5xZD3nc";
+      title="BWW: Xen Project Introduces New Mirage OS Release";
+      date=day(2014,07,22);
+      stream=press;
+    };
+
+    { id="open-source-china-mirage-20-release";
+      uri=Uri.of_string "http://www.oschina.net/news/53851/mirage-os-2-0-released";
+      title="(chinese) Mirage OS 2.0 发布，云编程平台";
+      date=day(2014,07,23);
+      stream=press;
+    };
+
+    { id="seedhack-experience";
+      uri=Uri.of_string "http://seedcamp.com/seedhack-5-0/";
+      title="The Seedhack Experience";
+      date=day(2014,07,23);
+      stream=blog;
+    };
+
+    { id="hn-introducing-irmin";
+      uri=Uri.of_string "https://news.ycombinator.com/item?id=8053687";
+      title="HN: Irmin: Git-like distributed, branchable storage";
+      date=day(2014,07,18);
+      stream=hn;
+    };
+
+    { id="hn-introducing-asn1";
+      uri=Uri.of_string "https://news.ycombinator.com/item?id=8020125";
+      title="HN: OCaml-TLS: ASN.1 and notation embedding";
+      date=day(2014,07,11);
+      stream=hn;
+    };
+
+    { id="hn-mirage-os-unikernel-for-xen-hypervisor";
+      uri=Uri.of_string "https://news.ycombinator.com/item?id=7726748";
+      title="HN: Mirage OS: A Unikernel For The Xen Hypervisor";
+      date=day(2014,05,10);
+      stream=hn;
+    };
+
+    { id="hn-ocaml-tls-api-internals-attacks-mitigation";
+      uri=Uri.of_string "https://news.ycombinator.com/item?id=8031368";
+      title="HN: OCaml-TLS: the protocol implementation and mitigations to known attacks";
+      date=day(2014,07,14);
+      stream=hn;
+    };
+
+    { id="hn-announcing-mirage-20-release";
+      uri=Uri.of_string "https://news.ycombinator.com/item?id=8069132";
+      title="HN: Mirage v2.0: a recap of the new features";
+      date=day(2014,07,22);
+      stream=hn;
+    };
+
+    { id="hn-acm-queue-01";
+      uri=Uri.of_string "https://news.ycombinator.com/item?id=7053638";
+      title="HN: Unikernels: Rise of the Virtual Library Operating System";
+      date=day(2014,01,14);
+      stream=hn;
+    };
+
+    { id="hn-acm-queue-02";
+      uri=Uri.of_string "https://news.ycombinator.com/item?id=8025493";
+      title="HN: Unikernels: Rise of the Virtual Library Operating System";
+      date=day(2014,07,12);
+      stream=hn;
+    };
+
+    { id="hn-introducing-tls";
       uri=Uri.of_string "https://news.ycombinator.com/item?id=8005130";
       title="HN: Introducing Transport Layer Security in pure OCaml";
       date=day(2014,07,08);

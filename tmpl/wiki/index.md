@@ -22,6 +22,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 <li><a href="/wiki/mirage-www">Building the website</a></li>
 <li><a href="/wiki/deploying-via-ci">Deploying via Continuous Integration</a></li>
 <li><a href="/wiki/opam">Keeping up-to-date</a></li>
+<li><a href="/wiki/contributing">Contributing to Mirage</a></li>
 </ul>
 </div>
 
@@ -42,12 +43,15 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 * [Synthesizing virtual disks for Xen](/wiki/xen-synthesize-virtual-disk)
 * [How Suspend and Resume work](/wiki/xen-suspend)
 * [Installing Xen on the Cubieboard2](/wiki/xen-on-cubieboard2)
+* [LibVirt on Cubieboard2](/wiki/libvirt-on-cubieboard)
 
 #### Weekly calls and release notes
 
 *Calls take place every two weeks and are announced on the
 [mailing list](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel).*
 
+* Weekly call [2014-08-20](/wiki/weekly-2014-08-20) on XenSummit feedback, Conduit patches and ARM profiling.
+* Weekly call [2014-08-07](/wiki/weekly-2014-08-07) on 2.0 release review, Docs Day and ARM updates.
 * Weekly call [2014-07-08](/wiki/weekly-2014-07-08) on More releases, ARM, Blog posts and OSCON prep.
 * Weekly call [2014-06-24](/wiki/weekly-2014-06-24) on Releases, ARM, TLS and Repos.
 * Weekly call [2014-06-10](/wiki/weekly-2014-06-10) on Irmin, Conduit, Deployment and Fist pumping.

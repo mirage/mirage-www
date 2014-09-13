@@ -1,3 +1,9 @@
+### mirage-fs-unix-v1.1.2: Fix quadratic behavior
+
+Released on 2014-09-11 as [v1.1.2](https://github.com/mirage/mirage-fs-unix/releases/tag/v1.1.2). See <https://github.com/mirage/mirage-fs-unix> for full history.
+
+* Fix quadratic behavior (#5)
+
 ### ocaml-dns-v0.10.0: Mirage DNS resolver support and more examples
 
 Released on 2014-08-28 as [v0.10.0](https://github.com/mirage/ocaml-dns/releases/tag/v0.10.0). See <https://github.com/mirage/ocaml-dns> for full history.
