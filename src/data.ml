@@ -514,6 +514,20 @@ module Links = struct
   }
 
   let entries = [
+    { id="haskell-symposium-2014-keynote";
+      uri=Uri.of_string "https://www.youtube.com/watch?v=UEIHfXLMtwA";
+      title="Haskell Symposium 2014 Keynote on Unikernels";
+      date=day(2014,09,05);
+      stream=talk;
+    };
+
+    { id="edge-cases-episode-101";
+      uri=Uri.of_string "http://edgecasesshow.com/101-a-program-that-runs-on-metal.html";
+      title="A Program That Runs on Metal";
+      date=day(2014,08,14);
+      stream=blog;
+    };
+
     { id="miso-talk-entrepreneur-first";
       uri=Uri.of_string "http://amirchaudhry.com/describing-miso-entrepreneur-first-2014/";
       title="Describing the MISO stack at Entrepreneur First";
