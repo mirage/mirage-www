@@ -360,7 +360,7 @@ let fat_ro dir =
 
 let disk =
   match mode, get_mode () with
-  | `Fat   , _     -> fat_ro "t"s
+  | `Fat   , _     -> fat_ro "t"
   | `Crunch, `Xen  -> crunch "t"
   | `Crunch, `Unix -> direct_kv_ro "t"
 
