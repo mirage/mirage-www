@@ -86,9 +86,7 @@ the xen-arm-builder image:
 ```bash
 $ opam init
 $ opam install mirage-xen-minios
-$ opam pin mirage https://github.com/talex5/mirage.git#link_c_stubs
-$ opam pin mirage-xen https://github.com/mirage/mirage-platform
-$ opam pin tcpip https://github.com/talex5/mirage-tcpip.git#checksum
+$ opam remote add mirage-dev git://github.com/mirage/mirage-dev
 $ opam install mirage
 ```
 
