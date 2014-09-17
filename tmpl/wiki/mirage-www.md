@@ -6,6 +6,13 @@ build the live Mirage website, we'll need several device drivers: two block
 devices for the static HTML content and the templates, and a network device to
 actually serve the traffic.
 
+As a temporary step, you will need to grab the development packages of
+Mirage to get the latest website building.
+
+```
+opam remote add mirage-dev git://github.com/mirage/mirage-dev
+```
+
 First, clone the website [source code](https://github.com/mirage/mirage-www):
 
 ```
