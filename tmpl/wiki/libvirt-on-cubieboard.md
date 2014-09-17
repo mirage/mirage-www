@@ -66,13 +66,9 @@ To install the ARM version of mirage:
 
 2. opam install mirage-xen-minios
 
-3. opam pin mirage https://github.com/talex5/mirage.git#link_c_stubs
+3. opam remote add mirage-dev git://github.com/mirage/mirage-dev
 
-4. opam pin mirage-xen https://github.com/mirage/mirage-platform
-
-5. opam pin tcpip https://github.com/talex5/mirage-tcpip.git#checksum
-
-6. opam install mirage
+4. opam install mirage
 
 (You should now be able to follow the rest of the Mirage tutorial:)
 
