@@ -37,7 +37,10 @@ configure:
 depend:
 	cd src && make depend
 
-build:
+feeds:
+	cd feeds && make run
+
+build: feeds
 	cd src && make build
 
 run:
@@ -45,4 +48,5 @@ run:
 
 clean:
 	cd src && make clean
+	cd feeds && make clean
 	$(RM) log src/mir-www src/*.img src/make-fat*.sh

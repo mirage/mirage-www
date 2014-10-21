@@ -191,6 +191,23 @@ module About = struct
     return (Global.page ~title:"Community" ~headers:[] ~content)
 end
 
+
+(* todo *)
+module Blogs = struct
+  let lines s = Str.split (Str.regexp "[\r\n]+") s
+      
+  let t read_fn =
+    lwt bf = read_file read_fn "/news/1.html" in
+    let content = <:html<
+    <div class="row">
+      <div class="small-12 columns">$bf$</div>
+    </div>
+     >> in
+    return (Global.page ~title:"Community" ~headers:[] ~content) 
+end
+
+
+
 module Releases = struct
 
   let content_type_xhtml = Cowabloga.Headers.html
