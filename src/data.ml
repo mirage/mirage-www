@@ -97,6 +97,12 @@ module People = struct
     uri       = Some "https://github.com/buzzheavyyear";
     email     = Some "buzzheavyyear@hotmail.com";
   }
+
+  let bactrian = {
+    Atom.name = "Bactrian";
+    uri       = None;
+    email     = None;
+  }
 end
 
 let rights = Some "All rights reserved by the author"
@@ -489,6 +495,14 @@ module Wiki = struct
       subject    = "Libvirt On Cubieboard";
       body       = File "libvirt-on-cubieboard.md";
       permalink  = "libvirt-on-cubieboard";
+    };
+    {
+     (*FIXME this date+time should be updated each time the status is updated*)
+      updated    = date (2014, 11, 29, 19, 00);
+      author     = bactrian;
+      subject    = "Mirage build status";
+      body       = File "is_mirage_broken.md";
+      permalink  = "is-mirage-broken";
     };
   ]
 end
