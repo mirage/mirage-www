@@ -1,3 +1,192 @@
+### ocaml-github-v0.9.1: Fix support for draft Releases
+
+Released on 2014-11-03 as [v0.9.1](https://github.com/avsm/ocaml-github/releases/tag/v0.9.1). See <https://github.com/avsm/ocaml-github> for full history.
+
+Mark `published_at` and `created_at` fields in Releases to be optional, as they may not be set in the case of draft tags.
+
+
+### mirage-platform-v2.0.0: Add Xen/ARM support, depend on external MiniOS library, install runtime headers
+
+Released on 2014-11-03 as [v2.0.0](https://github.com/mirage/mirage-platform/releases/tag/v2.0.0). See <https://github.com/mirage/mirage-platform> for full history.
+
+* Remove dietlibc, libm and most of the include files, replacing them with
+  external dependencies on Mini-OS and openlibm.
+* Introduce Xen/ARM support that works with both Xen 4.4 and the 4.5dev
+  hypervisor ABI.  Testing on Cubieboard2 and Cubietruck devices.
+* [xen] Move the Xen main Lwt loop into OCaml code to simplify it (#99).
+* Build fixes to work with multiple findlib directories in a single
+  installation (#101 from Petter Urkedal).
+* [xen] Install runtime headers for `mirage-xen` so that external C
+  libraries can be compiled (#102 from James Bielman)
+* [xen] Add support for demand-mapping for backend devices via a MiniOS
+  gntmap device (#103).
+
+
+### ocaml-vchan-v2.0.0: Add Unix and Mirage backends and improve interoperability
+
+Released on 2014-11-03 as [v2.0.0](https://github.com/mirage/ocaml-vchan/releases/tag/v2.0.0). See <https://github.com/mirage/ocaml-vchan> for full history.
+
+* add `Vchan_lwt_unix` with instantiation of functor
+* make Vchan.Port.t abstract (previously was a string)
+* use the same Xenstore path convention as `libxenvchan.h`
+* support channel closing, `Eof etc
+* define an `ENDPOINT` signature for a Vchan.
+
+
+### mirage-v2.0.0: Support for Mirage 2.0 libraries (Vchan, Conduit, Resolver) and CLI improvements
+
+Released on 2014-11-03 as [v2.0.0](https://github.com/mirage/mirage/releases/tag/v2.0.0). See <https://github.com/mirage/mirage> for full history.
+
+Backwards incompatible changes to V1 types:
+* `CONSOLE` is now a `FLOW`, so `write` has a different signature and 'write_all' has been removed.
+
+New features in the CLI and config parser:
+* Set on_crash = 'preserve' in default Xen config.
+* Automatically install dependencies again, but display the live output to the user.
+* Include C stub libraries in linker command when generating Makefiles for Xen.
+* Add `Vchan`, `Conduit` and `Resolver` code generators.
+* Generate a `*.xe` script which can upload a kernel to a XenServer.
+* Generate a libvirt `*.xml` configuration file (#292).
+* Fix determination of `mirage-xen` location for paths with spaces (#279).
+* Correctly show config file locations when using a custom one.
+* Fix generation of foreign (non-functor) modules (#293)
+
+
+### ocaml-dns-v0.11.0: Add Async resolver and reduce Io_page dependencies 
+
+Released on 2014-11-03 as [v0.11.0](https://github.com/mirage/ocaml-dns/releases/tag/v0.11.0). See <https://github.com/mirage/ocaml-dns> for full history.
+
+* Do not depend in Io_page; instead `Dns.Buf.create` now accepts an
+  optional `alloc` parameter to use a custom allocator such as `Io_page`.
+* Add Async DNS resolver modules from @marklrh (#22).
+* Add a Dns_resolver_mirage.Static for a static DNS interface.
+
+
+### mirage-tcpip-v2.0.0: Mirage 2.0 compatible TCP/IP release, and socket backend fixes
+
+Released on 2014-11-03 as [v2.0.0](https://github.com/mirage/mirage-tcpip/releases/tag/v2.0.0). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Moved 1s complement checksum C code here from mirage-platform.
+* Depend on `Console_unix` and `Console_xen` instead of `Console`.
+* [socket] Do not return an `Eof` when writing 0-length buffer (#76).
+* [socket] Accept callbacks now run in async threads instead of being serialised (#75).
+
+### mirage-tcpip-v2.0.0: Mirage 2.0 compatible TCP/IP release, and socket backend fixes
+
+Released on 2014-11-03 as [v2.0.0](https://github.com/mirage/mirage-tcpip/releases/tag/v2.0.0). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Moved 1s complement checksum C code here from mirage-platform.
+* Depend on `Console_unix` and `Console_xen` instead of `Console`.
+* [socket] Do not return an `Eof` when writing 0-length buffer (#76).
+* [socket] Accept callbacks now run in async threads instead of being serialised (#75).
+
+### cowabloga-v0.0.8: Adapt to newer Conduit 0.6.0+ APIs
+
+Released on 2014-11-02 as [v0.0.8](https://github.com/mirage/cowabloga/releases/tag/v0.0.8). See <https://github.com/mirage/cowabloga> for full history.
+
+No change aside from adding support for Conduit 0.6 APIs used in Mirage 2.0.0 and later.
+
+### ocaml-cohttp-v0.12.0: Add JavaScript and StringIO backends, and numerous interface improvements
+
+Released on 2014-11-02 as [v0.12.0](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.12.0). See <https://github.com/mirage/ocaml-cohttp> for full history.
+
+Compatibility breaking interface changes:
+
+* Rename `Cohttp.Auth.t` to `Cohttp.Auth.resp` to make it match the
+  existing `Cohttp.Auth.req` type.  Also expose an `Other` variant
+  to make it more extensible for unknown authentication types.
+* Rename `Cohttp.Transfer.encoding_to_string` to `string_of_encoding`
+  for consistency with the rest of Cohttp's APIs.
+* The `has_body` function in the Request and Response modules now
+  explicitly signals when the body size is unknown.
+* Move all the module type signatures into `Cohttp.S`.
+* If users have percent-encoded file names, their resolution is changed:
+ `resolve_local_file` in `Cohttp_async` and `Cohttp_lwt` now always
+  percent-decode paths (#157)
+* Remove the `Cohttp_lwt.Server.server` type synonym to `t`.
+* Port module interfaces to the latest Conduit (0.6.0+) API.
+* Cohttp requires OCaml 4.01.0 or higher now.
+
+New features and bugfixes:
+
+* Add a `Cohttp_lwt_xhr` JavaScript backend that enables Cohttp logic to be
+  mapped to `XMLHTTPRequest` in browsers via `js_of_ocaml` (via Andy Ray).
+* Add a `Cohttp.String_io` and `String_io_lwt` module that uses OCaml
+  `string` or `Buffer.t` to read and write HTTP requests and responses
+  instead of network connections.
+* `cohttp_server_lwt` and `cohttp_server_async` now return better errors (#158)
+* `cohttp_server_lwt` and `cohttp_server_async` now serve indexes directly (#162)
+* [lwt] Add `stop` thread to terminate a running server if it finishes (#147).
+* Add `Cohttp.Connection.compare` to make ordering of connections possible.
+* Add `Body.map` and `Body.as_pipe` to work with HTTP bodies more easily.
+* Remove link-time dependency on camlp4 via META fixes (#127).
+* Support HTTP methods and versions other than the standard ones. (#142).
+* Improve `cohttp_server_lwt` and `cohttp_server_async` directory listings (#158)
+* Fix `Cohttp_async.resolve_local_file` directory traversal vulnerability (#158)
+* [async] In the Async server, do not close the Reader too early.
+* [async] Close file descriptors more eagerly in the HTTP client (#167).
+
+
+### ocaml-github-v0.9.0: Add Gist bindings and JavaScript compilation support
+
+Released on 2014-11-02 as [v0.9.0](https://github.com/avsm/ocaml-github/releases/tag/v0.9.0). See <https://github.com/avsm/ocaml-github> for full history.
+
+* Add `Jar_cli` module for use by applications that use the Git Jar (#34).
+* Add bindings to the Gist APIs for storing text fragments (#36).
+* Add a JavaScript port, using Cohttp and js_of_ocaml (#36).
+* Build `ocamldoc` HTML documentation by default.
+
+### mirage-console-2.0.0: Improved build scripts and satisfy the FLOW interface.
+
+Released on 2014-10-31 as [2.0.0](https://github.com/mirage/mirage-console/releases/tag/2.0.0). See <https://github.com/mirage/mirage-console> for full history.
+
+* enable travis (for both xen and unix cases)
+* fix dependencies: drop mirage-{xen,unix}; keep dependencies on implementation
+  libraries and mirage-types
+* switch build to OASIS
+* add command-line tool to attach consoles
+* add experimental support for named consoles
+* add support for reading from consoles (so we can do user interaction)
+* [xen] support connecting to additional (named) consoles
+* [xen] don't zero the initial console ring
+* install findlib packages as `mirage-console.[xen/unix]`
+
+### mirage-types-2.0.0: mirage-types 2.0.0 release
+
+Released on 2014-10-28 as [types-2.0.0](https://github.com/mirage/mirage/releases/tag/untagged-96dc88c3dc6422721e68). See <https://github.com/mirage/mirage> for full history.
+
+* [types]: backwards incompatible change: CONSOLE is now a FLOW;
+  'write' has a different signature and 'write_all' has been removed.
+* Add `Vchan`, `Conduit` and `Resolver` code generators.
+
+
+### ocaml-git-1.3.0: Remove core_kernel dependency and use nocrypto
+
+Released on 2014-10-20 as [1.3.0](https://github.com/mirage/ocaml-git/releases/tag/1.3.0). See <https://github.com/mirage/ocaml-git> for full history.
+
+* Remove the dependency towards core_kernel
+* Use ocaml-nocrypto instead of ocaml-sha1
+
+
+### mirage-fs-unix-v1.1.3: Fixes in FS_unix.create and FS_unix.write
+
+Released on 2014-10-16 as [v1.1.3](https://github.com/mirage/mirage-fs-unix/releases/tag/v1.1.3). See <https://github.com/mirage/mirage-fs-unix> for full history.
+
+* Fixes FS_unix.create and FS_unix.write
+
+### mirage-block-xen-v1.2.0: Higher throughput via indirect descriptors
+
+Released on 2014-10-03 as [v1.2.0](https://github.com/mirage/mirage-block-xen/releases/tag/v1.2.0). See <https://github.com/mirage/mirage-block-xen> for full history.
+
+* blkback: add 'force_close' to more forcibly tear down the device
+* blkback: make 'destroy' idempotent
+* blkback: measure ring utilisation; segments per request; total
+  requests and responses (ok and error)
+* blkback: support indirect descriptors (i.e. large block sizes)
+* blkfront: if the 'connect' string is at all ambiguous, fail rather
+  than risk using the wrong disk
+* blkfront: use indirect segments if available
+
 ### mirage-fs-unix-v1.1.2: Fix quadratic behavior
 
 Released on 2014-09-11 as [v1.1.2](https://github.com/mirage/mirage-fs-unix/releases/tag/v1.1.2). See <https://github.com/mirage/mirage-fs-unix> for full history.
