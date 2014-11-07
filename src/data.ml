@@ -300,6 +300,8 @@ module Wiki = struct
     }
 
   let entries = [
+    weekly ~y:2014 ~m:10 ~d:14 ~a:amir;
+    weekly ~y:2014 ~m:9 ~d:30 ~a:amir;
     weekly ~y:2014 ~m:9 ~d:16 ~a:amir;
     weekly ~y:2014 ~m:8 ~d:20 ~a:amir;
     weekly ~y:2014 ~m:8 ~d:7 ~a:amir;
@@ -515,6 +517,13 @@ module Links = struct
   }
 
   let entries = [
+    { id="enterprise-oss-2014";
+      uri=Uri.of_string "http://www.linux.com/news/software/applications/789241--5-new-enterprise-open-source-projects-to-watch/";
+      title="5 New Enterprise Open Source Projects to Watch";
+      date=day(2014,09,24);
+      stream=press;
+    };
+
     { id="haskell-symposium-2014-keynote";
       uri=Uri.of_string "https://www.youtube.com/watch?v=UEIHfXLMtwA";
       title="Haskell Symposium 2014 Keynote on Unikernels";

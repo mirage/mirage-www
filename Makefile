@@ -28,8 +28,10 @@ FLAGS  ?=
 
 .PHONY: all configure build run clean
 
-all: build
-	@ :
+all:
+	@echo To build this website, look in the Makefile and set
+	@echo the appropriate variables (MODE, FS, NET, IPADDR).
+	@echo make configure && make depend && make build
 
 configure:
 	$(MIRAGE) configure src/config.ml $(FLAGS) --$(MODE)
