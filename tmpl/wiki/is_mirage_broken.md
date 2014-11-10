@@ -1,5 +1,5 @@
 <h2>(as of Tue Oct 28 02:21:02 UTC 2014)</h2>
-<table>
+<table> 
 <tr><td style="text-align:center;">Status</td><td style="text-align:center;">Target</td><td>Last line of log</td></tr>
 <!--<tr><th colspan=3 style="background-color:black;"></th></tr>-->
 <tr><td style="text-align:center;background-color:red;">:(</td><td>mirage-dev-ubuntu-trusty-4.01.0</td><td style="background-color:lightgray;">make: *** [build] Error 2
