@@ -497,8 +497,9 @@ module Wiki = struct
       permalink  = "libvirt-on-cubieboard";
     };
     {
-     (*FIXME this date+time should be updated each time the status is updated*)
-      updated    = date (2014, 11, 29, 19, 00);
+     (*NOTE don't change the line below -- it is updated automatically by
+       is-mirage-broken*)
+      updated    = date (2014, 11, 29, 19, 00); (*NOTE is-mirage-broken:marker*)
       author     = bactrian;
       subject    = "Mirage build status";
       body       = File "is_mirage_broken.md";
