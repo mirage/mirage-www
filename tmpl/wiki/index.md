@@ -50,6 +50,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 *Calls take place every two weeks and are announced on the
 [mailing list](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel).*
 
+* Weekly call [2014-10-28](/wiki/weekly-2014-10-28) on Docker tests, mirage-dev, tracing and onboarding newcomers.
 * Weekly call [2014-10-14](/wiki/weekly-2014-10-14) on Vchan, Conduit, library release plans and funky graphs.
 * Weekly call [2014-09-30](/wiki/weekly-2014-09-30) on Mirage 2.0 libs, Calendar and some Jitsu.
 * Weekly call [2014-09-16](/wiki/weekly-2014-09-16) on Mirage 2.0 lib releases, Cohttp, Doc day and ARM dev.
