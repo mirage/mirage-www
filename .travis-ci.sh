@@ -25,6 +25,7 @@ opam --git-version
 opam init git://github.com/ocaml/opam-repository >/dev/null 2>&1
 opam remote add mirage-dev git://github.com/mirage/mirage-dev
 opam install ${OPAM_PACKAGES}
+opam pin omd omd.
 eval `opam config env`
 cp .travis-www.ml src/config.ml
 cd src
@@ -35,6 +36,7 @@ make
 make clean
 mirage configure --xen
 make depend
+opam install omd.0.9.7
 make
 cd ..
 
