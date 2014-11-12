@@ -23,6 +23,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 <li><a href="/wiki/deploying-via-ci">Deploying via Continuous Integration</a></li>
 <li><a href="/wiki/opam">Keeping up-to-date</a></li>
 <li><a href="/wiki/contributing">Contributing to Mirage</a></li>
+<li><a href="/wiki/is_mirage_broken">Build status</a></li>
 </ul>
 </div>
 

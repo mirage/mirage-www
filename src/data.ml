@@ -97,6 +97,7 @@ module People = struct
     uri       = Some "https://github.com/buzzheavyyear";
     email     = Some "buzzheavyyear@hotmail.com";
   }
+
 end
 
 let rights = Some "All rights reserved by the author"
@@ -490,6 +491,8 @@ module Wiki = struct
       body       = File "libvirt-on-cubieboard.md";
       permalink  = "libvirt-on-cubieboard";
     };
+
+    Bactrian.entry_for_is_mirage_broken_wikipage;
   ]
 end
 
