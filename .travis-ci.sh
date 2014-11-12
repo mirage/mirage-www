@@ -36,7 +36,7 @@ make
 make clean
 mirage configure --xen
 make depend
-opam install omd.0.9.7
+opam install omd.1.1.0
 make
 cd ..
 
