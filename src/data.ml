@@ -98,11 +98,6 @@ module People = struct
     email     = Some "buzzheavyyear@hotmail.com";
   }
 
-  let bactrian = {
-    Atom.name = "Bactrian";
-    uri       = None;
-    email     = None;
-  }
 end
 
 let rights = Some "All rights reserved by the author"
@@ -496,15 +491,8 @@ module Wiki = struct
       body       = File "libvirt-on-cubieboard.md";
       permalink  = "libvirt-on-cubieboard";
     };
-    {
-     (*NOTE don't change the line below -- it is updated automatically by
-       is-mirage-broken*)
-      updated    = date (2014, 11, 29, 19, 00); (*NOTE is-mirage-broken:marker*)
-      author     = bactrian;
-      subject    = "Mirage build status";
-      body       = File "is_mirage_broken.md";
-      permalink  = "is-mirage-broken";
-    };
+
+    Bactrian.entry_for_is_mirage_broken_wikipage;
   ]
 end
 
