@@ -35,7 +35,6 @@ make
 make clean
 mirage configure --xen
 make depend
-#opam install omd.1.1.0
 make
 cd ..
 
@@ -60,6 +59,7 @@ if [ "$DEPLOY" = "1" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
     rm -rf xen/$TRAVIS_COMMIT
     mkdir -p xen/$TRAVIS_COMMIT
     cp ../src/mir-www.xen ../src/config.ml xen/$TRAVIS_COMMIT
+    opam info -i > xen/$TRAVIS_COMMIT/packages
     bzip2 -9 xen/$TRAVIS_COMMIT/mir-www.xen
     git pull --rebase
     echo $TRAVIS_COMMIT > xen/latest
