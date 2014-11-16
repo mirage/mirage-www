@@ -521,6 +521,20 @@ module Links = struct
   }
 
   let entries = [
+    { id="after-docker-immutable-infra";
+      uri=Uri.of_string "https://medium.com/@darrenrush/after-docker-unikernels-and-immutable-infrastructure-93d5a91c849e";
+      title="After Docker: Unikernels and Immutable Infrastructure";
+      date=day(2014,11,06);
+      stream=blog;
+    };
+
+    { id="unikernels-what-where-why-awick";
+      uri=Uri.of_string "https://www.youtube.com/watch?v=oHcHTFleNtg";
+      title="Unikernels: Who, What, Where, When, Why - Adam Wick, Galois";
+      date=day(2014,10,17);
+      stream=talk;
+    };
+
     { id="enterprise-oss-2014";
       uri=Uri.of_string "http://www.linux.com/news/software/applications/789241--5-new-enterprise-open-source-projects-to-watch/";
       title="5 New Enterprise Open Source Projects to Watch";
