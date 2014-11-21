@@ -20,6 +20,7 @@ mirage/ocaml-tuntap
 mirage/mirage-platform
 mirage/ocaml-dns
 mirage/mirage-tcpip
+mirage/mirage-tc
 mirage/ocaml-cstruct
 mirage/io-page
 mirage/mirage-vagrant-vms
@@ -40,3 +41,5 @@ djs55/ocaml-xenstore-clients
 samoht/ocaml-mstruct
 mirage/ocaml-lazy-trie
 mirage/merge-queues
+mirage/mirage-xen-minios
+samoht/alcotest
