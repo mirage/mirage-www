@@ -1,3 +1,93 @@
+### ocaml-git-v1.4.0: Use latest Conduit API
+
+Released on 2014-11-20 as [v1.4.0](https://github.com/mirage/ocaml-git/releases/tag/v1.4.0). See <https://github.com/mirage/ocaml-git> for full history.
+
+* Port to Conduit 0.6.0 API.
+* Depend on `ocaml-hex`
+
+
+### ocaml-github-v0.9.2: Improved log error messages
+
+Released on 2014-11-09 as [v0.9.2](https://github.com/avsm/ocaml-github/releases/tag/v0.9.2). See <https://github.com/avsm/ocaml-github> for full history.
+
+* Better log error messages (#39).
+* Tweak Makefile to build JavaScript version by default if `js_of_ocaml` is installed.
+
+
+### mirage-http-v2.0.0: Mirage 2.0 compatible HTTP interface
+
+Released on 2014-11-07 as [v2.0.0](https://github.com/mirage/mirage-http/releases/tag/v2.0.0). See <https://github.com/mirage/mirage-http> for full history.
+
+* Use the Conduit 0.6+ resolver API.
+* Add a local `opam` file for the OPAM 1.2.0 workflow.
+
+### ocaml-cohttp-v0.12.0: Add JavaScript and StringIO backends, and numerous interface improvements
+
+Released on 2014-11-07 as [v0.12.0](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.12.0). See <https://github.com/mirage/ocaml-cohttp> for full history.
+
+Compatibility breaking interface changes:
+
+* Rename `Cohttp.Auth.t` to `Cohttp.Auth.credential` and `Cohttp.Auth.req`
+  to `Cohttp.Auth.challenge`.  Also expose an `Other` variant
+  to make it more extensible for unknown authentication types. The
+  `Cohttp.Auth` functions using these types have also been renamed accordingly.
+* Rename `Cohttp.Transfer.encoding_to_string` to `string_of_encoding`
+  for consistency with the rest of Cohttp's APIs.
+* The `has_body` function in the Request and Response modules now
+  explicitly signals when the body size is unknown.
+* Move all the module type signatures into `Cohttp.S`.
+* If users have percent-encoded file names, their resolution is changed:
+ `resolve_local_file` in `Cohttp_async` and `Cohttp_lwt` now always
+  percent-decode paths (#157)
+* Remove the `Cohttp_lwt.Server.server` type synonym to `t`.
+* When reading data from a HTTP body stream using the `Fixed` encoding,
+  we need to maintain state (bytes remaining) so we know when to finish.
+  The `Cohttp.Request` and `Cohttp.Response` interfaces now expose a
+  `reader` and `writer` types to track this safely.
+* Add `is_empty` function to the `Cohttp.S.Body` module type.
+* Add `Strings` representation to `Cohttp.Body` to efficiently hold a
+  list of body chunks.
+* Move flushing logic for HTTP bodies into the portable `Request` and
+  `Response` modules instead of individual Lwt and Async backends.
+* Port module interfaces to the latest Conduit (0.6.0+) API.
+* Cohttp requires OCaml 4.01.0 or higher now.
+
+New features and bugfixes:
+
+* Add a `Cohttp_lwt_xhr` JavaScript backend that enables Cohttp logic to be
+  mapped to `XMLHTTPRequest` in browsers via `js_of_ocaml` (via Andy Ray).
+* Add a `Cohttp.String_io` and `String_io_lwt` module that uses OCaml
+  `string` or `Buffer.t` to read and write HTTP requests and responses
+  instead of network connections.
+* `cohttp_server_lwt` and `cohttp_server_async` now return better errors (#158)
+* `cohttp_server_lwt` and `cohttp_server_async` now serve indexes directly (#162)
+* [lwt] Add `stop` thread to terminate a running server if it finishes (#147).
+* Add `Cohttp.Connection.compare` to make ordering of connections possible.
+* Add `Body.map` and `Body.as_pipe` to work with HTTP bodies more easily.
+* Remove link-time dependency on camlp4 via META fixes (#127).
+* Support HTTP methods and versions other than the standard ones. (#142).
+* Improve `cohttp_server_lwt` and `cohttp_server_async` directory listings (#158)
+* Fix `Cohttp_async.resolve_local_file` directory traversal vulnerability (#158)
+* [async] In the Async server, do not close the Reader too early.
+* [async] Close file descriptors more eagerly in the HTTP client (#167).
+* Reduce thread allocation by replacing `return <const>` with `return_none`,
+  `return_unit` or `return_nil`.
+
+
+### mirage-tcpip-v2.0.1: Improve behaviour under heavy load
+
+Released on 2014-11-03 as [v2.0.1](https://github.com/mirage/mirage-tcpip/releases/tag/v2.0.1). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Fixed race condition in the signalling between the rx/tx threads under load.
+* Experimentally switch to immediate ACKs in TCPv4 by default instead of delayed ones.
+
+### mirage-tcpip-v2.0.1: Improve behaviour under heavy load
+
+Released on 2014-11-03 as [v2.0.1](https://github.com/mirage/mirage-tcpip/releases/tag/v2.0.1). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Fixed race condition in the signalling between the rx/tx threads under load.
+* Experimentally switch to immediate ACKs in TCPv4 by default instead of delayed ones.
+
 ### ocaml-github-v0.9.1: Fix support for draft Releases
 
 Released on 2014-11-03 as [v0.9.1](https://github.com/avsm/ocaml-github/releases/tag/v0.9.1). See <https://github.com/avsm/ocaml-github> for full history.
@@ -85,47 +175,6 @@ Released on 2014-11-03 as [v2.0.0](https://github.com/mirage/mirage-tcpip/releas
 Released on 2014-11-02 as [v0.0.8](https://github.com/mirage/cowabloga/releases/tag/v0.0.8). See <https://github.com/mirage/cowabloga> for full history.
 
 No change aside from adding support for Conduit 0.6 APIs used in Mirage 2.0.0 and later.
-
-### ocaml-cohttp-v0.12.0: Add JavaScript and StringIO backends, and numerous interface improvements
-
-Released on 2014-11-02 as [v0.12.0](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.12.0). See <https://github.com/mirage/ocaml-cohttp> for full history.
-
-Compatibility breaking interface changes:
-
-* Rename `Cohttp.Auth.t` to `Cohttp.Auth.resp` to make it match the
-  existing `Cohttp.Auth.req` type.  Also expose an `Other` variant
-  to make it more extensible for unknown authentication types.
-* Rename `Cohttp.Transfer.encoding_to_string` to `string_of_encoding`
-  for consistency with the rest of Cohttp's APIs.
-* The `has_body` function in the Request and Response modules now
-  explicitly signals when the body size is unknown.
-* Move all the module type signatures into `Cohttp.S`.
-* If users have percent-encoded file names, their resolution is changed:
- `resolve_local_file` in `Cohttp_async` and `Cohttp_lwt` now always
-  percent-decode paths (#157)
-* Remove the `Cohttp_lwt.Server.server` type synonym to `t`.
-* Port module interfaces to the latest Conduit (0.6.0+) API.
-* Cohttp requires OCaml 4.01.0 or higher now.
-
-New features and bugfixes:
-
-* Add a `Cohttp_lwt_xhr` JavaScript backend that enables Cohttp logic to be
-  mapped to `XMLHTTPRequest` in browsers via `js_of_ocaml` (via Andy Ray).
-* Add a `Cohttp.String_io` and `String_io_lwt` module that uses OCaml
-  `string` or `Buffer.t` to read and write HTTP requests and responses
-  instead of network connections.
-* `cohttp_server_lwt` and `cohttp_server_async` now return better errors (#158)
-* `cohttp_server_lwt` and `cohttp_server_async` now serve indexes directly (#162)
-* [lwt] Add `stop` thread to terminate a running server if it finishes (#147).
-* Add `Cohttp.Connection.compare` to make ordering of connections possible.
-* Add `Body.map` and `Body.as_pipe` to work with HTTP bodies more easily.
-* Remove link-time dependency on camlp4 via META fixes (#127).
-* Support HTTP methods and versions other than the standard ones. (#142).
-* Improve `cohttp_server_lwt` and `cohttp_server_async` directory listings (#158)
-* Fix `Cohttp_async.resolve_local_file` directory traversal vulnerability (#158)
-* [async] In the Async server, do not close the Reader too early.
-* [async] Close file descriptors more eagerly in the HTTP client (#167).
-
 
 ### ocaml-github-v0.9.0: Add Gist bindings and JavaScript compilation support
 
