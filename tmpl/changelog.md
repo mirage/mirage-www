@@ -1,3 +1,12 @@
+### mirage-v2.0.1: Add Tracing support
+
+Released on 2014-11-21 as [v2.0.1](https://github.com/mirage/mirage/releases/tag/v2.0.1). See <https://github.com/mirage/mirage> for full history.
+
+* Add `register ~tracing` to enable tracing with mirage-profile at start-up (#321).
+* Update Dockerfile for latest libraries (#320).
+* Only build mirage-types if Io_page is also installed (#324).
+
+
 ### mirage-xen-minios-v0.4.2: Add explicit section for boot loader
 
 Released on 2014-11-21 as [v0.4.2](https://github.com/mirage/mirage-xen-minios/releases/tag/v0.4.2). See <https://github.com/mirage/mirage-xen-minios> for full history.
@@ -205,15 +214,6 @@ Released on 2014-10-31 as [2.0.0](https://github.com/mirage/mirage-console/relea
 * [xen] support connecting to additional (named) consoles
 * [xen] don't zero the initial console ring
 * install findlib packages as `mirage-console.[xen/unix]`
-
-### mirage-types-2.0.0: mirage-types 2.0.0 release
-
-Released on 2014-10-28 as [types-2.0.0](https://github.com/mirage/mirage/releases/tag/untagged-96dc88c3dc6422721e68). See <https://github.com/mirage/mirage> for full history.
-
-* [types]: backwards incompatible change: CONSOLE is now a FLOW;
-  'write' has a different signature and 'write_all' has been removed.
-* Add `Vchan`, `Conduit` and `Resolver` code generators.
-
 
 ### mirage-tc-0.1.0: Initial release
 
