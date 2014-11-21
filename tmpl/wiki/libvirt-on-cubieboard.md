@@ -64,11 +64,7 @@ To install the ARM version of mirage:
 
 1. opam init
 
-2. opam install mirage-xen-minios
-
-3. opam remote add mirage-dev git://github.com/mirage/mirage-dev
-
-4. opam install mirage
+2. opam install mirage
 
 (You should now be able to follow the rest of the Mirage tutorial:)
 
