@@ -1,3 +1,120 @@
+### ocaml-conduit-v0.7.0: Add native OCaml-TLS support
+
+Released on 2014-12-04 as [v0.7.0](https://github.com/mirage/ocaml-conduit/releases/tag/v0.7.0). See <https://github.com/mirage/ocaml-conduit> for full history.
+
+* Add Lwt-unix support for the native OCaml/TLS stack as an alternative
+  to OpenSSL. This can be activated by setting the `CONDUIT_TLS` environment
+  variable to `native`.  If this is not set and OpenSSL is available, then
+  OpenSSL is used by in preference to the pure OCaml implementation.
+* Add sexp convertors for `Conduit_lwt_unix.ctx` and `Conduit_mirage.ctx`
+  and the `Resolver` service types.
+* Fix the Mirage tests to the Mirage 2.0.1+ Conduit interfaces.
+* Add more debugging output when the `CONDUIT_DEBUG` variable is set on Unix.
+* *Interface breaking:* The `client` and `server` types in `Conduit_lwt_unix`
+  now explicitly label the fields of the tuples with a polymorphic variant.
+  This allows them to remain independent of this library but still be
+  more self-descriptive (i.e. `Port of int` instead of just `int`).
+
+### ocaml-vmnet-v1.0.1: Handle interface initialisation failure more gracefully
+
+Released on 2014-12-02 as [v1.0.1](https://github.com/mirage/ocaml-vmnet/releases/tag/v1.0.1). See <https://github.com/mirage/ocaml-vmnet> for full history.
+
+Instead of just hanging indefinitely, raise the `Vmnet.Error` exception when interface init fails (#1, reported by @nojb)
+
+### mirage-tcpip-v2.0.2: Support IPv4 multicast addresses and stability fixes
+
+Released on 2014-12-01 as [v2.0.2](https://github.com/mirage/mirage-tcpip/releases/tag/v2.0.2). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Add IPv4 multicast to MAC address mapping in IPv4 output processing (#81 from Luke Dunstan).
+* Improve formatting of DHCP console logging, including printing out options (#83).
+* Build with -mno-red-zone on x86_64 to avoid stack corruption on Xen (#80).
+
+
+### mirage-tcpip-v2.0.2: Support IPv4 multicast addresses and stability fixes
+
+Released on 2014-12-01 as [v2.0.2](https://github.com/mirage/mirage-tcpip/releases/tag/v2.0.2). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Add IPv4 multicast to MAC address mapping in IPv4 output processing (#81 from Luke Dunstan).
+* Improve formatting of DHCP console logging, including printing out options (#83).
+* Build with -mno-red-zone on x86_64 to avoid stack corruption on Xen (#80).
+
+
+### mirage-net-macosx-v1.0.0: Initial public release
+
+Released on 2014-12-01 as [v1.0.0](https://github.com/mirage/mirage-net-macosx/releases/tag/v1.0.0). See <https://github.com/mirage/mirage-net-macosx> for full history.
+
+MacOS X implementation of the Mirage NETWORK interface.
+
+This interface exposes raw Ethernet frames using the
+[Vmnet](https://github.com/mirage/ocaml-vmnet) framework that
+is available on MacOS X Yosemite onwards.  It is suitable for
+use with an OCaml network stack such as the one found at
+<https://github.com/mirage/mirage-tcpip>.
+
+For a complete system that uses this, please see the
+[MirageOS](http://openmirage.org) homepage.
+
+
+### ocaml-vmnet-v1.0.0: Initial public release
+
+Released on 2014-12-01 as [v1.0.0](https://github.com/mirage/ocaml-vmnet/releases/tag/v1.0.0). See <https://github.com/mirage/ocaml-vmnet> for full history.
+
+MacOS X 10.10 (Yosemite) introduced the somewhat undocumented `vmnet`
+framework.  This exposes virtual network interfaces to userland applications.
+There are a number of advantages of this over previous implementations:
+
+- Unlike [tuntaposx](http://tuntaposx.sourceforge.net/), this is builtin
+  to MacOS X now and so is easier to package up and distribute for end users.
+- `vmnet` uses the XPC sandboxing interfaces and should make it easier to
+  drop a hard dependency on running networking applications as `root`.
+- Most significantly, `vmnet` supports bridging network traffic to the
+  outside world, which was previously unsupported.
+
+These OCaml bindings are constructed against the documentation contained
+in the `<vmnet.h>` header file in Yosemite, and may not be correct due to
+the lack of any other example code.  However, they do suffice to run
+[MirageOS](http://openmirage.org) applications that can connect to the
+outside world.  The bindings are also slightly complicated by the need
+to interface [GCD](http://en.wikipedia.org/wiki/Grand_Central_Dispatch)
+thread pools with the OCaml runtime, so please report any instabilities
+that you see when using this interface as a consumer.
+
+There are two libraries provided:
+
+- `Vmnet` is the raw OCaml binding to the `vmnet` framework, using
+   OCaml preemptive threads to handle synchronisation.
+- `Lwt_vmnet` uses the [Lwt](http://ocsigen.org/lwt) framework to
+  provide a monadic asynchronous I/O interface at a higher level.
+
+Most users should use `Lwt_vmnet` to handle guest traffic.
+
+### io-page-v1.2.0: Add a direct Cstruct allocation function
+
+Released on 2014-11-28 as [v1.2.0](https://github.com/mirage/io-page/releases/tag/v1.2.0). See <https://github.com/mirage/io-page> for full history.
+
+* Add `Io_page.get_buf` which allocates an Io_page and immediately turns it into a Cstruct that spans the entire page.
+* Improve ocamldoc for exported functions.
+* Add OPAM 1.2 file for easier local pinning workflow.
+
+
+### ocaml-github-v0.9.3: Add repository branch query functions
+
+Released on 2014-11-28 as [v0.9.3](https://github.com/avsm/ocaml-github/releases/tag/v0.9.3). See <https://github.com/avsm/ocaml-github> for full history.
+
+* Add `repo_branches` and `branches` query functions (#44 from Jeff Hammerbacher).
+* Improve `opam` 1.2 metadata.
+
+### ocaml-cstruct-v1.5.0: Camlp4 is now an optional dependency on Cstruct
+
+Released on 2014-11-24 as [v1.5.0](https://github.com/mirage/ocaml-cstruct/releases/tag/v1.5.0). See <https://github.com/mirage/ocaml-cstruct> for full history.
+
+This release moves the `camlp4` extension to being an optional dependency, so that libraries that manipulate Cstruct values without actually specifying C structure layouts are not forced to introduce a camlp4 dependency.
+
+* Make `camlp4` an optional build-time dependency (#35).
+* Remove `ounit` as a dependency in the `opam` file.
+* Improve `opam` description file for OPAM 1.2 workflow (#36).
+* Refresh Merlin IDE description (#37).
+
 ### mirage-v2.0.1: Add Tracing support
 
 Released on 2014-11-21 as [v2.0.1](https://github.com/mirage/mirage/releases/tag/v2.0.1). See <https://github.com/mirage/mirage> for full history.
@@ -87,6 +204,13 @@ New features and bugfixes:
 * [async] Close file descriptors more eagerly in the HTTP client (#167).
 * Reduce thread allocation by replacing `return <const>` with `return_none`,
   `return_unit` or `return_nil`.
+
+
+### ocaml-conduit-v0.6.1: Improve connection closing semantics
+
+Released on 2014-11-07 as [v0.6.1](https://github.com/mirage/ocaml-conduit/releases/tag/v0.6.1). See <https://github.com/mirage/ocaml-conduit> for full history.
+
+When terminating conduits, always close the output channel first before the input channel, so that any pending data in the underlying fd is flushed.
 
 
 ### mirage-tcpip-v2.0.1: Improve behaviour under heavy load
@@ -199,6 +323,25 @@ Released on 2014-11-02 as [v0.9.0](https://github.com/avsm/ocaml-github/releases
 * Add bindings to the Gist APIs for storing text fragments (#36).
 * Add a JavaScript port, using Cohttp and js_of_ocaml (#36).
 * Build `ocamldoc` HTML documentation by default.
+
+### ocaml-conduit-v0.6.0: Significant interface improvements for Lwt, Async and Mirage
+
+Released on 2014-11-02 as [v0.6.0](https://github.com/mirage/ocaml-conduit/releases/tag/v0.6.0). See <https://github.com/mirage/ocaml-conduit> for full history.
+
+* Add an explicit `ctx` content to track every conduit's runtime state.
+* Allow the source interface for a conduit to be set.
+* Support a `password` callback for the SSL layer (#4).
+* [lwt] Add stop parameters in main-loop of the server (#5).
+* Add `Conduit_mirage` with Mirage functor suport.
+* Add ocamldoc of most interfaces.
+* Add a `CONDUIT_DEBUG` environment variable to the Unix backends for
+  live debugging.
+* Add a `conn` value to the callback to query more information about the
+  current connection (#2).
+* Expose the representation of `Conduit_lwt_unix.flow` in the external signature.
+  This lets library users obtain the original `Lwt_unix.file_descr` when using
+  Conduit libraries like Cohttp.
+
 
 ### mirage-console-2.0.0: Improved build scripts and satisfy the FLOW interface.
 
@@ -351,16 +494,20 @@ Released on 2014-08-08 as [v1.1.3](https://github.com/mirage/mirage-net-xen/rele
 Revert the serialization in 1.1.2 as Xen/ARM (4.5 and backport to 4.4) has been fixed to support granting the same page multiple times. Backport is in https://github.com/mirage/xen-arm-builder.
 
 
+### ocaml-conduit-v0.5.1: Enable Async SSL support
+
+Released on 2014-08-07 as [v0.5.1](https://github.com/mirage/ocaml-conduit/releases/tag/v0.5.1). See <https://github.com/mirage/ocaml-conduit> for full history.
+
+This release reenables Async SSL by default, since the upstream bug that prevented linking from working reliably has been fixed.
+
+
 ### ocaml-ctypes-0.3.3: ocaml-ctypes 0.3.3
 
 Released on 2014-08-01 as [0.3.3](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/0.3.3). See <https://github.com/ocamllabs/ocaml-ctypes> for full history.
 
-## What's new in ocaml-ctypes 0.3.3
+See [CHANGES.md](https://github.com/ocamllabs/ocaml-ctypes/blob/master/CHANGES.md) for details.
 
-### Bug fixes
 
-* Fix a bug (#165) causing pointer offsets to be lost when passing pointers to generated stubs.  
-  Thanks to David Kaloper (@pqwy) for reporting and fixing the bug.
 
 ### ocaml-dns-v0.9.1: Fix file descriptor leak in resolver
 
@@ -484,29 +631,13 @@ Add RFC6874 compliance for IPv6 literals with zones (#48 by @vbmithr).
 
 Released on 2014-07-04 as [0.3.2](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/0.3.2). See <https://github.com/ocamllabs/ocaml-ctypes> for full history.
 
-## What's new in ocaml-ctypes 0.3.2
-
-### Bug fixes
-
-* Add the missing `bytes` dependency to the META file.
-
+See [CHANGES.md](https://github.com/ocamllabs/ocaml-ctypes/blob/master/CHANGES.md) for details.
 
 ### ocaml-ctypes-0.3.1: ocaml-ctypes 0.3.1
 
 Released on 2014-07-03 as [0.3.1](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/0.3.1). See <https://github.com/ocamllabs/ocaml-ctypes> for full history.
 
-### What's new in ocaml-ctypes 0.3.1
-
-Thanks to Peter Zotov (@whitequark) and Maverick Woo (@maverickwoo) for contributions to this release.
-
-#### New features
-
-* Support for passing 'bytes' values directly to C (Patch by Peter Zotov)
-
-#### Bug fixes
-
-* Fix a bug in ctypes_call (issue #158)
-* Safely remove file generated during configuration (Patch by Maverick Woo)
+See [CHANGES.md](https://github.com/ocamllabs/ocaml-ctypes/blob/master/CHANGES.md) for details.
 
 ### mirage-tcpip-v1.1.5: Stability fixes to TCPv4 and DHCP handling
 
@@ -726,60 +857,13 @@ Do not send oversized frames to the backend Netfront (#9 from Edwin Torok).
 
 Released on 2014-05-22 as [ocaml-ctypes-0.3](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/ocaml-ctypes-0.3). See <https://github.com/ocamllabs/ocaml-ctypes> for full history.
 
-See [the release notes for 0.3](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/0.3).
+See [CHANGES.md](https://github.com/ocamllabs/ocaml-ctypes/blob/master/CHANGES.md) for details.
 
 ### ocaml-ctypes-0.3: ocaml-ctypes 0.3
 
 Released on 2014-05-22 as [0.3](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/0.3). See <https://github.com/ocamllabs/ocaml-ctypes> for full history.
 
-### What's new in ocaml-ctypes 0.3
-
-Thanks to Peter Zotov (@whitequark), David Sheets (@dsheets), Mike McClurg (@mcclurmc) and Anil Madhavapeddy (@avsm) for contributions to this release.
-
-#### Major features
-
-##### Support for passing OCaml strings directly to C
-(Patch by Peter Zotov.)
-
-The implications are discussed [in the FAQ][strings_faq].
-
-[strings_faq]: https://github.com/ocamllabs/ocaml-ctypes/wiki/FAQ#strings
-
-##### Support for generating C stubs from names and type declarations.
-There are various examples available of packages which use stub support: see the [fts example][fts-example] in the distribution (which uses a custom Makefile), [this fork of async_ssl][async_ssl] (which uses OCamlMakefile), and [the cstubs branch of ocaml-lz4][ocaml-lz4] (which uses oasis and ocamlbuild).
-
-[fts-example]: https://github.com/ocamllabs/ocaml-ctypes/tree/master/examples/fts/stub-generation
-[async_ssl]: https://github.com/yallop/async_ssl/tree/stub-generation
-[ocaml-lz4]: https://github.com/whitequark/ocaml-lz4/tree/cstubs
-
-##### Support for turning OCaml modules into C libraries.
-See the [ocaml-ctypes-inverted-stubs-example][inverted-stubs-example] repository for a sample project which exposes a part of [Xmlm][xmlm]'s API to C.
-
-[inverted-stubs-example]: https://github.com/yallop/ocaml-ctypes-inverted-stubs-example/ 
-[xmlm]: http://erratique.ch/software/xmlm
-
-
-#### Other features
-
-* Add a function [`string_from_ptr`][string_from_ptr] for creating a string from an address and length.
-* Generate [codes for libffi ABI specifications][libffi_abi].
-* Support for passing complex numbers to C using the stub generation backend.
-* Add [`raw_address_of_ptr`][raw_address_of_ptr], an inverse of [`ptr_of_raw_address`][ptr_of_raw_address].
-* Add a function [`typ_of_bigarray_kind`][typ_of_bigarray_kind] for converting `Bigarray.kind` values to `Ctypes.typ` values.
-* Improved [coercion][coercion] support
-
-[typ_of_bigarray_kind]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#VALtyp_of_bigarray_kind
-[string_from_ptr]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#VALstring_from_ptr
-[raw_address_of_ptr]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#VALraw_address_of_ptr
-[ptr_of_raw_address]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#VALptr_of_raw_address
-[CArray]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.Array.html
-[libffi_abi]: http://ocamllabs.github.io/ocaml-ctypes/Libffi_abi.html
-[coercion]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#VALcoerce
-
-
-#### Backwards incompatibilities
-`Array` has been renamed to [`CArray`][CArray].
-
+See [CHANGES.md](https://github.com/ocamllabs/ocaml-ctypes/blob/master/CHANGES.md) for details.
 
 ### ocaml-github-v0.8.5: Fix optional schema field parsing
 
@@ -887,6 +971,12 @@ Released on 2014-04-17 as [v0.11.1](https://github.com/mirage/ocaml-cohttp/relea
 * Add an Lwt-based SimpleHTTPServer equivalent as `cohttp-server-lwt` (#108).
 * `Cohttp.Connection.t` now exposes sexp accessor functions (#117).
 
+
+### ocaml-conduit-v0.5.0: First public release
+
+Released on 2014-04-13 as [v0.5.0](https://github.com/mirage/ocaml-conduit/releases/tag/v0.5.0). See <https://github.com/mirage/ocaml-conduit> for full history.
+
+Async SSL is temporarily disabled in this release until a stub-generation version of the underlying library binding is available.
 
 ### ocaml-cohttp-v0.11.0: Thread safety and Async/Lwt SSL
 
@@ -1874,52 +1964,7 @@ Released on 2013-11-07 as [v0.8.1](https://github.com/mirage/ocaml-cstruct/relea
 
 Released on 2013-11-07 as [ocaml-ctypes-0.2](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/ocaml-ctypes-0.2). See <https://github.com/ocamllabs/ocaml-ctypes> for full history.
 
-## What's new in ocaml-ctypes 0.2
-
-Thanks to Ivan Gotovchits, Greg Perkins, Daniel Bünzli, Rob Hoes and Anil Madhavapeddy for contributions to this release.
-
-### Major features
-
-#### Bigarray support.
-See [Bigarray types][bigarray-types] and [Bigarray values][bigarray-values] for details.
-
-[bigarray-types]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#4_Bigarraytypes
-[bigarray-values]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#4_Bigarrayvalues
-
-#### Give the user control over the lifetime of closures passed to C.
-See [the FAQ][faq-lifetime] for details.
-
-[faq-lifetime]: https://github.com/ocamllabs/ocaml-ctypes/wiki/FAQ#function-lifetime
-
-#### Top level printing for C values and types
-Loading the new findlib package `ctypes.top` in the toplevel will install custom printers for C types and values.
-
-### Other features
-
-* Basic [coercion][coercion] support
-* Remove `returning_checking_errno`; pass a flag to [`foreign`][foreign] instead.
-* Add an optional argument to [`Foreign.foreign`][foreign] that ignores absent symbols.
-  (Patch by Daniel Bünzli.)
-* More precise tests for whether types are 'passable'
-* Compulsory names for structure and union fields (`*:*` and `+:+` are deprecated, but still supported for now.)
-* [`UInt32.of_int32`][of_int32], [`UInt32.to_int32`][to_int32], [`UInt64.of_int64`][of_int64], and [`UInt64.to_int64`][to_int64] functions.
-* Finalisers for ctypes-allocated memory.
-* Add a [`string_opt`][string_opt] view
-  (Patch by Rob Hoes.)
-* Add the ['camlint'][camlint] basic type.
-* Complex number support
-* Abstract types [now have names][abstract].
-
-[foreign]: http://ocamllabs.github.io/ocaml-ctypes/Foreign.html#VALforeign
-[of_int32]: http://ocamllabs.github.io/ocaml-ctypes/Unsigned.Uint32.html#VALof_int32
-[to_int32]: http://ocamllabs.github.io/ocaml-ctypes/Unsigned.Uint32.html#VALto_int32
-[of_int64]: http://ocamllabs.github.io/ocaml-ctypes/Unsigned.Uint64.html#VALof_int64
-[to_int64]: http://ocamllabs.github.io/ocaml-ctypes/Unsigned.Uint64.html#VALto_int64
-[string_opt]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#VALstring_opt
-[camlint]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#VALcamlint
-[abstract]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#VALabstract
-[coercion]: http://ocamllabs.github.io/ocaml-ctypes/Ctypes.html#VALcoerce
-
+See [CHANGES.md](https://github.com/ocamllabs/ocaml-ctypes/blob/master/CHANGES.md) for details.
 
 ### ocaml-uri-v1.3.11: Add relative/relative parsing
 
