@@ -23,7 +23,6 @@ mirage/mirage-platform
 mirage/mirage-skeleton
 mirage/mirage-tc
 mirage/mirage-tcpip
-mirage/mirage-tcpip
 mirage/mirage-vagrant-vms
 mirage/mirage-www
 mirage/mirage-xen-minios
