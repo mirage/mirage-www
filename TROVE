@@ -1,7 +1,9 @@
 avsm/ocaml-github
+avsm/ezxmlm
 djs55/ocaml-xenstore-clients
 mirage/cowabloga
 mirage/dyntype
+mirage/ezjsonm
 mirage/io-page
 mirage/irmin
 mirage/merge-queues

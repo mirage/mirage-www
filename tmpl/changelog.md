@@ -435,6 +435,13 @@ Released on 2014-10-24 as [v0.4.1](https://github.com/mirage/mirage-xen-minios/r
 
 Get time values from Xen on x86. This means that gettimeofday should now return correct values, not seconds since boot
 
+### ezjsonm-0.3.0: more helper functions
+
+Released on 2014-10-24 as [0.3.0](https://github.com/mirage/ezjsonm/releases/tag/0.3.0). See <https://github.com/mirage/ezjsonm> for full history.
+
+* Add sexpilb conversion functions
+* Add functions to encode/decode non utf8 strings (using hex encoding)
+
 ### ocaml-git-1.3.0: Remove core_kernel dependency and use nocrypto
 
 Released on 2014-10-20 as [1.3.0](https://github.com/mirage/ocaml-git/releases/tag/1.3.0). See <https://github.com/mirage/ocaml-git> for full history.
@@ -858,6 +865,15 @@ cenum foo64 {
 
 And `sexp_of_foo64` and `foo64_of_sexp` functions will also be available.
 The representation of the Sexp is the string representation of the enum.
+
+
+### ezxmlm-v1.0.1: Add XML sub-tree membership test function
+
+Released on 2014-06-03 as [v1.0.1](https://github.com/avsm/ezxmlm/releases/tag/v1.0.1). See <https://github.com/avsm/ezxmlm> for full history.
+
+* Add `has_member` function to test if a tag is present in sub-nodes (from #1)
+* Add Travis CI scripts.
+* Regenerate OASIS build files with 0.4.4 (better dynlink support)
 
 
 ### irmin-0.8.1: Javascript graphs & fix IrminMemory.create to create a shared store
@@ -1667,6 +1683,16 @@ CHANGES:
 * Use oasis to build the project
 * Use the now released separately `ezjsonm` and `alcotest` libraries
 
+### ezjsonm-0.2.0: Build json stream from string streams
+
+Released on 2013-12-13 as [0.2.0](https://github.com/mirage/ezjsonm/releases/tag/0.2.0). See <https://github.com/mirage/ezjsonm> for full history.
+
+This adds an optional dependency to lwt
+
+CHANGES:
+* Add a new module `Ezjsonm_lwt`, to convert string streams to json streams
+* Expose `Ezjsonm.get_bool`
+
 ### ocaml-cow-v0.8.0: Proper Markdown support
 
 Released on 2013-12-12 as [v0.8.0](https://github.com/mirage/ocaml-cow/releases/tag/v0.8.0). See <https://github.com/mirage/ocaml-cow> for full history.
@@ -1687,6 +1713,10 @@ Released on 2013-12-12 as [v1.0.0](https://github.com/mirage/mirage-platform/rel
 ### alcotest-0.1.0: Initial release
 
 Released on 2013-12-12 as [0.1.0](https://github.com/samoht/alcotest/releases/tag/0.1.0). See <https://github.com/samoht/alcotest> for full history.
+
+### ezjsonm-0.1.0: Initial release
+
+Released on 2013-12-12 as [0.1.0](https://github.com/mirage/ezjsonm/releases/tag/0.1.0). See <https://github.com/mirage/ezjsonm> for full history.
 
 ### ocaml-cohttp-v0.9.13: Mirage 1.0 support and Lwt-core
 
@@ -2032,6 +2062,10 @@ Released on 2013-11-07 as [v0.8.1](https://github.com/mirage/ocaml-cstruct/relea
 Released on 2013-11-07 as [ocaml-ctypes-0.2](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/ocaml-ctypes-0.2). See <https://github.com/ocamllabs/ocaml-ctypes> for full history.
 
 See [CHANGES.md](https://github.com/ocamllabs/ocaml-ctypes/blob/master/CHANGES.md) for details.
+
+### ezxmlm-v1.0.0: First public release
+
+Released on 2013-11-02 as [v1.0.0](https://github.com/avsm/ezxmlm/releases/tag/v1.0.0). See <https://github.com/avsm/ezxmlm> for full history.
 
 ### ocaml-uri-v1.3.11: Add relative/relative parsing
 
