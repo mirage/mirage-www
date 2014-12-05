@@ -1,3 +1,70 @@
+### mirage-tcpip-v2.0.3: Remove ARP race condition and simplify DHCP client
+
+Released on 2014-12-05 as [v2.0.3](https://github.com/mirage/mirage-tcpip/releases/tag/v2.0.3). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Fixed race waiting for ARP response (#86).
+* Move the the code that configures IPv4 address, netmask and gateways
+  after receiving a successful lease out of the `Dhcp_clientv4` module
+  and into `Stackv4` (#87)
+
+### mirage-tcpip-v2.0.3: Remove ARP race condition and simplify DHCP client
+
+Released on 2014-12-05 as [v2.0.3](https://github.com/mirage/mirage-tcpip/releases/tag/v2.0.3). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Fixed race waiting for ARP response (#86).
+* Move the the code that configures IPv4 address, netmask and gateways
+  after receiving a successful lease out of the `Dhcp_clientv4` module
+  and into `Stackv4` (#87)
+
+### mirage-platform-v2.0.1: Xen stability: use monotonic time, check for page aligned I/O and add assert stubs
+
+Released on 2014-12-05 as [v2.0.1](https://github.com/mirage/mirage-platform/releases/tag/v2.0.1). See <https://github.com/mirage/mirage-platform> for full history.
+
+* [xen] Assert that pages passed to the grant share API are page-aligned.
+  This always happens if they are created via `Io_page.create`, and
+  probably not true if made by `Cstruct.create`.
+* [xen] Use monotonic time for timing events, not wall-clock time.
+* [xen] Provide functions that C code often uses for asserts (`abort`,
+  `printf`, etc).
+
+### ocaml-cohttp-v0.13.0: Support for the pure OCaml TLS stack in HTTP clients and servers
+
+Released on 2014-12-05 as [v0.13.0](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.13.0). See <https://github.com/mirage/ocaml-cohttp> for full history.
+
+Compatibility breaking interface changes:
+
+* Add sexp converters for Conduit contexts and `Lwt` client and server
+  modules and module types.
+
+New Features and bug fixes:
+* Can use the Conduit 0.7+ `CONDUIT_TLS=native` environment variable to
+  make HTTPS requests using the pure OCaml TLS stack instead of depending
+  on OpenSSL bindings.  All of the installed binaries (client and server)
+  can work in this mode.
+* Add `Cohttp_lwt_unix_debug` which lets libraries control the debugging
+  output from Cohttp.  Previously the only way to do this was to set the
+  `COHTTP_DEBUG` environment variable at the program start.
+* Add `cohttp-curl-lwt` as a lightweight URI fetcher from the command-line.
+  It uses the `cmdliner` as a new dependency.
+* Remove build dependency check on `lwt.ssl` for `cohttp.lwt`.
+  This has been moved to conduit, so only `lwt.unix` is needed here now.
+
+
+### mirage-http-v2.1.0: Expose sexp converters for HTTP contexts
+
+Released on 2014-12-05 as [v2.1.0](https://github.com/mirage/mirage-http/releases/tag/v2.1.0). See <https://github.com/mirage/mirage-http> for full history.
+
+* Use the Conduit 0.7+ resolver API (provide `of_sexp` for context).
+* Do not link against `camlp4` in the `META` file and only use it during build.
+
+### ocaml-conduit-v0.7.1: Reduce debug logging by default
+
+Released on 2014-12-05 as [v0.7.1](https://github.com/mirage/ocaml-conduit/releases/tag/v0.7.1). See <https://github.com/mirage/ocaml-conduit> for full history.
+
+* Do not emit debug output when the `CONDUIT_DEBUG` variable is not set.
+* Do not create symlinks in a local build, which helps with OPAM pins.
+* Improve ocamldoc for `Conduit_lwt_unix`.
+
 ### ocaml-conduit-v0.7.0: Add native OCaml-TLS support
 
 Released on 2014-12-04 as [v0.7.0](https://github.com/mirage/ocaml-conduit/releases/tag/v0.7.0). See <https://github.com/mirage/ocaml-conduit> for full history.
