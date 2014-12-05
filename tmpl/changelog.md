@@ -7,15 +7,6 @@ Released on 2014-12-05 as [v2.0.3](https://github.com/mirage/mirage-tcpip/releas
   after receiving a successful lease out of the `Dhcp_clientv4` module
   and into `Stackv4` (#87)
 
-### mirage-tcpip-v2.0.3: Remove ARP race condition and simplify DHCP client
-
-Released on 2014-12-05 as [v2.0.3](https://github.com/mirage/mirage-tcpip/releases/tag/v2.0.3). See <https://github.com/mirage/mirage-tcpip> for full history.
-
-* Fixed race waiting for ARP response (#86).
-* Move the the code that configures IPv4 address, netmask and gateways
-  after receiving a successful lease out of the `Dhcp_clientv4` module
-  and into `Stackv4` (#87)
-
 ### mirage-platform-v2.0.1: Xen stability: use monotonic time, check for page aligned I/O and add assert stubs
 
 Released on 2014-12-05 as [v2.0.1](https://github.com/mirage/mirage-platform/releases/tag/v2.0.1). See <https://github.com/mirage/mirage-platform> for full history.
@@ -87,15 +78,6 @@ Released on 2014-12-04 as [v0.7.0](https://github.com/mirage/ocaml-conduit/relea
 Released on 2014-12-02 as [v1.0.1](https://github.com/mirage/ocaml-vmnet/releases/tag/v1.0.1). See <https://github.com/mirage/ocaml-vmnet> for full history.
 
 Instead of just hanging indefinitely, raise the `Vmnet.Error` exception when interface init fails (#1, reported by @nojb)
-
-### mirage-tcpip-v2.0.2: Support IPv4 multicast addresses and stability fixes
-
-Released on 2014-12-01 as [v2.0.2](https://github.com/mirage/mirage-tcpip/releases/tag/v2.0.2). See <https://github.com/mirage/mirage-tcpip> for full history.
-
-* Add IPv4 multicast to MAC address mapping in IPv4 output processing (#81 from Luke Dunstan).
-* Improve formatting of DHCP console logging, including printing out options (#83).
-* Build with -mno-red-zone on x86_64 to avoid stack corruption on Xen (#80).
-
 
 ### mirage-tcpip-v2.0.2: Support IPv4 multicast addresses and stability fixes
 
@@ -287,13 +269,6 @@ Released on 2014-11-03 as [v2.0.1](https://github.com/mirage/mirage-tcpip/releas
 * Fixed race condition in the signalling between the rx/tx threads under load.
 * Experimentally switch to immediate ACKs in TCPv4 by default instead of delayed ones.
 
-### mirage-tcpip-v2.0.1: Improve behaviour under heavy load
-
-Released on 2014-11-03 as [v2.0.1](https://github.com/mirage/mirage-tcpip/releases/tag/v2.0.1). See <https://github.com/mirage/mirage-tcpip> for full history.
-
-* Fixed race condition in the signalling between the rx/tx threads under load.
-* Experimentally switch to immediate ACKs in TCPv4 by default instead of delayed ones.
-
 ### ocaml-github-v0.9.1: Fix support for draft Releases
 
 Released on 2014-11-03 as [v0.9.1](https://github.com/avsm/ocaml-github/releases/tag/v0.9.1). See <https://github.com/avsm/ocaml-github> for full history.
@@ -357,15 +332,6 @@ Released on 2014-11-03 as [v0.11.0](https://github.com/mirage/ocaml-dns/releases
 * Add Async DNS resolver modules from @marklrh (#22).
 * Add a Dns_resolver_mirage.Static for a static DNS interface.
 
-
-### mirage-tcpip-v2.0.0: Mirage 2.0 compatible TCP/IP release, and socket backend fixes
-
-Released on 2014-11-03 as [v2.0.0](https://github.com/mirage/mirage-tcpip/releases/tag/v2.0.0). See <https://github.com/mirage/mirage-tcpip> for full history.
-
-* Moved 1s complement checksum C code here from mirage-platform.
-* Depend on `Console_unix` and `Console_xen` instead of `Console`.
-* [socket] Do not return an `Eof` when writing 0-length buffer (#76).
-* [socket] Accept callbacks now run in async threads instead of being serialised (#75).
 
 ### mirage-tcpip-v2.0.0: Mirage 2.0 compatible TCP/IP release, and socket backend fixes
 
@@ -612,16 +578,6 @@ Released on 2014-07-20 as [v1.1.6](https://github.com/mirage/mirage-tcpip/releas
 * Add `opam` file to permit easier local pinning, and fix Travis to use this.
 
 
-### mirage-tcpip-v1.1.6: More robust TCP options parsing
-
-Released on 2014-07-20 as [v1.1.6](https://github.com/mirage/mirage-tcpip/releases/tag/v1.1.6). See <https://github.com/mirage/mirage-tcpip> for full history.
-
-* Quieten down the stack logging rate by not announcing IPv6 packet discards.
-* Raise exception `Bad_option` for unparseable or invalid TCPv4 options (#57).
-* Fix linking error with module `Tcp_checksum` by lifting it into top library (#60).
-* Add `opam` file to permit easier local pinning, and fix Travis to use this.
-
-
 ### mirage-xen-minios-v0.2: Initial public release
 
 Released on 2014-07-18 as [v0.2](https://github.com/mirage/mirage-xen-minios/releases/tag/v0.2). See <https://github.com/mirage/mirage-xen-minios> for full history.
@@ -712,21 +668,6 @@ See [CHANGES.md](https://github.com/ocamllabs/ocaml-ctypes/blob/master/CHANGES.m
 Released on 2014-07-03 as [0.3.1](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/0.3.1). See <https://github.com/ocamllabs/ocaml-ctypes> for full history.
 
 See [CHANGES.md](https://github.com/ocamllabs/ocaml-ctypes/blob/master/CHANGES.md) for details.
-
-### mirage-tcpip-v1.1.5: Stability fixes to TCPv4 and DHCP handling
-
-Released on 2014-07-01 as [v1.1.5](https://github.com/mirage/mirage-tcpip/releases/tag/v1.1.5). See <https://github.com/mirage/mirage-tcpip> for full history.
-
-* Ensure that DHCP completes before the application is started, so that
-  unikernels that establish outgoing connections can do so without a race.
-  (fix from Mindy Preston in #53, followup in #55)
-* Add `echo`, `chargen` and `discard` services into the `examples/`
-  directory. (from Mindy Preston in #52).
-* [tcp] Fully process the last `ACK` in a 3-way handshake for server connections.
-  This ensures that a `FIN` is correctly transmitted upon application-initiated
-  connection close. (fix from Mindy Preston in #51).
-
-
 
 ### mirage-tcpip-v1.1.5: Stability fixes to TCPv4 and DHCP handling
 
@@ -985,14 +926,6 @@ Released on 2014-04-29 as [v1.1.3](https://github.com/mirage/mirage-tcpip/releas
 
 This requires the corresponding mirage-types package in Mirage 1.1.2
 
-### mirage-tcpip-v1.1.3: Expose IPV4 module in the STACKV4 functor
-
-Released on 2014-04-29 as [v1.1.3](https://github.com/mirage/mirage-tcpip/releases/tag/v1.1.3). See <https://github.com/mirage/mirage-tcpip> for full history.
-
-* Expose IPV4 through the STACKV4 interface.
-
-This requires the corresponding mirage-types package in Mirage 1.1.2
-
 ### mirage-1.1.2: Improve STACKV4 module type, and EC2 deployment scripts
 
 Released on 2014-04-29 as [1.1.2](https://github.com/mirage/mirage/releases/tag/1.1.2). See <https://github.com/mirage/mirage> for full history.
@@ -1114,15 +1047,6 @@ Released on 2014-04-01 as [v0.8.2](https://github.com/avsm/ocaml-github/releases
 Released on 2014-04-01 as [v1.5.0](https://github.com/mirage/ocaml-uri/releases/tag/v1.5.0). See <https://github.com/mirage/ocaml-uri> for full history.
 
 Doesn't depend on `Re_str` any more.
-
-### mirage-tcpip-v1.1.2: DHCP option parsing fixes
-
-Released on 2014-03-27 as [v1.1.2](https://github.com/mirage/mirage-tcpip/releases/tag/v1.1.2). See <https://github.com/mirage/mirage-tcpip> for full history.
-
-* Fix DHCP variable length option parsing for MTU responses, which
-  in turns improves robustness on Amazon EC2 (fix from @yomimono 
-  via mirage/mirage-tcpip#48)
-
 
 ### mirage-tcpip-v1.1.2: DHCP option parsing fixes
 
@@ -1258,16 +1182,6 @@ Released on 2014-02-21 as [v1.1.1](https://github.com/mirage/mirage-tcpip/releas
   (see mirage/mirage#226 for details).
 
 
-### mirage-tcpip-v1.1.1: Bug fixes and adapt API to Mirage 1.1.1
-
-Released on 2014-02-21 as [v1.1.1](https://github.com/mirage/mirage-tcpip/releases/tag/v1.1.1). See <https://github.com/mirage/mirage-tcpip> for full history.
-
-* Catch and ignore top-level socket exceptions (#219).
-* Set `SO_REUSEADDR` on listening sockets for Unix (#218).
-* Adapt the Stack interfaces to the v1.1.1 mirage-types interface
-  (see mirage/mirage#226 for details).
-
-
 ### mirage-1.1.1: Networking improvements
 
 Released on 2014-02-21 as [1.1.1](https://github.com/mirage/mirage/releases/tag/1.1.1). See <https://github.com/mirage/mirage> for full history.
@@ -1324,15 +1238,6 @@ Released on 2014-02-10 as [1.0.0](https://github.com/mirage/ocaml-git/releases/t
 
 - Full support for the format of all the Git objects
 - Partial support for the synchronisation protocols
-
-### mirage-tcpip-v1.1.0: Rewritten interfaces that are now functorized over V1_LWT
-
-Released on 2014-02-05 as [v1.1.0](https://github.com/mirage/mirage-tcpip/releases/tag/v1.1.0). See <https://github.com/mirage/mirage-tcpip> for full history.
-
-* Rewrite of the library as a set of functors that parameterize the
-  stack across the `V1_LWT` module types from Mirage 1.1.x.  This removes
-  the need to compile separate Xen and Unix versions of the stack.
-
 
 ### mirage-tcpip-v1.1.0: Rewritten interfaces that are now functorized over V1_LWT
 
@@ -1758,12 +1663,6 @@ This release uses the final beta 0.9.8 Mirage toolchain and is being archived in
 Released on 2013-12-09 as [0.8.0](https://github.com/mirage/ocaml-fat/releases/tag/0.8.0). See <https://github.com/mirage/ocaml-fat> for full history.
 
 * now works with mirage-block-xen
-
-### mirage-tcpip-v0.9.5: Mirage 1.0 compatible version
-
-Released on 2013-12-09 as [v0.9.5](https://github.com/mirage/mirage-tcpip/releases/tag/v0.9.5). See <https://github.com/mirage/mirage-tcpip> for full history.
-
-This removes the socket interface temporarily in favour of a simple repository layout.
 
 ### mirage-tcpip-v0.9.5: Mirage 1.0 compatible version
 
@@ -2236,14 +2135,6 @@ Released on 2013-08-09 as [v0.9.4](https://github.com/mirage/mirage-tcpip/releas
   equivalents in `Nettypes`.
 
 
-### mirage-tcpip-v0.9.4: Switch to external Ipaddr library
-
-Released on 2013-08-09 as [v0.9.4](https://github.com/mirage/mirage-tcpip/releases/tag/v0.9.4). See <https://github.com/mirage/mirage-tcpip> for full history.
-
-* Use the `Ipaddr` external library and remove the homebrew
-  equivalents in `Nettypes`.
-
-
 ### ocaml-cow-v0.6.2: Improve code highlighting and XML parsing
 
 Released on 2013-07-30 as [v0.6.2](https://github.com/mirage/ocaml-cow/releases/tag/v0.6.2). See <https://github.com/mirage/ocaml-cow> for full history.
@@ -2262,15 +2153,6 @@ Released on 2013-07-25 as [0.3.3](https://github.com/mirage/ocaml-pcap/releases/
 Released on 2013-07-25 as [1.0.2](https://github.com/mirage/xen-disk/releases/tag/1.0.2). See <https://github.com/mirage/xen-disk> for full history.
 
 vhd -> vhd-disk -> vhd-format
-
-### mirage-tcpip-v0.9.3: Network manager interface cleanups
-
-Released on 2013-07-18 as [v0.9.3](https://github.com/mirage/mirage-tcpip/releases/tag/v0.9.3). See <https://github.com/mirage/mirage-tcpip> for full history.
-
-* Changes in module Manager: Removed some functions from the `.mli
-  (plug/unplug) and added some modifications in the way the Manager
-  interacts with the underlying module Netif. The Netif.create function
-  does not take a callback anymore.
 
 ### mirage-tcpip-v0.9.3: Network manager interface cleanups
 
@@ -2305,14 +2187,6 @@ Released on 2013-07-09 as [v0.9.2](https://github.com/mirage/mirage-platform/rel
   the libxc bindings for OCaml. This makes it possible to write one
   application that can be compiled for the UNIX or the Xen backend.
 
-
-### mirage-tcpip-v0.9.2: Improve TCP state machine
-
-Released on 2013-07-09 as [v0.9.2](https://github.com/mirage/mirage-tcpip/releases/tag/v0.9.2). See <https://github.com/mirage/mirage-tcpip> for full history.
-
-* Improve TCP state machine for connection teardown.
-* Limit fragment number to 8, and coalesce buffers if it goes higher.
-* Adapt to mirage-platform-0.9.2 API changes.
 
 ### mirage-tcpip-v0.9.2: Improve TCP state machine
 
