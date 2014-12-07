@@ -67,6 +67,8 @@ let main =
     (console @-> kv_ro @-> kv_ro @-> http @-> job)
 
 let () =
-  register ~tracing:(mprof_trace ~size:100000 ()) "www" [
+  let tracing = None in
+  (* let tracing = mprof_trace ~size:10000 () in *)
+  register ?tracing "www" [
     main $ default_console $ fs $ tmpl $ http_srv
   ]
