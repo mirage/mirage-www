@@ -1,3 +1,36 @@
+### mirage-v2.1.0: Specific target support for MacOS X, and bug fixes for builds
+
+Released on 2014-12-07 as [v2.1.0](https://github.com/mirage/mirage/releases/tag/v2.1.0). See <https://github.com/mirage/mirage> for full history.
+
+* Add specific support for `MacOSX` as a platform, which enables network bridging
+  on Yosemite (#329).  The `--unix` flag will automatically activate the new target
+  if run on a MacOS X host.  If this breaks for you due to being on an older version of
+  MacOS X, then use the new `--target` flag to set either Unix, MacOSX or Xen to the
+  `mirage configure` command.
+* Add `mirage.runtime` findlib library and corresponding Mirage_runtime module (#327).
+* If net driver in STACKV4_direct can't initialize, print a helpful error (#164).
+* [xen]: fixed link order in generated Makefile (#322).
+* Make `Lwt.tracing` instructions work for Fish shell too by improving quoting (#328).
+
+### mirage-tcpip-v2.1.0: Add profile tracing, and better Xen stub compilation
+
+Released on 2014-12-07 as [v2.1.0](https://github.com/mirage/mirage-tcpip/releases/tag/v2.1.0). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Build Xen stubs separately, with `CFLAGS` from `mirage-xen` 2.1.0+.
+  This allows us to use the red zone under x86_64 Unix again.
+* Adding tracing labels and counters, which introduces a new dependency on the
+  `mirage-profile` package.
+
+### mirage-platform-v2.1.0: Add Xen tracing and improve packaging of C runtime
+
+Released on 2014-12-07 as [v2.1.0](https://github.com/mirage/mirage-platform/releases/tag/v2.1.0). See <https://github.com/mirage/mirage-platform> for full history.
+
+* [xen] Report trace events for GC, block_domain, XenStore and event channels.
+  This introduces a new dependency on the `mirage-profile` package.
+* [xen] Install a `pkg-config` file to allow other projects to compile C stubs
+  against `mirage-xen`.
+* [xen] Remove duplication of OCaml header files inside the `include` tree.
+
 ### mirage-tcpip-v2.0.3: Remove ARP race condition and simplify DHCP client
 
 Released on 2014-12-05 as [v2.0.3](https://github.com/mirage/mirage-tcpip/releases/tag/v2.0.3). See <https://github.com/mirage/mirage-tcpip> for full history.
