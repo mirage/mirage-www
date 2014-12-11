@@ -1,3 +1,17 @@
+### mirage-v2.1.1: Improve Xen linking, MacOS X compilation and build times
+
+Released on 2014-12-10 as [v2.1.1](https://github.com/mirage/mirage/releases/tag/v2.1.1). See <https://github.com/mirage/mirage> for full history.
+
+* Do not reuse the Unix linker options when building Xen unikernels.  Instead,
+  get the linker options from the ocamlfind `xen_linkopts` variables (#332).
+  See `tcpip.2.1.0` for a library that does this for a C binding.
+* Only activate MacOS X compilation by default on 10.10 (Yosemite) or higher.
+  Older revisions of MacOS X will use the generic Unix mode by default, since
+  the `vmnet` framework requires Yosemite or higher.
+* Do not run crunched filesystem modules through `camlp4`, which significantly
+  speeds up compilation on ARM platforms (from minutes to seconds!) (#299).
+
+
 ### mirage-v2.1.0: Specific target support for MacOS X, and bug fixes for builds
 
 Released on 2014-12-07 as [v2.1.0](https://github.com/mirage/mirage/releases/tag/v2.1.0). See <https://github.com/mirage/mirage> for full history.
