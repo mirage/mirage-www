@@ -494,6 +494,12 @@ module Wiki = struct
       body       = File "libvirt-on-cubieboard.md";
       permalink  = "libvirt-on-cubieboard";
     };
+    { updated    = date (2014, 12, 11, 17, 23);
+      author     = tal;
+      subject    = "Tracing and Profiling";
+      body       = File "profiling.md";
+      permalink  = "profiling";
+    };
 
     Bactrian.entry_for_is_mirage_broken_wikipage;
   ]
