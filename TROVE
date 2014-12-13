@@ -7,6 +7,7 @@ mirage/ezjsonm
 mirage/io-page
 mirage/irmin
 mirage/merge-queues
+mirage/merge-ropes
 mirage/mirage
 mirage/mirage-block-unix
 mirage/mirage-block-volume
