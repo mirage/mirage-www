@@ -34,8 +34,10 @@ mirage/ocaml-cstruct
 mirage/ocaml-dns
 mirage/ocaml-fat
 mirage/ocaml-git
+mirage/ocaml-hex
 mirage/ocaml-ipaddr
 mirage/ocaml-lazy-trie
+mirage/ocaml-mstruct
 mirage/ocaml-pcap
 mirage/ocaml-tuntap
 mirage/ocaml-uri
@@ -46,4 +48,3 @@ mirage/shared-memory-ring
 mirage/xen-disk
 ocamllabs/ocaml-ctypes
 samoht/alcotest
-samoht/ocaml-mstruct
