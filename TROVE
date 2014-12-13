@@ -50,6 +50,10 @@ mirage/ocaml-vmnet
 mirage/ocaml-xenstore
 mirage/shared-memory-ring
 mirage/xen-disk
+mirleft/ocaml-tls
+mirleft/ocaml-x509
+mirleft/ocaml-nocrypto
+mirleft/ocaml-asn1-combinators
 ocamllabs/ocaml-ctypes
 samoht/alcotest
 talex5/mirage-trace-viewer

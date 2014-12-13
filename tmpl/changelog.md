@@ -497,6 +497,32 @@ Released on 2014-10-31 as [2.0.0](https://github.com/mirage/mirage-console/relea
 * [xen] don't zero the initial console ring
 * install findlib packages as `mirage-console.[xen/unix]`
 
+### ocaml-tls-0.2.0: pre halloween special
+
+Released on 2014-10-30 as [0.2.0](https://github.com/mirleft/ocaml-tls/releases/tag/0.2.0). See <https://github.com/mirleft/ocaml-tls> for full history.
+
+* expose trust anchor when authenticating the certificate (requires x509 >= 0.2)
+* information about the active session is exposed via epoch : state -> epoch
+* distinguish between supported ciphersuites (type ciphersuite) and
+  known ciphersuites (type any_ciphersuite)
+* distinguish between supported versions by the stack (type tls_version)
+  and readable versions (tls_any_version), which might occur in a tls
+  record or client_hello read from the network
+* support > TLS-1.2 client hellos (as reported by ssllabs.com)
+* support iOS 6 devices (who propose NULL ciphers - reported in #160)
+* send minimal protocol version in record layer of client hello
+  (maximum version is in the client hello itself) (RFC5246, E.1)
+
+### ocaml-x509-0.2.0: bug fix release
+
+Released on 2014-10-30 as [0.2.0](https://github.com/mirleft/ocaml-x509/releases/tag/0.2.0). See <https://github.com/mirleft/ocaml-x509> for full history.
+
+from CHANGES.md:
+* expose Certificate.cert_hostnames, wildcard_matches
+* Certificate.verify_chain_of_trust and X509.authenticate both return now
+  [ `Ok of certificate | `Fail of certificate_failure ], where [certificate] is the trust anchor
+
+
 ### mirage-tc-0.1.0: Initial release
 
 Released on 2014-10-25 as [0.1.0](https://github.com/mirage/mirage-tc/releases/tag/0.1.0). See <https://github.com/mirage/mirage-tc> for full history.
@@ -762,6 +788,14 @@ before building their unikernel with `make` as normal.
 * Set `OPAMVERBOSE` and `OPAMYES` in the Makefile, which can be overridden.
 * Add an `ENTROPY` device type for strong random sources (#256).
 
+
+### ocaml-x509-0.1.0: Initial release
+
+Released on 2014-07-07 as [0.1.0](https://github.com/mirleft/ocaml-x509/releases/tag/0.1.0). See <https://github.com/mirleft/ocaml-x509> for full history.
+
+### ocaml-tls-0.1.0: Initial release
+
+Released on 2014-07-07 as [0.1.0](https://github.com/mirleft/ocaml-tls/releases/tag/0.1.0). See <https://github.com/mirleft/ocaml-tls> for full history.
 
 ### mirage-entropy-0.1.6: event-driven and xen implementation
 
