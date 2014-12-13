@@ -1,5 +1,5 @@
-avsm/ocaml-github
 avsm/ezxmlm
+avsm/ocaml-github
 djs55/ocaml-xenstore-clients
 mirage/cowabloga
 mirage/dyntype
@@ -20,6 +20,7 @@ mirage/mirage-net-macosx
 mirage/mirage-net-unix
 mirage/mirage-net-xen
 mirage/mirage-platform
+mirage/mirage-profile
 mirage/mirage-skeleton
 mirage/mirage-tc
 mirage/mirage-tcpip
@@ -47,3 +48,4 @@ mirage/xen-disk
 ocamllabs/ocaml-ctypes
 samoht/alcotest
 samoht/ocaml-mstruct
+talex5/mirage-trace-viewer
