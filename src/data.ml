@@ -529,6 +529,13 @@ module Links = struct
   }
 
   let entries = [
+    { id="techrepublic-unikernels";
+      uri=Uri.of_string "http://www.techrepublic.com/article/unikernels-offer-a-stripped-down-alternative-to-linux/";
+      title="Unikernels offer a stripped down alternative to Linux";
+      date=day(2014,12,18);
+      stream=press;
+    };
+
     { id="after-docker-immutable-infra";
       uri=Uri.of_string "https://medium.com/@darrenrush/after-docker-unikernels-and-immutable-infrastructure-93d5a91c849e";
       title="After Docker: Unikernels and Immutable Infrastructure";
