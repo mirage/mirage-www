@@ -4,7 +4,7 @@ let ipv4_config =
   let address = Ipaddr.V4.of_string_exn "128.232.97.54" in
   let netmask = Ipaddr.V4.of_string_exn "255.255.255.224" in
   let gateways = [Ipaddr.V4.of_string_exn "128.232.97.33"] in
-  { address; netmask; gateways }
+ { address; netmask; gateways }
 
 (* If the Unix `FS` is set, the choice of configuration changes:
    FS=crunch (or nothing): use static filesystem via crunch
@@ -26,13 +26,13 @@ let fs =
   match mode, get_mode () with
   | `Fat, _    -> fat_ro "../files"
   | `Crunch, `Xen -> crunch "../files"
-  | `Crunch, `Unix -> direct_kv_ro "../files"
+  | `Crunch, _ -> direct_kv_ro "../files"
 
 let tmpl =
   match mode, get_mode () with
   | `Fat, _    -> fat_ro "../tmpl"
   | `Crunch, `Xen -> crunch "../tmpl"
-  | `Crunch, `Unix -> direct_kv_ro "../tmpl"
+  | `Crunch, _ -> direct_kv_ro "../tmpl"
 
 let net =
   try match Sys.getenv "NET" with
@@ -63,7 +63,7 @@ let server =
   conduit_direct (stack default_console)
 
 let http_srv =
-  let mode = `TCP (`Port 80) in
+  let mode = `TCP (`Port port) in
   http_server mode server
 
 let main =
@@ -73,6 +73,8 @@ let main =
     (console @-> kv_ro @-> kv_ro @-> http @-> job)
 
 let () =
-  register "www" [
+  let tracing = None in
+  (* let tracing = mprof_trace ~size:10000 () in *)
+  register ?tracing "www" [
     main $ default_console $ fs $ tmpl $ http_srv
   ]
