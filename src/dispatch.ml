@@ -97,10 +97,10 @@ module Main
         in
         Cowabloga.Dispatch.f io dispatcher uri
       in
-      let conn_closed (_,conn_id) () =
+      let conn_closed (_,conn_id) =
         let cid = Cohttp.Connection.to_string conn_id in
         C.log c (Printf.sprintf "conn %s closed" cid)
       in
-      http { S.callback = callback; conn_closed }
+      http (S.make ~callback ~conn_closed ())
 
   end
