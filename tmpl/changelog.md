@@ -1,3 +1,127 @@
+### cowabloga-v0.0.9: Compatibility with Cohttp 0.14.x
+
+Released on 2014-12-19 as [v0.0.9](https://github.com/mirage/cowabloga/releases/tag/v0.0.9). See <https://github.com/mirage/cowabloga> for full history.
+
+Add compatibility with Cohttp 0.14.x APIs.
+
+### ocaml-github-v0.9.4: Add bindings for organisation teams and repositories
+
+Released on 2014-12-19 as [v0.9.4](https://github.com/avsm/ocaml-github/releases/tag/v0.9.4). See <https://github.com/avsm/ocaml-github> for full history.
+
+* Add bindings for organisation teams and repositories (#45).
+* Use `Bytes` instead of `String` for future `safe-string` support.
+* Use the Cohttp 0.14.0 API in the test cases and make them optional
+  (activate with `--enable-tests` during configure).
+* Add a `--json` option to `git-list-releases` so that it can emit
+  the release information in JSON rather than Markdown.
+
+
+### ocaml-cohttp-v0.14.0: Simplify server interface
+
+Released on 2014-12-19 as [v0.14.0](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.14.0). See <https://github.com/mirage/ocaml-cohttp> for full history.
+
+Compatibility breaking interface changes:
+* Simplify the Lwt server signature, so that manual construction of
+  a `callback` is no longer required (#210).
+  Code that previous looked like:
+
+```
+   let conn_closed (_,conn_id) () = <...>
+   let config = { Server.callback; conn_closed } in
+```
+
+should now be:
+
+```
+   let conn_closed (_,conn_id) = <...>
+   let config = Server.make ~callback ~conn_closed () in
+```
+
+* Remove the `Cohttp.Base64` module in favour of the external `base64`
+  library (which is now a new dependency).
+
+New features and bug fixes:
+* Lwt `respond_error` now defaults to an internal server error if no
+  status code is specified (#212).
+* Modernise the `opam` file using the OPAM 1.2 workflow (#211).
+* Flush the response body to the network by default, rather than
+  buffering by default.  The `?flush` optional parameter can still
+  be explicitly set to false if flushing is not desired (#205).
+
+
+### mirage-tcpip-v2.2.0: Add IPv6 stack
+
+Released on 2014-12-18 as [v2.2.0](https://github.com/mirage/mirage-tcpip/releases/tag/v2.2.0). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+
+Add IPv6 support. This changeset minimises interface changes to the existing
+`STACKV4` interfaces to faciliate a progressive merge.  The only visible
+interface changes are:
+
+* `IPV4.set_ipv4_*` functions have been renamed `IPV4.set_ip_*` because they
+  are shared between IPV4 and IPV6.
+* `IPV4.get_ipv4` and `get_ipv4_netmask` now return a `list` of `Ipaddr.V4.t`
+  (again because this is the common semantics with IPV6.)
+* Several types that had `v4` in their names (like `IPV4.ipv4addr`) have lost
+  that particle.
+
+
+### mirage-v2.2.0: Add IPv6 support to the type definitions
+
+Released on 2014-12-18 as [v2.2.0](https://github.com/mirage/mirage/releases/tag/v2.2.0). See <https://github.com/mirage/mirage> for full history.
+
+Add IPv6 support, from Nicolas Ojeda Bar. This alters some of the interfaces that were previously hardcoded to IPv4 by generalising them.  For example:
+
+```
+type v4
+type v6
+
+type 'a ip
+type ipv4 = v4 ip
+type ipv6 = v6 ip
+```
+
+Full support for configuring IPv6 does not exist yet, as this release is
+intended for getting the type definitions in place before adding configuration
+support.
+
+
+### mirage-xen-minios-v0.5.0: Build Openlibm with Mini-OS CFLAGS
+
+Released on 2014-12-17 as [v0.5.0](https://github.com/mirage/mirage-xen-minios/releases/tag/v0.5.0). See <https://github.com/mirage/mirage-xen-minios> for full history.
+
+In particular, this now uses `-mno-red-zone` on x86_64 architectures.
+
+### mirage-net-xen-v1.2.0: Add profile tracing to Netfront
+
+Released on 2014-12-17 as [v1.2.0](https://github.com/mirage/mirage-net-xen/releases/tag/v1.2.0). See <https://github.com/mirage/mirage-net-xen> for full history.
+
+* Add profiling tracepoints and labels (#13).  Introduces a dependency on `mirage-profile`.
+* New `opam` file present in source repository for OPAM 1.2 workflow.
+
+
+### mirage-platform-v2.1.1: Add header definitions for Ctypes support
+
+Released on 2014-12-17 as [v2.1.1](https://github.com/mirage/mirage-platform/releases/tag/v2.1.1). See <https://github.com/mirage/mirage-platform> for full history.
+
+* Remove checksum stubs from Unix and Xen, as they are provided by `tcpip` now.
+* [xen] Define UINTx_MAX and SIZE_MAX in stdint.h, which is sufficient to let Ctypes compile (ocamllabs/ocaml-ctypes#231)
+
+
+### ocaml-git-1.4.2: Fix writing of empty files
+
+Released on 2014-12-14 as [1.4.2](https://github.com/mirage/ocaml-git/releases/tag/1.4.2). See <https://github.com/mirage/ocaml-git> for full history.
+
+* Fix `Git_unix.IO.write_file` to work on empty files
+
+### mirage-tc-0.2.1: Bug-fix release
+
+Released on 2014-12-14 as [0.2.1](https://github.com/mirage/mirage-tc/releases/tag/0.2.1). See <https://github.com/mirage/mirage-tc> for full history.
+
+- Report more useful errors on binary parse errors
+- Add cstructs combinators
+- Fix Tc.List.equal
+
 ### mirage-profile-v0.4: mirage-profile 0.4
 
 Released on 2014-12-12 as [v0.4](https://github.com/mirage/mirage-profile/releases/tag/v0.4). See <https://github.com/mirage/mirage-profile> for full history.
@@ -158,6 +282,20 @@ Released on 2014-12-04 as [v0.7.0](https://github.com/mirage/ocaml-conduit/relea
   now explicitly label the fields of the tuples with a polymorphic variant.
   This allows them to remain independent of this library but still be
   more self-descriptive (i.e. `Port of int` instead of just `int`).
+
+### mirage-tc-0.2.0: More combinators
+
+Released on 2014-12-04 as [0.2.0](https://github.com/mirage/mirage-tc/releases/tag/0.2.0). See <https://github.com/mirage/mirage-tc> for full history.
+
+- Add bool base type-classes
+- Rename I0, I1, I2, I3 to S0, S1, S2 and S3
+- Expose value combinators (to mirror the functor combinators)
+- Remove dependency to camlp4
+- Add combinators for triples
+- Rename base type-classes
+- Expose more useful type-classes generators
+- Add base combinators for all the type-classes
+- Expose Reader.parse_error
 
 ### ocaml-git-1.4.1: Fix `ogit --version` and expose more values
 
