@@ -1,3 +1,39 @@
+### mirage-platform-v2.1.2: Further Xen/MiniOS header cleanup
+
+Released on 2014-12-21 as [v2.1.2](https://github.com/mirage/mirage-platform/releases/tag/v2.1.2). See <https://github.com/mirage/mirage-platform> for full history.
+
+[xen] Updated headers and build for Mini-OS 0.5.  This involves:
+
+* Require libminios >= 0.5
+* Remove old includes directory when installing
+* Compile with `-fno-builtin` (avoids warnings about standard functions)
+* Removed `complex.h` (now provided by Openlibm)
+* Include `cdefs.h` from `types.h` (needed for `__BEGIN_DECLS`)
+* Removed open from `unistd.h` (comes from `fcntl.h`)
+* Removed `assert.h` and `__assert_fail` (provided by Mini-OS)
+* Removed `string.h` (provided by Mini-OS)
+* Removed `cdefs.h` (provided by Mini-OS)
+* Added missing `console.h` includes (for `printk`)
+
+### ocaml-cow-v1.1.0: Support ezjsonm interface for JSON manipulation
+
+Released on 2014-12-21 as [v1.1.0](https://github.com/mirage/ocaml-cow/releases/tag/v1.1.0). See <https://github.com/mirage/ocaml-cow> for full history.
+
+* Add OPAM 1.2 compatible description file (#53).
+* Fix compatibility with `ezjsonm` version 0.4+ (#55).
+
+### mirage-tcpip-v2.2.1: Remove uint dependency and start safe-string migration
+
+Released on 2014-12-20 as [v2.2.1](https://github.com/mirage/mirage-tcpip/releases/tag/v2.2.1). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Use `Bytes` instead of `String` to begin the `-safe-string` migration in OCaml 4.02.0 (#93).
+* Remove dependency on `uint` to avoid the need for a C stub (#92).
+
+
+### mirage-xen-minios-v0.6.0: Build Mini-OS and Openlibm with -nostdinc
+
+Released on 2014-12-20 as [v0.6.0](https://github.com/mirage/mirage-xen-minios/releases/tag/v0.6.0). See <https://github.com/mirage/mirage-xen-minios> for full history.
+
 ### cowabloga-v0.0.9: Compatibility with Cohttp 0.14.x
 
 Released on 2014-12-19 as [v0.0.9](https://github.com/mirage/cowabloga/releases/tag/v0.0.9). See <https://github.com/mirage/cowabloga> for full history.
@@ -1867,10 +1903,6 @@ Released on 2013-12-19 as [0.2.0](https://github.com/samoht/alcotest/releases/ta
 
 * Fix issues with redirections
 * Display the full errors when only one test is selected
-
-### ocaml-mstruct-0.9.0: Initial release
-
-Released on 2013-12-19 as [0.9.0](https://github.com/mirage/ocaml-mstruct/releases/tag/untagged-3e36a8bb1fde59adb4e7). See <https://github.com/mirage/ocaml-mstruct> for full history.
 
 ### mirage-1.0.3: Improved HTTP and FAT filesystem support
 
