@@ -26,12 +26,12 @@ IPADDR ?= static
 
 FLAGS  ?=
 
-.PHONY: all configure build run clean
+.PHONY: all configure build run clean feeds
 
 all:
-	@echo To build this website, look in the Makefile and set
-	@echo the appropriate variables (MODE, FS, NET, IPADDR).
-	@echo make configure && make depend && make build
+	@echo "To build this website, look in the Makefile and set"
+	@echo "the appropriate variables (MODE, FS, NET, IPADDR)."
+	@echo "make configure && make depend && make build"
 
 configure:
 	$(MIRAGE) configure src/config.ml $(FLAGS) --$(MODE)
@@ -42,7 +42,7 @@ depend:
 feeds:
 	cd feeds && make run
 
-build: feeds
+build: 
 	cd src && make build
 
 run:

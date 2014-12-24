@@ -48,7 +48,7 @@ module Main
         `Blog (blog_feed, Data.Blog.entries);
         `Wiki (wiki_feed, Data.Wiki.entries);
       ] in
-
+      
       lwt blog_dispatch = Blog.dispatch blog_feed Data.Blog.entries in
       lwt wiki_dispatch = Wiki.dispatch wiki_feed Data.Wiki.entries in
       lwt releases_dispatch = Pages.Releases.dispatch read_tmpl in
@@ -65,15 +65,14 @@ module Main
           return (`Html (Pages.Index.t ~feeds:updates_feeds read_tmpl))
 
         | ["about"]
-        | ["community"] ->
-          return (`Html (Pages.About.t read_tmpl))
-        | ["community"; "blogs"] -> return (`Html (Pages.Blogs.t read_fs))
+        | ["community"] -> return (`Html (Pages.About.t read_tmpl))
+        | ["blogs"] -> return (`Html (Pages.Blogs.t read_tmpl))
 
         | "releases" :: tl -> return (`Page (releases_dispatch tl))
         | "blog"     :: tl -> return (`Page (blog_dispatch tl))
         | "links"    :: tl -> return (links_dispatch tl)
         | "updates"  :: tl -> return (`Page (updates_dispatch tl))
-
+                                
         | "docs" :: tl
         | "wiki" :: tl -> return (`Page (wiki_dispatch tl))
 
@@ -98,10 +97,10 @@ module Main
         in
         Cowabloga.Dispatch.f io dispatcher uri
       in
-      let conn_closed (_,conn_id) () =
+      let conn_closed (_,conn_id) =
         let cid = Cohttp.Connection.to_string conn_id in
         C.log c (Printf.sprintf "conn %s closed" cid)
       in
-      http { S.callback = callback; conn_closed }
+      http (S.make ~callback ~conn_closed ())
 
   end

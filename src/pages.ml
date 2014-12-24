@@ -194,16 +194,14 @@ end
 
 (* todo *)
 module Blogs = struct
-  let lines s = Str.split (Str.regexp "[\r\n]+") s
-      
   let t read_fn =
-    lwt bf = read_file read_fn "/news/1.html" in
+    lwt bs = read_file read_fn "blogs.html" in
     let content = <:html<
     <div class="row">
-      <div class="small-12 columns">$bf$</div>
+      <div class="small-12 columns">$bs$</div>
     </div>
      >> in
-    return (Global.page ~title:"Community" ~headers:[] ~content) 
+    return (Global.page ~title:"Blogs" ~headers:[] ~content) 
 end
 
 
