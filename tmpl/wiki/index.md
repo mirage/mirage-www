@@ -22,7 +22,9 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 <li><a href="/wiki/mirage-www">Building the website</a></li>
 <li><a href="/wiki/deploying-via-ci">Deploying via Continuous Integration</a></li>
 <li><a href="/wiki/opam">Keeping up-to-date</a></li>
+<li><a href="/wiki/profiling">Tracing and Profiling</a></li>
 <li><a href="/wiki/contributing">Contributing to Mirage</a></li>
+<li><a href="/wiki/is_mirage_broken">Build status</a></li>
 </ul>
 </div>
 
@@ -50,6 +52,9 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 *Calls take place every two weeks and are announced on the
 [mailing list](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel).*
 
+* Weekly call [2014-11-26](/wiki/weekly-2014-11-26) on Entropy, Config modularity, IPv6 stack and Pioneer projects.
+* Weekly call [2014-11-12](/wiki/weekly-2014-11-12) on TLS, IPv6, OCaml 4.02.1, Library requests and Xenstore.
+* Weekly call [2014-10-28](/wiki/weekly-2014-10-28) on Docker tests, mirage-dev, tracing and onboarding newcomers.
 * Weekly call [2014-10-14](/wiki/weekly-2014-10-14) on Vchan, Conduit, library release plans and funky graphs.
 * Weekly call [2014-09-30](/wiki/weekly-2014-09-30) on Mirage 2.0 libs, Calendar and some Jitsu.
 * Weekly call [2014-09-16](/wiki/weekly-2014-09-16) on Mirage 2.0 lib releases, Cohttp, Doc day and ARM dev.

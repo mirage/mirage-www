@@ -97,6 +97,7 @@ module People = struct
     uri       = Some "https://github.com/buzzheavyyear";
     email     = Some "buzzheavyyear@hotmail.com";
   }
+
 end
 
 let rights = Some "All rights reserved by the author"
@@ -300,6 +301,9 @@ module Wiki = struct
     }
 
   let entries = [
+    weekly ~y:2014 ~m:11 ~d:26 ~a:amir;
+    weekly ~y:2014 ~m:11 ~d:12 ~a:amir;
+    weekly ~y:2014 ~m:10 ~d:28 ~a:amir;
     weekly ~y:2014 ~m:10 ~d:14 ~a:amir;
     weekly ~y:2014 ~m:9 ~d:30 ~a:amir;
     weekly ~y:2014 ~m:9 ~d:16 ~a:amir;
@@ -490,6 +494,14 @@ module Wiki = struct
       body       = File "libvirt-on-cubieboard.md";
       permalink  = "libvirt-on-cubieboard";
     };
+    { updated    = date (2014, 12, 11, 17, 23);
+      author     = tal;
+      subject    = "Tracing and Profiling";
+      body       = File "profiling.md";
+      permalink  = "profiling";
+    };
+
+    Bactrian.entry_for_is_mirage_broken_wikipage;
   ]
 end
 
@@ -517,6 +529,27 @@ module Links = struct
   }
 
   let entries = [
+    { id="techrepublic-unikernels";
+      uri=Uri.of_string "http://www.techrepublic.com/article/unikernels-offer-a-stripped-down-alternative-to-linux/";
+      title="Unikernels offer a stripped down alternative to Linux";
+      date=day(2014,12,18);
+      stream=press;
+    };
+
+    { id="after-docker-immutable-infra";
+      uri=Uri.of_string "https://medium.com/@darrenrush/after-docker-unikernels-and-immutable-infrastructure-93d5a91c849e";
+      title="After Docker: Unikernels and Immutable Infrastructure";
+      date=day(2014,11,06);
+      stream=blog;
+    };
+
+    { id="unikernels-what-where-why-awick";
+      uri=Uri.of_string "https://www.youtube.com/watch?v=oHcHTFleNtg";
+      title="Unikernels: Who, What, Where, When, Why - Adam Wick, Galois";
+      date=day(2014,10,17);
+      stream=talk;
+    };
+
     { id="enterprise-oss-2014";
       uri=Uri.of_string "http://www.linux.com/news/software/applications/789241--5-new-enterprise-open-source-projects-to-watch/";
       title="5 New Enterprise Open Source Projects to Watch";

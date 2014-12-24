@@ -172,6 +172,7 @@ module About = struct
     <div class="row">
       <div class="small-12 medium-6 columns">$i$</div>
       <div class="small-12 medium-6 columns">$f$</div>
+      <hr/>
     </div>
     <a name="participate"> </a>
     <div class="row">

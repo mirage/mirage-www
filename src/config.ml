@@ -20,13 +20,13 @@ let fs =
   match mode, get_mode () with
   | `Fat, _    -> fat_ro "../files"
   | `Crunch, `Xen -> crunch "../files"
-  | `Crunch, `Unix -> direct_kv_ro "../files"
+  | `Crunch, _ -> direct_kv_ro "../files"
 
 let tmpl =
   match mode, get_mode () with
   | `Fat, _    -> fat_ro "../tmpl"
   | `Crunch, `Xen -> crunch "../tmpl"
-  | `Crunch, `Unix -> direct_kv_ro "../tmpl"
+  | `Crunch, _ -> direct_kv_ro "../tmpl"
 
 let net =
   try match Sys.getenv "NET" with
@@ -67,6 +67,8 @@ let main =
     (console @-> kv_ro @-> kv_ro @-> http @-> job)
 
 let () =
-  register "www" [
+  let tracing = None in
+  (* let tracing = mprof_trace ~size:10000 () in *)
+  register ?tracing "www" [
     main $ default_console $ fs $ tmpl $ http_srv
   ]
