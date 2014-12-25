@@ -1,3 +1,69 @@
+### ocaml-dns-v0.12.0: Multicast DNS parsing support
+
+Released on 2014-12-25 as [v0.12.0](https://github.com/mirage/ocaml-dns/releases/tag/v0.12.0). See <https://github.com/mirage/ocaml-dns> for full history.
+
+* Parse and marshal the mDNS unicast-response bit (#29).
+* Add OUnit tests for `Dns.Packet.parse` using `pcap` files.
+* Fix parsing of `SRV` records (#30).
+* Use `Bytes` instead of `String` for mutable buffers.
+* Switch to `Base64` v2, which uses `B64` as the toplevel module name
+  to avoid linking conflicts with other community libraries.
+
+### ocaml-cohttp-v0.15.0: Compatibility with new base64 and minor interface tweaks
+
+Released on 2014-12-25 as [v0.15.0](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.15.0). See <https://github.com/mirage/ocaml-cohttp> for full history.
+
+Compatibility breaking interface changes:
+* Change `Cohttp_lwt_body.map` to use a non-labelled type to fit the Lwt
+  style better (#200).
+* Depend on Base64 version 2, which uses `B64` as the toplevel module name (#220).
+
+New features and bug fixes:
+* Remove use of deprecated `Lwt_unix.run` and replace it with `Lwt_main.run`.
+  Should be no observable external change (#217).
+* Improve ocamldoc of `Cohttp.S` signature (#221).
+
+### ocaml-ctypes-0.3.4: ocaml-ctypes 0.3.4
+
+Released on 2014-12-23 as [0.3.4](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/0.3.4). See <https://github.com/ocamllabs/ocaml-ctypes> for full history.
+
+See [CHANGES.md](https://github.com/ocamllabs/ocaml-ctypes/blob/master/CHANGES.md) for details.
+
+
+### mirage-console-2.1.0: Xen: support stand-alone console servers
+
+Released on 2014-12-22 as [2.1.0](https://github.com/mirage/mirage-console/releases/tag/2.1.0). See <https://github.com/mirage/mirage-console> for full history.
+
+- Console.connect now blocks waiting for consoles to be hotplugged. This makes it possible to run stand-alone console servers which are not integrated directly with the toolstack.
+
+### ocaml-tls-0.3.0: A New Dawn - After Solstice
+
+Released on 2014-12-22 as [0.3.0](https://github.com/mirleft/ocaml-tls/releases/tag/0.3.0). See <https://github.com/mirleft/ocaml-tls> for full history.
+
+* X509_lwt provides Fingerprints and Hex_fingerprints constructor for checking fingerprints of certificates instead of trusting trust anchors
+* client configuration requires an authenticator
+* server certificate must be at least Config.min_rsa_key_size bits
+* expose epoch via lwt interface
+* mirage-2.2.0 compatibility
+* cleanups of mirage interface
+* nocrypto-0.3.0 compatibility
+
+### ocaml-x509-0.2.1: The Slow Sculpture
+
+Released on 2014-12-22 as [0.2.1](https://github.com/mirleft/ocaml-x509/releases/tag/0.2.1). See <https://github.com/mirleft/ocaml-x509> for full history.
+
+It's all about evolution, not revolution with this one.
+
+Even though it's solstice.
+
+### ocaml-nocrypto-0.3.0: Break-my-API Christmas special
+
+Released on 2014-12-22 as [0.3.0](https://github.com/mirleft/ocaml-nocrypto/releases/tag/0.3.0). See <https://github.com/mirleft/ocaml-nocrypto> for full history.
+
+This one is mostly about breaking your API.
+
+With a bit of luck, name clashes with the other libs are gone.
+
 ### mirage-platform-v2.1.2: Further Xen/MiniOS header cleanup
 
 Released on 2014-12-21 as [v2.1.2](https://github.com/mirage/mirage-platform/releases/tag/v2.1.2). See <https://github.com/mirage/mirage-platform> for full history.
@@ -52,39 +118,6 @@ Released on 2014-12-19 as [v0.9.4](https://github.com/avsm/ocaml-github/releases
   the release information in JSON rather than Markdown.
 
 
-### ocaml-cohttp-v0.14.0: Simplify server interface
-
-Released on 2014-12-19 as [v0.14.0](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.14.0). See <https://github.com/mirage/ocaml-cohttp> for full history.
-
-Compatibility breaking interface changes:
-* Simplify the Lwt server signature, so that manual construction of
-  a `callback` is no longer required (#210).
-  Code that previous looked like:
-
-```
-   let conn_closed (_,conn_id) () = <...>
-   let config = { Server.callback; conn_closed } in
-```
-
-should now be:
-
-```
-   let conn_closed (_,conn_id) = <...>
-   let config = Server.make ~callback ~conn_closed () in
-```
-
-* Remove the `Cohttp.Base64` module in favour of the external `base64`
-  library (which is now a new dependency).
-
-New features and bug fixes:
-* Lwt `respond_error` now defaults to an internal server error if no
-  status code is specified (#212).
-* Modernise the `opam` file using the OPAM 1.2 workflow (#211).
-* Flush the response body to the network by default, rather than
-  buffering by default.  The `?flush` optional parameter can still
-  be explicitly set to false if flushing is not desired (#205).
-
-
 ### mirage-tcpip-v2.2.0: Add IPv6 stack
 
 Released on 2014-12-18 as [v2.2.0](https://github.com/mirage/mirage-tcpip/releases/tag/v2.2.0). See <https://github.com/mirage/mirage-tcpip> for full history.
@@ -120,6 +153,39 @@ type ipv6 = v6 ip
 Full support for configuring IPv6 does not exist yet, as this release is
 intended for getting the type definitions in place before adding configuration
 support.
+
+
+### ocaml-cohttp-v0.14.0: Simplify server interface
+
+Released on 2014-12-18 as [v0.14.0](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.14.0). See <https://github.com/mirage/ocaml-cohttp> for full history.
+
+Compatibility breaking interface changes:
+* Simplify the Lwt server signature, so that manual construction of
+  a `callback` is no longer required (#210).
+  Code that previous looked like:
+
+```
+   let conn_closed (_,conn_id) () = <...>
+   let config = { Server.callback; conn_closed } in
+```
+
+should now be:
+
+```
+   let conn_closed (_,conn_id) = <...>
+   let config = Server.make ~callback ~conn_closed () in
+```
+
+* Remove the `Cohttp.Base64` module in favour of the external `base64`
+  library (which is now a new dependency).
+
+New features and bug fixes:
+* Lwt `respond_error` now defaults to an internal server error if no
+  status code is specified (#212).
+* Modernise the `opam` file using the OPAM 1.2 workflow (#211).
+* Flush the response body to the network by default, rather than
+  buffering by default.  The `?flush` optional parameter can still
+  be explicitly set to false if flushing is not desired (#205).
 
 
 ### mirage-xen-minios-v0.5.0: Build Openlibm with Mini-OS CFLAGS
@@ -482,9 +548,16 @@ Released on 2014-11-07 as [v2.0.0](https://github.com/mirage/mirage-http/release
 * Use the Conduit 0.6+ resolver API.
 * Add a local `opam` file for the OPAM 1.2.0 workflow.
 
+### ocaml-conduit-v0.6.1: Improve connection closing semantics
+
+Released on 2014-11-07 as [v0.6.1](https://github.com/mirage/ocaml-conduit/releases/tag/v0.6.1). See <https://github.com/mirage/ocaml-conduit> for full history.
+
+When terminating conduits, always close the output channel first before the input channel, so that any pending data in the underlying fd is flushed.
+
+
 ### ocaml-cohttp-v0.12.0: Add JavaScript and StringIO backends, and numerous interface improvements
 
-Released on 2014-11-07 as [v0.12.0](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.12.0). See <https://github.com/mirage/ocaml-cohttp> for full history.
+Released on 2014-11-05 as [v0.12.0](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.12.0). See <https://github.com/mirage/ocaml-cohttp> for full history.
 
 Compatibility breaking interface changes:
 
@@ -533,13 +606,6 @@ New features and bugfixes:
 * [async] Close file descriptors more eagerly in the HTTP client (#167).
 * Reduce thread allocation by replacing `return <const>` with `return_none`,
   `return_unit` or `return_nil`.
-
-
-### ocaml-conduit-v0.6.1: Improve connection closing semantics
-
-Released on 2014-11-07 as [v0.6.1](https://github.com/mirage/ocaml-conduit/releases/tag/v0.6.1). See <https://github.com/mirage/ocaml-conduit> for full history.
-
-When terminating conduits, always close the output channel first before the input channel, so that any pending data in the underlying fd is flushed.
 
 
 ### mirage-tcpip-v2.0.1: Improve behaviour under heavy load
