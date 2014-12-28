@@ -68,12 +68,12 @@ Add `foo.ml` with the following content and edit it:
 Assuming you are building for POSIX using native kernel sockets, compile the application by:
 
 ```
-  mirage configure --unix --socket
+  mirage configure --unix
   mirage build
   mirage run   # Or ./main.native
 ```
 
-If you are building for a different Mirage platform, change the `--unix --socket` switches appropriately (presently either `--xen` or `--unix --direct`).
+If you are building for a different Mirage platform, change the `--unix` switches appropriately (presently either `--xen` or `--unix`).
 
 ###Solution
 
