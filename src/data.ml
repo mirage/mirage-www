@@ -529,6 +529,20 @@ module Links = struct
   }
 
   let entries = [
+    { id="31c3-secure-modular-os-tls";
+      uri=Uri.of_string "http://media.ccc.de/browse/congress/2014/31c3_-_6443_-_en_-_saal_2_-_201412271245_-_trustworthy_secure_modular_operating_system_engineering_-_hannes_-_david_kaloper.html#video";
+      title="Trustworthy secure modular operating system engineering";
+      date=day(2014,12,27);
+      stream=talk;
+    };
+
+    { id="oups-dec2014-state-of-mirage";
+      uri=Uri.of_string "https://www.irill.org/videos/oups-december-2014/MirageOS";
+      title="OCaml Users Paris: State of the Mirage";
+      date=day(2014,12,09);
+      stream=talk;
+    };
+
     { id="techrepublic-unikernels";
       uri=Uri.of_string "http://www.techrepublic.com/article/unikernels-offer-a-stripped-down-alternative-to-linux/";
       title="Unikernels offer a stripped down alternative to Linux";
