@@ -58,6 +58,9 @@ One of the benefits touted by our CACM article on [unikernels](http://queue.acm.
 [Thomas Leonard](http://roscidus.com) joined the project this year after publishing a widely read [blog series](http://roscidus.com/blog/blog/2014/06/06/python-to-ocaml-retrospective/) on his experiences from switching from Python to OCaml.
 Aside from leading (and upstreaming to Xen) the port of [Mirage to ARM](http://openmirage.org/blog/introducing-xen-minios-arm), he also explored how to add profiling throughout the unikernel stack.
 
+<a href="http://roscidus.com/blog/blog/2014/10/27/visualising-an-asynchronous-monad"><img src="http://roscidus.com/blog/images/mirage-profiling/block-reads-3-32.png" style="float:right; padding: 5px" width="250px" /></a>
+
+
 The support is now comprehensive and integrated into the Mirage trees: the [Lwt](http://ocsigen.org/lwt) cooperative threading engine has hooks for thread switching, most of the core libraries register named events, traces are dumped into shared memory buffers in the [CTF](http://wiki.eclipse.org/Linux_Tools_Project/TMF/CTF_guide) file format used by the Linux trace toolkit, and there are JavaScript and GTK+ [GUI frontends](https://github.com/talex5/mirage-trace-viewer) that can parse them.
 
 You can find the latest instructions on [Tracing and Profiling](http://openmirage.org/wiki/profiling) on this website, and here are Thomas' original blog posts on the subject:
