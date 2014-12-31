@@ -1,5 +1,5 @@
-An amazing year has flown by for Mirage, and it's time for a little recap of what's been happening and the plans for the new year.
-We announced [Mirage 1.0](http://openmirage.org/blog/announcing-mirage10) just over a year ago, and 2014 also saw a major [2.0 summer release](http://openmirage.org/blog/announcing-mirage-20-release) and the growth of a developer community that have been building support for IPv6, Transport Layer Security, on-demand spawning, profiling and much more.  There have been XXX library [releases](http://openmirage.org/releases), XXX [talks](http://decks.openmirage.org), and lots of [online chatter](http://openmirage.org/links), so here follows a summary of our major activities recently...
+An action-packed year has flown by for Mirage, and it's time for a little recap of what's been happening and the plans for the new year.
+We announced [Mirage 1.0](http://openmirage.org/blog/announcing-mirage10) just over a year ago, and 2014 also saw a major [2.0 summer release](http://openmirage.org/blog/announcing-mirage-20-release) and the growth of a developer community that have been building support for IPv6, Transport Layer Security, on-demand spawning, profiling and much more.  There have been 205 individual library [releases](http://openmirage.org/releases), 25 [presentations](http://decks.openmirage.org), and lots of [online chatter](http://openmirage.org/links) through the year, so here follows a summary of our major activities recently.
 
 ### Clean-Slate Transport Layer Security
 
@@ -96,7 +96,7 @@ All of the above work was only possible due to the vastly improved tooling and i
 
 <img src="/graphics/opam-unique-packages-20141231" style="float:right; padding: 5px" width="250px" />
 
-The [OPAM](https://opam.ocaml.org) package manager continued to be the frontend for all Mirage tools, with releases of libraries happening [regularly](http://openmirage.org/releases).  Because of the modular nature of Mirage code, most of the libraries can also be used as normal Unix-based libraries, meaning that we aren't just limited to Mirage users but can benefit from the entire OCaml community.
+The [OPAM](https://opam.ocaml.org) package manager continued to be the frontend for all Mirage tools, with releases of libraries happening [regularly](http://openmirage.org/releases).  Because of the modular nature of Mirage code, most of the libraries can also be used as normal Unix-based libraries, meaning that we aren't just limited to Mirage users but can benefit from the entire OCaml community.  The graph to the right shows the growth of the total package database since the project started to give you a sense of how much activity there is.
 
 The major [OPAM 1.2](http://opam.ocaml.org/blog/opam-1-2-0-release/) also added a number of new features that made Mirage code easier to develop, including a [Git-based library pinning workflow](http://opam.ocaml.org/blog/opam-1-2-pin/) that works superbly with GitHub, and [easier Travis integration](http://opam.ocaml.org/blog/opam-1-2-travisci/) for continuous integration.  [Nik Sultana](https://github.com/niksu) also improved the [is-mirage-broken](https://github.com/mirage/is-mirage-broken/tree/master/logs) to give us a cron-driven prod if a library update caused an end-to-end failure in building the Mirage website or other self-hosted infrastructure.
 
