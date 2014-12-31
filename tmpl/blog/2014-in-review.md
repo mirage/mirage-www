@@ -4,11 +4,14 @@ We announced [Mirage 1.0](http://openmirage.org/blog/announcing-mirage10) just o
 ### Clean-Slate Transport Layer Security
 
 David Kaloper and Hannes Menhert started 2014 with getting interested in writing a [safer and cleaner TLS stack](https://ocaml.org/meetings/ocaml/2014/ocaml2014_4.pdf) in OCaml, and ended the year with a complete demonstration and talk last week in [31C3](http://media.ccc.de/browse/congress/2014/31c3_-_6443_-_en_-_saal_2_-_201412271245_-_trustworthy_secure_modular_operating_system_engineering_-_hannes_-_david_kaloper.html#video), the premier hacker conference!  Their blog posts over the summer remain an excellent introduction to the new stack:
+
 - *"[OCaml-TLS: Introducing transport layer security (TLS) in pure OCaml](http://openmirage.org/blog/introducing-ocaml-tls)"* presents the motivation and architecture behind our clean-slate implementation of the protocol.
 - *"[OCaml-TLS: building the nocrypto library core](http://openmirage.org/blog/introducing-nocrypto)"* talks about the cryptographic primitives that form the heart of TLS confidentiality guarantees, and how they expose safe interfaces to the rest of the stack.
 - *"[OCaml-TLS: adventures in X.509 certificate parsing and validation](http://openmirage.org/blog/introducing-x509)"* explains how authentication and chain-of-trust verification is implemented in our stack.
 - *"[OCaml-TLS: ASN.1 and notation embedding](http://openmirage.org/blog/introducing-asn1)"* introduces the libraries needed for handling ASN.1 grammars, the wire representation of messages in TLS.
 - *"[OCaml-TLS: the protocol implementation and mitigations to known attacks](http://openmirage.org/blog/ocaml-tls-api-internals-attacks-mitigation)"* concludes with the implementation of the core TLS protocol logic itself.
+
+<a href="http://media.ccc.de/browse/congress/2014/31c3_-_6443_-_en_-_saal_2_-_201412271245_-_trustworthy_secure_modular_operating_system_engineering_-_hannes_-_david_kaloper.html#video"><img src="/graphics/tls-31c3.png" style="float:right; padding: 5px" width="250px" /></a>
 
 By summer, the stack was complete enough to connect to the majority of TLS 1.0+ sites on the Internet, and work progressed to integration with the remainder of the Mirage libraries.  By November, the [Conduit](https://github.com/mirage/ocaml-conduit) network library had Unix support for both the [OpenSSL/Lwt](https://github.com/savonet/ocaml-ssl) bindings and the pure OCaml stack, with the ability to dynamically select them.  You can now deploy and test the pure OCaml TLS stack on a webserver simply by:
 
@@ -79,6 +82,8 @@ You can find the latest instructions on [Tracing and Profiling](http://openmirag
 We also had the pleasure of Benjamin Farinier and Matthieu Journault join us as summer interns.  Both of them did a great job improving the internals of Irmin, and Benjamin's work on *[Mergeable Persistent Datastructures](http://gazagnaire.org/pub/FGM15.pdf)* will be presented at JFLA 2015.
 
 ### Jitsu
+
+<a href="http://decks.openmirage.org/irill14-seminar#/"><img src="/graphics/decks-on-arm.png" style="float:right; padding: 5px" width="250px" /></a>
 
 [Magnus Skjegstad](http://www.skjegstad.com/) returned to Cambridge and got interested in the rapid dynamic provisioning of unikernels.  He built [Jitsu](https://github.com/MagnusS/jitsu), a DNS server that spawns unikernels in response to DNS requests and boots them in real-time with no perceptible lag to the end user.  The longer term goal behind this is to enable a community cloud of ARM-based [Cubieboard2](http://cubieboard.org/) boards that serve user content without requiring centralised data centers, but with the ease-of-use of existing systems.
 
