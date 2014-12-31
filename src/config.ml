@@ -39,7 +39,7 @@ let dhcp =
   try match Sys.getenv "DHCP" with
     | "" -> false
     | _  -> true
-  with Not_found -> false
+  with Not_found -> true
 
 let stack console =
   match net, dhcp with
