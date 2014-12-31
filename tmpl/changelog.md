@@ -1,3 +1,9 @@
+### irmin-0.9.1: Support for Cohttp 0.14.0+ interface
+
+Released on 2014-12-26 as [0.9.1](https://github.com/mirage/irmin/releases/tag/0.9.1). See <https://github.com/mirage/irmin> for full history.
+
+This point release updates the Irmin HTTP layer to be compatible with Cohttp 0.14.0 and higher.
+
 ### ocaml-dns-v0.12.0: Multicast DNS parsing support
 
 Released on 2014-12-25 as [v0.12.0](https://github.com/mirage/ocaml-dns/releases/tag/v0.12.0). See <https://github.com/mirage/ocaml-dns> for full history.
@@ -99,6 +105,25 @@ Released on 2014-12-20 as [v2.2.1](https://github.com/mirage/mirage-tcpip/releas
 ### mirage-xen-minios-v0.6.0: Build Mini-OS and Openlibm with -nostdinc
 
 Released on 2014-12-20 as [v0.6.0](https://github.com/mirage/mirage-xen-minios/releases/tag/v0.6.0). See <https://github.com/mirage/mirage-xen-minios> for full history.
+
+### irmin-0.9.0: Improved efficiency and removal of Core_kernel dependency
+
+Released on 2014-12-20 as [0.9.0](https://github.com/mirage/irmin/releases/tag/0.9.0). See <https://github.com/mirage/irmin> for full history.
+
+* Improve the efficiency of the Git backend
+* Expose a cleaner API for the Unix backends
+* Expose a cleaner public API
+* Rename `Origin` into `Task` and use it pervasively through the API
+* Expose a high-level REST API over HTTP (#80)
+* Fix the Git backend to stop constantly overwrite `.git/HEAD` (#76)
+* Add a limit on concurrently open files (#93, #75)
+* Add `remove_rec` to remove directories (#74, #85)
+* Remove dependency to `core_kernel` (#22, #81)
+* Remove dependency to `cryptokit and `sha1` and use `nocrypto` instead
+* Remove dependency to caml4
+* Fix writing contents at the root of the store (#73)
+* More efficient synchronization protocol between Irmin stores (#11)
+
 
 ### cowabloga-v0.0.9: Compatibility with Cohttp 0.14.x
 
