@@ -103,8 +103,13 @@ The major [OPAM 1.2](http://opam.ocaml.org/blog/opam-1-2-0-release/) also added 
 Our favourite [random idiot](http://www.somerandomidiot.com), Mindy Preston, wrote up a superb blog series about her experiences in the spring of 2014 with moving her homepage to be hosted on Mirage.  This was followed up by [Thomas Leonard](http://roscidus.com/blog/blog/2014/07/28/my-first-unikernel/), [Phil Tomson](http://philtomson.github.io/blog/2014/09/10/some-notes-on-building-and-running-mirage-unikernels-on-cubieboard2/), [Ian Wilkinson](https://github.com/iw/mirage-jekyll), [Toby Moore](http://ocaml.is-awesome.net/2014/11/building-a-blog-with-mirage-os), and many others that we've tried to record in our [link log](http://openmirage.org/links/).  One challenge for 2015 that we could use help on is to pull together many of these instructions and merge them back into the main documentation.
 
 OCaml has come a long way in the last year in terms of tooling, and another task my research group [OCaml Labs](http://ocaml.io) works on at Cambridge is the development of the [OCaml Platform](https://ocaml.org/meetings/ocaml/2014/ocaml2014_7.pdf).  I'll be blogging separately about our OCaml-specific activities in a few days, but all of this work has a direct impact on Mirage itself since it lets us establish a local feedback loop between Mirage and OCaml developers to rapidly iterate on large-scale development.  The regular [OCaml compiler hacking sessions](http://ocamllabs.github.io/compiler-hacking/) organised by Jeremy Yallop and Leo White have been a great success this year, with a wide variety of people from academic (Cambridge, London universities and Microsoft Research) and industrial (Jane Street, Citrix and Facebook among others) and locally interested folk.
-
 One very important project that has had a lot of work put into it in 2014 (but isn't quite ready for a public release yet) is [Assemblage](https://github.com/samoht/assemblage), which will remove much of the boilerplate currently needed to build and release an OCaml library to OPAM.
+
+We also had a great time working with open-source summer programs. Thanks to the Xen Foundation and GNOME for their support here, and we hope to do this again next summer!  The roundup posts were:
+
+* *[OPW FIN](http://www.somerandomidiot.com/blog/2014/08/22/opw-fin/)* by Mindy Preston: on of her [FOSS Outreach Program](http://gnome.org/opw/) work.
+* *[Amazon Adventures](http://1000hippos.wordpress.com/)* by Jyotsna Prakash: on her [Google Summer of Code](https://developers.google.com/open-source/soc/?csw=1) 2014 efforts on EC2 bindings.
+
 
 ### Upcoming features
 
