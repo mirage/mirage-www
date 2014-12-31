@@ -3,6 +3,8 @@ We announced [Mirage 1.0](http://openmirage.org/blog/announcing-mirage10) just o
 
 ### Clean-Slate Transport Layer Security
 
+<a href="http://media.ccc.de/browse/congress/2014/31c3_-_6443_-_en_-_saal_2_-_201412271245_-_trustworthy_secure_modular_operating_system_engineering_-_hannes_-_david_kaloper.html#video"><img src="/graphics/tls-31c3.png" style="float:right; padding: 5px" width="300px" /></a>
+
 David Kaloper and Hannes Menhert started 2014 with getting interested in writing a [safer and cleaner TLS stack](https://ocaml.org/meetings/ocaml/2014/ocaml2014_4.pdf) in OCaml, and ended the year with a complete demonstration and talk last week in [31C3](http://media.ccc.de/browse/congress/2014/31c3_-_6443_-_en_-_saal_2_-_201412271245_-_trustworthy_secure_modular_operating_system_engineering_-_hannes_-_david_kaloper.html#video), the premier hacker conference!  Their blog posts over the summer remain an excellent introduction to the new stack:
 
 - *"[OCaml-TLS: Introducing transport layer security (TLS) in pure OCaml](http://openmirage.org/blog/introducing-ocaml-tls)"* presents the motivation and architecture behind our clean-slate implementation of the protocol.
@@ -10,8 +12,6 @@ David Kaloper and Hannes Menhert started 2014 with getting interested in writing
 - *"[OCaml-TLS: adventures in X.509 certificate parsing and validation](http://openmirage.org/blog/introducing-x509)"* explains how authentication and chain-of-trust verification is implemented in our stack.
 - *"[OCaml-TLS: ASN.1 and notation embedding](http://openmirage.org/blog/introducing-asn1)"* introduces the libraries needed for handling ASN.1 grammars, the wire representation of messages in TLS.
 - *"[OCaml-TLS: the protocol implementation and mitigations to known attacks](http://openmirage.org/blog/ocaml-tls-api-internals-attacks-mitigation)"* concludes with the implementation of the core TLS protocol logic itself.
-
-<a href="http://media.ccc.de/browse/congress/2014/31c3_-_6443_-_en_-_saal_2_-_201412271245_-_trustworthy_secure_modular_operating_system_engineering_-_hannes_-_david_kaloper.html#video"><img src="/graphics/tls-31c3.png" style="float:right; padding: 5px" width="250px" /></a>
 
 By summer, the stack was complete enough to connect to the majority of TLS 1.0+ sites on the Internet, and work progressed to integration with the remainder of the Mirage libraries.  By November, the [Conduit](https://github.com/mirage/ocaml-conduit) network library had Unix support for both the [OpenSSL/Lwt](https://github.com/savonet/ocaml-ssl) bindings and the pure OCaml stack, with the ability to dynamically select them.  You can now deploy and test the pure OCaml TLS stack on a webserver simply by:
 
@@ -57,12 +57,11 @@ The new approach opens up the possibility of writing more user-friendly configur
 
 ### Profiling
 
+<a href="http://roscidus.com/blog/blog/2014/10/27/visualising-an-asynchronous-monad"><img src="http://roscidus.com/blog/images/mirage-profiling/block-reads-3-32.png" style="float:right; padding: 5px" width="300px" /></a>
+
 One of the benefits touted by our CACM article on [unikernels](http://queue.acm.org/detail.cfm?id=2566628) at the start of the year was the improved tooling from the static linking of an entire application stack with an operating system layer.
 [Thomas Leonard](http://roscidus.com) joined the project this year after publishing a widely read [blog series](http://roscidus.com/blog/blog/2014/06/06/python-to-ocaml-retrospective/) on his experiences from switching from Python to OCaml.
 Aside from leading (and upstreaming to Xen) the port of [Mirage to ARM](http://openmirage.org/blog/introducing-xen-minios-arm), he also explored how to add profiling throughout the unikernel stack.
-
-<a href="http://roscidus.com/blog/blog/2014/10/27/visualising-an-asynchronous-monad"><img src="http://roscidus.com/blog/images/mirage-profiling/block-reads-3-32.png" style="float:right; padding: 5px" width="250px" /></a>
-
 
 The support is now comprehensive and integrated into the Mirage trees: the [Lwt](http://ocsigen.org/lwt) cooperative threading engine has hooks for thread switching, most of the core libraries register named events, traces are dumped into shared memory buffers in the [CTF](http://wiki.eclipse.org/Linux_Tools_Project/TMF/CTF_guide) file format used by the Linux trace toolkit, and there are JavaScript and GTK+ [GUI frontends](https://github.com/talex5/mirage-trace-viewer) that can parse them.
 
