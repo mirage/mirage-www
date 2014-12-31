@@ -108,12 +108,20 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2014, 12, 31, 16, 0);
+        authors    = [anil];
+        subject    = "Mirage 2014 review: IPv6, TLS, Irmin, Jitsu and community growth";
+        body       = "2014-in-review.md";
+        permalink  = "2014-in-review";
+      };
+
       { updated    = date (2010, 10, 11, 15, 0);
         authors    = [anil];
         subject    = "Self-hosting Mirage website";
         body       = "welcome.md";
         permalink  = "self-hosting-mirage-website";
       };
+
       { updated    = date (2011, 04, 11, 15, 0);
         authors    = [anil];
         subject    = "A Spring Wiki Cleaning";
