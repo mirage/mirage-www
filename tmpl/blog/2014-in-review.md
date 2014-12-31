@@ -94,7 +94,7 @@ All of this work was hastily crammed into a [USENIX NSDI 2015](https://www.useni
 
 All of the above work was only possible due to the vastly improved tooling and infrastructure around the project.  Our community manager Amir Chaudhry led the [minuted](http://openmirage.org/docs/) calls every two weeks that tied the efforts together, and we established some [pioneer projects](https://github.com/mirage/mirage-www/wiki/Pioneer-Projects) for newcomers to tackle.
 
-<img src="/graphics/opam-unique-packages-20141231" style="float:right; padding: 5px" width="250px" />
+<img src="/graphics/opam-packages-20141231.png" style="float:right; padding: 5px" width="250px" />
 
 The [OPAM](https://opam.ocaml.org) package manager continued to be the frontend for all Mirage tools, with releases of libraries happening [regularly](http://openmirage.org/releases).  Because of the modular nature of Mirage code, most of the libraries can also be used as normal Unix-based libraries, meaning that we aren't just limited to Mirage users but can benefit from the entire OCaml community.  The graph to the right shows the growth of the total package database since the project started to give you a sense of how much activity there is.
 
