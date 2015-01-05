@@ -68,12 +68,12 @@ Add `foo.ml` with the following content and edit it:
 Assuming you are building for POSIX using native kernel sockets, compile the application by:
 
 ```
-  mirage configure --unix --socket
+  mirage configure --unix
   mirage build
   mirage run   # Or ./main.native
 ```
 
-If you are building for a different Mirage platform, change the `--unix --socket` switches appropriately (presently either `--xen` or `--unix --direct`).
+If you are building for a different Mirage platform, change the `--unix` switches appropriately (presently either `--xen` or `--unix`).
 
 ###Solution
 
@@ -275,7 +275,7 @@ Write an echo server, reading from a dummy input generator and, for each line it
 ```
   let rec echo_server () =
     lwt s = read_line () in
-    Console.log s;
+    Console.log c s;
     echo_server ()
 ```
 
@@ -372,11 +372,6 @@ Using the pipelining helpers, change the echo server into a string processing se
   let cap_str str =
     Lwt.return (String.uppercase str)
 
-  let rec print_mvar c m =
-    lwt s = Lwt_mvar.take m in
-    Console.log c s;
-    print_mvar c m
-
   let ( |> ) x f = f x
 
   let echo_server c () =
@@ -421,7 +416,7 @@ Every second write a tuple containing a pair of small random integers `(Random.i
   let rec print_odd c m =
     lwt a = Lwt_mvar.take m in
     Console.log c (Printf.sprintf "Odd: %d" a);
-    print_odd m
+    print_odd c m
 
   let ( |> ) x f = f x
 

@@ -145,6 +145,7 @@ If you are on a 64-bit Linux system able to build Xen images, simply change
 ```
 mirage configure --xen
 make depend
+make
 ```
 
 *Everything* else remains the same!  The `main.ml` and `Makefile` generated
@@ -176,6 +177,8 @@ Edit this to customize the VM name or memory, and then run it via `xl create -c 
 You should see the same output on the Xen console as you did on the
 UNIX version you ran earlier. If you need more help, or would like to boot your
 Xen VM on Amazon's EC2, [click here](/wiki/xen-boot).
+
+If you are using an ARM processor, such as the Cubie Board, you will need some extra pins that can be found [here](http://openmirage.org/blog/introducing-xen-minios-arm).
 
 ### Step 2: Getting a block device
 
@@ -223,6 +226,7 @@ a block device from a local file via `block_of_file`.
 Build this on Unix in the same way as the console example.
 
 ```
+cd block
 mirage configure --unix
 make depend
 make
@@ -256,7 +260,7 @@ name = 'block_test'
 kernel = '/home/avsm/src/git/avsm/mirage-skeleton/block/mir-block_test.xen'
 builder = 'linux'
 memory = 256
-disk = [ 'file:/home/avsm/src/git/avsm/mirage-skeleton/block/disk.img,xvda1,w']
+disk = [ 'file:/home/avsm/src/git/avsm/mirage-skeleton/block/disk.img,,xvda1,w']
 ```
 
 Now you just need to `xl create -c block_test.xl`, and you should
@@ -264,6 +268,16 @@ see the same output as you had for the Unix one.  The difference is
 that instead of going through the Linux or FreeBSD kernel, Mirage
 linked in the Xen [block device driver](https://github.com/mirage/mirage-block-xen)
 and mapped the unikernel block requests directly through to it.
+
+For ARM, if `qemu` is not available, it might be better do it through `losetup` so that you can access the 'disk'.
+```
+sudo losetup -f ../block/disk.img
+sudo losetup -a
+```
+
+```
+disk = [ '/dev/loop0,,xvda1,w']
+```
 
 ### Step 3: Key/value stores
 
@@ -306,6 +320,7 @@ You can read the generated ML file by looking at the `static1.ml` file
 in your build tree.
 
 ```
+cd kv_ro_crunch
 mirage configure --unix
 make depend
 make
@@ -381,7 +396,7 @@ filesystems and block devices that are independent of the implementations
 to assemble several combinations of unikernels via relatively simple
 configuration files.
 
-### Step 3: Networking
+### Step 4: Networking
 
 Block devices don't require a huge amount of configuration, but now we
 move onto networking, which sadly has far more knobs attached.  There
@@ -464,7 +479,7 @@ $ sudo make run
 
 This Unix application is now listening simultaneously on the local
 HTTP port, and also via a direct tuntap interface.  Let's test the
-socket interface first by retrieving something via HTTP.
+socket interface first by retrieving something via HTTP, probably best using a different terminal.
 
 ```
 $ curl http://localhost

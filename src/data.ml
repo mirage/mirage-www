@@ -91,6 +91,13 @@ module People = struct
     uri       = Some "https://github.com/yomimono";
     email     = Some "interblag@somerandomidiot.com";
   }
+
+  let nick = {
+    Atom.name = "Nick Betteridge";
+    uri       = Some "https://github.com/buzzheavyyear";
+    email     = Some "buzzheavyyear@hotmail.com";
+  }
+
 end
 
 let rights = Some "All rights reserved by the author"
@@ -101,12 +108,20 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2014, 12, 31, 16, 0);
+        authors    = [anil];
+        subject    = "Mirage 2014 review: IPv6, TLS, Irmin, Jitsu and community growth";
+        body       = "2014-in-review.md";
+        permalink  = "2014-in-review";
+      };
+
       { updated    = date (2010, 10, 11, 15, 0);
         authors    = [anil];
         subject    = "Self-hosting Mirage website";
         body       = "welcome.md";
         permalink  = "self-hosting-mirage-website";
       };
+
       { updated    = date (2011, 04, 11, 15, 0);
         authors    = [anil];
         subject    = "A Spring Wiki Cleaning";
@@ -294,6 +309,15 @@ module Wiki = struct
     }
 
   let entries = [
+    weekly ~y:2014 ~m:12 ~d:10 ~a:amir;
+    weekly ~y:2014 ~m:11 ~d:26 ~a:amir;
+    weekly ~y:2014 ~m:11 ~d:12 ~a:amir;
+    weekly ~y:2014 ~m:10 ~d:28 ~a:amir;
+    weekly ~y:2014 ~m:10 ~d:14 ~a:amir;
+    weekly ~y:2014 ~m:9 ~d:30 ~a:amir;
+    weekly ~y:2014 ~m:9 ~d:16 ~a:amir;
+    weekly ~y:2014 ~m:8 ~d:20 ~a:amir;
+    weekly ~y:2014 ~m:8 ~d:7 ~a:amir;
     weekly ~y:2014 ~m:7 ~d:8 ~a:amir;
     weekly ~y:2014 ~m:6 ~d:24 ~a:amir;
     weekly ~y:2014 ~m:6 ~d:10 ~a:amir;
@@ -467,6 +491,26 @@ module Wiki = struct
       body       = File "xen-on-cubieboard2.md";
       permalink  = "xen-on-cubieboard2";
     };
+    { updated    = date (2014, 08, 12, 22, 56);
+      author     = yomimono;
+      subject    = "Contributing to Mirage";
+      body       = File "contributing.md";
+      permalink  = "contributing";
+    };
+    { updated    = date (2014, 08, 21, 11, 19);
+      author     = nick;
+      subject    = "Libvirt On Cubieboard";
+      body       = File "libvirt-on-cubieboard.md";
+      permalink  = "libvirt-on-cubieboard";
+    };
+    { updated    = date (2014, 12, 11, 17, 23);
+      author     = tal;
+      subject    = "Tracing and Profiling";
+      body       = File "profiling.md";
+      permalink  = "profiling";
+    };
+
+    Bactrian.entry_for_is_mirage_broken_wikipage;
   ]
 end
 
@@ -494,6 +538,69 @@ module Links = struct
   }
 
   let entries = [
+    { id="31c3-secure-modular-os-tls";
+      uri=Uri.of_string "http://media.ccc.de/browse/congress/2014/31c3_-_6443_-_en_-_saal_2_-_201412271245_-_trustworthy_secure_modular_operating_system_engineering_-_hannes_-_david_kaloper.html#video";
+      title="Trustworthy secure modular operating system engineering";
+      date=day(2014,12,27);
+      stream=talk;
+    };
+
+    { id="oups-dec2014-state-of-mirage";
+      uri=Uri.of_string "https://www.irill.org/videos/oups-december-2014/MirageOS";
+      title="OCaml Users Paris: State of the Mirage";
+      date=day(2014,12,09);
+      stream=talk;
+    };
+
+    { id="techrepublic-unikernels";
+      uri=Uri.of_string "http://www.techrepublic.com/article/unikernels-offer-a-stripped-down-alternative-to-linux/";
+      title="Unikernels offer a stripped down alternative to Linux";
+      date=day(2014,12,18);
+      stream=press;
+    };
+
+    { id="after-docker-immutable-infra";
+      uri=Uri.of_string "https://medium.com/@darrenrush/after-docker-unikernels-and-immutable-infrastructure-93d5a91c849e";
+      title="After Docker: Unikernels and Immutable Infrastructure";
+      date=day(2014,11,06);
+      stream=blog;
+    };
+
+    { id="unikernels-what-where-why-awick";
+      uri=Uri.of_string "https://www.youtube.com/watch?v=oHcHTFleNtg";
+      title="Unikernels: Who, What, Where, When, Why - Adam Wick, Galois";
+      date=day(2014,10,17);
+      stream=talk;
+    };
+
+    { id="enterprise-oss-2014";
+      uri=Uri.of_string "http://www.linux.com/news/software/applications/789241--5-new-enterprise-open-source-projects-to-watch/";
+      title="5 New Enterprise Open Source Projects to Watch";
+      date=day(2014,09,24);
+      stream=press;
+    };
+
+    { id="haskell-symposium-2014-keynote";
+      uri=Uri.of_string "https://www.youtube.com/watch?v=UEIHfXLMtwA";
+      title="Haskell Symposium 2014 Keynote on Unikernels";
+      date=day(2014,09,05);
+      stream=talk;
+    };
+
+    { id="edge-cases-episode-101";
+      uri=Uri.of_string "http://edgecasesshow.com/101-a-program-that-runs-on-metal.html";
+      title="A Program That Runs on Metal";
+      date=day(2014,08,14);
+      stream=blog;
+    };
+
+    { id="miso-talk-entrepreneur-first";
+      uri=Uri.of_string "http://amirchaudhry.com/describing-miso-entrepreneur-first-2014/";
+      title="Describing the MISO stack at Entrepreneur First";
+      date=day(2014,07,25);
+      stream=blog;
+    };
+
     { id="mirage-20-pr-congoo";
       uri=Uri.of_string "http://www.congoo.com/news/addstorycomment.aspx?st=291376442&Channel_ID=8&Category_ID=-1";
       title="Xen Project Introduces New Mirage OS Release";

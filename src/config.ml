@@ -20,13 +20,13 @@ let fs =
   match mode, get_mode () with
   | `Fat, _    -> fat_ro "../files"
   | `Crunch, `Xen -> crunch "../files"
-  | `Crunch, `Unix -> direct_kv_ro "../files"
+  | `Crunch, _ -> direct_kv_ro "../files"
 
 let tmpl =
   match mode, get_mode () with
   | `Fat, _    -> fat_ro "../tmpl"
   | `Crunch, `Xen -> crunch "../tmpl"
-  | `Crunch, `Unix -> direct_kv_ro "../tmpl"
+  | `Crunch, _ -> direct_kv_ro "../tmpl"
 
 let net =
   try match Sys.getenv "NET" with
@@ -39,7 +39,7 @@ let dhcp =
   try match Sys.getenv "DHCP" with
     | "" -> false
     | _  -> true
-  with Not_found -> false
+  with Not_found -> true
 
 let stack console =
   match net, dhcp with
@@ -54,7 +54,11 @@ let port =
   with Not_found -> 80
 
 let server =
-  http_server port (stack default_console)
+  conduit_direct (stack default_console)
+
+let http_srv =
+  let mode = `TCP (`Port port) in
+  http_server mode server
 
 let main =
   let libraries = [ "cow.syntax"; "cowabloga" ] in
@@ -63,6 +67,8 @@ let main =
     (console @-> kv_ro @-> kv_ro @-> http @-> job)
 
 let () =
-  register "www" [
-    main $ default_console $ fs $ tmpl $ server
+  let tracing = None in
+  (* let tracing = mprof_trace ~size:10000 () in *)
+  register ?tracing "www" [
+    main $ default_console $ fs $ tmpl $ http_srv
   ]

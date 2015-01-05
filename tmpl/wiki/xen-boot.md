@@ -62,11 +62,13 @@ To use the EC2 `t1.micro` instances the kernel needs to reside inside an EBS vol
 * Create grub directories `sudo mkdir -p /mnt/boot/grub/`
 * Create grub menu.lst file in `/mnt/boot/grub/menu.lst`
 
+```
     default 0
     timeout 1
     title Mirage-Test
          root (hd0,0)
          kernel /kernel 
+```
 
 * Log out of instance
 * Create EBS snapshot `ec2-create-snapshot ${VOLUME}`

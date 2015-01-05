@@ -1,12 +1,10 @@
 **Author:** Thomas Leonard, addendums from Anil Madhavapeddy
 
-**Status:** work-in-progress
-
-These notes detail the process of setting up a Xen system on a Cubieboard2.
+These notes detail the process of setting up a Xen system on a Cubieboard2 (or Cubietruck).
 They are based on the [Xen ARM with Virtualization Extensions/Allwinner](http://wiki.xen.org/wiki/Xen_ARM_with_Virtualization_Extensions/Allwinner) documentation, but try to collect everything into one place.
 I'm trying to document the exact steps I took (with the wrong turns removed); some changes will be needed for other systems.
 
-**TL;DR**: There is now a script available that generates an image with Xen, Ubuntu dom0, and the OCaml tools installed.  Just run the `make` instructions at [mirage/xen-arm-builder](https://github.com/mirage/xen-arm-builder) and copy the resulting image onto an SDcard and boot up your Cubieboard2 or Cubietruck (password `linaro`/`linaro` which you should change as the first thing you do).
+**TL;DR**: There is now a script available that generates an image with Xen, Ubuntu dom0, and the OCaml tools installed.  Just run the `make` instructions at [mirage/xen-arm-builder](https://github.com/mirage/xen-arm-builder) and copy the resulting image onto an SDcard and boot up your Cubieboard2 or Cubietruck (password `mirage`/`mirage` which you should change as the first thing you do). The script is kept more up-to-date than the instructions on this page.
 
 The remainder of this guide covers:
 
@@ -80,14 +78,22 @@ On Arch Linux, run:
 
     yaourt -S arm-linux-gnueabihf-gcc
 
+On Debian testing, run (as root):
+
+    apt-get install gcc-arm-none-eabi
+
 On a modern Ubuntu, run:
 
     sudo apt-get install gcc-arm-linux-gnueabihf
 
-This installs files such as:
+This installs files such as, say, on Ubuntu:
 
     /usr/bin/arm-linux-gnueabihf-ld
     /usr/bin/arm-linux-gnueabihf-gcc
+
+Take note of the common prefix.  Define a variable to hold it:
+
+    export CROSS_COMPILE=arm-linux-gnueabihf-
 
 ## U-Boot
 
@@ -101,77 +107,66 @@ Note: only the "sunxi-next" branch has the required hypervisor support; DO NOT u
 
 Configure and build U-Boot using the ARM toolchain:
 
-    make CROSS_COMPILE=arm-linux-gnueabihf- Cubieboard2_config
-    make CROSS_COMPILE=arm-linux-gnueabihf- -j 4
-
+    make CROSS_COMPILE=$CROSS_COMPILE Cubieboard2_config
+    make CROSS_COMPILE=$CROSS_COMPILE -j 4
 
 ## U-Boot configuration
 
-Create a directory for the boot commands (e.g. "boot"). Create "boot/boot.cmd" with:
+Create a directory for the boot commands (e.g. `boot`). Create
+`boot/boot.cmd` whose content is the same as
+[boot-cubieboard2.cmd](https://github.com/mirage/xen-arm-builder/blob/master/boot/boot-cubieboard2.cmd)
+for the Cubieboard2 or
+[boot-cubietruck.cmd](https://github.com/mirage/xen-arm-builder/blob/master/boot/boot-cubietruck.cmd)
+for the Cubietruck.
 
-    # SUNXI Xen Boot Script
-    
-    # Addresses suitable for 1GB system, adjust as appropriate for a 2GB system.
-    # Top of RAM:         0x80000000
-    # Xen relocate addr   0x7fe00000
-    setenv kernel_addr_r  0x7f600000 # 8M
-    setenv ramdisk_addr_r 0x7ee00000 # 8M
-    setenv fdt_addr       0x7ec00000 # 2M
-    setenv xen_addr_r     0x7ea00000 # 2M
-    
-    setenv fdt_high      0xffffffff # Load fdt in place instead of relocating
-    
-    # Load xen/xen to ${xen_addr_r}.
-    fatload mmc 0 ${xen_addr_r} /xen
-    setenv bootargs "console=dtuart dtuart=/soc@01c00000/serial@01c28000 dom0_mem=128M"
-    
-    # Load appropriate .dtb file to ${fdt_addr}
-    fatload mmc 0 ${fdt_addr} /sun7i-a20-cubieboard2.dtb
-    fdt addr ${fdt_addr} 0x40000
-    fdt resize
-    fdt chosen
-    fdt set /chosen \#address-cells <1>
-    fdt set /chosen \#size-cells <1>
-    
-    # Load Linux arch/arm/boot/zImage to ${kernel_addr_r}
-    fatload mmc 0 ${kernel_addr_r} /vmlinuz
-    
-    fdt mknod /chosen module@0
-    fdt set /chosen/module@0 compatible "xen,linux-zimage" "xen,multiboot-module"
-    fdt set /chosen/module@0 reg <${kernel_addr_r} 0x${filesize} >
-    fdt set /chosen/module@0 bootargs "console=hvc0 ro root=/dev/mmcblk0p2 rootwait init=/bin/bash clk_ignore_unused"
-    
-    bootz ${xen_addr_r} - ${fdt_addr}
+The above is configured to:
 
-The above is the template from the wiki, but configured to:
-
-- Load Xen, the FDT and Linux from mmcblk0p1
-- Use mmcblk0p2 as Linux's root FS
+- Load Xen, the FDT and Linux from `mmcblk0p1`
+- Use `mmcblk0p2` as Linux's root FS
 - Wait for the device (`rootwait`)
-- Run /bin/bash as init.
+- Run `/bin/bash` as init.
 
-Create a `Makefile` to compile it:
+More information on
+[the format of `boot.cmd`](http://www.denx.de/wiki/view/DULG/UBoot)
+is available on the [denx site](http://www.denx.de/wiki/view/DULG/Manual).
+
+Create a `boot/Makefile` to compile it using
+[mkimage](https://github.com/jwrdegoede/u-boot-sunxi/blob/sunxi/doc/mkimage.1):
 
     all: boot.scr
 
     %.scr: %.cmd
-    	mkimage -C none -A arm -T script -d "$<" "$@"
+        ../tools/mkimage -C none -A arm -T script -d "$<" "$@"
 
-Run `make` to build `boot.scr`.
+Go to `boot` and run `make` to build `boot.scr`.
 
+Remark: You may have noticed that the above `.cmd` files allocate a
+rather large amount of memory to `dom0` (look at the `dom0_mem`
+parameter).  This is needed to compile large libraries like
+[Core](https://github.com/janestreet/core).
+However, if you use `autoballoon=on` in
+[`/etc/xen/xl.conf`](http://xenbits.xen.org/docs/unstable/man/xl.conf.5.html),
+`xl` will automatically reduce the amount of memory assigned to dom0
+to free memory for new domains.  An OCaml daemon
+[squeezed](https://github.com/xapi-project/squeezed), currently in
+development (and based on
+[xenopsd](https://github.com/xapi-project/xenopsd)), will dynamically
+move memory between dom0 and VMs to satisfy their needs.
 
 ## Building Linux
 
-Get [linux-sunxi Git tree](https://github.com/linux-sunxi/linux-sunxi), sunxi-devel branch.
+Get my [Linux Git tree](https://github.com/talex5/linux.git), master branch. This fork has a few extra patches we need.
 
-Note: DO NOT use the "sunxi-next" branch! Only the "sunxi-devel" branch has MMC support.
+    cd ../..
+    git clone https://github.com/talex5/linux.git
+    cd linux
 
 Configure:
 
     make ARCH=arm multi_v7_defconfig
     make ARCH=arm menuconfig
 
-Here are the settings I used (TODO: this is extracted from `config.working`; check it works with just these settings and whether they're all actually necessary):
+Here are the settings I used (check it works with just these settings and whether they're all actually necessary):
 
     CONFIG_CROSS_COMPILE="/usr/bin/arm-linux-gnueabihf-"
     CONFIG_XEN_DOM0=y
@@ -223,17 +218,22 @@ Here are the settings I used (TODO: this is extracted from `config.working`; che
     CONFIG_DM_BUFIO=y
     CONFIG_DM_SNAPSHOT=y
 
+A simpler alternative to `make ARCH=arm menuconfig` is to copy
+[`config-cubie2`](https://github.com/mirage/xen-arm-builder/blob/master/config/config-cubie2)
+to `.config`
+(note that `CONFIG_CROSS_COMPILE` *must* have the value of `$CROSS_COMPILE`).
+
 Then:
 
-    make ARCH=arm zImage dtbs -j 4
+    make ARCH=arm zImage dtbs modules -j 4
 
 ## Building Xen
 
-You can use the official [Xen 4.4 release](http://www.xenproject.org/downloads/xen-archives/xen-44-series/xen-440.html), but I used the Git version:
+Currently, some minor patches are needed to the official [Xen 4.4 release](http://www.xenproject.org/downloads/xen-archives/xen-44-series/xen-440.html), so use this Git version:
 
-    git clone git://xenbits.xen.org/xen.git
+    cd ..
+    git clone -b stable-4.4 https://github.com/talex5/xen.git
     cd xen
-    git checkout stable-4.4
 
 Edit `Config.mk` and turn debug on: `debug ?= y`.
 This enables some features that are useful when debugging guests, such as allowing guests to write debug messages to the Xen console.
@@ -242,7 +242,7 @@ Note: If you already built Xen without debug, `make clean` is NOT sufficient! Us
 
 Compile with:
 
-    make dist-xen XEN_TARGET_ARCH=arm32 CROSS_COMPILE=arm-linux-gnueabihf- CONFIG_EARLY_PRINTK=sun7i -j4
+    make dist-xen XEN_TARGET_ARCH=arm32 CROSS_COMPILE=$CROSS_COMPILE CONFIG_EARLY_PRINTK=sun7i -j4
 
 
 ## Partitioning the SD card
@@ -274,26 +274,37 @@ Write the U-Boot SPL and main program:
 
     dd if=u-boot-sunxi-with-spl.bin of=/dev/mmcblk0 bs=1024 seek=8
 
-Mount the fat partition and copy in boot.scr, the Linux kernel, the FDT and Xen:
+Mount the fat partition and copy in `boot.scr`, the Linux kernel, the
+FDT and Xen (you must create `/mnt/mmc1` if it does not exist):
 
     mount /dev/mmcblk0p1 /mnt/mmc1
-    cp boot/boot.scr /mnt/mmc1/
+    cp u-boot-sunxi/boot/boot.scr /mnt/mmc1/
     cp linux/arch/arm/boot/zImage /mnt/mmc1/vmlinuz
     cp linux/arch/arm/boot/dts/sun7i-a20-cubieboard2.dtb /mnt/mmc1/
     cp xen/xen/xen /mnt/mmc1/
     umount /mnt/mmc1
 
+For the Cubietruck, replace the third line with:
+
+    cp linux/arch/arm/boot/dts/sun7i-a20-cubietruck.dtb /mnt/mmc1/
+
+(You must run these commands as root or prefix them with `sudo`.)
 
 ## Root FS
 
 The wiki's links to the prebuilt root images are broken, but a bit of searching turns up some alternatives.
 
-I used [linaro-saucy-developer-20140406-651.tar.gz](https://snapshots.linaro.org/ubuntu/images/developer/latest/linaro-saucy-developer-20140406-651.tar.gz).
+I used [linaro-trusty-developer-20140522-661.tar.gz](http://releases.linaro.org/14.05/ubuntu/trusty-images/developer/linaro-trusty-developer-20140522-661.tar.gz).
 
+    mount /dev/mmcblk0p2 /mnt/mmc2
     cd /mnt/mmc2
-    sudo tar xf /data/arm/linaro-saucy-developer-20140406-651.tar.gz
+    sudo tar xf /your/path/to/linaro-trusty-developer-20140522-661.tar.gz
     sudo mv binary/* .
     sudo rmdir binary
+
+Go back to the directory where you compiled your Linux kernel and do:
+
+    make ARCH=arm INSTALL_MOD_PATH='/mnt/mmc2' modules_install
 
 `/mnt/mmc2/etc/fstab` should contain:
 
@@ -372,9 +383,39 @@ Add your ssh key:
     mkdir .ssh
     vi .ssh/authorized_keys
 
-You should now be able to connect with e.g.
+Install Avahi:
 
-    ssh root@192.168.1.79
+    apt-get install avahi-daemon libnss-mdns
+
+You must also install these packages and `avahi-utils` on your
+computer.
+
+You probably want to give your Cubieboard a nice name.  Edit
+`/etc/hostname` and replace the existing name with the one of your
+choice — `cubie2` for the following.
+(You should also change `linaro-developer` in `/etc/hosts`
+to `cubie2`.)
+For the changes to take effect, you can either reboot or run
+`hostname cubie2` followed by `/etc/init.d/avahi-daemon restart`.
+You should now be able to connect with e.g., from your computer
+
+    ssh root@cubie2.local
+
+To see the list of Avahi services on your network, do `avahi-browse
+-alr`.  If you do not see your Cubieboard, check that its network is
+up: doing
+
+    ip addr show
+
+at the Cubieboard root prompt, should output some information
+including a line starting with `br0:
+<BROADCAST,MULTICAST,UP,LOWER_UP>`.  If it doesn't try
+
+    brctl addbr br0
+
+If you get `add bridge failed: Package not installed`, you forgot to
+include Ethernet bridging in your kernel (it is included with the
+recommended `.config` file above so this should not happen).
 
 Kill the network and shut down:
 
@@ -388,24 +429,15 @@ You should now be able to ssh in directly.
 
 ## Xen toolstack
 
-The Ubuntu 13.10 image comes with Xen 4.3, so we need to upgrade:
-
-    apt-get install update-manager-core python-apt
-    do-release-upgrade -d
-
-Reboot and fix any problems. Edit `/etc/init/rc-sysinit.conf` if you need to change the default runlevel - for some reason, booting to level 1 and then doing `init 2` works for me, but booting directly to level 2 doesn't.
-
-Then install the new Xen tools:
+Ssh to your Cubieboard and install the Xen tools:
 
     apt-get install xen-utils-4.4
-
-Note: if you get `add bridge failed: Package not installed`, you forgot to include Ethernet bridging in your kernel.
 
 Once Xen 4.4 is installed, you can list your domains:
 
     # xl list
     Name                                        ID   Mem VCPUs      State   Time(s)
-    Domain-0                                     0   128     2     r-----      15.8
+    Domain-0                                     0   512     2     r-----      19.7
 
 
 ## LVM configuration
@@ -460,7 +492,7 @@ Copy the Linux kernel image into /root (the dom0 one is fine). Create `domU_test
 
     kernel = "/root/zImage"
     memory = 512
-    name = "Ubuntu-13.10"
+    name = "Ubuntu-14.04"
     vcpus = 2
     serial="pty"
     disk = [ 'phy:/dev/vg0/linux-guest-1,xvda,w' ]
@@ -555,7 +587,7 @@ You'll need to install a few things to build it:
 
 Clone the repository and build:
 
-    git clone https://github.com/talex5/xen.git
+    git clone -b devel https://github.com/talex5/xen.git
     cd xen/extras/mini-os
     make
 
@@ -594,4 +626,4 @@ On success, it will write lots of text to the Xen console (note: this requires a
     (d6) Initialising timer interface
     ...
 
-(to be continued...)
+You can now try [running a Mirage unikernel](/blog/introducing-xen-minios-arm).
