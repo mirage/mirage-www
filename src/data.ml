@@ -538,6 +538,13 @@ module Links = struct
   }
 
   let entries = [
+    { id="gfx-os-tech-to-watch";
+      uri=Uri.of_string "http://gfxmonk.net/2015/01/04/os-technologies-to-watch.html";
+      title="OS Technologies To Watch In 2015";
+      date=day(2015,01,04);
+      stream=blog;
+    };
+
     { id="31c3-secure-modular-os-tls";
       uri=Uri.of_string "http://media.ccc.de/browse/congress/2014/31c3_-_6443_-_en_-_saal_2_-_201412271245_-_trustworthy_secure_modular_operating_system_engineering_-_hannes_-_david_kaloper.html#video";
       title="Trustworthy secure modular operating system engineering";
