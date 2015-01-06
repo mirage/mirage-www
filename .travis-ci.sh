@@ -21,12 +21,6 @@ echo OPAM versions
 opam --version
 opam --git-version
 
-grep -ri menhert tmpl/
-if [ $? = 0 ]; then
-  echo Someone spelt Hannes Mehnert incorrectly. Fix it first!
-  exit 1
-fi
-
 opam init git://github.com/ocaml/opam-repository >/dev/null 2>&1
 opam install ${OPAM_PACKAGES}
 eval `opam config env`
