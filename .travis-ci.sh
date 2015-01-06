@@ -21,7 +21,7 @@ echo OPAM versions
 opam --version
 opam --git-version
 
-if ! grep -ri menhert tmpl/ ; then
+if grep -ri menhert tmpl/ ; then
   echo Someone spelt Hannes Mehnert incorrectly. Fix it first!
   exit 1
 fi
