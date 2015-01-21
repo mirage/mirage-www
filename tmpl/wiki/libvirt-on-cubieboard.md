@@ -1,91 +1,131 @@
+#### Bringing up the board
+
 1. Download and unpack the image for your board.
-http://blobs.openmirage.org/cubieboard2-xen-iso.tar.bz2
-http://blobs.openmirage.org/cubietruck-xen-iso.tar.bz2
+
+    [For the cubieboard2](http://blobs.openmirage.org/cubieboard2-xen-iso.tar.bz2)
+
+    [For the cubietruck](http://blobs.openmirage.org/cubietruck-xen-iso.tar.bz2)
 
 2. Copy to the SDcard, e.g.
-dd if=cubie.img of=/dev/mmcblk0
+
+    `dd if=cubie.img of=/dev/mmcblk0`
 
 3. Boot the device. It should get an IP address by DHCP.
 
-The devices announce a .local name using mDNS, so you should be able to ssh to $BOARD.local
-4. ssh mirage@cubieboard2.local.
+4. The device announces a .local name using mDNS, so you should be able to ssh to $BOARD.local
 
-To change hostname of the cubieboard:
+    ```
+    ssh mirage@cubieboard2.local.
+    ```
 
-1. edit /etc/hosts
-127.0.1.1       newname
+5. To change hostname of the cubieboard:
 
-2. edit /etc/hostname
-newname
+    edit /etc/hosts
+    
+    ```
+    127.0.1.1       newname
+    ```
 
-To change the cubieboard to get a static ip address:
+    edit /etc/hostname
 
-1. edit /etc/network/interfaces and update with:
+    ```
+    newname
+    ```
 
-//
-auto lo
-iface lo inet loopback
+1. To change the cubieboard to get a static ip address:
 
-auto eth0
-iface eth0 inet manual
-  up ip link set eth0 up
+    edit /etc/network/interfaces and update with:
 
-auto br0
-iface br0 inet static
-  bridge_ports eth0
-  address 192.168.1.11
-  broadcast 192.168.1.255
-  netmask 255.255.255.0
-  gateway 192.168.1.254
-//
+    ```
+    auto lo
+    iface lo inet loopback
 
-reboot
+    auto eth0
+    iface eth0 inet manual
+      up ip link set eth0 up
+
+    auto br0
+    iface br0 inet static
+      bridge_ports eth0
+      address 192.168.1.11
+      broadcast 192.168.1.255
+      netmask 255.255.255.0
+      gateway 192.168.1.254
+    ```
+
+1. reboot
+
+
+#### SSH
 
 To set up ssh:
 
-1. ssh mirage@192.168.1.11 (password: mirage)
+1. ```ssh mirage@192.168.1.11``` (password: mirage)
 
-2. ssh-keygen
+2. ```ssh-keygen```
 
 3. logout (ctrl-d)
 
-4. scp ~/.ssh/id_rsa.pub mirage@192.168.1.11:.ssh/authorized_keys
+4. ```scp ~/.ssh/id_rsa.pub mirage@192.168.1.11:.ssh/authorized_keys```
 
-5. ssh  mirage@192.168.1.11
+5. ```ssh mirage@192.168.1.11```
 
-6. chmod 700 ~/.ssh
+6. ```chmod 700 ~/.ssh```
 
-7. chmod 600 ~/.ssh/authorized_keys
+7. ```chmod 600 ~/.ssh/authorized_keys```
+
+
+#### Mirage
 
 You should now have a working Xen host ("xl list" to list current VMs, "lvcreate"
 to create guest disks).
 
 To install the ARM version of mirage:
 
-1. opam init
+```
+opam init
+opam install mirage
+```
 
-2. opam install mirage
+You should now be able to follow the rest of the Mirage tutorial.
 
-(You should now be able to follow the rest of the Mirage tutorial:)
 
-To install libvirt (the precompiled version doesn't contain the drivers for xen):
+#### Libvirt
 
-1. sudo apt-get install uuid-dev libxml2-dev libdevmapper-dev libpciaccess-dev \
-   libnl-dev libxen-dev libgnutls-dev
+1.  To install libvirt (the precompiled version doesn't contain the drivers for xen):
 
-2. download a release tarball from libvirt.org (I used 1.2.6) (download to local
-   machine, decompress, scp libvirt-1.2.6.tar mirage@cubieboard2:
+    ```
+    sudo apt-get install uuid-dev libxml2-dev libdevmapper-dev libpciaccess-dev \
+    libnl-dev libxen-dev libgnutls-dev
+    ```
 
-3. ssh mirage@cubieboard2; tar xf libvirt-1.2.6.tar; rm libvirt-1.2.6.tar; cd libvirt-1.2.6
+2.  Download a release tarball from libvirt.org (I used 1.2.6). Download to local
+    machine, decompress
+    
+    ```
+    scp libvirt-1.2.6.tar mirage@cubieboard2:
+    ssh mirage@cubieboard2
+    tar xf libvirt-1.2.6.tar
+    rm libvirt-1.2.6.tar
+    cd libvirt-1.2.6
+    ```
 
-3. ./configure --prefix=/usr --localstatedir=/var  --sysconfdir=/etc --with-xen \
-   --with-qemu=no --with-gnutls --with-uml=no --with-openvz=no --with-vmware=no \
-   --with-phyp=no --with-xenapi=no --with-libxl=yes --with-vbox=no --with-lxc=no \
-   --with-esx=no  --with-hyperv=no --with-parallels=no --with-init-script=upstart
+3. Configure:
 
-4. make
+    ```
+    ./configure --prefix=/usr --localstatedir=/var  --sysconfdir=/etc --with-xen \
+    --with-qemu=no --with-gnutls --with-uml=no --with-openvz=no --with-vmware=no \
+    --with-phyp=no --with-xenapi=no --with-libxl=yes --with-vbox=no --with-lxc=no \
+    --with-esx=no  --with-hyperv=no --with-parallels=no --with-init-script=upstart
+    ```
 
-5. sudo make install
+4. ```make```
+
+5. ```sudo make install```
+
+5.  Create a 'libvirt' group if one doesn't already exist
+
+    ```sudo addgroup libvirt```
 
 6. Add the two scripts (below, if they don't already exist) to 
    /etc/init.d/libvirt-bin and /etc/default/libvirt-bin
@@ -95,63 +135,72 @@ To install libvirt (the precompiled version doesn't contain the drivers for xen)
 7. Follow the instructions in http://wiki.libvirt.org/page/TLSSetup in install 
    tls on the cubieboards and admin machine
 
-8. cd /etc/rc5.d
-   sudo ln -s ../init.d/libvirt-bin S22libvirt-bin
+    - Use the libvirt group instead of qemu as the owner of /etc/pki/libvirt/
 
-9. cd /etc/rc6.d
-   sudo ln -s ../init.d/libvirt-bin K19libvirt-bin
-   sudo  update-rc.d libvirt-bin defaults
-   sudo service libvirt-bin start
+8. System init scripts:
+
+    ```
+    cd /etc/rc5.d
+    sudo ln -s ../init.d/libvirt-bin S22libvirt-bin
+
+    cd /etc/rc6.d
+    sudo ln -s ../init.d/libvirt-bin K19libvirt-bin
+    sudo update-rc.d libvirt-bin defaults
+    sudo service libvirt-bin start
+    ```
 
 10. Reboot the board
 
 11. From the admin machine, edit /etc/hosts and add the cubieboard addresses and
-    names so that (a) the names are resolvable and (b) matches the name on the certificates
+    names so that (a) the names are resolvable and (b) matches the name on the certificates, e.g.
 
-ie.
-192.168.1.10 cubieboard2
+    ```192.168.1.10 cubieboard2```
 
-Test that the admin machine can talk to the cubieboard:
+12. Test that the admin machine can talk to the cubieboard:
 
-1. sudo virsh -c xen://cubieboard2/system hostname
+    ```sudo virsh -c xen://cubieboard2/system hostname```
 
-..... and you should get 'cubieboard2' returned, if not, ssh to the cubieboard 
-      and check/restart the daemon (sudo service libvirt-bin start)
+    and you should get 'cubieboard2' returned, if not, ssh to the cubieboard 
+    and check/restart the daemon (sudo service libvirt-bin start)
 
 
 To set up the admin machine to ensure another user (instead of root) can run virsh commands:
 
-On the admin machine
+On the admin machine:
 
 1. Add the user to the libvirt group (on older releases of libvirt, this group 
-   is sometimes 'libvirtd')
+    is sometimes 'libvirtd')
 
 2. Ensure that the clientcert.pem and clientkey.pem in /etc/pki/libvirt belong 
-   to the libvirt group, ie:
-sudo chgrp libvirt /etc/pki/libvirt/clientcert.pem
-sudo chmod 440 /etc/pki/libvirt/clientcert.pem
-sudo chgrp libvirt /etc/pki/libvirt/private/clientkey.pem
-sudo chmod 440 /etc/pki/libvirt/private/clientkey.pem
+    to the libvirt group, e.g.:
+
+    ```
+    sudo chgrp libvirt /etc/pki/libvirt/clientcert.pem
+    sudo chmod 440 /etc/pki/libvirt/clientcert.pem
+    sudo chgrp libvirt /etc/pki/libvirt/private/clientkey.pem
+    sudo chmod 440 /etc/pki/libvirt/private/clientkey.pem
+    ```
 
 3. Edit /etc/libvirt/libvirtd.conf and ensure unix_sock_group, unix_sock_ro_perms, 
-   unix_sock_rw_perms are uncommented, allowing users in the libvirt(d) group to use tls, ie
+    unix_sock_rw_perms are uncommented, allowing users in the libvirt(d) group to use tls, i.e.
 
-unix_sock_group = "libvirt"
-unix_sock_ro_perms = "0777"
-unix_sock_rw_perms = "0770"
+    ```
+    unix_sock_group = "libvirt"
+    unix_sock_ro_perms = "0777"
+    unix_sock_rw_perms = "0770"
+    ```
 
-On the cubieboard
+On the cubieboard:
 
 4. ssh into the cubieboard and create a user which matches the 'admin' user ( - 'nick' in my case),
-sudo adduser 'username'
 
-5. create a 'libvirt' group if one doesn't already exist
-sudo addgroup libvirt
+    ```sudo adduser 'username'```
 
-6. add the admin user to the libvirt group
-sudo adduser 'username' libvirt
+6. Add the admin user to the libvirt group
 
-7. reboot
+    ```sudo adduser 'username' libvirt```
+
+7. Reboot
 
 
 The cubieboard should now be accessible remotely from a non-root account.
@@ -162,9 +211,10 @@ Compile the example (this currently needs to be built on a cubieboard), and then
 edit www.xl. Change the ipaddress, gateway etc. to suit, and then run the 
 virsh 'domxml-from-native' translator to get the libvirt xml file
 
+```
 virsh -c xen:/// domxml-from-native xen-xm www.xl > www.xml
-
 virsh -c xen://cubie0/system create www.xml
+```
 
 **/etc/default/libvirt-bin**
 
