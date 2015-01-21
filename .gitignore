@@ -8,6 +8,8 @@
 /src/mir-main
 /src/main.native
 /src/www.xl
+/src/www.xe
+/src/www_libvirt.xml
 
 /src/Makefile
 /src/main.ml
@@ -21,3 +23,5 @@
 /src/fat*.img
 /src/make-fat1-image.sh
 /src/make-fat2-image.sh
+
+.*.swp
