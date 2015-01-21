@@ -74,25 +74,27 @@ Assuming you are building for POSIX using native kernel sockets, compile the app
 ```
 
 If you are building for a different Mirage platform, change the `--unix` switches appropriately (presently either `--xen` or `--unix`).
+The `OS` module packs several sub-modules depending of the backend, [unix](https://github.com/mirage/mirage-platform/tree/master/unix/lib)
+or [xen](https://github.com/mirage/mirage-platform/tree/master/xen/lib).
 
 ###Solution
 
 ```
   open V1_LWT (* provides the CONSOLE signature *)
   open Lwt    (* provides bind and join *)
-  open OS     (* provides Time, Console and Main *)
+  open OS     (* provides Env, Main, and Time *)
 
   module Main (C : CONSOLE) = struct
     let start c =
       bind (join [
         bind (Time.sleep 1.0) (fun () ->
-          Console.log c "Heads"; return ()
+          C.log c "Heads"; return ()
         );
         bind (Time.sleep 2.0) (fun () ->
-          Console.log c "Tails"; return ()
+          C.log c "Tails"; return ()
         );
       ]) (fun () ->
-        Console.log c "Finished"; return ()
+        C.log c "Finished"; return ()
       )
   end
 ```
@@ -108,15 +110,15 @@ This is a good place to introduce some of these extensions. When opening the Lwt
 ```
   open V1_LWT (* provides the CONSOLE signature *)
   open Lwt    (* provides >>= and join *)
-  open OS     (* provides Time, Console and Main *)
+  open OS     (* provides Env, Main, and Time *)
 
   module Main (C : CONSOLE) = struct
     let start c =
       join [
-        (Time.sleep 1.0 >>= fun () -> (Console.log c "Heads"; return ()));
-        (Time.sleep 2.0 >>= fun () -> (Console.log c "Tails"; return ()));
+        (Time.sleep 1.0 >>= fun () -> (C.log c "Heads"; return ()));
+        (Time.sleep 2.0 >>= fun () -> (C.log c "Tails"; return ()));
        ] >>= fun () ->
-         Console.log c "Finished";
+         C.log c "Finished";
          return ()
   end
 ```
@@ -169,14 +171,14 @@ Now, the code looks like just normal OCaml code, except that we substitute `lwt`
 
       let heads =
         Time.sleep 1.0 >>
-        return (Console.log c "Heads");
+        return (C.log c "Heads");
       in
       let tails =
         Time.sleep 2.0 >>
-        return (Console.log c "Tails");
+        return (C.log c "Tails");
       in
       lwt () = heads <&> tails in
-      Console.log c "Finished";
+      C.log c "Finished";
       return ()
   end
 ```
