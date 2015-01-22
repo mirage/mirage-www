@@ -52,6 +52,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 *Calls take place every two weeks and are announced on the
 [mailing list](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel).*
 
+* Weekly call [2015-01-14](/wiki/weekly-2015-01-14) on Project name, 4.02.1 support, TLS on Xen and Error handling.
 * Weekly call [2014-12-10](/wiki/weekly-2014-12-10) on Entropy, Tracing docs, OSX backend, IPv6 and Projects.
 * Weekly call [2014-11-26](/wiki/weekly-2014-11-26) on Entropy, Config modularity, IPv6 stack and Pioneer projects.
 * Weekly call [2014-11-12](/wiki/weekly-2014-11-12) on TLS, IPv6, OCaml 4.02.1, Library requests and Xenstore.
