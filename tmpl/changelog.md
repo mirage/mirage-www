@@ -1,3 +1,98 @@
+### mirage-platform-v2.1.3: Improved reporting of top-level errors in Xen backend
+
+Released on 2015-01-23 as [v2.1.3](https://github.com/mirage/mirage-platform/releases/tag/v2.1.3). See <https://github.com/mirage/mirage-platform> for full history.
+
+* [xen] Fix error handling in `OS.Main.run` to enable a top-level
+  exception to signal to the Xen toolstack that it crashed (versus a
+  clean exit). This in turn lets `on_crash="preserve"` behaviour work
+  better in Xen VM description files.
+* Remove `mirage-xen.pc` file on uninstall.
+
+
+### irmin-0.9.2: 0.9.0 bug-fix
+
+Released on 2015-01-19 as [0.9.2](https://github.com/mirage/irmin/releases/tag/0.9.2). See <https://github.com/mirage/irmin> for full history.
+
+* Fix `S.of_head` for the HTTP client (regression introduced in 0.9.0)
+* Fix regression in displaying the store's graph over HTTP introduced by
+  0.9.0.
+* Fix regression in watch handling introduced in 0.9.0.
+* Fix regressions in `Views` introduced in 0.9.0. (thx @buzzheavyyear for
+  the report)
+* Always add a commit when calling a update function (`Irmin.update`
+  `Irmin.remove`, `Irmin.remove_rec`) even if the contents' store have
+  not changed.
+* The [head] argument of [Git_unix.config] now has a proper type.
+* Expose synchronisation functions for basic Irmin stores.
+* The user-provided merge function now takes optional values. The
+  function is now called much more often during recursive merges
+  (even if one of the 3 buckets of the 3-way merge function is not
+  filled -- in that case, it uses `None`).
+* Also expose the type of the keys in the type basic Irmin stores. Use
+  `('key, 'value) Irmint.t` instead of `'value Irmin.t`.
+* The user-defined `merge` functions now take the current filename being
+  merged as an additional argument.
+* The user-defined `Contents` should expose a `Path` sub-module. Keys of
+  the resulting Irmin store will be of type `Path.t`.
+* Fix `irmin init --help`. (#103)
+
+
+### ocaml-git-1.4.5: Support packed references
+
+Released on 2015-01-19 as [1.4.5](https://github.com/mirage/ocaml-git/releases/tag/1.4.5). See <https://github.com/mirage/ocaml-git> for full history.
+
+* Support `packed-refs` files, to read references packed by `git gc` (reported
+  by Gregory Tsipenyuk)
+* Fix the filesystem backend when TMPDIR is not on the same partition as the
+  Git repository (#51, patch from @vklquevs)
+
+### ocaml-git-1.4.4: More protocol support, more stability
+
+Released on 2015-01-12 as [1.4.4](https://github.com/mirage/ocaml-git/releases/tag/1.4.4). See <https://github.com/mirage/ocaml-git> for full history.
+
+* Support the smart HTTP Git protocol (#26)
+* Best-effort creation of files when expanding the index into the filesystem:
+  Skip the invalid filenames and continue. Users are expected to sanitize
+  their filenames if they want to use a non-bare repository (#11)
+* Overwrite changed file when expanding the index into the filesystem (#4)
+* Do not recompute the hash of blob files when expanding the index into the
+  filesystem. This help fixing a speed issue with non-bare repo with lots of
+  file.
+* Rename `{write,read}_cache` to `{write,read}_index`
+* Rename Cache to Index
+* Expose the protocol capabilities to the client
+* Support side-band-64k protocol capability (#44)
+* Fix support for git+ssh (#39)
+* Expose zlib compression level (#41)
+* Maintain a cache of opened files (#29, Pierre Chambart)
+
+### mirage-tcpip-v2.2.2: Restore ARP fixes
+
+Released on 2015-01-11 as [v2.2.2](https://github.com/mirage/mirage-tcpip/releases/tag/v2.2.2). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+Fixes from 2.0.0 relating to ARP race conditions were lost in a merge conflict, and have now been restored.
+
+### ocaml-cohttp-v0.15.1: Improved command-line tools and Lwt 2.4.7 support
+
+Released on 2015-01-11 as [v0.15.1](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.15.1). See <https://github.com/mirage/ocaml-cohttp> for full history.
+
+* Lwt 2.4.7 renamed `blit_bytes_string` to `blit_to_bytes`, so depend
+  on the newer API now. (#230)
+* Use `cmdliner` in all of the Lwt client and server binaries.  This gives
+  `cohttp-lwt-server` a nice Unix-like command-line interface now that
+  can be viewed with the `--help` option. (#218 via Runhang Li)
+* Improve `oasis` constraints and regenerate `opam` file (#229 via
+  Christophe Troestler).
+
+
+### shared-memory-ring-1.1.1: Traceability release
+
+Released on 2015-01-09 as [1.1.1](https://github.com/mirage/shared-memory-ring/releases/tag/1.1.1). See <https://github.com/mirage/shared-memory-ring> for full history.
+
+* add profiling/tracing support
+* add a "Front.wait_for_free" function to wait for n free slots
+* add opam file
+
 ### irmin-0.9.1: Support for Cohttp 0.14.0+ interface
 
 Released on 2014-12-26 as [0.9.1](https://github.com/mirage/irmin/releases/tag/0.9.1). See <https://github.com/mirage/irmin> for full history.
@@ -123,6 +218,28 @@ Released on 2014-12-20 as [0.9.0](https://github.com/mirage/irmin/releases/tag/0
 * Remove dependency to caml4
 * Fix writing contents at the root of the store (#73)
 * More efficient synchronization protocol between Irmin stores (#11)
+
+
+### ocaml-git-1.4.3: Fix caching and concurrent operations
+
+Released on 2014-12-19 as [1.4.3](https://github.com/mirage/ocaml-git/releases/tag/1.4.3). See <https://github.com/mirage/ocaml-git> for full history.
+
+* Fix regression introduced in 1.4.3 appearing when
+  synchronising big repositories (#38)
+* Fix concurrent read/write by using an atomic rename (#35)
+* Tree objects can also point to commits (@codinuum)
+* Reduce allocation (@codinuum)
+* Use LRU cache instead of an unbounde Hashtl
+  (code imported for Simon Cruanes's CCache implementation)
+* Remove the crazy unbounded caching in Git.FS. Use the LRU
+  everywhere (#22)
+* Fix fd leaking (#29)
+* Update to dolog.1.0
+* Remove dependency to camlp4
+* Remove lots of warnings
+* Move `Git_unix` and `Git_mirage` in their own subdirs as it
+  was causing issues to oasis (#5, Simon Cruanes)
+* Use `Bytes` instead of `String` (#5, Simon Cruanes)
 
 
 ### cowabloga-v0.0.9: Compatibility with Cohttp 0.14.x
