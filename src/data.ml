@@ -108,12 +108,20 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2014, 12, 31, 16, 0);
+        authors    = [anil];
+        subject    = "Mirage 2014 review: IPv6, TLS, Irmin, Jitsu and community growth";
+        body       = "2014-in-review.md";
+        permalink  = "2014-in-review";
+      };
+
       { updated    = date (2010, 10, 11, 15, 0);
         authors    = [anil];
         subject    = "Self-hosting Mirage website";
         body       = "welcome.md";
         permalink  = "self-hosting-mirage-website";
       };
+
       { updated    = date (2011, 04, 11, 15, 0);
         authors    = [anil];
         subject    = "A Spring Wiki Cleaning";
@@ -301,6 +309,8 @@ module Wiki = struct
     }
 
   let entries = [
+    weekly ~y:2015 ~m:1 ~d:14 ~a:amir;
+    weekly ~y:2014 ~m:12 ~d:10 ~a:amir;
     weekly ~y:2014 ~m:11 ~d:26 ~a:amir;
     weekly ~y:2014 ~m:11 ~d:12 ~a:amir;
     weekly ~y:2014 ~m:10 ~d:28 ~a:amir;
@@ -529,6 +539,27 @@ module Links = struct
   }
 
   let entries = [
+    { id="gfx-os-tech-to-watch";
+      uri=Uri.of_string "http://gfxmonk.net/2015/01/04/os-technologies-to-watch.html";
+      title="OS Technologies To Watch In 2015";
+      date=day(2015,01,04);
+      stream=blog;
+    };
+
+    { id="31c3-secure-modular-os-tls";
+      uri=Uri.of_string "http://media.ccc.de/browse/congress/2014/31c3_-_6443_-_en_-_saal_2_-_201412271245_-_trustworthy_secure_modular_operating_system_engineering_-_hannes_-_david_kaloper.html#video";
+      title="Trustworthy secure modular operating system engineering";
+      date=day(2014,12,27);
+      stream=talk;
+    };
+
+    { id="oups-dec2014-state-of-mirage";
+      uri=Uri.of_string "https://www.irill.org/videos/oups-december-2014/MirageOS";
+      title="OCaml Users Paris: State of the Mirage";
+      date=day(2014,12,09);
+      stream=talk;
+    };
+
     { id="techrepublic-unikernels";
       uri=Uri.of_string "http://www.techrepublic.com/article/unikernels-offer-a-stripped-down-alternative-to-linux/";
       title="Unikernels offer a stripped down alternative to Linux";

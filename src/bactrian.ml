@@ -19,4 +19,3 @@ let entry_for_is_mirage_broken_wikipage =
     body       = File "is_mirage_broken.md";
     permalink  = "is-mirage-broken";
   }
-
