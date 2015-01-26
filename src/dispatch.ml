@@ -66,7 +66,7 @@ module Main
 
         | ["about"]
         | ["community"] -> return (`Html (Pages.About.t read_tmpl))
-        | ["blogs"] -> return (`Html (Pages.Blogs.t read_tmpl))
+        | ["news"] -> return (`Html (Pages.News.t read_tmpl))
 
         | "releases" :: tl -> return (`Page (releases_dispatch tl))
         | "blog"     :: tl -> return (`Page (blog_dispatch tl))

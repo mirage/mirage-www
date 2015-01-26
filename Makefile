@@ -26,7 +26,7 @@ IPADDR ?= static
 
 FLAGS  ?=
 
-.PHONY: all configure build run clean feeds
+.PHONY: all configure build run clean news
 
 all:
 	@echo "To build this website, look in the Makefile and set"
@@ -39,10 +39,10 @@ configure:
 depend:
 	cd src && make depend
 
-feeds:
-	cd feeds && make run
+news:
+	cd news && make run
 
-build: 
+build: news
 	cd src && make build
 
 run:
