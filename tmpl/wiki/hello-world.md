@@ -416,7 +416,7 @@ are several ways that we might want to configure our networking:
 
 All of this can be manipulated via the `config.ml` file as usual, and
 we use the `NET` environment variable in the example below.
-The example below is from the [stackv4/](https://github.com/mirage/mirage-skeleton/tree/master/kv_ro)
+The example below is config.ml from the [stackv4/](https://github.com/mirage/mirage-skeleton/tree/master/stackv4)
 directory in `mirage-skeleton`.
 
 ```
@@ -424,37 +424,50 @@ open Mirage
 
 let handler = foreign "Unikernel.Main" (console @-> stackv4 @-> job)
 
-let direct =
-  let stack = direct_stackv4_with_default_ipv4 default_console tap0 in
-  handler $ default_console $ stack
+let net =
+  try match Sys.getenv "NET" with
+    | "direct" -> `Direct
+    | "socket" -> `Socket
+    | _ -> `Direct
+  with Not_found -> `Direct
 
-(* Only add the Unix socket backend if the configuration mode is Unix *)
-let socket =
-  let c = default_console in
-  match get_mode () with
-  | `Xen -> []
-  | `Unix -> [ handler $ c $ socket_stackv4 c [Ipaddr.V4.any] ]
+let dhcp =
+  try match Sys.getenv "DHCP" with
+    | "" -> false
+    | _ -> true
+  with Not_found -> false
+
+let stack =
+  match net, dhcp with
+  | `Direct, true -> direct_stackv4_with_dhcp default_console tap0
+  | `Direct, false -> direct_stackv4_with_default_ipv4 default_console tap0
+  | `Socket, _ -> socket_stackv4 default_console [Ipaddr.V4.any]
 
 let () =
-  add_to_ocamlfind_libraries ["mirage-http"];
   add_to_opam_packages ["mirage-http"];
-  register "stackv4" (direct :: socket)
+  add_to_ocamlfind_libraries ["mirage-http"];
+  register "stackv4" [
+    handler $ default_console $ stack;
+  ]
 ```
 
 This configuration shows how composable the network stack subsystem is, by
 simultaneously listening on a socket port (using the Linux kernel) *and* 
 a direct tuntap for the same webcode.  The definition of `handler` just
-adds a new `stackv4` device driver.  We then define the `direct` device
-driver to configure the network stack using the "default" ipv4 address
-(for convenience, Mirage assigns a default of `10.0.0.2` in this case;
-this is of course overridden for production deployments).
+adds a new `stackv4` device driver.  
 
-The `socket` handler checks to see if it's building a Unix target, and
-assigns the kernel socket version of the network stack to listen on all
-interfaces.  Crucially, both the socket and direct network stacks have
+The `net` handler checks to see if it's building for a socket or direct network stack.  
+Crucially, both the socket and direct network stacks have
 a very similar modular API which you can see in [mirage/types/V1.mli](https://github.com/mirage/mirage/blob/1.1.0/types/V1.mli#L512).
 This lets your applications be parameterized across either backend, or
 even use both simultaneously as in the above example.
+
+We then define the `dhcp` variable to configure the network stack to either use DHCP or 
+using the "default" ipv4 address
+(for convenience, Mirage assigns a default of `10.0.0.2` in this case;
+this is of course overridden for production deployments).
+The definition of `stack` then uses `dhcp` and `net` accordingly to set up the networking stack. 
+
 
 <br />
 <div class="panel callout">
@@ -478,12 +491,12 @@ $ sudo make run
 ```
 
 This Unix application is now listening simultaneously on the local
-HTTP port, and also via a direct tuntap interface.  Let's test the
-socket interface first by retrieving something via HTTP, probably best using a different terminal.
+port, and also via a direct tuntap interface.  Let's test the
+socket interface first by communicating via telnet, probably best using a different terminal.
 
 ```
-$ curl http://localhost
-hello mirage world!
+$ telnet localhost 8080
+hello!
 ```
 
 Next, let's configure the direct tuntap bridge so that we have a
@@ -496,14 +509,14 @@ PING 10.0.0.2 (10.0.0.2): 56 data bytes
 64 bytes from 10.0.0.2: icmp_seq=0 ttl=38 time=0.559 ms
 64 bytes from 10.0.0.2: icmp_seq=1 ttl=38 time=0.161 ms
 64 bytes from 10.0.0.2: icmp_seq=2 ttl=38 time=0.181 ms
-$ curl http://10.0.0.2
-hello mirage world!
+$ telnet 10.0.0.2 8080
+hello!
 ```
 
 The `ifconfig` call binds `10.0.0.1` as the gateway IP address to
 our unikernel.  We then test our userspace network stack by pinging
-it, and if that succeeds, the subsequent `curl` call now retrieves
-the requested HTTP page via the OCaml TCP/IP stack!
+it, and if that succeeds, the subsequent `telent` call now retrieves
+the request via the OCaml TCP/IP stack!
 
 At this point, recompiling a Xen unikernel is pretty straightforward.
 The configuration file already disables the socket-based job if a
@@ -531,9 +544,7 @@ vif = ['bridge=xenbr0']
 
 This tells Xen to bring up the virtual network interface and add it to the
 `xenbr0` bridge with a static `10.0.0.2` IPv4 address.  If you prefer DHCP
-instead, just edit the `config.ml` to replace the
-`direct_stackv4_with_default_ipv4` function call with
-`direct_stackv4_with_dhcp`, and rerun `mirage configure --xen`.  You can
+instead, just set `env DHCP="true"`, and rerun `mirage configure --xen`.  You can
 manually inspect the generated `main.ml` file to see what's happening under the
 hood with the functor applications (something that we'll explain further in a
 future tutorial!).
