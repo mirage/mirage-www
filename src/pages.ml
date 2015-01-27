@@ -71,6 +71,7 @@ module Index = struct
     lwt l2 = read_file read_fn "/intro-3.md" in
     lwt footer = read_file read_fn "/intro-f.html" in
     lwt recent = Cowabloga.Feed.to_html ~limit:12 feeds in
+    lwt latest_news = read_file read_fn "/latest_news.html" in 
     let content = <:html<
     <div class="row">
       <div class="small-12 columns">
@@ -83,6 +84,9 @@ module Index = struct
         <h4><a href="/updates/atom.xml"><i class="fa fa-rss"> </i></a>
          Recent Updates <small><a href="/updates/">(all)</a></small></h4>
         $recent$
+        <h4><i class="fa fa-rss"> </i>
+         Latest News <small><a href="/news/">(all)</a></small></h4>
+        $latest_news$
       </div>
     </div>
     <div class="row">

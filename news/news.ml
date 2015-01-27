@@ -30,11 +30,17 @@ let by_date (e1 : entry) (e2 : entry) : int =
 
 
 (*** HTML formatting ***)
+type news_item = {
+  title: string; 
+  author:string; 
+  date:int * string * int; 
+  uri:string
+}
 
-(* format an entry to HTML *)
-let news_item ((n: string), (e : entry)) =
+(* extract data required to display a news item *)
+let mk_news_item ((n: string), (e : entry)) : news_item =
   let date = e.updated in
-  let title = Html.of_string (string_of_text e.title) in
+  let title = string_of_text e.title in
   let uri = match e.links with
         [] -> ""
       | link :: _ -> Uri.to_string link.href
@@ -43,17 +49,32 @@ let news_item ((n: string), (e : entry)) =
   let day = day date in
   let year = year date in
   let month = month date |> string_of_month in
-  let date = Printf.sprintf "%s %d, %d" month day year in
+  {title; author=n; date=(day, month, year); uri}
+
+
+(* format a news item for news page *)
+let news_page_item ((n: string), (e : entry)) =
+  let {title; author; date=(day, month, year); uri} = mk_news_item (n,e) in
+  let date = Printf.sprintf "%d %s %d" day month year in
   <:html<
       <div>
-        <h4><a href="$str:uri$">$title$</a></h4>
-        <p>$str:n$ - <i>$str:date$</i></p>
+        <h4><a href="$str:uri$">$str:title$</a></h4>
+        <p><i>$str:author$</i> <i class="front_date">($str:date$)</i></p>
       </div>
-    <hr />
->>
+    <hr />&>>
+
+(* format a news item for home page *)
+let home_page_item ((n: string), (e : entry)) =
+  let {title; date=(day, month, year); uri} = mk_news_item (n,e) in
+  let date = Printf.sprintf "%d %s %d" day month year in
+  <:html<
+     <li><i class="fa-li fa fa-file-text-o"> </i>
+     <a href=$str:uri$>$str:title$</a>
+     <i class="front_date">($str:date$)</i></li>&>>
+
 
 (* format a feed an HTML list item *)
-let feeds_item (name, uri) =
+let syndication_item (name, uri) =
   <:html<
    <li><a href="$str:uri$">$str:name$</a></li>
 >>
@@ -74,16 +95,21 @@ let news_page feeds (es : (string * entry) list) =
              <a href="/community/">get in touch</a>.
           </p>
           <br />
-          $list:List.map news_item es$
+          $list:List.map news_page_item es$
        </div>
        <aside class="small-12 large-3 columns panel">
          <h5>Syndication</h5>
          <ul class="side-nav">
-          $list:List.map feeds_item feeds$
+          $list:List.map syndication_item feeds$
          </ul>
        </aside>
     </div>
     >>
+
+(* format the latest news as a list *)
+let latest_news es =
+  let ns = List.map (fun (n, e) -> home_page_item (n, e)) es in
+  <:html< <ul class="fa-ul">$list:ns$</ul>&>>
 
 
 (*** Feeds retrieval and processing ***)
@@ -112,6 +138,23 @@ let write_news_page feeds (es : (string * entry) list) : unit Lwt.t =
   Lwt_io.with_file
     Lwt_io.output fname (fun ch -> Lwt_io.fprint ch (Html.to_string html_page))
 
+(* write a list of latest news for homepage *)
+let write_latest_news es =
+  let take n xs =
+    let rec take_aux n xs acc =
+      match (n, xs) with
+        (n, _) when n <= 0 -> acc
+      | (_, []) -> acc
+      | (n, x::xs) -> take_aux (n-1) xs (x::acc)
+    in List.rev (take_aux n xs [])
+  in
+  let latest_news = latest_news (take 10 es) in
+  let fname = "../tmpl/latest_news.html" in
+  Lwt_io.with_file
+    Lwt_io.output fname (fun ch -> Lwt_io.fprint ch (Html.to_string latest_news))
+
+let write_news feeds es =
+  (write_news_page feeds es) <&> (write_latest_news es)
 let _ =
   let feeds = List.sort (fun (n1,_) (n2,_) -> compare n1 n2) Feeds.feeds in
-  Lwt_main.run (named_entries feeds >>= (write_news_page feeds))
+  Lwt_main.run (named_entries feeds >>= (write_news feeds))
