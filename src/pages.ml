@@ -37,7 +37,7 @@ module Global = struct
           <li><a href="/community/">Background</a></li>
           <li><a href="/community/">Contact</a></li>
           <li><a href="/community/#team">Team</a></li>
-          <li><a href="/community/#blogroll">Blogroll</a></li>
+          <li><a href="/news/">News</a></li>
           <li><a href="/links/">Links</a></li>
         </ul>
       </li>
@@ -71,6 +71,7 @@ module Index = struct
     lwt l2 = read_file read_fn "/intro-3.md" in
     lwt footer = read_file read_fn "/intro-f.html" in
     lwt recent = Cowabloga.Feed.to_html ~limit:12 feeds in
+    lwt latest_news = read_file read_fn "/latest_news.html" in 
     let content = <:html<
     <div class="row">
       <div class="small-12 columns">
@@ -83,6 +84,9 @@ module Index = struct
         <h4><a href="/updates/atom.xml"><i class="fa fa-rss"> </i></a>
          Recent Updates <small><a href="/updates/">(all)</a></small></h4>
         $recent$
+        <h4><i class="fa fa-rss"> </i>
+         Latest News <small><a href="/news/">(all)</a></small></h4>
+        $latest_news$
       </div>
     </div>
     <div class="row">
@@ -166,7 +170,6 @@ module About = struct
     lwt r = read_file read_fn "/about-community.md" in
     lwt b = read_file read_fn "/about-b.md" in
     lwt f = read_file read_fn "/about-funding.md" in
-    lwt br = read_file read_fn "/about-blogroll.md" in
     let content = <:html<
     <a name="about"> </a>
     <div class="row">
@@ -184,13 +187,23 @@ module About = struct
       <div class="small-12 medium-6 columns">$l$</div>
       <div class="small-12 medium-6 columns">$r$</div>
       <hr />
-    </div>
-    <a name="blogroll"> </a>
-    <div class="row">
-      <div class="small-12 medium-6 columns">$br$</div>
     </div> >> in
     return (Global.page ~title:"Community" ~headers:[] ~content)
 end
+
+
+module News = struct
+  let t read_fn =
+    lwt bs = read_file read_fn "news.html" in
+    let content = <:html<
+    <div class="row">
+      <div class="small-12 columns">$bs$</div>
+    </div>
+     >> in
+    return (Global.page ~title:"News" ~headers:[] ~content) 
+end
+
+
 
 module Releases = struct
 

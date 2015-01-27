@@ -1,0 +1,8 @@
+PKG cow
+PKG cow.syntax
+PKG cowabloga
+PKG lwt
+PKG cohttp
+PKG cohttp.lwt
+PKG xmlm
+PKG syndic

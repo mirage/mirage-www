@@ -48,7 +48,7 @@ module Main
         `Blog (blog_feed, Data.Blog.entries);
         `Wiki (wiki_feed, Data.Wiki.entries);
       ] in
-
+      
       lwt blog_dispatch = Blog.dispatch blog_feed Data.Blog.entries in
       lwt wiki_dispatch = Wiki.dispatch wiki_feed Data.Wiki.entries in
       lwt releases_dispatch = Pages.Releases.dispatch read_tmpl in
@@ -65,14 +65,14 @@ module Main
           return (`Html (Pages.Index.t ~feeds:updates_feeds read_tmpl))
 
         | ["about"]
-        | ["community"] ->
-          return (`Html (Pages.About.t read_tmpl))
+        | ["community"] -> return (`Html (Pages.About.t read_tmpl))
+        | ["news"] -> return (`Html (Pages.News.t read_tmpl))
 
         | "releases" :: tl -> return (`Page (releases_dispatch tl))
         | "blog"     :: tl -> return (`Page (blog_dispatch tl))
         | "links"    :: tl -> return (links_dispatch tl)
         | "updates"  :: tl -> return (`Page (updates_dispatch tl))
-
+                                
         | "docs" :: tl
         | "wiki" :: tl -> return (`Page (wiki_dispatch tl))
 
