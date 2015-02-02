@@ -260,11 +260,69 @@ There are a couple of known problems with the automatic propagation of exception
   Since exceptions contain stack traces, it is easy to discover where they originate and add the tagging then if missing.
   I suspect this problem will be much smaller than the problem with other systems, where the easiest (and therefore most common) thing to do is to discard the cause of the error and keep *only* the context ("Unknown error loading data").
 
+
+#### Handling exceptions
+
+Several people suggested that exceptions should be used only for fatal errors, need not be handled in any way, and should always simply terminate the unikernel.
+The problem with this approach is that by making exceptions fatal we turn every exception used in existing OCaml code into a security vulnerability.
+If exceptions are fatal then an attacker only needs to find some way of triggering some code path to throw an exception in order to launch a low-volume DoS attack.
+
+For example, my (Thomas Leonard's) upload service used `Int64.of_string` to read the `Content-Length` header on user uploads.
+If given a non-integer length it will log an exception but continue serving requests.
+I consider that to be correct behaviour for this service.
+
+Arguably, `Int64.of_string` should return an option or an error code, but it doesn't and there are plenty more cases like this.
+Some are built in and hard to remove, such as out-of-memory or division-by-zero.
+Many exist in libraries.
+Some more examples:
+
+- If I tried to tell the user what percentage of their file had been uploaded, they could crash my unikernel with a zero-length file.
+
+- If I accepted JSON, they could crash it with a malformed message (Yojson's `from_string` throws).
+
+- If I accepted XML, they could send invalid XML (xmlm throws).
+
+- Even if an XML parser reports errors with return codes, the unicode library it uses may throw.
+
+It is effectively impossible to write a secure (DoS-resistant) unikernel if every exception turns into a crash.
+
+In addition to the problem of DoS attacks, stopping the unikernel suddenly also means e.g. stopping all block device access mid-flow.
+For example, if the filesystem is updating the disk then it will stop part way through.
+While a good journalling FS will recover the filesystem on reboot, letting an attacker crash it at will doesn't seem sensible.
+
+In some cases a different trade off may be desirable.
+A service holding top-secret documents probably should stop if an exception is thrown while handling an HTTP request (or, at least, unplug the network device and log the problem).
+However, we shouldn't limit Mirage to this type of service only.
+
+In my opinion, therefore, Mirage code must not treat exceptions as fatal and must be prepared to handle (generically) any exception.
+Since Mirage code is already expected to handle the `Unknown` error return code, this shouldn't require any extra work.
+
+I believe this is easily achieved in most cases:
+
+- Any code that allocates a resource that must be freed manually (e.g. a grant ref) must ensure it is freed. This is usually done using a `with_*` function, or with `Lwt.finalize`.
+- Any code that puts the system temporarily into an invalid state (inside a lock) must ensure it is restored to a valid state before unlocking.
+- Code that runs a polling loop and invokes callbacks (e.g. an HTTP server) must catch and log any exceptions thrown by the callback, abort the operation safely (e.g. close the TCP connection) and continue processing requests.
+
+In particular, note that:
+
+- Code that does not cause side-effects automatically meets these requirements.
+- Transactional code (that calculates a new valid state and then atomically switches to that state) automatically meets these requirements.
+- It should never be necessary to catch specific exceptions to meet these requirements.
+
+Where possible, it is desirable to provide "Strong exception safety", which provides full "commit-or-rollback" semantics.
+
+For more information, [Exception-Safety in Generic Components: Lessons Learned from Specifying Exception-Safety for the C++ Standard Library][boost-exception-safety] is worth reading in full.
+
+Another suggestion was to use exceptions only in synchronous code and to catch them between yields.
+However, this relies on programmers remembering to catch exceptions in all cases, with no prompting, and this seems unrealistic to me.
+Conceptually, if synchronous threads can return values or raise exceptions then it seems reasonable that asynchronous threads should do the same.
+
+
 #### Proposal
 
-- Assume all code can raise exceptions, and that this must not break invariants or leak resources ([Basic exception safety][Exception safety]).
+- Document the fact that all code can raise exceptions, and that this must not break invariants or leak resources ([Basic exception safety][Exception safety]).
 - Use variant types when callers are likely to need to handle individual error cases (e.g. `Not_found` should not be an exception).
-- Use exceptions for all other errors.
+- Use exceptions for all other errors (e.g. `Unknown`).
 - Declare exceptions using `exception ... with sexp` (or `with sexp_of`). This ensures that values inside the exception can be displayed sensibly and logged.
 
 If you do want to force callers to handle a particular class of cases, consider using a variant with an exception (or `Error.t`) inside.
@@ -275,9 +333,11 @@ For example, an HTTP client might want to remind callers that network failures m
   val get : url -> [`Ok of data | `Network_error of exn] io
 ```
 
+[ There is no agreement yet on whether to have multiple error cases and match using OCaml's `#group` system, to have a single error variant (as shown above), or to use exceptions for these cases too. ThomasL: I don't have a strong opinion here, except that I think callers who don't care must be able to propagate errors easily. ]
+
 This means, we would:
 
-1. Convert all modules to raise exceptions rather than return error codes.
+1. Convert all modules to raise exceptions rather than return error codes in cases such as `Unknown` and `Unimplemented`.
 2. Remove all `error` types from `V1.mli`.
 3. List the (few) cases that need special handling as additional variants next to `Ok` (as we do now for `Eof`, for example). If there are no other cases, remove the `Ok` wrapper too.
 4. Remove the `Error` cases from return types.
@@ -364,7 +424,7 @@ Which is at least no worse than what we're doing now.
 
 [ I don't think it's necessary to support these cases now, but I list them in case someone knows an easy solution. ]
 
-It may be useful to distinguish between exceptions due to bugs (e.g. assertion failure), which should log a stack trace and possibly abort the unikernel, and exceptions that merely indicate that an operation can't go ahead (disk full, network down), which should be logged without a stack trace and should not stop the system.
+It may be useful to distinguish between exceptions due to bugs (e.g. assertion failure), which should log a stack trace, and exceptions that merely indicate that an operation can't go ahead (disk full, network down), which should be logged without a stack trace.
 
 It may be useful to indicate when an error is safe to display to an untrusted client vs one only the admin should see.
 "System too busy; try again later" is an example.
@@ -374,7 +434,7 @@ It would be useful to include an opaque tag in such messages so that the error c
 In a truly secure system, error details should be hidden not only from remote users but also from other components of the program.
 This can be done using "sealed exceptions", whose payload can be read only by the logging system.
 
-Sometimes it's useful to organise errors into a hierarchy, allowing callers to catch e.g. `Exception`, `Network_error`, `TCP_error`, `TCP_connection_refused`, etc.
+Sometimes it's useful to organise errors into a hierarchy, allowing callers to catch e.g. `Exception`, `Network_error`, `TCP_error`, `TCP_connection_refused`, etc (so that a caller choosing to catch e.g. `TCP_error` will also catch the `TCP_connection_refused` subtype).
 I don't see any way to do this in OCaml.
 
 
@@ -382,3 +442,4 @@ I don't see any way to do this in OCaml.
 [functor-exceptions]: http://lists.xenproject.org/archives/html/mirageos-devel/2014-07/msg00070.html
 [rwo-errors]: https://realworldocaml.org/v1/en/html/error-handling.html
 [Exception safety]: http://en.wikipedia.org/wiki/Exception_safety
+[boost-exception-safety]: http://www.boost.org/community/exception_safety.html
