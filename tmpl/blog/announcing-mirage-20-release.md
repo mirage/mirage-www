@@ -1,3 +1,8 @@
+<small>
+  This work funded in part by the EU FP7 User-Centric Networking project, Grant
+  No. 611001.
+</small>
+
 The [first release](http://openmirage.org/blog/announcing-mirage10) of Mirage back in December 2013 introduced the prototype
 of the [unikernel concept](http://queue.acm.org/detail.cfm?id=2566628), which realised the promise of a safe,
 flexible mechanism to build highly optimized software stacks purpose-built for deployment in the public cloud (more [background](http://openmirage.org/wiki/overview-of-mirage) on this).
