@@ -1,3 +1,8 @@
+<small>
+  This work funded in part by the EU FP7 User-Centric Networking project, Grant
+  No. 611001.
+</small>
+
 An action-packed year has flown by for Mirage, and it's time for a little recap of what's been happening and the plans for the new year.
 We announced [Mirage 1.0](http://openmirage.org/blog/announcing-mirage10) just over a year ago, and 2014 also saw a major [2.0 summer release](http://openmirage.org/blog/announcing-mirage-20-release) and the growth of a developer community that have been building support for IPv6, Transport Layer Security, on-demand spawning, profiling and much more.  There have been 205 individual library [releases](http://openmirage.org/releases), 25 [presentations](http://decks.openmirage.org), and lots of [online chatter](http://openmirage.org/links) through the year, so here follows a summary of our major activities recently.
 
