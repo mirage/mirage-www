@@ -4,7 +4,6 @@
 * *Jon Crowcroft*, University of Cambridge, [cl.cam.ac.uk](http://www.cl.cam.ac.uk/~jac22/)
 * *David Kaloper*, [github.com](https://github.com/pqwy)
 * *Steven Hand*, [cl.cam.ac.uk](http://www.cl.cam.ac.uk/~smh22/)
-* *Thomas Leonard*, University of Cambridge, [github.com](https://github.com/talex5)
 * *Jon Ludlam*, Citrix Systems R&D, [jon.recoil.org](http://jon.recoil.org/)
 * *Hannes Mehnert*, [github.com](https://github.com/hannesm)
 * *Mindy Preston*, [homepage](http://www.somerandomidiot.com/)
