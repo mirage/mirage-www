@@ -67,8 +67,8 @@ let load x = if ...
 ```
 
 The first two are very similar, as if the exception raised in the first example reaches Lwt it will be turned into a failed thread.
-The difference is that, depending on exactly how the threads are scheduled, a raised exception might make it back to the caller as an exception or as a failed thread. A buggy caller might fail to handle one or the other case (though using a `try_lwt` block will handle both correctly).
-Therefore, using the second form instead of the first is preferred.
+The difference is that, depending on exactly how the threads are scheduled, a raised exception might make it back to the caller as an exception or as a failed thread.
+Although both cases should be handled correctly, using the second form instead of the first is preferred as it makes the behaviour predictable.
 
 The Mirage interfaces generally prefer the third option.
 Most of the module types in `V1` include an `error` type. Some leave it abstract, while others define it in various ways:
@@ -198,6 +198,7 @@ There are several systems we could use:
 2. Interfaces define abstract error types, plus functions to convert to a `string` or `sexp`.
 3. All interfaces use the single general-purpose `Error.t` type.
 4. Interfaces throw exceptions.
+5. Interfaces define a selection of *private* error types, which concrete implementations can extend.
 
 System 2 (using abstract types) has the advantage that we can support this without breaking existing APIs (updated code still satisfies the old API):
 
@@ -231,13 +232,49 @@ module type BLOCK = sig
 
 It may be useful to predefine some common errors (e.g. `Connection_refused`) as exceptions in `mirage-types`.
 
+System 5 introduces multiple error types and formatters:
+
+```
+module type BLOCK = sig
+  type unimplemented
+  type disconnected
+  type is_read_only
+
+  type read_error = private [>
+    | `Unimplemented of unimplemented
+    | `Disconnected of disconnected
+  ]
+
+  type write_error = private [> read_error |
+    | `Is_read_only of is_read_only
+  ]
+
+  type error = private [> read_error | write_error ]
+
+  val pp_error : formatter -> error -> string
+
+  val error_of_write_error : write_error -> error
+  val error_of_read_error : read_error -> error
+
+  val read :
+    t -> int64 -> page_aligned_buffer list ->
+    (int, [> read_error]) result
+```
+
+The types must be private to allow modules to add extra error types.
+Each standard constructor includes an opaque payload, allowing the implementation to store extra details about each error.
+The cast functions are needed because OCaml doesn't provide a way to say that one private type is a subtype of another.
+[ The system 5 example is my best guess based on various mailing list comments; an advocate of this system should confirm this is what is intended. ]
+
+
 Looking back at the three uses above:
 
 - For providing human readable errors, any system except 1 will do.
-- Allowing programs to detect and handle certain errors specially works best with systems 1 and 4.
+- Allowing programs to detect and handle certain errors specially works best with systems 1, 4 and 5.
   System 2 only works if callers require a particular concrete implementation, breaking the abstraction.
   System 3 provides (I think) no easy way to match on the type of error.
 - For signalling errors in order to trigger rollback or freeing of resources, any system will do.
+  To rollback on error, a single exception handler will do with system 4, while the other systems require both an exception handler and something to detect error codes.
 
 It is perhaps worth noting that handling specific error cases specially is extremely rare.
 I don't think I've seen any examples of this feature being used with the `Error` variants in the Mirage code-base.
@@ -245,20 +282,39 @@ I don't think I've seen any examples of this feature being used with the `Error`
 In general, if code handles an exception, that's a good argument that it should have been a return code instead.
 However, having the exceptions available is useful to hot-patch around problems until the API is fixed.
 
-System 4 is good for reducing code clutter, and should be slightly more efficient due to avoiding allocation of `Ok` values.
+Systems 4 and 5 seem to be the only popular options.
 
-There are a couple of known problems with the automatic propagation of exceptions however:
+System 4 (exceptions) problems:
 
 - If a generic exception is raised then it may not be clear whether it comes from the direct module being used or from some module it is using internally.
   For example, if a `KV_RO` raises `Permission_denied` then it might mean that the user doesn't have permission to read that key, or that the `KV_RO` doesn't have permission to read the underlying block device.
-  Since handling specific exceptions is rare and ambiguous cases are also rare, this is unlikely to be a problem in practice.
   It is possible to scope exceptions to modules, instead of using generic ones, if desired (see [functor-exceptions][], although it presents this feature as a possible source of confusion by having two exceptions with the same name).
 
 - By the time an exception is displayed, the context for it may have been lost.
   For example, it may not be clear to the user seeing "Permission denied" what was being accessed or why.
   The `Error.tag` function can be used to attach context to an `Error.t` and the same can be done for exceptions (0install does this).
-  Since exceptions contain stack traces, it is easy to discover where they originate and add the tagging then if missing.
-  I suspect this problem will be much smaller than the problem with other systems, where the easiest (and therefore most common) thing to do is to discard the cause of the error and keep *only* the context ("Unknown error loading data").
+
+- If exceptions are always *raised* (not just returned) then it is difficult to distinguish between expected errors (e.g. network connection refused) and programming errors.
+  Having expected errors returned as e.g. `Network_error of exn` avoids this problem (the caller can then simply raise it if they think it should be considered a programming error in this case).
+
+- OCaml does not enforce having a pretty printer for every exception.
+  Could we enforce that every exception is declared with `with sexp` to ensure it can be displayed?
+
+System 5 (polymorphic variants) problems:
+
+- There is a performance penalty to wrapping every success value in an `Ok` variant, and a cost to matching on `Error` at every step.
+
+- Programmers often don't care about error cases when writing code. If the error is considered "unlikely" then they often insert poor handling (e.g. `assert false` or `failwith "Error!"`).
+  When the error does one day occur, it will be very difficult to track down.
+  When using many libraries, the error must be correctly propagated at every step (`P(error_seen) = P(one_step_correct) ^ n_steps`).
+
+- Code that wants to take action on error (e.g. rolling back or moving to a "failed" state) must consider two code paths (error codes and exceptions).
+  It is tempting to handle only one case, but they should almost always be treated identically.
+
+- The code becomes cluttered and the system is difficult to explain to new users.
+
+In summary, the typical failure case (lazy/wrong programmer) for system 4 is to give a specific error message without context ("I/O error writing to sector 4000 on disk X"), without saying why it was doing that.
+The typical failure case for system 5 is to give the context without the specifics ("Error handling HTTP request").
 
 
 #### Handling exceptions
