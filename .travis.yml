@@ -1,5 +1,5 @@
 language: c
-install: wget https://raw.githubusercontent.com/mor1/ocaml-travisci-skeleton/master/.travis-mirage.sh
+install: wget https://raw.githubusercontent.com/ocaml/ocaml-travisci-skeleton/master/.travis-mirage.sh
 script: bash -ex .travis-mirage.sh
 env:
   matrix:
