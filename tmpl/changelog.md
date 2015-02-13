@@ -1,3 +1,127 @@
+### mirage-xen-minios-v0.7.0: Disable stack protection on x86_64
+
+Released on 2015-02-12 as [v0.7.0](https://github.com/mirage/mirage-xen-minios/releases/tag/v0.7.0). See <https://github.com/mirage/mirage-xen-minios> for full history.
+
+Stack protection doesn't work yet on x86_64, so explicitly disable it to prevent boot-time crashes on systems that enable it by default on their host toolchains (like Ubuntu).
+
+### ocaml-magic-mime-v1.0.0: Initial public release
+
+Released on 2015-02-08 as [v1.0.0](https://github.com/mirage/ocaml-magic-mime/releases/tag/v1.0.0). See <https://github.com/mirage/ocaml-magic-mime> for full history.
+
+This library contains a database of MIME types that maps filename extensions
+into MIME types suitable for use in many Internet protocols such as HTTP or
+e-mail.  It is generated from the `mime.types` file found in Unix systems, but
+has no dependency on a filesystem since it includes the contents of the
+database as an ML datastructure.
+
+
+### ocaml-cow-v1.2.0: Now with valid HTML5 Output
+
+Released on 2015-02-06 as [v1.2.0](https://github.com/mirage/ocaml-cow/releases/tag/v1.2.0). See <https://github.com/mirage/ocaml-cow> for full history.
+
+* When serializing HTML, only self-close void elements.
+* New `Html.doctype` value of the HTML5 DOCTYPE.
+* New `Html.output` and `Html.output_doc` functions for generic polyglot output.
+* Atom support is now deprecated in favor of Syndic
+* New `Html.img` constructor for easy creation of <img> tags
+* New `Html.a` constructor for easy creation of <a> tags
+* Deprecate function `Html.html_of_link` and type `Html.link`
+
+### irmin-0.9.3: 
+
+Released on 2015-02-04 as [0.9.3](https://github.com/mirage/irmin/releases/tag/0.9.3). See <https://github.com/mirage/irmin> for full history.
+
+* Fix the invalidation of the view caches (report by @gregtatcam).
+  This was causing some confusing issues where views' sub-keys where
+  not properly updated to to their new values when the view is merged
+  back to the store. The issues is a regression introduced in 0.9.0.
+* Add post-commit hooks for the HTTP server.
+* Add `Irmin.watch_tags` to monitor tag creation and desctructions.
+* Fix `Irmin.push`
+* Add `Irmin.with_hrw_view` to easily use transactions.
+* Add a phantom type to `Irmin.t` to denote the store capabilities
+  read-only, read-write or branch-consistent.
+* The `~old` argument of a merge function can now be optional to
+  signify that there is no common ancestor.
+* Expose `Irmin.with_rw_view` to create a temporary, in-memory and
+  mutable view of the store. This can be used to perform atomic
+  operations in the store (ie. non-persistent transactions).
+* Simplify the view API again
+* Expose the task of previous commits. This let the user access
+  the Git timestamp and other info such as the committer name (#90)
+* The user-defined merge functions now takes an `unit -> 'a result
+  Lwt.t` argument for `~old` (instead of `'a`). Evalutating the
+  function will compute the least-common ancestors. Merge functions
+  which ignore the `old` argument don't have to pay the cost of
+  computing the lcas anymore.
+* Expose `S.lcas` to get the least common ancestors
+* Update to ocaml-git 1.4.6
+
+### ezjsonm-0.4.1: avoid manual coercion 
+
+Released on 2015-02-04 as [0.4.1](https://github.com/mirage/ezjsonm/releases/tag/0.4.1). See <https://github.com/mirage/ezjsonm> for full history.
+
+* Use polymorphic variants subtyping to avoid manual coercion in the
+  API (#11, patch from Julien Sagot)
+
+### ocaml-git-1.4.8: Fix bug in LRU cache, flush the `cat-file` commands
+
+Released on 2015-02-04 as [1.4.8](https://github.com/mirage/ocaml-git/releases/tag/1.4.8). See <https://github.com/mirage/ocaml-git> for full history.
+
+* Fix LRU cache: SHA1 should be unique in the cache (regression
+  introduced in 1.4.3). This was causing confusing read results
+  under load.
+* Reading objects now updates the LRU cache
+* Fix a regression in `ogit cat-file` which were displaying nothing
+  for small objects.
+
+
+### ocaml-git-1.4.7: Fix for non-bare repositories, remove stdout/stderr messages
+
+Released on 2015-02-03 as [1.4.7](https://github.com/mirage/ocaml-git/releases/tag/1.4.7). See <https://github.com/mirage/ocaml-git> for full history.
+
+* Fix the filesystem updates for non-bare repositories (reported by @avsm)
+* `Git.write_index` now takes an optional `index` argument
+* Index entries should be fixed alphabetically
+* Remove raw printf (#60)
+* More flexibility on where to write temp files. The directory name can be
+  configured by write calls, and the default is `OGITTMPDIR` if set,
+  then `Filename.get_temp_dir_name` -- as it was in 1.4.5, see #51
+
+
+### ocaml-nocrypto-0.3.1: The Ditch-Your-OS minor
+
+Released on 2015-02-01 as [0.3.1](https://github.com/mirleft/ocaml-nocrypto/releases/tag/0.3.1). See <https://github.com/mirleft/ocaml-nocrypto> for full history.
+
+Now with Mirage/Xen compatibility. Shout-out to @talex5!
+
+### ocaml-fat-0.10.2: Narrow dependency on IO_PAGE signature
+
+Released on 2015-01-31 as [0.10.2](https://github.com/mirage/ocaml-fat/releases/tag/0.10.2). See <https://github.com/mirage/ocaml-fat> for full history.
+
+* Fixed destroy, which previously would overwrite the entry with
+  uninitialised data, which might not set the deleted flag.
+* Require only `get_buf` from `IO_PAGE`
+* Fix travis.
+* test: use OUnit's arg parser.
+* return errors from size rather than raising Fs_error.
+
+### ocaml-cstruct-v1.6.0: Add `fillv` function
+
+Released on 2015-01-29 as [v1.6.0](https://github.com/mirage/ocaml-cstruct/releases/tag/v1.6.0). See <https://github.com/mirage/ocaml-cstruct> for full history.
+
+Add helper function to transfer from a list of buffers to a destination buffer.
+
+### ocaml-git-1.4.6: Improve LRU settings and add the `git.top` package
+
+Released on 2015-01-29 as [1.4.6](https://github.com/mirage/ocaml-git/releases/tag/1.4.6). See <https://github.com/mirage/ocaml-git> for full history.
+
+* Expose `Git.Value.Cache.set_size` to change the LRU cache size
+* Reduce the default LRU cache size (in 1.4.4 it was set to 64k, now it's 512)
+* More precise type for commit dates
+* Add `git.top` to load toplevel printers for Git values
+
+
 ### mirage-v2.2.1: Fix external C library linking and command line bug fixes
 
 Released on 2015-01-29 as [v2.2.1](https://github.com/mirage/mirage/releases/tag/v2.2.1). See <https://github.com/mirage/mirage> for full history.
@@ -489,6 +613,17 @@ New features and bug fixes:
 * Flush the response body to the network by default, rather than
   buffering by default.  The `?flush` optional parameter can still
   be explicitly set to false if flushing is not desired (#205).
+
+
+### ezjsonm-0.4.0: Add intXX combinatores, bug fixes for option and unit types
+
+Released on 2014-12-17 as [0.4.0](https://github.com/mirage/ezjsonm/releases/tag/0.4.0). See <https://github.com/mirage/ezjsonm> for full history.
+
+* Clean-up the typed representation of serializable JSON
+    (#5, report and patch from Rudi Grinberg)
+* add int32/int64/triple combinators
+* fix a bug with the option types
+* fix the type of the `unit` combinator
 
 
 ### mirage-xen-minios-v0.5.0: Build Openlibm with Mini-OS CFLAGS

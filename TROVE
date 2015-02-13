@@ -1,6 +1,7 @@
 avsm/ezxmlm
 avsm/ocaml-github
 djs55/ocaml-xenstore-clients
+mirage/ocaml-magic-mime
 mirage/cowabloga
 mirage/dyntype
 mirage/ezjsonm
