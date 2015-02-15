@@ -18,7 +18,7 @@ Also note that the `mirage` configuration and deployment tool relies on the `xl`
 
 ## Using OPAM
 
-We use [OPAM](http://opam.ocaml.org) to manage OCaml compiler and library installations. It tracks library versions across upgrades and will recompile dependencies automatically if they get out of date. Please refer to OPAM [documentation](https://opam.ocaml.org) if you want to know more, but we will cover the basics to get you started here. Install OPAM for your operating system by following its [Quick Install Guide](http://opam.ocaml.org/doc/Quick_Install.html).
+We use [OPAM](http://opam.ocaml.org) to manage OCaml compiler and library installations. It tracks library versions across upgrades and will recompile dependencies automatically if they get out of date. Please refer to OPAM [documentation](https://opam.ocaml.org) if you want to know more, but we will cover the basics to get you started here. Install OPAM for your operating system by following its [Quick Install Guide](http://opam.ocaml.org/doc/Install.html).
 
 Note that you require **OPAM 1.1 or greater** to use with Mirage. Some distribution packages provide earlier versions; check with
 
