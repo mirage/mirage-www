@@ -1,5 +1,27 @@
 open Mirage
 
+(** [split c s] splits string [s] at every occurrence of character [c] *)
+let split c s =
+  let rec aux c s ri acc =
+    (* half-closed intervals. [ri] is the open end, the right-fencepost.
+       [li] is the closed end, the left-fencepost. either [li] is
+       + negative (outside [s]), or
+       + equal to [ri] ([c] not found in remainder of [s]) ->
+         take everything from [ s[0], s[ri] )
+       + else inside [s], thus an instance of the separator ->
+         accumulate from the separator to [ri]: [ s[li+1], s[ri] )
+         and move [ri] inwards to the discovered separator [li]
+    *)
+    let li = try String.rindex_from s (ri-1) c with Not_found -> -1 in
+    if li < 0 || li == ri then (String.sub s 0 ri) :: acc
+    else begin
+      let len = ri-1 - li in
+      let rs = String.sub s (li+1) len in
+      aux c s li (rs :: acc)
+    end
+  in
+  aux c s (String.length s) []
+
 let mkfs fs =
   let mode =
     try match String.lowercase (Unix.getenv "FS") with
