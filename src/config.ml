@@ -38,17 +38,11 @@ let https =
     with Not_found -> false
   in
   let staticip =
-    let address = try match Sys.getenv "ADDR" with
-      | "" -> None
-      | ip -> Ipaddr.V4.of_string_exn ip
-    in
-    let netmask = try match Sys.getenv "MASK" with
-      | "" -> None
-      | nm -> Ipaddr.V4.of_string_exn nm
-    in
-    let gateways = try match Sys.getenv "GWS" with
-      | "" -> None
-      | gws -> List.map Ipaddr.V4.of_string_exn gws
+    let address = Sys.getenv "ADDR" |> Ipaddr.V4.of_string_exn in
+    let netmask = Sys.getenv "MASK" |> Ipaddr.V4.of_string_exn in
+    let gateways =
+      let split s = Str.(split (regexp " ")) s in
+      Sys.getenv "GWS" |> split |> List.map Ipaddr.V4.of_string_exn
     in
     { address; netmask; gateways }
   in
