@@ -1,11 +1,5 @@
 open Mirage
 
-let mkip address netmask gateways =
-  let address = Ipaddr.V4.of_string_exn address in
-  let netmask = Ipaddr.V4.of_string_exn netmask in
-  let gateways = List.map Ipaddr.V4.of_string_exn gateways in
-  { address; netmask; gateways }
-
 let mkfs fs =
   let mode =
     try match String.lowercase (Unix.getenv "FS") with
@@ -23,7 +17,6 @@ let mkfs fs =
 
 let filesfs = mkfs "../files"
 let tmplfs = mkfs "../tmpl"
-let staticip = mkip "128.232.97.54" "255.255.255.224" [ "128.232.97.33" ]
 
 let https =
   let net =
@@ -43,6 +36,21 @@ let https =
       | "1" | "true" | "yes" -> true
       | _ -> false
     with Not_found -> false
+  in
+  let staticip =
+    let address = try match Sys.getenv "ADDR" with
+      | "" -> None
+      | ip -> Ipaddr.V4.of_string_exn ip
+    in
+    let netmask = try match Sys.getenv "MASK" with
+      | "" -> None
+      | nm -> Ipaddr.V4.of_string_exn nm
+    in
+    let gateways = try match Sys.getenv "GWS" with
+      | "" -> None
+      | gws -> List.map Ipaddr.V4.of_string_exn gws
+    in
+    { address; netmask; gateways }
   in
   let stack console =
     match deploy with
