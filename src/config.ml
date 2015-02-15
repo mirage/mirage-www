@@ -54,7 +54,7 @@ let https =
         let address = Sys.getenv "ADDR" |> Ipaddr.V4.of_string_exn in
         let netmask = Sys.getenv "MASK" |> Ipaddr.V4.of_string_exn in
         let gateways =
-          Sys.getenv "GWS" |> split ' ' |> List.map Ipaddr.V4.of_string_exn
+          Sys.getenv "GWS" |> split ':' |> List.map Ipaddr.V4.of_string_exn
         in
         { address; netmask; gateways }
       in
