@@ -41,36 +41,38 @@ let filesfs = mkfs "../files"
 let tmplfs = mkfs "../tmpl"
 
 let https =
-  let net =
-    try match Sys.getenv "NET" with
-      | "socket" -> `Socket
-      | _        -> `Direct
-    with Not_found -> `Direct
-  in
-  let dhcp =
-    try match Sys.getenv "DHCP" with
-      | "1" | "true" | "yes" -> true
-      | _  -> false
-    with Not_found -> false
-  in
   let deploy =
     try match Sys.getenv "DEPLOY" with
       | "1" | "true" | "yes" -> true
       | _ -> false
     with Not_found -> false
   in
-  let staticip =
-    let address = Sys.getenv "ADDR" |> Ipaddr.V4.of_string_exn in
-    let netmask = Sys.getenv "MASK" |> Ipaddr.V4.of_string_exn in
-    let gateways =
-      Sys.getenv "GWS" |> split ' ' |> List.map Ipaddr.V4.of_string_exn
-    in
-    { address; netmask; gateways }
-  in
   let stack console =
     match deploy with
-    | true -> direct_stackv4_with_static_ipv4 console tap0 staticip
+    | true ->
+      let staticip =
+        let address = Sys.getenv "ADDR" |> Ipaddr.V4.of_string_exn in
+        let netmask = Sys.getenv "MASK" |> Ipaddr.V4.of_string_exn in
+        let gateways =
+          Sys.getenv "GWS" |> split ' ' |> List.map Ipaddr.V4.of_string_exn
+        in
+        { address; netmask; gateways }
+      in
+      direct_stackv4_with_static_ipv4 console tap0 staticip
+
     | false ->
+      let net =
+        try match Sys.getenv "NET" with
+          | "socket" -> `Socket
+          | _        -> `Direct
+        with Not_found -> `Direct
+      in
+      let dhcp =
+        try match Sys.getenv "DHCP" with
+          | "1" | "true" | "yes" -> true
+          | _  -> false
+        with Not_found -> false
+      in
       match net, dhcp with
       | `Direct, false -> direct_stackv4_with_default_ipv4 console tap0
       | `Direct, true  -> direct_stackv4_with_dhcp console tap0
