@@ -52,6 +52,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 *Calls take place every two weeks and are announced on the
 [mailing list](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel).*
 
+* Weekly call [2015-02-25](/wiki/weekly-2015-02-25) on Races, Testing, Deployment, Pioneers and Roadmapping.
 * Weekly call [2015-02-11](/wiki/weekly-2015-02-11) on Improving quality, error handling, TLS merge and GSoC.
 * Weekly call [2015-01-28](/wiki/weekly-2015-01-28) on OPAM 1.2, FOSDEM, new URL and 3.0 meta-planning.
 * Weekly call [2015-01-14](/wiki/weekly-2015-01-14) on Project name, 4.02.1 support, TLS on Xen and Error handling.
