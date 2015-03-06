@@ -548,6 +548,27 @@ module Links = struct
   }
 
   let entries = [
+    { id="cam-news-nymote";
+      uri=Uri.of_string "http://www.cambridge-news.co.uk/personal-cloud-private-data-reality-thanks-Nymote/story-26074338-detail/story.html";
+      title="A personal cloud for your private data could become a reality thanks to Nymote";
+      date=day(2015,02,24);
+      stream=press;
+    };
+
+    { id="acolyer-mergeable-structures";
+      uri=Uri.of_string "http://blog.acolyer.org/2015/01/14/mergeable-persistent-data-structures/";
+      title="Mergeable persistent data structures";
+      date=day(2015,01,14);
+      stream=blog;
+    };
+
+    { id="acolyer-unikernels";
+      uri=Uri.of_string "http://blog.acolyer.org/2015/01/13/unikernels-library-operating-systems-for-the-cloud/";
+      title="Unikernels: Library Operating Systems for the Cloud";
+      date=day(2015,01,13);
+      stream=blog;
+    };
+
     { id="gfx-os-tech-to-watch";
       uri=Uri.of_string "http://gfxmonk.net/2015/01/04/os-technologies-to-watch.html";
       title="OS Technologies To Watch In 2015";
