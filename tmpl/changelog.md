@@ -1,3 +1,117 @@
+### mirage-console-v2.1.3: Simplify build and install `mirage-console-cli` tool
+
+Released on 2015-03-08 as [v2.1.3](https://github.com/mirage/mirage-console/releases/tag/v2.1.3). See <https://github.com/mirage/mirage-console> for full history.
+
+* Fix installation of Unix library defaults by splitting out the base Unix dependency and the Xenctrl ones.  This needs a new `--enable-xenctrl` flag that explicitly depends on the Xen libraries being installed. (#36)
+* Install the `mirage-console-cli` executable if it is built.
+
+### mirage-fs-unix-v1.1.4: Add explicit `connect` function, and modernise Travis scripts
+
+Released on 2015-03-08 as [v1.1.4](https://github.com/mirage/mirage-fs-unix/releases/tag/v1.1.4). See <https://github.com/mirage/mirage-fs-unix> for full history.
+
+* Add explicit `connect` signature into interface (#8).
+* Add an `opam` file for OPAM 1.2 pinning workflow.
+* Add Travis CI unit test file.
+
+### mirage-console-v2.1.2: Add explicit `connect` function, and modernise Travis scripts
+
+Released on 2015-03-08 as [v2.1.2](https://github.com/mirage/mirage-console/releases/tag/v2.1.2). See <https://github.com/mirage/mirage-console> for full history.
+
+* Add an explicit `connect` function to interface. (#34)
+* Modernise Travis scripts with central sourcing.
+* Only build Unix executable if relevant `xenctrl` libraries are installed.
+
+### mirage-block-unix-v1.2.2: Add an explicit `connect` function, and OPAM pinning support
+
+Released on 2015-03-08 as [v1.2.2](https://github.com/mirage/mirage-block-unix/releases/tag/v1.2.2). See <https://github.com/mirage/mirage-block-unix> for full history.
+
+* Expose an explicit `connect` function in the interface signature. (#20)
+* Modernise Travis scripts with centralised ones.
+* Add local `opam` file for OPAM 1.2 workflow.
+
+
+### mirage-block-xen-v1.3.1: Add `connect` method to interface
+
+Released on 2015-03-07 as [v1.3.1](https://github.com/mirage/mirage-block-xen/releases/tag/v1.3.1). See <https://github.com/mirage/mirage-block-xen> for full history.
+
+* Add an explicit `connect` to the interface signature (#35)
+
+
+### mirage-net-xen-v1.4.0: Add an explicit `connect` function
+
+Released on 2015-03-07 as [v1.4.0](https://github.com/mirage/mirage-net-xen/releases/tag/v1.4.0). See <https://github.com/mirage/mirage-net-xen> for full history.
+
+* Add explicit `connect` function to interface signature (#19)
+
+### mirage-net-unix-v2.2.0: Support tuntap persistent interfaces
+
+Released on 2015-03-07 as [v2.2.0](https://github.com/mirage/mirage-net-unix/releases/tag/v2.2.0). See <https://github.com/mirage/mirage-net-unix> for full history.
+
+* Leave the tuntap persistence flag unchanged (#9, from @infidel)
+* Add explicit `connect` function to interface (#10)
+
+### ocaml-cow-v1.2.1: Support new ezjsonm in syntax extension
+
+Released on 2015-03-05 as [v1.2.1](https://github.com/mirage/ocaml-cow/releases/tag/v1.2.1). See <https://github.com/mirage/ocaml-cow> for full history.
+
+* Fix compatibility of the `json` syntax extension with `ezjsonm` version 0.4 (#68)
+
+### mirage-platform-v2.2.2: Add generic engine hooks and restore GC tracing support
+
+Released on 2015-03-04 as [v2.2.2](https://github.com/mirage/mirage-platform/releases/tag/v2.2.2). See <https://github.com/mirage/mirage-platform> for full history.
+
+* Add generic hooks to mainloop to support background tasks. (#120)
+* [xen] Report trace events for GC again; this was disabled temporarily
+  in the 2.2.0 release. (#119)
+
+### mirage-net-macosx-v1.1.0: Interface compatibility improvements with newer Mirage libraries
+
+Released on 2015-03-04 as [v1.1.0](https://github.com/mirage/mirage-net-macosx/releases/tag/v1.1.0). See <https://github.com/mirage/mirage-net-macosx> for full history.
+
+- Add an explicit `connect` function to interface (#1).
+- Support the `Io_page` 1.4.0+ API. (#2).
+
+
+### mirage-tcpip-v2.2.3: IPv6 and robustness improvements
+
+Released on 2015-03-04 as [v2.2.3](https://github.com/mirage/mirage-tcpip/releases/tag/v2.2.3). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Add ICMPv6 error reporting functions (#101)
+* Add universal IP address converters (#108)
+* Add `error_message` functions for human-readable errors (#98)
+* Improve debug logging for ICMP Destination Unreachable packets.
+* Filter incoming frames by MAC address to stop sending unnecessary RSTs. (#114)
+* Unhook unused modules `Sliding_window` and `Profiler` from the build. (#112)
+
+
+### ocaml-uri-v1.8.0: Add URI ordering and comparison functions, and bugfixes
+
+Released on 2015-02-17 as [v1.8.0](https://github.com/mirage/ocaml-uri/releases/tag/v1.8.0). See <https://github.com/mirage/ocaml-uri> for full history.
+
+* `Uri.with_port` no longer sets the host fragment to a blank value if both
+   the host and port are empty (#63).
+* `Uri.compare` imposes an ordering by host, scheme, port, userinfo, path,
+  query, and finally fragment. (#55).
+* Uri is now an `OrderedType` and can be used directly in Maps and Sets (#55).
+* Remove deprecation warnings with OCaml 4.02.0+ (#58).
+* Drop support for OCaml 3.12.1, and now require OCaml 4.00.1+.
+* Modernise Travis scripts to use OPAM 1.2 workflow.
+
+
+### ocaml-cohttp-v0.15.2: Stability improvements and utility functions
+
+Released on 2015-02-15 as [v0.15.2](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.15.2). See <https://github.com/mirage/ocaml-cohttp> for full history.
+
+* When transfer encoding is unknown, read until EOF when body size is unknown. (#241)
+* Add some missing documentation to `Cohttp.S.IO` signature. (#233)
+* Add `Cohttp.Header.mem` to check if a header exists.
+* Add `Cohttp.Conf` module to expose the library version number. (#259)
+* Add `Cohttp.Header.add_unless_exists` to update a key if it doesn't already exist. (#244)
+* Add `Cohttp.Header.get_location` to retrieve redirection information. (#254)
+* [async] Clean up the `Net.lookup` function to use `Or_error.t` instead of raising. (#247)
+* [tests] Add more tests for `content-range` handling. (#249)
+
+
 ### mirage-xen-minios-v0.7.0: Disable stack protection on x86_64
 
 Released on 2015-02-12 as [v0.7.0](https://github.com/mirage/mirage-xen-minios/releases/tag/v0.7.0). See <https://github.com/mirage/mirage-xen-minios> for full history.
