@@ -1,3 +1,52 @@
+### mirage-v2.3.0: Interface cleanups and entropy support
+
+Released on 2015-03-10 as [v2.3.0](https://github.com/mirage/mirage/releases/tag/v2.3.0). See <https://github.com/mirage/mirage> for full history.
+
+* Remove the `IO_PAGE` module type from `V1`. This has now moved into the
+  `io-page` pacakge (#356)
+* Remove `DEVICE.connect` from the `V1` module types.  When a module is
+  functorised over a `DEVICE` it should only have the ability to
+  *use* devices it is given, not to connect to new ones. (#150)
+* Add `FLOW.error_message` to the `V1` module types to allow for
+  generic handling of errors. (#346)
+* Add `IP.uipaddr` as a universal IP address type. (#361)
+* Support the `entropy` version 0.2+ interfaces. (#359)
+* Check that the `opam` command is at least version 1.2.0 (#355)
+* Don't put '-classic-display' in the generated Makefiles. (#364)
+
+
+### ocaml-fat-v0.10.3: Add explicit `connect` function, and modernise Travis scripts
+
+Released on 2015-03-10 as [v0.10.3](https://github.com/mirage/ocaml-fat/releases/tag/v0.10.3). See <https://github.com/mirage/ocaml-fat> for full history.
+
+* Add an explicit `connect` function to interfaces. (#39)
+* MemoryIO.connect now takes an FS.t, not an FS.id. (#39)
+* Use centralised Travis CI test scripts.
+* Add local `opam` file for OPAM 1.2 pinning workflow.
+
+### mirage-tcpip-v2.3.0: Support for Mirage 2.3.0's `connect` removal
+
+Released on 2015-03-09 as [v2.3.0](https://github.com/mirage/mirage-tcpip/releases/tag/v2.3.0). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Fix `STACKV4` for the `DEVICE` signature which has `connect` removed (in Mirage types 2.3+).
+
+
+### mirage-entropy-v0.2.0: Support for xentropyd
+
+Released on 2015-03-09 as [v0.2.0](https://github.com/mirage/mirage-entropy/releases/tag/v0.2.0). See <https://github.com/mirage/mirage-entropy> for full history.
+
+* Do not wrap `Entropy_unix` in a functor as it is meant to be used directly.
+* Xen: read entropy from a Xen PV device.  This is implemented by the `xentropyd` daemon.
+
+
+### ocaml-crunch-v1.4.0: Add an explicit `connect` function to generated code
+
+Released on 2015-03-09 as [v1.4.0](https://github.com/mirage/ocaml-crunch/releases/tag/v1.4.0). See <https://github.com/mirage/ocaml-crunch> for full history.
+
+* Add an explicit `connect` function to the signature of generated code. (#13)
+* Use centralised Travis CI scripts.
+
+
 ### mirage-console-v2.1.3: Simplify build and install `mirage-console-cli` tool
 
 Released on 2015-03-08 as [v2.1.3](https://github.com/mirage/mirage-console/releases/tag/v2.1.3). See <https://github.com/mirage/mirage-console> for full history.
@@ -140,6 +189,20 @@ Released on 2015-02-06 as [v1.2.0](https://github.com/mirage/ocaml-cow/releases/
 * New `Html.img` constructor for easy creation of <img> tags
 * New `Html.a` constructor for easy creation of <a> tags
 * Deprecate function `Html.html_of_link` and type `Html.link`
+
+### ocaml-git-1.4.10: Fix the smart HTTP protocol
+
+Released on 2015-02-05 as [1.4.10](https://github.com/mirage/ocaml-git/releases/tag/1.4.10). See <https://github.com/mirage/ocaml-git> for full history.
+
+* Fix support for the smart HTTP protocol (report by @talex5, mirage/irmin#138)
+
+
+### ocaml-git-1.4.9: Remove `OGITTMPDIR`
+
+Released on 2015-02-04 as [1.4.9](https://github.com/mirage/ocaml-git/releases/tag/1.4.9). See <https://github.com/mirage/ocaml-git> for full history.
+
+* Remove the `OGITTMPDIR` and alway store temp files under  `git/tmp` (mirage/irmin#132)
+
 
 ### irmin-0.9.3: 
 
