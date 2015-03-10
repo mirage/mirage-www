@@ -9,8 +9,8 @@ open Syndic_atom
 
 let string_of_text (t:text_construct) : string = match t with
   | Text(s) -> s
-  | Html(s) -> s
-  | Xhtml(xs) -> List.fold_left (fun acc x -> acc ^ Syndic_xml.to_string x) "" xs
+  | Html(_,s) -> s
+  | Xhtml(_,xs) -> List.fold_left (fun acc x -> acc ^ Syndic_xml.to_string x) "" xs
 
 (* given a feed as a string, try parsing it as Atom, then as RSS2 *)
 let feed_of_string  (u : string) (s : string) : Syndic_atom.feed option =
