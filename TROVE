@@ -1,6 +1,7 @@
 avsm/ezxmlm
 avsm/ocaml-github
 djs55/ocaml-xenstore-clients
+mirage/ocaml-magic-mime
 mirage/cowabloga
 mirage/dyntype
 mirage/ezjsonm
@@ -16,6 +17,7 @@ mirage/mirage-clock
 mirage/mirage-console
 mirage/mirage-decks
 mirage/mirage-entropy
+mirage/mirage-flow
 mirage/mirage-fs-unix
 mirage/mirage-http
 mirage/mirage-net-macosx

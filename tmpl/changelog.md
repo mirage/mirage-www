@@ -1,3 +1,402 @@
+### mirage-console-v2.1.3: Simplify build and install `mirage-console-cli` tool
+
+Released on 2015-03-08 as [v2.1.3](https://github.com/mirage/mirage-console/releases/tag/v2.1.3). See <https://github.com/mirage/mirage-console> for full history.
+
+* Fix installation of Unix library defaults by splitting out the base Unix dependency and the Xenctrl ones.  This needs a new `--enable-xenctrl` flag that explicitly depends on the Xen libraries being installed. (#36)
+* Install the `mirage-console-cli` executable if it is built.
+
+### mirage-fs-unix-v1.1.4: Add explicit `connect` function, and modernise Travis scripts
+
+Released on 2015-03-08 as [v1.1.4](https://github.com/mirage/mirage-fs-unix/releases/tag/v1.1.4). See <https://github.com/mirage/mirage-fs-unix> for full history.
+
+* Add explicit `connect` signature into interface (#8).
+* Add an `opam` file for OPAM 1.2 pinning workflow.
+* Add Travis CI unit test file.
+
+### mirage-console-v2.1.2: Add explicit `connect` function, and modernise Travis scripts
+
+Released on 2015-03-08 as [v2.1.2](https://github.com/mirage/mirage-console/releases/tag/v2.1.2). See <https://github.com/mirage/mirage-console> for full history.
+
+* Add an explicit `connect` function to interface. (#34)
+* Modernise Travis scripts with central sourcing.
+* Only build Unix executable if relevant `xenctrl` libraries are installed.
+
+### mirage-block-unix-v1.2.2: Add an explicit `connect` function, and OPAM pinning support
+
+Released on 2015-03-08 as [v1.2.2](https://github.com/mirage/mirage-block-unix/releases/tag/v1.2.2). See <https://github.com/mirage/mirage-block-unix> for full history.
+
+* Expose an explicit `connect` function in the interface signature. (#20)
+* Modernise Travis scripts with centralised ones.
+* Add local `opam` file for OPAM 1.2 workflow.
+
+
+### mirage-block-xen-v1.3.1: Add `connect` method to interface
+
+Released on 2015-03-07 as [v1.3.1](https://github.com/mirage/mirage-block-xen/releases/tag/v1.3.1). See <https://github.com/mirage/mirage-block-xen> for full history.
+
+* Add an explicit `connect` to the interface signature (#35)
+
+
+### mirage-net-xen-v1.4.0: Add an explicit `connect` function
+
+Released on 2015-03-07 as [v1.4.0](https://github.com/mirage/mirage-net-xen/releases/tag/v1.4.0). See <https://github.com/mirage/mirage-net-xen> for full history.
+
+* Add explicit `connect` function to interface signature (#19)
+
+### mirage-net-unix-v2.2.0: Support tuntap persistent interfaces
+
+Released on 2015-03-07 as [v2.2.0](https://github.com/mirage/mirage-net-unix/releases/tag/v2.2.0). See <https://github.com/mirage/mirage-net-unix> for full history.
+
+* Leave the tuntap persistence flag unchanged (#9, from @infidel)
+* Add explicit `connect` function to interface (#10)
+
+### ocaml-cow-v1.2.1: Support new ezjsonm in syntax extension
+
+Released on 2015-03-05 as [v1.2.1](https://github.com/mirage/ocaml-cow/releases/tag/v1.2.1). See <https://github.com/mirage/ocaml-cow> for full history.
+
+* Fix compatibility of the `json` syntax extension with `ezjsonm` version 0.4 (#68)
+
+### mirage-platform-v2.2.2: Add generic engine hooks and restore GC tracing support
+
+Released on 2015-03-04 as [v2.2.2](https://github.com/mirage/mirage-platform/releases/tag/v2.2.2). See <https://github.com/mirage/mirage-platform> for full history.
+
+* Add generic hooks to mainloop to support background tasks. (#120)
+* [xen] Report trace events for GC again; this was disabled temporarily
+  in the 2.2.0 release. (#119)
+
+### mirage-net-macosx-v1.1.0: Interface compatibility improvements with newer Mirage libraries
+
+Released on 2015-03-04 as [v1.1.0](https://github.com/mirage/mirage-net-macosx/releases/tag/v1.1.0). See <https://github.com/mirage/mirage-net-macosx> for full history.
+
+- Add an explicit `connect` function to interface (#1).
+- Support the `Io_page` 1.4.0+ API. (#2).
+
+
+### mirage-tcpip-v2.2.3: IPv6 and robustness improvements
+
+Released on 2015-03-04 as [v2.2.3](https://github.com/mirage/mirage-tcpip/releases/tag/v2.2.3). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Add ICMPv6 error reporting functions (#101)
+* Add universal IP address converters (#108)
+* Add `error_message` functions for human-readable errors (#98)
+* Improve debug logging for ICMP Destination Unreachable packets.
+* Filter incoming frames by MAC address to stop sending unnecessary RSTs. (#114)
+* Unhook unused modules `Sliding_window` and `Profiler` from the build. (#112)
+
+
+### ocaml-uri-v1.8.0: Add URI ordering and comparison functions, and bugfixes
+
+Released on 2015-02-17 as [v1.8.0](https://github.com/mirage/ocaml-uri/releases/tag/v1.8.0). See <https://github.com/mirage/ocaml-uri> for full history.
+
+* `Uri.with_port` no longer sets the host fragment to a blank value if both
+   the host and port are empty (#63).
+* `Uri.compare` imposes an ordering by host, scheme, port, userinfo, path,
+  query, and finally fragment. (#55).
+* Uri is now an `OrderedType` and can be used directly in Maps and Sets (#55).
+* Remove deprecation warnings with OCaml 4.02.0+ (#58).
+* Drop support for OCaml 3.12.1, and now require OCaml 4.00.1+.
+* Modernise Travis scripts to use OPAM 1.2 workflow.
+
+
+### ocaml-cohttp-v0.15.2: Stability improvements and utility functions
+
+Released on 2015-02-15 as [v0.15.2](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.15.2). See <https://github.com/mirage/ocaml-cohttp> for full history.
+
+* When transfer encoding is unknown, read until EOF when body size is unknown. (#241)
+* Add some missing documentation to `Cohttp.S.IO` signature. (#233)
+* Add `Cohttp.Header.mem` to check if a header exists.
+* Add `Cohttp.Conf` module to expose the library version number. (#259)
+* Add `Cohttp.Header.add_unless_exists` to update a key if it doesn't already exist. (#244)
+* Add `Cohttp.Header.get_location` to retrieve redirection information. (#254)
+* [async] Clean up the `Net.lookup` function to use `Or_error.t` instead of raising. (#247)
+* [tests] Add more tests for `content-range` handling. (#249)
+
+
+### mirage-xen-minios-v0.7.0: Disable stack protection on x86_64
+
+Released on 2015-02-12 as [v0.7.0](https://github.com/mirage/mirage-xen-minios/releases/tag/v0.7.0). See <https://github.com/mirage/mirage-xen-minios> for full history.
+
+Stack protection doesn't work yet on x86_64, so explicitly disable it to prevent boot-time crashes on systems that enable it by default on their host toolchains (like Ubuntu).
+
+### ocaml-magic-mime-v1.0.0: Initial public release
+
+Released on 2015-02-08 as [v1.0.0](https://github.com/mirage/ocaml-magic-mime/releases/tag/v1.0.0). See <https://github.com/mirage/ocaml-magic-mime> for full history.
+
+This library contains a database of MIME types that maps filename extensions
+into MIME types suitable for use in many Internet protocols such as HTTP or
+e-mail.  It is generated from the `mime.types` file found in Unix systems, but
+has no dependency on a filesystem since it includes the contents of the
+database as an ML datastructure.
+
+
+### ocaml-cow-v1.2.0: Now with valid HTML5 Output
+
+Released on 2015-02-06 as [v1.2.0](https://github.com/mirage/ocaml-cow/releases/tag/v1.2.0). See <https://github.com/mirage/ocaml-cow> for full history.
+
+* When serializing HTML, only self-close void elements.
+* New `Html.doctype` value of the HTML5 DOCTYPE.
+* New `Html.output` and `Html.output_doc` functions for generic polyglot output.
+* Atom support is now deprecated in favor of Syndic
+* New `Html.img` constructor for easy creation of <img> tags
+* New `Html.a` constructor for easy creation of <a> tags
+* Deprecate function `Html.html_of_link` and type `Html.link`
+
+### irmin-0.9.3: 
+
+Released on 2015-02-04 as [0.9.3](https://github.com/mirage/irmin/releases/tag/0.9.3). See <https://github.com/mirage/irmin> for full history.
+
+* Fix the invalidation of the view caches (report by @gregtatcam).
+  This was causing some confusing issues where views' sub-keys where
+  not properly updated to to their new values when the view is merged
+  back to the store. The issues is a regression introduced in 0.9.0.
+* Add post-commit hooks for the HTTP server.
+* Add `Irmin.watch_tags` to monitor tag creation and desctructions.
+* Fix `Irmin.push`
+* Add `Irmin.with_hrw_view` to easily use transactions.
+* Add a phantom type to `Irmin.t` to denote the store capabilities
+  read-only, read-write or branch-consistent.
+* The `~old` argument of a merge function can now be optional to
+  signify that there is no common ancestor.
+* Expose `Irmin.with_rw_view` to create a temporary, in-memory and
+  mutable view of the store. This can be used to perform atomic
+  operations in the store (ie. non-persistent transactions).
+* Simplify the view API again
+* Expose the task of previous commits. This let the user access
+  the Git timestamp and other info such as the committer name (#90)
+* The user-defined merge functions now takes an `unit -> 'a result
+  Lwt.t` argument for `~old` (instead of `'a`). Evalutating the
+  function will compute the least-common ancestors. Merge functions
+  which ignore the `old` argument don't have to pay the cost of
+  computing the lcas anymore.
+* Expose `S.lcas` to get the least common ancestors
+* Update to ocaml-git 1.4.6
+
+### ezjsonm-0.4.1: avoid manual coercion 
+
+Released on 2015-02-04 as [0.4.1](https://github.com/mirage/ezjsonm/releases/tag/0.4.1). See <https://github.com/mirage/ezjsonm> for full history.
+
+* Use polymorphic variants subtyping to avoid manual coercion in the
+  API (#11, patch from Julien Sagot)
+
+### ocaml-git-1.4.8: Fix bug in LRU cache, flush the `cat-file` commands
+
+Released on 2015-02-04 as [1.4.8](https://github.com/mirage/ocaml-git/releases/tag/1.4.8). See <https://github.com/mirage/ocaml-git> for full history.
+
+* Fix LRU cache: SHA1 should be unique in the cache (regression
+  introduced in 1.4.3). This was causing confusing read results
+  under load.
+* Reading objects now updates the LRU cache
+* Fix a regression in `ogit cat-file` which were displaying nothing
+  for small objects.
+
+
+### ocaml-git-1.4.7: Fix for non-bare repositories, remove stdout/stderr messages
+
+Released on 2015-02-03 as [1.4.7](https://github.com/mirage/ocaml-git/releases/tag/1.4.7). See <https://github.com/mirage/ocaml-git> for full history.
+
+* Fix the filesystem updates for non-bare repositories (reported by @avsm)
+* `Git.write_index` now takes an optional `index` argument
+* Index entries should be fixed alphabetically
+* Remove raw printf (#60)
+* More flexibility on where to write temp files. The directory name can be
+  configured by write calls, and the default is `OGITTMPDIR` if set,
+  then `Filename.get_temp_dir_name` -- as it was in 1.4.5, see #51
+
+
+### ocaml-nocrypto-0.3.1: The Ditch-Your-OS minor
+
+Released on 2015-02-01 as [0.3.1](https://github.com/mirleft/ocaml-nocrypto/releases/tag/0.3.1). See <https://github.com/mirleft/ocaml-nocrypto> for full history.
+
+Now with Mirage/Xen compatibility. Shout-out to @talex5!
+
+### ocaml-fat-0.10.2: Narrow dependency on IO_PAGE signature
+
+Released on 2015-01-31 as [0.10.2](https://github.com/mirage/ocaml-fat/releases/tag/0.10.2). See <https://github.com/mirage/ocaml-fat> for full history.
+
+* Fixed destroy, which previously would overwrite the entry with
+  uninitialised data, which might not set the deleted flag.
+* Require only `get_buf` from `IO_PAGE`
+* Fix travis.
+* test: use OUnit's arg parser.
+* return errors from size rather than raising Fs_error.
+
+### ocaml-cstruct-v1.6.0: Add `fillv` function
+
+Released on 2015-01-29 as [v1.6.0](https://github.com/mirage/ocaml-cstruct/releases/tag/v1.6.0). See <https://github.com/mirage/ocaml-cstruct> for full history.
+
+Add helper function to transfer from a list of buffers to a destination buffer.
+
+### ocaml-git-1.4.6: Improve LRU settings and add the `git.top` package
+
+Released on 2015-01-29 as [1.4.6](https://github.com/mirage/ocaml-git/releases/tag/1.4.6). See <https://github.com/mirage/ocaml-git> for full history.
+
+* Expose `Git.Value.Cache.set_size` to change the LRU cache size
+* Reduce the default LRU cache size (in 1.4.4 it was set to 64k, now it's 512)
+* More precise type for commit dates
+* Add `git.top` to load toplevel printers for Git values
+
+
+### mirage-v2.2.1: Fix external C library linking and command line bug fixes
+
+Released on 2015-01-29 as [v2.2.1](https://github.com/mirage/mirage/releases/tag/v2.2.1). See <https://github.com/mirage/mirage> for full history.
+
+* Fix logging errors when `mirage` output is not redirected. (#355)
+* Do not reverse the order of C libraries when linking.  This fixes Zarith
+  linking in Xen mode. (#341).
+* Fix typos in command line help. (#352).
+
+
+### mirage-block-xen-v1.3.0: Update to latest io-page 1.4.0 interface
+
+Released on 2015-01-29 as [v1.3.0](https://github.com/mirage/mirage-block-xen/releases/tag/v1.3.0). See <https://github.com/mirage/mirage-block-xen> for full history.
+
+* Update to `io-page.1.4.0` interface.
+* Add an `opam` 1.2 file for more convenient development.
+* Simplify travis configuration via centralised scripts.
+
+### ocaml-dns-v0.14.0: Interface improvements for DNS packet manipulation
+
+Released on 2015-01-29 as [v0.14.0](https://github.com/mirage/ocaml-dns/releases/tag/v0.14.0). See <https://github.com/mirage/ocaml-dns> for full history.
+
+* Renamed `Packet.QM` to `Packet.Q_Normal` and `QU` to `Q_mDNS_Unicast` for
+  clarity and added more detailed doc comments. Added constructor function
+  `Packet.make_question` for convenience. (#41)
+* Support `io-page` 1.3.0+ interface. (#40)
+
+
+### io-page-v1.4.0: Add Cstruct to Io_page conversion function
+
+Released on 2015-01-28 as [v1.4.0](https://github.com/mirage/io-page/releases/tag/v1.4.0). See <https://github.com/mirage/io-page> for full history.
+
+* Add `of_cstruct_exn` as a safe way to turn a Cstruct back into an `Io_page.t`.
+* Expose `page_size` constant in interface.
+
+
+### ocaml-vchan-v2.0.2: Support the Io_page 1.3.0 interface
+
+Released on 2015-01-27 as [v2.0.2](https://github.com/mirage/ocaml-vchan/releases/tag/v2.0.2). See <https://github.com/mirage/ocaml-vchan> for full history.
+
+The `io-page` 1.3.0 API changed the type of the page to be private, and so this library now ensures that it allocates the grant pages via Io_page.  This is backwards compatible with older versions of Io_page.
+
+### mirage-net-unix-v2.1.0: Support for Io_page 1.3.0
+
+Released on 2015-01-27 as [v2.1.0](https://github.com/mirage/mirage-net-unix/releases/tag/v2.1.0). See <https://github.com/mirage/mirage-net-unix> for full history.
+
+* Support `io-page` 1.3.0+ interface.
+* Add local `opam` file for convenient OPAM 1.2 developer workflow.
+
+
+### mirage-platform-v2.2.1: Fix modern GCC and Xen compilation
+
+Released on 2015-01-27 as [v2.2.1](https://github.com/mirage/mirage-platform/releases/tag/v2.2.1). See <https://github.com/mirage/mirage-platform> for full history.
+
+Fix Xen compilation with `gcc 4.8+` by disabling the stack protector and `-fno-tree-loop-distribute-patterns` (not compatible with MiniOS).  These missing flags were a regression from 2.1.3, which did include them.
+
+### ocaml-conduit-v0.7.2: Add error message display function
+
+Released on 2015-01-27 as [v0.7.2](https://github.com/mirage/ocaml-conduit/releases/tag/v0.7.2). See <https://github.com/mirage/ocaml-conduit> for full history.
+
+* Add an `error_message` function to simplify error display (#38).
+* Improvements to documentation (#37).
+
+### io-page-v1.3.0: Make the `Io_page.t` type private 
+
+Released on 2015-01-26 as [v1.3.0](https://github.com/mirage/io-page/releases/tag/v1.3.0). See <https://github.com/mirage/io-page> for full history.
+
+* Make `Io_page.t` type private. Otherwise, any old array of bytes can be used as an `Io_page.t`. (#14)
+* Switch to using the `Bytes` module instead of `String`.
+
+### ocaml-dns-v0.13.0: Improved multicast DNS support
+
+Released on 2015-01-26 as [v0.13.0](https://github.com/mirage/ocaml-dns/releases/tag/v0.13.0). See <https://github.com/mirage/ocaml-dns> for full history.
+
+* Add support for multicast DNS (RFC6762) in the trie. (#35 from Luke Dunstan)
+  * mDNS doesn't use SOA nor delegation (RFC 6762 section 12), so some minor changes
+    to Trie are required to handle this.
+  * mDNS doesn't echo the questions in the response (RFC 6762 section 6), except
+    in legacy mode, so a `bool` argument was added to `Query.response_of_answer`.
+  * `Query.answer` still exists but now `Query.answer_multiple` is also available
+    for answering multiple questions in one query to produce a single answer
+    (RFC 6762 section 5.3). One caveat is that responses may exceed the maximum
+    message length, but that is not really specific to mDNS. Also, in theory multiple
+    questions might require multiple separate response messages in unusual cases,
+    but that is complicated and the library does not deal with that yet.
+  * `Query.answer_multiple` takes an optional function to allow the caller to control
+    the `cache-flush` bit. This bit is only set for records that have been "confirmed
+    as unique". Using a callback requires minimal changes here but puts the burden of
+    maintaining uniqueness state elsewhere.
+  * `Query.answer_multiple` takes an optional function to filter the answer, in order
+    to support "known answer suppression" (RFC 6762 section 7.1). Again, using a callback
+    requires minimal change to the core, but later on the mDNS-specific known answer
+    suppression logic could move into the `Query` module if that turns out to be simpler.
+  * A query for `PTR` returns additional records for `SRV` and `TXT`, to support efficient
+    service discovery.
+  * `Trie.iter` was added to support mDNS announcements.
+* Switch to `Bytes` instead of `String` for eventual `-safe-string` support.
+* Partially remove some error printing to stderr. (#36)
+
+Unit tests were added for some of the changes above, including a test-only
+dependency on `pcap-format`.
+
+
+### mirage-net-xen-v1.3.0: Page pooling and stability fixes under high receive load
+
+Released on 2015-01-24 as [v1.3.0](https://github.com/mirage/mirage-net-xen/releases/tag/v1.3.0). See <https://github.com/mirage/mirage-net-xen> for full history.
+
+* When waiting for space in the transmit queue, we would sometimes fail
+  to notice when space became available. (#15)
+* Copy out-bound data into pre-shared pages for performance, security
+  and simplicity. (#17)
+* Use a centrally sourced Travis file and test OCaml 4.02+ as well.
+
+
+### ocaml-vchan-v2.0.1: Improve configure script and error message functionality
+
+Released on 2015-01-24 as [v2.0.1](https://github.com/mirage/ocaml-vchan/releases/tag/v2.0.1). See <https://github.com/mirage/ocaml-vchan> for full history.
+
+* add an `error_message` function to convert a Vchan error
+  into a human-readable string. (#60)
+* Improve error messages from the `configure` output (#61).
+* Use modern centrally sourced Travis script for OPAM 1.2.
+
+### mirage-platform-v2.2.0: Add support for OCaml 4.02+ in Xen
+
+Released on 2015-01-23 as [v2.2.0](https://github.com/mirage/mirage-platform/releases/tag/v2.2.0). See <https://github.com/mirage/mirage-platform> for full history.
+
+This releases adds support for OCaml 4.02+ compilation, and changes the Xen
+backend build for Mirage significantly by:
+
+* removing the OCaml compiler runtime from the mirage-platform, which makes
+  it simpler to work across multiple revisions of the compiler.  It now uses
+  the `ocaml-src` OPAM package to grab the current switch's version of the
+  OCaml runtime.
+* split the Xen runtime build into discrete `pkg-config` libraries:
+  * `mirage-xen-posix.pc` : in the `xen-posix/` directory, is the nano-posix
+     layer built with no knowledge of OCaml
+  * `mirage-xen-minios.pc`: defines the `__INSIDE_MINIOS__` macro to expose
+     internal state via the MiniOS headers (for use only by libraries that
+     know exactly what they are doing with the MiniOS)
+  * `mirage-xen-ocaml.pc`: in `xen-ocaml/core/`, this builds the OCaml asmrun,
+     Bigarray and Str bindings using the `mirage-xen-posix` layer.
+  * `mirage-xen-ocaml-bindings.pc`: in `xen-ocaml/bindings/`, these are bindings
+     required by the OCaml libraries to MiniOS.  Some of the bindings use MiniOS
+     external state and hence use `mirage-xen-minios`, whereas others
+    (`cstruct_stubs` and `barrier_stubs` are just OCaml bindings and so just
+    use `mirage-xen-posix`).
+  * `mirage-xen.pc`: depends on all the above to provide the same external
+    interface as the current `mirage-platform`.
+
+The OCaml code is now built using OASIS, since the C code is built entirely
+separately and could be moved out into a separate OPAM package entirely.
+
+
+### mirage-console-v2.1.1: Add an `error_message` for console messages
+
+Released on 2015-01-23 as [v2.1.1](https://github.com/mirage/mirage-console/releases/tag/v2.1.1). See <https://github.com/mirage/mirage-console> for full history.
+
+Add an `error_message` function to turn an `error` into a string.
+
+
 ### mirage-platform-v2.1.3: Improved reporting of top-level errors in Xen backend
 
 Released on 2015-01-23 as [v2.1.3](https://github.com/mirage/mirage-platform/releases/tag/v2.1.3). See <https://github.com/mirage/mirage-platform> for full history.
@@ -328,6 +727,17 @@ New features and bug fixes:
 * Flush the response body to the network by default, rather than
   buffering by default.  The `?flush` optional parameter can still
   be explicitly set to false if flushing is not desired (#205).
+
+
+### ezjsonm-0.4.0: Add intXX combinatores, bug fixes for option and unit types
+
+Released on 2014-12-17 as [0.4.0](https://github.com/mirage/ezjsonm/releases/tag/0.4.0). See <https://github.com/mirage/ezjsonm> for full history.
+
+* Clean-up the typed representation of serializable JSON
+    (#5, report and patch from Rudi Grinberg)
+* add int32/int64/triple combinators
+* fix a bug with the option types
+* fix the type of the `unit` combinator
 
 
 ### mirage-xen-minios-v0.5.0: Build Openlibm with Mini-OS CFLAGS
