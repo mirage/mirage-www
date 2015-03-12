@@ -1,3 +1,10 @@
+### mirage-net-xen-v1.4.1: Close race condition on device connection
+
+Released on 2015-03-12 as [v1.4.1](https://github.com/mirage/mirage-net-xen/releases/tag/v1.4.1). See <https://github.com/mirage/mirage-net-xen> for full history.
+
+Wait for the backend network device to enter the `Connected` state before transmitting packets.  This fixes a race condition in a fast-booting unikernel that caused the first packet to be lost (#20, #23).
+
+
 ### mirage-v2.3.0: Interface cleanups and entropy support
 
 Released on 2015-03-10 as [v2.3.0](https://github.com/mirage/mirage/releases/tag/v2.3.0). See <https://github.com/mirage/mirage> for full history.
