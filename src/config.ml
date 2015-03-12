@@ -1,10 +1,26 @@
 open Mirage
 
-let mkip address netmask gateways =
-  let address = Ipaddr.V4.of_string_exn address in
-  let netmask = Ipaddr.V4.of_string_exn netmask in
-  let gateways = List.map Ipaddr.V4.of_string_exn gateways in
-  { address; netmask; gateways }
+(** [split c s] splits string [s] at every occurrence of character [c] *)
+let split c s =
+  let rec aux c s ri acc =
+    (* half-closed intervals. [ri] is the open end, the right-fencepost.
+       [li] is the closed end, the left-fencepost. either [li] is
+       + negative (outside [s]), or
+       + equal to [ri] ([c] not found in remainder of [s]) ->
+         take everything from [ s[0], s[ri] )
+       + else inside [s], thus an instance of the separator ->
+         accumulate from the separator to [ri]: [ s[li+1], s[ri] )
+         and move [ri] inwards to the discovered separator [li]
+    *)
+    let li = try String.rindex_from s (ri-1) c with Not_found -> -1 in
+    if li < 0 || li == ri then (String.sub s 0 ri) :: acc
+    else begin
+      let len = ri-1 - li in
+      let rs = String.sub s (li+1) len in
+      aux c s li (rs :: acc)
+    end
+  in
+  aux c s (String.length s) []
 
 let mkfs fs =
   let mode =
@@ -23,21 +39,8 @@ let mkfs fs =
 
 let filesfs = mkfs "../files"
 let tmplfs = mkfs "../tmpl"
-let staticip = mkip "128.232.97.54" "255.255.255.224" [ "128.232.97.33" ]
 
 let https =
-  let net =
-    try match Sys.getenv "NET" with
-      | "socket" -> `Socket
-      | _        -> `Direct
-    with Not_found -> `Direct
-  in
-  let dhcp =
-    try match Sys.getenv "DHCP" with
-      | "1" | "true" | "yes" -> true
-      | _  -> false
-    with Not_found -> false
-  in
   let deploy =
     try match Sys.getenv "DEPLOY" with
       | "1" | "true" | "yes" -> true
@@ -46,8 +49,30 @@ let https =
   in
   let stack console =
     match deploy with
-    | true -> direct_stackv4_with_static_ipv4 console tap0 staticip
+    | true ->
+      let staticip =
+        let address = Sys.getenv "ADDR" |> Ipaddr.V4.of_string_exn in
+        let netmask = Sys.getenv "MASK" |> Ipaddr.V4.of_string_exn in
+        let gateways =
+          Sys.getenv "GWS" |> split ':' |> List.map Ipaddr.V4.of_string_exn
+        in
+        { address; netmask; gateways }
+      in
+      direct_stackv4_with_static_ipv4 console tap0 staticip
+
     | false ->
+      let net =
+        try match Sys.getenv "NET" with
+          | "socket" -> `Socket
+          | _        -> `Direct
+        with Not_found -> `Direct
+      in
+      let dhcp =
+        try match Sys.getenv "DHCP" with
+          | "1" | "true" | "yes" -> true
+          | _  -> false
+        with Not_found -> false
+      in
       match net, dhcp with
       | `Direct, false -> direct_stackv4_with_default_ipv4 console tap0
       | `Direct, true  -> direct_stackv4_with_dhcp console tap0
