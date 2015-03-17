@@ -69,8 +69,8 @@ Assuming you are building for POSIX using native kernel sockets, compile the app
 
 ```
   mirage configure --unix
-  mirage build
-  mirage run   # Or ./main.native
+  make
+  ./main.native
 ```
 
 If you are building for a different Mirage platform, change the `--unix` switches appropriately (presently either `--xen` or `--unix`).

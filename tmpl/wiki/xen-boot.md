@@ -15,11 +15,10 @@ Alternatively, for Xen versions greater than 4.1, you can simply invoke Mirage t
 
 ```
     $ mirage configure --xen
-    $ mirage build
-    $ mirage run
+    $ make
 ```
 
-The [Mirage website](/wiki/mirage-www) contains an example.  Thie `mirage run` will create an `xl` configuration file, and you will
+The [Mirage website](/wiki/mirage-www) contains an example.  Thie `mirage configure` will create an `xl` configuration file, and you will
 then need to edit it to add any VIFs or disks required by your application.  Consult the Xen documentation for your distro for
 the specifics on this.
 
