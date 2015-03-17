@@ -67,7 +67,7 @@ To use the EC2 `t1.micro` instances the kernel needs to reside inside an EBS vol
     timeout 1
     title Mirage-Test
          root (hd0,0)
-         kernel /kernel 
+         kernel /kernel
 ```
 
 * Log out of instance
@@ -76,7 +76,7 @@ To use the EC2 `t1.micro` instances the kernel needs to reside inside an EBS vol
 * Register your AMI using `ec2-register --snapshot ${SNAPSHOT} --kernel aki-4e7d9527 --architecture x86_64` Note the familiar kernel id: This is the pv-grub kernel that is also used in `script/ec2.sh`.
 * Start your EBS backed Mirage kernel in a micro instance: `ec2-run-instances ${EBSAMI} -k mirage -t t1.micro`
 
-This process could be put in a script easily. 
+This process could be put in a script easily.
 
 ## Xen Cloud Platform
 

@@ -117,7 +117,7 @@ make depend
 from evaluating the configuration file.  It also creates a `main.ml` that
 represents the entry point of your unikernel.  `make depend` will first check
 that you have all the right OPAM packages installed to build a Unix
-application, and will install them if they're not present. 
+application, and will install them if they're not present.
 
 ```
 make
@@ -377,8 +377,8 @@ will generate the appropriate settings for external filesystem access.
 
 ```
 $ env FS=fat mirage configure
-$ file fat1.img 
-fat1.img: x86 boot sector, code offset 0x0, OEM-ID "ocamlfat", 
+$ file fat1.img
+fat1.img: x86 boot sector, code offset 0x0, OEM-ID "ocamlfat",
 sectors/cluster 4, FAT  1, root entries 512, Media descriptor 0xf8,
 sectors/FAT 1, sectors 49 (volumes > 32 MB) , dos < 4.0 BootSector (0x0)
 ```
@@ -450,21 +450,21 @@ let () =
 ```
 
 This configuration shows how composable the network stack subsystem is, by
-simultaneously listening on a socket port (using the Linux kernel) *and* 
+simultaneously listening on a socket port (using the Linux kernel) *and*
 a direct tuntap for the same webcode.  The definition of `main` just
-adds a new `stackv4` device driver.  
+adds a new `stackv4` device driver.
 
-The `net` handler checks to see if it's building for a socket or direct network stack.  
+The `net` handler checks to see if it's building for a socket or direct network stack.
 Crucially, both the socket and direct network stacks have
 a very similar modular API which you can see in [mirage/types/V1.mli](https://github.com/mirage/mirage/blob/1.1.0/types/V1.mli#L512).
 This lets your applications be parameterized across either backend, or
 even use both simultaneously as in the above example.
 
-We then define the `dhcp` variable to configure the network stack to either use DHCP or 
+We then define the `dhcp` variable to configure the network stack to either use DHCP or
 using the "default" ipv4 address
 (for convenience, Mirage assigns a default of `10.0.0.2` in this case;
 this is of course overridden for production deployments).
-The definition of `stack` then uses `dhcp` and `net` accordingly to set up the networking stack. 
+The definition of `stack` then uses `dhcp` and `net` accordingly to set up the networking stack.
 
 
 <br />
