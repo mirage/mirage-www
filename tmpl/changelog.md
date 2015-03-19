@@ -1,3 +1,47 @@
+### mirage-platform-v2.3.0: split the `mirage-xen` package into 3
+
+Released on 2015-03-17 as [v2.3.0](https://github.com/mirage/mirage-platform/releases/tag/v2.3.0). See <https://github.com/mirage/mirage-platform> for full history.
+
+* Split `mirage-xen` into three opam packages: `mirage-xen-posix` (includes and mini-libc), `mirage-xen-ocaml` (OCaml runtime) and `mirage-xen` (bindings and OCaml OS libraries) (#125, patch from @hannesm)
+
+### mirage-platform-v2.2.3: Add opam files and remove `page_stubs.c`
+
+Released on 2015-03-16 as [v2.2.3](https://github.com/mirage/mirage-platform/releases/tag/v2.2.3). See <https://github.com/mirage/mirage-platform> for full history.
+
+* Add opam files for `mirage-xen` and `mirage-unix` OPAM packages
+* Remove page_stubs.c, now provided by io-page (#122, patch from @hannesm)
+
+### io-page-v1.5.0: Fix equality and have self-contained stubs
+
+Released on 2015-03-16 as [v1.5.0](https://github.com/mirage/io-page/releases/tag/v1.5.0). See <https://github.com/mirage/io-page> for full history.
+
+* Fix equallity of io-pages (#17, patch from @hannesm)
+* Import C stubs from mirage-platform (#18, patch from @hannesm)
+
+### irmin-0.9.4: better concurrency properties
+
+Released on 2015-03-16 as [0.9.4](https://github.com/mirage/irmin/releases/tag/0.9.4). See <https://github.com/mirage/irmin> for full history.
+
+* Ensure that `Irmin.update` and `Irmin.merge` are atomic.
+* Fix `Irmin.clone` of an empty branch
+* Add `Irmin.RW.compare_and_test` that the backends now have to implement
+  to guarantee atomicity of Irmin's high-level operations.
+* Add `Irmin.Private.Lock` to provide per-handler, per-key locking. This
+  can be used by backend to implement simple locking policies.
+* Add `Lwt.t` to the return type of `Irmin.tag` and `Irmin.tag_exn`
+* Do not throw [Not_found]. Now all the `_exn` function raise `Invalid_argument`
+  (#144)
+* Remove `Irmin.switch` and `Irmin.detach`
+* Add `Irmin.history` to get the branch history as a DAG of heads (#140).
+* Fix the computation of lcas (#160)
+
+### ocaml-ctypes-0.4.0: ocaml-ctypes 0.4.0
+
+Released on 2015-03-13 as [0.4.0](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/0.4.0). See <https://github.com/ocamllabs/ocaml-ctypes> for full history.
+
+See [CHANGES.md](https://github.com/ocamllabs/ocaml-ctypes/blob/master/CHANGES.md) for details.
+
+
 ### mirage-net-xen-v1.4.1: Close race condition on device connection
 
 Released on 2015-03-12 as [v1.4.1](https://github.com/mirage/mirage-net-xen/releases/tag/v1.4.1). See <https://github.com/mirage/mirage-net-xen> for full history.
