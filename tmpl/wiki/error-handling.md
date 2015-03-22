@@ -221,16 +221,19 @@ module type BLOCK = sig
     unit Or_error.t io
 ```
 
-System 4 removes all mention of errors from the interface, while `sexp_of_exn` and `Printexc.to_string` still provide `Sexp.t` and `string` values:
+System 4 removes all mention of errors from the return types; it is assumed that every function may result in an error.
+Standard exceptions can be declared in the module type, while implementations of the module can define extra exceptions as needed. `sexp_of_exn` and `Printexc.to_string` can provide `Sexp.t` and `string` values for any exception.
 
 ```
 module type BLOCK = sig
+  exception Unimplemented
+  exception Disconnected
+  exception Is_read_only
+
   val read:
     t -> int64 -> page_aligned_buffer list ->
     unit io
 ```
-
-It may be useful to predefine some common errors (e.g. `Connection_refused`) as exceptions in `mirage-types`.
 
 System 5 introduces multiple error types and formatters:
 
@@ -251,7 +254,7 @@ module type BLOCK = sig
 
   type error = private [> read_error | write_error ]
 
-  val pp_error : formatter -> error -> string
+  val pp_error : formatter -> error -> unit
 
   val error_of_write_error : write_error -> error
   val error_of_read_error : read_error -> error
@@ -285,10 +288,6 @@ However, having the exceptions available is useful to hot-patch around problems 
 Systems 4 and 5 seem to be the only popular options.
 
 System 4 (exceptions) problems:
-
-- If a generic exception is raised then it may not be clear whether it comes from the direct module being used or from some module it is using internally.
-  For example, if a `KV_RO` raises `Permission_denied` then it might mean that the user doesn't have permission to read that key, or that the `KV_RO` doesn't have permission to read the underlying block device.
-  It is possible to scope exceptions to modules, instead of using generic ones, if desired (see [functor-exceptions][], although it presents this feature as a possible source of confusion by having two exceptions with the same name).
 
 - By the time an exception is displayed, the context for it may have been lost.
   For example, it may not be clear to the user seeing "Permission denied" what was being accessed or why.
