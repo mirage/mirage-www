@@ -30,6 +30,7 @@ mirage/mirage-tc
 mirage/mirage-tcpip
 mirage/mirage-vagrant-vms
 mirage/mirage-www
+mirage/mirage-xen
 mirage/mirage-xen-minios
 mirage/ocaml-cohttp
 mirage/ocaml-conduit
