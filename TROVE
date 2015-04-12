@@ -62,5 +62,5 @@ samoht/alcotest
 talex5/mirage-trace-viewer
 magnuss/mirage-vnetif
 magnuss/jitsu
-magnuss/mirage-bootvar
+magnuss/mirage-bootvar-xen
 magnuss/mirage-mimic

@@ -1,3 +1,165 @@
+### jitsu-0.1: v0.1
+
+Released on 2015-04-10 as [0.1](https://github.com/MagnusS/jitsu/releases/tag/0.1). See <https://github.com/magnuss/jitsu> for full history.
+
+First release.
+
+### ocaml-cohttp-v0.16.1: Fix Uri Handling
+
+Released on 2015-04-09 as [v0.16.1](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.16.1). See <https://github.com/mirage/ocaml-cohttp> for full history.
+
+New features and bug fixes:
+* Fix handling of request paths starting with multiple slashes (#308)
+
+
+### mirage-http-v2.2.0: Rename `HTTP` to `Cohttp_mirage` and expose the `Server` functor
+
+Released on 2015-04-08 as [v2.2.0](https://github.com/mirage/mirage-http/releases/tag/v2.2.0). See <https://github.com/mirage/mirage-http> for full history.
+
+* Do not user `lwt.syntax`
+* Rename `HTTP` to `Cohttp_mirage` (#9)
+* Expose `Cohttp_mirage_io`
+* Expose a `Server` functor which depends only on mirage's `FLOW` (no dependency
+  to `Conduit` anymore in this case)
+* Modernize Travis CI scripts
+
+### ocaml-ctypes-0.4.1: ocaml-ctypes 0.4.1
+
+Released on 2015-04-06 as [0.4.1](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/0.4.1). See <https://github.com/ocamllabs/ocaml-ctypes> for full history.
+
+See [CHANGES.md](https://github.com/ocamllabs/ocaml-ctypes/blob/master/CHANGES.md) for details.
+
+### ocaml-cohttp-v0.16.0: Improved interface for headers, bug fixes for Uri, empty chunks, uninstalling binaries
+
+Released on 2015-04-04 as [v0.16.0](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.16.0). See <https://github.com/mirage/ocaml-cohttp> for full history.
+
+Compatibility breaking interface changes:
+* Response.t and Request.t fields are no longer mutable
+* [lwt] Fix types in `post_form` to be a `string * string list` instead
+  of a `Header.t` (#257)
+* Simplify the `Net` signature which needs to be provided for Lwt servers
+  to not be required.  Only the Lwt client needs a `Net` functor argument
+  to make outgoing connections. (#274)
+* `Request.has_body` does not permit a body to be set for methods that
+  RFC7231 forbids from having one (`HEAD`, `GET` and `DELETE`).
+
+New features and bug fixes:
+* Fix linking problem caused by sub-libraries using cohttp modules outside the
+  cohttp pack.
+* Added async client for S3. (#304)
+* Fix String_io.read_line to trim '\r' from end of string (#300)
+* Fix `cohttp-server-lwt` to correctly bind to a specific interface (#298).
+* Add `Cohttp_async.request` to send raw, umodified requests.
+* Supplying a `content-range` or `content-range` header in any client
+  request will always override any other encoding preference (#281).
+* Add a `cohttp-lwt-proxy` to act as an HTTP proxy. (#248)
+* Extend `cohttp-server-async` file server to work with HTTPS (#277).
+* Copy basic auth from `Uri.userinfo` into the Authorization header
+  for HTTP requests. (#255)
+* Install binaries via an OPAM `.install` file to ensure that they are
+  reliably uninstalled. (#252)
+* Use the `magic-mime` library to add a MIME type by probing filename
+  during static serving in the Lwt/Async backends. (#260)
+* Add `Cohttp.Header.add_opt_unless_exists` to set a header only if
+  an override wasn't supplied, and to initialise a fresh Header value
+  if none is present.
+* Do not override user-supplied headers in `post_form` or `redirect`.
+* `Request.make` does not inject a `transfer-encoding` header if there
+  is no body present in the request (#246).
+* `Server.respond` no longer overrides user-supplied headers that
+  specify the `content-length` or `transfer-encoding` headers (#268).
+* `cohttp_server_lwt` and `cohttp_server_async` now include sizes in
+  directory listing titles
+* Add `Header.add_multi` to initialise a header structure with multiple
+  fields more efficiently (#272).
+* Expose `IO.ic` and `IO.oc` types for `Cohttp_async` (#271).
+* Skip empty body chunks in `Transfer_io.write` (#270).
+* With the Lwt backend, `read` hangs if trying to fetch more than
+  `Sys.max_string_length` (which can be triggered on 32-bit platforms).
+  Read only a maximum that fits into a string (#282).
+* `cohttp-curl-lwt` now takes http method as parameter (#288)
+
+
+### ocaml-cstruct-v1.6.0: Add `fillv`, `memset` and comparison functions
+
+Released on 2015-04-03 as [v1.6.0](https://github.com/mirage/ocaml-cstruct/releases/tag/v1.6.0). See <https://github.com/mirage/ocaml-cstruct> for full history.
+
+* Add `memset` to set all the bytes of a cstruct value efficiently (#49)
+* More useful `Invalid_argument` parameters (#48).
+* Fix `to_sexp` to expose only the current view (#44 from David Kaloper).
+* Add `compare` and `equal` (#23, #24 and #45 from David Kaloper).
+* Add `fillv` to copy over a list of buffers (from Thomas Leonard).
+* Shift to centralised Travis scripts.
+
+### mirage-tcpip-v2.3.1: Permit excess trailing bytes in an IP frame
+
+Released on 2015-03-31 as [v2.3.1](https://github.com/mirage/mirage-tcpip/releases/tag/v2.3.1). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* Do not raise an assertion if an IP frame has extra trailing bytes (#221).
+
+
+### ocaml-dns-v0.14.1: Fix namespace pollution, add composition functions, Async_kernel support
+
+Released on 2015-03-30 as [v0.14.1](https://github.com/mirage/ocaml-dns/releases/tag/v0.14.1). See <https://github.com/mirage/ocaml-dns> for full history.
+
+* Reduce namespace pollution in `name.ml` to avoid breaking with Cstruct 1.6.0+.
+* Add a `Dns_server.compose` function to make it easier to build resolution pipelines (#58).
+* Add a `Dns_server_mirage` functor (#55).
+* Add `Dns_resolver.resolve_pkt` to support custom query packets (#49).
+* Split out the experimental Async_resolver into a `Async_kernel` and Unix libraries.
+  This introduces the `dns.async-unix` library.
+
+### ocaml-conduit-v0.8.0: TLS compatibility
+
+Released on 2015-03-24 as [v0.8.0](https://github.com/mirage/ocaml-conduit/releases/tag/v0.8.0). See <https://github.com/mirage/ocaml-conduit> for full history.
+
+*  Add TLS client support for Mirage (#50)
+* Do not overwrite the default name resolver for Mirage (#49)
+* Add TLS support using the pure OCaml TLS stack (#46).
+* Replace the Mirage `Make_flow` functor with `Dynamic_flow` that is
+  easier to extend with more flow types.
+
+### mirage-bootvar-xen-0.2: v0.2
+
+Released on 2015-03-19 as [0.2](https://github.com/MagnusS/mirage-bootvar-xen/releases/tag/0.2). See <https://github.com/magnuss/mirage-bootvar-xen> for full history.
+
+- `get` no longer raises exception
+- add `get_exn` which raises `Parameter_not_found` on error
+- return `'Ok of t | 'Error of msg` in `create` instead of raising exception on error
+- remove debug output
+
+### mirage-bootvar-xen-0.1: v0.1
+
+Released on 2015-03-19 as [0.1](https://github.com/MagnusS/mirage-bootvar-xen/releases/tag/0.1). See <https://github.com/magnuss/mirage-bootvar-xen> for full history.
+
+First release
+
+### ocaml-tls-0.4.0: solar eclipse - special edition release
+
+Released on 2015-03-19 as [0.4.0](https://github.com/mirleft/ocaml-tls/releases/tag/0.4.0). See <https://github.com/mirleft/ocaml-tls> for full history.
+
+* client authentication (both client and server side)
+* server side SNI configuration (see sni.md)
+* SCSV server-side downgrade prevention (contributed by Gabriel de Perthuis @g2p #5)
+* remove RC4 ciphers from default config #8
+* support for AEAD ciphers, currently CCM #191
+* proper bounds checking of handshake fragments #255
+* disable application data between CCS and Finished #237
+* remove secure renegotiation configuration option #256
+* expose epoch in mirage interface, implement 2.3.0 API (error_message)
+* error reporting (type failure in engine.mli) #246
+* hook into Lwt event loop to feed RNG #254
+
+### ocaml-x509-0.3.0: solar eclipse - special edition release
+
+Released on 2015-03-19 as [0.3.0](https://github.com/mirleft/ocaml-x509/releases/tag/0.3.0). See <https://github.com/mirleft/ocaml-x509> for full history.
+
+* more detailed error messages (type certificate_failure modified)
+* no longer Printf.printf debug messages
+* error reporting: `Ok of certificate option | `Fail of certificate_failure
+* fingerprint verification can work with None as host (useful for client authentication where host is not known upfront)
+* API reshape: X509 is the only public module, X509.t is the abstract certificate
+
 ### mirage-platform-v2.3.0: split the `mirage-xen` package into 3
 
 Released on 2015-03-17 as [v2.3.0](https://github.com/mirage/mirage-platform/releases/tag/v2.3.0). See <https://github.com/mirage/mirage-platform> for full history.
@@ -333,12 +495,6 @@ Released on 2015-01-31 as [0.10.2](https://github.com/mirage/ocaml-fat/releases/
 * Fix travis.
 * test: use OUnit's arg parser.
 * return errors from size rather than raising Fs_error.
-
-### ocaml-cstruct-v1.6.0: Add `fillv` function
-
-Released on 2015-01-29 as [v1.6.0](https://github.com/mirage/ocaml-cstruct/releases/tag/v1.6.0). See <https://github.com/mirage/ocaml-cstruct> for full history.
-
-Add helper function to transfer from a list of buffers to a destination buffer.
 
 ### ocaml-git-1.4.6: Improve LRU settings and add the `git.top` package
 
