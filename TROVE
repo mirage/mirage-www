@@ -13,6 +13,7 @@ mirage/mirage
 mirage/mirage-block-unix
 mirage/mirage-block-volume
 mirage/mirage-block-xen
+mirage/mirage-bootvar-xen
 mirage/mirage-clock
 mirage/mirage-console
 mirage/mirage-decks
@@ -62,5 +63,4 @@ samoht/alcotest
 talex5/mirage-trace-viewer
 magnuss/mirage-vnetif
 magnuss/jitsu
-magnuss/mirage-bootvar-xen
 magnuss/mirage-mimic
