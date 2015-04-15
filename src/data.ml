@@ -550,6 +550,13 @@ module Links = struct
   }
 
   let entries = [
+    { id="tls-podcast-ohm";
+      uri=Uri.of_string "http://monoxyd.de/20150408-ohm-008-ohne-heftige-mangel";
+      title="(german) OHM #008 – Ohne Heftige Mängel: TLS und dessen Probleme; robuste Implementierung von Sicherheitsprotokollen; OCaml-TLS und MirageOS";
+      date=day(2015,04,08);
+      stream=press;
+    };
+
     { id="cam-news-nymote";
       uri=Uri.of_string "http://www.cambridge-news.co.uk/personal-cloud-private-data-reality-thanks-Nymote/story-26074338-detail/story.html";
       title="A personal cloud for your private data could become a reality thanks to Nymote";
