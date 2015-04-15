@@ -48,7 +48,7 @@ using your favourite editor.
 
 ```
 $ cd src
-$ env NET=socket FS=crunch mirage configure --unix
+$ env NET=socket PORT=8080 FS=crunch mirage configure --unix
 $ make depend
 $ make
 $ make run
