@@ -1,3 +1,90 @@
+### mirage-platform-v2.3.1: Fix uninstallation of Xen libraries
+
+Released on 2015-04-19 as [v2.3.1](https://github.com/mirage/mirage-platform/releases/tag/v2.3.1). See <https://github.com/mirage/mirage-platform> for full history.
+
+Fix uninstall of `mirage-xen-ocaml` (#126, patch from @hannesm)
+
+
+### ocaml-cohttp-v0.17.0: Support more HTTP methods, Link support and stability improvements
+
+Released on 2015-04-18 as [v0.17.0](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.17.0). See <https://github.com/mirage/ocaml-cohttp> for full history.
+
+Compatibility breaking interface changes:
+* `CONNECT` and `TRACE` methods added to `Code`.Exhaustive matches will need updating.
+
+New features and bug fixes:
+* `Link` header parsing has been added as `Cohttp.Link`, `Header.get_links` and `Header.add_links`
+* `cohttp_server_*` now obeys `HEAD` requests and responds 405 to unknown methods
+* `Cohttp_async.Server.response` type is now exposed as a `response * body` pair
+* Failure to read a body in a pipelined response no longer terminates the stream
+* Fix `cohttp_curl_lwt -X HEAD` sending empty chunked body (#313)
+* Fix a bug which left extra `\r\n` in buffer at end of chunked reads
+* Fix handling of request URI for query strings and `CONNECT` proxies (#308, #318)
+* Fix precedence of `Host` header when request-URI is absolute URI
+* Fix request URI path to be non-empty except for * requests (e.g. `OPTIONS *`)
+
+### ocaml-conduit-v0.8.2: Make Mirage_TLS an optional dependency
+
+Released on 2015-04-18 as [v0.8.2](https://github.com/mirage/ocaml-conduit/releases/tag/v0.8.2). See <https://github.com/mirage/ocaml-conduit> for full history.
+
+Make TLS optional in `Conduit_mirage`, and disable it by default so that it is a developer-only option until it is properly released. It can be enabled by setting the `HAVE_MIRAGE_LWT` env variable.
+
+
+### ocaml-conduit-v0.8.1: Plug Unix resource leaks and support latest Async_ssl
+
+Released on 2015-04-17 as [v0.8.1](https://github.com/mirage/ocaml-conduit/releases/tag/v0.8.1). See <https://github.com/mirage/ocaml-conduit> for full history.
+
+* Support Async_SSL version 112.24.00 and higher.
+* Add a TLS echo server in `tests/async/`
+* [lwt] Do not leak socket fd when a connect or handshake 
+  operation fails (#56 via Edwin Torok).
+* [async] Do not leak pipes in SSL handling (#54 from Trevor Smith).
+
+
+### mirage-http-v2.2.0: Rename `HTTP` to `Cohttp_mirage` and expose the `Server` functor
+
+Released on 2015-04-16 as [v2.2.0](https://github.com/mirage/mirage-http/releases/tag/v2.2.0). See <https://github.com/mirage/mirage-http> for full history.
+
+* Do not user `lwt.syntax`
+* Rename `HTTP` to `Cohttp_mirage` (#9)
+* Expose `Cohttp_mirage_io`
+* Expose a `Server` functor which depends only on mirage's `FLOW` (no dependency
+  to `Conduit` anymore in this case)
+* Modernize Travis CI scripts
+
+### mirage-v2.4.0: Support latest tcpip, conduit and mirage-http. Remove `mirage run`, add `opam depext` and Makefile.user`
+
+Released on 2015-04-16 as [v2.4.0](https://github.com/mirage/mirage/releases/tag/v2.4.0). See <https://github.com/mirage/mirage> for full history.
+
+* Support `mirage-http.2.2.0`
+* Support `conduit.0.8.0`
+* Support `tcpip.2.4.0`
+* Add time and clock parameters to IPv4 (#362, patch from @yomimono)
+* Support for `ocaml-tls` 0.4.0.
+* Conduit now takes an optional TLS argument, allowing servers to support
+  encryption. (#347)
+* Add the ability to specify `Makefile.user` to extend the generated
+  `Makefile`. Also `all`, `build` and `clean` are now extensible make
+  targets.
+* Remove the `mirage run` command (#379)
+* Call `opam depext` when configuring (#373)
+* Add opam files for `mirage` and `mirage-types` packages
+* Fix `mirage --version` (#374)
+* Add a `update-doc` target to the Makefile to easily update the online
+  documentation at http://mirage.github.io/mirage/
+
+### mirage-block-volume-v0.9.1: With oasis generated files and without a bisect dependency.
+
+Released on 2015-04-15 as [v0.9.1](https://github.com/mirage/mirage-block-volume/releases/tag/v0.9.1). See <https://github.com/mirage/mirage-block-volume> for full history.
+
+No code change from v0.9.0, but following the release guidelines.
+
+### mirage-block-volume-v0.9.0: First release
+
+Released on 2015-04-10 as [v0.9.0](https://github.com/mirage/mirage-block-volume/releases/tag/v0.9.0). See <https://github.com/mirage/mirage-block-volume> for full history.
+
+The first release of mirage-block-volume
+
 ### jitsu-0.1: v0.1
 
 Released on 2015-04-10 as [0.1](https://github.com/MagnusS/jitsu/releases/tag/0.1). See <https://github.com/magnuss/jitsu> for full history.
@@ -11,17 +98,6 @@ Released on 2015-04-09 as [v0.16.1](https://github.com/mirage/ocaml-cohttp/relea
 New features and bug fixes:
 * Fix handling of request paths starting with multiple slashes (#308)
 
-
-### mirage-http-v2.2.0: Rename `HTTP` to `Cohttp_mirage` and expose the `Server` functor
-
-Released on 2015-04-08 as [v2.2.0](https://github.com/mirage/mirage-http/releases/tag/v2.2.0). See <https://github.com/mirage/mirage-http> for full history.
-
-* Do not user `lwt.syntax`
-* Rename `HTTP` to `Cohttp_mirage` (#9)
-* Expose `Cohttp_mirage_io`
-* Expose a `Server` functor which depends only on mirage's `FLOW` (no dependency
-  to `Conduit` anymore in this case)
-* Modernize Travis CI scripts
 
 ### ocaml-ctypes-0.4.1: ocaml-ctypes 0.4.1
 
@@ -119,9 +195,15 @@ Released on 2015-03-24 as [v0.8.0](https://github.com/mirage/ocaml-conduit/relea
 * Replace the Mirage `Make_flow` functor with `Dynamic_flow` that is
   easier to extend with more flow types.
 
+### mirage-tcpip-v2.4.0: ARP improvement
+
+Released on 2015-03-24 as [v2.4.0](https://github.com/mirage/mirage-tcpip/releases/tag/v2.4.0). See <https://github.com/mirage/mirage-tcpip> for full history.
+
+* ARP improvements (#118)
+
 ### mirage-bootvar-xen-0.2: v0.2
 
-Released on 2015-03-19 as [0.2](https://github.com/MagnusS/mirage-bootvar-xen/releases/tag/0.2). See <https://github.com/magnuss/mirage-bootvar-xen> for full history.
+Released on 2015-03-19 as [0.2](https://github.com/mirage/mirage-bootvar-xen/releases/tag/0.2). See <https://github.com/mirage/mirage-bootvar-xen> for full history.
 
 - `get` no longer raises exception
 - add `get_exn` which raises `Parameter_not_found` on error
@@ -130,7 +212,7 @@ Released on 2015-03-19 as [0.2](https://github.com/MagnusS/mirage-bootvar-xen/re
 
 ### mirage-bootvar-xen-0.1: v0.1
 
-Released on 2015-03-19 as [0.1](https://github.com/MagnusS/mirage-bootvar-xen/releases/tag/0.1). See <https://github.com/magnuss/mirage-bootvar-xen> for full history.
+Released on 2015-03-19 as [0.1](https://github.com/mirage/mirage-bootvar-xen/releases/tag/0.1). See <https://github.com/mirage/mirage-bootvar-xen> for full history.
 
 First release
 
