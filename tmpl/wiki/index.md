@@ -52,6 +52,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 *Calls take place every two weeks and are announced on the
 [mailing list](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel).*
 
+* Weekly call [2015-03-25](/wiki/weekly-2015-03-25) on Security advisory processes, TLS update and requests.
 * Weekly call [2015-03-11](/wiki/weekly-2015-03-11) on More racing, Testing, Networking, Large merges and Cleanups.
 * Weekly call [2015-02-25](/wiki/weekly-2015-02-25) on Races, Testing, Deployment, Pioneers and Roadmapping.
 * Weekly call [2015-02-11](/wiki/weekly-2015-02-11) on Improving quality, error handling, TLS merge and GSoC.
