@@ -64,6 +64,10 @@ module Main
         | [] | [""] | ["index.html"] ->
           return (`Html (Pages.Index.t ~feeds:updates_feeds read_tmpl))
 
+        | ["stats"; "gc"] ->
+          let gc = return (Cow.Html.to_string (Stats.page ())) in
+          return (`Html gc)
+
         | ["about"]
         | ["community"] ->
           return (`Html (Pages.About.t read_tmpl))
@@ -101,6 +105,8 @@ module Main
         let cid = Cohttp.Connection.to_string conn_id in
         C.log c (Printf.sprintf "conn %s closed" cid)
       in
+
+      Stats.start OS.Time.sleep;
       http (S.make ~callback ~conn_closed ())
 
   end
