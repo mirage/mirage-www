@@ -1,3 +1,32 @@
+### ocaml-tar-0.3.0: interoperability and portability improvements
+
+Released on 2015-04-28 as [0.3.0](https://github.com/mirage/ocaml-tar/releases/tag/0.3.0). See <https://github.com/mirage/ocaml-tar> for full history.
+
+- add Tar.Make functor which allows easier integration with `camlzip`
+- always initialise tar header unused bytes to 0 (previously would use uninitialised data)
+- modernise Travis CI scripts to use OPAM 1.2 workflow.
+
+### mirage-block-volume-v0.9.2: Idempotent redo-log
+
+Released on 2015-04-27 as [v0.9.2](https://github.com/mirage/mirage-block-volume/releases/tag/v0.9.2). See <https://github.com/mirage/mirage-block-volume> for full history.
+
+* Fixes to ensure redo-log is idempotent. This has resulted in some interface changes.
+
+### ocaml-cohttp-v0.17.1: Improved Async buffer handling
+
+Released on 2015-04-24 as [v0.17.1](https://github.com/mirage/ocaml-cohttp/releases/tag/v0.17.1). See <https://github.com/mirage/ocaml-cohttp> for full history.
+
+* [async] Limit buffer size to a maximum of 32K in the Async backend
+  (#330 from Stanislav Artemkin).
+* Add `Cohttp.Conf.version` with the library version number included.
+* Remove debug output from `cohttp-curl-async`.
+* Add the beginning of a `DESIGN.md` document to explain the library structure.
+
+
+### mirage-tcpip-v2.4.1: Merge between 2.4.0 and 2.3.1
+
+Released on 2015-04-21 as [v2.4.1](https://github.com/mirage/mirage-tcpip/releases/tag/v2.4.1). See <https://github.com/mirage/mirage-tcpip> for full history.
+
 ### mirage-platform-v2.3.1: Fix uninstallation of Xen libraries
 
 Released on 2015-04-19 as [v2.3.1](https://github.com/mirage/mirage-platform/releases/tag/v2.3.1). See <https://github.com/mirage/mirage-platform> for full history.
@@ -427,6 +456,13 @@ Released on 2015-03-04 as [v2.2.3](https://github.com/mirage/mirage-tcpip/releas
 * Filter incoming frames by MAC address to stop sending unnecessary RSTs. (#114)
 * Unhook unused modules `Sliding_window` and `Profiler` from the build. (#112)
 
+
+### mirage-flow-1.0.0: Initial release
+
+Released on 2015-02-26 as [1.0.0](https://github.com/mirage/mirage-flow/releases/tag/1.0.0). See <https://github.com/mirage/mirage-flow> for full history.
+
+* Add `Fflow`(functional flows)
+* Add `Lwt_io_flow` to convert between Mirage and Lwt flows
 
 ### ocaml-uri-v1.8.0: Add URI ordering and comparison functions, and bugfixes
 
@@ -1001,7 +1037,7 @@ Add compatibility with Cohttp 0.14.x APIs.
 
 ### ocaml-github-v0.9.4: Add bindings for organisation teams and repositories
 
-Released on 2014-12-19 as [v0.9.4](https://github.com/avsm/ocaml-github/releases/tag/v0.9.4). See <https://github.com/avsm/ocaml-github> for full history.
+Released on 2014-12-19 as [v0.9.4](https://github.com/mirage/ocaml-github/releases/tag/v0.9.4). See <https://github.com/mirage/ocaml-github> for full history.
 
 * Add bindings for organisation teams and repositories (#45).
 * Use `Bytes` instead of `String` for future `safe-string` support.
@@ -1386,7 +1422,7 @@ Released on 2014-11-28 as [v1.2.0](https://github.com/mirage/io-page/releases/ta
 
 ### ocaml-github-v0.9.3: Add repository branch query functions
 
-Released on 2014-11-28 as [v0.9.3](https://github.com/avsm/ocaml-github/releases/tag/v0.9.3). See <https://github.com/avsm/ocaml-github> for full history.
+Released on 2014-11-28 as [v0.9.3](https://github.com/mirage/ocaml-github/releases/tag/v0.9.3). See <https://github.com/mirage/ocaml-github> for full history.
 
 * Add `repo_branches` and `branches` query functions (#44 from Jeff Hammerbacher).
 * Improve `opam` 1.2 metadata.
@@ -1439,7 +1475,7 @@ Initial release. Mirage-profile can be compiled with or without Lwt tracing. If 
 
 ### ocaml-github-v0.9.2: Improved log error messages
 
-Released on 2014-11-09 as [v0.9.2](https://github.com/avsm/ocaml-github/releases/tag/v0.9.2). See <https://github.com/avsm/ocaml-github> for full history.
+Released on 2014-11-09 as [v0.9.2](https://github.com/mirage/ocaml-github/releases/tag/v0.9.2). See <https://github.com/mirage/ocaml-github> for full history.
 
 * Better log error messages (#39).
 * Tweak Makefile to build JavaScript version by default if `js_of_ocaml` is installed.
@@ -1521,7 +1557,7 @@ Released on 2014-11-03 as [v2.0.1](https://github.com/mirage/mirage-tcpip/releas
 
 ### ocaml-github-v0.9.1: Fix support for draft Releases
 
-Released on 2014-11-03 as [v0.9.1](https://github.com/avsm/ocaml-github/releases/tag/v0.9.1). See <https://github.com/avsm/ocaml-github> for full history.
+Released on 2014-11-03 as [v0.9.1](https://github.com/mirage/ocaml-github/releases/tag/v0.9.1). See <https://github.com/mirage/ocaml-github> for full history.
 
 Mark `published_at` and `created_at` fields in Releases to be optional, as they may not be set in the case of draft tags.
 
@@ -1600,7 +1636,7 @@ No change aside from adding support for Conduit 0.6 APIs used in Mirage 2.0.0 an
 
 ### ocaml-github-v0.9.0: Add Gist bindings and JavaScript compilation support
 
-Released on 2014-11-02 as [v0.9.0](https://github.com/avsm/ocaml-github/releases/tag/v0.9.0). See <https://github.com/avsm/ocaml-github> for full history.
+Released on 2014-11-02 as [v0.9.0](https://github.com/mirage/ocaml-github/releases/tag/v0.9.0). See <https://github.com/mirage/ocaml-github> for full history.
 
 * Add `Jar_cli` module for use by applications that use the Git Jar (#34).
 * Add bindings to the Gist APIs for storing text fragments (#36).
@@ -1815,7 +1851,7 @@ Released on 2014-08-10 as [v0.10.1](https://github.com/mirage/ocaml-cow/releases
 
 ### ocaml-github-v0.8.6: Add git-create-release
 
-Released on 2014-08-10 as [v0.8.6](https://github.com/avsm/ocaml-github/releases/tag/v0.8.6). See <https://github.com/avsm/ocaml-github> for full history.
+Released on 2014-08-10 as [v0.8.6](https://github.com/mirage/ocaml-github/releases/tag/v0.8.6). See <https://github.com/mirage/ocaml-github> for full history.
 
 * Fix `pull_action_type` `synchronize` tag typo (#33 from Philipp Gesang).
 * Add a `git create-release` to create a GitHub release, including binary assets
@@ -2224,7 +2260,7 @@ See [CHANGES.md](https://github.com/ocamllabs/ocaml-ctypes/blob/master/CHANGES.m
 
 ### ocaml-github-v0.8.5: Fix optional schema field parsing
 
-Released on 2014-05-08 as [v0.8.5](https://github.com/avsm/ocaml-github/releases/tag/v0.8.5). See <https://github.com/avsm/ocaml-github> for full history.
+Released on 2014-05-08 as [v0.8.5](https://github.com/mirage/ocaml-github/releases/tag/v0.8.5). See <https://github.com/mirage/ocaml-github> for full history.
 
 * The `master_branch` field in the `repo` is actually optional, to fix the schema to reflect this.
 
@@ -2287,7 +2323,7 @@ Released on 2014-04-27 as [v0.10.0](https://github.com/mirage/ocaml-cow/releases
 
 ### ocaml-github-v0.8.4: Add `git-list-releases` binary
 
-Released on 2014-04-26 as [v0.8.4](https://github.com/avsm/ocaml-github/releases/tag/v0.8.4). See <https://github.com/avsm/ocaml-github> for full history.
+Released on 2014-04-26 as [v0.8.4](https://github.com/mirage/ocaml-github/releases/tag/v0.8.4). See <https://github.com/mirage/ocaml-github> for full history.
 
 This sorts and displays a list of repository releases in chronological order.
 
@@ -2342,7 +2378,7 @@ Released on 2014-04-13 as [v0.11.0](https://github.com/mirage/ocaml-cohttp/relea
 
 ### ocaml-github-v0.8.3: Add `git-sync-releases` and `git upload-release` binaries
 
-Released on 2014-04-13 as [v0.8.3](https://github.com/avsm/ocaml-github/releases/tag/v0.8.3). See <https://github.com/avsm/ocaml-github> for full history.
+Released on 2014-04-13 as [v0.8.3](https://github.com/mirage/ocaml-github/releases/tag/v0.8.3). See <https://github.com/mirage/ocaml-github> for full history.
 
 This helps to synchronize Release metadata across two GitHub forks, and upload binary files to a Release.
 
@@ -2368,7 +2404,7 @@ Released on 2014-04-10 as [1.0.1](https://github.com/mirage/ocaml-git/releases/t
 
 ### ocaml-github-v0.8.2: Deployment key and POSIX thread safety
 
-Released on 2014-04-01 as [v0.8.2](https://github.com/avsm/ocaml-github/releases/tag/v0.8.2). See <https://github.com/avsm/ocaml-github> for full history.
+Released on 2014-04-01 as [v0.8.2](https://github.com/mirage/ocaml-github/releases/tag/v0.8.2). See <https://github.com/mirage/ocaml-github> for full history.
 
 0.8.2 (2014-04-01):
 * Remove use of `Re_str` to add POSIX thread safety.
@@ -2402,7 +2438,7 @@ Released on 2014-03-09 as [v1.3.0](https://github.com/mirage/ocaml-crunch/releas
 
 ### ocaml-github-v0.8.1: Add new oAuth scopes
 
-Released on 2014-03-07 as [v0.8.1](https://github.com/avsm/ocaml-github/releases/tag/v0.8.1). See <https://github.com/avsm/ocaml-github> for full history.
+Released on 2014-03-07 as [v0.8.1](https://github.com/mirage/ocaml-github/releases/tag/v0.8.1). See <https://github.com/mirage/ocaml-github> for full history.
 
 ### ocaml-tuntap-v1.0.0: Improve IPv6 support and error messages
 
@@ -2417,7 +2453,7 @@ Released on 2014-03-02 as [v1.0.0](https://github.com/mirage/ocaml-tuntap/releas
 
 ### ocaml-github-v0.8.0: Latest cohttp support and stability improvements
 
-Released on 2014-03-02 as [v0.8.0](https://github.com/avsm/ocaml-github/releases/tag/v0.8.0). See <https://github.com/avsm/ocaml-github> for full history.
+Released on 2014-03-02 as [v0.8.0](https://github.com/mirage/ocaml-github/releases/tag/v0.8.0). See <https://github.com/mirage/ocaml-github> for full history.
 
 * Port to cohttp.0.10.x interfaces.
 * Make the `note` field in oAuth token creation mandatory to reflect GitHub API.
@@ -2456,7 +2492,7 @@ Released on 2014-03-02 as [v0.10.0](https://github.com/mirage/ocaml-cohttp/relea
 
 ### ocaml-github-v0.7.1: Better toplevel and logging support
 
-Released on 2014-02-28 as [v0.7.1](https://github.com/avsm/ocaml-github/releases/tag/v0.7.1). See <https://github.com/avsm/ocaml-github> for full history.
+Released on 2014-02-28 as [v0.7.1](https://github.com/mirage/ocaml-github/releases/tag/v0.7.1). See <https://github.com/mirage/ocaml-github> for full history.
 
 0.7.1 (2014-02-28):
 * Log response bodies in the event of an API parsing failure. (#29)
@@ -2784,7 +2820,7 @@ What is missing before 1.0:
 
 ### ocaml-github-v0.7.0: Releases support, more scopes and better debug control
 
-Released on 2014-01-03 as [v0.7.0](https://github.com/avsm/ocaml-github/releases/tag/v0.7.0). See <https://github.com/avsm/ocaml-github> for full history.
+Released on 2014-01-03 as [v0.7.0](https://github.com/mirage/ocaml-github/releases/tag/v0.7.0). See <https://github.com/mirage/ocaml-github> for full history.
 
 * Add a User.repos call to list a users repositories.
 * Change repo type such that the field 'pushed_at' is now an option type.
