@@ -1,3 +1,16 @@
+### mirage-flow-1.0.1: Support for mirage-types 2.3.0
+
+Released on 2015-04-28 as [1.0.1](https://github.com/mirage/mirage-flow/releases/tag/1.0.1). See <https://github.com/mirage/mirage-flow> for full history.
+
+* Add `Fflow.error_message`
+
+### mirage-block-volume-v0.10.0: Add support for wiping PVs
+
+Released on 2015-04-28 as [v0.10.0](https://github.com/mirage/mirage-block-volume/releases/tag/v0.10.0). See <https://github.com/mirage/mirage-block-volume> for full history.
+
+- PV wipe: this obscures the labels
+- PV unwipe: this reveals the hidden labels, as an undo
+
 ### ocaml-tar-0.3.0: interoperability and portability improvements
 
 Released on 2015-04-28 as [0.3.0](https://github.com/mirage/ocaml-tar/releases/tag/0.3.0). See <https://github.com/mirage/ocaml-tar> for full history.
