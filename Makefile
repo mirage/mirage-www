@@ -26,7 +26,7 @@ IPADDR ?= static
 
 FLAGS  ?=
 
-.PHONY: all configure build run clean
+.PHONY: all configure build run clean news
 
 all:
 	@echo "To build this website, look in the Makefile and set"
@@ -39,7 +39,10 @@ configure:
 depend:
 	cd src && make depend
 
-build:
+news:
+	cd news && make run
+
+build: news
 	cd src && make build
 
 run:
@@ -47,4 +50,5 @@ run:
 
 clean:
 	cd src && make clean
+	cd feeds && make clean
 	$(RM) log src/mir-www src/*.img src/make-fat*.sh
