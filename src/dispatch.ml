@@ -77,6 +77,7 @@ module Main
         | "links"    :: tl -> return (links_dispatch tl)
         | "updates"  :: tl -> return (`Page (updates_dispatch tl))
 
+        | ("wiki" | "docs") :: "weekly" :: tl -> return (`Redirect "../wiki#Weeklycallsandreleasenotes")
         | "docs" :: tl
         | "wiki" :: tl -> return (`Page (wiki_dispatch tl))
 
