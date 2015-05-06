@@ -62,6 +62,7 @@ module Main
   let start c fs tmpl stack keys _clock =
     tls_init keys >>= fun cfg ->
     let serve flow = with_tls c cfg flow ~f:(with_http c fs tmpl) in
+    Stats.start OS.Time.sleep;
     S.listen_tcpv4 stack ~port:443 serve;
     S.listen stack
 
