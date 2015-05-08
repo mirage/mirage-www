@@ -1,7 +1,6 @@
 open Printf
 
 let (>>=) = Lwt.(>>=)
-let (>|=) = Lwt.(>|=)
 
 (* HTTPS *)
 module Main
