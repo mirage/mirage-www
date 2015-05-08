@@ -3,15 +3,6 @@ open Printf
 let (>>=) = Lwt.(>>=)
 let (>|=) = Lwt.(>|=)
 
-let split_path uri =
-  let path = Uri.path uri in
-  let rec aux = function
-    | [] | [""] -> []
-    | hd::tl -> hd :: aux tl
-  in
-  List.filter (fun e -> e <> "")
-    (aux (Re_str.(split_delim (regexp_string "/") path)))
-
 (* HTTPS *)
 module Main
     (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
