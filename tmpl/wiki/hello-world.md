@@ -442,16 +442,16 @@ let () =
   ]
 ```
 
-This configuration shows how composable the network stack subsystem is, by
-simultaneously listening on a socket port (using the Linux kernel) *and*
-a direct tuntap for the same webcode.  The definition of `main` just
-adds a new `stackv4` device driver.
+This configuration shows how composable the network stack subsystem is:
+the application can be configured at compile-time to either
+listen on a socket port (using the Linux kernel) *or*
+use tuntap directly - the same application code remains the same.
+The definition of `main` just adds a new `stackv4` device driver.
 
 The `net` handler checks to see if it's building for a socket or direct network stack.
 Crucially, both the socket and direct network stacks have
 a very similar modular API which you can see in [mirage/types/V1.mli](https://github.com/mirage/mirage/blob/1.1.0/types/V1.mli#L512).
-This lets your applications be parameterized across either backend, or
-even use both simultaneously as in the above example.
+This lets your applications be parameterized across either backend.
 
 We then define the `dhcp` variable to configure the network stack to either use DHCP or
 using the "default" ipv4 address
