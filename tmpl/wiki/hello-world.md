@@ -445,7 +445,7 @@ let () =
 This configuration shows how composable the network stack subsystem is:
 the application can be configured at compile-time to either
 listen on a socket port (using the Linux kernel) *or*
-use tuntap directly - the same application code remains the same.
+use tuntap directly - the application code remains the same.
 The definition of `main` just adds a new `stackv4` device driver.
 
 The `net` handler checks to see if it's building for a socket or direct network stack.
