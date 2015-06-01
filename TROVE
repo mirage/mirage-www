@@ -1,5 +1,6 @@
 avsm/ezxmlm
 djs55/ocaml-xenstore-clients
+mirage/alcotest
 mirage/ocaml-magic-mime
 mirage/ocaml-github
 mirage/cowabloga
@@ -63,6 +64,5 @@ mirleft/ocaml-x509
 mirleft/ocaml-nocrypto
 mirleft/ocaml-asn1-combinators
 ocamllabs/ocaml-ctypes
-samoht/alcotest
 talex5/mirage-trace-viewer
 magnuss/mirage-mimic
