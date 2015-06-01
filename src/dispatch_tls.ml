@@ -31,14 +31,14 @@ module Main
 
   let with_https c fs tmpl flow =
     let t = DS.create c (DS.dispatcher c fs tmpl) in
-    Https.listen t flow () ()
+    Https.listen t flow
 
   let with_http c flow =
     let t =
       let mk path = Site_config.base_uri ^ String.concat "/" path in
       D.create c (fun path -> D.redirect (mk path))
     in
-    Http.listen t flow () ()
+    Http.listen t flow
 
   let tls_init kv =
     X509.certificate kv `Default >>= fun cert ->
