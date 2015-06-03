@@ -27,6 +27,7 @@ mirage/mirage-net-unix
 mirage/mirage-net-xen
 mirage/mirage-platform
 mirage/mirage-profile
+mirage/mirage-seal
 mirage/mirage-skeleton
 mirage/mirage-tc
 mirage/mirage-tcpip
