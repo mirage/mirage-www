@@ -1,8 +1,8 @@
 If you're familiar with the using the command line, The best way to
-learn about Mirage is to try out the [installation
+learn about MirageOS is to try out the [installation
 instructions](http://openmirage.org/wiki/install) for yourself!
 
-### What is Mirage and why is it important?
+### What is MirageOS and why is it important?
 
 <a href="http://www.berndnaut.nl/images/NimbusNP3web.jpg"><img style="float:right; margin-left: 15px; margin-bottom: 15px;" src="/graphics/nimbus-np3-smilde.jpg"></img></a>
 
@@ -18,7 +18,7 @@ which themselves run applications like web-servers. This means a large
 part of the footprint is unused and unnecessary, which is both costly
 and a security risk (due to the larger attack surface).
 
-Mirage represents a new approach where only the necessary components
+MirageOS represents a new approach where only the necessary components
 of the OS are included and compiled along with the application into a
 [unikernel](http://queue.acm.org/detail.cfm?id=2566628). This
 results in highly efficient and extremely lean
@@ -27,11 +27,11 @@ much smaller attack surface.  These appliances can be deployed
 directly to the cloud and embedded devices, with the benefits of
 reduced costs and increased security and scalability.
 
-### How does Mirage work?
+### How does MirageOS work?
 
 <a href="http://www.xenproject.org/developers/teams/hypervisor.html"><img style="float:left; margin-right: 15px;" src="/graphics/Xen-Panda-Ecosystem-1.png"></img></a>
 
-Mirage is a 'library operating system' for constructing secure,
+MirageOS is a 'library operating system' for constructing secure,
 high-performance network applications across a variety of cloud
 computing and mobile platforms. It works by treating the [Xen
 hypervisor](http://www.xenproject.org/developers/teams/hypervisor.html)
@@ -45,31 +45,31 @@ Code can be developed in a high-level functional programming language
 into a fully-standalone, specialised unikernel. These unikernels run
 directly on Xen hypervisor APIs. Since the Xen powers most public
 clouds such as [Amazon EC2](http://aws.amazon.com/ec2), [Rackspace
-Cloud](http://www.rackspace.com/cloud/), and many others, Mirage lets
+Cloud](http://www.rackspace.com/cloud/), and many others, MirageOS lets
 your servers run more cheaply, securely and faster in any Xen based
 cloud or hosting service.
 
-Mirage is based around the [OCaml language](http://ocaml.org), with
+MirageOS is based around the [OCaml language](http://ocaml.org), with
 syntax extensions and [50+ libraries](https://github.com/mirage) which
 map directly to operating system constructs when being compiled for
-production deployment. As such, Mirage includes clean-slate functional
+production deployment. As such, MirageOS includes clean-slate functional
 implementations of protocols ranging from TCP/IP, DNS, SSH, Openflow
 (switch/controller), HTTP, XMPP and Xen inter-VM transports.
 
 
-### Where will Mirage be useful?
+### Where will MirageOS be useful?
 
 <a href="http://www.flickr.com/photos/radnezeoz/7343684238/"><img style="float:right; margin-left: 15px;" src="/graphics/cumulous-cruisin.jpg"></img></a>
 
-An example of a current Mirage appliance is this website which is a
+An example of a current MirageOS appliance is this website which is a
 completely self-hosted site, deployed on the public cloud and running
 directly on the Xen hypervisor (in this case, on Amazon EC2). Such
 appliances could be auto-configured and deployed directly to the
 public cloud (e.g. Rackspace or Amazon EC2) or pushed to embedded
 devices. There is also
 [http://decks.openmirage.org](http://decks.openmirage.org), where
-separate Mirage appliances are being used to present slides for
-conferences.  These are both cases of how Mirage is being used right
+separate MirageOS appliances are being used to present slides for
+conferences.  These are both cases of how MirageOS is being used right
 now and below are examples of things we can do in the future.
 
 #### Self-scaling architecture
@@ -91,7 +91,7 @@ spending what we actually need when we really need it.
 
 <a href="http://www.flickr.com/photos/lukew/6171377827/"><img style="float:left; margin-right: 15px;" src="/graphics/device-love.jpg"></img></a>
 
-Using Mirage, we can also create appliances that can run on embedded
+Using MirageOS, we can also create appliances that can run on embedded
 devices. Such appliances can be deployed into small devices that are
 scattered around your home, for example in plant pots to measure
 moisture levels to chemical sensors in your fridge, which tell you
@@ -111,10 +111,10 @@ lighting and many other things. When additional computation is
 required, more appliances can automatically be created on a cloud
 provider for the short duration that they're needed.
 
-Overall, Mirage provides substantial benefits in terms of increased
+Overall, MirageOS provides substantial benefits in terms of increased
 efficiency and safety and is ideal for deploying to both the public
 cloud and embedded devices. Together with
 [Irmin](http://nymote.org/software/irmin) and
-[Signpost](http://nymote.org/software/signpost), Mirage forms a core
+[Signpost](http://nymote.org/software/signpost), MirageOS forms a core
 piece of the Nymote/MISO toolstack to power the coming wave of [Internet of
 Things devices](http://en.wikipedia.org/wiki/Internet_of_Things).

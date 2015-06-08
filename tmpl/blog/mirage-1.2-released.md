@@ -1,7 +1,7 @@
-Summer is in full swing here in Mirage HQ with torrential rainstorms, searing
+Summer is in full swing here in MirageOS HQ with torrential rainstorms, searing
 sunshine, and our [OSCON 2014](http://www.oscon.com/oscon2014/public/schedule/detail/35024) talk
 rapidly approaching in just a few weeks.  We've been steadily releasing point releases
-since the [first release](/blog/mirage-1.1-released) back in December, and today's [Mirage
+since the [first release](/blog/mirage-1.1-released) back in December, and today's [MirageOS
 1.2.0](https://github.com/mirage/mirage/releases/tag/v1.2.0) is the last of the `1.x` series.
 The main improvements are usability-oriented:
 
@@ -27,9 +27,9 @@ The main improvements are usability-oriented:
   and finding some good [zingers](https://github.com/mirage/mirage-tcpip/issues/56)).  There are too many
   library releases to list individually here, but you can [browse the changelog](/releases) for more details.
 
-#### Towards Mirage OS 2.0
+#### Towards MirageOS 2.0
 
-We've also been working hard on the **Mirage OS 2.x series**, which introduces
+We've also been working hard on the **MirageOS 2.x series**, which introduces
 a number of new features and usability improvements that emerged from actually
 using the tools in practical projects.  Since there have been so many [new
 contributors](/blog/welcome-to-our-summer-hackers) recently,

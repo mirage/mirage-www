@@ -2,7 +2,7 @@
 
 Something we've been working on for a little while now that we're pretty
 excited about is an [OpenFlow](http://openflow.org/) implementation for
-Mirage. For those who're not networking types, in short, OpenFlow is a
+MirageOS. For those who're not networking types, in short, OpenFlow is a
 protocol and framework for devolving network control to software running on
 platforms other than the network elements themselves. It consists of three
 main parts:
@@ -15,7 +15,7 @@ main parts:
 For more -- and far clearer! -- explanations, see any of the many online
 OpenFlow resources such as [OpenFlowHub](http://openflowhub.org).
 
-Within Mirage we have an OpenFlow implementation in two parts: individual
+Within MirageOS we have an OpenFlow implementation in two parts: individual
 libraries that provide controller and switch functionality. Linking the switch
 library enables your application to become a software-based OpenFlow switch.
 Linking in the controller library enables your application to exercise direct

@@ -1,7 +1,7 @@
-We've had a lot of people trying out Mirage since the [1.0 release](/blog/releasing-mirage) last week, and so we've been steadily cutting point releases and new libraries to OPAM as they're done.
+We've had a lot of people trying out MirageOS since the [1.0 release](/blog/releasing-mirage) last week, and so we've been steadily cutting point releases and new libraries to OPAM as they're done.
 The most common build error by far has been people using outdated OPAM packages.  Do make sure that you have at least [OPAM 1.1](http://opam.ocaml.org/doc/Quick_Install.html) installed, and that you've run `opam update -u` to get the latest package lists from the [package repository](https://github.com/ocaml/opam-repository).
 
-[Mirage 1.0.3](https://github.com/mirage/mirage/releases/tag/1.0.3) improves
+[MirageOS 1.0.3](https://github.com/mirage/mirage/releases/tag/1.0.3) improves
 Xen configuration generation, cleans up HTTP support, and adds support for FAT
 filesystems.  Here are some of the libraries we've released this week to go along with it:
 
@@ -16,10 +16,10 @@ filesystems.  Here are some of the libraries we've released this week to go alon
 * [cow.0.8.1](https://github.com/mirage/ocaml-cow) (update): switch to the [Omd](https://github.com/pw374/omd) library for Markdown parsing, which is significantly more compatible with other parsers.
 * [ezjsonm.0.2.0](https://github.com/samoht/ezjsonm) (new): a combinator library to parse, select and manipulate JSON structures.
 * [ezxmlm.1.0.0](https://github.com/avsm/ezxmlm) (new): a combinator library to parse, select and transform XML tags and attributes.
-* [mirage-http-xen](https://github.com/mirage/mirage-http-xen) and [mirage-http-unix](https://github.com/mirage/mirage-http-unix) provide the HTTP drivers on top of Cohttp for Mirage. Although they are very similar at the moment, they will diverge as the Unix variant gains options to use kernel sockets instead of only the network stack.
+* [mirage-http-xen](https://github.com/mirage/mirage-http-xen) and [mirage-http-unix](https://github.com/mirage/mirage-http-unix) provide the HTTP drivers on top of Cohttp for MirageOS. Although they are very similar at the moment, they will diverge as the Unix variant gains options to use kernel sockets instead of only the network stack.
 
-We're making great progress on moving our personal homepages over to Mirage.  The first two introductory wiki posts are also now available:
+We're making great progress on moving our personal homepages over to MirageOS.  The first two introductory wiki posts are also now available:
 * [Building a hello world example](/wiki/hello-world) takes you through the basic steps to build a Unix and Xen binary.
-* [Building the Mirage website](/wiki/mirage-www) lets you build this website with several variants, demonstrating the Unix passthrough filesystem, the OCaml FAT filesystem library, and how to attach a network stack to your application.
+* [Building the MirageOS website](/wiki/mirage-www) lets you build this website with several variants, demonstrating the Unix passthrough filesystem, the OCaml FAT filesystem library, and how to attach a network stack to your application.
 
 As always, please feel free to report any issues via the [bug tracker](https://github.com/mirage/mirage/issues) and ask questions on the [mailing list](mailto:mirageos-devel@lists.xenproject.org).
