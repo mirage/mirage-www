@@ -102,7 +102,7 @@ let js2 : Javascript.t =
   <:camlscript< List.iter print_int [1;2;3] >>
 ```
 
-The `<:css< >>`, `<:xml< >>` and `<:html< >>` quotations are present in Mirage today, and the `<:js< >>` and `<:camlscript< >>` quotations will be integrated soon.  `js` uses Jake Donham's [ocamljs](https://github.com/jaked/ocamljs) and an early prototype of `camlscript` is [available](https://github.com/samoht/camlscript) on Github.
+The `<:css< >>`, `<:xml< >>` and `<:html< >>` quotations are present in MirageOS today, and the `<:js< >>` and `<:camlscript< >>` quotations will be integrated soon.  `js` uses Jake Donham's [ocamljs](https://github.com/jaked/ocamljs) and an early prototype of `camlscript` is [available](https://github.com/samoht/camlscript) on Github.
 
 ###Type-driven Code Generation
 
@@ -219,7 +219,7 @@ val user_of_t : Json.t -> t
 
 It is possible to combine multiple code generators by separating the annotations with a comma, e.g.
 `type t = [..] with html,json`. It is thus possible to use Cow with the [ORM](https://www.github.com/mirage/orm)
-library to persist typed values with SQLite (this is not integrated into Mirage just yet, but will be soon).
+library to persist typed values with SQLite (this is not integrated into MirageOS just yet, but will be soon).
 
 ####Mixing generated and hand-written code
 
@@ -264,4 +264,4 @@ let xml_of_feed f = <:xml<
 >>
 ```
 
-This has been a quick overview of the Cow syntax handlers in Mirage. They are still a work-in-progress, but this website is built using them. Thanks to Jake Donham and Nicolas Pouillard for their excellent [meta-programming tutorial](https://github.com/jaked/cufp-metaprogramming-tutorial/tree/master/solutions/ocaml/json_quot) at [CUFP 2010](http://cufp.org/conference/sessions/2010/camlp4-and-template-haskell) that kicked off this work.
+This has been a quick overview of the Cow syntax handlers in MirageOS. They are still a work-in-progress, but this website is built using them. Thanks to Jake Donham and Nicolas Pouillard for their excellent [meta-programming tutorial](https://github.com/jaked/cufp-metaprogramming-tutorial/tree/master/solutions/ocaml/json_quot) at [CUFP 2010](http://cufp.org/conference/sessions/2010/camlp4-and-template-haskell) that kicked off this work.

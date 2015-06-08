@@ -1,4 +1,4 @@
-This article is part of a series documenting how Mirage applications run under
+This article is part of a series documenting how MirageOS applications run under
 [Xen](http://www.xenproject.org/). This article is about suspend, resume and
 live migration.
 
@@ -34,7 +34,7 @@ changed.
 However, most operating systems inside VMs have software installed
 that is aware that it is running in a VM, and generally speaking, this
 is where work is required to ensure that these components survive a
-suspend and resume. In the case of the Mirage Xen unikernels, it is
+suspend and resume. In the case of the MirageOS Xen unikernels, it is
 mainly the IO devices that need to be aware of the changes that happen
 over the course of the operation. Since our unikernels are not fully
 virtualised but are paravirtualised kernels, there is also some
@@ -55,7 +55,7 @@ using these can carry on without any special logic required.
 
 #### Walkthrough
 
-To explain the process of suspend and resume in Mirage Xen guests,
+To explain the process of suspend and resume in MirageOS Xen guests,
 we will walk though the various operations in sequence.
 
 #### Suspend
@@ -66,7 +66,7 @@ suspend, and is therefore a good place to start looking.
 The first thing that happens when a suspend is requested is that the
 toolstack organising the operation will signal to the guest that it
 should begin the process. This can be done via several mechanisms, but
-the one supported in mirage today is by writing a particular key to
+the one supported in MirageOS today is by writing a particular key to
 xenstore:
 
     /local/domain/<n>/control/shutdown = "suspend"
@@ -90,7 +90,7 @@ Then, the
 [grant tables are suspended](https://github.com/mirage/mirage-platform/blob/a47758c696797498e3eb7f3aac90830e2993090d/xen/lib/sched.ml#L35)
 via the call to Gnt.suspend, which ends up calling a
 [c function](https://github.com/mirage/mirage-platform/blob/a47758c696797498e3eb7f3aac90830e2993090d/xen/runtime/kernel/gnttab_stubs.c#L164)
-in the mirage kernel code. The main reason for calling this is that
+in the MirageOS kernel code. The main reason for calling this is that
 the mechanism by which the grant code works is via shared memory
 pages, and these pages are [owned by xen](https://github.com/mirage/xen/blob/8940a13d6de1295cfdc4a189e0a5610849a9ef59/xen/common/grant_table.c#L1239) and not by the domain itself,
 which causes problems when suspending the VM as we will see shortly.
@@ -149,7 +149,7 @@ PFNs to the new MFNs.
 The next task is to 
 rewrite the VCPU registers to pass back the suspend return code as
 mentioned previously and then we are ready to unpause the new domain. At this point,
-control is handed back to the mirage guest as if the hypercall has just
+control is handed back to the MirageOS guest as if the hypercall has just
 returned. At this point, the domain is close to the state of a cleanly
 started guest, and so we have to [reinitialize](https://github.com/mirage/mirage-platform/blob/a47758c696797498e3eb7f3aac90830e2993090d/xen/runtime/kernel/sched_stubs.c#L69) many of the same things
 that are done on startup, including enabling event delivery, initialising
@@ -189,7 +189,7 @@ that takes responses from the ring and demultiplexes them, and this
 thread will be killed when it attempts to wait on the
 [event channel](/wiki/xen-events). Whenever an event channel is bound,
 we pair up the integer event channel number with a 'generation count'
-that is incremented on resume. Whenever the mirage guest attempts to
+that is incremented on resume. Whenever the MirageOS guest attempts to
 wait for a signal from an event channel, the generation count is
 checked, and a stale generation results in a Lwt thread failure. The
 generation count is _not_ checked when attempting to notify via an

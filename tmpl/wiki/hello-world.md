@@ -1,5 +1,5 @@
 First make sure you have followed the [installation
-instructions](/wiki/install) to get a working Mirage installation.  The
+instructions](/wiki/install) to get a working MirageOS installation.  The
 examples below are in the
 [mirage-skeleton](http://github.com/mirage/mirage-skeleton) repository. Begin
 by cloning and changing directory to it:
@@ -11,7 +11,7 @@ $ cd mirage-skeleton
 
 ### Step 1: Hello World!
 
-As a first step, let's build and run the Mirage "Hello World" unikernel -- this
+As a first step, let's build and run the MirageOS "Hello World" unikernel -- this
 will print `hello\nworld\n` 5 times before terminating:
 
 ```
@@ -48,7 +48,7 @@ First, let's look at the code:
 To veteran OCaml programmers among you, this might look a little odd: we have a
 `Main` module parameterised by another module (`C`, of type `CONSOLE`) that
 contains a method `start` taking a single parameter `c` (an instance of a
-`CONSOLE`). This is the basic structure required to make this a Mirage
+`CONSOLE`). This is the basic structure required to make this a MirageOS
 unikernel rather than a standard OCaml POSIX application.
 
 The concrete implementation of `CONSOLE` will be supplied at compile-time,
@@ -84,7 +84,7 @@ file at build-time and outputs a `main.ml` that has the concrete values filled i
 for you, with the exact modules varying by which backend you selected (e.g. Unix or
 Xen).
 
-Mirage mirrors the Xen model on UNIX as far as possible: your application is
+MirageOS mirrors the Xen model on UNIX as far as possible: your application is
 built as a unikernel which needs to be instantiated and run whether on UNIX or
 on Xen. When your unikernel is run, it starts much as a VM on Xen does -- and
 so must be passed references to devices such as the console, network interfaces
@@ -97,8 +97,8 @@ console.
 
 You can find the module signatures of all the device drivers (such as `CONSOLE`)
 in the [`types/`](https://github.com/mirage/mirage/tree/master/types) directory
-of the main Mirage repository.  Since you'll find yourself referring back to
-these quite often when building Mirage applications, it's worth bookmarking
+of the main MirageOS repository.  Since you'll find yourself referring back to
+these quite often when building MirageOS applications, it's worth bookmarking
 the [documentation](http://mirage.github.io) for this module.
 
 #### Building a Unix binary
@@ -258,7 +258,7 @@ disk = [ 'file:/home/avsm/src/git/avsm/mirage-skeleton/block/disk.img,,xvda1,w']
 
 Now you just need to `xl create -c block_test.xl`, and you should
 see the same output as you had for the Unix one.  The difference is
-that instead of going through the Linux or FreeBSD kernel, Mirage
+that instead of going through the Linux or FreeBSD kernel, MirageOS
 linked in the Xen [block device driver](https://github.com/mirage/mirage-block-xen)
 and mapped the unikernel block requests directly through to it.
 
@@ -382,7 +382,7 @@ then a statically linked filesystem is used. On Unix however, the overhead
 of building this can be removed by simply passing through to the underlying
 filesystem, which is done via the `direct_kv_ro` implementation.
 
-You should now be seeing the power of the Mirage configuration tool: we
+You should now be seeing the power of the MirageOS configuration tool: we
 have built several applications that use fairly complex concepts such as
 filesystems and block devices that are independent of the implementations
 (by virtue of our application logic being a functor), and then are able
@@ -455,7 +455,7 @@ This lets your applications be parameterized across either backend.
 
 We then define the `dhcp` variable to configure the network stack to either use DHCP or
 using the "default" ipv4 address
-(for convenience, Mirage assigns a default of `10.0.0.2` in this case;
+(for convenience, MirageOS assigns a default of `10.0.0.2` in this case;
 this is of course overridden for production deployments).
 The definition of `stack` then uses `dhcp` and `net` accordingly to set up the networking stack.
 
@@ -541,5 +541,5 @@ hood with the functor applications (something that we'll explain further in a
 future tutorial!).
 
 Now that we've covered the basics of configuration, block devices and
-networking, let's get the real Mirage website up and running with a [networked
+networking, let's get the real MirageOS website up and running with a [networked
 application](/wiki/mirage-www).

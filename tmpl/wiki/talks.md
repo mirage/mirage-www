@@ -1,5 +1,5 @@
-This page links to various technical talks and slide decks on Mirage.  The bulk
-of slide decks that we give are now hosted using Mirage on
+This page links to various technical talks and slide decks on MirageOS.  The bulk
+of slide decks that we give are now hosted using MirageOS on
 <http://decks.openmirage.org>, so please browse there for the latest content.
 
 ## Videos
@@ -17,7 +17,7 @@ website](http://www.infoq.com/presentations/mirage-os).
 
 ### Mirage: Extreme Specialization of Cloud Appliances (OSCon, summer 2013)
 
-[Richard Mortier](http://mort.io) and [Anil Madhavapeddy](http://anil.recoil.org) presented a developer preview of Mirage 1.0 at OSCon.  The screencast below still uses the old `mirari` tool instead of the final version that shipped with Mirage 1.0, but the screencast is included here for historical reasons.
+[Richard Mortier](http://mort.io) and [Anil Madhavapeddy](http://anil.recoil.org) presented a developer preview of MirageOS 1.0 at OSCon.  The screencast below still uses the old `mirari` tool instead of the final version that shipped with MirageOS 1.0, but the screencast is included here for historical reasons.
 
 <div class="flex-video">
 <iframe width="560" height="315" src="//www.youtube.com/embed/2Mx8Bd5JYyo" frameborder="0" allowfullscreen=""> </iframe>
@@ -26,7 +26,7 @@ website](http://www.infoq.com/presentations/mirage-os).
 ### Programming the Xen Cloud with OCaml (OCaml Workshop, Sep 2012)
 
 [Dave's presentation](http://www.youtube.com/watch?v=dJlHBS7sP_c&feature=plcp)
-at the 2012 OCaml Users and Developers Workshop, describing Mirage and its use
+at the 2012 OCaml Users and Developers Workshop, describing MirageOS and its use
 as a way to build VMs for Xen in OCaml.
 
 <div class="flex-video">
@@ -35,7 +35,7 @@ as a way to build VMs for Xen in OCaml.
 
 ### Mirage: extreme specialisation of virtual appliances, XenSummit 2012
 
-Anil's [presentation](http://vimeo.com/57412215) at [XenSummit 2012](http://www-archive.xenproject.org/xensummit/xs12na_talks/M10b.html) describing the architecture of Mirage, and giving a quick demonstration of how to build a web-server that runs as a unikernel on a standard Xen installation.
+Anil's [presentation](http://vimeo.com/57412215) at [XenSummit 2012](http://www-archive.xenproject.org/xensummit/xs12na_talks/M10b.html) describing the architecture of MirageOS, and giving a quick demonstration of how to build a web-server that runs as a unikernel on a standard Xen installation.
 
 <div class="flex-video">
 <iframe src="//player.vimeo.com/video/57412215" width="500" height="375" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""> </iframe>
@@ -44,7 +44,7 @@ Anil's [presentation](http://vimeo.com/57412215) at [XenSummit 2012](http://www-
 ### Mirage: Building a Better Internet (Verisign Internet Infrastructure, 2011)
 
 [A short video](http://www.youtube.com/watch?v=5-4lbyD_Fvw&feature=player_detailpage&t=79) Verisign requested as part of a showcase of the
-recipients of their "Building a Better Internet" 2011 grant symposium, discussing Mirage and its importance for the ongoing health of the Internet.
+recipients of their "Building a Better Internet" 2011 grant symposium, discussing MirageOS and its importance for the ongoing health of the Internet.
 
 <div class="flex-video">
 <iframe width="560" height="315" src="//www.youtube.com/embed/5-4lbyD_Fvw?start=79" frameborder="0" allowfullscreen=""> </iframe>
@@ -52,7 +52,7 @@ recipients of their "Building a Better Internet" 2011 grant symposium, discussin
 
 ### Mirage, A New Multi-Scale Operating System for Clouds and Crowds (LinkedIn SNA Tech Talk, Oct 2010)
 
-[Alex Feinberg](http://twitter.com/strlen) kindly hosted a Mirage talk at [LinkedIn](http://linkedin.com)'s Search Networks and Analytics Team ([blog](http://sna-projects.com/blog/2010/10/mirage/)).
+[Alex Feinberg](http://twitter.com/strlen) kindly hosted a MirageOS talk at [LinkedIn](http://linkedin.com)'s Search Networks and Analytics Team ([blog](http://sna-projects.com/blog/2010/10/mirage/)).
 
 <div class="flex-video">
 <iframe src="http://player.vimeo.com/video/16189862" width="400" height="225" frameborder="0">&nbsp; </iframe>

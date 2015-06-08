@@ -1,4 +1,4 @@
-[Lwt](http://www.ocsigen.org/lwt) is a lightweight cooperative threading library for OCaml. A good way to understand Lwt and its use in Mirage is to write some simple code. This document introduces the basic concepts and suggests programs to write. Note that Lwt has a number of syntax extensions that are widely used in Mirage. These are introduced as you go along through the tutorial. Code for all examples is in the `mirage-skeleton/lwt/src` [repository](https://github.com/mirage/mirage-skeleton/tree/master/lwt/src).
+[Lwt](http://www.ocsigen.org/lwt) is a lightweight cooperative threading library for OCaml. A good way to understand Lwt and its use in MirageOS is to write some simple code. This document introduces the basic concepts and suggests programs to write. Note that Lwt has a number of syntax extensions that are widely used in MirageOS. These are introduced as you go along through the tutorial. Code for all examples is in the `mirage-skeleton/lwt/src` [repository](https://github.com/mirage/mirage-skeleton/tree/master/lwt/src).
 
 ##Tutorial
 
@@ -38,7 +38,7 @@ The infix operators `<&>` and `<?>` are defined in the Lwt module, where `a <&> 
 
 Now write a program that spins off two threads, each of which sleep for some amount of time, say 1 and 2 seconds and then one prints "Heads", the other "Tails". After both have finished, it prints "Finished" and exits. To sleep for some time use `OS.Time.sleep` and to print to console use `OS.Console.log`. Note that `OS` is a Mirage-specific module, if you are using Lwt in another context, use `Lwt_unix.sleep` and `Lwt_io.write`.
 
-You will need to have Mirage [installed](/wiki/install). Create a file `config.ml` with the following content:
+You will need to have MirageOS [installed](/wiki/install). Create a file `config.ml` with the following content:
 
 ```
   open Mirage
@@ -73,7 +73,7 @@ Assuming you are building for POSIX using native kernel sockets, compile the app
   ./main.native
 ```
 
-If you are building for a different Mirage platform, change the `--unix` switches appropriately (presently either `--xen` or `--unix`).
+If you are building for a different MirageOS platform, change the `--unix` switches appropriately (presently either `--xen` or `--unix`).
 The `OS` module packs several sub-modules depending of the backend, [unix](https://github.com/mirage/mirage-platform/tree/master/unix/lib)
 or [xen](https://github.com/mirage/mirage-platform/tree/master/xen/lib).
 
@@ -103,7 +103,7 @@ This code is also found in `lwt/src/unikernels.ml` in the `mirage-skeleton` code
 
 ###Syntax Extensions
 
-Using Lwt does sometimes require significantly restructuring code, and in particular doesn't work with many of the more imperative OCaml control structures such as `for` and `while`. Luckily, Lwt includes a comprehensive [pa_lwt](http://ocsigen.org/lwt/api/Pa_lwt) syntax extension that makes writing threaded code as convenient as vanilla OCaml. Mirage includes this extension by default, so you can use it anywhere you want.
+Using Lwt does sometimes require significantly restructuring code, and in particular doesn't work with many of the more imperative OCaml control structures such as `for` and `while`. Luckily, Lwt includes a comprehensive [pa_lwt](http://ocsigen.org/lwt/api/Pa_lwt) syntax extension that makes writing threaded code as convenient as vanilla OCaml. MirageOS includes this extension by default, so you can use it anywhere you want.
 
 This is a good place to introduce some of these extensions. When opening the Lwt module, the infix operator `>>=` is made available. This operator is an alternative to the `bind` function and often makes the code more readable. E.g. consider `bind (bind (bind t f) g) h` and the operator based equivalent expression `t >>= f >>= g >>= h`. We can now rewrite the previous solution more simply:
 
@@ -183,7 +183,7 @@ Now, the code looks like just normal OCaml code, except that we substitute `lwt`
   end
 ```
 
-This is in `lwt/src/unikernels.ml` in the Mirage code repository. The target is `heads3`.
+This is in `lwt/src/unikernels.ml` in the MirageOS code repository. The target is `heads3`.
 
 Here we define two threads, `heads` and `tails`, and block until they are both complete (via the `lwt ()` and the `<&>` join operator). If you want to print "Finished" before the previous threads are complete, just put the print statement (`Console.log`) before the join statement (`... <&> ...`).
 
@@ -434,7 +434,7 @@ Every second write a tuple containing a pair of small random integers `(Random.i
     inp ()
 ```
 
-This is in `lwt/src/mvar_unikernels.ml` in the Mirage code repository. Build with target `int_server`.
+This is in `lwt/src/mvar_unikernels.ml` in the MirageOS code repository. Build with target `int_server`.
 
 
 ##Stream Processing
@@ -510,7 +510,7 @@ The `Lwt_stream` library actually provides a number of processing functions. Som
 
 ##Mutexes and cooperation
 
-With Lwt, it is often possible to avoid mutexes altogether! The web server from the [Ocsigen](http://ocsigen.org) project uses only two, and the Mirage source code none. In usual concurrent systems, mutexes are used to prevent two (or more) threads executing concurrently on a given piece of data. This can happen when a thread is preemptively interrupted and another one starts running. In Lwt, a thread executes serially until it explicitly yields (most commonly via `bind`); for this reason, Lwt threads are said to be [cooperative](http://en.wikipedia.org/wiki/Cooperative_multitasking#Cooperative_multitasking.2Ftime-sharing).
+With Lwt, it is often possible to avoid mutexes altogether! The web server from the [Ocsigen](http://ocsigen.org) project uses only two, and the MirageOS source code none. In usual concurrent systems, mutexes are used to prevent two (or more) threads executing concurrently on a given piece of data. This can happen when a thread is preemptively interrupted and another one starts running. In Lwt, a thread executes serially until it explicitly yields (most commonly via `bind`); for this reason, Lwt threads are said to be [cooperative](http://en.wikipedia.org/wiki/Cooperative_multitasking#Cooperative_multitasking.2Ftime-sharing).
 
 From the coder's perspective, it means that the evaluation of expressions without the `Lwt.t` type will *never* go through the thread scheduler. Note however, that it is possible to switch threads without executing the scheduler via the `wakeup` function. As a result, instead of surrounding an expression with `lock` and `unlock` statements, one can simply enforce that the type of the expression is not `Lwt.t` and check for the absence of calls to `wakeup`. Finally, be aware that some functions from the Lwt standard libraries do use thread switching.
 
@@ -570,9 +570,9 @@ There is also a `match_lwt` which will bind the result of a thread and immediate
 
 Understanding the basic principles behind Lwt can be helpful.
 
-The core of Lwt is based on an event loop. In "standard" (non-Mirage) settings,
+The core of Lwt is based on an event loop. In "standard" (non-MirageOS) settings,
 this loop is started using the `Lwt_main.run` function. However, when using
-Mirage, the loop is automatically started by the `main.ml` file autogenerated
+MirageOS, the loop is automatically started by the `main.ml` file autogenerated
 by the `mirage` command-line tool..
 
 Because it's based on an event loop, threads are actually very cheap in Lwt

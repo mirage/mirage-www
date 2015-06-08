@@ -24,7 +24,7 @@ Core Unix/Xen libraries:
 * *ocaml-xen-net-driver*: Can be moved out, and works in Xen. It once worked in userspace. (Owner: djs/jonludlam). For 1.0.
 * *xenbigarray*: OPAM switch hack to eliminate unix dependency. shouldnt be externally visible. (Owner: anil). For 1.0.
 
-Core Mirage libraries and tools:
+Core MirageOS libraries and tools:
 * *mirage-platform*:
 * *ocaml-cstruct*:
 * *mirari*:

@@ -626,4 +626,4 @@ On success, it will write lots of text to the Xen console (note: this requires a
     (d6) Initialising timer interface
     ...
 
-You can now try [running a Mirage unikernel](/blog/introducing-xen-minios-arm).
+You can now try [running a MirageOS unikernel](/blog/introducing-xen-minios-arm).

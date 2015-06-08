@@ -6,7 +6,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 <div class="small-12 medium-5 large-5 column">
 <h5>Background</h5>
 <ul>
-<li><a href="/wiki/overview-of-mirage">Overview of Mirage</a></li>
+<li><a href="/wiki/overview-of-mirage">Overview of MirageOS</a></li>
 <li><a href="/wiki/technical-background">Technical Background</a></li>
 <li><a href="/wiki/faq">Frequently Asked Questions</a></li>
 <li><a href="/wiki/papers">Papers and Articles</a></li>
@@ -23,7 +23,7 @@ Mirage is still in pre-alpha stage, but the infrastructure you see here is self-
 <li><a href="/wiki/deploying-via-ci">Deploying via Continuous Integration</a></li>
 <li><a href="/wiki/opam">Keeping up-to-date</a></li>
 <li><a href="/wiki/profiling">Tracing and Profiling</a></li>
-<li><a href="/wiki/contributing">Contributing to Mirage</a></li>
+<li><a href="/wiki/contributing">Contributing to MirageOS</a></li>
 <li><a href="/wiki/is-mirage-broken">Build status</a></li>
 </ul>
 </div>
