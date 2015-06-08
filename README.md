@@ -1,8 +1,8 @@
 [![Build Status](https://travis-ci.org/mirage/mirage-www.png?branch=master)](https://travis-ci.org/mirage/mirage-www)
 
-# Mirage Website
+# MirageOS Website
 
-This repository contains the Mirage public website, <http://openmirage.org/>.
+This repository contains the MirageOS public website, <http://openmirage.org/>.
 
 It provides information about the project as well as the blog and wiki.
 

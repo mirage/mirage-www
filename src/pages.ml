@@ -89,7 +89,7 @@ module Index = struct
       <div class="small-12 columns">$footer$</div>
     </div>
     >> in
-    return (Global.page ~title:"Mirage OS" ~headers:[] ~content)
+    return (Global.page ~title:"MirageOS" ~headers:[] ~content)
 
   let content_type_xhtml = Cowabloga.Headers.html
   let content_type_atom  = Cowabloga.Headers.atom
@@ -134,7 +134,7 @@ module Links = struct
           <h2>Around the Web</h2>
           <p>
             This is a small link blog we maintain as we hear of stories or
-            interesting blog entries that may be useful for Mirage users. If
+            interesting blog entries that may be useful for MirageOS users. If
             you'd like to add one, please do <a href="/community/">get in
             touch</a>.
           </p>
@@ -205,7 +205,7 @@ module Releases = struct
           <p>MirageOS consists of numerous libraries that are independently developed
              and released.  This page lists the chronological stream of releases, 
              along with the summary of changes that went into each library.  The
-             Mirage <a href="https://github.com/mirage">organization</a> holds most
+             MirageOS <a href="https://github.com/mirage">organization</a> holds most
              of the major libraries if you just want to browse.</p>
           $c$
         </div>

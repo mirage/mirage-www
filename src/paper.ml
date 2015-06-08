@@ -125,11 +125,11 @@ Real World OCaml takes you through the concepts of the language at a brisk pace,
        standalone kernels, and sealed against modification when deployed to a
        cloud platform. In return they offer significant reduction in image
        sizes, improved efficiency and security, and should reduce operational
-       costs. Our Mirage prototype compiles OCaml code into unikernels that
+       costs. Our MirageOS prototype compiles OCaml code into unikernels that
        run on commodity clouds and offer an order of magnitude reduction in
        code size without significant performance penalty. The architecture
        combines static type-safety with a single address-space layout that can
-       be made immutable via a hypervisor extension. Mirage contributes a
+       be made immutable via a hypervisor extension. MirageOS contributes a
        suite of type-safe protocol libraries, and our results demonstrate that
        the hypervisor is a platform that overcomes the hardware compatibility
        issues that have made past library operating systems impractical to
@@ -173,7 +173,7 @@ Real World OCaml takes you through the concepts of the language at a brisk pace,
       2nd USENIX Workshop on Hot Topics in Cloud Computing
       <a href="http://www.usenix.org/events/hotcloud10/">HotCloud '10</a>, June 2010 >>;
     abstract = <:xml<
-       This paper positions work on the Xen backend for Mirage. It is a decent summary of the idea,
+       This paper positions work on the Xen backend for MirageOS. It is a decent summary of the idea,
        although some details such as the filesystem extension are likely to be significantly different
        in the first release. >>;
   };
@@ -241,7 +241,7 @@ Real World OCaml takes you through the concepts of the language at a brisk pace,
     authors  = [ anil; alex; tim; dave; rip ];
     descr    = <:xml< <a href="http://www.gsd.inesc-id.pt/conference/EuroSys2007/">EuroSys 2007</a>, March 2007. >>;
     abstract = <:xml<
-      The original paper that formed the basis of Mirage. We define <a href="http://github.com/avsm/mpl">MPL</a>, a
+      The original paper that formed the basis of MirageOS. We define <a href="http://github.com/avsm/mpl">MPL</a>, a
       DSL to express bi-directional packet descriptions and compile them into efficient, type-safe OCaml code.
       Performance is tested for DNS and SSH servers written in OCaml versus their C counterparts (BIND and
       OpenSSH). >>;
@@ -256,12 +256,12 @@ let related_papers = [
     descr    = <:xml< PhD Thesis, University of Cambridge, 2006. >>;
     abstract = <:xml<
       This thesis describes the Main Name System, an approach to centralising DNS for improved reliability. The source
-      code for the Mirage DNS library is based directly off the data structures described in this thesis. >>;
+      code for the MirageOS DNS library is based directly off the data structures described in this thesis. >>;
   }
 ]
 
 let html = <:xml<
-  <p>This page lists any publications, technical reports and related work to Mirage. If you know of any work that should be listed here, please <a href="/about">contact</a> us.</p>
+  <p>This page lists any publications, technical reports and related work to MirageOS. If you know of any work that should be listed here, please <a href="/about">contact</a> us.</p>
   <hr />
   $list:List.map html_of_paper papers$
   <h2>Related Work</h2>

@@ -8,7 +8,7 @@ let google_analytics= ("UA-19610168-1", "openmirage.org")
 let blog read_entry = {
   Cowabloga.Atom_feed.base_uri;
   id = "blog/";
-  title = "The Mirage Blog";
+  title = "The MirageOS Blog";
   subtitle = Some "on building functional operating systems";
   rights;
   author = None;
@@ -18,8 +18,8 @@ let blog read_entry = {
 let wiki read_entry = {
   Cowabloga.Atom_feed.base_uri;
   id = "wiki/";
-  title = "The Mirage Documentation";
-  subtitle = Some "guides and articles on using Mirage OS";
+  title = "The MirageOS Documentation";
+  subtitle = Some "guides and articles on using MirageOS";
   rights;
   author = None;
   read_entry
@@ -29,7 +29,7 @@ let wiki read_entry = {
 let updates read_entry = {
   Cowabloga.Atom_feed.base_uri;
   id = "updates/";
-  title = "Mirage OS updates";
+  title = "MirageOS updates";
   subtitle = None;
   rights;
   author = None;
