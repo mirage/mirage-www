@@ -1,7 +1,7 @@
 [ updated 2014-02-01 for mirage.1.1.0 and xen-disk.1.2.1 ]
 
 This page describes how to create a synthetic, high-performance
-virtual disk implementation for Xen based on the Mirage libraries.
+virtual disk implementation for Xen based on the MirageOS libraries.
 
 ## Disk devices under Xen
 
@@ -24,9 +24,9 @@ ends start running simultaneously. There are no locks in the protocol so
 updates to the shared metadata must be handled carefully, using write
 memory barriers to ensure consistency.
 
-### Xen disk devices in Mirage
+### Xen disk devices in MirageOS
 
-Like everything else in Mirage, Xen disk devices are implemented as
+Like everything else in MirageOS, Xen disk devices are implemented as
 libraries. The following libraries are used:
 * [io-page](https://github.com/mirage/io-page):
   for representing raw memory pages
@@ -49,7 +49,7 @@ link-time.
 
 ## Userspace disk implementations
 
-Userspace Mirage apps are ideal for development, since they have access to
+Userspace MirageOS apps are ideal for development, since they have access to
 the full suite of Unix debug and profiling tools. Once written, the exact
 same code can be relinked and run directly in kernelspace for maximum
 performance.
@@ -97,7 +97,7 @@ Assuming that worked ok, clone and build the source for `xen-disk` yourself:
 
 ## Making a custom virtual disk implementation
 
-The `xen-disk` program can use any Mirage disk implementation satisfying
+The `xen-disk` program can use any MirageOS disk implementation satisfying
 Mirage
 [BLOCK signature](https://github.com/mirage/mirage/blob/master/types/V1.mli#L134).
 The key functions are:

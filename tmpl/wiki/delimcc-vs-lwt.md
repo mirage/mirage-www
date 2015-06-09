@@ -1,4 +1,4 @@
-Mirage is a fully event-driven system, with no support for conventional [preemptive threads](http://en.wikipedia.org/wiki/POSIX_Threads).  Instead, programs are woken by events such as incoming network packets, and event callbacks execute until they themselves need to block (due to I/O or timers) or complete their task.
+MirageOS is a fully event-driven system, with no support for conventional [preemptive threads](http://en.wikipedia.org/wiki/POSIX_Threads).  Instead, programs are woken by events such as incoming network packets, and event callbacks execute until they themselves need to block (due to I/O or timers) or complete their task.
 
 Event-driven systems are simple to implement, scalable to lots of network clients, and very hip due to frameworks like [node.js](http://nodejs.org). However, programming event callbacks directly leads to the control logic being scattered across many small functions, and so we need some abstractions to hide the interruptions of registering and waiting for an event to trigger.
 
@@ -32,7 +32,7 @@ We can now use the `bind` function to do something after the sleep is complete:
 
 ##Concerns
 
-Mirage currently uses Lwt extensively, and we have been very happy with using it to build a network stack. However, I was surprised to hear a lot of debate at the [2011 OCaml Users Group](http://anil.recoil.org/2011/04/15/ocaml-users-group.html) meeting that Lwt is not to everyone's tastes. There are a few issues:
+MirageOS currently uses Lwt extensively, and we have been very happy with using it to build a network stack. However, I was surprised to hear a lot of debate at the [2011 OCaml Users Group](http://anil.recoil.org/2011/04/15/ocaml-users-group.html) meeting that Lwt is not to everyone's tastes. There are a few issues:
 
 * The monadic style means that existing code will not just work. Any code that might block must be adapted to use `return` and `bind`, which makes integrating third-party code problematic.
 
@@ -49,7 +49,7 @@ The `lwt` keyword indicates the result of the expression should be passed throug
 
 ##Fibers
 
-After the meeting, I did get thinking about using alternatives to Lwt in Mirage. One exciting option is the [delimcc](http://okmij.org/ftp/continuations/implementations.html) library which implements [delimited continuations](http://en.wikipedia.org/wiki/Delimited_continuation) for OCaml.  These can be used to implement restartable exceptions: a program can raise an exception which can be invoked to resume the execution as if the exception had never happened. 
+After the meeting, I did get thinking about using alternatives to Lwt in MirageOS. One exciting option is the [delimcc](http://okmij.org/ftp/continuations/implementations.html) library which implements [delimited continuations](http://en.wikipedia.org/wiki/Delimited_continuation) for OCaml.  These can be used to implement restartable exceptions: a program can raise an exception which can be invoked to resume the execution as if the exception had never happened. 
 Delimcc can be combined with Lwt very elegantly, and Jake Donham did just this with the [Lwt_fiber](http://ambassadortothecomputers.blogspot.com/2010/08/mixing-monadic-and-direct-style-code.html) library. His post also has a detailed explanation of how `delimcc` works.
 
 The interface for fibers is also simple:
@@ -228,7 +228,7 @@ and after `pa_lwt` macro-expands it:
 
 Every iteration of the recursive loop requires the allocation of a closure (the `Lwt.bind` call). In the `delimcc` case, the function operates as a normal recursive function that uses the stack, until the very end when it needs to save the stack in one pass.
 
-Overall, I'm convinced now that the performance difference is insignificant for the purposes of choosing one thread system over the other for Mirage.  Instead, the question of code interoperability is more important. Lwt-enabled protocol code will work unmodified in Javascript, and Delimcc code helps migrate existing code over.
+Overall, I'm convinced now that the performance difference is insignificant for the purposes of choosing one thread system over the other for MirageOS.  Instead, the question of code interoperability is more important. Lwt-enabled protocol code will work unmodified in Javascript, and Delimcc code helps migrate existing code over.
 
 Interestingly, [Javascript 1.7](https://developer.mozilla.org/en/new_in_javascript_1.7) introduces a *yield* operator, which [has been shown](http://parametricity.net/dropbox/yield.subc.pdf) to have comparable expressive power to the *shift-reset* delimcc operators. Perhaps convergence isn't too far away after all...
 

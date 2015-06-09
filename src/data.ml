@@ -117,14 +117,14 @@ module Blog = struct
 
       { updated    = date (2014, 12, 31, 16, 0);
         authors    = [anil];
-        subject    = "Mirage 2014 review: IPv6, TLS, Irmin, Jitsu and community growth";
+        subject    = "MirageOS 2014 review: IPv6, TLS, Irmin, Jitsu and community growth";
         body       = "2014-in-review.md";
         permalink  = "2014-in-review";
       };
 
       { updated    = date (2010, 10, 11, 15, 0);
         authors    = [anil];
-        subject    = "Self-hosting Mirage website";
+        subject    = "Self-hosting MirageOS website";
         body       = "welcome.md";
         permalink  = "self-hosting-mirage-website";
       };
@@ -143,13 +143,13 @@ module Blog = struct
       };
       { updated    = date (2012, 02, 29, 11, 10);
         authors    = [mort];
-        subject    = "Connected Cloud Control: OpenFlow in Mirage";
+        subject    = "Connected Cloud Control: OpenFlow in MirageOS";
         body       = "announcing-mirage-openflow.md";
         permalink  = "announcing-mirage-openflow";
       };
       { updated    = date (2012, 9, 12, 0, 0);
         authors    = [dave];
-        subject    = "Building a \"Xenstore stub domain\" with Mirage";
+        subject    = "Building a \"Xenstore stub domain\" with MirageOS";
         body       = "xenstore-stub.md";
         permalink  = "xenstore-stub-domain";
       };
@@ -167,13 +167,13 @@ module Blog = struct
       };
       { updated    = date (2013, 07, 18, 11, 20);
         authors    = [dave];
-        subject    = "Creating Xen block devices with Mirage";
+        subject    = "Creating Xen block devices with MirageOS";
         body       = "xen-block-devices-with-mirage.md";
         permalink  = "xen-block-devices-with-mirage";
       };
       { updated    = date (2013, 08, 08, 16, 00);
         authors    = [mort];
-        subject    = "Mirage travels to OSCON'13: a trip report";
+        subject    = "MirageOS travels to OSCON'13: a trip report";
         body       = "oscon13-trip-report.md";
         permalink  = "oscon13-trip-report";
       };
@@ -185,13 +185,13 @@ module Blog = struct
       };
       { updated    = date (2013, 12, 09, 12, 0);
         authors    = [anil];
-        subject    = "Mirage 1.0: not just a hallucination!";
+        subject    = "MirageOS 1.0: not just a hallucination!";
         body       = "releasing-mirage.md";
         permalink  = "announcing-mirage10";
       };
       { updated    = date (2013, 12, 19, 23, 0);
         authors    = [anil];
-        subject    = "Mirage 1.0.3 released; tutorial on building this website available";
+        subject    = "MirageOS 1.0.3 released; tutorial on building this website available";
         body       = "mirage-1.0.3-released.md";
         permalink  = "mirage-1.0.3-released";
       };
@@ -203,7 +203,7 @@ module Blog = struct
       };
       { updated    = date (2014, 02, 11, 16, 0);
         authors    = [anil];
-        subject    = "Mirage 1.1.0: the eat-your-own-dogfood release";
+        subject    = "MirageOS 1.1.0: the eat-your-own-dogfood release";
         body       = "mirage-1.1-released.md";
         permalink  = "mirage-1.1-released";
       };
@@ -215,13 +215,13 @@ module Blog = struct
       };
       { updated    = date (2014, 05, 08, 18, 0);
         authors    = [anil];
-        subject    = "Welcome to the summer Mirage hackers";
+        subject    = "Welcome to the summer MirageOS hackers";
         body       = "welcome-to-our-summer-hackers.md";
         permalink  = "welcome-to-our-summer-hackers";
       };
       { updated    = date (2014, 07, 08, 11, 0);
         authors    = [anil];
-        subject    = "Mirage 1.2 released and the 2.0 runup begins";
+        subject    = "MirageOS 1.2 released and the 2.0 runup begins";
         body       = "mirage-1.2-released.md";
         permalink  = "mirage-1.2-released";
       };
@@ -269,7 +269,7 @@ module Blog = struct
       };
       { updated    = date (2014, 07, 17, 13, 0);
         authors    = [yomimono];
-        subject    = "Fitting the modular Mirage TCP/IP stack together";
+        subject    = "Fitting the modular MirageOS TCP/IP stack together";
         body       = "intro-tcpip.md";
         permalink  = "intro-tcpip";
       };
@@ -293,7 +293,7 @@ module Blog = struct
       };
       { updated    = date (2014, 07, 22, 11, 0);
         authors    = [anil];
-        subject    = "Mirage v2.0: a recap of the new features";
+        subject    = "MirageOS v2.0: a recap of the new features";
         body       = "announcing-mirage-20-release.md";
         permalink  = "announcing-mirage-20-release";
       };
@@ -356,7 +356,7 @@ module Wiki = struct
 
     { updated    = date (2013, 12, 29, 17, 0);
       author     = dave;
-      subject    = "Understanding Xen events with Mirage";
+      subject    = "Understanding Xen events with MirageOS";
       body       = File "xen-events.md";
       permalink  = "xen-events";
     };
@@ -369,14 +369,14 @@ module Wiki = struct
 
     { updated    = date (2013, 10, 15, 16, 0);
       author     = amir;
-      subject    = "Overview of Mirage";
+      subject    = "Overview of MirageOS";
       body       = File "overview-of-mirage.md";
       permalink  = "overview-of-mirage";
     };
 
     { updated    = date (2013, 11, 10, 16, 0);
       author     = ckoppelt;
-      subject    = "Technical Background of Mirage";
+      subject    = "Technical Background of MirageOS";
       body       = File "technical-background.md";
       permalink  = "technical-background";
     };
@@ -455,13 +455,13 @@ module Wiki = struct
 
     { updated    = date (2013, 12, 31, 19, 00);
       author     = mort;
-      subject    = "Hello Mirage World";
+      subject    = "Hello MirageOS World";
       body       = File "hello-world.md";
       permalink  = "hello-world";
     };
     { updated    = date (2013, 08, 11, 15, 00);
       author     = anil;
-      subject    = "Running Mirage Xen kernels";
+      subject    = "Running MirageOS Xen kernels";
       body       = File "xen-boot.md";
       permalink  = "xen-boot";
     };
@@ -511,7 +511,7 @@ module Wiki = struct
     };
     { updated    = date (2014, 08, 12, 22, 56);
       author     = yomimono;
-      subject    = "Contributing to Mirage";
+      subject    = "Contributing to MirageOS";
       body       = File "contributing.md";
       permalink  = "contributing";
     };

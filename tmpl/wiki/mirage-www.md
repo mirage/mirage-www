@@ -2,7 +2,7 @@ This assumes that you've followed the [Hello World](/wiki/hello-world)
 instructions from earlier and are now familiar with the basic console, block
 device and networking configurations from the
 [mirage-skeleton](https://github.com/mirage/mirage-skeleton) repository.  To
-build the live Mirage website, we'll need several device drivers: two block
+build the live MirageOS website, we'll need several device drivers: two block
 devices for the static HTML content and the templates, and a network device to
 actually serve the traffic.
 
@@ -87,7 +87,7 @@ $ sudo ifconfig tap0 10.0.0.1 255.255.255.0
 $ ping 10.0.0.2
 ```
 
-If you see ping responses, then you are now communicating with the Mirage
+If you see ping responses, then you are now communicating with the MirageOS
 unikernel via the OCaml TCP/IP stack!  Point your web browser at `http://10.0.0.2`
 and you should be able to surf this website too.
 
@@ -95,7 +95,7 @@ and you should be able to surf this website too.
 
 This site won't quite compile to Xen yet.  Despite doing all networking via an
 OCaml TCP/IP stack, we still have a dependency on the Unix filesystem for our
-files.  Mirage provides a [FAT filesystem](http://github.com/mirage/ocaml-fat)
+files.  MirageOS provides a [FAT filesystem](http://github.com/mirage/ocaml-fat)
 which we'll use as an alternative.  Our new `config.ml` will now contain this:
 
 The FAT filesystem needs to be installed onto a block device, which we assign
@@ -169,7 +169,7 @@ Chances are that the Xen kernel you just built doesn't have a useful IP
 address, since it was hardcoded to `10.0.0.2`.  You can modify the HTTP driver
 to give it a static IP address, as the [live deployment script](https://github.com/mirage/mirage-www/blob/master/.travis-www.ml) does.
 
-We've shown you the very low-levels of the configuration system in Mirage here.
+We've shown you the very low-levels of the configuration system in MirageOS here.
 While it's not instantly user-friendly, it's an extremely powerful way of
 assembling your own components for your unikernel for whatever specialised
 unikernels you want to build.

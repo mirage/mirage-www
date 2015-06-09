@@ -75,7 +75,7 @@ To set up ssh:
 7. ```chmod 600 ~/.ssh/authorized_keys```
 
 
-#### Mirage
+#### MirageOS
 
 You should now have a working Xen host ("xl list" to list current VMs, "lvcreate"
 to create guest disks).
@@ -87,7 +87,7 @@ opam init
 opam install mirage
 ```
 
-You should now be able to follow the rest of the Mirage tutorial.
+You should now be able to follow the rest of the MirageOS tutorial.
 
 
 #### Libvirt

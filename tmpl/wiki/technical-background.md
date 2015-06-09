@@ -37,7 +37,7 @@ We chose OCaml as the sole base language for MirageOS. It is a full-fledged syst
 
 ## Modular OS Libraries
 
-Mirage provides modular OS libraries, which can be switched when needed.
+MirageOS provides modular OS libraries, which can be switched when needed.
 
 <img src="/graphics/mirage-sample-application.png" alt="example" width="50%"/>
 

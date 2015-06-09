@@ -1,10 +1,10 @@
-Mirage consists of a set of OCaml libraries that link with a runtime to form either a standalone Xen operating system or a normal UNIX binary. These libraries are managed via the [OPAM](http://opam.ocaml.org) tool. After describing Mirage's system requirements, we will introduce the basics of OPAM and setting up for Mirage.
+MirageOS consists of a set of OCaml libraries that link with a runtime to form either a standalone Xen operating system or a normal UNIX binary. These libraries are managed via the [OPAM](http://opam.ocaml.org) tool. After describing MirageOS's system requirements, we will introduce the basics of OPAM and setting up for MirageOS.
 
 ## Requirements
 
-Mirage has been tested on ArchLinux, Debian Wheezy, Ubuntu Precise/Lucid/Raring/Saucy, CentOS 6.4 and MacOS X 10.8 and 10.9. To compile the Xen backend, you *must* have a 64-bit Linux host. 32-bit is not supported at this time.
+MirageOS has been tested on ArchLinux, Debian Wheezy, Ubuntu Precise/Lucid/Raring/Saucy, CentOS 6.4 and MacOS X 10.8 and 10.9. To compile the Xen backend, you *must* have a 64-bit Linux host. 32-bit is not supported at this time.
 
-If you're using MacOS X, you will also need the [tuntap](http://tuntaposx.sourceforge.net/) kernel module if you want to use the Mirage network stack from userspace.
+If you're using MacOS X, you will also need the [tuntap](http://tuntaposx.sourceforge.net/) kernel module if you want to use the MirageOS network stack from userspace.
 
 If you're using Ubuntu/Debian, we recommend you also install the essential build tools (GNU make, etc) and GNU M4 as well as the OCaml toolchain including camlp4:
 
@@ -20,7 +20,7 @@ Also note that the `mirage` configuration and deployment tool relies on the `xl`
 
 We use [OPAM](http://opam.ocaml.org) to manage OCaml compiler and library installations. It tracks library versions across upgrades and will recompile dependencies automatically if they get out of date. Please refer to OPAM [documentation](https://opam.ocaml.org) if you want to know more, but we will cover the basics to get you started here. Install OPAM for your operating system by following its [Quick Install Guide](http://opam.ocaml.org/doc/Install.html).
 
-Note that you require **OPAM 1.1 or greater** to use with Mirage. Some distribution packages provide earlier versions; check with
+Note that you require **OPAM 1.1 or greater** to use with MirageOS. Some distribution packages provide earlier versions; check with
 
     $ opam --version ## response should be at least 1.1.0, viz.
     1.1.0
@@ -54,12 +54,12 @@ Check that the base packages are installed correctly:
     base-unix             base  Unix library distributed with the OCaml compiler
     [ possibly other installed packages ]
 
-Finally, install the Mirage command-line tool.
+Finally, install the MirageOS command-line tool.
 
     $ opam install mirage
     $ mirage --help
 
 This will install [Mirage](https://github.com/mirage/mirage)!
-If you're upgrading from an older beta installation of Mirage, then be sure that you have at least 1.1.0, or you'll get installation errors.  You can verify this by checking that the version number in the manual page from `mirage --help` is at least (as of the time of writing this page) 1.1.0.
+If you're upgrading from an older beta installation of MirageOS, then be sure that you have at least 1.1.0, or you'll get installation errors.  You can verify this by checking that the version number in the manual page from `mirage --help` is at least (as of the time of writing this page) 1.1.0.
 
-That's it. You now have everything required to start developing Mirage unikernels that will run either as POSIX processes or as Xen VMs using the Mirage network stack. Next, why not try [building a Mirage *hello world*](/wiki/hello-world)?
+That's it. You now have everything required to start developing MirageOS unikernels that will run either as POSIX processes or as Xen VMs using the MirageOS network stack. Next, why not try [building a MirageOS *hello world*](/wiki/hello-world)?

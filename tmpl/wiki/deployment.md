@@ -1,11 +1,11 @@
-This live Mirage website is written as a Mirage application itself, with the
+This live MirageOS website is written as a MirageOS application itself, with the
 source code on [mirage/mirage](https://github.com/mirage/mirage) on GitHub.
 Our workflow is such that we can send a [pull
 request](https://github.com/mirage/mirage-www/pulls?direction=desc&page=1&sort=created&state=closed)
 to update the website, and have a fully standalone Xen kernel committed into
 the binary [mirage/mirage-www-deployment](https://github.com/mirage/mirage-www-deployment) repository.
 
-This all works by installing a fresh Mirage installation for each change
+This all works by installing a fresh MirageOS installation for each change
 committed to the website, and rebuilding the entire website kernel from scratch
 (a process that takes around 5-7 minutes without any parallel building).  We 
 use the free [Travis Continuous Integration](http://travis-ci.org) for automating
@@ -24,7 +24,7 @@ actually happen until the next code push or pull request goes to that
 repository.  Behind the scenes, the <i>On</i> button that you clicked use the
 GitHub APIs to turn on the Travis post-commit hook for your repository.
 
-Create a `.travis.yml` file in your main repository (see below or [this file](https://github.com/mirage/mirage-www/blob/master/.travis-ci.sh)).  Travis doesn't have native support for OCaml, but it isn't really needed since we can just use the `C` mode and write our own shell scripts.  The `env` variables define a matrix of the different combinations of Mirage backends that we want to test.  Just remove variations that you don't care about to avoid wasting Travis' CPU time (open source projects are supported on a fair-use basis by them).
+Create a `.travis.yml` file in your main repository (see below or [this file](https://github.com/mirage/mirage-www/blob/master/.travis-ci.sh)).  Travis doesn't have native support for OCaml, but it isn't really needed since we can just use the `C` mode and write our own shell scripts.  The `env` variables define a matrix of the different combinations of MirageOS backends that we want to test.  Just remove variations that you don't care about to avoid wasting Travis' CPU time (open source projects are supported on a fair-use basis by them).
 
 Here's the `.travis.yml` that used by [mirage/mirage-www](https://github.com/mirage/mirage-www):
 
@@ -48,7 +48,7 @@ often want to test different versions of all of these, we have a series of
 stable Ubuntu PPAs that have OCaml 3.12.1, 4.00.1, and 4.01.0 available, along
 with OPAM 1.0 and 1.1.
 
-Out of these, Mirage requires at least OPAM 1.1 and an
+Out of these, MirageOS requires at least OPAM 1.1 and an
 OCaml greater than 4.00.1, so we'll pick just those PPAs for our tests.  The
 [travis-ci.sh](https://github.com/mirage/mirage-www/blob/master/.travis-ci.sh)
 from the repository starts like this:
@@ -116,7 +116,7 @@ of the documentation content.
 
 Travis isn't just for code pushes though; as of mid-2013 it can also [test pull
 requests](http://about.travis-ci.org/blog/announcing-pull-request-support/).
-This is an incredibly useful feature for Mirage since it means that you can
+This is an incredibly useful feature for MirageOS since it means that you can
 experimentally propose changes without having to try all the different
 backends.  You don't need to do anything special to activate it: whenever
 someone issues a pull request, Travis will merge it locally and trigger the
@@ -199,7 +199,7 @@ The live website runs on a Xen machine hosted in Cambridge, and
 this simply polls the [mirage/mirage-www-deployment](http://github.com/mirage/mirage-www-deployment)
 repository for new pushes, and updates to the latest version in
 that repository when one appears.  This machine doesn't need to
-have any of the Mirage tools installed, and if there's an error in
+have any of the MirageOS tools installed, and if there's an error in
 an updated website, we can simply revert back to a previous changeset
 of the deployed site.
 

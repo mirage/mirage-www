@@ -1,6 +1,6 @@
 When tracking down bugs or performance problems, or just trying to understand how something works, it is often useful to look at a trace of the execution of your unikernel.
 
-As a motivating example, we'll track down a (real, but now fixed) bug in Mirage's TCP stack.
+As a motivating example, we'll track down a (real, but now fixed) bug in MirageOS's TCP stack.
 
 Here's a small program that demonstrates the problem:
 
@@ -69,7 +69,7 @@ let () =
 
 The size argument gives the size in bytes of the ring buffer to use.
 When you run `mirage configure`, you will probably be prompted to install a version of Lwt with tracing enabled; just run the `opam pin` command provided.
-This will automatically trigger a recompile of all the Mirage libraries with tracing enabled.
+This will automatically trigger a recompile of all the MirageOS libraries with tracing enabled.
 
 To view the trace data, use [mirage-trace-viewer][].
 If you don't want to compile from source, there are [pre-compiled binaries][mtv-feed] for Linux-x86_64 and Linux-armv7l (e.g. for the Cubietruck).
@@ -78,7 +78,7 @@ You can get them with 0install:
     sudo apt-get install zeroinstall-injector
     0install add mirage-trace-viewer http://talex5.github.io/mirage-trace-viewer/mtv.xml
 
-If you compiled your Mirage program as a Unix process, the trace data will appear in a file called `trace.ctf` (you can view the trace while the process is still running).
+If you compiled your MirageOS program as a Unix process, the trace data will appear in a file called `trace.ctf` (you can view the trace while the process is still running).
 To view the trace using the GTK viewer, use:
 
     mirage-trace-viewer trace.ctf
@@ -195,7 +195,7 @@ A wait thread can only be resolved once, so it doesn't matter whether you check 
 
 #### Collecting more information
 
-You might notice that many of the threads are unlabelled, as we haven't fully instrumented all the Mirage libraries.
+You might notice that many of the threads are unlabelled, as we haven't fully instrumented all the MirageOS libraries.
 To add extra annotations, clone the appropriate library with Git, add some extra reporting, and use `opam pin` to build against your version.
 If you think your annotations would be generally useful, please send a pull request.
 

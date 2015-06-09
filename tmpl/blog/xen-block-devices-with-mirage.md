@@ -1,4 +1,4 @@
-[Mirage](http://www.openmirage.org/) is a
+[MirageOS](http://www.openmirage.org/) is a
 [unikernel](http://anil.recoil.org/papers/2013-asplos-mirage.pdf)
 or "library operating system" that allows us to build applications
 which can be compiled to very diverse environments: the same code can be linked
@@ -49,7 +49,7 @@ ends start running simultaneously. There are no locks in the protocol so
 updates to the shared metadata must be handled carefully, using write
 memory barriers to ensure consistency.
 
-*Xen disk devices in Mirage*
+*Xen disk devices in MirageOS*
 
 Like everything else in Mirage, Xen disk devices are implemented as
 libraries. The ocamlfind library called "xenctrl" provides support for
@@ -74,7 +74,7 @@ Finally the ocamlfind library
 provides functions to hotplug and hotunplug disk devices, together with an
 implementation of the disk block protocol itself.
 
-*Making custom virtual disk servers with Mirage*
+*Making custom virtual disk servers with MirageOS*
 
 Let's experiment with making our own virtual disk server based on
 the Mirage example program, [xen-disk](https://github.com/mirage/xen-disk).

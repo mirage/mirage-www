@@ -2,7 +2,7 @@
 *First*: read the [overview](/wiki/overview-of-mirage) and
 [technical background](/wiki/technical-background) behind the project.
 
-When we started hacking on Mirage back in 2009, it started off looking like a
+When we started hacking on MirageOS back in 2009, it started off looking like a
 conventional OS, except written in OCaml.   The [monolithic
 repository](https://github.com/mirage/mirage/tree/old-master) contained all the
 libraries and boot code, and exposed a big `OS` module for applications to use.
@@ -33,9 +33,9 @@ Three key things have emerged from this effort:
   This is where Mirage lives up to its name: we've gone from the early
   monolithic repository to a single, standalone interface file that
   describes the interfaces.  Of course, we also have libraries to go along
-  with this signature, and they all live in the [Mirage GitHub organization](https://github.com/mirage).
+  with this signature, and they all live in the [MirageOS GitHub organization](https://github.com/mirage).
 
-With these components, I'm excited to announce that Mirage 1.0 is finally ready
+With these components, I'm excited to announce that MirageOS 1.0 is finally ready
 to see the light of day!  Since it consists of so many libraries, we've decided
 not to have a "big bang" release where we dump fifty complex libraries on the
 open-source community.  Instead, we're going to spend the month of December
