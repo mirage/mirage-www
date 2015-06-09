@@ -110,8 +110,8 @@ let stack = match deploy with
     | `Direct, true  -> direct_stackv4_with_dhcp cons0 tap0
     | `Socket, _     -> socket_stackv4 cons0 [Ipaddr.V4.any]
 
-let libraries = [ "cow.syntax"; "cowabloga" ]
-let packages  = [ "cow"; "cowabloga" ]
+let libraries = [ "cow.syntax"; "cowabloga"; "rrd" ]
+let packages  = [ "cow"; "cowabloga"; "xapi-rrd" ]
 
 let sp = Printf.sprintf
 

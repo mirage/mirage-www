@@ -22,7 +22,7 @@ MIRAGE ?= mirage
 MODE   ?= unix
 FS     ?= fat
 NET    ?= direct
-IPADDR ?= static
+IPADDR ?= dhcp
 
 FLAGS  ?=
 
@@ -37,9 +37,11 @@ configure:
 	$(MIRAGE) configure src/config.ml $(FLAGS) --$(MODE)
 
 depend:
+	cd stats && make depend
 	cd src && make depend
 
 build:
+	cd stats && make all
 	cd src && make build
 
 run:
@@ -47,4 +49,5 @@ run:
 
 clean:
 	cd src && make clean
+	cd stats && make clean
 	$(RM) log src/mir-www src/*.img src/make-fat*.sh

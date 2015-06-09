@@ -20,4 +20,7 @@ val start: sleep:(float -> unit Lwt.t) -> unit
 (** Start the monitor thread. *)
 
 val page: unit -> Cow.Html.t
-(** Build a page describing the stats of the current application. *)
+
+val get_rrd_updates: Uri.t -> string
+
+val get_rrd_timescales: Uri.t -> string

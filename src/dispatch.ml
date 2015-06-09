@@ -1,5 +1,6 @@
 (*
  * Copyright (c) 2015 Thomas Gazagnaire <thomas@gazagnaire.org>
+ * Copyright (c) 2015 Citrix Inc
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -197,7 +198,12 @@ module Make_localhost
         notfound = (fun ~uri -> not_found ~uri ());
         redirect = (fun ~uri -> moved_permanently ~uri ());
       } in
-      Cowabloga.Dispatch.f io dispatch uri
+      (* Cowabloga hides the URI which we need for query parameters *)
+      if Uri.path uri = "/rrd_updates"
+      then S.respond_string ~status:`OK ~body:(Stats.get_rrd_updates uri) ()
+      else if Uri.path uri = "/rrd_timescales"
+      then S.respond_string ~status:`OK ~body:(Stats.get_rrd_timescales uri) ()
+      else Cowabloga.Dispatch.f io dispatch uri
     in
     let conn_closed (_,conn_id) =
       let cid = Cohttp.Connection.to_string conn_id in
