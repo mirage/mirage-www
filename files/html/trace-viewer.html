@@ -7,6 +7,24 @@
   <style type="text/css">
     body { margin: 0; padding: 0; border: 0; }
     canvas { position: absolute; left: 0; top: 0; }
+    div.side-panel {
+      z-index: 80;
+      margin: 0;
+      padding: 0;
+      border-right: 1px solid black;
+      position: absolute; left: 0; top: 0; height: 100%; background: rgba(220, 220, 220, 0.9);
+      display: flex;
+    }
+    div.side-panel > div {
+      margin: 0.5em;
+      display: flex;
+      flex-direction: column;
+    }
+    ul.metrics {
+      list-style: none;
+      padding-left: 0;
+      overflow-y: scroll;
+    }
   </style>
   <title>Mirage Trace Viewer</title>
 </head>
