@@ -116,26 +116,30 @@ on_poweroff = 'preserve'
 
 Here's the trace for a successful run (where the message was transmitted):
 
-<canvas id='good' style='width: 100%; height:500px'>
+<div class='trace-viewer'>
+<canvas tabindex='1' id='good' style='width: 100%; height:500px'>
 <noscript>Sorry, you need to enable JavaScript to see this page.</noscript>
 </canvas>
-[View full screen](/html/trace-viewer.html?trace=tutorial-good.ctf)
+</div>
+[View full screen](/html/trace-viewer.html?trace=good)
 
 Use your mouse's scroll wheel (or the buttons at the bottom) to zoom.
 
-There are four main regions here (time runs left to right):
+Time runs left to right:
 
-* At the start (far left), the tracing system shares all the pages of its trace buffer with dom 0, allowing us to read the trace. The `gntref` counter increases steadily during this time.
-* The next block is the tracing system storing the grant ref details in XenStore, followed immediately by the TCP stack getting the network details from XenStore.
-* The third block shows more pages being shared.
-* Finally, the last block is our test code, which opens the TCP connection and sends the data.
-  The `tcp-to-ip` counter goes up here, showing where the packet is passed from the TCP buffer to the IP layer for transmission.
+* At the start (far left), the tracing system shares all the pages of its trace buffer with dom 0, allowing us to read the trace. The `gntref` counter (the red line) increases rapidly during this time.
+* Next, the tracing system stores the grant ref details in XenStore, followed immediately by the TCP stack getting the network details from XenStore.
+* The `gntref` metric then goes up again as the network code shares its buffer with dom0.
+* Then our test code runs, opening the TCP connection and sending the data.
+  The `tcp-to-ip` counter goes up here (to 1), showing where the single-byte packet is passed from the TCP buffer to the IP layer for transmission.
 
 Horizontal black lines are Lwt threads. White regions indicate when the thread was running. Vertical black lines indicate threads creating new threads or merging with existing ones. Arrows show interactions between threads:
 
 * A green arrow from A to B means that A resolved sleeping thread B (e.g. with `Lwt.wakeup`).
 * A blue arrow from A to B means that B read the result of A.
 * A red arrow is similar, but for the case where the thread failed.
+* A yellow arrow from A to B means that A tried to read B but it wasn't ready yet.
+  In the common case where this is followed by a blue arrow, the yellow arrow isn't shown.
 * An orange arrow from A to B means that A sent some other kind of message to B.
 
 Libraries can annotate threads with labels, which makes reading the diagrams much easier.
@@ -145,36 +149,45 @@ For more information about reading the visualisation, see the blog post [Visuali
 
 #### Finding the bug
 
-To find the problem, we can compare a good trace and a bad trace (here zoomed in to highlight the opening of the TCP connection):
+To find the problem, we can compare a good trace and a bad trace:
 
-<canvas id='good-detail' style='width: 100%; height:500px'>No canvas support. </canvas> 
-[View full screen](/html/trace-viewer.html?trace=tutorial-good.ctf&detail=true)
+<div class='trace-viewer'>
+<canvas tabindex='2' id='good-detail' style='width: 100%; height:500px'>No canvas support. </canvas>
+</div>
+[View full screen](/html/trace-viewer.html?trace=good-detail)
 
 Above: a trace from a successful run. Below: a trace from a failed run.
 
-<canvas id='bad-detail' style='width: 100%; height:500px'>No canvas support.</canvas>
-[View full screen](/html/trace-viewer.html?trace=tutorial-bad.ctf&detail=true)
+<div class='trace-viewer'>
+<canvas tabindex='3' id='bad-detail' style='width: 100%; height:500px'>No canvas support.</canvas>
+</div>
+[View full screen](/html/trace-viewer.html?trace=bad-detail)
 
-Looking at the ARP response thread you may be able to see what has happened.
+Normally, when a thread doesn't do anything it is drawn only as a tiny stub in the display.
+To make the problem easier to spot, I modified the test program to call `MProf.Trace.should_resolve` on the program's main thread, which adds a hint that this thread is important.
+The viewer sees that it didn't resolve, and so draws it in red and extending to the far right of the display.
 
-In the good case, the unikernel starts by creating three threads:
+Looking at the good trace, three important threads are created:
 
-1. A "TCP connect" thread to track the TCP connection.
+1. A "TCP connect" thread to track the TCP connection (if you can't see it, click the menu button in the bottom left and search for `TCP connect` - it will highlight in yellow as you type.
 2. An "ARP response" condition thread to get the MAC address from the target IP address.
-3. A "ring.write" thread to track the ARP request being transmitted.
+3. A "ring.write" thread to track the ARP request being transmitted (you'll have to zoom in to see this).
 
-It then received an event on port-4, which is the network event channel.
-The `Netif` driver determined this was an ack that the ARP request had been sent, and so unshared the page of memory containing the request.
-This triggered the next step in the process, which was to start waiting for the "ARP response" condition to fire, creating an "ARP response" task thread.
+Soon after creating these threads, the unikernel received an event on port-4, which is the network event channel.
+The `Netif` driver determined this was an ack that the ARP request had been sent, and resolved the `ring.write` thread, which then triggered the page of memory containing the request to be unshared.
+This then triggered the next step in the process, which was to start waiting for the "ARP response" condition to fire, creating an "ARP response" "task" thread.
 
 Another event then arrived on port-4, which was the ARP response notification.
 This resolved the "ARP response" thread, which allowed us to start the TCP connection (sending the SYN packet).
+Once the remote end had ack'd the SYN, the TCP connection was ready (the `TCP connect` thread ends) and we sent the data, increasing the `tcp-to-ip` counter.
 
 In the bad case:
 
-- The "TCP connect" thread appears as a tiny stub. This is because the trace viewer only draws a thread as long as is needed to show the events that happened to it. The arrowhead pointing left indicates that the thread didn't finish.
-- The order of the events is different.
+- The main thread (that we annotated with `MProf.Trace.should_resolve`) appears as a long red line with `should-resolve thread never resolved` at the end.
+- Looking at the start of this red thread, you can see a yellow arrow to a bind thread (indicating that the main thread was waiting for it).
+- Following the yellow arrows, you'll eventually end up at a `try` thread waiting on `Wait for ARP response` (tip: to avoid losing track of where you are, you can double-click a thread to highlight it).
 
+Following the ARP response task thread backwards, we can see that the order of the events was different.
 In this case, the first event from the network is not the confirmation that the ARP request has been sent, but the notification of the ARP response. You can see that the network code now first notifies the "ARP response" condition (but nothing is waiting for it, so this is ignored). Then, confirmation of the request being sent arrives, ending the "ring.write" thread.
 This triggers us to start waiting for a notification from the "ARP response" condition, but this will never arrive because the event has already happened.
 
