@@ -29,13 +29,13 @@ module Main
     | `Ok tls  -> log "TLS ok"; f tls >>= fun () ->TLS.close tls
     | `Eof     -> log "TLS eof"; TCP.close tcp
 
-  let with_https c fs tmpl flow =
-    let t = DS.create c (DS.dispatcher c fs tmpl) in
+  let with_https s c fs tmpl flow =
+    let t = DS.create c (DS.dispatcher s c fs tmpl) in
     Https.listen t flow
 
   let with_http c flow =
     let t =
-      let mk path = Site_config.base_uri ^ String.concat "/" path in
+      let mk path = Site_config.base_uri `Https ^ String.concat "/" path in
       D.create c (fun path -> D.redirect (mk path))
     in
     Http.listen t flow
@@ -47,7 +47,8 @@ module Main
 
   let start c fs tmpl stack keys _clock =
     tls_init keys >>= fun cfg ->
-    let https flow = with_tls c cfg flow ~f:(with_https c fs tmpl) in
+    let callback = with_https `Https c fs tmpl in
+    let https flow = with_tls c cfg flow ~f:callback in
     let http flow = with_http c flow in
     S.listen_tcpv4 stack ~port:443 https;
     S.listen_tcpv4 stack ~port:80  http;

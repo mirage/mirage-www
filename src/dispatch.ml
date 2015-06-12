@@ -40,26 +40,26 @@ module Main
   let page p path = p >|= fun f -> (`Page (f path))
   let redirect r = Lwt.return (`Redirect r)
 
-  let blog_feed tmpl = Site_config.blog (fun n -> read_entry tmpl ("/blog/"^n))
-  let wiki_feed tmpl = Site_config.wiki (fun n -> read_entry tmpl ("/wiki/"^n))
-  let updates_feed tmpl = Site_config.updates (read_entry tmpl)
-  let links_feed tmpl = Site_config.links (read_entry tmpl)
+  let blog_feed s tmpl = Site_config.blog s (fun n -> read_entry tmpl ("/blog/"^n))
+  let wiki_feed s tmpl = Site_config.wiki s (fun n -> read_entry tmpl ("/wiki/"^n))
+  let updates_feed s tmpl = Site_config.updates s (read_entry tmpl)
+  let links_feed s tmpl = Site_config.links s (read_entry tmpl)
 
-  let updates_feeds tmpl = [
-    `Blog (blog_feed tmpl, Data.Blog.entries);
-    `Wiki (wiki_feed tmpl, Data.Wiki.entries);
+  let updates_feeds s tmpl = [
+    `Blog (blog_feed s tmpl, Data.Blog.entries);
+    `Wiki (wiki_feed s tmpl, Data.Wiki.entries);
   ]
 
-  let blog_dispatch tmpl = Blog.dispatch (blog_feed tmpl) Data.Blog.entries
-  let wiki_dispatch tmpl = Wiki.dispatch (wiki_feed tmpl) Data.Wiki.entries
+  let blog_dispatch s tmpl = Blog.dispatch (blog_feed s tmpl) Data.Blog.entries
+  let wiki_dispatch s tmpl = Wiki.dispatch (wiki_feed s tmpl) Data.Wiki.entries
   let releases_dispatch tmpl = Pages.Releases.dispatch (read_tmpl tmpl)
-  let links_dispatch tmpl = Pages.Links.dispatch (links_feed tmpl) Data.Links.entries
-  let updates_dispatch tmpl =
-    Pages.Index.dispatch ~feed:(updates_feed tmpl) ~feeds:(updates_feeds tmpl)
+  let links_dispatch s tmpl = Pages.Links.dispatch (links_feed s tmpl) Data.Links.entries
+  let updates_dispatch s tmpl =
+    Pages.Index.dispatch ~feed:(updates_feed s tmpl) ~feeds:(updates_feeds s tmpl)
 
   let stats () = html (Lwt.return (Cow.Html.to_string (Stats.page ())))
   let redirect_notes () = redirect "../wiki#Weeklycallsandreleasenotes"
-  let index tmpl = html (Pages.Index.t ~feeds:(updates_feeds tmpl) (read_tmpl tmpl))
+  let index s tmpl = html (Pages.Index.t ~feeds:(updates_feeds s tmpl) (read_tmpl tmpl))
   let about tmpl = html (Pages.About.t (read_tmpl tmpl))
 
   let asset c fs path =
@@ -68,16 +68,16 @@ module Main
     Lwt.catch (fun () -> asset path) (fun e  -> not_found path)
 
   (* dispatch non-file URLs *)
-  let dispatcher c fs tmpl = function
-    | [] | [""] | ["index.html"] -> index tmpl
+  let dispatcher s c fs tmpl = function
+    | [] | [""] | ["index.html"] -> index s tmpl
     | ["stats"; "gc"] -> stats ()
     | ["about"] | ["community"] -> about tmpl
     | "releases" :: tl -> page (releases_dispatch tmpl) tl
-    | "blog"     :: tl -> page (blog_dispatch tmpl) tl
-    | "links"    :: tl -> links_dispatch tmpl >|= fun f -> f tl
-    | "updates"  :: tl -> page (updates_dispatch tmpl) tl
+    | "blog"     :: tl -> page (blog_dispatch s tmpl) tl
+    | "links"    :: tl -> links_dispatch s tmpl >|= fun f -> f tl
+    | "updates"  :: tl -> page (updates_dispatch s tmpl) tl
     | ("wiki" | "docs") :: "weekly" :: tl -> redirect_notes ()
-    | "docs" :: tl | "wiki" :: tl -> page (wiki_dispatch tmpl) tl
+    | "docs" :: tl | "wiki" :: tl -> page (wiki_dispatch s tmpl) tl
     | path -> asset c fs path
 
   let create c dispatch =
@@ -98,6 +98,7 @@ module Main
     Stats.start OS.Time.sleep;
     S.make ~callback ~conn_closed ()
 
-  let start c fs tmpl http = http (`TCP 80) (create c (dispatcher c fs tmpl))
+  let start c fs tmpl http =
+    http (`TCP 80) (create c (dispatcher `Http c fs tmpl))
 
 end
