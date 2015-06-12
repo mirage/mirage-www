@@ -52,7 +52,7 @@ Equipped with a private key and a certificate, let's make an HTTPS unikernel!  F
 opam install mirage-seal
 ```
 
-`mirage-seal` has a few required arguments.  (For more thorough documentation, see `mirage-seal --help` or [mirage-seal's README file](https://github.com/mirage/mirage-seal/blob/master/README.md).)
+`mirage-seal` has a few required arguments.  (For more thorough documentation including network configuration settings, see `mirage-seal --help` or [mirage-seal's README file](https://github.com/mirage/mirage-seal/blob/master/README.md).)
 
 * `--data`: one directory containing all the content that should be served by the unikernel.  Candidates for such a directory are the top-level output directory of a static site generator (such as `public` for octopress), the `DocumentRoot` of an Apache configuration, or the `root` of an nginx configuration.
 * `--keys`: one directory containing the certificate (`server.pem`) and key (`server.key`) for the site.
