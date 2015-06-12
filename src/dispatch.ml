@@ -92,7 +92,7 @@ module Main
 
       (* HTTP callback *)
       let callback conn_id request body =
-        let uri = S.Request.uri request in
+        let uri = Cohttp.Request.uri request in
         let io = { Cowabloga.Dispatch.
                    log = (fun ~msg -> C.log c msg);
                    ok = respond_ok;
