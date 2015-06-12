@@ -37,7 +37,6 @@ let fs = get "FS" ~default:`Crunch fat_of_env
 let deploy = get "DEPLOY" ~default:false bool_of_env
 let net = get  "NET" ~default:`Direct socket_of_env
 let dhcp = get "DHCP" ~default:false bool_of_env
-let port = get  "PORT" ~default:80 (function "" -> 80 | s  -> int_of_string s)
 let tls = get "TLS" ~default:false bool_of_env
 
 let mkfs path =
