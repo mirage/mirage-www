@@ -2,7 +2,7 @@ open Printf
 
 open Lwt.Infix
 
-module Main
+module Make
     (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
     (S: Cohttp_lwt.Server)
 = struct
@@ -98,7 +98,23 @@ module Main
     Stats.start OS.Time.sleep;
     S.make ~callback ~conn_closed ()
 
-  let start c fs tmpl http =
-    http (`TCP 80) (create c (dispatcher `Http c fs tmpl))
+  let start name c fs tmpl http =
+    http (`TCP 80) (create c (dispatcher (`Http, name) c fs tmpl))
 
+end
+
+module OpenMirage_org
+    (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
+    (S: Cohttp_lwt.Server)
+= struct
+  module M = Make(C)(FS)(TMPL)(S)
+  let start c fs tmpl http = M.start "openmirage.org" c fs tmpl http
+end
+
+module Mirage_io
+    (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
+    (S: Cohttp_lwt.Server)
+= struct
+  module M = Make(C)(FS)(TMPL)(S)
+  let start c fs tmpl http = M.start "mirage.io" c fs tmpl http
 end

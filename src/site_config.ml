@@ -1,9 +1,8 @@
 open Data
 
-(* TODO uri must be a fully qualified hostname *)
-let base_uri = function
-  | `Https -> "https://openmirage.org/"
-  | `Http  -> "http://openmirage.org/"
+let base_uri (scheme, name) = match scheme with
+  | `Https -> "https://" ^ name ^ "/"
+  | `Http  -> "http://"  ^ name ^ "/"
 
 let google_analytics= ("UA-19610168-1", "openmirage.org")
 

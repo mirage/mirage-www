@@ -25,11 +25,22 @@ let ips_of_env x = split ':' x |> List.map Ipaddr.V4.of_string_exn
 let bool_of_env = function "1" | "true" | "yes" -> true | _ -> false
 let socket_of_env = function "socket" -> `Socket | _ -> `Direct
 let fat_of_env = function "fat" -> `Fat | _ -> `Crunch
+let string_of_env x = x
+
+let err fmt =
+  Printf.eprintf ("\027[31m[ERROR]V\027[m         " ^^ fmt ^^ "\n");
+  exit 1
+
+let env_info fmt = Printf.printf ("\027[33mENV\027[m         " ^^ fmt ^^ "\n%!")
 
 let get_exn name fn =
-  let res = Sys.getenv name in
-  Printf.printf "\027[33mENV\027[m         %s => %s\n%!" name res;
-  fn (String.lowercase res)
+  try
+    let res = Sys.getenv name in
+    env_info "%s => %s" name res;
+    fn (String.lowercase res)
+  with Not_found ->
+    env_info "%s => not set." name;
+    raise Not_found
 
 let get name ~default fn = try get_exn name fn with Not_found -> default
 
@@ -38,6 +49,7 @@ let deploy = get "DEPLOY" ~default:false bool_of_env
 let net = get  "NET" ~default:`Direct socket_of_env
 let dhcp = get "DHCP" ~default:false bool_of_env
 let tls = get "TLS" ~default:false bool_of_env
+let name = get "NAME" ~default:"openmirage.org" string_of_env
 
 let mkfs path =
   let fat_ro dir = kv_ro_of_fs (fat_of_files ~dir ()) in
@@ -68,14 +80,19 @@ let stack = match deploy with
 let libraries = [ "cow.syntax"; "cowabloga" ]
 let packages  = [ "cow"; "cowabloga" ]
 
+let main = match name with
+  | "openmirage.org" -> "OpenMirage_org"
+  | "mirage.io"      -> "Mirage_io"
+  | _ -> err "NAME must be either 'openmirage.org' or 'mirage.io'"
+
 let http =
-  foreign ~libraries ~packages "Dispatch.Main"
+  foreign ~libraries ~packages ("Dispatch." ^ main)
     (console @-> kv_ro @-> kv_ro @-> http @-> job)
 
 let https =
   let libraries = "tls" :: "tls.mirage" :: "mirage-http" :: libraries in
   let packages = "tls" :: "tls" :: "mirage-http" :: packages in
-  foreign ~libraries ~packages "Dispatch_tls.Main"
+  foreign ~libraries ~packages ("Dispatch_tls." ^ main)
     (console @-> kv_ro @-> kv_ro @-> stackv4 @-> kv_ro @-> clock @-> job)
 
 let err fmt = Printf.ksprintf (fun msg ->

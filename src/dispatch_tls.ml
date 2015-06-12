@@ -45,13 +45,29 @@ module Main
     let conf = Tls.Config.server ~certificates:(`Single cert) () in
     Lwt.return conf
 
-  let start c fs tmpl stack keys _clock =
+  let start name c fs tmpl stack keys _clock =
     tls_init keys >>= fun cfg ->
-    let callback = with_https `Https c fs tmpl in
+    let callback = with_https (`Https, name) c fs tmpl in
     let https flow = with_tls c cfg flow ~f:callback in
     let http flow = with_http c flow in
     S.listen_tcpv4 stack ~port:443 https;
     S.listen_tcpv4 stack ~port:80  http;
     S.listen stack
 
+end
+
+module OpenMirage_org
+    (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
+    (S: V1_LWT.STACKV4) (KEYS: V1_LWT.KV_RO) (Clock : V1.CLOCK)
+= struct
+  module M = Make(C)(FS)(TMPL)(S)(KEYS)(Clock)
+  let start = M.start "openmirage.org"
+end
+
+module Mirage_io
+    (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
+    (S: V1_LWT.STACKV4) (KEYS: V1_LWT.KV_RO) (Clock : V1.CLOCK)
+= struct
+  module M = Make(C)(FS)(TMPL)(S)(KEYS)(Clock)
+  let start = M.start "mirage.io"
 end
