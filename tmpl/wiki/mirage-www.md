@@ -27,13 +27,13 @@ MIRAGE ?= mirage
 MODE ?= unix
 FS ?= fat
 NET ?= direct
-DHCP ?= 
+DHCP ?=
 
 ```
 
 These `Makefile` variables do the following:
 
-* `MIRAGE` set the location of the `mirage` binary (normally you 
+* `MIRAGE` set the location of the `mirage` binary (normally you
   don't need to override this).
 * `MODE` is either `unix` or `xen` depending on what backend you're compiling for.
 * `FS` is either `fat` or `crunch`, depending on if you want to use an external block device or simply compile the website contents directly into the `mirage` binary.
@@ -48,7 +48,7 @@ using your favourite editor.
 
 ```
 $ cd src
-$ env NET=socket PORT=8080 FS=crunch mirage configure --unix
+$ env NET=socket FS=crunch mirage configure --unix
 $ make depend
 $ make
 $ make run
@@ -124,12 +124,12 @@ You can inspect the resulting FAT images for yourself by using the `fat`
 command line tool, and the `make-fat1-image.sh` script.
 
 ```
-$ file fat1.img 
+$ file fat1.img
 fat1.img: x86 boot sector, code offset 0x0, OEM-ID "ocamlfat",
 sectors/cluster 4, FAT  1, root entries 512, Media descriptor 0xf8,
 sectors/FAT 2, sectors 1728 (volumes > 32 MB) , dos < 4.0 BootSector (0x0)
 
-$ fat list fat1.img 
+$ fat list fat1.img
 /wiki (DIR)(1856 bytes)
 /wiki/xen-synthesize-virtual-disk.md (FILE)(8082 bytes)
 /wiki/xen-suspend.md (FILE)(14120 bytes)
