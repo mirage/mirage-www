@@ -108,6 +108,6 @@ module Main
       in
 
       Stats.start OS.Time.sleep;
-      http (S.make ~callback ~conn_closed ())
+      http (`TCP 80) (S.make ~callback ~conn_closed ())
 
   end
