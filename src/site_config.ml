@@ -1,7 +1,7 @@
 open Data
 
 (* TODO uri must be a fully qualified hostname *)
-let base_uri = "http://openmirage.org/"
+let base_uri = "https://openmirage.org/"
 
 let google_analytics= ("UA-19610168-1", "openmirage.org")
 

@@ -22,8 +22,11 @@ module Main
   module TLS  = Tls_mirage.Make (TCP)
   module X509 = Tls_mirage.X509 (KEYS) (Clock)
 
-  module Http     = Cohttp_mirage.Server(TLS)
-  module Dispatch = Dispatch.Main(C)(FS)(TMPL)(Http)
+  module Http  = Cohttp_mirage.Server(TCP)
+  module Https = Cohttp_mirage.Server(TLS)
+
+  module D  = Dispatch.Main(C)(FS)(TMPL)(Http)
+  module DS = Dispatch.Main(C)(FS)(TMPL)(Https)
 
   let log c fmt = Printf.ksprintf (C.log c) fmt
 
@@ -36,23 +39,16 @@ module Main
     | `Ok tls  -> log "TLS ok"; f tls >>= fun () ->TLS.close tls
     | `Eof     -> log "TLS eof"; TCP.close tcp
 
-  let with_http c fs tmpl flow =
-    let callback conn_id request body =
-      let uri = Http.Request.uri request in
-      let io = {
-        Cowabloga.Dispatch.log = (fun ~msg -> C.log c msg);
-        ok = Dispatch.respond_ok;
-        notfound = (fun ~uri -> Http.respond_not_found ~uri ());
-        redirect = (fun ~uri -> Http.respond_redirect ~uri ());
-      } in
-      Cowabloga.Dispatch.f io (Dispatch.dispatcher c fs tmpl) uri
+  let with_https c fs tmpl flow =
+    let t = DS.create c (DS.dispatcher c fs tmpl) in
+    Https.listen t flow () ()
+
+  let with_http c flow =
+    let t =
+      let mk path = Site_config.base_uri ^ String.concat "/" path in
+      D.create c (fun path -> D.redirect (mk path))
     in
-    let conn_closed (_,conn_id) =
-      let cid = Cohttp.Connection.to_string conn_id in
-      C.log c (Printf.sprintf "conn %s closed" cid)
-    in
-    let http = Http.make ~conn_closed ~callback () in
-    Http.listen http flow () ()
+    Http.listen t flow () ()
 
   let tls_init kv =
     X509.certificate kv `Default >>= fun cert ->
@@ -61,9 +57,10 @@ module Main
 
   let start c fs tmpl stack keys _clock =
     tls_init keys >>= fun cfg ->
-    let serve flow = with_tls c cfg flow ~f:(with_http c fs tmpl) in
-    Stats.start OS.Time.sleep;
-    S.listen_tcpv4 stack ~port:443 serve;
+    let https flow = with_tls c cfg flow ~f:(with_https c fs tmpl) in
+    let http flow = with_http c flow in
+    S.listen_tcpv4 stack ~port:443 https;
+    S.listen_tcpv4 stack ~port:80  http;
     S.listen stack
 
 end

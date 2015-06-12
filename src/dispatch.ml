@@ -58,7 +58,7 @@ module Main
     Pages.Index.dispatch ~feed:(updates_feed tmpl) ~feeds:(updates_feeds tmpl)
 
   let stats () = html (Lwt.return (Cow.Html.to_string (Stats.page ())))
-  let redirect () = redirect "../wiki#Weeklycallsandreleasenotes"
+  let redirect_notes () = redirect "../wiki#Weeklycallsandreleasenotes"
   let index tmpl = html (Pages.Index.t ~feeds:(updates_feeds tmpl) (read_tmpl tmpl))
   let about tmpl = html (Pages.About.t (read_tmpl tmpl))
 
@@ -76,12 +76,11 @@ module Main
     | "blog"     :: tl -> page (blog_dispatch tmpl) tl
     | "links"    :: tl -> links_dispatch tmpl >|= fun f -> f tl
     | "updates"  :: tl -> page (updates_dispatch tmpl) tl
-    | ("wiki" | "docs") :: "weekly" :: tl -> redirect ()
+    | ("wiki" | "docs") :: "weekly" :: tl -> redirect_notes ()
     | "docs" :: tl | "wiki" :: tl -> page (wiki_dispatch tmpl) tl
     | path -> asset c fs path
 
-  let start c fs tmpl http =
-    (* HTTP callback *)
+  let create c dispatch =
     let callback conn_id request body =
       let uri = Cohttp.Request.uri request in
       let io = {
@@ -90,13 +89,15 @@ module Main
         notfound = (fun ~uri -> S.respond_not_found ~uri ());
         redirect = (fun ~uri -> S.respond_redirect ~uri ());
       } in
-      Cowabloga.Dispatch.f io (dispatcher c fs tmpl) uri
+      Cowabloga.Dispatch.f io dispatch uri
     in
     let conn_closed (_,conn_id) =
       let cid = Cohttp.Connection.to_string conn_id in
       C.log c (Printf.sprintf "conn %s closed" cid)
     in
     Stats.start OS.Time.sleep;
-    http (`TCP 80) (S.make ~callback ~conn_closed ())
+    S.make ~callback ~conn_closed ()
+
+  let start c fs tmpl http = http (`TCP 80) (create c (dispatcher c fs tmpl))
 
 end
