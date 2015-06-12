@@ -1,6 +1,5 @@
 open Mirage
 
-(** [split c s] splits string [s] at every occurrence of character [c] *)
 let split c s =
   let rec aux c s ri acc =
     (* half-closed intervals. [ri] is the open end, the right-fencepost.
@@ -22,73 +21,85 @@ let split c s =
   in
   aux c s (String.length s) []
 
-let mkfs fs =
-  let mode =
-    try match String.lowercase (Unix.getenv "FS") with
-      | "fat" -> `Fat
-      | _     -> `Crunch
-    with Not_found -> `Crunch
-  in
-  let fat_ro dir =
-    kv_ro_of_fs (fat_of_files ~dir ())
-  in
-  match mode, get_mode () with
-  | `Fat,    _    -> fat_ro fs
-  | `Crunch, `Xen -> crunch fs
-  | `Crunch, _    -> direct_kv_ro fs
+let ips_of_env x = split ':' x |> List.map Ipaddr.V4.of_string_exn
+let bool_of_env = function "1" | "true" | "yes" -> true | _ -> false
+let socket_of_env = function "socket" -> `Socket | _ -> `Direct
+let fat_of_env = function "fat" -> `Fat | _ -> `Crunch
+
+let get_exn name fn =
+  let res = Sys.getenv name in
+  Printf.printf "\027[33mENV\027[m         %s => %s\n%!" name res;
+  fn (String.lowercase res)
+
+let get name ~default fn = try get_exn name fn with Not_found -> default
+
+let fs = get "FS" ~default:`Crunch fat_of_env
+let deploy = get "DEPLOY" ~default:false bool_of_env
+let net = get  "NET" ~default:`Direct socket_of_env
+let dhcp = get "DHCP" ~default:false bool_of_env
+let port = get  "PORT" ~default:80 (function "" -> 80 | s  -> int_of_string s)
+let tls = get "TLS" ~default:false bool_of_env
+
+let mkfs path =
+  let fat_ro dir = kv_ro_of_fs (fat_of_files ~dir ()) in
+  match fs, get_mode () with
+  | `Fat,    _    -> fat_ro path
+  | `Crunch, `Xen -> crunch path
+  | `Crunch, _    -> direct_kv_ro path
 
 let filesfs = mkfs "../files"
 let tmplfs = mkfs "../tmpl"
+let cons0 = default_console
 
-let https =
-  let deploy =
-    try match Sys.getenv "DEPLOY" with
-      | "1" | "true" | "yes" -> true
-      | _ -> false
-    with Not_found -> false
-  in
-  let stack console =
-    match deploy with
-    | true ->
-      let staticip =
-        let address = Sys.getenv "ADDR" |> Ipaddr.V4.of_string_exn in
-        let netmask = Sys.getenv "MASK" |> Ipaddr.V4.of_string_exn in
-        let gateways =
-          Sys.getenv "GWS" |> split ':' |> List.map Ipaddr.V4.of_string_exn
-        in
-        { address; netmask; gateways }
-      in
-      direct_stackv4_with_static_ipv4 console tap0 staticip
+let stack = match deploy with
+  | true ->
+    let staticip =
+      let address = get_exn "ADDR" Ipaddr.V4.of_string_exn in
+      let netmask = get_exn "MASK" Ipaddr.V4.of_string_exn in
+      let gateways = get_exn "GWS" ips_of_env in
+      { address; netmask; gateways }
+    in
+    direct_stackv4_with_static_ipv4 cons0 tap0 staticip
+  | false ->
+    match net, dhcp with
+    | `Direct, false -> direct_stackv4_with_default_ipv4 cons0 tap0
+    | `Direct, true  -> direct_stackv4_with_dhcp cons0 tap0
+    | `Socket, _     -> socket_stackv4 cons0 [Ipaddr.V4.any]
 
-    | false ->
-      let net =
-        try match Sys.getenv "NET" with
-          | "socket" -> `Socket
-          | _        -> `Direct
-        with Not_found -> `Direct
-      in
-      let dhcp =
-        try match Sys.getenv "DHCP" with
-          | "1" | "true" | "yes" -> true
-          | _  -> false
-        with Not_found -> false
-      in
-      match net, dhcp with
-      | `Direct, false -> direct_stackv4_with_default_ipv4 console tap0
-      | `Direct, true  -> direct_stackv4_with_dhcp console tap0
-      | `Socket, _     -> socket_stackv4 console [Ipaddr.V4.any]
-  in
-  http_server (conduit_direct (stack default_console))
+let libraries = [ "cow.syntax"; "cowabloga" ]
+let packages  = [ "cow"; "cowabloga" ]
 
-let main =
-  let libraries = [ "cow.syntax"; "cowabloga" ] in
-  let packages = [ "cow"; "cowabloga" ] in
+let http =
   foreign ~libraries ~packages "Dispatch.Main"
     (console @-> kv_ro @-> kv_ro @-> http @-> job)
+
+let https =
+  let libraries = "tls" :: "tls.mirage" :: "mirage-http" :: libraries in
+  let packages = "tls" :: "tls" :: "mirage-http" :: packages in
+  foreign ~libraries ~packages "Dispatch_tls.Main"
+    (console @-> kv_ro @-> kv_ro @-> stackv4 @-> kv_ro @-> clock @-> job)
+
+let err fmt = Printf.ksprintf (fun msg ->
+    Printf.eprintf "\n\027[31m[ERROR]\027[m     %s, stopping.\n%!" msg;
+    exit 1
+  ) fmt
+
+let check_file ~msg file =
+  if not (Sys.file_exists file) then err "%s %s is missing" msg file
 
 let () =
   let tracing = None in
   (* let tracing = mprof_trace ~size:10000 () in *)
-  register ?tracing "www" [
-    main $ default_console $ filesfs $ tmplfs $ https
+  register ?tracing "www" [ match tls with
+      | false ->
+        let server = http_server (conduit_direct stack) in
+        http  $ default_console $ filesfs $ tmplfs $ server
+      | true ->
+        let key = "../tls/tls/server.key" in
+        let pem = "../tls/tls/server.pem" in
+        check_file ~msg:"The TLS private key" key;
+        check_file ~msg:"The TLS certificate" pem;
+        let tls = mkfs "../tls" in
+        let clock0 = default_clock in
+        https $ default_console $ filesfs $ tmplfs $ stack $ tls $ clock0
   ]
