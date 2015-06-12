@@ -3,7 +3,7 @@ open Printf
 let (>>=) = Lwt.(>>=)
 
 (* HTTPS *)
-module Main
+module Make
     (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
     (S: V1_LWT.STACKV4) (KEYS: V1_LWT.KV_RO) (Clock : V1.CLOCK)
 = struct
@@ -15,8 +15,8 @@ module Main
   module Http  = Cohttp_mirage.Server(TCP)
   module Https = Cohttp_mirage.Server(TLS)
 
-  module D  = Dispatch.Main(C)(FS)(TMPL)(Http)
-  module DS = Dispatch.Main(C)(FS)(TMPL)(Https)
+  module D  = Dispatch.Make(C)(FS)(TMPL)(Http)
+  module DS = Dispatch.Make(C)(FS)(TMPL)(Https)
 
   let log c fmt = Printf.ksprintf (C.log c) fmt
 
@@ -33,9 +33,11 @@ module Main
     let t = DS.create c (DS.dispatcher s c fs tmpl) in
     Https.listen t flow
 
-  let with_http c flow =
+  let with_http name c flow =
     let t =
-      let mk path = Site_config.base_uri `Https ^ String.concat "/" path in
+      let mk path =
+        Site_config.base_uri (`Https, name) ^ String.concat "/" path
+      in
       D.create c (fun path -> D.redirect (mk path))
     in
     Http.listen t flow
@@ -49,7 +51,7 @@ module Main
     tls_init keys >>= fun cfg ->
     let callback = with_https (`Https, name) c fs tmpl in
     let https flow = with_tls c cfg flow ~f:callback in
-    let http flow = with_http c flow in
+    let http flow = with_http name c flow in
     S.listen_tcpv4 stack ~port:443 https;
     S.listen_tcpv4 stack ~port:80  http;
     S.listen stack
@@ -61,7 +63,8 @@ module OpenMirage_org
     (S: V1_LWT.STACKV4) (KEYS: V1_LWT.KV_RO) (Clock : V1.CLOCK)
 = struct
   module M = Make(C)(FS)(TMPL)(S)(KEYS)(Clock)
-  let start = M.start "openmirage.org"
+  let start c fs tmpl stack keys _clock =
+    M.start "openmirage.org" c fs tmpl stack keys _clock
 end
 
 module Mirage_io
@@ -69,5 +72,6 @@ module Mirage_io
     (S: V1_LWT.STACKV4) (KEYS: V1_LWT.KV_RO) (Clock : V1.CLOCK)
 = struct
   module M = Make(C)(FS)(TMPL)(S)(KEYS)(Clock)
-  let start = M.start "mirage.io"
+  let start c fs tmpl stack keys _clock =
+    M.start "mirage.io" c fs tmpl stack keys _clock
 end
