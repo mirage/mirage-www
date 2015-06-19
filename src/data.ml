@@ -527,6 +527,12 @@ module Wiki = struct
       body       = File "profiling.md";
       permalink  = "profiling";
     };
+    { updated    = date (2015, 06, 18, 11, 00);
+      author     = tal;
+      subject    = "Breaking changes";
+      body       = File "breaking-changes.md";
+      permalink  = "breaking-changes";
+    };
 
     Bactrian.entry_for_is_mirage_broken_wikipage;
   ]

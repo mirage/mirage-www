@@ -207,6 +207,7 @@ module Releases = struct
              along with the summary of changes that went into each library.  The
              MirageOS <a href="https://github.com/mirage">organization</a> holds most
              of the major libraries if you just want to browse.</p>
+          <p>We also provide a short list of <a href='/wiki/breaking-changes'>backwards incompatible changes</a>.</p>
           $c$
         </div>
       </div>
