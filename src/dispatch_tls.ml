@@ -16,11 +16,24 @@
 
 open Lwt.Infix
 
-(* HTTPS *)
-module Make
+module type S =
+  functor (C: V1_LWT.CONSOLE) ->
+  functor (FS: V1_LWT.KV_RO) ->
+  functor (TMPL: V1_LWT.KV_RO) ->
+  functor (S: V1_LWT.STACKV4) ->
+  functor (KEYS: V1_LWT.KV_RO) ->
+  functor (Clock : V1.CLOCK) ->
+sig
+  val start: ?host:string -> C.t -> FS.t -> TMPL.t -> S.t -> KEYS.t ->
+    unit -> unit Lwt.t
+end
+
+module Make_localhost
     (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
     (S: V1_LWT.STACKV4) (KEYS: V1_LWT.KV_RO) (Clock : V1.CLOCK)
 = struct
+
+
 
   module TCP  = S.TCPV4
   module TLS  = Tls_mirage.Make (TCP)
@@ -29,8 +42,8 @@ module Make
   module Http  = Cohttp_mirage.Server(TCP)
   module Https = Cohttp_mirage.Server(TLS)
 
-  module D  = Dispatch.Make(C)(FS)(TMPL)(Http)
-  module DS = Dispatch.Make(C)(FS)(TMPL)(Https)
+  module D  = Dispatch.Make_localhost(C)(FS)(TMPL)(Http)
+  module DS = Dispatch.Make_localhost(C)(FS)(TMPL)(Https)
 
   let log c fmt = Printf.ksprintf (C.log c) fmt
 
@@ -43,17 +56,13 @@ module Make
     | `Ok tls  -> log "TLS ok"; f tls >>= fun () ->TLS.close tls
     | `Eof     -> log "TLS eof"; TCP.close tcp
 
-  let with_https s c fs tmpl flow =
-    let t = DS.create c (DS.dispatcher s fs tmpl) in
+  let with_https domain c fs tmpl flow =
+    let t = DS.create c (DS.dispatch domain c fs tmpl) in
     Https.listen t flow
 
-  let with_http name c flow =
-    let t =
-      let mk path =
-        Site_config.base_uri (`Https, name) ^ String.concat "/" path
-      in
-      D.create c (fun path -> D.redirect (mk path))
-    in
+  let with_http host c flow =
+    let domain = `Https, host in
+    let t = D.create c (D.redirect domain) in
     Http.listen t flow
 
   let tls_init kv =
@@ -61,31 +70,22 @@ module Make
     let conf = Tls.Config.server ~certificates:(`Single cert) () in
     Lwt.return conf
 
-  let start name c fs tmpl stack keys _clock =
+  let start ?(host="localhost") c fs tmpl stack keys _clock =
     tls_init keys >>= fun cfg ->
-    let callback = with_https (`Https, name) c fs tmpl in
+    let callback = with_https (`Https, host) c fs tmpl in
     let https flow = with_tls c cfg flow ~f:callback in
-    let http flow = with_http name c flow in
+    let http flow = with_http host c flow in
     S.listen_tcpv4 stack ~port:443 https;
     S.listen_tcpv4 stack ~port:80  http;
     S.listen stack
 
 end
 
-module OpenMirage_org
+module Make (Config: Dispatch.Config)
     (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
     (S: V1_LWT.STACKV4) (KEYS: V1_LWT.KV_RO) (Clock : V1.CLOCK)
 = struct
-  module M = Make(C)(FS)(TMPL)(S)(KEYS)(Clock)
-  let start c fs tmpl stack keys _clock =
-    M.start "openmirage.org" c fs tmpl stack keys _clock
-end
-
-module Mirage_io
-    (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
-    (S: V1_LWT.STACKV4) (KEYS: V1_LWT.KV_RO) (Clock : V1.CLOCK)
-= struct
-  module M = Make(C)(FS)(TMPL)(S)(KEYS)(Clock)
-  let start c fs tmpl stack keys _clock =
-    M.start "mirage.io" c fs tmpl stack keys _clock
+  module M = Make_localhost(C)(FS)(TMPL)(S)(KEYS)(Clock)
+  let start ?(host=Config.host) c fs tmpl stack keys _clock =
+    M.start ~host c fs tmpl stack keys _clock
 end

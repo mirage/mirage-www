@@ -16,65 +16,68 @@
 
 open Printf
 open Lwt.Infix
-open Cowabloga.Wiki
+
+type t = Cowabloga.Wiki.entry
+
+module C = Cowabloga
 
 (* Make a full Html.t including Atom link and headers from an wiki
    page *)
-let make ~domain ?title ?disqus content sidebar =
+let make ?title ?disqus ~read ~domain ~sidebar content =
   (* TODO get atom url from the feed *)
   let url = sprintf "/wiki/atom.xml" in
   let headers =
     <:xml<<link rel="alternate" type="application/atom+xml" href=$str:url$ />&>>
   in
   let title = "Docs " ^ match title with None -> "" | Some x -> " :: " ^ x in
-  html_of_page ?disqus ~content ~sidebar >>= fun content ->
-  Lwt.return (Pages.Global.page ~domain ~title ~headers ~content)
+  C.Wiki.html_of_page ?disqus ~content ~sidebar >>= fun content ->
+  Pages.Global.t ~domain ~title ~headers ~content ~read
 
 (* Main wiki page Html.t fragment with the index page *)
-let main_page ~domain feed =
-  html_of_index feed >>= fun idx ->
-  let sidebar = html_of_recent_updates feed Data.Wiki.entries in
-  make ~domain ~title:"index" (Lwt.return idx) sidebar
+let wiki_index ~feed ~read ~domain =
+  C.Wiki.html_of_index feed >>= fun idx ->
+  let sidebar = C.Wiki.html_of_recent_updates feed Data.Wiki.entries in
+  make ~read ~domain ~title:"index" ~sidebar (Lwt.return idx)
 
-let doc_entries ~domain feed entries =
+let wiki_entries ~feed ~entries ~read ~domain =
   let h = Hashtbl.create 1 in
-  List.iter (fun entry ->
-      let title = entry.subject in
-      let post = html_of_entry feed entry in
-      let body = make ~domain ~title post [] in
-      Hashtbl.add h entry.permalink body;
-    ) entries;
-  h
+  Lwt_list.iter_s (fun entry ->
+      let title = entry.C.Wiki.subject in
+      let post = C.Wiki.html_of_entry feed entry in
+      make ~domain ~read ~title ~sidebar:[] post >>= fun body ->
+      Hashtbl.add h entry.C.Wiki.permalink body;
+      Lwt.return_unit
+    ) entries
+  >>= fun () ->
+  Lwt.return h
 
-let atom_feed feed entries =
-  to_atom ~feed ~entries
-  >|= Cow.Atom.xml_of_feed ~self:"/wiki/atom.xml" (* TODO what is self? *)
-  >|= Cow.Xml.to_string
-
-let not_found ~domain x doc_entries =
-  let all = Hashtbl.fold (fun k _ a -> k :: a) doc_entries [] in
-  let left = sprintf "Not found: %s (known links: wiki/%s)"
-      (String.concat " ... " x)
-      (String.concat " " all)
+let atom_feed ~feed ~entries =
+  let headers  = Cowabloga.Headers.atom in
+  let feed =
+    C.Wiki.to_atom ~feed ~entries
+    >|= Cow.Atom.xml_of_feed ~self:"/wiki/atom.xml" (* TODO what is self? *)
+    >|= Cow.Xml.to_string
   in
-  make ~domain ~title:"Not Found" (Lwt.return <:xml<$str:left$>>) []
+  Lwt.return (`Page (headers, feed))
+
+let not_found ~domain x =
+  (* FIXME: pass "wiki" in the domain variable? *)
+  let uri = Site_config.uri domain ("wiki" :: x) in
+  `Not_found uri
 
 (* Construct an HTTP dispatch function for the blog *)
-let dispatch ~domain feed entries =
-  (* TODO use a mime type db (from cohttp?) *)
-  let content_type_xhtml = Cowabloga.Headers.html in
-  let content_type_atom  = Cowabloga.Headers.atom in
-  let main_page = main_page ~domain feed in
-  let doc_entries = doc_entries ~domain feed entries in
-  let atom_feed = atom_feed feed entries in
-  let doc_entry x =
-    try Hashtbl.find doc_entries x
-    with Not_found -> not_found ~domain [x] doc_entries
+let dispatch ~feed ~entries ~read ~domain =
+  atom_feed ~feed ~entries                  >>= fun atom_feed ->
+  wiki_index ~domain ~feed ~read            >>= fun wiki_index ->
+  wiki_entries ~domain ~read ~feed ~entries >>= fun wiki_entries ->
+  let wiki_entry x =
+    try Hashtbl.find wiki_entries x
+    with Not_found -> not_found ~domain [x]
   in
   let f = function
-    | [] | [""]    -> content_type_xhtml, main_page
-    | ["atom.xml"] -> content_type_atom , atom_feed
-    | [x]          -> content_type_xhtml, doc_entry x
-    | x            -> content_type_xhtml, not_found ~domain x doc_entries
+    | [] | [""]    -> wiki_index
+    | ["atom.xml"] -> atom_feed
+    | [x]          -> wiki_entry x
+    | x            -> not_found ~domain x
   in
   Lwt.return f

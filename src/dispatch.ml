@@ -16,10 +16,27 @@
 
 open Lwt.Infix
 
-module Make
+module type S =
+  functor (C: V1_LWT.CONSOLE) ->
+  functor (FS: V1_LWT.KV_RO) ->
+  functor (TMPL: V1_LWT.KV_RO) ->
+  functor (S: Cohttp_lwt.Server) ->
+sig
+  type dispatch = Types.path -> Types.cowabloga Lwt.t
+  val redirect: Types.domain -> dispatch
+  val dispatch: Types.domain -> C.t -> FS.t -> TMPL.t -> dispatch
+  val create: C.t -> dispatch -> S.t
+  type s = Conduit_mirage.server -> S.t -> unit Lwt.t
+  val start: ?host:string -> C.t -> FS.t -> TMPL.t -> s -> unit Lwt.t
+end
+
+module Make_localhost
     (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
     (S: Cohttp_lwt.Server)
 = struct
+
+  type dispatch = Types.path -> Types.cowabloga Lwt.t
+  type s = Conduit_mirage.server -> S.t -> unit Lwt.t
 
   let log c fmt = Printf.kprintf (C.log c) fmt
   let err fmt = Printf.kprintf (fun f -> raise (Failure f)) fmt
@@ -49,74 +66,100 @@ module Make
     let headers = Cohttp.Header.of_list headers in
     S.respond_string ~headers ~status ~body ()
 
-  let not_found page = Lwt.return (`Not_found page)
-  let html h = Lwt.return (`Html h)
-  let page p path = p >|= fun f -> (`Page (f path))
-  let redirect r = Lwt.return (`Redirect r)
+  let not_found domain path =
+    let uri = Site_config.uri domain path in
+    let uri = Uri.to_string uri in
+    Lwt.return (`Not_found uri)
 
-  let blog_feed s tmpl =
-    Site_config.blog s (fun n -> read_entry tmpl ("/blog/"^n))
+  let redirect domain r =
+    let uri = Site_config.uri domain r in
+    let uri = Uri.to_string uri in
+    Lwt.return (`Redirect uri)
 
-  let wiki_feed s tmpl =
-    Site_config.wiki s (fun n -> read_entry tmpl ("/wiki/"^n))
+  let cowabloga (x:Types.contents): Types.cowabloga = match x with
+    | `Html _ | `Page _ as e -> e
+    | `Not_found p -> `Not_found (Uri.to_string p)
+    | `Redirect p  -> `Redirect (Uri.to_string p)
 
-  let updates_feed s tmpl = Site_config.updates s (read_entry tmpl)
-  let links_feed s tmpl = Site_config.links s (read_entry tmpl)
+  let mk f path = f >|= fun f -> cowabloga (f path)
 
-  let updates_feeds s tmpl = [
-    `Blog (blog_feed s tmpl, Data.Blog.entries);
-    `Wiki (wiki_feed s tmpl, Data.Wiki.entries);
+  let blog_feed domain tmpl =
+    Data.Feed.blog domain (fun n -> read_entry tmpl ("/blog/"^n))
+
+  let wiki_feed domain tmpl =
+    Data.Feed.wiki domain (fun n -> read_entry tmpl ("/wiki/"^n))
+
+  let updates_feed domain tmpl = Data.Feed.updates domain (read_entry tmpl)
+  let links_feed domain tmpl = Data.Feed.links domain (read_entry tmpl)
+
+  let updates_feeds domain tmpl = [
+    `Blog (blog_feed domain tmpl, Data.Blog.entries);
+    `Wiki (wiki_feed domain tmpl, Data.Wiki.entries);
   ]
 
-  let blog_dispatch s tmpl =
-    let domain = snd s in
-    Blog.dispatch ~domain (blog_feed s tmpl) Data.Blog.entries
+  let blog_dispatch domain tmpl =
+    let feed = blog_feed domain tmpl in
+    let entries = Data.Blog.entries in
+    let read = read_tmpl tmpl in
+    Blog.dispatch ~domain ~feed ~entries ~read
 
-  let wiki_dispatch s tmpl =
-    let domain = snd s in
-    Wiki.dispatch ~domain (wiki_feed s tmpl) Data.Wiki.entries
+  let wiki_dispatch domain tmpl =
+    let read = read_tmpl tmpl in
+    let feed = wiki_feed domain tmpl in
+    let entries = Data.Wiki.entries in
+    Wiki.dispatch ~domain ~read ~feed ~entries
 
-  let releases_dispatch s tmpl =
-    let domain = snd s in
-    Pages.Releases.dispatch ~domain (read_tmpl tmpl)
+  let releases_dispatch domain tmpl =
+    let read = read_tmpl tmpl in
+    Pages.Releases.dispatch ~domain ~read
 
-  let links_dispatch s tmpl =
-    let domain = snd s in
-    Pages.Links.dispatch ~domain (links_feed s tmpl) Data.Links.entries
+  let links_dispatch domain tmpl =
+    let read = read_tmpl tmpl in
+    let feed = links_feed domain tmpl in
+    let links = Data.Links.entries in
+    Pages.Links.dispatch ~domain ~read ~feed ~links
 
-  let updates_dispatch s tmpl =
-    let domain = snd s in
-    Pages.Index.dispatch ~domain
-      ~feed:(updates_feed s tmpl) ~feeds:(updates_feeds s tmpl)
+  let updates_dispatch domain tmpl =
+    let feed = updates_feed domain tmpl in
+    let feeds = updates_feeds domain tmpl in
+    let read = read_tmpl tmpl in
+    Pages.Index.dispatch ~domain ~feed ~feeds ~read
 
-  let stats () = html (Lwt.return (Cow.Html.to_string (Stats.page ())))
-  let redirect_notes () = redirect "../wiki#Weeklycallsandreleasenotes"
+  let stats () =
+    let html = Cow.Html.to_string (Stats.page ()) in
+    Lwt.return (`Html (Lwt.return html))
 
-  let index s tmpl =
-    let domain = snd s in
-    html (Pages.Index.t ~domain ~feeds:(updates_feeds s tmpl) (read_tmpl tmpl))
+  let redirect_notes domain =
+    redirect domain ["../wiki#Weeklycallsandreleasenotes"]
 
-  let about s tmpl =
-    let domain = snd s in
-    html (Pages.About.t ~domain (read_tmpl tmpl))
+  let index domain tmpl =
+    let read = read_tmpl tmpl in
+    let feeds = updates_feeds domain tmpl in
+    Pages.Index.t ~domain ~feeds ~read >|= cowabloga
 
-  let asset fs path =
-    let path = String.concat "/" path in
-    let asset path = Lwt.return (`Asset (read_fs fs path)) in
-    Lwt.catch (fun () -> asset path) (fun _ -> not_found path)
+  let about domain tmpl =
+    let read = read_tmpl tmpl in
+    Pages.About.t ~domain ~read >|= cowabloga
+
+  let asset c domain fs path =
+    let path_s = String.concat "/" path in
+    let asset () = Lwt.return (`Asset (read_fs fs path_s)) in
+    Lwt.catch asset (fun e ->
+        log c "got an error while getting %s: %s" path_s (Printexc.to_string e);
+        not_found domain path)
 
   (* dispatch non-file URLs *)
-  let dispatcher s fs tmpl = function
-    | [] | [""] | ["index.html"] -> index s tmpl
+  let dispatch domain c fs tmpl = function
+    | [] | [""] | ["index.html"] -> index domain tmpl
     | ["stats"; "gc"] -> stats ()
-    | ["about"] | ["community"] -> about s tmpl
-    | "releases" :: tl -> page (releases_dispatch s tmpl) tl
-    | "blog"     :: tl -> page (blog_dispatch s tmpl) tl
-    | "links"    :: tl -> links_dispatch s tmpl >|= fun f -> f tl
-    | "updates"  :: tl -> page (updates_dispatch s tmpl) tl
-    | ("wiki" | "docs") :: "weekly" :: _ -> redirect_notes ()
-    | "docs" :: tl | "wiki" :: tl -> page (wiki_dispatch s tmpl) tl
-    | path -> asset fs path
+    | ["about"] | ["community"] -> about domain tmpl
+    | "releases" :: tl -> mk (releases_dispatch domain tmpl) tl
+    | "blog"     :: tl -> mk (blog_dispatch domain tmpl) tl
+    | "links"    :: tl -> mk (links_dispatch domain tmpl) tl
+    | "updates"  :: tl -> mk (updates_dispatch domain tmpl) tl
+    | ("wiki" | "docs") :: "weekly" :: _ -> redirect_notes domain
+    | "docs" :: tl | "wiki" :: tl -> mk (wiki_dispatch domain tmpl) tl
+    | path -> asset c domain fs path
 
   let create c dispatch =
     let callback _conn_id request _body =
@@ -131,28 +174,25 @@ module Make
     in
     let conn_closed (_,conn_id) =
       let cid = Cohttp.Connection.to_string conn_id in
-      C.log c (Printf.sprintf "conn %s closed" cid)
+      log c "conn %s closed" cid
     in
     Stats.start ~sleep:OS.Time.sleep;
     S.make ~callback ~conn_closed ()
 
-  let start domain c fs tmpl http =
-    http (`TCP 80) (create c (dispatcher (`Http, domain) fs tmpl))
+  let start ?(host="localhost") c fs tmpl http =
+    http (`TCP 80) (create c (dispatch (`Http, host) c fs tmpl))
 
 end
 
-module OpenMirage_org
-    (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
-    (S: Cohttp_lwt.Server)
-= struct
-  module M = Make(C)(FS)(TMPL)(S)
-  let start c fs tmpl http = M.start "openmirage.org" c fs tmpl http
+module type Config = sig
+  val host: string
 end
 
-module Mirage_io
+module Make (Config: Config)
     (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
     (S: Cohttp_lwt.Server)
 = struct
-  module M = Make(C)(FS)(TMPL)(S)
-  let start c fs tmpl http = M.start "mirage.io" c fs tmpl http
+  module M = Make_localhost(C)(FS)(TMPL)(S)
+  include M
+  let start ?(host=Config.host) c fs tmpl http = M.start ~host c fs tmpl http
 end

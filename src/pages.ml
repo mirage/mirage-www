@@ -18,7 +18,11 @@ open Printf
 open Lwt.Infix
 open Cow
 
-let empty_string = Lwt.return ""
+type t = read:string Types.read -> domain:Types.domain -> Types.contents Lwt.t
+
+let html str = Lwt.return (`Html (Lwt.return str))
+let page h c = Lwt.return (`Page (h, Lwt.return c))
+let empty = `Html (Lwt.return "")
 
 let get_extension filename =
   try
@@ -40,14 +44,8 @@ let read_file tmpl_read f =
   | Some "html" -> read (fun s -> Html.of_string s)
   | _           -> Lwt.return []
 
-let two_cols l r = <:html<
-  <div class="row">
-    <div class="large-6 columns">$l$</div>
-    <div class="large-6 columns">$r$</div>
-  </div>
->>
-
 module Global = struct
+
   let nav_links = <:xml<
     <ul class="left">
       <li><a href="/blog/">Blog</a></li>
@@ -72,7 +70,7 @@ module Global = struct
       ~title_uri:(Uri.of_string "/")
       ~nav_links
 
-  let page ~domain ~title ~headers ~content =
+  let t ~title ~headers ~content ~read:_ ~domain =
     let font = <:html<
       <link rel="stylesheet" href="/css/font-awesome.css"> </link>
       <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700"
@@ -80,20 +78,21 @@ module Global = struct
     >> in
     let headers = font @ headers in
     let content = top_nav @ content in
-    let google_analytics = Site_config.google_analytics domain in
+    let google_analytics = Data.google_analytics domain in
     let body =
       Cowabloga.Foundation.body ~highlight:"/css/magula.css"
         ~google_analytics ~title ~headers ~content ~trailers:[] ()
     in
-    Cowabloga.Foundation.page ~body
+    html (Cowabloga.Foundation.page ~body)
+
 end
 
 module Index = struct
 
-  let t ~domain ~feeds read_fn =
-    read_file read_fn "/intro-1.md"        >>= fun l1 ->
-    read_file read_fn "/intro-3.md"        >>= fun l2 ->
-    read_file read_fn "/intro-f.html"      >>= fun footer ->
+  let t ~feeds ~read ~domain =
+    read_file read "/intro-1.md"  >>= fun l1 ->
+    read_file read "/intro-3.md"  >>= fun l2 ->
+    read_file read "/intro-f.html">>= fun footer ->
     Cowabloga.Feed.to_html ~limit:12 feeds >>= fun recent ->
     let content = <:html<
     <div class="row">
@@ -113,37 +112,38 @@ module Index = struct
       <div class="small-12 columns">$footer$</div>
     </div>
     >> in
-    Lwt.return (Global.page ~domain ~title:"MirageOS" ~headers:[] ~content)
+    Global.t ~title:"MirageOS" ~headers:[] ~content ~domain ~read
 
-  let content_type_xhtml = Cowabloga.Headers.html
   let content_type_atom  = Cowabloga.Headers.atom
 
   (* TODO have a way of rewriting all the pages with an associated Atom feed *)
-  let make domain content =
+  let make ~read ~domain content =
     (* TODO need a URL routing mechanism instead of assuming / *)
     let uri = Uri.of_string "/updates/atom.xml" in
     let headers =
       <:xml<<link rel="alternate" type="application/atom+xml" href=$uri:uri$ /> >> in
     let title = "Updates" in
-    Global.page ~domain ~title ~headers ~content
+    Global.t ~title ~headers ~content ~read ~domain
 
-  let dispatch ~domain ~feed ~feeds =
+  let dispatch ~feed ~feeds ~read ~domain =
     Cowabloga.Feed.to_atom ~meta:feed ~feeds
     >|= Cow.Atom.xml_of_feed
     >|= Cow.Xml.to_string
     >>= fun atom ->
     Cowabloga.Feed.to_html feeds >>= fun recent ->
-    let content = make domain <:html<
+    make ~domain ~read <:html<
        <div class="row">
          <div class="small-12 medium-9 large-6 front_updates">
          <h2>Site Updates <small>across the blogs and documentation</small></h2>
           $recent$
          </div>
-       </div> >> in
+       </div> >>
+    >>= fun content ->
+    page content_type_atom atom >>= fun atom ->
     let f = function
-      | [""] | []    -> content_type_xhtml, (Lwt.return content)
-      | ["atom.xml"] -> content_type_atom , (Lwt.return atom)
-      | _            -> content_type_xhtml, empty_string
+      | [""] | []    -> content
+      | ["atom.xml"] -> atom
+      | _            -> empty
     in
     Lwt.return f
 
@@ -151,9 +151,9 @@ end
 
 module Links = struct
 
-  let dispatch ~domain feed ls =
+  let dispatch ~feed ~links ~read ~domain =
     let open Cowabloga.Links in
-    Cowabloga.Feed.to_html [ `Links (feed, ls) ] >>= fun body ->
+    Cowabloga.Feed.to_html [ `Links (feed, links) ] >>= fun body ->
     let content = <:html<
       <div class="row">
         <div class="small-12 medium-9 large-6 columns">
@@ -169,28 +169,39 @@ module Links = struct
         </div>
       </div>
     >> in
-    let body = Global.page ~domain ~title:"Around the Web" ~headers:[] ~content in
+    let title = "Around the Web" in
+    let headers = [] in
+    Global.t ~domain ~title ~headers ~read ~content >>= fun body ->
+    let not_found path =
+      (* FIXME: put [links] in the domain variable? *)
+      let uri = Site_config.uri domain ("links" :: path) in
+      `Not_found uri
+    in
     let h = Hashtbl.create 1 in
-    List.iter (fun l -> Hashtbl.add h (sprintf "%s/%s" l.stream.name l.id) l.uri) ls;
-    Lwt.return (function
-      | []        -> `Html (Lwt.return body)
+    List.iter
+      (fun l -> Hashtbl.add h (sprintf "%s/%s" l.stream.name l.id) l.uri)
+      links;
+    let f = function
+      | []        -> body
       | [id;link] ->
         let id = sprintf "%s/%s" id link in
-        if Hashtbl.mem h id then `Redirect (Uri.to_string (Hashtbl.find h id))
-        else `Not_found id
-      | x -> `Not_found (String.concat "|" x)
-    )
+        if Hashtbl.mem h id then `Redirect (Hashtbl.find h id)
+        else not_found [id;link]
+      | x -> not_found x
+    in
+    Lwt.return f
+
 end
 
 module About = struct
 
-  let t ~domain read_fn =
-    read_file read_fn "/about-intro.md"     >>= fun i ->
-    read_file read_fn "/about.md"           >>= fun l ->
-    read_file read_fn "/about-community.md" >>= fun r ->
-    read_file read_fn "/about-b.md"         >>= fun b ->
-    read_file read_fn "/about-funding.md"   >>= fun f ->
-    read_file read_fn "/about-blogroll.md"  >>= fun br ->
+  let t ~read ~domain =
+    read_file read "/about-intro.md"     >>= fun i ->
+    read_file read "/about.md"           >>= fun l ->
+    read_file read "/about-community.md" >>= fun r ->
+    read_file read "/about-b.md"         >>= fun b ->
+    read_file read "/about-funding.md"   >>= fun f ->
+    read_file read "/about-blogroll.md"  >>= fun br ->
     let content = <:html<
     <a name="about"> </a>
     <div class="row">
@@ -213,16 +224,14 @@ module About = struct
     <div class="row">
       <div class="small-12 medium-6 columns">$br$</div>
     </div> >> in
-    Lwt.return (Global.page ~domain ~title:"Community" ~headers:[] ~content)
+    Global.t ~title:"Community" ~headers:[] ~content ~read ~domain
 
 end
 
 module Releases = struct
 
-  let content_type_xhtml = Cowabloga.Headers.html
-
-  let changelog ~domain read_fn =
-    read_file read_fn "/changelog.md" >>= fun c ->
+  let changelog ~read ~domain =
+    read_file read "/changelog.md" >>= fun c ->
     let content = <:html<
       <div class="row">
         <div class="small-12 medium-12 large-9 columns">
@@ -240,13 +249,19 @@ module Releases = struct
         </div>
       </div>
     >> in
-    Lwt.return (Global.page ~domain ~title:"Changelog" ~headers:[] ~content)
+    Global.t ~domain ~title:"Changelog" ~headers:[] ~content ~read
 
-  let dispatch ~domain read_fn =
+  let dispatch ~read ~domain =
+    changelog ~read ~domain >>= fun changelog ->
     let f = function
-      | [""] | [] -> content_type_xhtml, changelog ~domain read_fn
-      | _         -> content_type_xhtml, empty_string
+      | [""] | [] -> changelog
+      | _         -> empty
     in
     Lwt.return f
-
 end
+
+(*
+
+('a -> 'b Lwt.t) -> 'a -> ('a -> 'b) Lwt.t
+
+*)

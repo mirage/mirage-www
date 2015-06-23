@@ -14,10 +14,48 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *)
 
-let string_of_scheme = function `Http -> "http" | `Https -> "https"
-let base_uri (scheme, host) = string_of_scheme scheme ^ "://" ^ host ^ "/"
+(** Various pages. *)
 
-let uri (scheme, host) path =
-  let scheme = string_of_scheme scheme in
-  let path = String.concat "/" path in
-  Uri.make ~scheme ~host ~path ()
+type t = read:string Types.read -> domain:Types.domain -> Types.contents Lwt.t
+
+module Global: sig
+
+  val t:
+    title:string ->
+    headers:Cow.Html.t ->
+    content:Cow.Html.t ->
+    t
+
+end
+
+module Releases: sig
+
+  val dispatch: read:string Types.read -> Types.dispatch
+
+end
+
+module Links: sig
+
+  val dispatch:
+    feed:Cowabloga.Atom_feed.t ->
+    links:Cowabloga.Links.t list ->
+    read:string Types.read -> Types.dispatch
+
+end
+
+module Index: sig
+
+  val t: feeds:Cowabloga.Feed.feed list -> t
+
+  val dispatch:
+    feed:Cowabloga.Atom_feed.t ->
+    feeds:Cowabloga.Feed.feed list ->
+    read:string Types.read -> Types.dispatch
+
+end
+
+module About: sig
+
+  val t: t
+
+end

@@ -14,10 +14,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *)
 
-let string_of_scheme = function `Http -> "http" | `Https -> "https"
-let base_uri (scheme, host) = string_of_scheme scheme ^ "://" ^ host ^ "/"
+(** Academic publications. *)
 
-let uri (scheme, host) path =
-  let scheme = string_of_scheme scheme in
-  let path = String.concat "/" path in
-  Uri.make ~scheme ~host ~path ()
+val html: Cow.Html.t
+(** The page with all the MirageOS papers. *)

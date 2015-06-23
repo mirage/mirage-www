@@ -71,7 +71,7 @@ let balraj  = "Balraj Singh"
 let smith   = "Steven Smith"
 let malte   = "Malte Schwarzkopf"
 let theo    = "Theo Hong"
-let watson = "Robert Watson"
+(* let watson = "Robert Watson" *)
 let yminsky = "Yaron Minsky"
 let jhickey = "Jason Hickey"
 
