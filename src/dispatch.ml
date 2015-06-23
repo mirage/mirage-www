@@ -1,5 +1,3 @@
-open Printf
-
 open Lwt.Infix
 
 module Make
@@ -40,8 +38,12 @@ module Make
   let page p path = p >|= fun f -> (`Page (f path))
   let redirect r = Lwt.return (`Redirect r)
 
-  let blog_feed s tmpl = Site_config.blog s (fun n -> read_entry tmpl ("/blog/"^n))
-  let wiki_feed s tmpl = Site_config.wiki s (fun n -> read_entry tmpl ("/wiki/"^n))
+  let blog_feed s tmpl =
+    Site_config.blog s (fun n -> read_entry tmpl ("/blog/"^n))
+
+  let wiki_feed s tmpl =
+    Site_config.wiki s (fun n -> read_entry tmpl ("/wiki/"^n))
+
   let updates_feed s tmpl = Site_config.updates s (read_entry tmpl)
   let links_feed s tmpl = Site_config.links s (read_entry tmpl)
 
@@ -50,38 +52,58 @@ module Make
     `Wiki (wiki_feed s tmpl, Data.Wiki.entries);
   ]
 
-  let blog_dispatch s tmpl = Blog.dispatch (blog_feed s tmpl) Data.Blog.entries
-  let wiki_dispatch s tmpl = Wiki.dispatch (wiki_feed s tmpl) Data.Wiki.entries
-  let releases_dispatch tmpl = Pages.Releases.dispatch (read_tmpl tmpl)
-  let links_dispatch s tmpl = Pages.Links.dispatch (links_feed s tmpl) Data.Links.entries
+  let blog_dispatch s tmpl =
+    let domain = snd s in
+    Blog.dispatch ~domain (blog_feed s tmpl) Data.Blog.entries
+
+  let wiki_dispatch s tmpl =
+    let domain = snd s in
+    Wiki.dispatch ~domain (wiki_feed s tmpl) Data.Wiki.entries
+
+  let releases_dispatch s tmpl =
+    let domain = snd s in
+    Pages.Releases.dispatch ~domain (read_tmpl tmpl)
+
+  let links_dispatch s tmpl =
+    let domain = snd s in
+    Pages.Links.dispatch ~domain (links_feed s tmpl) Data.Links.entries
+
   let updates_dispatch s tmpl =
-    Pages.Index.dispatch ~feed:(updates_feed s tmpl) ~feeds:(updates_feeds s tmpl)
+    let domain = snd s in
+    Pages.Index.dispatch ~domain
+      ~feed:(updates_feed s tmpl) ~feeds:(updates_feeds s tmpl)
 
   let stats () = html (Lwt.return (Cow.Html.to_string (Stats.page ())))
   let redirect_notes () = redirect "../wiki#Weeklycallsandreleasenotes"
-  let index s tmpl = html (Pages.Index.t ~feeds:(updates_feeds s tmpl) (read_tmpl tmpl))
-  let about tmpl = html (Pages.About.t (read_tmpl tmpl))
 
-  let asset c fs path =
+  let index s tmpl =
+    let domain = snd s in
+    html (Pages.Index.t ~domain ~feeds:(updates_feeds s tmpl) (read_tmpl tmpl))
+
+  let about s tmpl =
+    let domain = snd s in
+    html (Pages.About.t ~domain (read_tmpl tmpl))
+
+  let asset fs path =
     let path = String.concat "/" path in
     let asset path = Lwt.return (`Asset (read_fs fs path)) in
-    Lwt.catch (fun () -> asset path) (fun e  -> not_found path)
+    Lwt.catch (fun () -> asset path) (fun _ -> not_found path)
 
   (* dispatch non-file URLs *)
-  let dispatcher s c fs tmpl = function
+  let dispatcher s fs tmpl = function
     | [] | [""] | ["index.html"] -> index s tmpl
     | ["stats"; "gc"] -> stats ()
-    | ["about"] | ["community"] -> about tmpl
-    | "releases" :: tl -> page (releases_dispatch tmpl) tl
+    | ["about"] | ["community"] -> about s tmpl
+    | "releases" :: tl -> page (releases_dispatch s tmpl) tl
     | "blog"     :: tl -> page (blog_dispatch s tmpl) tl
     | "links"    :: tl -> links_dispatch s tmpl >|= fun f -> f tl
     | "updates"  :: tl -> page (updates_dispatch s tmpl) tl
-    | ("wiki" | "docs") :: "weekly" :: tl -> redirect_notes ()
+    | ("wiki" | "docs") :: "weekly" :: _ -> redirect_notes ()
     | "docs" :: tl | "wiki" :: tl -> page (wiki_dispatch s tmpl) tl
-    | path -> asset c fs path
+    | path -> asset fs path
 
   let create c dispatch =
-    let callback conn_id request body =
+    let callback _conn_id request _body =
       let uri = Cohttp.Request.uri request in
       let io = {
         Cowabloga.Dispatch.log = (fun ~msg -> C.log c msg);
@@ -95,11 +117,11 @@ module Make
       let cid = Cohttp.Connection.to_string conn_id in
       C.log c (Printf.sprintf "conn %s closed" cid)
     in
-    Stats.start OS.Time.sleep;
+    Stats.start ~sleep:OS.Time.sleep;
     S.make ~callback ~conn_closed ()
 
-  let start name c fs tmpl http =
-    http (`TCP 80) (create c (dispatcher (`Http, name) c fs tmpl))
+  let start domain c fs tmpl http =
+    http (`TCP 80) (create c (dispatcher (`Http, domain) fs tmpl))
 
 end
 

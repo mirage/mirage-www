@@ -1,10 +1,10 @@
 open Data
 
-let base_uri (scheme, name) = match scheme with
-  | `Https -> "https://" ^ name ^ "/"
-  | `Http  -> "http://"  ^ name ^ "/"
+let base_uri (scheme, domain) = match scheme with
+  | `Https -> "https://" ^ domain ^ "/"
+  | `Http  -> "http://"  ^ domain ^ "/"
 
-let google_analytics= ("UA-19610168-1", "openmirage.org")
+let google_analytics domain = ("UA-19610168-1", domain)
 
 let blog scheme read_entry = {
   Cowabloga.Atom_feed.base_uri = base_uri scheme;

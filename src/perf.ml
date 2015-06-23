@@ -1,4 +1,3 @@
-open Cow
 
 let dns =
  <:xml<

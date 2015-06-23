@@ -1,6 +1,4 @@
-open Printf
-
-let (>>=) = Lwt.(>>=)
+open Lwt.Infix
 
 (* HTTPS *)
 module Make
@@ -30,7 +28,7 @@ module Make
     | `Eof     -> log "TLS eof"; TCP.close tcp
 
   let with_https s c fs tmpl flow =
-    let t = DS.create c (DS.dispatcher s c fs tmpl) in
+    let t = DS.create c (DS.dispatcher s fs tmpl) in
     Https.listen t flow
 
   let with_http name c flow =
