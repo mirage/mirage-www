@@ -48,18 +48,25 @@ sig
   type s = Conduit_mirage.server -> S.t -> unit Lwt.t
   (** The type for HTTP callbacks. *)
 
-  val start: ?host:string -> C.t -> FS.t -> TMPL.t -> s -> unit Lwt.t
-  (** The HTTP server's start function. If [host] is not set, use an
-      implementation specific default. *)
+  val start: ?host:string -> ?redirect:string ->
+    C.t -> FS.t -> TMPL.t -> s -> unit Lwt.t
+  (** The HTTP server's start function.
+
+      {ul
+      {- If [host] is not set, use an implementation specific default}
+      {- If [redirect] is set, all the paths will be redirected to the
+         given domain}} *)
 
 end
 
 module type Config = sig
   (** Website configuration. *)
 
-  val host: string
+  val host: string option
   (** Configure the host name. *)
 
+  val redirect: string option
+  (** If set, redirect all paths to the the given domain. *)
 end
 
 module Make_localhost: S
@@ -69,3 +76,8 @@ module Make_localhost: S
 module Make (Config: Config): S
 (** Instantiate an implementation of {!S} using [Config.host] as
     default host in {!S.start}. *)
+
+val domain_of_string: string -> Types.domain
+(** [domain_of_string d] parses the string [d] to build a
+    domain. Should be of the form {i http://host} or {i
+    https://host}. *)

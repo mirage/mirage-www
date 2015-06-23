@@ -66,6 +66,7 @@ let net = get  "NET" ~default:`Direct socket_of_env
 let dhcp = get "DHCP" ~default:false bool_of_env
 let tls = get "TLS" ~default:false bool_of_env
 let host = get "HOST" ~default:None opt_string_of_env
+let redirect = get "REDIRECT" ~default:None opt_string_of_env
 
 let mkfs path =
   let fat_ro dir = kv_ro_of_fs (fat_of_files ~dir ()) in
@@ -96,9 +97,14 @@ let stack = match deploy with
 let libraries = [ "cow.syntax"; "cowabloga" ]
 let packages  = [ "cow"; "cowabloga" ]
 
-let main = match host with
-  | Some host -> Printf.sprintf "Make(struct let host = %S end)" host
-  | None      -> "Make_localhost"
+let sp = Printf.sprintf
+
+let config =
+  let h = match host with None -> "None" | Some s -> sp "Some %S" s in
+  let r = match redirect with None -> "None" | Some d -> sp "Some %S" d in
+  sp "struct let host = %s let redirect = %s end" h r
+
+let main = sp "Make(%s)" config
 
 let http =
   foreign ~libraries ~packages ("Dispatch." ^ main)

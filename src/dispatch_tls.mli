@@ -26,8 +26,8 @@ module type S =
   functor (Clock : V1.CLOCK) ->
 sig
 
-  val start: ?host:string -> C.t -> FS.t -> TMPL.t -> S.t -> KEYS.t ->
-    unit -> unit Lwt.t
+  val start: ?host:string -> ?redirect:string ->
+    C.t -> FS.t -> TMPL.t -> S.t -> KEYS.t -> unit -> unit Lwt.t
   (** The HTTP server's start function. If [host] is not set, use an
       implementation specific default. *)
 

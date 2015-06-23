@@ -27,8 +27,25 @@ sig
   val dispatch: Types.domain -> C.t -> FS.t -> TMPL.t -> dispatch
   val create: Types.domain -> C.t -> dispatch -> S.t
   type s = Conduit_mirage.server -> S.t -> unit Lwt.t
-  val start: ?host:string -> C.t -> FS.t -> TMPL.t -> s -> unit Lwt.t
+  val start: ?host:string -> ?redirect:string ->
+    C.t -> FS.t -> TMPL.t -> s -> unit Lwt.t
 end
+
+let err fmt = Printf.kprintf (fun f -> raise (Failure f)) fmt
+
+let domain_of_string x =
+  let uri = Uri.of_string x in
+  let scheme = match Uri.scheme uri with
+    | Some "http"  -> `Http
+    | Some "https" -> `Https
+    | _ ->
+      err "%s: wrong scheme for redirect. Should be either http:// or https://." x
+  in
+  let host = match Uri.host uri with
+    | Some x -> x
+    | None   -> err "%s: missing hostname for redirect." x
+  in
+  scheme, host
 
 module Make_localhost
     (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
@@ -39,7 +56,6 @@ module Make_localhost
   type s = Conduit_mirage.server -> S.t -> unit Lwt.t
 
   let log c fmt = Printf.kprintf (C.log c) fmt
-  let err fmt = Printf.kprintf (fun f -> raise (Failure f)) fmt
   let err_not_found name = err "%s not found" name
 
   let read_tmpl tmpl name =
@@ -180,14 +196,19 @@ module Make_localhost
     Stats.start ~sleep:OS.Time.sleep;
     S.make ~callback ~conn_closed ()
 
-  let start ?(host="localhost") c fs tmpl http =
+  let start ?(host="localhost") ?redirect:red c fs tmpl http =
     let domain = `Http, host in
-    http (`TCP 80) (create domain c (dispatch domain c fs tmpl))
+    let dispatch = match red with
+      | None        -> dispatch domain c fs tmpl
+      | Some domain -> redirect (domain_of_string domain)
+    in
+    http (`TCP 80) (create domain c dispatch)
 
 end
 
 module type Config = sig
-  val host: string
+  val host: string option
+  val redirect: string option
 end
 
 module Make (Config: Config)
@@ -196,5 +217,8 @@ module Make (Config: Config)
 = struct
   module M = Make_localhost(C)(FS)(TMPL)(S)
   include M
-  let start ?(host=Config.host) c fs tmpl http = M.start ~host c fs tmpl http
+  let start ?host ?redirect c fs tmpl http =
+    let host = match host with None -> Config.host | x -> x in
+    let redirect = match redirect with None -> Config.redirect | x -> x in
+    M.start ?host ?redirect c fs tmpl http
 end
