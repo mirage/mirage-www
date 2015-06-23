@@ -57,12 +57,12 @@ module Make_localhost
     | `Eof     -> log "TLS eof"; TCP.close tcp
 
   let with_https domain c fs tmpl flow =
-    let t = DS.create c (DS.dispatch domain c fs tmpl) in
+    let t = DS.create domain c (DS.dispatch domain c fs tmpl) in
     Https.listen t flow
 
   let with_http host c flow =
     let domain = `Https, host in
-    let t = D.create c (D.redirect domain) in
+    let t = D.create domain c (D.redirect domain) in
     Http.listen t flow
 
   let tls_init kv =

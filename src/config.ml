@@ -41,7 +41,7 @@ let ips_of_env x = split ':' x |> List.map Ipaddr.V4.of_string_exn
 let bool_of_env = function "1" | "true" | "yes" -> true | _ -> false
 let socket_of_env = function "socket" -> `Socket | _ -> `Direct
 let fat_of_env = function "fat" -> `Fat | _ -> `Crunch
-let string_of_env x = x
+let opt_string_of_env x = Some x
 
 let err fmt =
   Printf.eprintf ("\027[31m[ERROR]V\027[m         " ^^ fmt ^^ "\n");
@@ -65,7 +65,7 @@ let deploy = get "DEPLOY" ~default:false bool_of_env
 let net = get  "NET" ~default:`Direct socket_of_env
 let dhcp = get "DHCP" ~default:false bool_of_env
 let tls = get "TLS" ~default:false bool_of_env
-let name = get "NAME" ~default:"openmirage.org" string_of_env
+let host = get "HOST" ~default:None opt_string_of_env
 
 let mkfs path =
   let fat_ro dir = kv_ro_of_fs (fat_of_files ~dir ()) in
@@ -96,10 +96,9 @@ let stack = match deploy with
 let libraries = [ "cow.syntax"; "cowabloga" ]
 let packages  = [ "cow"; "cowabloga" ]
 
-let main = match name with
-  | "openmirage.org" -> "OpenMirage_org"
-  | "mirage.io"      -> "Mirage_io"
-  | _ -> err "NAME must be either 'openmirage.org' or 'mirage.io'"
+let main = match host with
+  | Some host -> Printf.sprintf "Make(struct let host = %S end)" host
+  | None      -> "Make_localhost"
 
 let http =
   foreign ~libraries ~packages ("Dispatch." ^ main)

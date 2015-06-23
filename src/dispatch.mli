@@ -41,7 +41,7 @@ sig
       {- [tmpl] is a read-only key/value store holding the proccessed data such
       as blog posts and wiki entries.}} *)
 
-  val create: C.t -> dispatch -> S.t
+  val create: Types.domain -> C.t -> dispatch -> S.t
   (** [create c f] is an HTTP server function using [f] as callback
       and logging on the console [c].  *)
 

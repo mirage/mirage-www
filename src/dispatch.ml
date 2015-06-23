@@ -25,7 +25,7 @@ sig
   type dispatch = Types.path -> Types.cowabloga Lwt.t
   val redirect: Types.domain -> dispatch
   val dispatch: Types.domain -> C.t -> FS.t -> TMPL.t -> dispatch
-  val create: C.t -> dispatch -> S.t
+  val create: Types.domain -> C.t -> dispatch -> S.t
   type s = Conduit_mirage.server -> S.t -> unit Lwt.t
   val start: ?host:string -> C.t -> FS.t -> TMPL.t -> s -> unit Lwt.t
 end
@@ -161,7 +161,7 @@ module Make_localhost
     | "docs" :: tl | "wiki" :: tl -> mk (wiki_dispatch domain tmpl) tl
     | path -> asset c domain fs path
 
-  let create c dispatch =
+  let create domain c dispatch =
     let callback _conn_id request _body =
       let uri = Cohttp.Request.uri request in
       let io = {
@@ -176,11 +176,13 @@ module Make_localhost
       let cid = Cohttp.Connection.to_string conn_id in
       log c "conn %s closed" cid
     in
+    log c "Listening on %s" (Site_config.base_uri domain);
     Stats.start ~sleep:OS.Time.sleep;
     S.make ~callback ~conn_closed ()
 
   let start ?(host="localhost") c fs tmpl http =
-    http (`TCP 80) (create c (dispatch (`Http, host) c fs tmpl))
+    let domain = `Http, host in
+    http (`TCP 80) (create domain c (dispatch domain c fs tmpl))
 
 end
 
