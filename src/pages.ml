@@ -74,10 +74,13 @@ module Global = struct
       ~nav_links
 
   let t ~title ~headers ~content ~read:_ ~domain =
+    let scheme = match fst domain with `Http -> "http" | `Https -> "https" in
+    let fonts =
+      scheme ^ "://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700"
+    in
     let font = <:html<
       <link rel="stylesheet" href="/css/font-awesome.css"> </link>
-      <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700"
-            rel="stylesheet" type="text/css"> </link>
+      <link href=$str:fonts$ rel="stylesheet" type="text/css"> </link>
     >> in
     let headers = font @ headers in
     let content = top_nav @ content in
