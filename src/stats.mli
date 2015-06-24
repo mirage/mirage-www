@@ -14,5 +14,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *)
 
+(** Gather statisticts about the application. *)
+
 val start: sleep:(float -> unit Lwt.t) -> unit
+(** Start the monitor thread. *)
+
 val page: unit -> Cow.Html.t
+(** Build a page describing the stats of the current application. *)

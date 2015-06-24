@@ -67,3 +67,6 @@ end
 
 val google_analytics: Types.domain -> string * string
 (** Google analytics configuration. *)
+
+val empty_feed: Cowabloga.Atom_feed.t
+(** The empty feed. *)

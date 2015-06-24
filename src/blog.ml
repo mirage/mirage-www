@@ -87,7 +87,8 @@ let dispatch ~feed ~entries ~read ~domain =
     with Not_found -> not_found ~domain [x]
   in
   let f = function
-    | [] | [""]    -> blog_index
+    | ["index.html"]
+    | [""] | []    -> blog_index
     | ["atom.xml"] -> atom_feed
     | [x]          -> blog_entry x
     | x            -> not_found ~domain x

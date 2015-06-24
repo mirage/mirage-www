@@ -19,10 +19,13 @@ open Lwt.Infix
 open Cow
 
 type t = read:string Types.read -> domain:Types.domain -> Types.contents Lwt.t
+type dispatch =
+  feed:Cowabloga.Atom_feed.t -> read:string Types.read -> Types.dispatch
 
-let html str = Lwt.return (`Html (Lwt.return str))
-let page h c = Lwt.return (`Page (h, Lwt.return c))
-let empty = `Html (Lwt.return "")
+let not_found ~domain section path =
+  (* FIXME: put [section] in the [domain] variable? *)
+  let uri = Site_config.uri domain (section :: path) in
+  `Not_found uri
 
 let get_extension filename =
   try
@@ -83,7 +86,8 @@ module Global = struct
       Cowabloga.Foundation.body ~highlight:"/css/magula.css"
         ~google_analytics ~title ~headers ~content ~trailers:[] ()
     in
-    html (Cowabloga.Foundation.page ~body)
+    let body = Cowabloga.Foundation.page ~body in
+    Lwt.return (`Html (Lwt.return body))
 
 end
 
@@ -114,23 +118,32 @@ module Index = struct
     >> in
     Global.t ~title:"MirageOS" ~headers:[] ~content ~domain ~read
 
-  let content_type_atom  = Cowabloga.Headers.atom
+end
+
+module Updates = struct
 
   (* TODO have a way of rewriting all the pages with an associated Atom feed *)
   let make ~read ~domain content =
     (* TODO need a URL routing mechanism instead of assuming / *)
     let uri = Uri.of_string "/updates/atom.xml" in
     let headers =
-      <:xml<<link rel="alternate" type="application/atom+xml" href=$uri:uri$ /> >> in
+      <:xml<<link rel="alternate" type="application/atom+xml" href=$uri:uri$ />&>>
+    in
     let title = "Updates" in
     Global.t ~title ~headers ~content ~read ~domain
 
-  let dispatch ~feed ~feeds ~read ~domain =
-    Cowabloga.Feed.to_atom ~meta:feed ~feeds
-    >|= Cow.Atom.xml_of_feed
-    >|= Cow.Xml.to_string
-    >>= fun atom ->
-    Cowabloga.Feed.to_html feeds >>= fun recent ->
+  let atom_feed ~feed ~feeds =
+    let content_type_atom  = Cowabloga.Headers.atom in
+    let feed =
+      Cowabloga.Feed.to_atom ~meta:feed ~feeds
+      >|= Cow.Atom.xml_of_feed
+      >|= Cow.Xml.to_string
+    in
+    Lwt.return (`Page (content_type_atom, feed))
+
+  let dispatch ~feeds ~feed ~read ~domain =
+    Cowabloga.Feed.to_html feeds >>= fun recent    ->
+    atom_feed ~feed ~feeds       >>= fun atom_feed ->
     make ~domain ~read <:html<
        <div class="row">
          <div class="small-12 medium-9 large-6 front_updates">
@@ -139,11 +152,11 @@ module Index = struct
          </div>
        </div> >>
     >>= fun content ->
-    page content_type_atom atom >>= fun atom ->
     let f = function
+      | ["index.html"]
       | [""] | []    -> content
-      | ["atom.xml"] -> atom
-      | _            -> empty
+      | ["atom.xml"] -> atom_feed
+      | x            -> not_found ~domain "updates" x
     in
     Lwt.return f
 
@@ -151,7 +164,7 @@ end
 
 module Links = struct
 
-  let dispatch ~feed ~links ~read ~domain =
+  let dispatch ~links ~feed ~read ~domain =
     let open Cowabloga.Links in
     Cowabloga.Feed.to_html [ `Links (feed, links) ] >>= fun body ->
     let content = <:html<
@@ -172,22 +185,18 @@ module Links = struct
     let title = "Around the Web" in
     let headers = [] in
     Global.t ~domain ~title ~headers ~read ~content >>= fun body ->
-    let not_found path =
-      (* FIXME: put [links] in the domain variable? *)
-      let uri = Site_config.uri domain ("links" :: path) in
-      `Not_found uri
-    in
     let h = Hashtbl.create 1 in
     List.iter
       (fun l -> Hashtbl.add h (sprintf "%s/%s" l.stream.name l.id) l.uri)
       links;
     let f = function
-      | []        -> body
+      | ["index.html"]
+      | [""] | [] -> body
       | [id;link] ->
         let id = sprintf "%s/%s" id link in
         if Hashtbl.mem h id then `Redirect (Hashtbl.find h id)
-        else not_found [id;link]
-      | x -> not_found x
+        else not_found ~domain "links" [id;link]
+      | x -> not_found ~domain "links" x
     in
     Lwt.return f
 
@@ -226,11 +235,20 @@ module About = struct
     </div> >> in
     Global.t ~title:"Community" ~headers:[] ~content ~read ~domain
 
+  let dispatch ~feed:_ ~read ~domain =
+    t ~read ~domain >>= fun about ->
+    let f = function
+      | ["index.html"]
+      | [""] | [] -> about
+      | x         -> not_found ~domain "about" (* FIXME: can also be docs *) x
+    in
+    Lwt.return f
+
 end
 
 module Releases = struct
 
-  let changelog ~read ~domain =
+  let t ~read ~domain =
     read_file read "/changelog.md" >>= fun c ->
     let content = <:html<
       <div class="row">
@@ -251,17 +269,13 @@ module Releases = struct
     >> in
     Global.t ~domain ~title:"Changelog" ~headers:[] ~content ~read
 
-  let dispatch ~read ~domain =
-    changelog ~read ~domain >>= fun changelog ->
+  let dispatch ~feed:_ ~read ~domain =
+    t ~read ~domain >>= fun releases ->
     let f = function
-      | [""] | [] -> changelog
-      | _         -> empty
+      | ["index.html"]
+      | [""] | [] -> releases
+      | x         -> not_found ~domain "releases" x
     in
     Lwt.return f
+
 end
-
-(*
-
-('a -> 'b Lwt.t) -> 'a -> ('a -> 'b) Lwt.t
-
-*)

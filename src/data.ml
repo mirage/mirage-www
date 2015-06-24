@@ -1111,3 +1111,13 @@ module Feed = struct
 end
 
 let google_analytics (_, host) = ("UA-19610168-1", host)
+
+let empty_feed = {
+  Cowabloga.Atom_feed.base_uri = Site_config.base_uri (`Http, "localhost");
+    id = "";
+    title = "";
+    subtitle = None;
+    rights;
+    author = None;
+    read_entry = (fun s -> Lwt.fail Not_found);
+  }

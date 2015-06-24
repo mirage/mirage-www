@@ -113,33 +113,34 @@ module Make_localhost
     `Wiki (wiki_feed domain tmpl, Data.Wiki.entries);
   ]
 
-  let blog_dispatch domain tmpl =
+  let blog domain tmpl =
     let feed = blog_feed domain tmpl in
     let entries = Data.Blog.entries in
     let read = read_tmpl tmpl in
     Blog.dispatch ~domain ~feed ~entries ~read
 
-  let wiki_dispatch domain tmpl =
+  let wiki domain tmpl =
     let read = read_tmpl tmpl in
     let feed = wiki_feed domain tmpl in
     let entries = Data.Wiki.entries in
     Wiki.dispatch ~domain ~read ~feed ~entries
 
-  let releases_dispatch domain tmpl =
+  let releases domain tmpl =
     let read = read_tmpl tmpl in
-    Pages.Releases.dispatch ~domain ~read
+    let feed = Data.empty_feed in
+    Pages.Releases.dispatch ~feed ~domain ~read
 
-  let links_dispatch domain tmpl =
+  let links domain tmpl =
     let read = read_tmpl tmpl in
     let feed = links_feed domain tmpl in
     let links = Data.Links.entries in
     Pages.Links.dispatch ~domain ~read ~feed ~links
 
-  let updates_dispatch domain tmpl =
+  let updates domain tmpl =
     let feed = updates_feed domain tmpl in
     let feeds = updates_feeds domain tmpl in
     let read = read_tmpl tmpl in
-    Pages.Index.dispatch ~domain ~feed ~feeds ~read
+    Pages.Updates.dispatch ~domain ~feed ~feeds ~read
 
   let stats () =
     let html = Cow.Html.to_string (Stats.page ()) in
@@ -155,7 +156,8 @@ module Make_localhost
 
   let about domain tmpl =
     let read = read_tmpl tmpl in
-    Pages.About.t ~domain ~read >|= cowabloga
+    let feed = Data.empty_feed in
+    Pages.About.dispatch ~feed ~domain ~read
 
   let asset c domain fs path =
     let path_s = String.concat "/" path in
@@ -166,15 +168,16 @@ module Make_localhost
 
   (* dispatch non-file URLs *)
   let dispatch domain c fs tmpl = function
-    | [] | [""] | ["index.html"] -> index domain tmpl
+    | ["index.html"]
+    | [""] | []       -> index domain tmpl
     | ["stats"; "gc"] -> stats ()
-    | ["about"] | ["community"] -> about domain tmpl
-    | "releases" :: tl -> mk (releases_dispatch domain tmpl) tl
-    | "blog"     :: tl -> mk (blog_dispatch domain tmpl) tl
-    | "links"    :: tl -> mk (links_dispatch domain tmpl) tl
-    | "updates"  :: tl -> mk (updates_dispatch domain tmpl) tl
-    | ("wiki" | "docs") :: "weekly" :: _ -> redirect_notes domain
-    | "docs" :: tl | "wiki" :: tl -> mk (wiki_dispatch domain tmpl) tl
+    | ("about"|"community") :: tl-> mk (about domain tmpl) []
+    | "releases" :: tl -> mk (releases domain tmpl) tl
+    | "blog"     :: tl -> mk (blog domain tmpl) tl
+    | "links"    :: tl -> mk (links domain tmpl) tl
+    | "updates"  :: tl -> mk (updates domain tmpl) tl
+    | ("wiki"|"docs") :: ["weekly"] -> redirect_notes domain
+    | ("wiki"|"docs") :: tl -> mk (wiki domain tmpl) tl
     | path -> asset c domain fs path
 
   let create domain c dispatch =
