@@ -180,14 +180,22 @@ module Make_localhost
     | ("wiki"|"docs") :: tl -> mk (wiki domain tmpl) tl
     | path -> asset c domain fs path
 
+  let moved_permanently ~uri () =
+    let headers = Cohttp.Header.init_with "location" (Uri.to_string uri) in
+    S.respond ~headers ~status:`Moved_permanently ~body:`Empty ()
+
+  let not_found ~uri () =
+    (* FIXME: better 404 page *)
+    S.respond_not_found ~uri ()
+
   let create domain c dispatch =
     let callback _conn_id request _body =
       let uri = Cohttp.Request.uri request in
       let io = {
         Cowabloga.Dispatch.log = (fun ~msg -> C.log c msg);
         ok = respond_ok;
-        notfound = (fun ~uri -> S.respond_not_found ~uri ());
-        redirect = (fun ~uri -> S.respond_redirect ~uri ());
+        notfound = (fun ~uri -> not_found ~uri ());
+        redirect = (fun ~uri -> moved_permanently ~uri ());
       } in
       Cowabloga.Dispatch.f io dispatch uri
     in
