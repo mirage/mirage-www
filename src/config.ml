@@ -86,7 +86,7 @@ let mkfs fs path =
     kv_ro_of_fs fat
   in
   match fs, get_mode () with
-  | `Fat   , `Xen -> fat_of_device (51711 + !blocks)
+  | `Fat   , `Xen -> incr blocks; fat_of_device (51711 + !blocks)
   | `Fat   , _    -> fat_of_files path
   | `Crunch, `Xen -> crunch path
   | `Crunch, _    -> direct_kv_ro path
