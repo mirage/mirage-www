@@ -57,9 +57,11 @@ opam install mirage-seal
 * `--data`: one directory containing all the content that should be served by the unikernel.  Candidates for such a directory are the top-level output directory of a static site generator (such as `public` for octopress), the `DocumentRoot` of an Apache configuration, or the `root` of an nginx configuration.
 * `--keys`: one directory containing the certificate (`server.pem`) and key (`server.key`) for the site.
 
-You'll find more thorough documentation, including network configuration settings, by looking at `mirage-seal --help` or [mirage-seal's README file](https://github.com/mirage/mirage-seal/blob/master/README.md).
+There are also a number of configurable parameters for IP settings.  By default, `mirage-seal` will use DHCP to configure the network at boot.  To set static IP information, use the `--ip`, `--nm`, and `--gw` arguments.
 
-To build a Xen unikernel, select the Xen mode with `-t xen` as well.  So in full:
+You'll find more thorough documentation by looking at `mirage-seal --help` or [mirage-seal's README file](https://github.com/mirage/mirage-seal/blob/master/README.md).
+
+To build a Xen unikernel, select the Xen mode with `-t xen` as well.  So in full, for a unikernel that will configure its network via DHCP:
 
 ```
 mirage-seal --data=/home/me/coolwebsite/public --keys=/home/me/coolwebsite/secrets -t xen
