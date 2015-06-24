@@ -77,10 +77,12 @@ let host = get "HOST" ~default:None opt_string_of_env
 let redirect = get "REDIRECT" ~default:None opt_string_of_env
 let image = get "XENIMG" ~default:"www" string_of_env
 
+let disks = ref 0
 let mkfs fs path =
   let fat_ro dir = kv_ro_of_fs (fat_of_files ~dir ()) in
   match fs, get_mode () with
-  | `Fat,    _    -> fat_ro path
+  | `Fat   , `Xen -> incr disks; fat_ro (string_of_int (51711 + !disks))
+  | `Fat   , _    -> fat_ro path
   | `Crunch, `Xen -> crunch path
   | `Crunch, _    -> direct_kv_ro path
 
