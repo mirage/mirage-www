@@ -16,6 +16,25 @@
 
 open Mirage
 
+let custom_fs device =
+  let module M = struct
+    type t = int
+    let name t = "custom_fs_" ^ string_of_int t
+    let module_name _ = "Block"
+    let packages _ = match Mirage.get_mode () with
+      | `Xen  -> ["mirage-block-xen"]
+      | _     -> ["mirage-block-unix"]
+    let libraries = packages
+    let configure _ = ()
+    let clean _ = ()
+    let update_path t _ = t
+  end in
+  let m = (module M: CONFIGURABLE with type t = int) in
+  (* FIXME: fix the Mirage API to expose Mirage.impl instead of
+     Mirage.implementation. *)
+  let t: Mirage.kv_ro = (Obj.magic 0) in
+  Mirage.(implementation t device m)
+
 let split c s =
   let rec aux c s ri acc =
     (* half-closed intervals. [ri] is the open end, the right-fencepost.
@@ -81,7 +100,7 @@ let disks = ref 0
 let mkfs fs path =
   let fat_ro dir = kv_ro_of_fs (fat_of_files ~dir ()) in
   match fs, get_mode () with
-  | `Fat   , `Xen -> incr disks; fat_ro (string_of_int (51711 + !disks))
+  | `Fat   , `Xen -> custom_fs (51711 + !disks)
   | `Fat   , _    -> fat_ro path
   | `Crunch, `Xen -> crunch path
   | `Crunch, _    -> direct_kv_ro path
