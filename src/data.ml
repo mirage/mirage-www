@@ -1119,5 +1119,5 @@ let empty_feed = {
     subtitle = None;
     rights;
     author = None;
-    read_entry = (fun s -> Lwt.fail Not_found);
+    read_entry = (fun _ -> Lwt.fail Not_found);
   }

@@ -171,7 +171,7 @@ module Make_localhost
     | ["index.html"]
     | [""] | []       -> index domain tmpl
     | ["stats"; "gc"] -> stats ()
-    | ("about"|"community") :: tl-> mk (about domain tmpl) []
+    | ("about"|"community") :: tl-> mk (about domain tmpl) tl
     | "releases" :: tl -> mk (releases domain tmpl) tl
     | "blog"     :: tl -> mk (blog domain tmpl) tl
     | "links"    :: tl -> mk (links domain tmpl) tl
