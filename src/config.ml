@@ -42,23 +42,31 @@ let bool_of_env = function "1" | "true" | "yes" -> true | _ -> false
 let socket_of_env = function "socket" -> `Socket | _ -> `Direct
 let fat_of_env = function "fat" -> `Fat | _ -> `Crunch
 let opt_string_of_env x = Some x
+let string_of_env x = x
 
 let err fmt =
-  Printf.eprintf ("\027[31m[ERROR]V\027[m         " ^^ fmt ^^ "\n");
-  exit 1
+  Printf.ksprintf (fun str ->
+      Printf.eprintf ("\027[31m[ERROR]\027[m     %s\n") str;
+      exit 1
+    ) fmt
 
 let env_info fmt = Printf.printf ("\027[33mENV\027[m         " ^^ fmt ^^ "\n%!")
 
+let get_env name fn =
+  let res = Sys.getenv name in
+  env_info "%s => %s" name res;
+  fn (String.lowercase res)
+
 let get_exn name fn =
-  try
-    let res = Sys.getenv name in
-    env_info "%s => %s" name res;
-    fn (String.lowercase res)
+  try get_env name fn
+  with Not_found ->
+    err "%s is not set." name
+
+let get ~default name fn =
+  try get_env name fn
   with Not_found ->
     env_info "%s => not set." name;
-    raise Not_found
-
-let get name ~default fn = try get_exn name fn with Not_found -> default
+    default
 
 let fs = get "FS" ~default:`Crunch fat_of_env
 let deploy = get "DEPLOY" ~default:false bool_of_env
@@ -67,24 +75,25 @@ let dhcp = get "DHCP" ~default:false bool_of_env
 let tls = get "TLS" ~default:false bool_of_env
 let host = get "HOST" ~default:None opt_string_of_env
 let redirect = get "REDIRECT" ~default:None opt_string_of_env
+let image = get "XENIMG" ~default:"www" string_of_env
 
-let mkfs path =
+let mkfs fs path =
   let fat_ro dir = kv_ro_of_fs (fat_of_files ~dir ()) in
   match fs, get_mode () with
   | `Fat,    _    -> fat_ro path
   | `Crunch, `Xen -> crunch path
   | `Crunch, _    -> direct_kv_ro path
 
-let filesfs = mkfs "../files"
-let tmplfs = mkfs "../tmpl"
+let filesfs = mkfs fs "../files"
+let tmplfs = mkfs fs "../tmpl"
 let cons0 = default_console
 
 let stack = match deploy with
   | true ->
     let staticip =
-      let address = get_exn "ADDR" Ipaddr.V4.of_string_exn in
-      let netmask = get_exn "MASK" Ipaddr.V4.of_string_exn in
-      let gateways = get_exn "GWS" ips_of_env in
+      let address = get_exn "IP" Ipaddr.V4.of_string_exn in
+      let netmask = get_exn "NETMASK" Ipaddr.V4.of_string_exn in
+      let gateways = get_exn "GATEWAYS" ips_of_env in
       { address; netmask; gateways }
     in
     direct_stackv4_with_static_ipv4 cons0 tap0 staticip
@@ -127,16 +136,25 @@ let check_file ~msg file =
 let () =
   let tracing = None in
   (* let tracing = mprof_trace ~size:10000 () in *)
-  register ?tracing "www" [ match tls with
+  register ?tracing image [ match tls with
       | false ->
         let server = http_server (conduit_direct stack) in
         http  $ default_console $ filesfs $ tmplfs $ server
       | true ->
-        let key = "../tls/tls/server.key" in
-        let pem = "../tls/tls/server.pem" in
-        check_file ~msg:"The TLS private key" key;
-        check_file ~msg:"The TLS certificate" pem;
-        let tls = mkfs "../tls" in
-        let clock0 = default_clock in
-        https $ default_console $ filesfs $ tmplfs $ stack $ tls $ clock0
-  ]
+        let pr = get ~default:None "TRAVIS_PULL_REQUEST" opt_string_of_env in
+        let secrets = get "SECRETS" ~default:`Crunch fat_of_env in
+        match pr with
+        | None | Some "false" ->
+          let key = "../tls/tls/server.key" in
+          let pem = "../tls/tls/server.pem" in
+          check_file ~msg:"The TLS private key" key;
+          check_file ~msg:"The TLS certificate" pem;
+          let tls = mkfs secrets "../tls" in
+          let clock0 = default_clock in
+          https $ default_console $ filesfs $ tmplfs $ stack $ tls $ clock0
+        | _ ->
+          Printf.printf
+            "The TLS build is running inside a Travis CI pull request, \
+             skipping.\n%!";
+          exit 0
+    ]
