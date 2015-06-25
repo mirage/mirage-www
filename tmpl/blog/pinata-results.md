@@ -33,14 +33,14 @@ secret was transmitted via your machine.
 
 #### Accesses
 
-There were roughly 50,000 unique IP addresses who accessed the website.
+There were 50,000 unique IP addresses who accessed the website.
 1000 unique IP addresses initiated more than 20,000 TLS
 connections to the Piñata, trying to break it.  Cumulative numbers of
 the HTTP and TLS accesses are shown in the diagram:
 
 <img src="/graphics/pinata_access.png" alt="Cumulative Piñata accesses" />
 
-There were 9000 failed TLS connections and 12000 successful ones,
+There were more than 9000 failing and 12000 successful TLS sessions,
 comprised of short-circuits described earlier, and our own tests.
 
 No X.509 certificate was presented in 1200 of the failed TLS
