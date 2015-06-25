@@ -2,16 +2,25 @@
 
 Building a static website is one of the better-supported user stories for MirageOS, but it currently results in an HTTP-only site, with no capability for TLS.  Although there's been a great TLS stack [available for a while now](http://openmirage.org/blog/introducing-ocaml-tls), it was a bit fiddly to assemble the pieces of TLS, Cohttp, and the MirageOS frontend tool in order to construct an HTTPS unikernel.  With MirageOS 2.5, that's changed!  Let's celebrate by building an HTTPS-serving unikernel of our very own.
 
+## Prerequisites
+
 ## Get a Certificate
 
 To serve HTTPS, we'll need a certificate to present to clients (i.e., browsers) for authentication and establishing asymmetric encryption. For just testing things out, or when it's okay to cause a big scary warning message to appear for anyone browsing a site, we can just use a self-signed certificate.  Alternatively, the domain name registrar or hosting provider for a site will be happy to sell (or in some cases, give!) a certificate -- both options are explained in more detail below.
 
-### Self-Signed
-
-It's not strictly necessary to get someone else to sign a certificate. We can create and sign our own certificates with the `openssl` command-line tool.  The following invocation will create a secret key in `secrets/server.key` and a public certificate for the domain `totallyradhttpsunikernel.xyz` in `secrets/server.pem`.  The certificate will be valid for 365 days, so if you choose this option, it's a good idea set a calendar reminder to renew it if the service will be up for longer than that.  The key generated will be a 2048-bit RSA key.
+Whichever option you choose, you'll need to install `ocaml-certify` to get started (assuming you'd like to avoid using `openssl`).  To do so, pin the package in opam:
 
 ```
-openssl req -x509 -newkey rsa:2048 -nodes -keyout secrets/server.key -out secrets/server.pem -days 365 -subj '/CN=totallyradhttpsunikernel.xyz'
+opam pin add ocaml-certify https://github.com/yomimono/ocaml-certify.git
+opam install ocaml-certify
+```
+
+### Self-Signed
+
+It's not strictly necessary to get someone else to sign a certificate. We can create and sign our own certificates with the `selfsign` command-line tool.  The following invocation will create a secret key in `secrets/server.key` and a public certificate for the domain `totallyradhttpsunikernel.xyz` in `secrets/server.pem`.  The certificate will be valid for 365 days, so if you choose this option, it's a good idea set a calendar reminder to renew it if the service will be up for longer than that.  The key generated will be a 2048-bit RSA key, although it's possible to create certificates valid for different lengths -- check `selfsign --help` for more information.
+
+```
+selfsign -c secrets/server.pem -k secrets/server.key -d 365 totallyradhttpsunikernel.xyz
 ```
 
 We can now use this key and certificate with `mirage-seal`!  See "Packaging Up an HTTPS Site with Mirage-Seal" below.
@@ -26,13 +35,13 @@ Although there are many entities that can sign a certificate with different proc
 
 #### Generating a Certificate-Signing Request
 
-No matter whom we ask to sign a certificate, we'll need to generate a certificate signing request so the signer knows what to create.  The `openssl` command-line tool can do this.  The line below will generate a CSR (saved as server.csr) signed with a 2048-bit RSA key (which will be saved as myserver.key) and hashed with SHA-256, after asking you questions about the domain for which the certificate should be generated.
+No matter whom we ask to sign a certificate, we'll need to generate a certificate signing request so the signer knows what to create.  The `csr` command-line tool can do this.  The line below will generate a CSR (saved as server.csr) signed with a 2048-bit RSA key (which will be saved as server.key), for the organization "Robotic Flowers Ltd." and the common name "robotflowers.space".  For more information on `csr`, try `csr --help`.
 
 ```
-openssl req -nodes -newkey rsa:2048 -sha256 -keyout server.key -out server.csr
+csr -c server.csr -k server.key "Robotic Flowers Ltd." robotflowers.space
 ```
 
-Once `openssl` has answers to all of its questions, it will generate a `server.csr` that contains the certificate signing request for submission elsewhere.
+`csr` will generate a `server.csr` that contains the certificate signing request for submission elsewhere.
 
 ##### Example: Gandi.net
 
