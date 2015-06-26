@@ -16,22 +16,12 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 open Lwt
 
 let do_get ~uri =
-  let method_ = "GET" in
-  let (res, w) = Lwt.task () in
-  let req = XmlHttpRequest.create () in
-
-  Firebug.console##log(Js.string (Uri.to_string uri));
-  req##_open (Js.string method_, Js.string (Uri.to_string uri), Js._true);
-  req##onreadystatechange <- Js.wrap_callback
-    (fun _ ->
-       (match req##readyState with
-                   | XmlHttpRequest.DONE ->
-                           Lwt.wakeup w (Js.to_string req##responseText)
-                   | _ -> ()));
-
-	req##send (Js.some (Js.string ""));
-  Lwt.on_cancel res (fun () -> req##abort ()) ;
-  res
+  let open XmlHttpRequest in
+  get (Uri.to_string uri)
+  >>= fun frame ->
+  if frame.code = 200
+  then return frame.content
+  else fail (Failure (Printf.sprintf "GET %s returned code %d" (Uri.to_string uri) frame.code))
 
 let chart = ref None
 
