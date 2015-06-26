@@ -137,9 +137,6 @@ let err fmt = Printf.ksprintf (fun msg ->
     exit 1
   ) fmt
 
-let check_file ~msg file =
-  if not (Sys.file_exists file) then err "%s %s is missing" msg file
-
 let () =
   let tracing = None in
   (* let tracing = mprof_trace ~size:10000 () in *)
@@ -150,15 +147,10 @@ let () =
       | true ->
         let pr = get ~default:None "TRAVIS_PULL_REQUEST" opt_string_of_env in
         let secrets = get "SECRETS" ~default:`Crunch fat_of_env in
-        let key = "../tls/tls/server.key" in
-        let pem = "../tls/tls/server.pem" in
         let clock = default_clock in
         let tls =
           match pr with
-          | None | Some "false" ->
-            check_file ~msg:"The TLS private key" key;
-            check_file ~msg:"The TLS certificate" pem;
-            mkfs secrets "../tls"
+          | None | Some "false" -> mkfs secrets "../tls"
           | _ ->
             (* we are running inside a PR in Travis CI. Don't try to
                get the server certificates. *)
