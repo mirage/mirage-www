@@ -14,10 +14,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *)
 
-let string_of_scheme = function `Http -> "http" | `Https -> "https"
-let base_uri (scheme, host) = string_of_scheme scheme ^ "://" ^ host ^ "/"
+(** Site configuration *)
 
-let uri (scheme, host) path =
-  let scheme = string_of_scheme scheme in
-  let path = String.concat "/" path in
-  Uri.make ~scheme ~host ~path ()
+val base_uri: Types.domain -> string
+(** [base_uri d] is the base URI the the domain [d]. *)
+
+val uri: Types.domain -> Types.path -> Uri.t
+(** [uri d p] is the URI with the domain [d] and the path [p]. *)

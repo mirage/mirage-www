@@ -1,6 +1,21 @@
+(*
+ * Copyright (c) 2015 Thomas Gazagnaire <thomas@gazagnaire.org>
+ *
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ *)
+
 open Mirage
 
-(** [split c s] splits string [s] at every occurrence of character [c] *)
 let split c s =
   let rec aux c s ri acc =
     (* half-closed intervals. [ri] is the open end, the right-fencepost.
@@ -22,73 +37,124 @@ let split c s =
   in
   aux c s (String.length s) []
 
-let mkfs fs =
-  let mode =
-    try match String.lowercase (Unix.getenv "FS") with
-      | "fat" -> `Fat
-      | _     -> `Crunch
-    with Not_found -> `Crunch
-  in
-  let fat_ro dir =
-    kv_ro_of_fs (fat_of_files ~dir ())
-  in
-  match mode, get_mode () with
-  | `Fat,    _    -> fat_ro fs
-  | `Crunch, `Xen -> crunch fs
-  | `Crunch, _    -> direct_kv_ro fs
+let ips_of_env x = split ':' x |> List.map Ipaddr.V4.of_string_exn
+let bool_of_env = function "1" | "true" | "yes" -> true | _ -> false
+let socket_of_env = function "socket" -> `Socket | _ -> `Direct
+let fat_of_env = function "fat" -> `Fat | _ -> `Crunch
+let opt_string_of_env x = Some x
+let string_of_env x = x
 
-let filesfs = mkfs "../files"
-let tmplfs = mkfs "../tmpl"
+let err fmt =
+  Printf.ksprintf (fun str ->
+      Printf.eprintf ("\027[31m[ERROR]\027[m     %s\n") str;
+      exit 1
+    ) fmt
+
+let env_info fmt = Printf.printf ("\027[33mENV\027[m         " ^^ fmt ^^ "\n%!")
+
+let get_env name fn =
+  let res = Sys.getenv name in
+  env_info "%s => %s" name res;
+  fn (String.lowercase res)
+
+let get_exn name fn =
+  try get_env name fn
+  with Not_found ->
+    err "%s is not set." name
+
+let get ~default name fn =
+  try get_env name fn
+  with Not_found ->
+    env_info "%s => not set." name;
+    default
+
+let fs = get "FS" ~default:`Crunch fat_of_env
+let deploy = get "DEPLOY" ~default:false bool_of_env
+let net = get  "NET" ~default:`Direct socket_of_env
+let dhcp = get "DHCP" ~default:false bool_of_env
+let tls = get "TLS" ~default:false bool_of_env
+let host = get "HOST" ~default:None opt_string_of_env
+let redirect = get "REDIRECT" ~default:None opt_string_of_env
+let image = get "XENIMG" ~default:"www" string_of_env
+
+let blocks = ref 0
+let mkfs fs path =
+  let fat_of_files dir = kv_ro_of_fs (fat_of_files ~dir ()) in
+  let fat_of_device device =
+    let block = block_of_file (string_of_int device) in
+    let fat   = fat block in
+    kv_ro_of_fs fat
+  in
+  match fs, get_mode () with
+  | `Fat   , `Xen -> incr blocks; fat_of_device (51711 + !blocks)
+  | `Fat   , _    -> fat_of_files path
+  | `Crunch, `Xen -> crunch path
+  | `Crunch, _    -> direct_kv_ro path
+
+let filesfs = mkfs fs "../files"
+let tmplfs = mkfs fs "../tmpl"
+let cons0 = default_console
+
+let stack = match deploy with
+  | true ->
+    let staticip =
+      let address = get_exn "IP" Ipaddr.V4.of_string_exn in
+      let netmask = get_exn "NETMASK" Ipaddr.V4.of_string_exn in
+      let gateways = get_exn "GATEWAYS" ips_of_env in
+      { address; netmask; gateways }
+    in
+    direct_stackv4_with_static_ipv4 cons0 tap0 staticip
+  | false ->
+    match net, dhcp with
+    | `Direct, false -> direct_stackv4_with_default_ipv4 cons0 tap0
+    | `Direct, true  -> direct_stackv4_with_dhcp cons0 tap0
+    | `Socket, _     -> socket_stackv4 cons0 [Ipaddr.V4.any]
+
+let libraries = [ "cow.syntax"; "cowabloga" ]
+let packages  = [ "cow"; "cowabloga" ]
+
+let sp = Printf.sprintf
+
+let config =
+  let h = match host with None -> "None" | Some s -> sp "Some %S" s in
+  let r = match redirect with None -> "None" | Some d -> sp "Some %S" d in
+  sp "struct let host = %s let redirect = %s end" h r
+
+let main = sp "Make(%s)" config
+
+let http =
+  foreign ~libraries ~packages ("Dispatch." ^ main)
+    (console @-> kv_ro @-> kv_ro @-> http @-> job)
 
 let https =
-  let deploy =
-    try match Sys.getenv "DEPLOY" with
-      | "1" | "true" | "yes" -> true
-      | _ -> false
-    with Not_found -> false
-  in
-  let stack console =
-    match deploy with
-    | true ->
-      let staticip =
-        let address = Sys.getenv "ADDR" |> Ipaddr.V4.of_string_exn in
-        let netmask = Sys.getenv "MASK" |> Ipaddr.V4.of_string_exn in
-        let gateways =
-          Sys.getenv "GWS" |> split ':' |> List.map Ipaddr.V4.of_string_exn
-        in
-        { address; netmask; gateways }
-      in
-      direct_stackv4_with_static_ipv4 console tap0 staticip
+  let libraries = "tls" :: "tls.mirage" :: "mirage-http" :: libraries in
+  let packages = "tls" :: "tls" :: "mirage-http" :: packages in
+  foreign ~libraries ~packages ("Dispatch_tls." ^ main)
+    (console @-> kv_ro @-> kv_ro @-> stackv4 @-> kv_ro @-> clock @-> job)
 
-    | false ->
-      let net =
-        try match Sys.getenv "NET" with
-          | "socket" -> `Socket
-          | _        -> `Direct
-        with Not_found -> `Direct
-      in
-      let dhcp =
-        try match Sys.getenv "DHCP" with
-          | "1" | "true" | "yes" -> true
-          | _  -> false
-        with Not_found -> false
-      in
-      match net, dhcp with
-      | `Direct, false -> direct_stackv4_with_default_ipv4 console tap0
-      | `Direct, true  -> direct_stackv4_with_dhcp console tap0
-      | `Socket, _     -> socket_stackv4 console [Ipaddr.V4.any]
-  in
-  http_server (conduit_direct (stack default_console))
-
-let main =
-  let libraries = [ "cow.syntax"; "cowabloga" ] in
-  let packages = [ "cow"; "cowabloga" ] in
-  foreign ~libraries ~packages "Dispatch.Main"
-    (console @-> kv_ro @-> kv_ro @-> http @-> job)
+let err fmt = Printf.ksprintf (fun msg ->
+    Printf.eprintf "\n\027[31m[ERROR]\027[m     %s, stopping.\n%!" msg;
+    exit 1
+  ) fmt
 
 let () =
   let tracing = None in
   (* let tracing = mprof_trace ~size:10000 () in *)
-  register ?tracing "www" [
-    main $ default_console $ filesfs $ tmplfs $ https
-  ]
+  register ?tracing image [ match tls with
+      | false ->
+        let server = http_server (conduit_direct stack) in
+        http  $ default_console $ filesfs $ tmplfs $ server
+      | true ->
+        let pr = get ~default:None "TRAVIS_PULL_REQUEST" opt_string_of_env in
+        let secrets = get "SECRETS" ~default:`Crunch fat_of_env in
+        let clock = default_clock in
+        let tls =
+          match pr with
+          | None | Some "false" -> mkfs secrets "../tls"
+          | _ ->
+            (* we are running inside a PR in Travis CI. Don't try to
+               get the server certificates. *)
+            mkfs `Crunch "../src"
+        in
+        https $ default_console $ filesfs $ tmplfs $ stack $ tls $ clock
+    ]

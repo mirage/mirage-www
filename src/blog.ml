@@ -1,78 +1,96 @@
-open Data
-open Lwt
+(*
+ * Copyright (c) 2015 Thomas Gazagnaire <thomas@gazagnaire.org>
+ *
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ *)
+
+open Lwt.Infix
+open Cowabloga.Atom_feed
+
+type t = Cowabloga.Blog.Entry.t
+
 module C = Cowabloga
-open C.Atom_feed
-open C.Blog
 
-(* Construct an HTTP dispatch function for the blog *)
-let dispatch ({title; subtitle; rights} as feed) entries =
+let not_found ~domain x =
+  (* FIXME: pass "blog" in the domain variable? *)
+  let uri = Site_config.uri domain ("blog" :: x) in
+  `Not_found uri
 
-  let make ?title content =
-    (* TODO need a URL routing mechanism instead of assuming / *)
-    let uri = Uri.of_string "/blog/atom.xml" in
-    let headers =
-      <:xml<
-        <link rel="alternate" type="application/atom+xml" href=$uri:uri$ />
-      >>
-    in
-    let title = "Blog" ^ match title with None -> "" | Some x -> " :: " ^ x in
-    Pages.Global.page ~title ~headers ~content in
-
-  let content_type_xhtml = C.Headers.html in
-  let content_type_atom  = C.Headers.atom in
-
-  let copyright =
-    match rights with
-    | None -> []
-    | Some r -> [`Data r]
+let make ?title ~read ~domain content =
+  (* TODO need a URL routing mechanism instead of assuming / *)
+  let uri = Uri.of_string "/blog/atom.xml" in
+  let headers =
+    <:xml<<link rel="alternate" type="application/atom+xml" href=$uri:uri$ />&>>
   in
+  let title = "Blog" ^ match title with None -> "" | Some x -> " :: " ^ x in
+  Pages.Global.t ~title ~headers ~content ~domain ~read
 
-  let main_blog_index =
-    let recent_posts = recent_posts feed entries in
-    let sidebar =
-      C.Foundation.Sidebar.t ~title:"Recent Posts" ~content:recent_posts
-    in
-    lwt posts = C.Blog.to_html feed entries in
-    let content =
-      C.Foundation.Blog.t ~title ~subtitle ~sidebar ~posts ~copyright ()
-    in
-    return (make content)
+let copyright f = match f.rights with None -> [] | Some r -> [`Data r]
+
+let blog_index ~feed ~entries ~read ~domain =
+  let recent_posts = C.Blog.recent_posts feed entries in
+  let copyright = copyright feed in
+  let sidebar =
+    C.Foundation.Sidebar.t ~title:"Recent Posts" ~content:recent_posts
   in
-
-  lwt blog_entries =
-    Lwt_list.map_s (fun ent ->
-        let recent_posts = recent_posts feed entries in
-        let sidebar =
-          C.Foundation.Sidebar.t ~title:"Recent Posts" ~content:recent_posts
-        in
-        lwt posts = C.Blog.Entry.to_html feed ent in
-        let content =
-          C.Foundation.Blog.t ~title ~subtitle ~sidebar ~posts ~copyright ()
-        in
-        let content = make ~title:ent.C.Blog.Entry.subject content in
-        return (ent.C.Blog.Entry.permalink, content)
-      ) entries
+  C.Blog.to_html ?sep:None ~feed ~entries >>= fun posts ->
+  let { title; subtitle; _ } = feed in
+  let content =
+    C.Foundation.Blog.t ~title ~subtitle ~sidebar ~posts ~copyright ()
   in
+  make ~domain ~read content
 
-  let atom_index =
+let blog_entry ~feed ~entries ~read ~domain entry =
+  let recent_posts = C.Blog.recent_posts feed entries in
+  let copyright = copyright feed in
+  let sidebar =
+    C.Foundation.Sidebar.t ~title:"Recent Posts" ~content:recent_posts
+  in
+  C.Blog.Entry.to_html ~feed ~entry >>= fun posts ->
+  let { title; subtitle; _ } = feed in
+  let content =
+    C.Foundation.Blog.t ~title ~subtitle ~sidebar ~posts ~copyright ()
+  in
+  let title = entry.C.Blog.Entry.subject in
+  make ~domain ~read ~title content >>= fun content ->
+  Lwt.return (entry.C.Blog.Entry.permalink, content)
+
+let blog_entries ~feed ~entries ~read ~domain =
+  Lwt_list.map_s (blog_entry ~domain ~read ~feed ~entries) entries
+
+let atom_feed ~feed ~entries =
+  let headers  = C.Headers.atom in
+  let feed =
     C.Blog.to_atom ~feed ~entries
     >|= Cow.Atom.xml_of_feed
     >|= Cow.Xml.to_string
   in
+  Lwt.return (`Page (headers, feed))
 
-  (* TODO this should be a 404! Bad API *)
-  let not_found x =
-    return (Printf.sprintf "Not found: %s (known links: %s)"
-              (String.concat " ... " x)
-              (String.concat " "
-                 (List.fold_left (fun a (v,_) -> v::a) [] blog_entries)))
+(* Construct an HTTP dispatch function for the blog *)
+let dispatch ~feed ~entries ~read ~domain =
+  atom_feed ~feed ~entries                  >>= fun atom_feed ->
+  blog_index ~domain ~feed ~entries ~read   >>= fun blog_index ->
+  blog_entries ~domain ~read ~feed ~entries >>= fun blog_entries ->
+  let blog_entry x =
+    try List.assoc x blog_entries
+    with Not_found -> not_found ~domain [x]
   in
-
-  return (
-    function
-    | [] | [""] -> content_type_xhtml, main_blog_index
-    | ["atom.xml"] -> content_type_atom, atom_index
-    | [x] when List.mem_assoc x blog_entries ->
-      content_type_xhtml, return ((List.assoc x blog_entries))
-    | x -> content_type_xhtml, not_found x
-  )
+  let f = function
+    | ["index.html"]
+    | [""] | []    -> blog_index
+    | ["atom.xml"] -> atom_feed
+    | [x]          -> blog_entry x
+    | x            -> not_found ~domain x
+  in
+  Lwt.return f
