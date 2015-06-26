@@ -17,8 +17,6 @@
 
 open Lwt.Infix
 
-open Rrd
-
 let timescales = Rrd_timescales.([
   make ~name:"minute" ~num_intervals:120 ~interval_in_steps:1 ();
   make ~name:"hour"   ~num_intervals:120 ~interval_in_steps:12 ();
@@ -29,7 +27,7 @@ let timescales = Rrd_timescales.([
 let create_rras use_min_max =
   (* Create archives of type min, max and average and last *)
   Array.of_list (List.flatten
-    (List.map (fun { Rrd_timescales.num_intervals; interval_in_steps } ->
+  (List.map (fun { Rrd_timescales.num_intervals; interval_in_steps; _ } ->
       if interval_in_steps > 1 && use_min_max then [
         Rrd.rra_create Rrd.CF_Average num_intervals interval_in_steps 1.0;
         Rrd.rra_create Rrd.CF_Min num_intervals interval_in_steps 1.0;
@@ -148,5 +146,5 @@ let get_rrd_updates uri =
   let cfopt = get "cf" >>= cf in
   Lwt.return (Rrd_updates.export [ "", rrd ] start interval cfopt)
 
-let get_rrd_timescales uri =
+let get_rrd_timescales _ =
   Rrd_timescales.to_json timescales
