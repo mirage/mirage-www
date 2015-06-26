@@ -204,10 +204,10 @@ module Make_localhost
       log c "conn %s closed" cid
     in
     log c "Listening on %s" (Site_config.base_uri domain);
-    Stats.start ~sleep:OS.Time.sleep;
     S.make ~callback ~conn_closed ()
 
   let start ?(host="localhost") ?redirect:red c fs tmpl http =
+    Stats.start ~sleep:OS.Time.sleep;
     let domain = `Http, host in
     let dispatch = match red with
       | None        -> dispatch domain c fs tmpl
