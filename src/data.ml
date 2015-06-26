@@ -89,7 +89,7 @@ module People = struct
   let yomimono = {
     Atom.name = "Mindy Preston";
     uri       = Some "https://github.com/yomimono";
-    email     = Some "interblag@somerandomidiot.com";
+    email     = Some "mindy.preston@cl.cam.ac.uk";
   }
 
   let nick = {
