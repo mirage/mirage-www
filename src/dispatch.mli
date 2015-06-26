@@ -22,6 +22,7 @@ module type S =
   functor (FS: V1_LWT.KV_RO) ->
   functor (TMPL: V1_LWT.KV_RO) ->
   functor (S: Cohttp_lwt.Server) ->
+  functor (Clock: V1.CLOCK) ->
 sig
 
   type dispatch = Types.path -> Types.cowabloga Lwt.t
@@ -49,7 +50,7 @@ sig
   (** The type for HTTP callbacks. *)
 
   val start: ?host:string -> ?redirect:string ->
-    C.t -> FS.t -> TMPL.t -> s -> unit Lwt.t
+    C.t -> FS.t -> TMPL.t -> s -> unit -> unit Lwt.t
   (** The HTTP server's start function.
 
       {ul

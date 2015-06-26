@@ -75,7 +75,7 @@ module Make_localhost
     Lwt.return conf
 
   let start ?(host="localhost") ?redirect c fs tmpl stack keys _clock =
-    Stats.start ~sleep:OS.Time.sleep;
+    Stats.start ~sleep:OS.Time.sleep ~time:Clock.time;
     tls_init keys >>= fun cfg ->
     let callback = with_https ?redirect(`Https, host) c fs tmpl in
     let https flow = with_tls c cfg flow ~f:callback in

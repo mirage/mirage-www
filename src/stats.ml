@@ -66,28 +66,41 @@ let make_dss stats = [
   ]
 
 (** Create a rrd *)
-let create_fresh_rrd use_min_max dss =
+let create_fresh_rrd timestamp use_min_max dss =
   let rras = create_rras use_min_max in
   let dss = Array.of_list (List.map (fun ds ->
       Rrd.ds_create ds.Ds.name ds.Ds.ty ~mrhb:300.0 ~max:ds.Ds.max
       ~min:ds.Ds.min Rrd.VT_Unknown
     ) dss) in
-  let rrd = Rrd.rrd_create dss rras (Int64.of_int step) (Clock.time ()) in
+  let rrd = Rrd.rrd_create dss rras (Int64.of_int step) timestamp in
   rrd
 
 let update_rrds timestamp dss rrd =
   Rrd.ds_update_named rrd timestamp ~new_domid:false
     (List.map (fun ds -> ds.Ds.name, (ds.Ds.value, fun x -> x)) dss)
 
-let rrd = create_fresh_rrd true (make_dss (Gc.stat ()))
+let rrd, rrd_u = Lwt.task ()
+let rrd_created = ref false
 
-let start ~sleep =
-  let rec loop () =
-    let timestamp = Clock.time () in
-    update_rrds timestamp (make_dss (Gc.stat ())) rrd;
-    sleep 5. >>= fun () ->
+let start ~sleep ~time =
+  let t () =
+    ( if !rrd_created then rrd
+      else begin
+        let timestamp = time () in
+        let x = create_fresh_rrd timestamp true (make_dss (Gc.stat ())) in
+        rrd_created := true;
+        Lwt.wakeup rrd_u x;
+        rrd
+      end
+    ) >>= fun rrd ->
+  
+    let rec loop () =
+      let timestamp = time () in
+      update_rrds timestamp (make_dss (Gc.stat ())) rrd;
+      sleep 5. >>= fun () ->
+      loop () in
     loop () in
-  Lwt.async loop
+  Lwt.async t
 
 let page () =
   let timescales = List.map (fun t ->
@@ -118,6 +131,7 @@ let page () =
   >>
 
 let get_rrd_updates uri =
+  rrd >>= fun rrd ->
   let query = Uri.query uri in
   let get key =
     if List.mem_assoc key query
@@ -132,7 +146,7 @@ let get_rrd_updates uri =
   let start = default 0L (get "start" >>= int64) in
   let interval = default 0L (get "interval" >>= int64) in
   let cfopt = get "cf" >>= cf in
-  Rrd_updates.export [ "", rrd ] start interval cfopt
+  Lwt.return (Rrd_updates.export [ "", rrd ] start interval cfopt)
 
 let get_rrd_timescales uri =
   Rrd_timescales.to_json timescales

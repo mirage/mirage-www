@@ -16,11 +16,11 @@
 
 (** Gather statisticts about the application. *)
 
-val start: sleep:(float -> unit Lwt.t) -> unit
+val start: sleep:(float -> unit Lwt.t) -> time:(unit -> float) -> unit
 (** Start the monitor thread. *)
 
 val page: unit -> Cow.Html.t
 
-val get_rrd_updates: Uri.t -> string
+val get_rrd_updates: Uri.t -> string Lwt.t
 
 val get_rrd_timescales: Uri.t -> string
