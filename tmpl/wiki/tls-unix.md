@@ -5,7 +5,7 @@ We developed various Unix applications which use the OCaml-TLS stack.
 In this article, we will describe them in detail and getting you ready
 to deploy.
 
-tlstunnel
+[tlstunnel](https://github.com/hannesm/tlstunnel)
 ---------
 
 ```
@@ -23,7 +23,7 @@ certificate chain and private key, PEM-encoded in a file.  They can be
 merged into a single file, or given as two distinct files (`--cert
 FILE` and optionally `--key FILE` if a distinct file is used).
 
-jackline
+[jackline](https://github.com/hannesm/jackline)
 --------
 
 ```
@@ -35,7 +35,7 @@ Jackline is a terminal-based XMPP (jabber) client supporting basic
 features (ping, message receipts, OTR encryption).  After installation
 it starts with an interactive configuration.
 
-tlsclient
+[tlsclient](https://github.com/hannesm/tlsclient)
 ---------
 
 ```
