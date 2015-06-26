@@ -8,11 +8,11 @@ Building a static website is one of the better-supported user stories for Mirage
 
 To serve HTTPS, we'll need a certificate to present to clients (i.e., browsers) for authentication and establishing asymmetric encryption. For just testing things out, or when it's okay to cause a big scary warning message to appear for anyone browsing a site, we can just use a self-signed certificate.  Alternatively, the domain name registrar or hosting provider for a site will be happy to sell (or in some cases, give!) a certificate -- both options are explained in more detail below.
 
-Whichever option you choose, you'll need to install `ocaml-certify` to get started (assuming you'd like to avoid using `openssl`).  To do so, pin the package in opam:
+Whichever option you choose, you'll need to install `certify` to get started (assuming you'd like to avoid using `openssl`).  To do so, pin the package in opam:
 
 ```
-opam pin add ocaml-certify https://github.com/yomimono/ocaml-certify.git
-opam install ocaml-certify
+opam pin add certify https://github.com/yomimono/ocaml-certify.git
+opam install certify
 ```
 
 ### Self-Signed
