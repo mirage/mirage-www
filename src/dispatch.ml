@@ -142,6 +142,11 @@ module Make_localhost
     let read = read_tmpl tmpl in
     Pages.Updates.dispatch ~domain ~feed ~feeds ~read
 
+  let security domain tmpl =
+    let feed = updates_feed domain tmpl in
+    let read = read_tmpl tmpl in
+    Pages.Security.dispatch ~domain ~read ~feed
+
   let stats () =
     let html = Cow.Html.to_string (Stats.page ()) in
     Lwt.return (`Html (Lwt.return html))
@@ -176,6 +181,7 @@ module Make_localhost
     | "blog"     :: tl -> mk (blog domain tmpl) tl
     | "links"    :: tl -> mk (links domain tmpl) tl
     | "updates"  :: tl -> mk (updates domain tmpl) tl
+    | "security" :: tl -> mk (security domain tmpl) tl
     | ("wiki"|"docs") :: ["weekly"] -> redirect_notes domain
     | ("wiki"|"docs") :: tl -> mk (wiki domain tmpl) tl
     | path -> asset c domain fs path
