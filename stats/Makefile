@@ -1,4 +1,4 @@
-LIBS   = -pkgs lwt.syntax,js_of_ocaml,js_of_ocaml.syntax,c3,uri,re.str,rrd,bigarray
+LIBS   = -pkgs lwt.syntax,js_of_ocaml,js_of_ocaml.syntax,js_of_ocaml.log,c3,uri,re.str,rrd,bigarray
 PKGS   = js_of_ocaml lwt c3 uri xapi-rrd re
 SYNTAX = -tags "syntax(camlp4o),annot,bin_annot,strict_sequence,principal,thread"
 

@@ -14,14 +14,20 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 *)
 
 open Lwt
+open Lwt_log_js
 
 let do_get ~uri =
   let open XmlHttpRequest in
-  get (Uri.to_string uri)
+  let uri = Uri.to_string uri in
+  get uri
   >>= fun frame ->
   if frame.code = 200
   then return frame.content
-  else fail (Failure (Printf.sprintf "GET %s returned code %d" (Uri.to_string uri) frame.code))
+  else begin
+    error_f "GET %s returned code %d" uri frame.code
+    >>= fun () ->
+    fail (Failure "GET failed")
+  end
 
 let chart = ref None
 
@@ -36,7 +42,6 @@ let render_update timescale update =
       | [ "AVERAGE"; name ] ->
        (idx + 1, (idx, name) :: acc)
      | _ ->
-       Firebug.console##log(Js.string (elt));
          (idx + 1, acc)
     ) (0, []) update.legend in
 
@@ -70,7 +75,6 @@ let render_update timescale update =
         then []
         else [x.time, x.row_data.(idx)]
       ) data |> List.concat in
-      Firebug.console##log(Js.string (Printf.sprintf "x_min = %f points = [| %s |]" x_min (String.concat "; " (List.map (fun (t, p) -> Printf.sprintf "%Ld %f" t p) points))));
       if points <> []
       then [ C3.Segment.make ~label:legend ~kind:`Area ~points:(List.map (fun (t, v) -> Int64.to_float t, v) points) () ]
       else []
@@ -83,7 +87,6 @@ let watch_rrds () =
     then Some (List.assoc key query)
     else None in
   let default d = function None -> d | Some x -> x in
-  Firebug.console##log(Printf.sprintf "arguments = [ %s ]" (String.concat ", " (List.map (fun (k, v) -> k ^ ":" ^ v) Url.Current.arguments)));
 
   let selected_timescale = default "minute" @@ get "?timescale" Url.Current.arguments in
 
@@ -104,7 +107,6 @@ let watch_rrds () =
     >>= fun txt ->
     let input = Xmlm.make_input (`String (0, txt)) in
     let update = Rrd_updates.of_xml input in
-    Firebug.console##log(Js.string "got some updates");
     render_update timescale update;
     Lwt_js.sleep 5.
     >>= fun () ->
