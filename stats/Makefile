@@ -33,7 +33,7 @@ main.min.js: main.js
 	jsoo_minify main.js
 
 main.js: main.byte
-	js_of_ocaml main.byte
+	js_of_ocaml +weak.js main.byte
 
 clean::
 	ocamlbuild -clean
