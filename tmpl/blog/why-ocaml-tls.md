@@ -5,7 +5,7 @@ complexities of large APIs and code bases, and the use of unsafe programming
 practices.
 
 Re-engineering security-critical software allows the opportunity to use modern
-approaches to prevent these recurring issues. Creating the TLS stack in OCaml
+approaches to prevent these recurring issues. Creating [the TLS stack in OCaml](https://github.com/mirleft/ocaml-tls)
 offers a range of benefits, including: 
 
 **Robust memory safety**: Lack of memory safety was the largest single source
