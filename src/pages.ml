@@ -282,3 +282,22 @@ module Releases = struct
     Lwt.return f
 
 end
+
+module Security = struct
+  let dispatch ~feed:_ ~read ~domain =
+    read_file read "/security.md" >>= fun c->
+    let content = <:html<
+      <div class="row">
+        <div class="small-12 medium-12 large-9 columns">
+          <h2>Security</h2>
+          $c$
+        </div>
+      </div>
+    >> in
+    Global.t ~title:"Security" ~headers:[] ~content ~domain ~read >>= fun security ->
+    let f = function
+    | ["index.html"]
+    | [""] | [] -> security
+    | x         -> not_found ~domain "security" x in
+    Lwt.return f
+end

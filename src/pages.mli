@@ -81,3 +81,11 @@ module About: sig
       [/about/index.html] page. *)
 
 end
+
+module Security: sig
+  (** Security process. *)
+
+  val dispatch: dispatch
+  (** [dispatch] is the dispatch function serving [/security] *)
+
+end

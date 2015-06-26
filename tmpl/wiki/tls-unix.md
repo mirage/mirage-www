@@ -1,14 +1,16 @@
 Deploying OCaml-TLS
 ===================
 
-We developed various applications which use our OCaml-TLS stack,
-running either on UNIX or on Mirage.  In this article, we will
-describe them in detail and getting you ready to deploy.
+We developed various Unix applications which use the OCaml-TLS stack.
+In this article, we will describe them in detail and getting you ready
+to deploy.
 
-tlstunnel
+[tlstunnel](https://github.com/hannesm/tlstunnel)
 ---------
 
-`opam install tlstunnel`
+```
+opam install tlstunnel
+```
 
 Tlstunnel is a [stud](https://github.com/bumptech/stud) like TLS
 proxy.  It listens on a given port and address, answers TLS
@@ -21,33 +23,28 @@ certificate chain and private key, PEM-encoded in a file.  They can be
 merged into a single file, or given as two distinct files (`--cert
 FILE` and optionally `--key FILE` if a distinct file is used).
 
-mirage-seal
------------
-
-`opam repo add mirage-dev https://github.com/mirage/mirage-dev.git`
-`opam install mirage-seal`
-
-Mirage-seal is a tool on top of mirage which lets you seal up a
-directory to be served by a unikernel using https.  `mirage-seal` has
-two command-line options, `--data=files/` and `--keys=secrets/`.
-Inside of `secrets` you should have the private key and certificate
-chain, as PEM-encoded files.
-
-jackline
+[jackline](https://github.com/hannesm/jackline)
 --------
 
-`opam repo add xmpp-dev https://github.com/hannesm/xmpp-opam.git`
-`opam install jackline`
+```
+opam repo add xmpp-dev https://github.com/hannesm/xmpp-opam.git
+opam install jackline
+```
 
 Jackline is a terminal-based XMPP (jabber) client supporting basic
 features (ping, message receipts, OTR encryption).  After installation
 it starts with an interactive configuration.
 
-tlsclient
+[tlsclient](https://github.com/hannesm/tlsclient)
 ---------
 
-`opam pin add tlsclient https://github.com/hannesm/tlsclient.git`
-`opam install tlsclient`
+```
+opam pin add -n nocrypto https://github.com/mirleft/ocaml-nocrypto.git
+opam pin add -n x509 https://github.com/mirleft/ocaml-x509.git
+opam pin add -n tls https://github.com/mirleft/ocaml-tls.git
+opam pin add -n tlsclient https://github.com/hannesm/tlsclient.git
+opam install tlsclient
+```
 
 Tlsclient is a TLS client, in the spirit of `openssl s_client`.  Given
 a hostname and port it will connect there and do a TLS handshake, and

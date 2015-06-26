@@ -105,7 +105,7 @@ module People = struct
   let yomimono = {
     Atom.name = "Mindy Preston";
     uri       = Some "https://github.com/yomimono";
-    email     = Some "interblag@somerandomidiot.com";
+    email     = Some "mindy.preston@cl.cam.ac.uk";
   }
 
   let nick = {
@@ -125,6 +125,20 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2015, 06, 26, 16, 0);
+        authors    = [amir; thomas];
+        subject    = "MirageOS v2.5 with full TLS support";
+        body       = "announcing-mirage-25-release.md";
+        permalink  = "announcing-mirage-25-release";
+      };
+
+      { updated    = date (2015, 06, 26, 14, 0);
+        authors    = [amir];
+        subject    = "Why OCaml-TLS?";
+        body       = "why-ocaml-tls.md";
+        permalink  = "why-ocaml-tls";
+      };
+
       { updated    = date (2015, 02, 10, 16, 0);
         authors    = [amir];
         subject    = "Smash the Bitcoin Pinata for fun and profit!";
@@ -365,6 +379,13 @@ module Wiki = struct
     weekly ~y:2014 ~m:3 ~d:18 ~a:amir;
     weekly ~y:2014 ~m:3 ~d:4 ~a:amir;
     weekly ~y:2014 ~m:2 ~d:26 ~a:amir;
+
+    { updated    = date (2015, 06, 26, 14, 0);
+      author     = hannes;
+      subject    = "Unix TLS Tools";
+      body       = File "tls-unix.md";
+      permalink  = "tls-unix";
+    };
 
     { updated    = date (2014, 02, 01, 01, 0);
       author     = jonludlam;
