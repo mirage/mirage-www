@@ -22,7 +22,7 @@ MIRAGE ?= mirage
 MODE   ?= unix
 FS     ?= fat
 NET    ?= direct
-IPADDR ?= dhcp
+IPADDR ?= static
 
 FLAGS  ?=
 
