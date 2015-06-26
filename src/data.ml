@@ -382,9 +382,9 @@ module Wiki = struct
 
     { updated    = date (2015, 06, 26, 14, 0);
       author     = hannes;
-      subject    = "TLS Tools";
-      body       = File "tls.md";
-      permalink  = "tls";
+      subject    = "Unix TLS Tools";
+      body       = File "tls-unix.md";
+      permalink  = "tls-unix";
     };
 
     { updated    = date (2014, 02, 01, 01, 0);

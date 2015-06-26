@@ -93,7 +93,7 @@ We would love to hear your feedback on this release, either on our
 [breaking]: /wiki/breaking-changes
 [pinata-post]: /blog/announcing-bitcoin-pinata
 [tls-benefits]: /blog/why-ocaml-tls
-[tls-unix]: /wiki/tls
+[tls-unix]: /wiki/tls-unix
 [calls]: /wiki/#Weeklycallsandreleasenotes
 [OPAM]: https://opam.ocaml.org
 [mirage-skeleton]: https://github.com/mirage/mirage-skeleton
