@@ -42,8 +42,8 @@ module Make_localhost
   module Http  = Cohttp_mirage.Server(TCP)
   module Https = Cohttp_mirage.Server(TLS)
 
-  module D  = Dispatch.Make_localhost(C)(FS)(TMPL)(Http)
-  module DS = Dispatch.Make_localhost(C)(FS)(TMPL)(Https)
+  module D  = Dispatch.Make_localhost(C)(FS)(TMPL)(Http)(Clock)
+  module DS = Dispatch.Make_localhost(C)(FS)(TMPL)(Https)(Clock)
 
   let log c fmt = Printf.ksprintf (C.log c) fmt
 
