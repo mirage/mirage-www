@@ -2,7 +2,7 @@
 
 # MirageOS Website
 
-This repository contains the MirageOS public website, <http://openmirage.org/>.
+This repository contains the MirageOS public website, <https://mirage.io/>.
 
 It provides information about the project as well as the blog and wiki.
 
