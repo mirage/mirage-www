@@ -1,9 +1,9 @@
 Deploying OCaml-TLS
 ===================
 
-We developed various applications which use our OCaml-TLS stack,
-running either on UNIX or on Mirage.  In this article, we will
-describe them in detail and getting you ready to deploy.
+We developed various Unix applications which use the OCaml-TLS stack.
+In this article, we will describe them in detail and getting you ready
+to deploy.
 
 tlstunnel
 ---------
@@ -23,20 +23,6 @@ certificate chain and private key, PEM-encoded in a file.  They can be
 merged into a single file, or given as two distinct files (`--cert
 FILE` and optionally `--key FILE` if a distinct file is used).
 
-mirage-seal
------------
-
-```
-opam repo add mirage-dev https://github.com/mirage/mirage-dev.git
-opam install mirage-seal
-```
-
-Mirage-seal is a tool on top of mirage which lets you seal up a
-directory to be served by a unikernel using https.  `mirage-seal` has
-two command-line options, `--data=files/` and `--keys=secrets/`.
-Inside of `secrets` you should have the private key and certificate
-chain, as PEM-encoded files.
-
 jackline
 --------
 
@@ -53,7 +39,10 @@ tlsclient
 ---------
 
 ```
-opam pin add tlsclient https://github.com/hannesm/tlsclient.git
+opam pin add -n nocrypto https://github.com/mirleft/ocaml-nocrypto.git
+opam pin add -n x509 https://github.com/mirleft/ocaml-x509.git
+opam pin add -n tls https://github.com/mirleft/ocaml-tls.git
+opam pin add -n tlsclient https://github.com/hannesm/tlsclient.git
 opam install tlsclient
 ```
 
