@@ -19,7 +19,7 @@ all:: build install
 
 install: build
 	mkdir -p ../files/js/stats
-	cp main.js ../files/js/stats/main.js
+	cp main.min.js ../files/js/stats/main.js
 
 depend::
 	$(OPAM) install $(PKGS) --verbose
@@ -27,7 +27,10 @@ depend::
 main.byte:
 	$(BUILD) main.byte
 
-build: main.js
+build: main.min.js
+
+main.min.js: main.js
+	jsoo_minify main.js
 
 main.js: main.byte
 	js_of_ocaml main.byte
