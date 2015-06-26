@@ -105,10 +105,12 @@ let page () =
       <script src="/js/stats/main.js"> </script>
     </head>
     <body>
-      <h1>GC statistics</h1>
+      <h1>Memory usage</h1>
       <p>
         $List.concat timescales$
       </p>
+      <p>This chart shows heap usage, divided into live_words and free_words. The values are stacked,
+         allowing you to see the total amount of memory being managed by OCaml.</p>
       <p>
         <div id="chart"/>
       </p>
