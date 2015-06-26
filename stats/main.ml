@@ -114,8 +114,4 @@ let watch_rrds () =
   loop (-window + 1)
 
 let _ =
-  Dom_html.window##onload <- Dom_html.handler
-    (fun _ ->
-      Lwt.async watch_rrds;
-      Js._true
-    )
+  Lwt_js_events.onload () >>= (fun _ -> watch_rrds ())
