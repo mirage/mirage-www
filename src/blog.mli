@@ -14,10 +14,14 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *)
 
-let string_of_scheme = function `Http -> "http" | `Https -> "https"
-let base_uri (scheme, host) = string_of_scheme scheme ^ "://" ^ host ^ "/"
+(** Blog engine *)
 
-let uri (scheme, host) path =
-  let scheme = string_of_scheme scheme in
-  let path = String.concat "/" path in
-  Uri.make ~scheme ~host ~path ()
+type t = Cowabloga.Blog.Entry.t
+(** The type for blog entries. *)
+
+val dispatch:
+  feed:Cowabloga.Atom_feed.t ->
+  entries:t list ->
+  read:string Types.read ->
+  Types.dispatch
+(** The blog dispatch function. *)

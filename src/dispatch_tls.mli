@@ -14,10 +14,29 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *)
 
-let string_of_scheme = function `Http -> "http" | `Https -> "https"
-let base_uri (scheme, host) = string_of_scheme scheme ^ "://" ^ host ^ "/"
+(** HTTPS dispatcher *)
 
-let uri (scheme, host) path =
-  let scheme = string_of_scheme scheme in
-  let path = String.concat "/" path in
-  Uri.make ~scheme ~host ~path ()
+(** The signature for HTTP dispatcher. *)
+module type S =
+  functor (C: V1_LWT.CONSOLE) ->
+  functor (FS: V1_LWT.KV_RO) ->
+  functor (TMPL: V1_LWT.KV_RO) ->
+  functor (S: V1_LWT.STACKV4) ->
+  functor (KEYS: V1_LWT.KV_RO) ->
+  functor (Clock : V1.CLOCK) ->
+sig
+
+  val start: ?host:string -> ?redirect:string ->
+    C.t -> FS.t -> TMPL.t -> S.t -> KEYS.t -> unit -> unit Lwt.t
+  (** The HTTP server's start function. If [host] is not set, use an
+      implementation specific default. *)
+
+end
+
+module Make_localhost: S
+(** Instantiate an implementation of {!S} using ["localhost"] as
+    default host in {!S.start}. *)
+
+module Make (Config: Dispatch.Config): S
+(** Instantiate an implementation of {!S} using [Config.host] as
+    default host in {!S.start}. *)
