@@ -150,18 +150,19 @@ let () =
       | true ->
         let pr = get ~default:None "TRAVIS_PULL_REQUEST" opt_string_of_env in
         let secrets = get "SECRETS" ~default:`Crunch fat_of_env in
-        match pr with
-        | None | Some "false" ->
-          let key = "../tls/tls/server.key" in
-          let pem = "../tls/tls/server.pem" in
-          check_file ~msg:"The TLS private key" key;
-          check_file ~msg:"The TLS certificate" pem;
-          let tls = mkfs secrets "../tls" in
-          let clock0 = default_clock in
-          https $ default_console $ filesfs $ tmplfs $ stack $ tls $ clock0
-        | _ ->
-          Printf.printf
-            "The TLS build is running inside a Travis CI pull request, \
-             skipping.\n%!";
-          exit 0
+        let key = "../tls/tls/server.key" in
+        let pem = "../tls/tls/server.pem" in
+        let clock = default_clock in
+        let tls =
+          match pr with
+          | None | Some "false" ->
+            check_file ~msg:"The TLS private key" key;
+            check_file ~msg:"The TLS certificate" pem;
+            mkfs secrets "../tls"
+          | _ ->
+            (* we are running inside a PR in Travis CI. Don't try to
+               get the server certificates. *)
+            mkfs `Crunch "../src"
+        in
+        https $ default_console $ filesfs $ tmplfs $ stack $ tls $ clock
     ]
