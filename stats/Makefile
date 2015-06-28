@@ -20,6 +20,8 @@ all:: build install
 install: build
 	mkdir -p ../files/js/stats
 	cp main.min.js ../files/js/stats/main.js
+	# workaround djs55/ocaml-c3:12
+	$(OPAM) remove c3
 
 depend::
 	$(OPAM) install $(PKGS) --verbose

@@ -34,6 +34,9 @@ all:
 	@echo "make configure && make depend && make build"
 
 configure:
+	cd stats && make depend
+	# the make depend in src will crunch the stats into the fs:
+	cd stats && make all
 	$(MIRAGE) configure src/config.ml $(FLAGS) --$(MODE)
 
 depend:
@@ -41,7 +44,7 @@ depend:
 	cd src && make depend
 
 build:
-	cd stats && make all
+	cd stats && make build
 	cd src && make build
 
 run:
