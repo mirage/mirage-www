@@ -111,7 +111,7 @@ let stack = match deploy with
     | `Socket, _     -> socket_stackv4 cons0 [Ipaddr.V4.any]
 
 let libraries = [ "cow.syntax"; "cowabloga"; "rrd" ]
-let packages  = [ "cow"; "cowabloga"; "xapi-rrd"; "c3"; "js_of_ocaml" ]
+let packages  = [ "cow"; "cowabloga"; "xapi-rrd" ]
 
 let sp = Printf.sprintf
 
