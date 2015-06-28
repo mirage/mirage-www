@@ -25,4 +25,6 @@
 /src/make-fat1-image.sh
 /src/make-fat2-image.sh
 
+files/js/stats
+
 .*.swp

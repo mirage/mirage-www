@@ -42,8 +42,8 @@ module Make_localhost
   module Http  = Cohttp_mirage.Server(TCP)
   module Https = Cohttp_mirage.Server(TLS)
 
-  module D  = Dispatch.Make_localhost(C)(FS)(TMPL)(Http)
-  module DS = Dispatch.Make_localhost(C)(FS)(TMPL)(Https)
+  module D  = Dispatch.Make_localhost(C)(FS)(TMPL)(Http)(Clock)
+  module DS = Dispatch.Make_localhost(C)(FS)(TMPL)(Https)(Clock)
 
   let log c fmt = Printf.ksprintf (C.log c) fmt
 
@@ -75,7 +75,7 @@ module Make_localhost
     Lwt.return conf
 
   let start ?(host="localhost") ?redirect c fs tmpl stack keys _clock =
-    Stats.start ~sleep:OS.Time.sleep;
+    Stats.start ~sleep:OS.Time.sleep ~time:Clock.time;
     tls_init keys >>= fun cfg ->
     let callback = with_https ?redirect(`Https, host) c fs tmpl in
     let https flow = with_tls c cfg flow ~f:callback in

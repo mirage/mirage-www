@@ -110,8 +110,8 @@ let stack = match deploy with
     | `Direct, true  -> direct_stackv4_with_dhcp cons0 tap0
     | `Socket, _     -> socket_stackv4 cons0 [Ipaddr.V4.any]
 
-let libraries = [ "cow.syntax"; "cowabloga" ]
-let packages  = [ "cow"; "cowabloga" ]
+let libraries = [ "cow.syntax"; "cowabloga"; "rrd" ]
+let packages  = [ "cow"; "cowabloga"; "xapi-rrd"; "c3"; "js_of_ocaml" ]
 
 let sp = Printf.sprintf
 
@@ -124,7 +124,7 @@ let main = sp "Make(%s)" config
 
 let http =
   foreign ~libraries ~packages ("Dispatch." ^ main)
-    (console @-> kv_ro @-> kv_ro @-> http @-> job)
+    (console @-> kv_ro @-> kv_ro @-> http @-> clock @-> job)
 
 let https =
   let libraries = "tls" :: "tls.mirage" :: "mirage-http" :: libraries in
@@ -143,7 +143,8 @@ let () =
   register ?tracing image [ match tls with
       | false ->
         let server = http_server (conduit_direct stack) in
-        http  $ default_console $ filesfs $ tmplfs $ server
+        let clock = default_clock in
+        http  $ default_console $ filesfs $ tmplfs $ server $ clock
       | true ->
         let pr = get ~default:None "TRAVIS_PULL_REQUEST" opt_string_of_env in
         let secrets = get "SECRETS" ~default:`Crunch fat_of_env in

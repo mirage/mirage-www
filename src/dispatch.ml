@@ -1,5 +1,6 @@
 (*
  * Copyright (c) 2015 Thomas Gazagnaire <thomas@gazagnaire.org>
+ * Copyright (c) 2015 Citrix Inc
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -21,6 +22,7 @@ module type S =
   functor (FS: V1_LWT.KV_RO) ->
   functor (TMPL: V1_LWT.KV_RO) ->
   functor (S: Cohttp_lwt.Server) ->
+  functor (Clock : V1.CLOCK) ->
 sig
   type dispatch = Types.path -> Types.cowabloga Lwt.t
   val redirect: Types.domain -> dispatch
@@ -28,7 +30,7 @@ sig
   val create: Types.domain -> C.t -> dispatch -> S.t
   type s = Conduit_mirage.server -> S.t -> unit Lwt.t
   val start: ?host:string -> ?redirect:string ->
-    C.t -> FS.t -> TMPL.t -> s -> unit Lwt.t
+    C.t -> FS.t -> TMPL.t -> s -> unit -> unit Lwt.t
 end
 
 let err fmt = Printf.kprintf (fun f -> raise (Failure f)) fmt
@@ -49,7 +51,7 @@ let domain_of_string x =
 
 module Make_localhost
     (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
-    (S: Cohttp_lwt.Server)
+    (S: Cohttp_lwt.Server) (Clock: V1.CLOCK)
 = struct
 
   type dispatch = Types.path -> Types.cowabloga Lwt.t
@@ -85,6 +87,7 @@ module Make_localhost
   let not_found domain path =
     let uri = Site_config.uri domain path in
     let uri = Uri.to_string uri in
+    incr Stats.total_errors;
     Lwt.return (`Not_found uri)
 
   let redirect domain r =
@@ -192,6 +195,7 @@ module Make_localhost
 
   let not_found ~uri () =
     (* FIXME: better 404 page *)
+    incr Stats.total_errors;
     S.respond_not_found ~uri ()
 
   let create domain c dispatch =
@@ -203,7 +207,15 @@ module Make_localhost
         notfound = (fun ~uri -> not_found ~uri ());
         redirect = (fun ~uri -> moved_permanently ~uri ());
       } in
-      Cowabloga.Dispatch.f io dispatch uri
+      incr Stats.total_requests;
+      (* Cowabloga hides the URI which we need for query parameters *)
+      if Uri.path uri = "/rrd_updates" then begin
+        Stats.get_rrd_updates uri
+        >>= fun body ->
+        S.respond_string ~status:`OK ~body ()
+      end else if Uri.path uri = "/rrd_timescales"
+      then S.respond_string ~status:`OK ~body:(Stats.get_rrd_timescales uri) ()
+      else Cowabloga.Dispatch.f io dispatch uri
     in
     let conn_closed (_,conn_id) =
       let cid = Cohttp.Connection.to_string conn_id in
@@ -212,8 +224,8 @@ module Make_localhost
     log c "Listening on %s" (Site_config.base_uri domain);
     S.make ~callback ~conn_closed ()
 
-  let start ?(host="localhost") ?redirect:red c fs tmpl http =
-    Stats.start ~sleep:OS.Time.sleep;
+  let start ?(host="localhost") ?redirect:red c fs tmpl http () =
+    Stats.start ~sleep:OS.Time.sleep ~time:Clock.time;
     let domain = `Http, host in
     let dispatch = match red with
       | None        -> dispatch domain c fs tmpl
@@ -230,9 +242,9 @@ end
 
 module Make (Config: Config)
     (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
-    (S: Cohttp_lwt.Server)
+    (S: Cohttp_lwt.Server)(Clock: V1.CLOCK)
 = struct
-  module M = Make_localhost(C)(FS)(TMPL)(S)
+  module M = Make_localhost(C)(FS)(TMPL)(S)(Clock)
   include M
   let start ?host ?redirect c fs tmpl http =
     let host = match host with None -> Config.host | x -> x in
