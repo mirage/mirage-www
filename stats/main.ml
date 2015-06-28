@@ -29,7 +29,7 @@ let do_get ~uri =
     fail (Failure "GET failed")
   end
 
-let chart = ref None
+let memory = ref None
 
 let colon = Re_str.regexp_string ":"
 
@@ -47,7 +47,7 @@ let render_update timescale update =
 
   let data = Array.to_list update.data in
   let labels = List.map snd legends in
-  let chart = match !chart with
+  let memory = match !memory with
   | Some x -> x
   | None ->
       let segments =
@@ -58,8 +58,8 @@ let render_update timescale update =
       let x =
         C3.Line.make ~kind:`Timeseries ~x_format:"%H:%M:%S" ~x_label:"Time" ~y_label:"words" ()
         |> C3.Line.add_group ~segments
-        |> C3.Line.render ~bindto:"#chart" in
-      chart := Some x;
+        |> C3.Line.render ~bindto:"#memory" in
+      memory := Some x;
       x in
 
   let x_min = Int64.to_float update.Rrd_updates.end_time -. (float_of_int window) in
@@ -79,7 +79,7 @@ let render_update timescale update =
       then [ C3.Segment.make ~label:legend ~kind:`Area ~points:(List.map (fun (t, v) -> Int64.to_float t, v) points) () ]
       else []
     ) legends |> List.concat in
-  C3.Line.update ~segments chart
+  C3.Line.update ~segments memory
 
 let watch_rrds () =
   let get key query =

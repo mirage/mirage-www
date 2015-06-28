@@ -91,7 +91,7 @@ let start ~sleep ~time =
         rrd
       end
     ) >>= fun rrd ->
-  
+
     let rec loop () =
       let timestamp = time () in
       update_rrds timestamp (make_dss (Gc.stat ())) rrd;
@@ -110,20 +110,22 @@ let page () =
   <:html<
     <head>
       <meta charset="utf-8" />
+      <title>Server statistics</title>
       <link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.css" rel="stylesheet" type="text/css"/>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"></script>
       <script src="/js/stats/main.js"> </script>
     </head>
     <body>
-      <h1>Memory usage</h1>
+      <h1>Server statistics</h1>
       <p>
-        $List.concat timescales$
+        Select a timescale: $List.concat timescales$
       </p>
+      <h2>Memory usage</h2>
       <p>This chart shows heap usage, divided into live_words and free_words. The values are stacked,
          allowing you to see the total amount of memory being managed by OCaml.</p>
       <p>
-        <div id="chart"/>
+        <div id="memory"/>
       </p>
     </body>
   >>
