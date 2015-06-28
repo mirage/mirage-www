@@ -16,6 +16,14 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 open Lwt
 open Lwt_log_js
 
+module Option = struct
+  let value_exn ?(message="") = function
+    | Some x -> x
+    | None ->
+      Lwt.async (fun () -> error_f "Option.value_exn failed %s" message);
+      raise Not_found
+end
+
 let do_get ~uri =
   let open XmlHttpRequest in
   let uri = Uri.to_string uri in
@@ -29,40 +37,30 @@ let do_get ~uri =
     fail (Failure "GET failed")
   end
 
-let memory = ref None
+(* The memory chart will show these legends *)
+let memory_legends = [
+  "AVERAGE:live_words";
+  "AVERAGE:free_words"
+]
+
+let memory, memory_u = Lwt.task ()
 
 let colon = Re_str.regexp_string ":"
 
-let render_update timescale update =
+(* Return the index of an element in an array, or None *)
+let index_of name array =
+  Array.fold_left
+    (fun (idx, found) elt ->
+      idx + 1, (if elt = name then Some idx else found)
+    ) (0, None) array |> snd
+
+(* Given an rrd update, update a single chart *)
+let render_chart chart legends update =
   let open Rrd_updates in
-  let window = Rrd_timescales.to_span timescale in
-	let _, legends = Array.fold_left
-	  (fun (idx, acc) elt ->
-      match Re_str.split_delim colon elt with
-      | [ "AVERAGE"; name ] ->
-       (idx + 1, (idx, name) :: acc)
-     | _ ->
-         (idx + 1, acc)
-    ) (0, []) update.legend in
-
   let data = Array.to_list update.data in
-  let labels = List.map snd legends in
-  let memory = match !memory with
-  | Some x -> x
-  | None ->
-      let segments =
-        List.map
-          (fun (_, label) ->
-            C3.Segment.make ~label ~kind:`Area ~points:[] ()
-          ) legends in
-      let x =
-        C3.Line.make ~kind:`Timeseries ~x_format:"%H:%M:%S" ~x_label:"Time" ~y_label:"words" ()
-        |> C3.Line.add_group ~segments
-        |> C3.Line.render ~bindto:"#memory" in
-      memory := Some x;
-      x in
-
-  let x_min = Int64.to_float update.Rrd_updates.end_time -. (float_of_int window) in
+  let legends = List.map (fun legend ->
+    Option.value_exn ~message:legend @@ index_of legend update.legend, legend
+  ) legends in
   let nans = List.map
     (fun (idx, _) ->
       Array.map (fun x -> classify_float x.row_data.(idx) = FP_nan) update.data
@@ -79,7 +77,25 @@ let render_update timescale update =
       then [ C3.Segment.make ~label:legend ~kind:`Area ~points:(List.map (fun (t, v) -> Int64.to_float t, v) points) () ]
       else []
     ) legends |> List.concat in
-  C3.Line.update ~segments memory
+  C3.Line.update ~segments chart
+
+(* Given an rrd update, redraw all the charts *)
+let render_update update =
+  (* Create the memory chart if it doesn't already exist *)
+  if Lwt.state memory = Lwt.Sleep then begin
+    let segments =
+      List.map
+        (fun label ->
+          C3.Segment.make ~label ~kind:`Area ~points:[] ()
+        ) memory_legends in
+    C3.Line.make ~kind:`Timeseries ~x_format:"%H:%M:%S" ~x_label:"Time" ~y_label:"words" ()
+    |> C3.Line.add_group ~segments
+    |> C3.Line.render ~bindto:"#memory"
+    |> Lwt.wakeup memory_u
+  end;
+  memory >>= fun memory ->
+  render_chart memory memory_legends update;
+  return ()
 
 let watch_rrds () =
   let get key query =
@@ -107,7 +123,8 @@ let watch_rrds () =
     >>= fun txt ->
     let input = Xmlm.make_input (`String (0, txt)) in
     let update = Rrd_updates.of_xml input in
-    render_update timescale update;
+    render_update update
+    >>= fun () ->
     Lwt_js.sleep 5.
     >>= fun () ->
     loop (-window + 1) in
