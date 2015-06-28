@@ -38,10 +38,11 @@ configure:
 
 depend:
 	cd stats && make depend
+	# the make depend in src will crunch the stats into the fs:
+	cd stats && make all
 	cd src && make depend
 
 build:
-	cd stats && make all
 	cd src && make build
 
 run:
