@@ -24,3 +24,9 @@ val page: unit -> Cow.Html.t
 val get_rrd_updates: Uri.t -> string Lwt.t
 
 val get_rrd_timescales: Uri.t -> string
+
+val total_requests: int ref
+(** Total number of HTTP requests received *)
+
+val total_errors: int ref
+(** Total number of HTTP error responses *)

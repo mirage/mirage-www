@@ -45,7 +45,12 @@ let memory_legends = [
 
 let memory, memory_u = Lwt.task ()
 
-let colon = Re_str.regexp_string ":"
+let http_legends = [
+  "AVERAGE:requests_per_second";
+  "AVERAGE:errors_per_second"
+]
+
+let http, http_u = Lwt.task ()
 
 (* Return the index of an element in an array, or None *)
 let index_of name array =
@@ -95,6 +100,19 @@ let render_update update =
   end;
   memory >>= fun memory ->
   render_chart memory memory_legends update;
+  if Lwt.state http = Lwt.Sleep then begin
+    let segments =
+      List.map
+        (fun label ->
+          C3.Segment.make ~label ~kind:`Area ~points:[] ()
+        ) http_legends in
+    let chart = C3.Line.make ~kind:`Timeseries ~x_format:"%H:%M:%S" ~x_label:"Time" ~y_label:"per second" () in
+    List.fold_left (fun chart segment -> C3.Line.add ~segment chart) chart segments
+    |> C3.Line.render ~bindto:"#http"
+    |> Lwt.wakeup http_u
+  end;
+  http >>= fun http ->
+  render_chart http http_legends update;
   return ()
 
 let watch_rrds () =

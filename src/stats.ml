@@ -54,6 +54,9 @@ module Ds = struct
   }
 end
 
+let total_requests = ref 0
+let total_errors = ref 0
+
 let make_dss stats = [
   Ds.make ~name:"free_words" ~units:"words"
     ~description:"Number of words in the free list"
@@ -61,6 +64,12 @@ let make_dss stats = [
   Ds.make ~name:"live_words" ~units:"words"
     ~description:"Number of words of live data in the major heap, including the header words."
     ~value:(Rrd.VT_Int64 (Int64.of_int stats.Gc.live_words)) ~ty:Rrd.Gauge ~min:0.0 ();
+  Ds.make ~name:"requests_per_second" ~units:"requests/second"
+    ~description:"HTTP requests received per second"
+    ~value:(Rrd.VT_Int64 (Int64.of_int !total_requests)) ~ty:Rrd.Derive ~min:0.0 ();
+  Ds.make ~name:"errors_per_second" ~units:"responses/second"
+    ~description:"Unsuccessful HTTP responses per second"
+    ~value:(Rrd.VT_Int64 (Int64.of_int !total_errors)) ~ty:Rrd.Derive ~min:0.0 ();
   ]
 
 (** Create a rrd *)
@@ -120,6 +129,11 @@ let page () =
       <h1>Server statistics</h1>
       <p>
         Select a timescale: $List.concat timescales$
+      </p>
+      <h2>HTTP</h2>
+      <p>This charts shows the number of HTTP requests per second</p>
+      <p>
+        <div id="http"/>
       </p>
       <h2>Memory usage</h2>
       <p>This chart shows heap usage, divided into live_words and free_words. The values are stacked,

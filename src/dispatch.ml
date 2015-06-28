@@ -51,7 +51,7 @@ let domain_of_string x =
 
 module Make_localhost
     (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
-    (S: Cohttp_lwt.Server) (Clock: V1.CLOCK) 
+    (S: Cohttp_lwt.Server) (Clock: V1.CLOCK)
 = struct
 
   type dispatch = Types.path -> Types.cowabloga Lwt.t
@@ -87,6 +87,7 @@ module Make_localhost
   let not_found domain path =
     let uri = Site_config.uri domain path in
     let uri = Uri.to_string uri in
+    incr Stats.total_errors;
     Lwt.return (`Not_found uri)
 
   let redirect domain r =
@@ -188,6 +189,7 @@ module Make_localhost
 
   let not_found ~uri () =
     (* FIXME: better 404 page *)
+    incr Stats.total_errors;
     S.respond_not_found ~uri ()
 
   let create domain c dispatch =
@@ -199,6 +201,7 @@ module Make_localhost
         notfound = (fun ~uri -> not_found ~uri ());
         redirect = (fun ~uri -> moved_permanently ~uri ());
       } in
+      incr Stats.total_requests;
       (* Cowabloga hides the URI which we need for query parameters *)
       if Uri.path uri = "/rrd_updates" then begin
         Stats.get_rrd_updates uri
