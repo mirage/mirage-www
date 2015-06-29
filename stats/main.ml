@@ -123,10 +123,8 @@ let watch_rrds () =
   let default d = function None -> d | Some x -> x in
 
   let selected_timescale = default "minute" @@ get "?timescale" Url.Current.arguments in
-  let scheme =
-    let p = Url.Current.protocol in
-    String.sub p 0 (String.length p - 1) in (* remove trailing ':' *)
-  do_get ~uri:(Uri.make ~scheme ~path:"/rrd_timescales" ())
+
+  do_get ~uri:(Uri.make ~path:"/rrd_timescales" ())
   >>= fun txt ->
   let timescales = Rrd_timescales.of_json txt in
 
@@ -134,7 +132,7 @@ let watch_rrds () =
 
   let uri start =
     let query = [ "start", [ string_of_int start ]; "interval", [ string_of_int (Rrd_timescales.interval_to_span timescale)] ] in
-    Uri.make ~scheme ~path:"/rrd_updates" ~query () in
+    Uri.make ~path:"/rrd_updates" ~query () in
 
   let window = Rrd_timescales.to_span timescale in
 
