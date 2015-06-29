@@ -125,6 +125,13 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2015, 06, 29, 16, 0);
+        authors    = [hannes];
+        subject    = "Reviewing the Bitcoin Pinata";
+        body       = "pinata-results.md";
+        permalink  = "bitcoin-pinata-results";
+      };
+
       { updated    = date (2015, 06, 26, 16, 0);
         authors    = [amir; thomas];
         subject    = "MirageOS v2.5 with full TLS support";
