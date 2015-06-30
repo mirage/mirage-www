@@ -56,14 +56,6 @@ module Make_localhost
     | `Ok tls  -> log "TLS ok"; f tls >>= fun () ->TLS.close tls
     | `Eof     -> log "TLS eof"; TCP.close tcp
 
-  let with_https ?redirect domain c fs tmpl flow =
-    let dispatch = match redirect with
-      | None        -> DS.dispatch domain c fs tmpl
-      | Some domain -> DS.redirect (Dispatch.domain_of_string domain)
-    in
-    let t = DS.create domain c dispatch in
-    Https.listen t flow
-
   let with_http host c flow =
     let domain = `Https, host in
     let t = D.create domain c (D.redirect domain) in
@@ -77,7 +69,12 @@ module Make_localhost
   let start ?(host="localhost") ?redirect c fs tmpl stack keys _clock =
     Stats.start ~sleep:OS.Time.sleep ~time:Clock.time;
     tls_init keys >>= fun cfg ->
-    let callback = with_https ?redirect(`Https, host) c fs tmpl in
+    let domain = `Https, host in
+    let dispatch = match redirect with
+      | None        -> DS.dispatch domain c fs tmpl
+      | Some domain -> DS.redirect (Dispatch.domain_of_string domain)
+    in
+    let callback = Https.listen (DS.create domain c dispatch) in
     let https flow = with_tls c cfg flow ~f:callback in
     let http flow = with_http host c flow in
     S.listen_tcpv4 stack ~port:443 https;
