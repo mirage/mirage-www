@@ -199,10 +199,12 @@ module Make_localhost
     S.respond_not_found ~uri ()
 
   let create domain c dispatch =
-    let callback _conn_id request _body =
+    let hdr = match fst domain with `Http -> "HTTP" | `Https -> "HTTPS" in
+    let callback (_, conn_id) request _body =
       let uri = Cohttp.Request.uri request in
+      let cid = Cohttp.Connection.to_string conn_id in
       let io = {
-        Cowabloga.Dispatch.log = (fun ~msg -> C.log c msg);
+        Cowabloga.Dispatch.log = (fun ~msg -> log c "[%s %s] %s" hdr cid msg);
         ok = respond_ok;
         notfound = (fun ~uri -> not_found ~uri ());
         redirect = (fun ~uri -> moved_permanently ~uri ());
@@ -219,9 +221,8 @@ module Make_localhost
     in
     let conn_closed (_,conn_id) =
       let cid = Cohttp.Connection.to_string conn_id in
-      log c "conn %s closed" cid
+      log c "[%s %s] OK, closing" hdr cid
     in
-    log c "Listening on %s" (Site_config.base_uri domain);
     S.make ~callback ~conn_closed ()
 
   let start ?(host="localhost") ?redirect:red c fs tmpl http () =
@@ -231,7 +232,9 @@ module Make_localhost
       | None        -> dispatch domain c fs tmpl
       | Some domain -> redirect (domain_of_string domain)
     in
-    http (`TCP 80) (create domain c dispatch)
+    let callback = create domain c dispatch in
+    log c "Listening on %s" (Site_config.base_uri domain);
+    http (`TCP 80) callback
 
 end
 
