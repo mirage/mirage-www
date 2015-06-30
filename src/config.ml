@@ -87,8 +87,7 @@ let libraries = [ "cow"; "cowabloga"; "rrd" ]
 let packages  = [ "cow"; "cowabloga"; "xapi-rrd"; "c3" ]
 
 let () =
-  let tracing = None in
-  (* let tracing = mprof_trace ~size:10000 () in *)
+  let tracing = Some (mprof_trace ~size:1000000 ()) in
   register ?tracing ~libraries ~packages image [
     dispatch $ default_console $ filesfs $ tmplfs $ default_clock
   ]
