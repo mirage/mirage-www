@@ -220,11 +220,10 @@ module Make_localhost
       } in
       incr Stats.total_requests;
       (* Cowabloga hides the URI which we need for query parameters *)
-      if Uri.path uri = "/rrd_updates" then begin
-        Stats.get_rrd_updates uri
-        >>= fun body ->
+      if Uri.path uri = "/rrd_updates" then (
+        Stats.get_rrd_updates uri >>= fun body ->
         S.respond_string ~status:`OK ~body ()
-      end else if Uri.path uri = "/rrd_timescales"
+      ) else if Uri.path uri = "/rrd_timescales"
       then S.respond_string ~status:`OK ~body:(Stats.get_rrd_timescales uri) ()
       else Cowabloga.Dispatch.f io dispatch uri
     in
