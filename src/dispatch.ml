@@ -175,18 +175,27 @@ module Make_localhost
         not_found domain path)
 
   (* dispatch non-file URLs *)
-  let dispatch domain c fs tmpl = function
+  let dispatch domain c fs tmpl =
+    let index = index domain tmpl in
+    let about = about domain tmpl in
+    let releases = releases domain tmpl in
+    let blog = blog domain tmpl in
+    let links = links domain tmpl in
+    let updates = updates domain tmpl in
+    let security = security domain tmpl in
+    let wiki = wiki domain tmpl in
+    function
     | ["index.html"]
-    | [""] | []       -> index domain tmpl
+    | [""] | []       -> index
     | ["stats"; "gc"] -> stats ()
-    | ("about"|"community") :: tl-> mk (about domain tmpl) tl
-    | "releases" :: tl -> mk (releases domain tmpl) tl
-    | "blog"     :: tl -> mk (blog domain tmpl) tl
-    | "links"    :: tl -> mk (links domain tmpl) tl
-    | "updates"  :: tl -> mk (updates domain tmpl) tl
-    | "security" :: tl -> mk (security domain tmpl) tl
+    | ("about"|"community") :: tl-> mk about tl
+    | "releases" :: tl -> mk releases tl
+    | "blog"     :: tl -> mk blog tl
+    | "links"    :: tl -> mk links tl
+    | "updates"  :: tl -> mk updates tl
+    | "security" :: tl -> mk security tl
     | ("wiki"|"docs") :: ["weekly"] -> redirect_notes domain
-    | ("wiki"|"docs") :: tl -> mk (wiki domain tmpl) tl
+    | ("wiki"|"docs") :: tl -> mk wiki tl
     | path -> asset c domain fs path
 
   let moved_permanently ~uri () =
@@ -211,11 +220,10 @@ module Make_localhost
       } in
       incr Stats.total_requests;
       (* Cowabloga hides the URI which we need for query parameters *)
-      if Uri.path uri = "/rrd_updates" then begin
-        Stats.get_rrd_updates uri
-        >>= fun body ->
+      if Uri.path uri = "/rrd_updates" then (
+        Stats.get_rrd_updates uri >>= fun body ->
         S.respond_string ~status:`OK ~body ()
-      end else if Uri.path uri = "/rrd_timescales"
+      ) else if Uri.path uri = "/rrd_timescales"
       then S.respond_string ~status:`OK ~body:(Stats.get_rrd_timescales uri) ()
       else Cowabloga.Dispatch.f io dispatch uri
     in
