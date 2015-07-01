@@ -1,6 +1,6 @@
 # Unikernels: HTTP -> HTTPS
 
-Building a static website is one of the better-supported user stories for MirageOS, but it currently results in an HTTP-only site, with no capability for TLS.  Although there's been a great TLS stack [available for a while now](http://openmirage.org/blog/introducing-ocaml-tls), it was a bit fiddly to assemble the pieces of TLS, Cohttp, and the MirageOS frontend tool in order to construct an HTTPS unikernel.  With MirageOS 2.5, that's changed!  Let's celebrate by building an HTTPS-serving unikernel of our very own.
+Building a static website is one of the better-supported user stories for MirageOS, but it currently results in an HTTP-only site, with no capability for TLS.  Although there's been a great TLS stack [available for a while now](https://mirage.io/blog/introducing-ocaml-tls), it was a bit fiddly to assemble the pieces of TLS, Cohttp, and the MirageOS frontend tool in order to construct an HTTPS unikernel.  With MirageOS 2.5, that's changed!  Let's celebrate by building an HTTPS-serving unikernel of our very own.
 
 ## Prerequisites
 
@@ -20,7 +20,7 @@ opam install certify
 It's not strictly necessary to get someone else to sign a certificate. We can create and sign our own certificates with the `selfsign` command-line tool.  The following invocation will create a secret key in `secrets/server.key` and a public certificate for the domain `totallyradhttpsunikernel.xyz` in `secrets/server.pem`.  The certificate will be valid for 365 days, so if you choose this option, it's a good idea set a calendar reminder to renew it if the service will be up for longer than that.  The key generated will be a 2048-bit RSA key, although it's possible to create certificates valid for different lengths -- check `selfsign --help` for more information.
 
 ```
-selfsign -c secrets/server.pem -k secrets/server.key -d 365 totallyradhttpsunikernel.xyz
+selfsign -c secrets/server.pem -k secrets/server.key -d 365 totallyradhttpsunikernel.example
 ```
 
 We can now use this key and certificate with `mirage-seal`!  See "Packaging Up an HTTPS Site with Mirage-Seal" below.
@@ -35,10 +35,10 @@ Although there are many entities that can sign a certificate with different proc
 
 #### Generating a Certificate-Signing Request
 
-No matter whom we ask to sign a certificate, we'll need to generate a certificate signing request so the signer knows what to create.  The `csr` command-line tool can do this.  The line below will generate a CSR (saved as server.csr) signed with a 2048-bit RSA key (which will be saved as server.key), for the organization "Robotic Flowers Ltd." and the common name "robotflowers.space".  For more information on `csr`, try `csr --help`.
+No matter whom we ask to sign a certificate, we'll need to generate a certificate signing request so the signer knows what to create.  The `csr` command-line tool can do this.  The line below will generate a CSR (saved as server.csr) signed with a 2048-bit RSA key (which will be saved as server.key), for the organization "Rad Unikernel Construction, Ltd." and the common name "totallyradhttpsunikernel.example".  For more information on `csr`, try `csr --help`.
 
 ```
-csr -c server.csr -k server.key "Robotic Flowers Ltd." robotflowers.space
+csr -c server.csr -k server.key totallyradhttpsunikernel.example "Rad Unikernel Construction, Ltd."
 ```
 
 `csr` will generate a `server.csr` that contains the certificate signing request for submission elsewhere.
@@ -53,11 +53,15 @@ Copy the content of the certificate-signing request you generated earlier and pa
 
 If you're buying a certificate for a domain you have registered through Gandi (via the registered account), the rest of the process is pretty automatic.  You should shortly receive an e-mail with a subject like "Procedure for the validation of your Standard SSL certificate", which explains the process in more detail, but really all you need to do is wait a while (about 30 minutes, for me).  After the certificate has been generated, Gandi will notify you by e-mail, and you can download your certificate from the SSL management screen.  Click the magnifying glass next to the name of the domain for which you generated the cert to do so.
 
-Once you've downloaded your certificate, you may also wish to append the [intermediate certificates](https://en.wikipedia.org/wiki/Intermediate_certificate_authorities).  Here's a help page on [gathering intermediate certificates](https://wiki.gandi.net/en/ssl/intermediate).  Equipped with the intermediate certificates, append them to the signed certificate downloaded for your site to provide a full certificate chain.
+Once you've downloaded your certificate, you may also wish to append the [intermediate certificates](https://en.wikipedia.org/wiki/Intermediate_certificate_authorities).  Here's a help page on [gathering intermediate certificates](https://wiki.gandi.net/en/ssl/intermediate).  Equipped with the intermediate certificates, append them to the signed certificate downloaded for your site to provide a full certificate chain:
+
+```
+cat signed_cert.pem intermediate_certs.pem > server.pem
+```
 
 ## Packaging Up an HTTPS Site with Mirage-Seal
 
-Equipped with a private key and a certificate, let's make an HTTPS unikernel!  First, use `opam` to install `mirage-seal`.  If `opam` or other MirageOS tooling aren't set up yet, check out the [instructions for getting started](http://openmirage.org/wiki/install).
+Equipped with a private key and a certificate, let's make an HTTPS unikernel!  First, use `opam` to install `mirage-seal`.  If `opam` or other MirageOS tooling aren't set up yet, check out the [instructions for getting started](https://mirage.io/wiki/install).
 
 ```
 opam install mirage-seal
@@ -72,7 +76,7 @@ There are also a number of configurable parameters for IP settings.  By default,
 
 You'll find more thorough documentation by looking at `mirage-seal --help` or [mirage-seal's README file](https://github.com/mirage/mirage-seal/blob/master/README.md).
 
-To build a Xen unikernel, select the Xen mode with `-t xen` as well.  So in full, for a unikernel that will configure its network via DHCP:
+To build a Xen unikernel, select the Xen mode with `-t xen`.  In full, for a unikernel that will configure its network via DHCP:
 
 ```
 mirage-seal --data=/home/me/coolwebsite/public --keys=/home/me/coolwebsite/secrets -t xen
