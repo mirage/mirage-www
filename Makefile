@@ -16,13 +16,37 @@
 # PERFORMANCE OF THIS SOFTWARE.
 #
 
-MODE ?= unix
-
 MIRAGE ?= mirage
+# MODE: unix for Unix executable, xen for Xen unikernel
 MODE   ?= unix
-FS     ?= fat
+# FS: crunch for in-memory read-only store, fat for read-write filesystem
+FS     ?= crunch
+# NET: direct for mirage network stack, socket for unix sockets (Unix mode only)
 NET    ?= direct
-IPADDR ?= static
+# XENIMG: the name to provide for the xen image and configuration
+XENIMG ?= www
+# HOST: all links will be relative to this domain; default is localhost
+HOST   ?= localhost
+
+# to configure the network via DHCP:
+# DHCP = true
+
+# to configure the network statically with ip 10.0.0.2/24 and gateway 10.0.0.1:
+# IP = "10.0.0.2"
+# NETMASK = "255.255.255.0"
+# GATEWAYS = "10.0.0.1"
+#
+# if none of DHCP || (IP && NETMASK && GATEWAYS) is set,
+# default static settings will be used.
+
+# to serve pages over https:
+# TLS = true
+# to make it work with FS=crunch, put the certificate in tls/tls/server.key and the private key in tls/tls/server.pem
+
+# to redirect all http requests to https://somewhereelse.org:
+# REDIRECT = https://somewhereelse.org 
+# (redirect must be an http:// or https:// url)
+# if TLS is set but REDIRECT is not, the value of REDIRECT will be assumed to be https://$HOST , with the effect that all http requests will be redirected to https
 
 FLAGS  ?=
 
@@ -30,7 +54,7 @@ FLAGS  ?=
 
 all:
 	@echo "To build this website, look in the Makefile and set"
-	@echo "the appropriate variables (MODE, FS, NET, IPADDR)."
+	@echo "the appropriate variables (MODE, FS, NET, DHCP, REDIRECT, HOST, TLS)."
 	@echo "make configure && make depend && make build"
 
 configure:
