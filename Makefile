@@ -46,7 +46,7 @@ HOST   ?= localhost
 # to redirect all http requests to https://somewhereelse.org:
 # REDIRECT = https://somewhereelse.org 
 # (redirect must be an http:// or https:// url)
-# if https is being served and REDIRECT is not specified, it will be assumed to be https://$HOST
+# if TLS is set but REDIRECT is not, the value of REDIRECT will be assumed to be https://$HOST , with the effect that all http requests will be redirected to https
 
 FLAGS  ?=
 
