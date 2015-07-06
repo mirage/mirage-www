@@ -356,6 +356,7 @@ module Wiki = struct
     }
 
   let entries = [
+    weekly ~y:2015 ~m:7 ~d:1 ~a:anil;
     weekly ~y:2015 ~m:6 ~d:3 ~a:amir;
     weekly ~y:2015 ~m:5 ~d:20 ~a:amir;
     weekly ~y:2015 ~m:5 ~d:6 ~a:amir;
@@ -386,6 +387,13 @@ module Wiki = struct
     weekly ~y:2014 ~m:3 ~d:18 ~a:amir;
     weekly ~y:2014 ~m:3 ~d:4 ~a:amir;
     weekly ~y:2014 ~m:2 ~d:26 ~a:amir;
+
+    { updated    = date (2015, 07, 01, 18, 0);
+      author     = dave;
+      subject    = "Coverage Testing with Coveralls";
+      body       = File "coverage.md";
+      permalink  = "coverage";
+    };
 
     { updated    = date (2015, 06, 26, 14, 0);
       author     = hannes;
