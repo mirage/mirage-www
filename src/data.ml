@@ -388,6 +388,13 @@ module Wiki = struct
     weekly ~y:2014 ~m:3 ~d:4 ~a:amir;
     weekly ~y:2014 ~m:2 ~d:26 ~a:amir;
 
+    { updated    = date (2015, 07, 01, 18, 0);
+      author     = dave;
+      subject    = "Coverage Testing with Coveralls";
+      body       = File "coverage.md";
+      permalink  = "coverage";
+    };
+
     { updated    = date (2015, 06, 26, 14, 0);
       author     = hannes;
       subject    = "Unix TLS Tools";
