@@ -59,7 +59,7 @@ Once you've downloaded your certificate, you may also wish to append the [interm
 cat signed_cert.pem intermediate_certs.pem > server.pem
 ```
 
-#### Example: StartSSL.com
+##### Example: StartSSL.com
 
 Another free TLS certificate provider is [StartSSL](https://www.startssl.com).  During online registration, StartSSL will generate a TLS client certificate for you.  This is used for authentication of yourself towards their service.
 
