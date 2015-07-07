@@ -59,6 +59,18 @@ Once you've downloaded your certificate, you may also wish to append the [interm
 cat signed_cert.pem intermediate_certs.pem > server.pem
 ```
 
+#### Example: StartSSL.com
+
+Another free TLS certificate provider is [StartSSL](https://www.startssl.com).  During online registration, StartSSL will generate a TLS client certificate for you.  This is used for authentication of yourself towards their service.
+
+You need to validate that you own the domain you want to request a certificate for.  This is done via the "Validations Wizard", which lets you choose to validate a domain via "Domain Name Validation".  There you enter your domain name, and receive an eMail with a token which you have to enter into the web interface.
+
+Once done, run `csr` to create a key and a certificate signing request.  Go to the "Certificates Wizard", select "Web Server SSL/TLS Certificate", skip the generation of the private key (you already generated one with `csr`), copy and paste your certificate signing request (only the public key of that CSR is used, everything else is ignored), select a domain name, and immediately receive your certificate.
+
+Make sure to also download their intermediate CA certificate, and append them:
+
+`cat intermediate.pem cert.pem > server.pem`
+
 ## Packaging Up an HTTPS Site with Mirage-Seal
 
 Equipped with a private key and a certificate, let's make an HTTPS unikernel!  First, use `opam` to install `mirage-seal`.  If `opam` or other MirageOS tooling aren't set up yet, check out the [instructions for getting started](https://mirage.io/wiki/install).
