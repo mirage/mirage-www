@@ -39,11 +39,7 @@ it starts with an interactive configuration.
 ---------
 
 ```
-opam pin add -n nocrypto https://github.com/mirleft/ocaml-nocrypto.git
-opam pin add -n x509 https://github.com/mirleft/ocaml-x509.git
-opam pin add -n tls https://github.com/mirleft/ocaml-tls.git
-opam pin add -n tlsclient https://github.com/hannesm/tlsclient.git
-opam install tlsclient
+opam pin add tlsclient https://github.com/hannesm/tlsclient.git
 ```
 
 Tlsclient is a TLS client, in the spirit of `openssl s_client`.  Given
