@@ -69,7 +69,9 @@ Once done, run `csr` to create a key and a certificate signing request.  Go to t
 
 Make sure to also download their intermediate CA certificate, and append them:
 
-`cat intermediate.pem cert.pem > server.pem`
+```
+cat intermediate.pem cert.pem > server.pem
+```
 
 ## Packaging Up an HTTPS Site with Mirage-Seal
 
