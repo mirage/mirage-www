@@ -302,12 +302,27 @@ RNG.
 Combination of event timings and built-in RNG does have certain unpredictability
 in the long run, especially if our unikernel is running on a multi-tenant host
 and competing for CPU with other instances. But the entropy in each individual
-event, that is, exact timing of each individual event, is still relatively low:
-we can assume that a determined attacker can guess each individual time up to a
-certain precision we that don't know, but which we can assume is high. Does this
-compromise our RNG?
+event is still relatively low: we can assume that a determined attacker can
+guess each individual time stamp up to a certain precision that we don't know,
+but which is potentially quite high. This creates the following problem: imagine
+that an attacker knows the current PRNG state, and can measure the time of the
+next event, but not with sufficient precision to know the last two bits of the
+timestamp. Thus, our event contains two bits of entropy relative to this
+attacker. If we immediately update the PRNG, the attacker only has to observe
+some of the output and check four candidate states against it, to fully recover
+knowledge about the state and negate our entropy addition. On the other hand, if
+we decide to wait and try to accumulate many more events before updating the
+PRNG, we keep generating a fully predictable sequence in the meantime.
 
-XXXX a paragraph elaborating fortuna's accumulator system which saves the day...
+And here is where Fortuna really shines. It keeps accumulating events in 32
+internal pools in a round-robin fashion. These pools are constantly being
+activated, but with an exponentially decreasing frequency. The pools activated
+too frequently are wasted, but one of them is activated with just the right
+frequency to contain enough entropy to make it prohibitively expensive for an
+attacker to enumerate all the possibilities. This design was
+[shown][eat-your-entropy] to be within a constant factor from optimal entropy
+use, and in particular, scales robustly with the actual amount of entropy
+inherent in the input events.
 
 This leaves us with the problem of boot-time entropy. Not only can the saved
 random seed be reused by cloning the disk image, but in many cases, a MirageOS
