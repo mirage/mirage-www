@@ -16,6 +16,7 @@ mirage/mirage-block-unix
 mirage/mirage-block-volume
 mirage/mirage-block-xen
 mirage/mirage-bootvar-xen
+mirage/mirage-channel
 mirage/mirage-clock
 mirage/mirage-console
 mirage/mirage-decks
@@ -66,3 +67,5 @@ mirleft/ocaml-asn1-combinators
 ocamllabs/ocaml-ctypes
 talex5/mirage-trace-viewer
 magnuss/mirage-mimic
+yomimono/mirage-nat
+yomimono/ocaml-certify
