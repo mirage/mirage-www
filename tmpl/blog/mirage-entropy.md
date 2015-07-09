@@ -101,7 +101,7 @@ secret", for every ECDSA signature they made. This lead to complete compromise
 of the signing keys. Admittedly, this not really a random number generator
 problem in itself, but it is where an RNG malfunction can lead.
 
-These only are some of the most spectacular failures related to random numbers.
+These are only some of the most spectacular failures related to random numbers.
 For example, it is widely known in security circles that RNGs of embedded
 devices tend to be predictable, leading to widespread use of weak key on routers
 and similar equipment, amongst other things. So when implementing a unikernel
@@ -369,3 +369,8 @@ randomness in a unikernel environment.
 We intend to re-evaluate the effectiveness of this design after getting some
 experience with how it works in the wild. To this end, we particularly
 appreciate the community feedback.
+
+You can reach us through our [mailing list][mirageos-devel-web], or hop onto
+`freenode` and join `#mirage`.
+
+[mirageos-devel-web]: http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel
