@@ -16,6 +16,7 @@ mirage/mirage-block-volume
 mirage/mirage-block-xen
 mirage/mirage-bootvar-xen
 mirage/mirage-channel
+mirage/mirage-channel
 mirage/mirage-clock
 mirage/mirage-console
 mirage/mirage-decks
