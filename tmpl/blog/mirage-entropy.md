@@ -3,9 +3,9 @@
 This post gives a bit of background on the *Random Number Generator* (RNG) in the
 new MirageOS 2.5.0.
 
-First we give background about why RNGs are really critical for security, then
+First we give background about why RNGs are really critical for security. Then
 we try to clarify the often-confused concepts of "randomness" and "entropy" as
-used in this context, and finally we explore the challenges of harvesting
+used in this context. Finally, we explore the challenges of harvesting
 good-quality entropy in a unikernel environment.
 
 ## Playing dice
@@ -23,23 +23,24 @@ else.
 
 There are other reasons to use randomness. A number of algorithms require a
 unique value every time they are invoked and badly malfunction when this
-assumption is violated, with random choice being one way to provide a value likely
-to be unique. For example, repeating the [`k`-parameter][dsa-sensitivity] in DSA
-digital signatures compromises the secret key, while reusing a GCM
-[nonce][gcm-security] negates authenticity. Other algorithms are probabilistic,
-in that they generate random values before operating on an input, and then store
-the chosen values in the output, such as the [OAEP][wiki-oaep] padding mode for
-RSA. This is done in order to confuse the relationship between the input and
-the output and defeat a clever attacker who tries to manipulate the input to
-gain knowledge about secrets by looking at the output. Still other algorithms pick
-random numbers to internally change their operation and hide the physical amount
-of time they need to execute, to avoid revealing information about the secrets
-they operate on. This is known as [blinding][wiki-blinding], and is one way to
-counter timing side-channel attacks.
+assumption is violated, with random choice being one way to provide a value
+likely to be unique. For example, repeating the `k`-[parameter][dsa-sensitivity]
+in DSA digital signatures compromises the secret key, while reusing a
+[GCM][wiki-gcm] nonce negates both confidentiality and authenticity. Other
+algorithms are probabilistic, in that they generate random values before
+operating on an input, and then store the chosen values in the output, such as
+the [OAEP][wiki-oaep] padding mode for RSA. This is done in order to confuse the
+relationship between the input and the output and defeat a clever attacker who
+tries to manipulate the input to gain knowledge about secrets by looking at the
+output. Still other algorithms pick random numbers to internally change their
+operation and hide the physical amount of time they need to execute, to avoid
+revealing information about the secrets they operate on. This is known as
+[blinding][wiki-blinding], and is one way to counter timing side-channel
+attacks.
 
 Randomness is therefore quite pervasive in a security context. In fact, many
 cryptographic algorithms are designed under the assumption of a readily
-available source of randomness, termed a [*random oracle*][wiki-random-oracle].
+available source of randomness, termed a *[random oracle][wiki-random-oracle]*.
 The security analysis of those algorithms is conditional on the oracle; we know
 that they have certain security characteristics, like the difficulty of guessing
 the correct message or impersonating somebody, only given an ideal random oracle.
@@ -49,7 +50,7 @@ deterministic, made to behave reproducibly given a known program and starting
 state. How to go about solving this?
 
 [dsa-sensitivity]: https://en.wikipedia.org/wiki/Digital_Signature_Algorithm#Sensitivity
-[gcm-security]: https://en.wikipedia.org/wiki/Galois/Counter_Mode#Security
+[wiki-gcm]: https://en.wikipedia.org/wiki/Galois/Counter_Mode
 [wiki-oaep]: https://en.wikipedia.org/wiki/Optimal_asymmetric_encryption_padding
 [wiki-blinding]: https://en.wikipedia.org/wiki/Blinding_%28cryptography%29
 [wiki-random-oracle]: https://en.wikipedia.org/wiki/Random_oracle
@@ -58,7 +59,7 @@ state. How to go about solving this?
 
 Before taking a look at how we try to solve this problem, let's instead consider
 what happens if we fail to do so. There is even a [Wikipedia
-page][wiki-random-attacks] on this problem, which is a nice starting point. Some
+page][wiki-random-attacks] about this, which is a nice starting point. Some
 of the highlights:
 
 The first public release of Netscape's original SSL, version 2.0, was
@@ -102,8 +103,8 @@ problem in itself, but it is where an RNG malfunction can lead.
 
 These only are some of the most spectacular failures related to random numbers.
 For example, it is widely known in security circles that RNGs of embedded
-devices tend to be predictable, leading for example to widespread use of weak
-key on routers and similar equipment. So when implementing a unikernel
+devices tend to be predictable, leading to widespread use of weak key on routers
+and similar equipment, amongst other things. So when implementing a unikernel
 operating system, you don't want to end up on that Wikipedia page either.
 
 [wiki-random-attacks]: https://en.wikipedia.org/wiki/Random_number_generator_attack
@@ -122,8 +123,8 @@ somehow "dancing around", or being "jiggly" in a sense. If we have a software
 component that keeps producing random outputs, these outputs form a sequence,
 and we hope this to be a [random sequence][wiki-random-sequence].
 
-But such a thing is notoriously difficult to define. The above page opens with
-the following quote:
+But such a thing is [notoriously][xkcd-rng] [difficult][dilbert-rng] to define.
+The above page opens with the following quote:
 
 > A random sequence is a vague notion... in which each term is unpredictable to
 > the uninitiated and whose digits pass a certain number of tests traditional with
@@ -149,9 +150,7 @@ as the de-facto standard for testing random number generators. Here's the
 beginning of a certain sequence that [passes][marsaglia-pi-randomness] the test
 with flying colors:
 
-```
-3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5, 8, 9, 7, 9, 3, 2, 3, 8, 4, 6, 2, 6, 4, 3, 3, 8, 3, ...
-```
+`3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5, 8, 9, 7, 9, 3, 2, 3, 8, 4, 6, 2, 6, 4, 3, 3, 8, 3, ...`
 
 We still would not recommend using digits of `π` as a secret key. We would recommend
 releasing software for everyone to study, which uses that sequence to generate
@@ -196,7 +195,7 @@ output matches the observed sequence. This is how we can quantify a CSPRNG
 unpredictability: it takes trying about half of all the possibilities to guess
 the state.
 
-MirageOS's security stack contains a CSPRNG, a design called [Fortuna][fortuna].
+MirageOS' security stack contains a CSPRNG, a design called [Fortuna][fortuna].
 What it really does, is encrypt the simple sequence `0, 1, 2, 3, ...` with AES
 (AES-CTR) using a secret key. This makes it as resistant to prediction as AES is
 to [known-plaintext attacks][wiki-known-plaintext]. After each output, it
@@ -207,6 +206,8 @@ learns the secret key at some point would need to perform the [preimage
 attack][wiki-preimage-attack] on the hash function to figure out the earlier key
 and reconstruct the earlier outputs.
 
+[xkcd-rng]: https://xkcd.com/221
+[dilbert-rng]: http://dilbert.com/strip/2001-10-25
 [wiki-random-sequence]: https://en.wikipedia.org/wiki/Random_sequence
 [wiki-statistical-randomness]: https://en.wikipedia.org/wiki/Statistical_randomness
 [diehard-web]: http://www.stat.fsu.edu/pub/diehard/
