@@ -127,7 +127,7 @@ module Blog = struct
     [
       { updated    = date (2015, 07, 07, 20, 0);
         authors    = [dkaloper];
-        subject    = "subject";
+        subject    = "Organized chaos: managing randomness";
         body       = "mirage-entropy.md";
         permalink  = "mirage-entropy";
       };

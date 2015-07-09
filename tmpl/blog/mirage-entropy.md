@@ -348,16 +348,23 @@ not as parallel as Intel's, this yields an initial value which varies wildly
 between boots. We use this value to kickstart the PRNG, giving it quick
 divergence, and ensuring that the state is unpredictable from the very start.
 
-While some of our techniques (in particular bootstrapping) need a little more
-exposure before we place our full confidence in them -- and users should
-probably avoid generating long-term private keys in unikernels running on bare
-Xen just yet -- the combination of boostrapping, continuous reseeding, and
-robust accumulation gives us a comprehensive solution to generating randomness
-in a unikernel environment.
-
 [randomness-exposed]: http://www.cs.berkeley.edu/~cthompson/papers/vmm-entropy-report-2011.pdf
 [not-so-random]: http://www.ieee-security.org/TC/SP2014/papers/Not-So-RandomNumbersinVirtualizedLinuxandtheWhirlwindRNG.pdf
 [xentropyd]: https://github.com/mirage/xentropyd
 [eat-your-entropy]: https://eprint.iacr.org/2014/167
 [dual-ec-drgb]: https://en.wikipedia.org/wiki/Dual_EC_DRBG
 [bootstrap-code]: https://github.com/mirage/mirage-entropy/blob/863b48d4e33b43ca31c49c2e8caef4e367fab7b2/lib/entropy_xen.ml#L79
+
+
+## Parting words
+
+While some of our techniques (in particular bootstrapping on ARM) need a little
+more exposure before we place our full confidence in them -- and users should
+probably avoid generating long-term private keys in unikernels running on bare
+Xen just yet -- the combination of boostrapping, continuous reseeding, and
+robust accumulation gives us a hopefully comprehensive solution to generating
+randomness in a unikernel environment.
+
+We intend to re-evaluate the effectiveness of this design after getting some
+experience with how it works in the wild. To this end, we particularly
+appreciate the community feedback.
