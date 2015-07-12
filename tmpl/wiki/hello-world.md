@@ -318,7 +318,7 @@ mirage configure --unix
 make depend
 make
 less static1.ml # the generated filesystem
-make run
+./mir-kv_ro
 mirage configure --xen
 make depend
 make
@@ -478,7 +478,7 @@ before trying this.
 $ cd stackv4
 $ mirage configure --unix
 $ make
-$ sudo make run
+$ ./mir-stackv4
 ```
 
 This Unix application is now listening simultaneously on the local
