@@ -33,7 +33,8 @@ body {
 code {
   font-weight: normal;
   margin-bottom: 1em;
-  font-size: 90%;
+  font-size: 100%;
+  line-height: 1.2;
   word-break: break-all;
   word-wrap: break-word;
 }
