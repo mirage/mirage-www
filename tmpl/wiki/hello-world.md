@@ -574,7 +574,7 @@ address we can then trigger the application logic with some network input from
 
 
 ```
-$ echo -n hello tcp world | nc -n4 -u -w1  192.168.64.5 53
+$ echo -n hello udp world | nc -n4 -u -w1 192.168.64.5 53
 $ echo -n hello tcp world | nc -n4 -w1 192.168.64.5 8080
 ```
 
@@ -583,7 +583,7 @@ then reports the input received over UDP and TCP as previously:
 
 ```
 ARP responding to: who-has 192.168.64.5?
-UDP 192.168.64.1.61367 > 192.168.64.5.53: "hello tcp world"
+UDP 192.168.64.1.61367 > 192.168.64.5.53: "hello udp world"
 ARP: transmitting probe -> 192.168.64.1
 ARP: updating 192.168.64.1 -> 12:dd:b1:3a:68:64
 TCP 192.168.64.1.51631 > _.8080
