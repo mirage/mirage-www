@@ -487,6 +487,8 @@ to set up the networking stack.
   </p>
 </div>
 
+#### Unix / Socket networking
+
 Let's get the network stack compiling on Unix first. On a pre-Yosemite Mac, be
 sure to install the [tuntap](http://tuntaposx.sourceforge.net/) kernel module
 before trying this.
@@ -522,10 +524,79 @@ UDP 127.0.0.1.59406 > 0.0.0.0.53: "hello udp world"
 TCP 127.0.0.1.50997 > _.8080
 read: 15 "hello tcp world"
 ```
+
+#### Unix / MirageOS Stack with DHCP
+
+Next, let's try using the direct MirageOS network stack, assuming you've got a
+DHCP server running:
+
+
+```
+$ cd stackv4
+$ env NET=direct DHCP=true mirage configure --unix
+$ make
+$ sudo ./mir-stackv4
+Netif: connect unknown
+Manager: connect
+Manager: configuring
+DHCP: start discovery
+
+Sending DHCP broadcast (length 552)
+DHCP: start discovery
+
+Sending DHCP broadcast (length 552)
+DHCP response:
+input ciaddr 0.0.0.0 yiaddr 192.168.64.5
+siaddr 192.168.64.1 giaddr 0.0.0.0
+chaddr f2edd241cf3200000000000000000000 sname greyjay.mac.cl.cam.ac.uk file
+DHCP: offer received: 192.168.64.5
+DHCP options: Offer : DNS servers(192.168.64.1), Routers(192.168.64.1), Subnet mask(255.255.255.0), Lease time(85536), Server identifer(192.168.64.1)
+Sending DHCP broadcast (length 552)
+DHCP response:
+input ciaddr 0.0.0.0 yiaddr 192.168.64.5
+siaddr 192.168.64.1 giaddr 0.0.0.0
+chaddr f2edd241cf3200000000000000000000 sname greyjay.mac.cl.cam.ac.uk file
+DHCP: offer received
+IPv4: 192.168.64.5
+Netmask: 255.255.255.0
+Gateways: [192.168.64.1]
+ARP: sending gratuitous from 192.168.64.5
+DHCP offer received and bound to 192.168.64.5 nm 255.255.255.0 gw [192.168.64.1]
+Manager: configuration done
+IP address: 192.168.64.5
+
 ```
 
-Next, let's configure the direct tuntap bridge so that we have a
-route available to it from our machine.
+The application starts up, issues a DHCP request and (eventually) receives a
+response allocating an address -- in this case, `192.168.64.5`. Using that
+address we can then trigger the application logic with some network input from
+`nc(1)` in a separate terminal as before:
+
+
+```
+$ echo -n hello tcp world | nc -n4 -u -w1  192.168.64.5 53
+$ echo -n hello tcp world | nc -n4 -w1 192.168.64.5 8080
+```
+
+The original terminal reports the ARP transactions invoked by the stack, and
+then reports the input received over UDP and TCP as previously:
+
+```
+ARP responding to: who-has 192.168.64.5?
+UDP 192.168.64.1.61367 > 192.168.64.5.53: "hello tcp world"
+ARP: transmitting probe -> 192.168.64.1
+ARP: updating 192.168.64.1 -> 12:dd:b1:3a:68:64
+TCP 192.168.64.1.51631 > _.8080
+read: 15 "hello tcp world"
+```
+
+#### Unix / MirageOS Stack with static IP addresses
+
+__This section is under revision__.
+
+
+Configure the direct tuntap bridge so that we have a route available to it from
+our machine.
 
 ```
 $ sudo ifconfig tap0 10.0.0.1 netmask 255.255.255.0
@@ -543,18 +614,20 @@ our unikernel.  We then test our userspace network stack by pinging
 it, and if that succeeds, the subsequent `telnet` call now retrieves
 the request via the OCaml TCP/IP stack!
 
-At this point, recompiling a Xen unikernel is pretty straightforward.
-The configuration file already disables the socket-based job if a
-Xen compilation is detected, leaving just the OCaml TCP/IP stack.
+#### Xen
+
+At this point, recompiling a Xen unikernel is pretty straightforward. The
+configuration file already disables the socket-based job if a Xen compilation is
+detected, leaving just the OCaml TCP/IP stack.
 
 ```
 $ mirage configure --xen
 $ make
-$ make run
 ```
 
-You will need to configure an appropriate Xen [network bridge](http://wiki.xen.org/wiki/Xen_Networking)
-to connect to this.  Assuming that you have a bridge called `xenbr0`, edit the generated `stackv4.xl`
+You will need to configure an appropriate Xen
+[network bridge](http://wiki.xen.org/wiki/Xen_Networking) to connect to this.
+Assuming that you have a bridge called `xenbr0`, edit the generated `stackv4.xl`
 to have a VIF entry that looks like this:
 
 ```
@@ -568,12 +641,12 @@ vif = ['bridge=xenbr0']
 ```
 
 This tells Xen to bring up the virtual network interface and add it to the
-`xenbr0` bridge with a static `10.0.0.2` IPv4 address.  If you prefer DHCP
-instead, just set `env DHCP="true"`, and rerun `mirage configure --xen`.  You can
+`xenbr0` bridge with a static `10.0.0.2` IPv4 address. If you prefer DHCP
+instead, just set `env DHCP="true"`, and rerun `mirage configure --xen`. You can
 manually inspect the generated `main.ml` file to see what's happening under the
 hood with the functor applications (something that we'll explain further in a
 future tutorial!).
 
 Now that we've covered the basics of configuration, block devices and
-networking, let's get the real MirageOS website up and running with a [networked
-application](/wiki/mirage-www).
+networking, let's get the real MirageOS website up and running with a
+[networked application](/wiki/mirage-www).
