@@ -16,7 +16,6 @@
 # PERFORMANCE OF THIS SOFTWARE.
 #
 
-MIRAGE ?= mirage
 # MODE: unix for Unix executable, xen for Xen unikernel
 MODE   ?= unix
 # FS: crunch for in-memory read-only store, fat for read-write filesystem
@@ -44,7 +43,7 @@ HOST   ?= localhost
 # to make it work with FS=crunch, put the certificate in tls/tls/server.key and the private key in tls/tls/server.pem
 
 # to redirect all http requests to https://somewhereelse.org:
-# REDIRECT = https://somewhereelse.org 
+# REDIRECT = https://somewhereelse.org
 # (redirect must be an http:// or https:// url)
 # if TLS is set but REDIRECT is not, the value of REDIRECT will be assumed to be https://$HOST , with the effect that all http requests will be redirected to https
 
@@ -61,7 +60,7 @@ configure:
 	cd stats && make depend
 	# the make depend in src will crunch the stats into the fs:
 	cd stats && make all
-	$(MIRAGE) configure src/config.ml $(FLAGS) --$(MODE)
+	mirage configure src/config.ml $(FLAGS) --$(MODE)
 
 depend:
 	cd stats && make depend
