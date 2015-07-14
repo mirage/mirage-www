@@ -53,7 +53,7 @@ state. How to go about solving this?
 [wiki-blinding]: https://en.wikipedia.org/wiki/Blinding_%28cryptography%29
 [wiki-random-oracle]: https://en.wikipedia.org/wiki/Random_oracle
 
-## Random failures
+### Random failures
 
 Before taking a look at how we try to solve this problem, let's instead consider
 what happens if we **fail** to do so. There is even a [Wikipedia
@@ -138,9 +138,9 @@ constitutes a purely frequentist definition of randomness. In addition, we want
 the absence of clear patterns between outputs. We don't want the sequence to
 look like `7, 8, 9, 10, ...`, even with a bit of noise, and we
 don't want correlation between outputs. The problem here is that no-one really
-knows what "having patterns" means; it is entirely possible that we simply
-searched for a pattern too simple, and that in fact there is one fully
-explaining the sequence lurking just around the complexity corner.
+knows what "having patterns" means; it is entirely possible that we only
+searched for patterns too simple, and that in fact there is a pattern that fully
+explains the sequence lurking just around the complexity corner.
 
 Nonetheless, there is a well established battery of tests to check statistical
 randomness of RNG outputs, called the [Diehard Tests][diehard-web], and serves
@@ -233,7 +233,7 @@ unpredictability that was contained in the seed.
 
 We often call this quality of unpredictability *entropy*. In a sense, by
 employing an algorithmic generator, we have just shifted the burden of being
-unpredictable around. But now we're cornered and have to search for entropy in
+unpredictable to the beginning. But now we're cornered and have to search for entropy in
 the only place where a computer can find it: in the physical world.
 
 A typical (kernel-level) RNG-system reaches out into the world around it through
