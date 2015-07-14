@@ -9,9 +9,9 @@ actually serve the traffic.
 First, clone the website [source code](https://github.com/mirage/mirage-www):
 
 ```
-git clone git://github.com/mirage/mirage-www
-cd mirage-www/src
-less config.ml
+$ git clone git://github.com/mirage/mirage-www
+$ cd mirage-www/src
+$ cat config.ml
 ```
 
 This `config.ml` is more complex to reflect all the different ways we want to
@@ -59,11 +59,11 @@ for an example of a static IPv4 address).
 
 ### A Unix development workflow
 
-For editing content and working with the website on a day-to-day basis, we
-simply compile it using kernel sockets and a pass-through filesystem. This is
-pretty similar a conventional web server, and means you can edit content using
-your favourite editor (though you must restart the website binary to make edits
-visible).
+For editing content and generally working with the website on a day-to-day
+basis, we simply compile it using kernel sockets and a pass-through filesystem.
+This is pretty similar a conventional web server, and means you can edit content
+using your favourite editor (though you must restart the website binary to make
+edits visible).
 
 First, if you wish to build the site to present the site statistics (garbage
 collection, etc) data, build the JavaScript:
@@ -100,8 +100,10 @@ commands, the website will now be available on `http://localhost/`.
 
 ## Building the direct networking version
 
-Now you can build the Unix unikernel using the direct stack, following much the
-same procedure as the hello world examples.
+Now you can build the Unix unikernel using the direct stack, via a similar
+procedure to the [hello world](/wiki/hello-world) examples.
+
+On Unix with a tuntap device:
 
 ```
 $ cd src
@@ -111,8 +113,9 @@ $ sudo ./mir-www
 ```
 
 This will open a [tap device](http://en.wikipedia.org/wiki/TUN/TAP) device and
-assign itself a default IP of `10.0.0.2/255.255.255.0`. You need to set up your
-routing so that you can see this IP by assigning an IP to the `tap0` interface.
+assign itself a default IP of `10.0.0.2`/`255.255.255.0`. You need to set up
+your routing so that you can see this IP by assigning an IP to the `tap0`
+interface in a separate terminal.
 
 ```
 $ sudo ifconfig tap0 10.0.0.1 255.255.255.0
@@ -125,35 +128,33 @@ unikernel via the OCaml TCP/IP stack! Point your web browser at
 
 ### Serving the site from a FAT filesystem instead
 
-This site won't quite compile to Xen yet.  Despite doing all networking via an
+This site won't quite compile to Xen yet. Despite doing all networking via an
 OCaml TCP/IP stack, we still have a dependency on the Unix filesystem for our
-files.  MirageOS provides a [FAT filesystem](http://github.com/mirage/ocaml-fat)
-which we'll use as an alternative.  Our new `config.ml` will now contain this:
+files. MirageOS provides a [FAT filesystem](http://github.com/mirage/ocaml-fat)
+which we'll use as an alternative. Our new `config.ml` will now contain this:
 
-The FAT filesystem needs to be installed onto a block device, which we assign
-to a Unix file.  The driver for this is provided via *mmap* in the
+The FAT filesystem needs to be installed onto a block device, which we assign to
+a Unix file. The driver for this is provided via *mmap* in the
 [mirage/mirage-block-unix](https://github.com/mirage/mirage-block-unix) module.
 
-Now build the FAT version of the website.  The `config.ml` supplied in the real
-mirage-www repository uses an environment variable to switch to these
+Now build the FAT version of the website. The `config.ml` supplied in the real
+`mirage-www` repository uses an environment variable to switch to these
 variables, so we can quickly try it as follows.
 
 ```
 $ cd src
 $ env FS=fat mirage configure --unix
-$ make depend
 $ make
-$ sudo ./mir-www
-$ sudo ifconfig tap0 10.0.0.1 255.255.255.0
+$ sudo ./mir-www & sudo ifconfig tap0 10.0.0.1 255.255.255.0 && fg
 ```
 
-The `make-fat-images.sh` script uses the `fat` command-line helper installed
-by the `ocaml-fat` package to build the FAT block image for you.
-If you now access the website, it is serving the traffic straight from the
-FAT image you just created, without requiring a Unix filesystem at all!
+The `make-fat-images.sh` script uses the `fat` command-line helper installed by
+the `ocaml-fat` package to build the FAT block image for you. If you now access
+the website, it is serving the traffic straight from the FAT image you just
+created, without requiring a Unix filesystem at all!
 
-You can inspect the resulting FAT images for yourself by using the `fat`
-command line tool, and the `make-fat1-image.sh` script.
+You can inspect the resulting FAT images for yourself by using the `fat` command
+line tool, and the `make-fat1-image.sh` script.
 
 ```
 $ file fat1.img
@@ -170,6 +171,9 @@ $ fat list fat1.img
 /wiki/weekly (DIR)(768 bytes)
 ```
 
+(The details of the file listing may vary if, for example, new posts have been
+added to the site recently.)
+
 ## Building a Xen kernel
 
 We're now ready to build a Xen kernel.  This can use eithr FAT or a builtin
@@ -179,32 +183,32 @@ default, for simplicity's sake.
 ```
 $ cd src
 $ mirage configure --xen
-$ make depend
 $ make
-$ make run
 ```
 
-This will build a static kernel that uses the `ocaml-crunch` tool to convert
-the static website files into an OCaml module that is linked directly into
-the image.  While it of course will not work for very large websites, it's
-just fine for this website (or for configuration files that will never be
-very large).  The advantage of this mode is that you don't need to worry
-about configuring any external block devices for your VM, and boot times are
-much faster as a result.
+This will build a static kernel that uses the `ocaml-crunch` tool to convert the
+static website files into an OCaml module that is linked directly into the
+image. While it of course will not work for very large websites, it's just fine
+for this website (or for configuration files that will never be very large). The
+advantage of this mode is that you don't need to worry about configuring any
+external block devices for your VM, and boot times are much faster as a result.
 
-You can now boot the `mir-www.xen` kernel using `xl` (don't forget to supply
-it a VIF so that the network can work).
+You can now boot the `mir-www.xen` kernel using `sudo xl create -c www.xl` --
+don't forget to edit `www.xl` to supply a VIF first though!
 
 ### Modifying networking to use DHCP or static IP
 
-Chances are that the Xen kernel you just built doesn't have a useful IP
-address, since it was hardcoded to `10.0.0.2`.  You can modify the HTTP driver
-to give it a static IP address, as the [live deployment script](https://github.com/mirage/mirage-www/blob/master/.travis-www.ml) does.
+Chances are that the Xen kernel you just built doesn't have a useful IP address,
+since it was hardcoded to `10.0.0.2`. You can modify the HTTP driver to give it
+a static IP address, as the
+[live deployment script](https://github.com/mirage/mirage-www/blob/master/.travis-www.ml)
+does.
 
-We've shown you the very low-levels of the configuration system in MirageOS here.
-While it's not instantly user-friendly, it's an extremely powerful way of
+We've shown you the very low-levels of the configuration system in MirageOS
+here. While it's not instantly user-friendly, it's an extremely powerful way of
 assembling your own components for your unikernel for whatever specialised
 unikernels you want to build.
 
-We'll talk about the deployment scripts that run the [live
-site](http://openmirage.org) in the [next article](/docs/deploying-via-ci).
+We'll talk about the deployment scripts that run the
+[live site](http://openmirage.org) in the
+[next article](/docs/deploying-via-ci).
