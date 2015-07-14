@@ -1,7 +1,7 @@
 This assumes that you've followed the [Hello World](/wiki/hello-world)
 instructions from earlier and are now familiar with the basic console, block
 device and networking configurations from the
-[mirage-skeleton](https://github.com/mirage/mirage-skeleton) repository.  To
+[mirage-skeleton](https://github.com/mirage/mirage-skeleton) repository. To
 build the live MirageOS website, we'll need several device drivers: two block
 devices for the static HTML content and the templates, and a network device to
 actually serve the traffic.
@@ -14,72 +14,104 @@ cd mirage-www/src
 less config.ml
 ```
 
-This `config.ml` is more complex to reflect all the different ways we want
-to statically build the webite, but it also does a lot more!  We'll walk through it step by step.
+This `config.ml` is more complex to reflect all the different ways we want to
+statically build the website, but it also does a lot more! We'll walk through it
+step by step.
 
 ## Building a Unix version
 
-The `src/config.ml` takes its configuration variables from some environment variables,
-which can be supplied manually or provided via the `Makefile`:
+The `src/config.ml` takes its configuration variables from some environment
+variables, which can be supplied manually or provided via the `Makefile`:
 
 ```
-MIRAGE ?= mirage
-MODE ?= unix
-FS ?= fat
-NET ?= direct
-DHCP ?=
-
+MODE   ?= unix
+FS     ?= crunch
+NET    ?= direct
+XENIMG ?= www
+HOST   ?= localhost
 ```
 
 These `Makefile` variables do the following:
+* `MODE` is either `unix` or `xen`, selecting the backend you're compiling for.
+* `FS` is either `fat` or `crunch`, depending on if you want to use an external
+  block device or simply compile the website contents directly into the `mirage`
+  binary.
+* `NET` is either `socket` or `direct`, selecting whether you wish to use the
+  host-local network stack, or the MirageOS network stack respectively. Note
+  that building for `MODE=xen` implies `NET=direct`.
+* `XENIMG` sets the name of the built Xen VM image and configuration.
+* `HOST` sets the root domain for the site, to which links are relative.
 
-* `MIRAGE` set the location of the `mirage` binary (normally you
-  don't need to override this).
-* `MODE` is either `unix` or `xen` depending on what backend you're compiling for.
-* `FS` is either `fat` or `crunch`, depending on if you want to use an external block device or simply compile the website contents directly into the `mirage` binary.
-* `DHCP` is either blank or set to any value (which is considered `true`). Disabling DHCP assumes a development IP address of `10.0.0.2`, although this can be overridden by editing the `config.ml` (see the [live website configuration](https://github.com/mirage/mirage-www/blob/master/.travis-www.ml) for an example of a static IPv4 address).
+To configure the network, the following further variables can be set:
++ `DHCP` is either `false` (or blank) or `true`, specifying whether the
+  unikernel should acquire address information via DHCP on startup.
++ (`IP`,`NETMASK`,`GATEWAYS`) indicate static IP configuration and should be set
+  to the desired IP address, the netmask and a `:`-separated list of gateways.
++ `TLS` is either `false` or `true` (default: `false`).
++ `REDIRECT` is set to the `https` target for all `http` requests. If `TLS` is
+  set but `REDIRECT` is not, then `REDIRECT=https://$HOST` is assumed.
+
+If neither `DHCP` nor all of `IP`, `NETMASK` and `GATEWAYS` are set, then
+`IP="10.0.0.2"`, `NETMASK="255.255.255.0"` and `GATEWAYS="10.0.0.1"` are
+assumed. This can be overridden by editing the `config.ml` (see the
+[live website configuration](https://github.com/mirage/mirage-www/blob/master/.travis.yml)
+for an example of a static IPv4 address).
 
 ### A Unix development workflow
 
-For editing content and working with the website on a day-to-day basis, we can
-just compile it to run using kernel sockets and a pass-through filesystem.  This
-is pretty similar a conventional web server, and means you can edit content
-using your favourite editor.
+For editing content and working with the website on a day-to-day basis, we
+simply compile it using kernel sockets and a pass-through filesystem. This is
+pretty similar a conventional web server, and means you can edit content using
+your favourite editor (though you must restart the website binary to make edits
+visible).
+
+First, if you wish to build the site to present the site statistics (garbage
+collection, etc) data, build the JavaScript:
+
+```
+cd stats && make depend build
+```
+
+Then configure and build the website itself:
 
 ```
 $ cd src
 $ env NET=socket FS=crunch mirage configure --unix
-$ make depend
 $ make
-$ make run
 ```
 
-Alternatively you can use the toplevel `Makefile` to do this directly:
+Alternatively you can use the toplevel `Makefile` to achieve both the above
+steps:
 
 ```
-$ make NET=socket FS=crunch
-$ make run
+$ make NET=socket FS=crunch configure
+$ make build
+```
+
+Finally, run the website application:
+
+```
+$ sudo ./mir-www
 ```
 
 For the rest of the tutorial, we'll call `mirage` directly rather than use the
-`Makefile`, as this makes the tools usage clearer.  If you run the above
+`Makefile`, as this makes the tools usage clearer. If you run the above
 commands, the website will now be available on `http://localhost/`.
 
 ## Building the direct networking version
 
-Now you can build the Unix unikernel using the direct stack, following much the same procedure
-as the hello world examples.
+Now you can build the Unix unikernel using the direct stack, following much the
+same procedure as the hello world examples.
 
 ```
 $ cd src
 $ env NET=direct mirage configure --unix
-$ make depend
 $ make
 $ sudo ./mir-www
 ```
 
 This will open a [tap device](http://en.wikipedia.org/wiki/TUN/TAP) device and
-assign itself a default IP of `10.0.0.2/255.255.255.0`.  You need to set up your
+assign itself a default IP of `10.0.0.2/255.255.255.0`. You need to set up your
 routing so that you can see this IP by assigning an IP to the `tap0` interface.
 
 ```
@@ -88,8 +120,8 @@ $ ping 10.0.0.2
 ```
 
 If you see ping responses, then you are now communicating with the MirageOS
-unikernel via the OCaml TCP/IP stack!  Point your web browser at `http://10.0.0.2`
-and you should be able to surf this website too.
+unikernel via the OCaml TCP/IP stack! Point your web browser at
+`http://10.0.0.2` and you should be able to surf this website too.
 
 ### Serving the site from a FAT filesystem instead
 
