@@ -829,7 +829,7 @@ ensure we have a route to it. Thus:
 
 ```
 $ cd stackv4
-$ env NET=direct DHCP=true mirage configure --unix
+$ env NET=direct DHCP=false mirage configure --unix
 $ make
 $ sudo ./mir-stackv4
 Netif: plugging into tap0 with mac c2:9d:56:19:d7:2c
