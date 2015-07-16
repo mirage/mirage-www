@@ -115,7 +115,7 @@ $ mirage configure --unix
 
 `mirage configure` generates a `Makefile` with all the build rules included from
 evaluating the configuration file, and a `main.ml` that represents the entry
-point of your unikernel. The `configure` step should ensure all external nd OPAM
+point of your unikernel. The `configure` step should ensure all external OPAM
 dependencies are installed, but in case not, execute `make depend` to check and
 install if any are missing.
 
