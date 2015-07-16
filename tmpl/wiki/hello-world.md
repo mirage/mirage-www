@@ -713,9 +713,8 @@ to set up the networking stack.
 
 #### Unix / Socket networking
 
-Let's get the network stack compiling on Unix first. On a pre-Yosemite Mac, be
-sure to install the [tuntap](http://tuntaposx.sourceforge.net/) kernel module
-before trying this.
+Let's get the network stack compiling using the standard Unix sockets APIs
+first.
 
 ```
 $ cd stackv4
@@ -751,8 +750,11 @@ read: 15 "hello tcp world"
 
 #### Unix / MirageOS Stack with DHCP
 
-Next, let's try using the direct MirageOS network stack, assuming you've got a
-DHCP server running:
+Next, let's try using the direct MirageOS network stack. On a pre-Yosemite Mac,
+be sure to install the [tuntap](http://tuntaposx.sourceforge.net/) kernel module
+before trying this.
+
+Assuming you've got a DHCP server running:
 
 
 ```
