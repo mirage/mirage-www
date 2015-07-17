@@ -8,7 +8,7 @@ binary
 repository.
 
 This all works by installing a fresh MirageOS installation for each change
-committed to the website, and rebuilding the entire website kernel from scratch
+committed to the website, and rebuilding the entire website unikernel from scratch
 (a process that takes around 5-7 minutes without any parallel building). We use
 the free [Travis Continuous Integration](http://travis-ci.org) for automating
 all of this, so that we don't need to host any servers to go from pull request
@@ -121,8 +121,9 @@ and builds it; and finally fetches, builds and executes
 [travis_mirage.ml](https://github.com/ocaml/ocaml-travisci-skeleton/blob/master/travis_mirage.ml)
 with the environment variables defined in the
 [.travis.yml](https://github.com/mirage/mirage-www/.travis.yml) file. This piece
-of OCaml sets the environment to use OPAM, installs any requested pins, and then
-executes the following commands:
+of OCaml sets the environment to use OPAM, installs any pins requested by
+setting the variable `PINS` in the `.travis.yml` file (none in this case), and
+then executes the following commands:
 
 ```
 eval $(opam config env)
@@ -227,7 +228,7 @@ straightforward. We install `travis-senv` and use it to retrieve our SSH
 deployment key (which is stored encrypted in the `.travis.yml` file, and can
 only be decrypted by the Travis infrastructure). Once that's installed, we
 initialise `git` and clone the deployment repository. We then compress our
-output kernel, update the `xen/latest` pointer to refer to the new kernel,
+output unikernel, update the `xen/latest` pointer to refer to the new unikernel,
 commit everything, and push the results back.
 
 ### Updating the live website
@@ -236,8 +237,9 @@ The live website runs on a Xen machine which has a crontab entry in dom0 that
 polls the
 [mirage/mirage-www-deployment](http://github.com/mirage/mirage-www-deployment)
 repository for new content via `git pull`. When new content __is__ obtained, a
-Git [`merge-hook`](https://github.com/mirage/mirage-www-deployment) is invoked
-which stops the current unikernel and boots the newly updated latest version.
+Git [`post-merge.hook`](http://git-scm.com/docs/githooks#_post_merge) is invoked
+which
+[stops the current unikernel and boots the newly updated latest version](https://github.com/mirage/mirage-www-deployment/blob/master/scripts/post-merge.hook).
 This machine doesn't need to have any of the MirageOS tools installed, and if
 there's an error in an updated website, we can simply revert back to a previous
 as previous binary revisions of the site remain in the deployment repository.

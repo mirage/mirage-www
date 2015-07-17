@@ -253,8 +253,8 @@ As you can see, after some initial boot messages have been displayed as Xen
 boots the VM, you see the same output on the Xen console as you did on the UNIX
 version you ran earlier. If you need more help, or would like to see how to boot
 your Xen VM on Amazon's EC2, [click here](/wiki/xen-boot). Finally, if you are
-using an ARM processor, such as the CubieBoard, you will need some extra OPAM
-package pins that can be found
+using an ARM processor, such as the CubieBoard, you should follow extra
+ARM-specific documentation found
 [here](http://openmirage.org/blog/introducing-xen-minios-arm).
 
 ### Step 2: Getting a block device
@@ -548,7 +548,7 @@ YES!
 YES!
 ```
 
-Of course, this scheme doesn't really scale up to large website, and we often
+Of course, this scheme doesn't really scale up to large websites, and we often
 need a more elaborate configuration for larger datasets depending on how we are
 deploying our unikernels (i.e. for development or production). Switch to the
 [kv_ro/](https://github.com/mirage/mirage-skeleton/tree/master/kv_ro) directory,
