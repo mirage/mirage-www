@@ -190,8 +190,10 @@ on_crash = 'preserve'
 # vif = [ 'mac=c0:ff:ee:c0:ff:ee,bridge=br0' ]
 ```
 
-Edit this to customise the VM name or memory, and then run it (if you're still
-on an old release of Xen you may need to swap the `xl` command for `xm`):
+`xl` replaced `xm` as the default in Xen 4.2, with `xm` being removed completely
+in Xen 4.5. If you find that you're running the `xend` daemon, then you should
+use the `xm` command. Edit this to customise the VM name or memory, and then run
+it:
 
 ```
 $ sudo xl create -c console.xl
