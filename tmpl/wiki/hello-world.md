@@ -63,9 +63,7 @@ let main =
   foreign "Unikernel.Main" (console @-> job)
 
 let () =
-  register "console" [
-    main $ default_console
-  ]
+  register "console" [main $ default_console]
 ```
 
 The configuration file is a normal OCaml module that calls `register` to create
@@ -280,15 +278,14 @@ onto local files. The `config.ml` for the block example looks like this:
 ```
 open Mirage
 
+let main = foreign "Unikernel.Main" (console @-> block @-> job)
+
+let img = match get_mode () with
+  | `Xen -> block_of_file "xvda1"
+  | `Unix | `MacOSX -> block_of_file "disk.img"
+
 let () =
-  let main = foreign "Unikernel.Block_test" (console @-> block @-> job) in
-  let img = match get_mode () with
-    | `Xen -> block_of_file "xvda1"
-    | `Unix | `MacOSX -> block_of_file "disk.img"
-  in
-  register "block_test" [
-    main $ default_console $ img
-  ]
+  register "block_test" [main $ default_console $ img]
 ```
 
 The `main` binding looks much like the earlier console example, except for the
@@ -891,7 +888,6 @@ ARP: timeout 10.0.0.1
 
 (The last line will be displayed after a delay dependent on the ARP timeout
 setting.)
-
 
 #### Xen
 
