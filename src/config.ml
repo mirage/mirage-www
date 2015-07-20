@@ -40,7 +40,7 @@ let split c s =
 let ips_of_env x = split ':' x |> List.map Ipaddr.V4.of_string_exn
 let bool_of_env = function "1" | "true" | "yes" -> true | _ -> false
 let socket_of_env = function "socket" -> `Socket | _ -> `Direct
-let fat_of_env = function "fat" -> `Fat | _ -> `Crunch
+let fat_of_env = function "fat" -> `Fat | "archive" -> `Archive | _ -> `Crunch
 let opt_string_of_env x = Some x
 let string_of_env x = x
 
@@ -88,6 +88,7 @@ let mkfs fs path =
   match fs, get_mode () with
   | `Fat   , `Xen -> incr blocks; fat_of_device (51711 + !blocks)
   | `Fat   , _    -> fat_of_files path
+  | `Archive, _   -> archive_of_files ~dir:path ()
   | `Crunch, `Xen -> crunch path
   | `Crunch, _    -> direct_kv_ro path
 
