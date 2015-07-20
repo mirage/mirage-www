@@ -14,6 +14,13 @@ The remainder of this guide covers:
 * Running a Mini-OS DomU
 
 
+
+## Warning: OUT OF DATE
+
+These instructions no longer work, as some of the Git branches referred to no longer exist. Instead, please look at the scripts in the [mirage/xen-arm-builder](https://github.com/mirage/xen-arm-builder) repository.
+They are based on these instructions, but are kept up-to-date.
+
+
 ## Glossary
 
 [ARMv7](http://en.wikipedia.org/wiki/ARM_architecture)
@@ -102,6 +109,8 @@ Xen needs to be started in non-secure HYP mode. Use this U-Boot Git repository:
     git clone git://github.com/jwrdegoede/u-boot-sunxi.git
     cd u-boot-sunxi
     git checkout -b sunxi-next origin/sunxi-next
+
+**WARNING** This branch no longer exists.
 
 Note: only the "sunxi-next" branch has the required hypervisor support; DO NOT use the "sunxi" branch.
 
