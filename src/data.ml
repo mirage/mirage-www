@@ -125,12 +125,14 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      (*
       { updated    = date (2015, 07, 07, 20, 0);
         authors    = [dkaloper];
         subject    = "Organized chaos: managing randomness";
         body       = "mirage-entropy.md";
         permalink  = "mirage-entropy";
       };
+      *)
 
       { updated    = date (2015, 07, 07, 12, 0);
         authors    = [yomimono; hannes];
