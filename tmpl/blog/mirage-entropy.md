@@ -16,8 +16,8 @@ two TLS endpoints. Proof of the knowledge of a particular secret can be
 used to verify the identity of someone on the Internet, as in the case of
 verifying the possession of the secret RSA key associated with an X.509
 certificate. As an attacker guessing a secret can have disastrous consequences,
-it must be chosen in a manner that is not realistically predictable by anyone
-else.
+it must be chosen in a manner that is realistically unpredictable by anyone
+else -- we need it to be *random*.
 
 There are other reasons to use randomness. A number of algorithms require a
 unique value every time they are invoked and badly malfunction when this
@@ -62,13 +62,13 @@ of the highlights:
 
 The first public release of Netscape's original SSL, version 2.0, was
 [broken][ian-goldberg-netscape] several months after its release. The weakness
-was in seeding the generator with the current time, and process ID and parent
+was in initializing the generator with the current time, the process ID and the parent
 process ID of the browser. The time stamp can be guessed to a certain precision,
 leaving only its sub-second part and the two PIDs unknown. This relatively small
 unknown space of initial values can be brute-forced.
 
 About a decade later, Debian patched their version of OpenSSL and reduced RNG
-seeding to the current PID. As a result, only 32767 random sequences were
+initialization to the current PID. As a result, only 32767 random sequences were
 possible. This flaw went undetected for two years and became known as the
 [Debian fiasco][debian-fiasco]. Personal reports indicate that some of the 32767
 distinct secret keys that could be generated with OpenSSL on a Debian system
@@ -84,10 +84,10 @@ affected keys, a technique which produces
 [spectacular][factoring-rsa-smartcards] [results][mining-your-ps-and-qs].
 
 Recently, a bitcoin application for Android was
-[discovered][reddit-bitcoin-post] to be downloading its random seed from a
+[discovered][reddit-bitcoin-post] to be downloading its random initial value from a
 [website](http://www.random.org). It wasn't even necessary to intercept this
 unencrypted traffic, because the website started serving a redirect page and the
-Android application was left seeding its RNG with the text of the redirection
+Android application was left initializing its RNG with the text of the redirection
 message. It therefore started
 generating the same private ECDSA key and the associated bitcoin address for
 every affected user, an issue which reportedly [cost][thereg-bitcoin] some users
@@ -96,8 +96,8 @@ their bitcoins.
 Playstation 3 game signatures can be forged. Sony [reused][schneier-sony] a
 single `k`-parameter, which is supposed to be "unique, unpredictable and
 secret", for every ECDSA signature they made. This lead to complete compromise
-of the signing keys. Admittedly, this not really a random number generator
-problem in itself, but it is where an RNG malfunction can lead.
+of the signing keys. Admittedly, this is not really an RNG
+problem in itself, but it shows where such a malfunction can lead.
 
 These are only some of the most spectacular failures related to random numbers.
 For example, it is widely known in security circles that RNGs of embedded
@@ -133,7 +133,7 @@ randomness][wiki-statistical-randomness]. We require each output, taken
 independently, to come from the same distribution (and in fact we want it to be
 the uniform distribution). That is, when we take a long sequence of outputs, we
 want them to cover the entire range, we want them to cover it evenly, and we
-want the evenness to increase as the number of outputs increases — which
+want the evenness to increase as the number of outputs increases -- which
 constitutes a purely frequentist definition of randomness. In addition, we want
 the absence of clear patterns between outputs. We don't want the sequence to
 look like `7, 8, 9, 10, ...`, even with a bit of noise, and we
@@ -225,11 +225,13 @@ and reconstruct the earlier outputs.
 
 Although resistant to prediction based solely on the outputs, just like any
 other software RNG, Fortuna is still just a deterministic PRNG. Its entire
-output is as unpredictable as its initial seed. From the information
-perspective, a PRNG can only stretch what was unpredictable about its initial
-seed into an equally unpredictable sequence. The best PRNGs do not give out more
-hints about their starting position, but they can never out-race the amount of
-unpredictability that was contained in the seed.
+output is as unpredictable as its initial value, which we call the *seed*. From
+the information perspective, a PRNG can only transform what was unpredictable
+about its initial seed into an equally unpredictable sequence. In other words,
+we typically use PRNGs to stretch the unpredictability inherent in the initial
+seed into an infinite stream. The best PRNGs do not give out more hints about
+their starting position, but they can never out-race the amount of
+unpredictability that they started with.
 
 We often call this quality of unpredictability *entropy*. In a sense, by
 employing an algorithmic generator, we have just shifted the burden of being
@@ -244,7 +246,7 @@ network packets arriving at an interface, of the hard drive asserting interrupts
 to signal the end of a DMA transfer, and the like. They are combined together
 and used to seed the internal (CS-)PRNG.
 
-In fact, describing them as a "seed" from which the entire sequence is unfolded
+In fact, describing them as a *seed* from which the entire sequence is unfolded
 is a deliberate oversimplification: what really happens is that the PRNG is
 continuously fed with random events, which change its state as they arrive, and
 the requests for random bytes are served from the PRNG. The PRNG is used to
@@ -264,7 +266,7 @@ This is a known problem and [various][randomness-exposed]
 environments have been published. The problem is especially severe right after
 boot. The gradual trickle of unpredictability from hardware events slowly moves
 the pseudo-random stream into an increasingly unpredictable state,
-but at the very start, it
+but at the very start, it still
 tends to be fairly predictable. Typically, operating systems store some of their
 PRNG output on shutdown and use it to quickly reseed their PRNG on the next
 boot, in order to reuse whatever entropy was contained in its state.
