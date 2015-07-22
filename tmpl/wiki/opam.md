@@ -1,6 +1,6 @@
 ### Maintenance
 
-The `opam upgrade` command will refresh all your remote repositories, and recompile any outdated libraries. You will need to run this once per compiler installed, so switch between them.
+The `opam update` command will refresh all your remote repositories. The `opam upgrade` command will recompile any outdated libraries. You will need to run this once per compiler installed, so switch between them.
 
 If you run into any problems with OPAM, then first ask on the MirageOS [mailing list](/about), or report a [bug](http://github.com/OCamlPro/opam/issues). It is safe to delete `~/.opam` and just start the installation again if you run into an unrecoverable situation, as OPAM doesn't use any files outside of that space.
 
