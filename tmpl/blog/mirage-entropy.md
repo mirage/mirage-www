@@ -17,7 +17,7 @@ used to verify the identity of someone on the Internet, as in the case of
 verifying the possession of the secret RSA key associated with an X.509
 certificate. As an attacker guessing a secret can have disastrous consequences,
 it must be chosen in a manner that is realistically unpredictable by anyone
-else -- we need it to be *random*.
+else — we need it to be *random*.
 
 There are other reasons to use randomness. A number of algorithms require a
 unique value every time they are invoked and badly malfunction when this
@@ -62,7 +62,7 @@ of the highlights:
 
 The first public release of Netscape's original SSL, version 2.0, was
 [broken][ian-goldberg-netscape] several months after its release. The weakness
-was in initializing the generator with the current time, the process ID and the parent
+was in initializing the RNG with the current time, the process ID and the parent
 process ID of the browser. The time stamp can be guessed to a certain precision,
 leaving only its sub-second part and the two PIDs unknown. This relatively small
 unknown space of initial values can be brute-forced.
@@ -122,7 +122,7 @@ component that keeps producing random outputs, these outputs form a sequence,
 and we hope this to be a [random sequence][wiki-random-sequence].
 
 But such a thing is [notoriously][xkcd-rng] [difficult][dilbert-rng] to define.
-The above page opens with the following quote:
+The above linked page opens with the following quote:
 
 > A random sequence is a vague notion... in which each term is unpredictable to
 > the uninitiated and whose digits pass a certain number of tests traditional with
@@ -133,7 +133,7 @@ randomness][wiki-statistical-randomness]. We require each output, taken
 independently, to come from the same distribution (and in fact we want it to be
 the uniform distribution). That is, when we take a long sequence of outputs, we
 want them to cover the entire range, we want them to cover it evenly, and we
-want the evenness to increase as the number of outputs increases -- which
+want the evenness to increase as the number of outputs increases — which
 constitutes a purely frequentist definition of randomness. In addition, we want
 the absence of clear patterns between outputs. We don't want the sequence to
 look like `7, 8, 9, 10, ...`, even with a bit of noise, and we
@@ -376,3 +376,10 @@ you can reach us through our [mailing list][mirageos-devel-web], or hop onto
 `freenode` and join `#mirage`.
 
 [mirageos-devel-web]: http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel
+
+*Thanks to [Daniel][], [Mort][] and [Amir][] for their comments on earlier
+drafts.*
+
+[Amir]: http://amirchaudhry.com
+[Mort]: http://mort.io
+[Daniel]: http://erratique.ch
