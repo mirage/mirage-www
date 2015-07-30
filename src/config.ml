@@ -77,16 +77,9 @@ let host = get "HOST" ~default:None opt_string_of_env
 let redirect = get "REDIRECT" ~default:None opt_string_of_env
 let image = get "XENIMG" ~default:"www" string_of_env
 
-let blocks = ref 0
 let mkfs fs path =
   let fat_of_files dir = kv_ro_of_fs (fat_of_files ~dir ()) in
-  let fat_of_device device =
-    let block = block_of_file (string_of_int device) in
-    let fat   = fat block in
-    kv_ro_of_fs fat
-  in
   match fs, get_mode () with
-  | `Fat   , `Xen -> incr blocks; fat_of_device (51711 + !blocks)
   | `Fat   , _    -> fat_of_files path
   | `Archive, _   -> archive_of_files ~dir:path ()
   | `Crunch, `Xen -> crunch path
