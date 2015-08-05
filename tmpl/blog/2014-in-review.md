@@ -100,7 +100,7 @@ Building Jitsu and hitting our goal of extremely low latency management of unike
 - [Dave Scott](http://dave.recoil.org) and I built out the [vchan](https://github.com/mirage/) shared memory transport that supports low-latency communiction between unikernels and/or Unix processes.  This is rapidly heading into a Plan9-like model, with the additional twist of using Git instead of a flat filesystem hierarchy as its coordination basis.
 - [Amir Chaudhry](http://amirchaudhry.com/) and [Richard Mortier](http://mort.io) documented the Git-based (and eventually Irmin-based) workflow behind managing the unikernels themselves, so that they can easily be deployed to distance ARM devices simply by running `git pull`.  You can read more about this in his [From Jekyll to Unikernels](http://amirchaudhry.com/from-jekyll-to-unikernel-in-fifty-lines/) post.
 
-All of this work was hastily crammed into a [USENIX NSDI 2015](https://www.usenix.org/conference/nsdi15/call-for-papers) paper that got submitted at 4am on a bright autumn morning.  We'll put the preprint available when it's ready in January, along with a blog post describing how you can deploy this infrastructure for yourself.
+All of this work was hastily crammed into a [USENIX NSDI 2015](https://www.usenix.org/conference/nsdi15/call-for-papers) paper that got submitted at 4am on a bright autumn morning.  [Here is the published paper](https://www.usenix.org/system/files/conference/nsdi15/nsdi15-paper-madhavapeddy.pdf), and we're planning a blog post describing how you can deploy this infrastructure for yourself.
 
 ### Community
 
