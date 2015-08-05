@@ -34,7 +34,7 @@ mirage/mirage-skeleton
 mirage/mirage-tc
 mirage/mirage-tcpip
 mirage/mirage-vagrant-vms
-mirage/mirage-vnetif
+MagnusS/mirage-vnetif
 mirage/mirage-www
 mirage/mirage-xen-minios
 mirage/ocaml-cohttp
