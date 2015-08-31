@@ -54,6 +54,8 @@ MirageOS is in beta stage and the infrastructure you see here is self-hosting. T
 *Calls take place every two weeks and are announced on the
 [mailing list](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel).*
 
+* Weekly call [2015-08-26](/wiki/weekly-2015-08-26) on QA & Test, Rust support,
+  Irmin API changes, previous minutes, and running Jitsu on `monk`.
 * Weekly call [2015-06-03](/wiki/weekly-2015-06-03) on TLS releases, TCP bug-squishing and best-practice docs.
 * Weekly call [2015-05-20](/wiki/weekly-2015-05-20) on TLS release progress, Mirage.io, Jitsu and Irmin.
 * Weekly call [2015-05-06](/wiki/weekly-2015-05-06) on TLS integration, Irmin-in-browser and MirageOS Hangout.
