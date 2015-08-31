@@ -70,9 +70,6 @@ build:
 	cd stats && make build
 	cd src && make build
 
-run:
-	cd src && sudo make run
-
 clean:
 	cd src && make clean
 	cd stats && make clean
