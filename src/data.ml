@@ -635,6 +635,14 @@ module Links = struct
   }
 
   let entries = [
+    { id = "talk-big-techday8";
+      uri = Uri.of_string
+              "http://www.techcast.com/events/bigtechday8/salvator-1130/";
+      title = "Nymote: Git your own cloud here";
+      date = day(2015,06,12);
+      stream = talk;
+    };
+
     { id="tls-podcast-ohm";
       uri=Uri.of_string "http://monoxyd.de/20150408-ohm-008-ohne-heftige-mangel";
       title="(german) OHM #008 – Ohne Heftige Mängel: TLS und dessen Probleme; robuste Implementierung von Sicherheitsprotokollen; OCaml-TLS und MirageOS";
