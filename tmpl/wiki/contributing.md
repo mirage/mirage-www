@@ -22,7 +22,7 @@ The mechanics for submitting a pull request are as follows:
 * [Set up a free GitHub account](https://github.com/signup).
 * [Fork](https://help.github.com/articles/fork-a-repo) the repository to which you intend to commit your code.  Forexample, a patch to the TCP/IP stack in MirageOS should fork [mirage-tcpip](http://www.github.com/mirage/mirage-tcpip), and a patch correcting a problem with the website's documentation should fork [mirage-www](http://www.github.com/mirage/mirage-www).
 * Make a [branch](https://github.com/blog/1377-create-and-delete-branches) with a descriptive name for the changes you plan to make.
-* If you are making code changes, you may wish to point `opam` to your local repository for that code with `opam pin`.  [More details on using opam when developing are available at the `opam` site.](https://opam.ocaml.org/doc/Developing.html)
+* If you are making code changes, you may wish to point `opam` to your local repository for that code with `opam pin`.  [More details on using opam when developing are available at the `opam` site.](https://opam.ocaml.org/doc/Packaging.html)
 * Make changes in your local repository.  [Here are some simple guidelines on commit messages.](https://wiki.gnome.org/Git/CommitMessages)
 * When you're satisfied that your changes are ready to be submitted, [push your changes to GitHub](https://help.github.com/articles/pushing-to-a-remote).
 * The web view for your repository should now have a button labeled `submit pull request`, where you can view the summary of your change and request that it be merged into the main repository.
