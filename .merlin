@@ -1,6 +1,5 @@
 PKG cohttp cow cowabloga cstruct lwt mirage mirage-unix mirage-http
 PKG mirage-net-unix mirage-clock-unix mirage-console.unix mirage-fs-unix
 
-B src/_build/
-B src/build/**
+B src/_build/**
 S src/
