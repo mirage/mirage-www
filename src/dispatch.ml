@@ -34,8 +34,9 @@ let domain_of_string x =
   scheme, host
 
 module Make
+    (S: Cohttp_lwt.Server)
     (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
-    (S: Cohttp_lwt.Server) (Clock: V1.CLOCK)
+    (Clock: V1.CLOCK)
 = struct
 
   type dispatch = Types.path -> Types.cowabloga Lwt.t
@@ -217,7 +218,7 @@ module Make
     in
     S.make ~callback ~conn_closed ()
 
-  let start c fs tmpl http () =
+  let start http c fs tmpl () =
     let host = Key_gen.host () in
     let red = Key_gen.redirect () in
     Stats.start ~sleep:OS.Time.sleep ~time:Clock.time;

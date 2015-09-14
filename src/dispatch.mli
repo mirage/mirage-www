@@ -18,10 +18,10 @@
 
 (** The HTTP dispatcher. *)
 module Make
+    (S: Cohttp_lwt.Server)
     (C: V1_LWT.CONSOLE)
     (FS: V1_LWT.KV_RO)
     (TMPL: V1_LWT.KV_RO)
-    (S: Cohttp_lwt.Server)
     (Clock: V1.CLOCK) :
 sig
 
@@ -49,7 +49,7 @@ sig
   type s = Conduit_mirage.server -> S.t -> unit Lwt.t
   (** The type for HTTP callbacks. *)
 
-  val start: C.t -> FS.t -> TMPL.t -> s -> unit -> unit Lwt.t
+  val start: s -> C.t -> FS.t -> TMPL.t -> unit -> unit Lwt.t
   (** The HTTP server's start function. *)
 
 end
