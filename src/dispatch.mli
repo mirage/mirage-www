@@ -16,13 +16,13 @@
 
 (** HTTP dispatcher *)
 
-(** The signature for HTTP dispatcher. *)
-module type S =
-  functor (C: V1_LWT.CONSOLE) ->
-  functor (FS: V1_LWT.KV_RO) ->
-  functor (TMPL: V1_LWT.KV_RO) ->
-  functor (S: Cohttp_lwt.Server) ->
-  functor (Clock: V1.CLOCK) ->
+(** The HTTP dispatcher. *)
+module Make
+    (C: V1_LWT.CONSOLE)
+    (FS: V1_LWT.KV_RO)
+    (TMPL: V1_LWT.KV_RO)
+    (S: Cohttp_lwt.Server)
+    (Clock: V1.CLOCK) :
 sig
 
   type dispatch = Types.path -> Types.cowabloga Lwt.t
@@ -49,34 +49,10 @@ sig
   type s = Conduit_mirage.server -> S.t -> unit Lwt.t
   (** The type for HTTP callbacks. *)
 
-  val start: ?host:string -> ?redirect:string ->
-    C.t -> FS.t -> TMPL.t -> s -> unit -> unit Lwt.t
-  (** The HTTP server's start function.
-
-      {ul
-      {- If [host] is not set, use an implementation specific default}
-      {- If [redirect] is set, all the paths will be redirected to the
-         given domain}} *)
+  val start: C.t -> FS.t -> TMPL.t -> s -> unit -> unit Lwt.t
+  (** The HTTP server's start function. *)
 
 end
-
-module type Config = sig
-  (** Website configuration. *)
-
-  val host: string option
-  (** Configure the host name. *)
-
-  val redirect: string option
-  (** If set, redirect all paths to the the given domain. *)
-end
-
-module Make_localhost: S
-(** Instantiate an implementation of {!S} using ["localhost"] as
-    default host in {!S.start}. *)
-
-module Make (Config: Config): S
-(** Instantiate an implementation of {!S} using [Config.host] as
-    default host in {!S.start}. *)
 
 val domain_of_string: string -> Types.domain
 (** [domain_of_string d] parses the string [d] to build a

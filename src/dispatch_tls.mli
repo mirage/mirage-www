@@ -16,27 +16,17 @@
 
 (** HTTPS dispatcher *)
 
-(** The signature for HTTP dispatcher. *)
-module type S =
-  functor (C: V1_LWT.CONSOLE) ->
-  functor (FS: V1_LWT.KV_RO) ->
-  functor (TMPL: V1_LWT.KV_RO) ->
-  functor (S: V1_LWT.STACKV4) ->
-  functor (KEYS: V1_LWT.KV_RO) ->
-  functor (Clock : V1.CLOCK) ->
+(** The HTTP dispatcher. *)
+module Make
+    (C: V1_LWT.CONSOLE)
+    (FS: V1_LWT.KV_RO)
+    (TMPL: V1_LWT.KV_RO)
+    (S: V1_LWT.STACKV4)
+    (KEYS: V1_LWT.KV_RO)
+    (Clock : V1.CLOCK) :
 sig
 
-  val start: ?host:string -> ?redirect:string ->
+  val start:
     C.t -> FS.t -> TMPL.t -> S.t -> KEYS.t -> unit -> unit -> unit Lwt.t
-  (** The HTTP server's start function. If [host] is not set, use an
-      implementation specific default. *)
-
+    (** The HTTP server's start function. *)
 end
-
-module Make_localhost: S
-(** Instantiate an implementation of {!S} using ["localhost"] as
-    default host in {!S.start}. *)
-
-module Make (Config: Dispatch.Config): S
-(** Instantiate an implementation of {!S} using [Config.host] as
-    default host in {!S.start}. *)

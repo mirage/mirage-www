@@ -17,22 +17,6 @@
 
 open Lwt.Infix
 
-module type S =
-  functor (C: V1_LWT.CONSOLE) ->
-  functor (FS: V1_LWT.KV_RO) ->
-  functor (TMPL: V1_LWT.KV_RO) ->
-  functor (S: Cohttp_lwt.Server) ->
-  functor (Clock : V1.CLOCK) ->
-sig
-  type dispatch = Types.path -> Types.cowabloga Lwt.t
-  val redirect: Types.domain -> dispatch
-  val dispatch: Types.domain -> C.t -> FS.t -> TMPL.t -> dispatch
-  val create: Types.domain -> C.t -> dispatch -> S.t
-  type s = Conduit_mirage.server -> S.t -> unit Lwt.t
-  val start: ?host:string -> ?redirect:string ->
-    C.t -> FS.t -> TMPL.t -> s -> unit -> unit Lwt.t
-end
-
 let err fmt = Printf.kprintf (fun f -> raise (Failure f)) fmt
 
 let domain_of_string x =
@@ -49,7 +33,7 @@ let domain_of_string x =
   in
   scheme, host
 
-module Make_localhost
+module Make
     (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
     (S: Cohttp_lwt.Server) (Clock: V1.CLOCK)
 = struct
@@ -233,7 +217,9 @@ module Make_localhost
     in
     S.make ~callback ~conn_closed ()
 
-  let start ?(host="localhost") ?redirect:red c fs tmpl http () =
+  let start c fs tmpl http () =
+    let host = Key_gen.host () in
+    let red = Key_gen.redirect () in
     Stats.start ~sleep:OS.Time.sleep ~time:Clock.time;
     let domain = `Http, host in
     let dispatch = match red with
@@ -244,21 +230,4 @@ module Make_localhost
     log c "Listening on %s" (Site_config.base_uri domain);
     http (`TCP 80) callback
 
-end
-
-module type Config = sig
-  val host: string option
-  val redirect: string option
-end
-
-module Make (Config: Config)
-    (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
-    (S: Cohttp_lwt.Server)(Clock: V1.CLOCK)
-= struct
-  module M = Make_localhost(C)(FS)(TMPL)(S)(Clock)
-  include M
-  let start ?host ?redirect c fs tmpl http =
-    let host = match host with None -> Config.host | x -> x in
-    let redirect = match redirect with None -> Config.redirect | x -> x in
-    M.start ?host ?redirect c fs tmpl http
 end
