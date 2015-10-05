@@ -11,4 +11,4 @@ It also serves as a good first self-hosting test case.
 To update, send a pull request. When successfully merged, the Travis CI scripts,
 fetched from <https://github.com/ocaml/ocaml-travisci-skeleton/>, will cause the
 generated Xen unikernel to be committed back to the
-<https://github.com/mirage/mirage-decks-deployment> repo.
+<https://github.com/mirage/mirage-www-deployment> repo.
