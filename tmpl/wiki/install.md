@@ -14,6 +14,10 @@ On CentOS 6.4, install the system compiler and libraries via:
 
     sudo yum groupinstall "Development Tools" "Development Libraries"
 
+On Arch Linux, install the system compiler and libraries via:
+    sudo pacman -S ocaml camlp4 ocaml-findlib
+    yaourt -S opam
+
 Also note that the `mirage` configuration and deployment tool relies on the `xl` Xen toolstack to run virtual machines.
 
 ## Using OPAM
@@ -58,6 +62,8 @@ Finally, install the MirageOS command-line tool.
 
     $ opam install mirage
     $ mirage --help
+
+If you're using Arch Linux and `opam install mirage` gives errors about not finding camlp4 and camlp4 was installed with pacman (and not by OPAM), then running `opam install mirage` without having executed the `eval` line lets `opam` find the system-wide installation of camlp4.
 
 This will install [Mirage](https://github.com/mirage/mirage)!
 If you're upgrading from an older beta installation of MirageOS, then be sure that you have at least 1.1.0, or you'll get installation errors.  You can verify this by checking that the version number in the manual page from `mirage --help` is at least (as of the time of writing this page) 1.1.0.
