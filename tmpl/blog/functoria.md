@@ -1,5 +1,5 @@
 
-For the last two month, I have been at OCamllabs for "holidays" with the grand task
+For the last two months, I have been at OCaml Labs for "holidays" with the grand task
 of "fixing the mirage tool".
 
 I'm happy to present [Functoria](https://github.com/Drup/Functoria), a library to create arbitrary mirage-like DSLs. Functoria is independent from Mirage and will replace all the core engine that was bolted on the mirage tool until now.
@@ -20,7 +20,7 @@ startup time.
 [feature]: https://github.com/mirage/mirage/issues/231
 
 
-A good example is the ip address of the http stack, you want to be able to:
+A good example is the IP address of the HTTP stack, you want to be able to:
 
 - Set a good default directly in the `config.ml`
 - Provide a value at configure time, if you are already aware of deployment conditions.
@@ -62,7 +62,7 @@ A simple example of a unikernel with a key is available in [mirage-skeleton][] i
 ### Switching implementation
 
 We can do much more with keys: we can use them to switch devices at configure time.
-To illustrate, let us take the example of a dynamic storage: we want to choose between a block device and a crunch device with a command line option.
+To illustrate, let us take the example of dynamic storage: we want to choose between a block device and a crunch device with a command line option.
 In order to do that, we must first define a boolean key:
 
 ```
@@ -111,9 +111,9 @@ instantiate it with the default console. If we execute `mirage describe --dot` i
 
 [![A console unikernel](../graphics/dot/console.svg "My little unikernel")](../graphics/dot/console.svg)
 
-As you can see, there is already quite a few things going on!
+As you can see, there are already quite a few things going on!
 Squares are the various devices.
-The `default_console` is actually two consoles: the one on unix and the one on xen. We use the `if_impl` construction - represented as a circle node - to choose dynamically between the two.
+The `default_console` is actually two consoles: the one on unix and the one on xen. We use the `if_impl` construction - represented as a circle node - to choose between the two during configuration.
 
 The `bootvar` device handles the runtime key handling. It relies on an `argv` device, which is similar to `console`. Those devices are present in all unikernels.
 
@@ -129,18 +129,18 @@ TODO Add a *simple* example (tls is too complicated ...)
 
 ## Sharing
 
-Since we have a way to draw unikernels, we can now observe the sharing between various pieces. For example, the direct stack with static ip yields this diagram:
+Since we have a way to draw unikernels, we can now observe the sharing between various pieces. For example, the direct stack with static IP yields this diagram:
 
 [![A stack unikernel](../graphics/dot/stack.svg "My stack unikernel")](../graphics/dot/stack.svg)
 
 You can see that all the sub-parts of the stack have been properly shared. To be merged, two devices must have the same name, keys, dependencies and functor arguments.
-To force non-sharing of two devices, is is enough to give them different names.
+To force non-sharing of two devices, it is enough to give them different names.
 
 This sharing also works up to switching keys. The dynamic stack gives us this diagram:
 
 [![A dynamic stack unikernel](../graphics/dot/dynamic.svg "My dynamic unikernel")](../graphics/dot/dynamic.svg)
 
-There is actually three stacks in this example: the socket stack, the direct stack with dhcp and the direct stack with ip, all controlled by switching keys.
+There is actually three stacks in this example: the socket stack, the direct stack with DHCP and the direct stack with IP, all controlled by switching keys.
 
 ## All your functors are belong to us
 
