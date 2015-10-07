@@ -1,6 +1,6 @@
 
-For the last two month, I have been at OCamllabs for « holidays » with the grand task
-of « fixing the mirage tool ».
+For the last two month, I have been at OCamllabs for "holidays" with the grand task
+of "fixing the mirage tool".
 
 I'm happy to present [Functoria](https://github.com/Drup/Functoria), a library to create arbitrary mirage-like DSLs. Functoria is independent from Mirage and will replace all the core engine that was bolted on the mirage tool until now.
 
@@ -29,7 +29,7 @@ A good example is the ip address of the http stack, you want to be able to:
 All of this is now possible using **keys**. A key is composed of :
 - _name_ : The name of the value in the program.
 - _description_ : How it should be displayed/serialized.
-- _stage_ : Is the key available only at runtime, at configure time or both ?
+- _stage_ : Is the key available only at runtime, at configure time or both?
 - _documentation_ : It is not optional so you should really write it.
 
 Imagine we are building a multilingual unikernel and we want to pass the
@@ -45,7 +45,7 @@ let lang_key =
   Key.create ~doc ~stage:`Both ~default:"en" "language" Key.Desc.string
 ```
 
-Here, We defined both a long option `--lang` and a short one `-l` (the format is similar to the one used by [Cmdliner][cmdliner]).
+Here, we defined both a long option `--lang` and a short one `-l` (the format is similar to the one used by [Cmdliner][cmdliner]).
 In the unikernel, the value is retrieved with `Bootvar_gen.language ()`.
 
 The option is also documented in the `--help` option for both `mirage configure` (at configure time) and `./my_unikernel` (at startup time).
@@ -61,8 +61,8 @@ A simple example of a unikernel with a key is available in [mirage-skeleton][] i
 
 ### Switching implementation
 
-We can do much more with keys: we can use them to switch implementation at configure time.
-To illustrate, let us take the example of a dynamic storage: We want to choose between a block device and a crunch device with a command line option.
+We can do much more with keys: we can use them to switch devices at configure time.
+To illustrate, let us take the example of a dynamic storage: we want to choose between a block device and a crunch device with a command line option.
 In order to do that, we must first define a boolean key:
 
 ```
@@ -91,7 +91,7 @@ We can now use this device as a normal storage device of type `kv_ro impl`! The 
 
 It is also possible to compute on keys before giving them to `if_impl`, combining multiple keys in order to compute a value, and so on. The documentation for the API is located in the `Mirage.Key` module and various examples are available in [mirage][] and [mirage-skeleton][].
 
-Switching keys opens various possibilities, for example a `generic_stack` combinator is now implemented in mirage that will switch between socket stack, direct stack with dhcp and direct stack with static ip, depending on command line arguments.
+Switching keys opens various possibilities, for example a `generic_stack` combinator is now implemented in mirage that will switch between socket stack, direct stack with DHCP and direct stack with static IP, depending on command line arguments.
 
 ## Drawing unikernels
 
@@ -106,7 +106,7 @@ let main = foreign "Unikernel.Main" (console @-> job)
 let () = register "console" [main $ default_console]
 ```
 
-This is fairly straightforward, we define a `Unikernel.Main` functor using a console and we
+This is fairly straightforward: we define a `Unikernel.Main` functor using a console and we
 instantiate it with the default console. If we execute `mirage describe --dot` in this directory, we will get the following output.
 
 [![A console unikernel](../graphics/dot/console.svg "My little unikernel")](../graphics/dot/console.svg)
