@@ -14,7 +14,9 @@ If anyone would like to help us make more of these screencasts, please do get
 in touch on the [mailing list][list] — I've also listed it as one of our many
 [Pioneer Projects][pioneer]!
 
+<div class="flex-video">
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/videoseries?list=PLgjWYrrJw8_wlrkveCXULbg6oIYDvNuDU" frameborder="0" allowfullscreen></iframe>
+</div>
 
 [list]: http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel
 [pioneer]: https://github.com/mirage/mirage-www/wiki/Pioneer-Projects#screencasts
