@@ -1,4 +1,4 @@
-For the last two months, I've been working on improving the `mirage` tool and
+For the last few months, I've been working on improving the `mirage` tool and
 I'm happy to present [Functoria](https://github.com/mirage/functoria), a library to create arbitrary Mirage-like DSLs. Functoria is independent from `mirage` and will replace the core engine, which was somewhat bolted on to the tool until now.
 
 This introduces a few breaking changes so please consult the 
