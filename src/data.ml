@@ -144,9 +144,9 @@ module Blog = struct
     [
       { updated    = date (2016, 2, 17, 18, 15);
         authors    = [drup];
-        subject    = "Functoria";
-        body       = "functoria.md";
-        permalink  = "functoria";
+        subject    = "Introducing Functoria";
+        body       = "introducing-functoria.md";
+        permalink  = "introducing-functoria";
       };
 
       { updated    = date (2016, 1, 7, 18, 10);
