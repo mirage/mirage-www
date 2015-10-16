@@ -1,18 +1,15 @@
+For the last two months, I've been working on improving the `mirage` tool and
+I'm happy to present [Functoria](https://github.com/mirage/functoria), a library to create arbitrary Mirage-like DSLs. Functoria is independent from `mirage` and will replace the core engine, which was somewhat bolted on to the tool until now.
 
-For the last two months, I have been at OCaml Labs for "holidays" with the grand task
-of "fixing the mirage tool".
-
-I'm happy to present [Functoria](https://github.com/Drup/Functoria), a library to create arbitrary mirage-like DSLs. Functoria is independent from Mirage and will replace all the core engine that was bolted on the mirage tool until now.
-
-The bad news is that it's going to break some (little) things. To see the breaking changes and how to fix them, consult [the breaking changes page](../docs/breaking-changes).
-
-The good news is that it will be much more simple to use and much more flexible.
-And it produces pretty pictures.
+This introduces a few breaking changes so please consult the 
+[the breaking changes page](../docs/breaking-changes) to see what is different and how to fix things if needed.
+The good news is that it will be much more simple to use, much more flexible,
+and will even produce pretty pictures!
 
 ## Keys
 
-A [much][] [demanded][] [feature][] is the ability to define so-called bootvars.
-Bootvars are variables which value would be set either at configure time or at
+A [much][] [demanded][] [feature][] has been the ability to define so-called bootvars.
+Bootvars are variables where the value is set either at configure time or at
 startup time.
 
 [much]: https://github.com/mirage/mirage/issues/229
@@ -20,17 +17,17 @@ startup time.
 [feature]: https://github.com/mirage/mirage/issues/231
 
 
-A good example is the IP address of the HTTP stack, you want to be able to:
+A good example of a bootvar would be the IP address of the HTTP stack. For example, you may wish to:
 
 - Set a good default directly in the `config.ml`
 - Provide a value at configure time, if you are already aware of deployment conditions.
 - Provide a value at startup time, for last minute changes.
 
-All of this is now possible using **keys**. A key is composed of :
-- _name_ : The name of the value in the program.
-- _description_ : How it should be displayed/serialized.
-- _stage_ : Is the key available only at runtime, at configure time or both?
-- _documentation_ : It is not optional so you should really write it.
+All of this is now possible using **keys**. A key is composed of:
+- _name_ — The name of the value in the program.
+- _description_ — How it should be displayed/serialized.
+- _stage_ — Is the key available only at runtime, at configure time, or both?
+- _documentation_ — This is not optional, so you have to write it.
 
 Imagine we are building a multilingual unikernel and we want to pass the
 default language as a parameter. We will use a simple string, so we can use the
@@ -61,8 +58,8 @@ A simple example of a unikernel with a key is available in [mirage-skeleton][] i
 
 ### Switching implementation
 
-We can do much more with keys: we can use them to switch devices at configure time.
-To illustrate, let us take the example of dynamic storage: we want to choose between a block device and a crunch device with a command line option.
+We can do much more with keys, for example we can use them to switch devices at configure time.
+To illustrate, let us take the example of dynamic storage, where we want to choose between a block device and a crunch device with a command line option.
 In order to do that, we must first define a boolean key:
 
 ```
@@ -91,7 +88,7 @@ We can now use this device as a normal storage device of type `kv_ro impl`! The 
 
 It is also possible to compute on keys before giving them to `if_impl`, combining multiple keys in order to compute a value, and so on. The documentation for the API is located in the `Mirage.Key` module and various examples are available in [mirage][] and [mirage-skeleton][].
 
-Switching keys opens various possibilities, for example a `generic_stack` combinator is now implemented in mirage that will switch between socket stack, direct stack with DHCP and direct stack with static IP, depending on command line arguments.
+Switching keys opens various possibilities, for example a `generic_stack` combinator is now implemented in `mirage` that will switch between socket stack, direct stack with DHCP and direct stack with static IP, depending on command line arguments.
 
 ## Drawing unikernels
 
@@ -112,8 +109,8 @@ instantiate it with the default console. If we execute `mirage describe --dot` i
 [![A console unikernel](../graphics/dot/console.svg "My little unikernel")](../graphics/dot/console.svg)
 
 As you can see, there are already quite a few things going on!
-Squares are the various devices.
-The `default_console` is actually two consoles: the one on unix and the one on xen. We use the `if_impl` construction - represented as a circle node - to choose between the two during configuration.
+Rectangles are the various devices and you'll notice that 
+the `default_console` is actually two consoles: the one on Unix and the one on Xen. We use the `if_impl` construction — represented as a circular node — to choose between the two during configuration.
 
 The `bootvar` device handles the runtime key handling. It relies on an `argv` device, which is similar to `console`. Those devices are present in all unikernels.
 
@@ -121,9 +118,9 @@ The `mirage` device is the device that brings all the jobs together (and on the 
 
 ## Data dependencies
 
-You may have noticed dashed lines in the previous drawing, in particular from `mirage` to `Unikernel.Main`. Those lines are data dependencies. For example, the `bootvar` device has a dependency on the `argv` device. It means that `argv` is configured and run first, returns some data - an array of string - then `bootvar` is configured and run.
+You may have noticed dashed lines in the previous diagram, in particular from `mirage` to `Unikernel.Main`. Those lines are data dependencies. For example, the `bootvar` device has a dependency on the `argv` device. It means that `argv` is configured and run first, returns some data — an array of string — then `bootvar` is configured and run.
 
-If your unikernel has a data dependency - such as, for example, initializing the entropy - you can use the `~dependencies` argument on `Mirage.foreign`. The `start` function of the unikernel will receive one extra argument for each dependency.
+If your unikernel has a data dependency — say, initializing the entropy — you can use the `~dependencies` argument on `Mirage.foreign`. The `start` function of the unikernel will receive one extra argument for each dependency.
 
 TODO Add a *simple* example (tls is too complicated ...)
 
@@ -140,14 +137,21 @@ This sharing also works up to switching keys. The dynamic stack gives us this di
 
 [![A dynamic stack unikernel](../graphics/dot/dynamic.svg "My dynamic unikernel")](../graphics/dot/dynamic.svg)
 
-There is actually three stacks in this example: the socket stack, the direct stack with DHCP and the direct stack with IP, all controlled by switching keys.
+If you look closely, you'll notice that there are actually _three_ stacks in the last example: the _socket_ stack, the _direct stack with DHCP_, and the _direct stack with IP_. All controlled by switching keys.
 
 ## All your functors are belong to us
 
 There is more to be said about the new capabilities offered by functoria, in particular on how to define new devices. You can discover them by looking at the [mirage][] implementation.
 
-However, to wrap up this blog post, I offer you a visualization of the mirage website itself. [Enjoy](../graphics/dot/www.svg).
-
+However, to wrap up this blog post, I offer you a visualization of the MirageOS website itself (brace yourself). [Enjoy!](../graphics/dot/www.svg)
 
 [mirage]: https://github.com/mirage/mirage
 [mirage-skeleton]: https://github.com/mirage/mirage-skeleton
+
+*Thanks to [Mort][], [Mindy][], and [Amir][]
+for their comments on earlier drafts.*
+
+[Mort]: http://mort.io
+[Mindy]: http://somerandomidiot.com
+[Thomas]: http://www.gazagnaire.org
+[Amir]: http://amirchaudhry.com
