@@ -7,6 +7,72 @@ of slide decks that we give are now hosted using MirageOS on
 Below are various videos of public presentations that are available online.
 There is also a [link blog](/links) of other articles available.
 
+### Rainbows and Unikernels
+
+**[Garett Smith][garett] at CityCode - Oct 2015**  
+<div class="flex-video">
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/cUvNths_5RA" frameborder="0" allowfullscreen></iframe>
+</div>
+
+### Taking the Operating System out of Operations
+
+**[Gareth Rushgrove][gareth] at Operability - Sep 2015**  
+<div class="flex-video">
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/nxofKgwgjHs" frameborder="0" allowfullscreen></iframe>
+</div>
+
+### Look ma, no OS! Unikernels and their applications
+
+**[Matt Bajor][matt] at Strangeloop - Sep 2015**  
+<div class="flex-video">
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/W9F4pn9Lngc" frameborder="0" allowfullscreen></iframe>
+</div>
+
+
+### Non-Imperative Network Programming
+
+**[Mindy Preston][mindy] at Strangeloop - Sep 2015**  
+<div class="flex-video">
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/GNc1t6Q5Dls" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Mindy also wrote a post that has some information and links:
+<http://somerandomidiot.com/blog/2015/10/07/ocaml-workshop-and-strange-loop-talks>
+
+### Leaving legacy behind — A clean-slate approach to operating systems
+
+**[Hannes Mehnert][hannes] at Source_Code Berlin - Aug 2015**  
+<div class="flex-video">
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/PTtI8hpR7hQ" frameborder="0" allowfullscreen></iframe>
+</div>
+
+### Unikernels!
+
+**[Amir Chaudhry][amir] at PolyConf - July 2015**  
+<div class="flex-video">
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/nZLy19eRWLk" frameborder="0" allowfullscreen></iframe>
+</div>
+
+There's more information about this talk in the blog post at:
+<http://amirchaudhry.com/unikernels-polyconf-2015>
+
+### Next Generation Cloud
+
+**[Russell Pavlicek][russ] at SouthEast LinuxFest - June 2015**  
+<div class="flex-video">
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/8UgiPODw3CY" frameborder="0" allowfullscreen></iframe>
+</div>
+
+*Russ has also been at many other Linuxfests this year!*
+
+### Unikernels: Functional Infrastructure with MirageOS
+
+**[Anil Madhavapeddy][anil] at Esper Technologies - May 2015**  
+<div class="flex-video">
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/bC7rTUEZfmI" frameborder="0" allowfullscreen></iframe>
+</div>
+
+
 ### My Other Internet is a Mirage (QCon SF 2013)
 
 This talk was given by [Anil Madhavapeddy](http://anil.recoil.org) towards the
@@ -68,3 +134,12 @@ work. The [video](http://portal.acm.org/citation.cfm?id=1863557) is
 unfortunately only available behind the ACM paywall, but the paper can be found
 [here](/wiki/papers).
 
+[anil]: http://anil.recoil.org
+[russ]: https://twitter.com/RCPavlicek
+[amir]: http://amirchaudhry.com
+[hannes]: https://github.com/hannesm
+[steve]: https://twitter.com/sjfloat
+[mindy]: http://somerandomidiot.com
+[matt]: https://twitter.com/mattbajor
+[gareth]: https://twitter.com/garethr
+[garett]: https://twitter.com/gar1t
