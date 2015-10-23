@@ -125,6 +125,13 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2015, 10, 23, 11, 0);
+        authors    = [amir];
+        subject    = "Videos!";
+        body       = "recent-talks-oct2015.md";
+        permalink  = "recent-talks-oct2015";
+      };
+
       { updated    = date (2015, 10, 15, 19, 0);
         authors    = [amir];
         subject    = "Getting Started Screencasts";
