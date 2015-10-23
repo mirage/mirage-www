@@ -9,19 +9,22 @@ one of your videos, please do [get in touch][mail]!
 
 #### Videos of recent talks
 
-**[Anil Madhavapeddy][anil] at Esper Technologies - May 2015**
+**[Anil Madhavapeddy][anil] at Esper Technologies - May 2015**  
+**'Unikernels: Functional Infrastructure with MirageOS'**
 <div class="flex-video">
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/bC7rTUEZfmI" frameborder="0" allowfullscreen></iframe>
 </div>
 
-**[Russell Pavlicek][russ]** at SouthEast LinuxFest - June 2015
+**[Russell Pavlicek][russ] at SouthEast LinuxFest - June 2015**  
+**'Next Generation Cloud'**
 <div class="flex-video">
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/8UgiPODw3CY" frameborder="0" allowfullscreen></iframe>
 </div>
 
 *Russ has also been at many other Linuxfests this year!*
 
-**[Amir Chaudhry][amir] at PolyConf - July 2015**
+**[Amir Chaudhry][amir] at PolyConf - July 2015**  
+**'Unikernels!'**
 <div class="flex-video">
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/nZLy19eRWLk" frameborder="0" allowfullscreen></iframe>
 </div>
@@ -29,12 +32,20 @@ one of your videos, please do [get in touch][mail]!
 There's more information about this talk in the blog post at:
 <http://amirchaudhry.com/unikernels-polyconf-2015>
 
-**[Hannes Mehnert][hannes] at Source_Code Berlin - Aug 2015**
+**[Hannes Mehnert][hannes] at Source_Code Berlin - Aug 2015**  
+**'Leaving legacy behind — A clean-slate approach to operating systems'**
 <div class="flex-video">
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/PTtI8hpR7hQ" frameborder="0" allowfullscreen></iframe>
 </div>
 
-**[Mindy Preston][mindy] at Strangeloop - Sep 2015**
+**[Steve Jones][steve] at DevopsDays Pittsburgh - Aug 2015**  
+**'The Incredible Shrinking Operating System!'**
+<div class="flex-video">
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/Ud3NGqRRGc4" frameborder="0" allowfullscreen></iframe>
+</div>
+
+**[Mindy Preston][mindy] at Strangeloop - Sep 2015**  
+**'Non-Imperative Network Programming'**
 <div class="flex-video">
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/GNc1t6Q5Dls" frameborder="0" allowfullscreen></iframe>
 </div>
@@ -42,17 +53,20 @@ There's more information about this talk in the blog post at:
 Mindy also wrote a post that has some information and links:
 <http://somerandomidiot.com/blog/2015/10/07/ocaml-workshop-and-strange-loop-talks>
 
-**[Matt Bajor][matt] at Strangeloop - Sep 2015**
+**[Matt Bajor][matt] at Strangeloop - Sep 2015**  
+**'Look ma, no OS! Unikernels and their applications'**
 <div class="flex-video">
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/W9F4pn9Lngc" frameborder="0" allowfullscreen></iframe>
 </div>
 
-**[Gareth Rushgrove][gareth] at Operability - Sep 2015**
+**[Gareth Rushgrove][gareth] at Operability - Sep 2015**  
+**'Taking the Operating System out of Operations'**
 <div class="flex-video">
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/nxofKgwgjHs" frameborder="0" allowfullscreen></iframe>
 </div>
 
-**[Garett Smith][garett] at CityCode - Oct 2015**
+**[Garett Smith][garett] at CityCode - Oct 2015**  
+**'Rainbows and Unikernels'**
 <div class="flex-video">
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/cUvNths_5RA" frameborder="0" allowfullscreen></iframe>
 </div>
@@ -62,6 +76,7 @@ Mindy also wrote a post that has some information and links:
 [russ]: https://twitter.com/RCPavlicek
 [amir]: http://amirchaudhry.com
 [hannes]: https://github.com/hannesm
+[steve]: https://twitter.com/sjfloat
 [mindy]: http://somerandomidiot.com
 [matt]: https://twitter.com/mattbajor
 [gareth]: https://twitter.com/garethr
