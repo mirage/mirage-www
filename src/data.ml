@@ -129,7 +129,7 @@ module Blog = struct
         authors    = [amir];
         subject    = "Videos from around the world!";
         body       = "videos-around-world-2015.md";
-        permalink  = "videos-around-world-2015.md";
+        permalink  = "videos-around-world-2015";
       };
 
       { updated    = date (2015, 10, 15, 19, 0);
