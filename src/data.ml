@@ -127,9 +127,9 @@ module Blog = struct
     [
       { updated    = date (2015, 10, 23, 11, 0);
         authors    = [amir];
-        subject    = "Videos!";
-        body       = "recent-talks-oct2015.md";
-        permalink  = "recent-talks-oct2015";
+        subject    = "Videos from around the world!";
+        body       = "videos-around-world-2015.md";
+        permalink  = "videos-around-world-2015.md";
       };
 
       { updated    = date (2015, 10, 15, 19, 0);
