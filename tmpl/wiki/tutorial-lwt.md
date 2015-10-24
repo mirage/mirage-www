@@ -482,7 +482,7 @@ Write the same pipelining library as in the mailbox challenge, replacing instanc
   let split iab =
     let (oa, pa) = Lwt_stream.create () in
     let (ob, pb) = Lwt_stream.create () in
-    let rec aux () = match_lwt Lwt_stream.get source with
+    let rec aux () = match_lwt Lwt_stream.get iab with
       | None -> pa None; pb None; return ()
       | Some (a,b) -> pa (Some a); pb (Some b); aux ()
     in
