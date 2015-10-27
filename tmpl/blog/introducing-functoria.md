@@ -9,7 +9,7 @@ and will even produce pretty pictures!
 ## Keys
 
 A [much][] [demanded][] [feature][] has been the ability to define so-called bootvars.
-Bootvars are variables where the value is set either at configure time or at
+Bootvars are variables whose value is set either at configure time or at
 startup time.
 
 [much]: https://github.com/mirage/mirage/issues/229
@@ -54,7 +54,7 @@ The option is also documented in the `--help` option for both `mirage configure`
 
 [cmdliner]: http://erratique.ch/software/cmdliner
 
-A simple example of a unikernel with a key is available in [mirage-skeleton][] in the `hello` directory.
+A simple example of a unikernel with a key is available in [mirage-skeleton][] in the [`hello` directory][mirage-skeleton-hello].
 
 ### Switching implementation
 
@@ -147,6 +147,7 @@ However, to wrap up this blog post, I offer you a visualization of the MirageOS 
 
 [mirage]: https://github.com/mirage/mirage
 [mirage-skeleton]: https://github.com/mirage/mirage-skeleton
+[mirage-skeleton-hello]: https://github.com/mirage/mirage-skeleton/tree/master/hello
 
 *Thanks to [Mort][], [Mindy][], and [Amir][]
 for their comments on earlier drafts.*
