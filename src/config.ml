@@ -102,15 +102,17 @@ let keys = Key.[ abstract host_key ; abstract redirect_key ]
 
 let image = get "XENIMG" ~default:"www" string_of_env
 
-let filesfs = generic_kv_ro ~group:"file" "../files"
-let tmplfs = generic_kv_ro ~group:"tmpl" "../tmpl"
+let fs_key = Key.(value @@ kv_ro ())
+let filesfs = generic_kv_ro ~key:fs_key "../files"
+let tmplfs = generic_kv_ro ~key:fs_key "../tmpl"
 
 (* If we are running inside a PR in Travis CI,
    we don't try to get the server certificates. *)
+let secrets_key = Key.(value @@ kv_ro ~group:"secrets" ())
 let secrets =
   if_impl (Key.value pr_key)
     (crunch "../src")
-    (generic_kv_ro ~group:"secret" "../tls")
+    (generic_kv_ro ~key:secrets_key "../tls")
 
 let stack = generic_stackv4 default_console tap0
 
