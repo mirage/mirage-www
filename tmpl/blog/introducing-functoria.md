@@ -6,6 +6,21 @@ This introduces a few breaking changes so please consult
 The good news is that it will be much more simple to use, much more flexible,
 and will even produce pretty pictures!
 
+## Configuration
+
+For people unfamiliar with mirage, the `mirage` tool handles configuration of mirage unikernel by reading an OCaml file describing the various pieces and dependencies of the project.
+Based on this configuration it will use [opam][] to install the dependencies, handle various configuration tasks and emit a build script.
+
+A very simple configuration file look like this:
+
+```
+open Mirage
+let main = foreign "Unikernel.Main" (console @-> job)
+let () = register "console" [main $ default_console]
+```
+
+It declares a new functor, `Unikernel.Main`, which take a console as argument and instantiate it on the `default_console`. For more details about unikernel configuration, please read the [hello-world](../wiki/hello-world) tutorial.
+
 ## Keys
 
 A [much][] [demanded][] [feature][] has been the ability to define so-called bootvars.
@@ -171,6 +186,7 @@ There is more to be said about the new capabilities offered by functoria, in par
 
 However, to wrap up this blog post, I offer you a visualization of the MirageOS website itself (brace yourself). [Enjoy!](../graphics/dot/www.svg)
 
+[opam]: http://opam.ocaml.org/
 [API]: http://mirage.github.io/functoria/
 [mirage]: https://github.com/mirage/mirage
 [mirage-skeleton]: https://github.com/mirage/mirage-skeleton
