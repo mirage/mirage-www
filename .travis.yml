@@ -14,7 +14,7 @@ env:
     TLS=1 HOST="mirage.io" SECRETS=fat
     UPDATE_GCC_BINUTILS=1
   global:
-  - PINS="mirage:https://github.com/samoht/mirage.git"
+  - EXTRA_REMOTES=https://github.com/mirage/mirage-dev.git
   - secure: PUu3+Enupf9jcIPD/hs5b6zrNuJagTDXJGtYfSUIFvzevSXZzs6mXPu8L2vvAQbQ8ig/8VLToa44vUTG9OEy9SxXrR6yTQGfj4YxJ5BXKHwhYMTBXnR1e+S1gA4a5tilMa7M/a0hWa1rORv3diMIK3dihjc1m6VzpCK/4vly7KU=
   - secure: crnwZ3MDUA9szI/EuwB9o7plXVF2QCx+JpOazy4SwC2v47Vf5voOEAxh7iFMgGziBqzKGVnDw4/37WHVm5vdgaL4lL2T73F1PqXbiCdhhwZVcf+EAXr8KmoaNXRieL7qPsemQVvPWUiERZRmR2okvm60EqifZA9/dy/48dJIGMI=
   - secure: JijSTl0jOOPL0HoWooCBnhokjqboQSgwy3orgG5nUIPrluthNjix4ujds9TOuEtv2pflbgptUUdYJ7R6VfeZk/UWIVUbwBRjtMJRQRDPB0jxyoL9VLGzTwfdovwV0Rg0jeJkBWsAJjIxkdawE2R4wexAOn/tWDiLaSQh/n096Fc=
