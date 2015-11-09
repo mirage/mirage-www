@@ -124,7 +124,6 @@ let https =
   let libraries = "tls" :: "tls.mirage" :: "mirage-http" :: libraries in
   let packages = "tls" :: "tls" :: "mirage-http" :: packages in
   foreign ~libraries ~packages ("Dispatch_tls." ^ main)
-    ~deps:[abstract nocrypto]
     (console @-> kv_ro @-> kv_ro @-> stackv4 @-> kv_ro @-> clock @-> job)
 
 let err fmt = Printf.ksprintf (fun msg ->
