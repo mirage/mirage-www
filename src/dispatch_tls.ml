@@ -25,7 +25,7 @@ module type S =
   functor (Clock : V1.CLOCK) ->
 sig
   val start: ?host:string -> ?redirect:string ->
-    C.t -> FS.t -> TMPL.t -> S.t -> KEYS.t -> unit -> unit Lwt.t
+    C.t -> FS.t -> TMPL.t -> S.t -> KEYS.t -> unit -> unit -> unit Lwt.t
 end
 
 module Make_localhost
@@ -66,7 +66,7 @@ module Make_localhost
     let conf = Tls.Config.server ~certificates:(`Single cert) () in
     Lwt.return conf
 
-  let start ?(host="localhost") ?redirect c fs tmpl stack keys _clock =
+  let start ?(host="localhost") ?redirect c fs tmpl stack keys _clock () =
     Stats.start ~sleep:OS.Time.sleep ~time:Clock.time;
     tls_init keys >>= fun cfg ->
     let domain = `Https, host in
@@ -88,8 +88,8 @@ module Make (Config: Dispatch.Config)
     (S: V1_LWT.STACKV4) (KEYS: V1_LWT.KV_RO) (Clock : V1.CLOCK)
 = struct
   module M = Make_localhost(C)(FS)(TMPL)(S)(KEYS)(Clock)
-  let start ?host ?redirect c fs tmpl stack keys _clock =
+  let start ?host ?redirect c fs tmpl stack keys _clock () =
     let host = match host with None -> Config.host | x -> x in
     let redirect = match redirect with None -> Config.redirect | x -> x in
-    M.start ?host ?redirect c fs tmpl stack keys _clock
+    M.start ?host ?redirect c fs tmpl stack keys _clock ()
 end
