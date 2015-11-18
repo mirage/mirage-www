@@ -27,7 +27,7 @@ module type S =
 sig
 
   val start: ?host:string -> ?redirect:string ->
-    C.t -> FS.t -> TMPL.t -> S.t -> KEYS.t -> unit -> unit Lwt.t
+    C.t -> FS.t -> TMPL.t -> S.t -> KEYS.t -> unit -> unit -> unit Lwt.t
   (** The HTTP server's start function. If [host] is not set, use an
       implementation specific default. *)
 
