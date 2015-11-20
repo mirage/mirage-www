@@ -24,10 +24,10 @@ Also note that the `mirage` configuration and deployment tool relies on the `xl`
 
 We use [OPAM](http://opam.ocaml.org) to manage OCaml compiler and library installations. It tracks library versions across upgrades and will recompile dependencies automatically if they get out of date. Please refer to OPAM [documentation](https://opam.ocaml.org) if you want to know more, but we will cover the basics to get you started here. Install OPAM for your operating system by following its [Quick Install Guide](http://opam.ocaml.org/doc/Install.html).
 
-Note that you require **OPAM 1.1 or greater** to use with MirageOS. Some distribution packages provide earlier versions; check with
+Note that you require **OPAM 1.2 or greater** to use with MirageOS. Some distribution packages provide earlier versions and must be updated; check with
 
-    $ opam --version ## response should be at least 1.1.0, viz.
-    1.1.0
+    $ opam --version ## response should be at least 1.2.0, viz.
+    1.2.0
 
 All the OPAM state is held in the `.opam` directory in your home directory, including compiler installations. You should never need to switch to a root user to install packages. Package listings are obtained through `remote` sources, which defaults to the contents of [github.com/ocaml/opam-repository](http://github.com/ocaml/opam-repository).
 After installation, `opam update -u` refreshes the package list and recompiles packages to the latest versions.
