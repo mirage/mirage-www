@@ -5,6 +5,7 @@ mirage/alcotest
 mirage/cowabloga
 mirage/dyntype
 mirage/ezjsonm
+mirage/functoria
 mirage/io-page
 mirage/irmin
 mirage/irmin-chunk
