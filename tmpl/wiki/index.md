@@ -54,6 +54,7 @@ MirageOS is in beta stage and the infrastructure you see here is self-hosting. T
 *Calls take place every two weeks and are announced on the
 [mailing list](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel).*
 
+* Weekly call [2015-12-02](/wiki/weekly-2015-12-02) on Website stability, Functoria, QubesOS and Hackathons.
 * Weekly call [2015-11-11](/wiki/weekly-2015-11-11) on Functoria, Logs, Protocol lists and unikernel logos.
 * Weekly call [2015-10-28](/wiki/weekly-2015-10-28) on Logging, Pioneer Projects and Error Handling.
 * Weekly call [2015-10-14](/wiki/weekly-2015-10-14) on Functoria, Irmin roadmap and upcoming blog posts.
