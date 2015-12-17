@@ -125,7 +125,7 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
-      { updated    = date (2015, 12, 16, 16, 0);
+      { updated    = date (2015, 12, 17, 12, 0);
         authors    = [amir];
         subject    = "Unikernel.org";
         body       = "unikernel-org.md";
