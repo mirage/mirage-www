@@ -210,6 +210,9 @@ client logic functionality to [Charrua]
 This is my first real project in OCaml and I'm more or less a newcomer to
 functional programming as well, my background is mostly kernel hacking as an
 ex-openbsd developer.
+I'd love to hear how people are actually using it and any problems they're
+finding, so please do let me know via the
+[issue tracker](https://github.com/haesbaert/charrua-core/issues)!
 
 Prior to this project I had no contact with any of the MirageOS folks, but I'm
 amazed on how easy the interaction and comunication with the community has been,
