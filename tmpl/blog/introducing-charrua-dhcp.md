@@ -7,19 +7,19 @@ mask, a default gateway and so on.
 
 DHCP can be seen as a critical security component, since it deals usually with
 unauthenticated/unknown peers, therefore it is of special interest to run a
-server as a self-contained MirageOS VM.
+server as a self-contained MirageOS unikernel.
 
 [Charrua](http://www.github.com/haesbaert/charrua-core) is a DHCP implementation
-written in OCaml, it started off as an excuse to learn more about the language,
-while in development it got picked up on the MirageOS mailing lists and became one
+written in OCaml and it started off as an excuse to learn more about the language.
+While in development it got picked up on the MirageOS mailing lists and became one
 of the [Pioneer
 Projects](https://github.com/mirage/mirage-www/wiki/Pioneer-Projects).
 
 The name `Charrua` is a reference to the, now extinct, semi-nomadic people of
-southern South America, nowadays it is also used to refer to Uruguayan
+southern South America — nowadays it is also used to refer to Uruguayan
 nationals. The logic is that DHCP handles dynamic (hence nomadic) clients.
 
-The library is platform agnostic and works outside of MirageOS as well, it
+The library is platform agnostic and works outside of MirageOS as well. It
 provides two main modules:
 [Dhcp_wire](http://haesbaert.github.io/charrua-core/api/Dhcp_wire.html) and
 [Dhcp_server](http://haesbaert.github.io/charrua-core/api/Dhcp_server.html).
@@ -27,7 +27,7 @@ provides two main modules:
 ### Dhcp_wire
 
 [Dhcp_wire](http://haesbaert.github.io/charrua-core/api/Dhcp_wire.html) provides
-basic functions for dealing with the protocol, essentialy
+basic functions for dealing with the protocol, essentially
 marshalling/unmarshalling and helpers for dealing with the various DHCP options.
 
 The central record type of
@@ -42,18 +42,18 @@ val buf_of_pkt : pkt -> Cstruct.t
 ```
 
 [pkt_of_buf](http://haesbaert.github.io/charrua-core/api/Dhcp_wire.html#VALpkt_of_buf) takes
-a [Cstruct.t](https://github.com/mirage/ocaml-cstruct) buffer and a length, it
-then attempts to build a DHCP packet, unknown DHCP options are ignored, invalid
-options or malformed data is not accepted and you get a `` `Error of string``.
+a [Cstruct.t](https://github.com/mirage/ocaml-cstruct) buffer and a length and it
+then attempts to build a DHCP packet. Unknown DHCP options are ignored, invalid
+options or malformed data are not accepted and you get an `` `Error of string``.
 
 [buf_of_pkt](http://haesbaert.github.io/charrua-core/api/Dhcp_wire.html#VALbuf_of_pkt) is
-the mirror function, but it never fails, it could for instance fail in case of
+the mirror function, but it never fails.  It could for instance fail in case of
 two duplicate DHCP options, but that would imply too much policy in a
 marshalling function.
 
 The DHCP options from RFC2132 are implemented in
-[dhcp_option](http://haesbaert.github.io/charrua-core/api/Dhcp_wire.html#TYPEdhcp_option),
-there are more, but the most common ones look like this:
+[dhcp_option](http://haesbaert.github.io/charrua-core/api/Dhcp_wire.html#TYPEdhcp_option).
+There are more, but the most common ones look like this:
 
 ```ocaml
 type dhcp_option =
@@ -69,15 +69,15 @@ type dhcp_option =
 ### Dhcp_server
 
 [Dhcp_server](http://haesbaert.github.io/charrua-core/api/Dhcp_server.html)
-Provides a library for building DHCP server, it is divided into two sub-modules:
+Provides a library for building a DHCP server and is divided into two sub-modules:
 [Config](http://haesbaert.github.io/charrua-core/api/Dhcp_server.Config.html),
 which handles the building of a suitable DHCP server configuration record and
 [Input](http://haesbaert.github.io/charrua-core/api/Dhcp_server.Config.html),
 which handles the input of DHCP packets.
 
-The logic is modeled in a pure functional style,
+The logic is modelled in a pure functional style and
 [Dhcp_server](http://haesbaert.github.io/charrua-core/api/Dhcp_server.html) does
-not perform any IO of its own, it works by taking an input
+not perform any IO of its own. It works by taking an input
 [packet](http://haesbaert.github.io/charrua-core/api/Dhcp_wire.html#TYPEpkt),
  a
  [configuration](http://haesbaert.github.io/charrua-core/api/Dhcp_server.Config.html#TYPEt)
@@ -102,8 +102,8 @@ val input_pkt : Dhcp_server.Config.t -> Dhcp_server.Config.subnet ->
 
 A typical main server loop would work by:
  1. Reading a packet from the network.
- 2. Unmarshaling with [Dhcp_wire.pkt_of_buf](http://haesbaert.github.io/charrua-core/api/Dhcp_wire.html#VALpkt_of_buf).
- 3. Inputing the result with [Dhcp_server.Input.input_pkt](http://haesbaert.github.io/charrua-core/api/Dhcp_server.Input.html#VALinput_pkt).
+ 2. Unmarshalling with [Dhcp_wire.pkt_of_buf](http://haesbaert.github.io/charrua-core/api/Dhcp_wire.html#VALpkt_of_buf).
+ 3. Inputting the result with [Dhcp_server.Input.input_pkt](http://haesbaert.github.io/charrua-core/api/Dhcp_server.Input.html#VALinput_pkt).
  4. Sending the reply, or logging the event from the [Dhcp_server.Input.input_pkt](http://haesbaert.github.io/charrua-core/api/Dhcp_server.Input.html#VALinput_pkt) call.
 
 A mainloop example can be found in
@@ -132,7 +132,7 @@ As stated,
 does not perform any IO of its own, it only deals with the logic of analyzing a
 DHCP packet and building a possible answer, which should then be sent by the
 caller. This allows a design where all the side effects are controlled in one
-small chunk, it makes it easier to understand the state transitions since they
+small chunk, which makes it easier to understand the state transitions since they
 are made explicit.
 
 At the time of this writing,
@@ -141,16 +141,16 @@ is not side effect free, as it manipulates a database of leases, this will be
 changed in the next version to be pure as well.
 
 Storing leases in permanent storage is also unsupported at this time and
-should be available soon, with irmin and other backends. The main idea is to
+should be available soon, with Irmin and other backends. The main idea is to
 always return a new lease database for each input, or maybe just the updates to
-be applied, in this scenario, the caller would be able to store the database in
+be applied, and in this scenario, the caller would be able to store the database in
 permanent storage as he sees fit.
 
 #### Configuration
 
-This project started independently of MirageOS, and at that time, the best
-configuration I could think of was the well known `ISC` `dhcpd.conf`, therefore
-the configuration uses the same format, but it does not support the myriad of
+This project started independently of MirageOS and at that time, the best
+configuration I could think of was the well known `ISC` `dhcpd.conf`. Therefore,
+the configuration uses the same format but it does not support the myriad of
 options of the original one.
 
 ```ocaml
@@ -172,7 +172,7 @@ options of the original one.
       configured in the system *)
 ```
 
-Although it is a great format, it doesn't play exactly nice with MirageOS and
+Although it is a great format, it doesn't exactly play nice with MirageOS and
 OCaml, since the unikernel needs to parse a string at runtime to build the
 configuration, this requires a file IO backend and other complications. The
 next version should provide OCaml helpers for building the configuration, which
@@ -180,7 +180,7 @@ would drop the requirements of a file IO backend and facilitate writing tests.
 
 ### Building a simple server
 
-The easiest way is to follow [mirage-skeleton DHCP
+The easiest way is to follow the [mirage-skeleton DHCP
 README](https://github.com/mirage/mirage-skeleton/blob/master/dhcp/README.md).
 
 ### Future
@@ -189,7 +189,7 @@ The next steps would be:
 
 * Provide helpers for building the configuration.
 * Expose the lease database in an immutable structure, possibly a `Map`, adding
-also support/example for [Irmin](https://github.com/mirage/irmin).
+also support/examples for [Irmin](https://github.com/mirage/irmin).
 * Use [Functoria](https://github.com/mirage/functoria) to pass down the
 configuration in [mirage-skeleton](https://github.com/mirage/mirage-skeleton/blob/master/dhcp/README.md). Currently
 it is awkward since the user has to edit `unikernel.ml` and `config.ml`, with
@@ -202,17 +202,18 @@ client logic functionality to [Charrua](http://www.github.com/haesbaert/charrua-
 
 This is my first real project in OCaml and I'm more or less a newcomer to
 functional programming as well, my background is mostly kernel hacking as an
-ex-openbsd developer.
+ex-OpenBSD developer.
 I'd love to hear how people are actually using it and any problems they're
 finding, so please do let me know via the
 [issue tracker](https://github.com/haesbaert/charrua-core/issues)!
 
 Prior to this project I had no contact with any of the MirageOS folks, but I'm
-amazed on how easy the interaction and comunication with the community has been,
-everyone has been incredibly friendly and supportful, I'd say MirageOS is a gold
+amazed about how easy the interaction and communication with the community has been,
+everyone has been incredibly friendly and supportive. I'd say MirageOS is a gold
 project for anyone wanting to work with smart people and hack OCaml.
 
-My many thanks to [Anil][], [Richard][], [Hannes][], [Amir][], Scott, Gabriel and others. Thanks also to [Thomas][] and [Christophe][] for comments on this post.
+My many thanks to [Anil][], [Richard][], [Hannes][], [Amir][], Scott, Gabriel and others.
+Thanks also to [Thomas][] and [Christophe][] for comments on this post.
 I also
 would like to thank my [employer](https://www.genua.de) for letting me work on this
 project in our hackathons.
