@@ -1,5 +1,6 @@
-Almost every network needs to support [DHCP]
-(https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol) (Dynamic
+Almost every network needs to support
+[DHCP](https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol)
+(Dynamic
 Host Configuration Protocol), that is, a way for clients to request network
 parameters from the environment. Common parameters are an IP address, a network
 mask, a default gateway and so on.
@@ -40,14 +41,12 @@ val pkt_of_buf : Cstruct.t -> int -> [> `Error of string | `Ok of pkt ]
 val buf_of_pkt : pkt -> Cstruct.t
 ```
 
-[pkt_of_buf]
-(http://haesbaert.github.io/charrua-core/api/Dhcp_wire.html#VALpkt_of_buf) takes
-a [Cstruct.t] (https://github.com/mirage/ocaml-cstruct) buffer and a length, it
+[pkt_of_buf](http://haesbaert.github.io/charrua-core/api/Dhcp_wire.html#VALpkt_of_buf) takes
+a [Cstruct.t](https://github.com/mirage/ocaml-cstruct) buffer and a length, it
 then attempts to build a DHCP packet, unknown DHCP options are ignored, invalid
 options or malformed data is not accepted and you get a `` `Error of string``.
 
-[buf_of_pkt]
-(http://haesbaert.github.io/charrua-core/api/Dhcp_wire.html#VALbuf_of_pkt) is
+[buf_of_pkt](http://haesbaert.github.io/charrua-core/api/Dhcp_wire.html#VALbuf_of_pkt) is
 the mirror function, but it never fails, it could for instance fail in case of
 two duplicate DHCP options, but that would imply too much policy in a
 marshalling function.
@@ -103,12 +102,9 @@ val input_pkt : Dhcp_server.Config.t -> Dhcp_server.Config.subnet ->
 
 A typical main server loop would work by:
  1. Reading a packet from the network.
- 2. Unmarshaling with [Dhcp_wire.pkt_of_buf]
-(http://haesbaert.github.io/charrua-core/api/Dhcp_wire.html#VALpkt_of_buf).
- 3. Inputing the result with [Dhcp_server.Input.input_pkt]
-(http://haesbaert.github.io/charrua-core/api/Dhcp_server.Input.html#VALinput_pkt).
- 4. Sending the reply, or logging the event from the [Dhcp_server.Input.input_pkt]
-(http://haesbaert.github.io/charrua-core/api/Dhcp_server.Input.html#VALinput_pkt) call.
+ 2. Unmarshaling with [Dhcp_wire.pkt_of_buf](http://haesbaert.github.io/charrua-core/api/Dhcp_wire.html#VALpkt_of_buf).
+ 3. Inputing the result with [Dhcp_server.Input.input_pkt](http://haesbaert.github.io/charrua-core/api/Dhcp_server.Input.html#VALinput_pkt).
+ 4. Sending the reply, or logging the event from the [Dhcp_server.Input.input_pkt](http://haesbaert.github.io/charrua-core/api/Dhcp_server.Input.html#VALinput_pkt) call.
 
 A mainloop example can be found in
 [mirage-skeleton](https://github.com/mirage/mirage-skeleton/blob/master/dhcp/unikernel.ml#L28):
@@ -194,16 +190,13 @@ The next steps would be:
 * Provide helpers for building the configuration.
 * Expose the lease database in an immutable structure, possibly a `Map`, adding
 also support/example for [Irmin](https://github.com/mirage/irmin).
-* Use [Functoria] (https://github.com/mirage/functoria) to pass down the
-configuration in [mirage-skeleton]
-(https://github.com/mirage/mirage-skeleton/blob/master/dhcp/README.md). Currently
+* Use [Functoria](https://github.com/mirage/functoria) to pass down the
+configuration in [mirage-skeleton](https://github.com/mirage/mirage-skeleton/blob/master/dhcp/README.md). Currently
 it is awkward since the user has to edit `unikernel.ml` and `config.ml`, with
-[Functoria] (https://github.com/mirage/functoria) we would be able to have it
+[Functoria](https://github.com/mirage/functoria) we would be able to have it
 much nicer and only touch `config.ml`.
-* Convert MirageOS DHCP client code to use [Dhcp_wire]
-(http://haesbaert.github.io/charrua-core/api/Dhcp_wire.html), or perhaps add a
-client logic functionality to [Charrua]
-(http://www.github.com/haesbaert/charrua-core).
+* Convert MirageOS DHCP client code to use [Dhcp_wire](http://haesbaert.github.io/charrua-core/api/Dhcp_wire.html), or perhaps add a
+client logic functionality to [Charrua](http://www.github.com/haesbaert/charrua-core).
 
 ### Finishing words
 
@@ -220,5 +213,5 @@ everyone has been incredibly friendly and supportful, I'd say MirageOS is a gold
 project for anyone wanting to work with smart people and hack OCaml.
 
 My many thanks to Anil, Richard, Hannes, Amir, Scott, Gabriel and others. I also
-would like to thank my [employer] (www.genua.de) for letting me work on this
+would like to thank my [employer](http://www.genua.de) for letting me work on this
 project in our hackathons.
