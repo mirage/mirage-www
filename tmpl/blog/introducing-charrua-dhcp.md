@@ -212,6 +212,14 @@ amazed on how easy the interaction and comunication with the community has been,
 everyone has been incredibly friendly and supportful, I'd say MirageOS is a gold
 project for anyone wanting to work with smart people and hack OCaml.
 
-My many thanks to Anil, Richard, Hannes, Amir, Scott, Gabriel and others. I also
-would like to thank my [employer](http://www.genua.de) for letting me work on this
+My many thanks to [Anil][], [Richard][], [Hannes][], [Amir][], Scott, Gabriel and others. Thanks also to [Thomas][] and [Christophe][] for comments on this post.
+I also
+would like to thank my [employer](https://www.genua.de) for letting me work on this
 project in our hackathons.
+
+[Anil]: http://anil.recoil.org
+[Richard]: http://mort.io
+[Hannes]: https://github.com/hannesm
+[Amir]: https://twitter.com/amirmc
+[Thomas]: http://roscidus.com/blog/
+[Christophe]: https://github.com/Chris00/
