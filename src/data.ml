@@ -114,6 +114,12 @@ module People = struct
     email     = Some "buzzheavyyear@hotmail.com";
   }
 
+  let christiano = {
+    Atom.name = "Christiano Haesbaert";
+    uri       = Some "http://www.haesbaert.org/";
+    email     = Some "haesbaert@haesbaert.org";
+  }
+
 end
 
 let rights = Some "All rights reserved by the author"
@@ -125,6 +131,13 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2015, 12, 29, 15, 30);
+        authors    = [christiano];
+        subject    = "Introducing Charrua — a DHCP implementation";
+        body       = "introducing-charrua-dhcp.md";
+        permalink  = "introducing-charrua-dhcp";
+      };
+
       { updated    = date (2015, 12, 17, 12, 0);
         authors    = [amir];
         subject    = "Unikernel.org";
