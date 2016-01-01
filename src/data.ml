@@ -131,6 +131,13 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2016, 1, 1, 23, 42);
+        authors    = [hannes];
+        subject    = "MirageOS hackathon";
+        body       = "hackathon-marrakech2016.md";
+        permalink  = "hackathon-marrakech2016";
+      };
+
       { updated    = date (2015, 12, 29, 15, 30);
         authors    = [christiano];
         subject    = "Introducing Charrua — a DHCP implementation";
