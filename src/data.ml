@@ -120,6 +120,12 @@ module People = struct
     email     = Some "haesbaert@haesbaert.org";
   }
 
+  let djwillia = {
+    Atom.name = "Dan Williams";
+    uri       = Some "https://github.com/djwillia";
+    email     = Some "djwillia@us.ibm.com";
+  }
+
 end
 
 let rights = Some "All rights reserved by the author"
@@ -131,6 +137,13 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2016, 1, 6, 14, 36);
+        authors    = [djwillia];
+        subject    = "Run Mirage Unikernels on KVM/QEMU with Solo5";
+        body       = "introducing-solo5.md";
+        permalink  = "introducing-solo5";
+      };
+
       { updated    = date (2016, 1, 1, 23, 42);
         authors    = [hannes];
         subject    = "MirageOS hackathon";
