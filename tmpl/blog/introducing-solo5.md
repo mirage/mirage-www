@@ -1,11 +1,11 @@
 I'm excited to announce the release of
-[Solo5](https://github.com/djwillia/solo5/tree/mirage) via mirage.io!
+[Solo5](https://github.com/djwillia/solo5/tree/mirage)!
 Solo5 is essentially a kernel library that bootstraps the hardware and
 forms a base (similar to Mini-OS) from which unikernels can be built.
 It runs on fully virtualized x86 hardware (e.g., KVM/QEMU), using
 `virtio` device interfaces.
 
-Importantly, Solo5 is integrated (to some extent) with the Mirage
+Importantly, Solo5 is integrated (to some extent) with the MirageOS
 toolstack, so the Solo5 version of the Mirage toolstack can build
 Mirage unikernels that run directly on KVM/QEMU instead of Xen.  As
 such, Solo5 can be considered an alternative to Mini-OS in the Mirage
@@ -15,7 +15,6 @@ today!](https://github.com/djwillia/solo5/tree/mirage)
 In the rest of this post, I'll give a bit of motivation about why I
 think the lowest layer of the unikernel is interesting and important,
 as well as a rough overview of the steps I took to create Solo5.
-Thanks for reading!
 
 ### Why focus so far down the software stack?
 
@@ -23,7 +22,7 @@ When people think about Mirage unikernels, one of the first things
 that comes to mind is the use of a high-level language (OCaml).
 Indeed, the Mirage community has invested lots of time and effort
 producing implementations of traditional system components (e.g., an
-entire TCP stack) in OCaml.  The pervasive use of OCaml contributes to
+entire [TCP stack](https://github.com/mirage/mirage-tcpip)) in OCaml.  The pervasive use of OCaml contributes to
 security arguments for Mirage unikernels (strong type systems are
 good) and is an interesting design choice well worth exploring.
 
@@ -46,7 +45,7 @@ written in C.  This layer has a direct impact on:
   require cooperation of this lowest layer.
 
 * **Low-level device interfacing.** As individual devices (e.g., NICs)
-  gain virtualization capabilities, the lowest-software layer is an
+  gain virtualization capabilities, the lowest software layer is an
   obvious place to interface directly with hardware.
 
 * **Threads/events.** The low-level code must ensure that device I/O
@@ -54,12 +53,15 @@ written in C.  This layer has a direct impact on:
   primitives.
 
 The most popular existing code providing this low-level kernel layer
-for is called Mini-OS.  Mini-OS was (I believe) originally written as
+is called Mini-OS.  Mini-OS was (I believe) originally written as
 a vehicle to demonstrate the paravirtualized interface offered by Xen
 for people to have a reference to port their kernels to and as a base
 for new kernel builders to build specialized Xen domains.  Mini-OS is
-a popular base for MirageOS, ClickOS, and other unikernels.  Other
-software that implements a unikernel base include rumprun and OSv.
+a popular base for [MirageOS](https://mirage.io),
+[ClickOS](http://cnp.neclab.eu/clickos),
+and [other unikernels](http://unikernel.org/projects/).  Other
+software that implements a unikernel base include
+[Rumprun](http://rumpkernel.org/) and [OSv](http://osv.io/).
 
 I built Solo5 from scratch (rather than adapting Mini-OS, for example)
 primarily as an educational (and fun!) exercise to explore and really
@@ -90,12 +92,13 @@ base that runs on KVM/QEMU and supports Mirage:
   interesting to write them in OCaml like the Xen device drivers in
   Mirage, but for someone who doesn't know OCaml (like me) a simple C
   implementation seemed like a good first step.  I should note that
-  even though the drivers themselves are written in C, to connect with
-  Mirage Solo5 does include some OCaml code to call out to the
-  drivers.
+  even though the drivers themselves are written in C, Solo5 does
+  include some OCaml code to call out to the drivers so it can connect with
+  Mirage.
 
 * **Appropriately link Mirage binaries/build system.** A piece of
-  software called mirage-platform performs the binding between Mini-OS
+  software called [mirage-platform](https://github.com/mirage/mirage-platform)
+  performs the binding between Mini-OS
   and the rest of the Mirage stack.  Building a new unikernel base
   means that this "cut point" will have lots of undefined dependencies
   which can either be implemented in the new unikernel base, stubbed
@@ -115,7 +118,8 @@ systems.  It's a work in progress!
 In addition to the aforementioned clean up, I'm currently exploring
 the boot time in this environment.  So far I've found that generating
 a bootable iso with GRUB as a bootloader and relying on QEMU to
-emulate BIOS calls to load the kernel is... inefficient.
+emulate BIOS calls to load the kernel is, by the nature of emulation,
+inefficient and something that should be avoided.
 
 If you find the lowest layer of the unikernel interesting, please
 don't hesitate to contact me or get involved.  I've packaged the build
@@ -123,3 +127,11 @@ and test environment for Solo5 into a Docker container to reduce the
 dependency burden in playing around with it.  Check out [the
 repo](https://github.com/djwillia/solo5/tree/mirage) for the full
 instructions!
+
+I'll be talking about Solo5 at the upcoming [2016 Unikernels and More:
+Cloud Innovators
+Forum](http://wiki.xenproject.org/wiki/2016_Unikernels_and_More:_Cloud_Innovators_Forum_Schedule)
+event to be held on January 22, 2016 at [SCALE
+14X](https://www.socallinuxexpo.org/scale/14x) in Pasadena, CA USA.  I
+look forward to meeting some of you there!
+
