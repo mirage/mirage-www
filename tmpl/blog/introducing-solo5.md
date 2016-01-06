@@ -70,13 +70,13 @@ provide applications, Solo5 supports the Mirage stack.  It is my hope
 that Solo5 can be a useful base for others; even if only at this point
 to run some Mirage applications on KVM/QEMU!
 
-### Solo5: Building a Unikernel Base From Scratch
+### Solo5: Building a Unikernel Base from Scratch
 
 At a high level, there are roughly 3 parts to building a unikernel
 base that runs on KVM/QEMU and supports Mirage:
 
 * **Typical kernel hardware initialization.** The kernel must know how
-  to loading things into memory at the desired locations, and prepare
+  to load things into memory at the desired locations and prepare
   the processor to operate in the correct mode (e.g., 64-bit).  Unlike
   typical kernels, most setup is one-time and simplified.  The kernel
   must set up a memory map, stack, interrupt vectors, and provide
@@ -134,4 +134,9 @@ Forum](http://wiki.xenproject.org/wiki/2016_Unikernels_and_More:_Cloud_Innovator
 event to be held on January 22, 2016 at [SCALE
 14X](https://www.socallinuxexpo.org/scale/14x) in Pasadena, CA USA.  I
 look forward to meeting some of you there!
+
+*Thanks to [@amirmc](https://github.com/amirmc),
+[@mor1](https://github.com/mor1),
+and [@yallop](https://github.com/yallop),
+for taking the time to read and comment on earlier drafts.*
 
