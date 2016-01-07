@@ -4,4 +4,4 @@ Find more details on [the hackathon website](http://marrakech2016.mirage.io).
 
 *Edit: discuss this post on [devel.unikernel.org][discuss]*
 
-[discuss]: http://devel.unikernel.org/t/1st-mirageos-hackathon/24/1
+[discuss]: https://devel.unikernel.org/t/1st-mirageos-hackathon/24/1

@@ -36,7 +36,7 @@ improving unikernels!
 
 *Edit: discuss this post on [devel.unikernel.org][discuss]*
 
-[discuss]: http://devel.unikernel.org/t/why-we-need-unikernel-org/18/1
+[discuss]: https://devel.unikernel.org/t/why-we-need-unikernel-org/18/1
 
 *Thanks to [Anil][], [Jeremy][] and [Mindy][] for
 comments on an earlier draft.*
