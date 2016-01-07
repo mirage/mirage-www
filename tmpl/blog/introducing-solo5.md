@@ -135,8 +135,8 @@ event to be held on January 22, 2016 at [SCALE
 14X](https://www.socallinuxexpo.org/scale/14x) in Pasadena, CA USA.  I
 look forward to meeting some of you there!
 
-*Thanks to [@amirmc](https://github.com/amirmc),
-[@mor1](https://github.com/mor1),
-and [@yallop](https://github.com/yallop),
+*Thanks to [Amir](https://twitter.com/amirmc),
+[Mort](http://mort.io),
+and [Jeremy](https://github.com/yallop),
 for taking the time to read and comment on earlier drafts.*
 
