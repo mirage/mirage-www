@@ -135,6 +135,10 @@ event to be held on January 22, 2016 at [SCALE
 14X](https://www.socallinuxexpo.org/scale/14x) in Pasadena, CA USA.  I
 look forward to meeting some of you there!
 
+*Discuss this post on [devel.unikernel.org][discuss]*
+
+[discuss]: https://devel.unikernel.org/t/run-mirage-unikernels-on-kvm-qemu-with-solo5/59
+
 *Thanks to [Amir](https://twitter.com/amirmc),
 [Mort](http://mort.io),
 and [Jeremy](https://github.com/yallop),

@@ -137,7 +137,7 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
-      { updated    = date (2016, 1, 6, 14, 36);
+      { updated    = date (2016, 1, 7, 18, 10);
         authors    = [djwillia];
         subject    = "Run Mirage Unikernels on KVM/QEMU with Solo5";
         body       = "introducing-solo5.md";
