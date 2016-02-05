@@ -326,7 +326,7 @@ will act as our block device. Once it runs, `mir-block-test` will write a series
 of patterns to the block device and read them back to check that they are the
 same (the logic for this is in `unikernel.ml` within the `Block_test` module).
 
-THe Xen version works the same way. First build the code:
+The Xen version works the same way. First build the code:
 
 ```
 $ mirage configure --xen
