@@ -4,7 +4,7 @@ MirageOS consists of a set of OCaml libraries that link with a runtime to form e
 
 MirageOS has been tested on ArchLinux, Debian Wheezy, Ubuntu Precise/Lucid/Raring/Saucy, CentOS 6.4 and MacOS X 10.8 and 10.9. To compile the Xen backend, you *must* have a 64-bit Linux host. 32-bit is not supported at this time.
 
-If you're using MacOS X, you will also need the [tuntap](http://tuntaposx.sourceforge.net/) kernel module if you want to use the MirageOS network stack from userspace.
+If you're using MacOS X 10.9 or older, you will also need the [tuntap](http://tuntaposx.sourceforge.net/) kernel module if you want to use the MirageOS network stack from userspace.
 
 If you're using Ubuntu/Debian, we recommend you also install the essential build tools (GNU make, etc) and GNU M4 as well as the OCaml toolchain including camlp4:
 
@@ -36,11 +36,12 @@ After installation, `opam update -u` refreshes the package list and recompiles p
     # list of your remotes, which should include opam.ocaml.org
     $ opam remote
 
-Next, make sure you have at either OCaml 4.00.1 or 4.01.0 as your active compiler. This is generally the case on MacOS X, though Debian only has it in the *unstable* distribution at present. But don't worry: if your compiler is out of date, just run `opam switch` to have it locally install the right version for you.
+Next, make sure you have at least **OCaml 4.01.0 or higher** as your active compiler. This is generally the case on MacOS X, though Debian only has it in the *unstable* distribution at present. But don't worry: if your compiler is out of date, just run `opam switch` to have it locally install the right version for you.
 
     $ ocaml -version
-    # if it is not 4.00.1 or 4.01.0, then run this
-    $ opam switch 4.01.0
+    # if it is not 4.01.0 or higher, then run this
+    $ opam switch `opam switch | grep Official | tail -1 | awk '{print $3}'`
+    # to install the latest available version
 
 Once you've got the right version, set up your shell environment to point to the current compiler switch.
 
