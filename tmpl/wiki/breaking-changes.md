@@ -1,6 +1,6 @@
 This page records API changes that require existing code to be updated.
 
-### 2015-09, Functoria edition
+### 2016-02-17: Functoria edition
 
 #### Command line
 
