@@ -1,5 +1,5 @@
 For the last few months, I've been working with [Thomas][] on improving the `mirage` tool and
-I'm happy to present [Functoria](https://github.com/mirage/functoria), a library to create arbitrary Mirage-like DSLs. Functoria is independent from `mirage` and will replace the core engine, which was somewhat bolted on to the tool until now.
+I'm happy to present [Functoria](https://github.com/mirage/functoria), a library to create arbitrary MirageOS-like DSLs. Functoria is independent from `mirage` and will replace the core engine, which was somewhat bolted on to the tool until now.
 
 This introduces a few breaking changes so please consult
 [the breaking changes page](../docs/breaking-changes) to see what is different and how to fix things if needed.
@@ -8,10 +8,10 @@ and will even produce pretty pictures!
 
 ## Configuration
 
-For people unfamiliar with mirage, the `mirage` tool handles configuration of mirage unikernel by reading an OCaml file describing the various pieces and dependencies of the project.
+For people unfamiliar with MirageOS, the `mirage` tool handles configuration of mirage unikernels by reading an OCaml file describing the various pieces and dependencies of the project.
 Based on this configuration it will use [opam][] to install the dependencies, handle various configuration tasks and emit a build script.
 
-A very simple configuration file look like this:
+A very simple configuration file looks like this:
 
 ```
 open Mirage
@@ -19,7 +19,7 @@ let main = foreign "Unikernel.Main" (console @-> job)
 let () = register "console" [main $ default_console]
 ```
 
-It declares a new functor, `Unikernel.Main`, which take a console as argument and instantiate it on the `default_console`. For more details about unikernel configuration, please read the [hello-world](../wiki/hello-world) tutorial.
+It declares a new functor, `Unikernel.Main`, which take a console as an argument and instantiates it on the `default_console`. For more details about unikernel configuration, please read the [hello-world](../wiki/hello-world) tutorial.
 
 ## Keys
 
@@ -59,7 +59,7 @@ let lang_key =
   Key.(create "language" Arg.(opt ~stage:`Both string "en" doc))
 ```
 
-Here, we defined both a long option `--lang` and a short one `-l` (the format is similar to the one used by [Cmdliner][cmdliner]).
+Here, we defined both a long option `--lang`, and a short one `-l`, (the format is similar to the one used by [Cmdliner][cmdliner]).
 In the unikernel, the value is retrieved with `Key_gen.language ()`.
 
 The option is also documented in the `--help` option for both `mirage configure` (at configure time) and `./my_unikernel` (at startup time).
@@ -107,11 +107,11 @@ We can now use this device as a normal storage device of type `kv_ro impl`! The 
 
 It is also possible to compute on keys before giving them to `if_impl`, combining multiple keys in order to compute a value, and so on. For more details, see the [API][] and the various examples available in [mirage][] and [mirage-skeleton][].
 
-Switching keys opens various possibilities, for example a `generic_stack` combinator is now implemented in `mirage` that will switch between socket stack, direct stack with DHCP and direct stack with static IP, depending on command line arguments.
+Switching keys opens various possibilities, for example a `generic_stack` combinator is now implemented in `mirage` that will switch between socket stack, direct stack with DHCP, and direct stack with static IP, depending on command line arguments.
 
 ## Drawing unikernels
 
-All these keys and dynamic implementations make for complicated unikernels. In order to still be able to understand what is going on and how to configure our unikernels, we have a new command: `describe`.
+All these keys and dynamic implementations make for complicated unikernels. In order to clarify what is going on and help to configure our unikernels, we have a new command: `describe`.
 
 Let us consider the `console` example in [mirage-skeleton][]:
 
