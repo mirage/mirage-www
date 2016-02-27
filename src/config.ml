@@ -36,7 +36,7 @@ let pr_key =
       ~doc:"Configuration for running inside a travis PR."
       ~env:"TRAVIS_PULL_REQUEST" ["pr"]
   in
-  Key.(create "pr" Arg.(flag ~stage:`Configure doc))
+  Key.(create "pr" Arg.(opt ~stage:`Configure (some int) None doc))
 
 
 let host_key =
@@ -59,16 +59,9 @@ let fs_key = Key.(value @@ kv_ro ())
 let filesfs = generic_kv_ro ~key:fs_key "../files"
 let tmplfs = generic_kv_ro ~key:fs_key "../tmpl"
 
-(* If we are running inside a PR in Travis CI,
-   we don't try to get the server certificates. *)
 let secrets_key = Key.(value @@ kv_ro ~group:"secrets" ())
-let secrets =
-  if_impl (Key.value pr_key)
-    (crunch "../src")
-    (generic_kv_ro ~key:secrets_key "../tls")
-
+let secrets = generic_kv_ro ~key:secrets_key "../tls"
 let stack = generic_stackv4 default_console tap0
-
 
 let http =
   foreign ~keys "Dispatch.Make"
