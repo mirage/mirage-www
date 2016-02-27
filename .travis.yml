@@ -3,15 +3,17 @@ install: wget https://raw.githubusercontent.com/ocaml/ocaml-travisci-skeleton/ma
 script: bash -ex .travis-mirage.sh
 env:
   matrix:
-  - OCAML_VERSION=4.02 FLAGS=-vv MIRAGE_BACKEND=unix MIRAGE_NET=socket
-  - OCAML_VERSION=4.02 FLAGS=-vv MIRAGE_BACKEND=unix MIRAGE_NET=direct
-  - OCAML_VERSION=4.02 FLAGS=-vv MIRAGE_BACKEND=xen  DEPLOY=1 XENIMG="openmirage.org"
-    IP="46.43.42.147" NETMASK="255.255.255.128" GATEWAYS="46.43.42.129"
-    TLS=0 HOST="openmirage.org" REDIRECT="https://mirage.io"
+  - OCAML_VERSION=4.02 MIRAGE_BACKEND=unix FLAGS="-vv --net socket"
+  - OCAML_VERSION=4.02 MIRAGE_BACKEND=unix FLAGS="-vv --net direct"
+  - OCAML_VERSION=4.02 MIRAGE_BACKEND=xen  DEPLOY=1 XENIMG="openmirage.org"
+    FLAGS="-vv --net direct --dhcp false --ip 46.43.42.147
+    --netmask 255.255.255.128 --gateways 46.43.42.129 --tls false
+    --host openmirage.org --redirect https://mirage.io"
     UPDATE_GCC_BINUTILS=1
-  - OCAML_VERSION=4.02 FLAGS=-vv MIRAGE_BACKEND=xen DEPLOY=1 XENIMG="mirage.io"
-    IP="46.43.42.146" NETMASK="255.255.255.128" GATEWAYS="46.43.42.129"
-    TLS=1 HOST="mirage.io" SECRETS=fat
+  - OCAML_VERSION=4.02 MIRAGE_BACKEND=xen DEPLOY=1 XENIMG="mirage.io"
+    FLAGS="-vv --net direct --dhcp false --ip 46.43.42.146
+    --netmask 255.255.255.128 --gateways 46.43.42.129 --tls true
+    --secrets-kv_ro fat --host mirage.io"
     UPDATE_GCC_BINUTILS=1
   global:
   - secure: PUu3+Enupf9jcIPD/hs5b6zrNuJagTDXJGtYfSUIFvzevSXZzs6mXPu8L2vvAQbQ8ig/8VLToa44vUTG9OEy9SxXrR6yTQGfj4YxJ5BXKHwhYMTBXnR1e+S1gA4a5tilMa7M/a0hWa1rORv3diMIK3dihjc1m6VzpCK/4vly7KU=
