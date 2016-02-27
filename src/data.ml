@@ -142,7 +142,7 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
-      { updated    = date (2016, 2, 17, 18, 15);
+      { updated    = date (2016, 2, 29, 12, 00);
         authors    = [drup];
         subject    = "Introducing Functoria";
         body       = "introducing-functoria.md";
