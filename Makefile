@@ -60,7 +60,7 @@ configure:
 	cd stats && make depend
 	# the make depend in src will crunch the stats into the fs:
 	cd stats && make all
-	mirage configure src/config.ml $(FLAGS) --$(MODE)
+	mirage configure -f src/config.ml $(FLAGS) -t $(MODE)
 
 depend:
 	cd stats && make depend
