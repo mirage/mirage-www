@@ -26,8 +26,8 @@ open Mirage
 
 let tls_key =
   let doc = Key.Arg.info
-      ~doc:"Enable serving the website over https."
-      ~env:"TLS" ["tls"]
+      ~doc:"Enable serving the website over https. Do not forget to put certificates in tls/"
+      ~docv:"BOOL" ~env:"TLS" ["tls"]
   in
   Key.(create "tls" Arg.(opt ~stage:`Configure bool false doc))
 
@@ -42,14 +42,15 @@ let pr_key =
 let host_key =
   let doc = Key.Arg.info
       ~doc:"Hostname of the unikernel."
-      ~env:"HOST" ["host"]
+      ~docv:"URL" ~env:"HOST" ["host"]
   in
   Key.(create "host" Arg.(opt string "localhost" doc))
 
 let redirect_key =
   let doc = Key.Arg.info
-      ~doc:"Where to redirect to."
-      ~env:"REDIRECT" ["redirect"]
+      ~doc:"Where to redirect to. Must start with http:// or https://. \
+            When tls is enabled, the default is https://$HOST, with the effect that all http requests will be redirected to https"
+      ~docv:"URL" ~env:"REDIRECT" ["redirect"]
   in
   Key.(create "redirect" Arg.(opt (some string) None doc))
 
