@@ -20,42 +20,18 @@ step by step.
 
 ## Building a Unix version
 
-The `src/config.ml` takes its configuration variables from some environment
-variables, which can be supplied manually or provided via the `Makefile`:
+In order to configure the unikernel, we can use the mirage tool. To see all the available options:
 
 ```
-MODE   ?= unix
-FS     ?= crunch
-NET    ?= direct
-XENIMG ?= www
-HOST   ?= localhost
+cd src
+mirage configure --help
 ```
 
-These `Makefile` variables do the following:
-* `MODE` is either `unix` or `xen`, selecting the backend you're compiling for.
-* `FS` is either `fat` or `crunch`, depending on if you want to use an external
-  block device or simply compile the website contents directly into the `mirage`
-  binary.
-* `NET` is either `socket` or `direct`, selecting whether you wish to use the
-  host-local network stack, or the MirageOS network stack respectively. Note
-  that building for `MODE=xen` implies `NET=direct`.
-* `XENIMG` sets the name of the built Xen VM image and configuration.
-* `HOST` sets the root domain for the site, to which links are relative.
+Alternatively, You can get a quick overview of all the options (and their current value):
 
-To configure the network, the following further variables can be set:
-+ `DHCP` is either `false` (or blank) or `true`, specifying whether the
-  unikernel should acquire address information via DHCP on startup.
-+ (`IP`,`NETMASK`,`GATEWAYS`) indicate static IP configuration and should be set
-  to the desired IP address, the netmask and a `:`-separated list of gateways.
-+ `TLS` is either `false` or `true` (default: `false`).
-+ `REDIRECT` is set to the `https` target for all `http` requests. If `TLS` is
-  set but `REDIRECT` is not, then `REDIRECT=https://$HOST` is assumed.
-
-If neither `DHCP` nor all of `IP`, `NETMASK` and `GATEWAYS` are set, then
-`IP="10.0.0.2"`, `NETMASK="255.255.255.0"` and `GATEWAYS="10.0.0.1"` are
-assumed. This can be overridden by editing the `config.ml` (see the
-[live website configuration](https://github.com/mirage/mirage-www/blob/master/.travis.yml)
-for an example of a static IPv4 address).
+```
+mirage describe
+```
 
 ### A Unix development workflow
 
@@ -69,23 +45,15 @@ First, if you wish to build the site to present the site statistics (garbage
 collection, etc) data, build the JavaScript:
 
 ```
-cd stats && make depend build
+make prepare
 ```
 
 Then configure and build the website itself:
 
 ```
 $ cd src
-$ env NET=socket FS=crunch mirage configure --unix
+$ mirage configure --unix --kv_ro crunch --net socket
 $ make
-```
-
-Alternatively you can use the toplevel `Makefile` to achieve both the above
-steps:
-
-```
-$ make NET=socket FS=crunch configure
-$ make build
 ```
 
 Finally, run the website application:
@@ -94,9 +62,7 @@ Finally, run the website application:
 $ sudo ./mir-www
 ```
 
-For the rest of the tutorial, we'll call `mirage` directly rather than use the
-`Makefile`, as this makes the tools usage clearer. If you run the above
-commands, the website will now be available on `http://localhost/`.
+The website will now be available on `http://localhost/`.
 
 ## Building the direct networking version
 
@@ -107,7 +73,7 @@ On Unix with a tuntap device:
 
 ```
 $ cd src
-$ env NET=direct mirage configure --unix
+$ mirage configure --unix --net direct
 $ make
 $ sudo ./mir-www
 ```
@@ -143,26 +109,26 @@ variables, so we can quickly try it as follows.
 
 ```
 $ cd src
-$ env FS=fat mirage configure --unix
+$ mirage configure --unix --kv_ro fat
 $ make
 $ sudo ./mir-www & sudo ifconfig tap0 10.0.0.1 255.255.255.0 && fg
 ```
 
-The `make-fat-images.sh` script uses the `fat` command-line helper installed by
+The `make-fat_*-images.sh` script uses the `fat` command-line helper installed by
 the `ocaml-fat` package to build the FAT block image for you. If you now access
 the website, it is serving the traffic straight from the FAT image you just
 created, without requiring a Unix filesystem at all!
 
 You can inspect the resulting FAT images for yourself by using the `fat` command
-line tool, and the `make-fat1-image.sh` script.
+line tool, and the generated scripts.
 
 ```
-$ file fat1.img
+$ file fat_block1.img
 fat1.img: x86 boot sector, code offset 0x0, OEM-ID "ocamlfat",
 sectors/cluster 4, FAT  1, root entries 512, Media descriptor 0xf8,
 sectors/FAT 2, sectors 1728 (volumes > 32 MB) , dos < 4.0 BootSector (0x0)
 
-$ fat list fat1.img
+$ fat list fat_block1.img
 /wiki (DIR)(1856 bytes)
 /wiki/xen-synthesize-virtual-disk.md (FILE)(8082 bytes)
 /wiki/xen-suspend.md (FILE)(14120 bytes)
