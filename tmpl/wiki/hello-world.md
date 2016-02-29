@@ -286,9 +286,10 @@ open Mirage
 
 let main = foreign "Unikernel.Main" (console @-> block @-> job)
 
-let img = match get_mode () with
-  | `Xen -> block_of_file "xvda1"
-  | `Unix | `MacOSX -> block_of_file "disk.img"
+let img =
+  if_impl Key.is_xen
+    (block_of_file "xvda1")
+    (block_of_file "disk.img")
 
 let () =
   register "block_test" [main $ default_console $ img]
@@ -571,21 +572,7 @@ of this selection logic is simple enough.
 ```
 open Mirage
 
-let mode =
-  let x = try Unix.getenv "FS" with Not_found -> "crunch" in
-  match x with
-  | "fat"    -> `Fat
-  | "crunch" -> `Crunch
-  | x        -> failwith ("Unknown FS mode: " ^ x)
-
-let fat_ro dir =
-  kv_ro_of_fs (fat_of_files ~dir ())
-
-let disk =
-  match mode, get_mode () with
-  | `Fat   , _                 -> fat_ro "t"
-  | `Crunch, `Xen              -> crunch "t"
-  | `Crunch, (`Unix | `MacOSX) -> direct_kv_ro "t"
+let disk = generic_kv_ro "t"
 
 let main =
   foreign "Unikernel.Main" (console @-> kv_ro @-> kv_ro @-> job)
@@ -601,7 +588,7 @@ appropriate settings for external filesystem access.
 On OSX:
 
 ```
-$ env FS=fat mirage configure --unix
+$ mirage configure --unix --kv_ro fat
 $ ./make-fat1-image.sh
 $ file fat1.img
 fat1.img: x86 boot sector, code offset 0x0, OEM-ID "ocamlfat",
@@ -612,7 +599,7 @@ sectors/FAT 1, sectors 49 (volumes > 32 MB) , dos < 4.0 BootSector (0x0)
 or, on Linux:
 
 ```
-$ env FS=fat mirage configure --unix
+$ mirage configure --unix --kv_ro fat
 $ ./make-fat1-image.sh
 $ file fat1.img
 fat1.img: x86 boot sector
@@ -661,29 +648,12 @@ directory in `mirage-skeleton`.
 ```
 open Mirage
 
-let net =
-  try match Sys.getenv "NET" with
-    | "direct" -> `Direct
-    | "socket" -> `Socket
-    | _        -> `Direct
-  with Not_found -> `Direct
+let handler = foreign "Unikernel.Main" (console @-> stackv4 @-> job)
 
-let dhcp =
-  try match Sys.getenv "DHCP" with
-    | "" -> false
-    | _  -> true
-  with Not_found -> false
-
-let stack =
-  match net, dhcp with
-  | `Direct, true  -> direct_stackv4_with_dhcp default_console tap0
-  | `Direct, false -> direct_stackv4_with_default_ipv4 default_console tap0
-  | `Socket, _     -> socket_stackv4 default_console [Ipaddr.V4.any]
-
-let main = foreign "Unikernel.Main" (console @-> stackv4 @-> job)
+let stack = generic_stackv4 default_console tap0
 
 let () =
-  register "stackv4" [main $ default_console $ stack]
+  register "stackv4" [handler $ default_console $ stack]
 ```
 
 This configuration shows how composable the network stack subsystem is: the
@@ -726,7 +696,7 @@ first.
 
 ```
 $ cd stackv4
-$ env NET=socket mirage configure --unix
+$ mirage configure --unix --net socket
 $ make
 $ sudo ./mir-stackv4
 Manager: connect
@@ -767,7 +737,7 @@ Assuming you've got a DHCP server running:
 
 ```
 $ cd stackv4
-$ env NET=direct DHCP=true mirage configure --unix
+$ mirage configure --unix --dhcp true --net direct
 $ make
 $ sudo ./mir-stackv4
 Netif: connect unknown
@@ -837,7 +807,7 @@ ensure we have a route to it. Thus:
 
 ```
 $ cd stackv4
-$ env NET=direct DHCP=false mirage configure --unix
+$ mirage configure --unix --dhcp false --net direct
 $ make
 $ sudo ./mir-stackv4
 Netif: plugging into tap0 with mac c2:9d:56:19:d7:2c
@@ -905,7 +875,7 @@ configuration file already disables the socket-based job if a Xen compilation is
 detected, leaving just the OCaml TCP/IP stack.
 
 ```
-$ env DHCP=true mirage configure --xen
+$ mirage configure --xen --dhcp true
 $ make
 ```
 

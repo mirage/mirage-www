@@ -9,6 +9,8 @@
 /src/mir-main
 /src/main.native
 /src/www.xl
+/src/www.xl.in
+/src/key_gen.ml
 /src/www.xe
 /src/www_libvirt.xml
 
@@ -22,8 +24,7 @@
 /src/static[0-9].ml
 /src/static[0-9].mli
 /src/fat*.img
-/src/make-fat1-image.sh
-/src/make-fat2-image.sh
+/src/make-fat*.sh
 
 files/js/stats
 
