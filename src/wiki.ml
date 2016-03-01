@@ -23,14 +23,14 @@ module C = Cowabloga
 
 (* Make a full Html.t including Atom link and headers from an wiki
    page *)
-let make ?title ?disqus ~read ~domain ~sidebar content =
+let make ?title ~read ~domain ~sidebar content =
   (* TODO get atom url from the feed *)
   let url = sprintf "/wiki/atom.xml" in
   let headers =
     <:xml<<link rel="alternate" type="application/atom+xml" href=$str:url$ />&>>
   in
   let title = "Docs " ^ match title with None -> "" | Some x -> " :: " ^ x in
-  C.Wiki.html_of_page ?disqus ~content ~sidebar >>= fun content ->
+  C.Wiki.html_of_page ~content ~sidebar >>= fun content ->
   Pages.Global.t ~domain ~title ~headers ~content ~read
 
 (* Main wiki page Html.t fragment with the index page *)
