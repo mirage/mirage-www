@@ -16,6 +16,7 @@
 
 open Printf
 open Lwt.Infix
+open Cow.Html
 
 type t = Cowabloga.Wiki.entry
 
@@ -27,7 +28,11 @@ let make ?title ~read ~domain ~sidebar content =
   (* TODO get atom url from the feed *)
   let url = sprintf "/wiki/atom.xml" in
   let headers =
-    <:xml<<link rel="alternate" type="application/atom+xml" href=$str:url$ />&>>
+    link ~attrs:[
+      "rel" , "alternate";
+      "type", "application/atom+xml";
+      "href", url
+    ] empty
   in
   let title = "Docs " ^ match title with None -> "" | Some x -> " :: " ^ x in
   C.Wiki.html_of_page ~content ~sidebar >>= fun content ->

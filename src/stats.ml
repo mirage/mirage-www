@@ -16,6 +16,7 @@
  *)
 
 open Lwt.Infix
+open Cow.Html
 
 let timescales = Rrd_timescales.([
   make ~name:"minute" ~num_intervals:120 ~interval_in_steps:1 ();
@@ -111,38 +112,42 @@ let start ~sleep ~time =
 
 let page () =
   let timescales = List.map (fun t ->
-    let uri = "?timescale=" ^ t.Rrd_timescales.name in
-    <:html<
-    <a href="$str:uri$">$str:t.Rrd_timescales.name$</a>
-    >>
-  ) timescales in
-  <:html<
-    <head>
-      <meta charset="utf-8" />
-      <title>Server statistics</title>
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.css" rel="stylesheet" type="text/css"/>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"></script>
-      <script src="/js/stats/main.js"> </script>
-    </head>
-    <body>
-      <h1>Server statistics</h1>
-      <p>
-        Select a timescale: $List.concat timescales$
-      </p>
-      <h2>HTTP</h2>
-      <p>This charts shows the number of HTTP requests per second</p>
-      <p>
-        <div id="http"/>
-      </p>
-      <h2>Memory usage</h2>
-      <p>This chart shows heap usage, divided into live_words and free_words. The values are stacked,
-         allowing you to see the total amount of memory being managed by OCaml.</p>
-      <p>
-        <div id="memory"/>
-      </p>
-    </body>
-  >>
+      let uri = "?timescale=" ^ t.Rrd_timescales.name in
+      a ~href:(Uri.of_string uri) (string t.Rrd_timescales.name)
+    ) timescales
+  in
+  list [
+    head (list [
+      meta ~attrs:["charset","utf-8"] empty;
+      title (string "Server statistics");
+      link ~attrs:[
+        "href", "https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.css";
+        "rel" , "stylesheet";
+        "type", "text/css"
+      ] empty;
+      script
+        ~src:"https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"
+        ~charset:"utf-8"
+        empty;
+      script
+        ~src:"https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"
+        empty;
+      script ~src:"/js/stats/main.js" empty;
+    ]);
+    body (list [
+        h1 (string "Server statistics");
+        p (string  "Select a timescale: " ++ list timescales);
+        h2 (string "HTTP");
+        p (string "This charts shows the number of HTTP requests per second");
+        p (div ~id:"http" empty);
+        h2 (string "Memory usage");
+        p (string
+             "This chart shows heap usage, divided into live_words and \
+              free_words. The values are stacked, allowing you to see the \
+              total amount of memory being managed by OCaml."
+           ++ div ~id:"memory" empty)
+      ])
+  ]
 
 let get_rrd_updates uri =
   rrd >>= fun rrd ->
