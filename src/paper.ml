@@ -14,7 +14,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *)
 
-open Cow
+open Cow.Html
 
 type item = {
   href : string;
@@ -22,37 +22,41 @@ type item = {
   alt : string;
 }
 
-let html_of_item i =
-  let cl = Printf.sprintf "fa fa-%s" i.icon in
-  <:xml<<a href=$str:i.href$><i class=$str:cl$> </i></a> >>
+let uri = Uri.of_string
+
+let html_of_item item =
+  let cl = Printf.sprintf "fa fa-%s" item.icon in
+  a ~href:(uri item.href) (i ~cls:cl empty)
 
 type author = string
 
 let html_of_authors al =
   match List.rev al with
     | []   -> assert false
-    | [a]  -> <:xml<$str:a$&>>
-    | a::t -> <:xml<$str:String.concat ", " (List.rev t)$ and $str:a$&>>
+    | [a]  -> string a
+    | a::t ->
+      string (String.concat ", " (List.rev t)) ++ string " and " ++ string  a
 
 type paper = {
-  name : string;
-  items : item list;
-  title : string;
+  name    : string;
+  items   : item list;
+  title   : string;
   authors : author list;
-  descr : Html.t;
-  abstract : Html.t;
+  descr   : Cow.Html.t;
+  abstract: Cow.Html.t;
 }
 
-let html_of_paper p = <:html<
-    <h4>$str:p.title$ &nbsp; &nbsp;
-    <a name=$str:p.name$> </a>$list:List.map html_of_item p.items$ </h4>
-    <p>
-      <i>$html_of_authors p.authors$</i>.
-      <br />
-      $p.descr$
-    </p>
-     <blockquote>$p.abstract$</blockquote>
->>
+let html_of_paper paper =
+  list [
+    h4 (string paper.title
+        ++ of_string "&nbsp; &nbsp;"
+        ++ anchor paper.name
+        ++ list (List.map html_of_item paper.items));
+    p (i (html_of_authors paper.authors)
+       ++ br empty
+       ++ paper.descr);
+    tag "blockquote" paper.abstract
+  ]
 
 let anil    = "Anil Madhavapeddy"
 let mort    = "Richard Mortier"
@@ -105,25 +109,40 @@ let prezi path = {
   alt  = "Prezi presentation";
 }
 
+let url = Uri.of_string
+
 let papers = [
   { name = "cacm";
     items = [ ext "http://queue.acm.org/detail.cfm?id=2566628" ];
     title = "Unikernels: Rise of the Virtual Library Operating System";
     authors = [ anil; dave ];
-    descr = <:xml< In <a href="http://cacm.acm.org">Communications of the ACM</a>, January 2014. >>;
-    abstract = <:xml< What if all the software layers in a virtual appliance were compiled within the same safe, high-level language framework? >>;
+    descr =
+      string "In "
+      ++ a ~href:(url "http://cacm.acm.org")  (string "Communications of the ACM")
+      ++ string ", January 2014.";
+    abstract =
+      string "What if all the software layers in a virtual appliance were \
+              compiled within the same safe, high-level language framework?";
   };
   { name     = "rwo";
     items = [ ext "https://realworldocaml.org"; ];
     title = "Real World OCaml: functional programming for the masses";
     authors = [ anil; yminsky; jhickey ];
-    descr = <:xml<
-      Published by O'Reilly Associates, 510 pages, Nov 2013.
-      >>;
-    abstract = <:xml<
-This fast-moving tutorial introduces you to OCaml, an industrial-strength programming language designed for expressiveness, safety, and speed. Through the book’s many examples, you’ll quickly learn how OCaml stands out as a tool for writing fast, succinct, and readable systems code.
-Real World OCaml takes you through the concepts of the language at a brisk pace, and then helps you explore the tools and techniques that make OCaml an effective and practical tool. In the book’s third section, you’ll delve deep into the details of the compiler toolchain and OCaml’s simple and efficient runtime system. >>
-
+    descr = string "Published by O'Reilly Associates, 510 pages, Nov 2013.";
+    abstract =
+      string "This fast-moving tutorial introduces you to OCaml, an \
+              industrial-strength programming language designed for \
+              expressiveness, safety, and speed. Through the book’s \
+              many examples, you’ll quickly learn how OCaml stands \
+              out as a tool for writing fast, succinct, and readable \
+              systems code.\n\
+              \n\
+              Real World OCaml takes you through the concepts of the \
+              language at a brisk pace, and then helps you explore the \
+              tools and techniques that make OCaml an effective and \
+              practical tool. In the book’s third section, you’ll delve \
+              deep into the details of the compiler toolchain and OCaml’s \
+              simple and efficient runtime system."
   };
   { name     = "asplos";
     items    = [
@@ -131,25 +150,29 @@ Real World OCaml takes you through the concepts of the language at a brisk pace,
       acm "2451116.2451167" ];
     title    = "Unikernels: library operating systems for the cloud";
     authors  = [ anil; mort; haris; dave; balraj; thomas; smith; steven; jon ];
-    descr    = <:xml<
-      Proceedings of the 18th International Conference on Architectural Support for Programming Languages and Operating Systems
-      <a href="http://asplos13.rice.edu/">ASPLOS '13</a>, April, 2013 >>;
-    abstract = <:xml<
-       We present <em>unikernels</em>, a new approach to deploying cloud services via
-       applications written in high-level source code. Unikernels are
-       single-purpose appliances that are compile-time specialised into
-       standalone kernels, and sealed against modification when deployed to a
-       cloud platform. In return they offer significant reduction in image
-       sizes, improved efficiency and security, and should reduce operational
-       costs. Our MirageOS prototype compiles OCaml code into unikernels that
-       run on commodity clouds and offer an order of magnitude reduction in
-       code size without significant performance penalty. The architecture
-       combines static type-safety with a single address-space layout that can
-       be made immutable via a hypervisor extension. MirageOS contributes a
-       suite of type-safe protocol libraries, and our results demonstrate that
-       the hypervisor is a platform that overcomes the hardware compatibility
-       issues that have made past library operating systems impractical to
-       deploy in the real-world. >>;
+    descr    =
+      string "Proceedings of the 18th International Conference on \
+              Architectural Support for Programming Languages and \
+              Operating Systems"
+      ++ a ~href:(url "http://asplos13.rice.edu/") (string ">ASPLOS '13")
+      ++ string ", April, 2013.";
+    abstract =
+      string
+       "We present <em>unikernels</em>, a new approach to deploying cloud \
+        services via applications written in high-level source code. Unikernels \
+        are single-purpose appliances that are compile-time specialised into \
+       standalone kernels, and sealed against modification when deployed to a \
+       cloud platform. In return they offer significant reduction in image \
+       sizes, improved efficiency and security, and should reduce operational \
+       costs. Our MirageOS prototype compiles OCaml code into unikernels that \
+       run on commodity clouds and offer an order of magnitude reduction in \
+       code size without significant performance penalty. The architecture \
+       combines static type-safety with a single address-space layout that can \
+       be made immutable via a hypervisor extension. MirageOS contributes a \
+       suite of type-safe protocol libraries, and our results demonstrate that \
+       the hypervisor is a platform that overcomes the hardware compatibility \
+       issues that have made past library operating systems impractical to \
+       deploy in the real-world."
   };
 
   { name = "openflow";
@@ -158,11 +181,9 @@ Real World OCaml takes you through the concepts of the language at a brisk pace,
     ];
     title = "Cost, Performance & Flexibility in OpenFlow: Pick Three";
     authors = [ mort; haris; anil; balraj; andrew];
-    descr = <:xml<
-      Proceedings of IEEE ICC Software Defined Networking workshop, June 2012.
-        >>;
-    abstract = <:xml<
-      >>;
+    descr = string
+        "Proceedings of IEEE ICC Software Defined Networking workshop, June 2012.";
+    abstract = empty;
   };
 
   { name = "droplets";
@@ -171,12 +192,13 @@ Real World OCaml takes you through the concepts of the language at a brisk pace,
     ];
     title = "Unclouded Vision";
     authors = [ jon; anil; malte; theo; mort ];
-    descr = <:xml<
-      Proceedings of 12th International Conference on Distributed Computing and Networking
-      <a href="http://icdcn2012.comp.polyu.edu.hk/">ICDCN '11</a>, January 2011. Invited paper.
-      >>;
-    abstract = <:xml<
-      >>;
+    descr =
+      string
+        "Proceedings of 12th International Conference on Distributed Computing \
+         and  Networking "
+      ++ a ~href:(url "http://icdcn2012.comp.polyu.edu.hk/") (string ">ICDCN '11")
+      ++ string ", January 2011. Invited paper.";
+    abstract = empty;
   };
 
   { name     = "hotcloud";
@@ -185,13 +207,16 @@ Real World OCaml takes you through the concepts of the language at a brisk pace,
       acm "1863114" ];
     title    = "Turning down the LAMP: Software Specialisation for the Cloud";
     authors  = [ anil; mort; rip; thomas; steven; tim; mac; jon ];
-    descr    = <:xml<
-      2nd USENIX Workshop on Hot Topics in Cloud Computing
-      <a href="http://www.usenix.org/events/hotcloud10/">HotCloud '10</a>, June 2010 >>;
-    abstract = <:xml<
-       This paper positions work on the Xen backend for MirageOS. It is a decent summary of the idea,
-       although some details such as the filesystem extension are likely to be significantly different
-       in the first release. >>;
+    descr    =
+      string "2nd USENIX Workshop on Hot Topics in Cloud Computing "
+      ++ a ~href:(url "http://www.usenix.org/events/hotcloud10/")
+        (string "HotCloud '10")
+      ++ string ", June 2010.";
+    abstract = string
+        "This paper positions work on the Xen backend for MirageOS. It is a \
+         decent summary of the idea, although some details such as the \
+         filesystem extension are likely to be significantly different \
+         in the first release.";
   };
 
   { name = "dustclouds";
@@ -200,11 +225,10 @@ Real World OCaml takes you through the concepts of the language at a brisk pace,
     ];
     title = "Using Dust Clouds to Enhance Anonymous Communication";
     authors = [ mort; anil; theo; derek; malte ];
-    descr = <:xml<
-      Proceedings of the 18th International Workshop on Security Protocols (IWSP), April 2010
-      >>;
-    abstract = <:xml<
-      >>;
+    descr = string
+      "Proceedings of the 18th International Workshop on Security Protocols \
+       (IWSP), April 2010";
+    abstract = empty;
   };
 
   { name     = "visions";
@@ -213,12 +237,19 @@ Real World OCaml takes you through the concepts of the language at a brisk pace,
       bcs "nav.11980" ];
     title    = "Multiscale not Multicore: Efficient Heterogeneous Cloud Computing";
     authors  = [ anil; mort; jon; steven ];
-    descr    = <:xml<
-      ACM/BCS <a href="http://www.bcs.org/server.php?show=nav.11980">Visions of Computer Science</a>, April 2010 >>;
-    abstract = <:xml<
-      This is a vision paper that lays out the broader background to the project, including some of the problem
-      areas we are tackling in social networking and scientific computing.  The first half is a good introduction
-      to the area, but read the later <a href="#hotcloud">HotCloud</a> paper instead of the technical second half. >>;
+    descr    =
+      string "ACM/BCS "
+      ++ a ~href:(url "http://www.bcs.org/server.php?show=nav.11980")
+        (string "Visions of Computer Science")
+      ++ string ", April 2010";
+    abstract =
+      string
+        "This is a vision paper that lays out the broader background to the \
+         project, including some of the problem areas we are tackling in \
+         social networking and scientific computing. The first half is a good \
+         introduction to the area, but read the later "
+      ++ a ~href:(url "#hotcloud") (string "HotCloud")
+      ++ string " paper instead of the technical second half.";
   };
 
   { name     = "wgt";
@@ -227,26 +258,36 @@ Real World OCaml takes you through the concepts of the language at a brisk pace,
       prezi "qjkrijlacqiq/mirage/" ];
     title    = "Statically-typed value persistence for ML";
     authors  = [ thomas; anil ];
-    descr    = <:xml<
-      <a href="http://wgt2010.elte.hu/">Workshop on Generative Technologies</a>, April 2010 >>;
-    abstract = <:xml<
-      This paper defines the <a href="http://github.com/mirage/dyntype">dyntype</a> dynamic typing extension we developed for
-      OCaml, and the SQL mapper that converts ML values directly into SQL calls. The approach is useful as it is
-      purely meta-programming instead of compiler patching, and thus much easier to integrate with other OCaml code.
-      There is an extended journal paper currently under review; please contact the authors if you wish to read it.>>;
+    descr    =
+      a ~href:(url "http://wgt2010.elte.hu/")
+        (string "Workshop on Generative Technologies")
+      ++ string ", April 2010";
+    abstract =
+      string "This paper defines the " ++
+      a ~href:(url "http://github.com/mirage/dyntype") (string "dyntype")
+      ++ string
+        " dynamic typing extension we developed for OCaml, and the SQL mapper \
+         that converts ML values directly into SQL calls. The approach is \
+         useful as it is purely meta-programming instead of compiler patching, \
+         and thus much easier to integrate with other OCaml code.";
    };
 
   { name     = "icfem";
     items    = [ pdf "http://anil.recoil.org/papers/2009-icfem-spl.pdf" ];
     authors  = [ anil ];
     title    = "Combining Static Model Checking with Dynamic Enforcement using the Statecall Policy Language";
-    descr    = <:xml<
-      International Conference on Formal Engineering Methods
-      <a href="http://icfem09.inf.puc-rio.br/ICFEM.html">ICFEM</a>, December 2009. >>;
-    abstract = <:xml<
-      A small domain-specific language which compiles to both PROMELA (for static model checking) and OCaml
-      (for dynamic enforcement) of state machines. This paper defines the DSL and an example against an
-      <a href="http://github.com/avsm/melange/tree/master/apps/sshd">SSH server</a> written in pure OCaml.>>;
+    descr    =
+      string "International Conference on Formal Engineering Methods "
+      ++ a ~href:(url "http://icfem09.inf.puc-rio.br/ICFEM.html") (string "ICFEM")
+      ++ string ", December 2009.";
+    abstract =
+      string
+        "A small domain-specific language which compiles to both PROMELA \
+         (for static model checking) and OCaml (for dynamic enforcement) of \
+         state machines. This paper defines the DSL and an example against an "
+      ++ a ~href:(url "http://github.com/avsm/melange/tree/master/apps/sshd")
+        (string "SSH server")
+      ++ string " written in pure OCaml.";
   };
 
   { name     = "eurosys";
@@ -255,12 +296,19 @@ Real World OCaml takes you through the concepts of the language at a brisk pace,
       acm "1272996.1273009" ];
     title    = "Melange: Towards a \"functional\" Internet";
     authors  = [ anil; alex; tim; dave; rip ];
-    descr    = <:xml< <a href="http://www.gsd.inesc-id.pt/conference/EuroSys2007/">EuroSys 2007</a>, March 2007. >>;
-    abstract = <:xml<
-      The original paper that formed the basis of MirageOS. We define <a href="http://github.com/avsm/mpl">MPL</a>, a
-      DSL to express bi-directional packet descriptions and compile them into efficient, type-safe OCaml code.
-      Performance is tested for DNS and SSH servers written in OCaml versus their C counterparts (BIND and
-      OpenSSH). >>;
+    descr    =
+      a ~href:(url "http://www.gsd.inesc-id.pt/conference/EuroSys2007/")
+        (string ">EuroSys 2007")
+    ++ string ", March 2007.";
+    abstract =
+      string
+        "The original paper that formed the basis of MirageOS. We define "
+      ++ a ~href:(url "http://github.com/avsm/mpl") (string "MPL")
+      ++ string
+        ", a DSL to express bi-directional packet descriptions and compile \
+         them into efficient, type-safe OCaml code. Performance is tested for \
+         DNS and SSH servers written in OCaml versus their C counterparts \
+         (BIND and OpenSSH";
   }
 ]
 
@@ -269,17 +317,25 @@ let related_papers = [
     items    = [ pdf "http://www.tjd.phlegethon.org/words/thesis.pdf" ];
     title    = "The Main Name System";
     authors  = [ tim ];
-    descr    = <:xml< PhD Thesis, University of Cambridge, 2006. >>;
-    abstract = <:xml<
-      This thesis describes the Main Name System, an approach to centralising DNS for improved reliability. The source
-      code for the MirageOS DNS library is based directly off the data structures described in this thesis. >>;
+    descr    = string "PhD Thesis, University of Cambridge, 2006.";
+    abstract = string
+        "This thesis describes the Main Name System, an approach to \
+         centralising  DNS for improved reliability. The source  code for \
+         the MirageOS DNS library is based directly off the data structures \
+         described in this thesis.";
   }
 ]
 
-let html = <:xml<
-  <p>This page lists any publications, technical reports and related work to MirageOS. If you know of any work that should be listed here, please <a href="/about">contact</a> us.</p>
-  <hr />
-  $list:List.map html_of_paper papers$
-  <h2>Related Work</h2>
-  $list:List.map html_of_paper related_papers$
->>
+let html =
+  list [
+    p (string
+         "This page lists any publications, technical reports and related work \
+          to MirageOS. If you know of any work that should be listed here, \
+          please "
+       ++ a ~href:(url "/about") (string "contact")
+       ++ string " us.");
+    hr empty;
+    list @@ List.map html_of_paper papers;
+    h2 (string "Related Work");
+    list @@ List.map html_of_paper related_papers;
+  ]

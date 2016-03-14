@@ -16,6 +16,7 @@
 
 open Lwt.Infix
 open Cowabloga.Atom_feed
+open Cow.Html
 
 type t = Cowabloga.Blog.Entry.t
 
@@ -30,7 +31,11 @@ let make ?title ~read ~domain content =
   (* TODO need a URL routing mechanism instead of assuming / *)
   let uri = Uri.of_string "/blog/atom.xml" in
   let headers =
-    <:xml<<link rel="alternate" type="application/atom+xml" href=$uri:uri$ />&>>
+    link ~attrs:[
+      "rel" , "alternate";
+      "type", "application/atom+xml";
+      "href", Uri.to_string uri;
+    ] empty
   in
   let title = "Blog" ^ match title with None -> "" | Some x -> " :: " ^ x in
   Pages.Global.t ~title ~headers ~content ~domain ~read

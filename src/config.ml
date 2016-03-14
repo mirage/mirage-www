@@ -83,7 +83,7 @@ let dispatch = if_impl (Key.value tls_key)
     (** Without tls *)
     (http  $ http_server (conduit_direct stack))
 
-let libraries = [ "cow.syntax"; "cowabloga"; "rrd" ]
+let libraries = [ "cow"; "cowabloga"; "rrd" ]
 let packages  = [ "cow"; "cowabloga"; "xapi-rrd"; "c3" ]
 
 let () =
