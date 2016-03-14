@@ -49,7 +49,7 @@ type paper = {
 let html_of_paper paper =
   list [
     h4 (string paper.title
-        ++ string "&nbsp; &nbsp;"
+        ++ of_string "&nbsp; &nbsp;"
         ++ anchor paper.name
         ++ list (List.map html_of_item paper.items));
     p (i (html_of_authors paper.authors)
