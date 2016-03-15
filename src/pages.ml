@@ -16,7 +16,7 @@
 
 open Printf
 open Lwt.Infix
-open Cow
+open Cow.Html
 
 type t = read:string Types.read -> domain:Types.domain -> Types.contents Lwt.t
 type dispatch =
@@ -43,33 +43,34 @@ let read_file tmpl_read f =
         exit 1)
   in
   match get_extension f with
-  | Some "md"   -> read Markdown.of_string
-  | Some "html" -> read (fun s -> Html.of_string s)
+  | Some "md"   -> read Cow.Markdown.of_string
+  | Some "html" -> read (fun s -> Cow.Html.of_string s)
   | _           -> Lwt.return []
 
 module Global = struct
 
-  let nav_links = <:xml<
-    <ul class="left">
-      <li><a href="/blog/">Blog</a></li>
-      <li><a href="/docs/">Docs</a></li>
-      <li><a href="http://mirage.github.io/">API</a></li>
-      <li><a href="/releases/">Changes</a></li>
-      <li class="has-dropdown">
-        <a href="/community/">Community</a>
-        <ul class="dropdown">
-          <li><a href="/community/">Background</a></li>
-          <li><a href="/community/">Contact</a></li>
-          <li><a href="/community/#team">Team</a></li>
-          <li><a href="/community/#blogroll">Blogroll</a></li>
-          <li><a href="/links/">Links</a></li>
-        </ul>
-      </li>
-     </ul> >>
+  let uri = Uri.of_string
+
+  let nav_links =
+    tag "ul" ~cls:"left" (list [
+      tag "li" (a ~href:(uri "/blog/") (string "Blog"));
+      tag "li" (a ~href:(uri "/docs/") (string "Docs"));
+      tag "li" (a ~href:(uri "http://mirage.github.io/") (string "API"));
+      tag "li" (a ~href:(uri "/releases/") (string "Changes"));
+      tag "li"~cls:"has-dropdown" (list [
+          a ~href:(uri "/community/") (string "Community");
+          ul ~cls:"dropdown" [
+            a ~href:(uri "/community/") (string "Background");
+            a ~href:(uri "/community/") (string "Contact");
+            a ~href:(uri "/community/#team") (string "Team");
+            a ~href:(uri "/community/#blogroll") (string "Blogroll");
+            a ~href:(uri "/links/") (string "Links");
+          ]
+        ])])
 
   let top_nav =
     Cowabloga.Foundation.top_nav
-      ~title:<:html<<img src="/graphics/mirage-logo-small.png" />&>>
+      ~title:(img (uri "/graphics/mirage-logo-small.png"))
       ~title_uri:(Uri.of_string "/")
       ~nav_links
 
@@ -78,10 +79,18 @@ module Global = struct
     let fonts =
       scheme ^ "://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700"
     in
-    let font = <:html<
-      <link rel="stylesheet" href="/css/font-awesome.css"> </link>
-      <link href=$str:fonts$ rel="stylesheet" type="text/css"> </link>
-    >> in
+    let font =
+      link ~attrs:[
+        "rel" , "stylesheet";
+        "href", "/css/font-awesome.css"
+      ] empty
+      ++
+      link ~attrs:[
+        "href", fonts;
+        "rel" , "stylesheet";
+        "type", "text/css"
+      ] empty
+    in
     let headers = font @ headers in
     let content = top_nav @ content in
     let google_analytics = Data.google_analytics domain in
@@ -96,29 +105,31 @@ end
 
 module Index = struct
 
+  let uri = Uri.of_string
+
   let t ~feeds ~read ~domain =
     read_file read "/intro-1.md"  >>= fun l1 ->
     read_file read "/intro-3.md"  >>= fun l2 ->
     read_file read "/intro-f.html">>= fun footer ->
     Cowabloga.Feed.to_html ~limit:12 feeds >>= fun recent ->
-    let content = <:html<
-    <div class="row">
-      <div class="small-12 columns">
-        <h3>A programming framework for building type-safe, modular systems</h3>
-      </div>
-    </div>
-    <div class="row">
-      <div class="small-12 medium-6 columns">$l1$ $l2$</div>
-      <div class="small-12 medium-6 large-6 columns front_updates">
-        <h4><a href="/updates/atom.xml"><i class="fa fa-rss"> </i></a>
-         Recent Updates <small><a href="/updates/">(all)</a></small></h4>
-        $recent$
-      </div>
-    </div>
-    <div class="row">
-      <div class="small-12 columns">$footer$</div>
-    </div>
-    >> in
+    let content = list [
+        div ~cls:"row" (
+          div ~cls:"small-12 columns" (
+            h3 ( string "A programming framework for building type-safe, \
+                         modular systems")));
+        div ~cls:"row" (list [
+            div ~cls:"small-12 medium-6 columns" (l1 ++ l2);
+            div ~cls:"small-12 medium-6 large-6 columns front_updates"
+              (h4 (list [
+                   a ~href:(uri "/updates/atom.xml") (i ~cls:"fa fa-rss" empty);
+                   string "Recent Updates ";
+                   small (a ~href:(uri "/updates/") (string "all"))
+                 ])
+               ++ recent
+              )]);
+        div ~cls:"row" (div ~cls:"small-12 columns" footer)
+      ]
+    in
     Global.t ~title:"MirageOS" ~headers:[] ~content ~domain ~read
 
 end
@@ -130,7 +141,11 @@ module Updates = struct
     (* TODO need a URL routing mechanism instead of assuming / *)
     let uri = Uri.of_string "/updates/atom.xml" in
     let headers =
-      <:xml<<link rel="alternate" type="application/atom+xml" href=$uri:uri$ />&>>
+      link ~attrs:[
+        "rel" , "alternate";
+        "type", "application/atom+xml";
+        "href", Uri.to_string uri
+      ] empty
     in
     let title = "Updates" in
     Global.t ~title ~headers ~content ~read ~domain
@@ -147,13 +162,12 @@ module Updates = struct
   let dispatch ~feeds ~feed ~read ~domain =
     Cowabloga.Feed.to_html feeds >>= fun recent    ->
     atom_feed ~feed ~feeds       >>= fun atom_feed ->
-    make ~domain ~read <:html<
-       <div class="row">
-         <div class="small-12 medium-9 large-6 front_updates">
-         <h2>Site Updates <small>across the blogs and documentation</small></h2>
-          $recent$
-         </div>
-       </div> >>
+    make ~domain ~read
+      (div ~cls:"row" (
+          div ~cls:"small-12 medium-9 large-6 front_updates" (
+            h2 (string "Site Updates "
+                ++ small (string "across the blogs and documentation"))
+            ++ recent)))
     >>= fun content ->
     let f = function
       | ["index.html"]
@@ -167,24 +181,24 @@ end
 
 module Links = struct
 
+  let uri = Uri.of_string
+
   let dispatch ~links ~feed ~read ~domain =
     let open Cowabloga.Links in
     Cowabloga.Feed.to_html [ `Links (feed, links) ] >>= fun body ->
-    let content = <:html<
-      <div class="row">
-        <div class="small-12 medium-9 large-6 columns">
-          <h2>Around the Web</h2>
-          <p>
-            This is a small link blog we maintain as we hear of stories or
-            interesting blog entries that may be useful for MirageOS users. If
-            you'd like to add one, please do <a href="/community/">get in
-            touch</a>.
-          </p>
-          <br />
-          $body$
-        </div>
-      </div>
-    >> in
+    let content =
+      div ~cls:"row" (
+        div ~cls:"small-12 medium-9 large-6 columns" (list [
+            h2 (string "Around the Web");
+            p (string
+                 "This is a small link blog we maintain as we hear of stories \n\
+                  or interesting blog entries that may be useful for MirageOS \n\
+                  users. If you'd like to add one, please do"
+               ++ a ~href:(uri "/community/") (string "get in touch."));
+            br empty;
+            body
+          ])
+      ) in
     let title = "Around the Web" in
     let headers = [] in
     Global.t ~domain ~title ~headers ~read ~content >>= fun body ->
@@ -208,34 +222,31 @@ end
 module About = struct
 
   let t ~read ~domain =
-    read_file read "/about-intro.md"     >>= fun i ->
-    read_file read "/about.md"           >>= fun l ->
-    read_file read "/about-community.md" >>= fun r ->
-    read_file read "/about-b.md"         >>= fun b ->
-    read_file read "/about-funding.md"   >>= fun f ->
-    read_file read "/about-blogroll.md"  >>= fun br ->
-    let content = <:html<
-    <a name="about"> </a>
-    <div class="row">
-      <div class="small-12 medium-6 columns">$i$</div>
-      <div class="small-12 medium-6 columns">$f$</div>
-      <hr/>
-    </div>
-    <a name="participate"> </a>
-    <div class="row">
-      <div class="small-12 columns">$b$</div>
-      <hr />
-    </div>
-    <a name="team"> </a>
-    <div class="row">
-      <div class="small-12 medium-6 columns">$l$</div>
-      <div class="small-12 medium-6 columns">$r$</div>
-      <hr />
-    </div>
-    <a name="blogroll"> </a>
-    <div class="row">
-      <div class="small-12 medium-6 columns">$br$</div>
-    </div> >> in
+    read_file read "/about-intro.md"     >>= fun intro ->
+    read_file read "/about.md"           >>= fun main ->
+    read_file read "/about-community.md" >>= fun community ->
+    read_file read "/about-b.md"         >>= fun bb ->
+    read_file read "/about-funding.md"   >>= fun funding ->
+    read_file read "/about-blogroll.md"  >>= fun blogroll ->
+    let content = list [
+        anchor "about";
+        div ~cls:"row" (list [
+            div ~cls:"small-12 medium-6 columns" intro;
+            div ~cls:"small-12 medium-6 columns" funding;
+            hr empty;
+          ]);
+        anchor "participate";
+        div ~cls:"row" (div ~cls:"small-12 columns" bb ++ hr empty);
+        anchor "team";
+        div ~cls:"row"(list [
+            div ~cls:"small-12 medium-6 columns" main;
+            div ~cls:"small-12 medium-6 columns" community;
+            hr empty
+          ]);
+        anchor "blogroll";
+        div ~cls:"row" (div ~cls:"small-12 medium-6 columns" blogroll)
+      ]
+    in
     Global.t ~title:"Community" ~headers:[] ~content ~read ~domain
 
   let dispatch ~feed:_ ~read ~domain =
@@ -251,25 +262,31 @@ end
 
 module Releases = struct
 
+  let uri = Uri.of_string
+
   let t ~read ~domain =
     read_file read "/changelog.md" >>= fun c ->
-    let content = <:html<
-      <div class="row">
-        <div class="small-12 medium-12 large-9 columns">
-          <h2>Changelogs of ecosystem libraries</h2>
-          <p>MirageOS consists of numerous libraries that are independently
-          developed and released.  This page lists the chronological stream
-          of releases, along with the summary of changes that went into each
-          library. The MirageOS
-          <a href="https://github.com/mirage">organization</a> holds most of
-          the major libraries if you just want to browse.</p>
-          <p>We also provide a short list of
-          <a href='/wiki/breaking-changes'>backwards incompatible changes</a>.
-          </p>
-          $c$
-        </div>
-      </div>
-    >> in
+    let content =
+      div ~cls:"row" (
+        div ~cls:"small-12 medium-12 large-9 columns" (list [
+            h2 (string "Changelogs of ecosystem libraries");
+            p (string
+                 "MirageOS consists of numerous libraries that are \n\
+                  independently developed and released. This page lists \n\
+                  the chronological stream of releases, along with the \n\
+                  summary of changes that went into each library. \n\
+                  The MirageOS"
+               ++ a ~href:(uri "https://github.com/mirage")
+                 (string "organization")
+               ++ string
+                 "holds most of the major libraries if you just want to \n\
+                  browse.");
+            p (string "We also provide a short list of "
+               ++ a ~href:(uri "/wiki/breaking-changes")
+                 (string "backwards incompatible changes"));
+            c
+          ]))
+    in
     Global.t ~domain ~title:"Changelog" ~headers:[] ~content ~read
 
   let dispatch ~feed:_ ~read ~domain =
@@ -286,14 +303,12 @@ end
 module Security = struct
   let dispatch ~feed:_ ~read ~domain =
     read_file read "/security.md" >>= fun c->
-    let content = <:html<
-      <div class="row">
-        <div class="small-12 medium-12 large-9 columns">
-          <h2>Security</h2>
-          $c$
-        </div>
-      </div>
-    >> in
+    let content =
+      div ~cls:"row" (
+        div ~cls:"small-12 medium-12 large-9 columns"
+          (h2 (string "Security") ++ c)
+      )
+    in
     Global.t ~title:"Security" ~headers:[] ~content ~domain ~read >>= fun security ->
     let f = function
     | ["index.html"]

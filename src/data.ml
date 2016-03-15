@@ -114,6 +114,23 @@ module People = struct
     email     = Some "buzzheavyyear@hotmail.com";
   }
 
+  let christiano = {
+    Atom.name = "Christiano Haesbaert";
+    uri       = Some "http://www.haesbaert.org/";
+    email     = Some "haesbaert@haesbaert.org";
+  }
+
+  let djwillia = {
+    Atom.name = "Dan Williams";
+    uri       = Some "https://github.com/djwillia";
+    email     = Some "djwillia@us.ibm.com";
+  }
+
+  let drup = {
+    Atom.name = "Gabriel Radanne";
+    uri       = Some "https://github.com/drup";
+    email     = Some "drupyog@zoho.com";
+  }
 end
 
 let rights = Some "All rights reserved by the author"
@@ -125,6 +142,41 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2016, 2, 29, 12, 00);
+        authors    = [drup];
+        subject    = "Introducing Functoria";
+        body       = "introducing-functoria.md";
+        permalink  = "introducing-functoria";
+      };
+
+      { updated    = date (2016, 1, 7, 18, 10);
+        authors    = [djwillia];
+        subject    = "Run Mirage Unikernels on KVM/QEMU with Solo5";
+        body       = "introducing-solo5.md";
+        permalink  = "introducing-solo5";
+      };
+
+      { updated    = date (2016, 1, 1, 23, 42);
+        authors    = [hannes];
+        subject    = "MirageOS hackathon";
+        body       = "hackathon-marrakech2016.md";
+        permalink  = "hackathon-marrakech2016";
+      };
+
+      { updated    = date (2015, 12, 29, 15, 30);
+        authors    = [christiano];
+        subject    = "Introducing Charrua — a DHCP implementation";
+        body       = "introducing-charrua-dhcp.md";
+        permalink  = "introducing-charrua-dhcp";
+      };
+
+      { updated    = date (2015, 12, 17, 12, 0);
+        authors    = [amir];
+        subject    = "Unikernel.org";
+        body       = "unikernel-org.md";
+        permalink  = "unikernel-org";
+      };
+
       { updated    = date (2015, 10, 23, 11, 0);
         authors    = [amir];
         subject    = "Videos from around the world!";

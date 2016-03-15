@@ -16,21 +16,11 @@
 
 open Lwt.Infix
 
-module type S =
-  functor (C: V1_LWT.CONSOLE) ->
-  functor (FS: V1_LWT.KV_RO) ->
-  functor (TMPL: V1_LWT.KV_RO) ->
-  functor (S: V1_LWT.STACKV4) ->
-  functor (KEYS: V1_LWT.KV_RO) ->
-  functor (Clock : V1.CLOCK) ->
-sig
-  val start: ?host:string -> ?redirect:string ->
-    C.t -> FS.t -> TMPL.t -> S.t -> KEYS.t -> unit -> unit Lwt.t
-end
+module Make
+    (S: V1_LWT.STACKV4) (KEYS: V1_LWT.KV_RO)
 
-module Make_localhost
-    (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
-    (S: V1_LWT.STACKV4) (KEYS: V1_LWT.KV_RO) (Clock : V1.CLOCK)
+    (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO)
+    (TMPL: V1_LWT.KV_RO) (Clock : V1.CLOCK)
 = struct
 
 
@@ -42,8 +32,8 @@ module Make_localhost
   module Http  = Cohttp_mirage.Server(TCP)
   module Https = Cohttp_mirage.Server(TLS)
 
-  module D  = Dispatch.Make_localhost(C)(FS)(TMPL)(Http)(Clock)
-  module DS = Dispatch.Make_localhost(C)(FS)(TMPL)(Https)(Clock)
+  module D  = Dispatch.Make(Http)(C)(FS)(TMPL)(Clock)
+  module DS = Dispatch.Make(Https)(C)(FS)(TMPL)(Clock)
 
   let log c fmt = Printf.ksprintf (C.log c) fmt
 
@@ -66,7 +56,9 @@ module Make_localhost
     let conf = Tls.Config.server ~certificates:(`Single cert) () in
     Lwt.return conf
 
-  let start ?(host="localhost") ?redirect c fs tmpl stack keys _clock =
+  let start stack keys  c fs tmpl _clock () =
+    let host = Key_gen.host () in
+    let redirect = Key_gen.redirect () in
     Stats.start ~sleep:OS.Time.sleep ~time:Clock.time;
     tls_init keys >>= fun cfg ->
     let domain = `Https, host in
@@ -81,15 +73,4 @@ module Make_localhost
     S.listen_tcpv4 stack ~port:80  http;
     S.listen stack
 
-end
-
-module Make (Config: Dispatch.Config)
-    (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
-    (S: V1_LWT.STACKV4) (KEYS: V1_LWT.KV_RO) (Clock : V1.CLOCK)
-= struct
-  module M = Make_localhost(C)(FS)(TMPL)(S)(KEYS)(Clock)
-  let start ?host ?redirect c fs tmpl stack keys _clock =
-    let host = match host with None -> Config.host | x -> x in
-    let redirect = match redirect with None -> Config.redirect | x -> x in
-    M.start ?host ?redirect c fs tmpl stack keys _clock
 end
