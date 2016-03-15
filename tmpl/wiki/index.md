@@ -54,6 +54,11 @@ MirageOS is in beta stage and the infrastructure you see here is self-hosting. T
 *Calls take place every two weeks and are announced on the
 [mailing list](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel).*
 
+* Weekly call [2016-03-02](/wiki/weekly-2016-03-02) on Decision to drop 4.01, 2.7 released, Hackathon and CI.
+* Weekly call [2016-02-17](/wiki/weekly-2016-02-17) on Containers, 2.7 prep, Hackathon and Netmap.
+* Weekly call [2016-02-03](/wiki/weekly-2016-02-03) on Dropping 4.01 support and Hackathon.
+* Weekly call [2016-01-13](/wiki/weekly-2016-01-13) on Test, Hackathon, Talks and Blog posts.
+* Weekly call [2015-12-16](/wiki/weekly-2015-12-16) on Conduit, Unikernel Events and end of 2015!
 * Weekly call [2015-12-02](/wiki/weekly-2015-12-02) on Website stability, Functoria, QubesOS and Hackathons.
 * Weekly call [2015-11-11](/wiki/weekly-2015-11-11) on Functoria, Logs, Protocol lists and unikernel logos.
 * Weekly call [2015-10-28](/wiki/weekly-2015-10-28) on Logging, Pioneer Projects and Error Handling.
