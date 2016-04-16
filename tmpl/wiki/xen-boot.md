@@ -28,7 +28,7 @@ Amazon has recently added support for booting [user-specified kernels](http://ec
 
 * The VM is launched using a `pvgrub` stub domain that is a micro-kernel containing a small grub interpreter.
 * `pvgrub` mounts the root device, looks for `/boot/menu.lst`, and parses it for the default kernel location on that filesystem.
-* The actual kernel is loaded into memory, and `pygrub` execs it, erasing it from memory.
+* The actual kernel is loaded into memory, and `pvgrub` execs it, erasing it from memory.
 * From this point on, the second kernel is active and boot proceeds normally.
 
 So to boot a MirageOS kernel on EC2, it must first be wrapped in a block device. After that, the image needs to be bundled into an AMI, and then registered as a bootable image using the EC2 tools.
