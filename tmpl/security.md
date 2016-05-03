@@ -8,4 +8,6 @@ team will respond and we will take it from there.
 
 A OpenPGP key is [available from the keyservers](http://keys.mayfirst.org/pks/lookup?op=get&fingerprint=on&search=0x4A732D757C0EDA74), its fingerprint is `23B2 822C 89A9 EC73 C7DF  0748 4A73 2D75 7C0E DA74`.
 
+- [3rd May 2016: MSA00 mirage-net-xen<1.4.2](https://mirage.io/blog/MSA00)
+
 [issues]: https://github.com/mirage/mirage/issues
