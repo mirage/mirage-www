@@ -29,19 +29,19 @@ a response from the hypervisor.  To correlate the request with the response, a
 II.  Problem Description
 
 Generating this 16bit identifier was not done in a unique manner.  When multiple
-pages share an identifier, and are requested to be transmitted, the first
-successful response will mark all pages with this identifier free, event those
-still waiting to be transmitted.  Once marked free, the MirageOS application
-fills the page for another chunk of data.  This leads to corrupted packets be
-sent, and can lead to disclosure of memory intended for another recipient.
-
-The receiving side uses a similar mechanism, which is also fixed.
+pages share an identifier, and are requested to be transmitted via the wire, the
+first successful response will mark all pages with this identifier free, even
+those still waiting to be transmitted.  Once marked free, the MirageOS
+application fills the page for another chunk of data.  This leads to corrupted
+packets being sent, and can lead to disclosure of memory intended for another
+recipient.
 
 III. Impact
 
-This issue discloses memory intended for another recipient.  All versions
-before mirage-net-xen 1.4.2 are affected.  On the receiving side, incoming data
-may be corrupted (eventually even mutated while being processed).
+This issue discloses memory intended for another recipient.  All versions before
+mirage-net-xen 1.4.2 are affected.  The receiving side uses a similar mechanism,
+which may lead to corrupted incoming data (eventually even mutated while being
+processed).
 
 Version 1.5.0, released on 8th January, already assigns unique identifiers for
 transmission.  Received pages are copied into freshly allocated buffers before
