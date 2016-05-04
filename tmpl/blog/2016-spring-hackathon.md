@@ -1,13 +1,13 @@
 # Hackathon Trip Reports
 
-We're looking forward to the next MirageOS hackathon already!  We've collected some reports from those who were present.  Thanks to the folks who put in the time and effort to organize the event and our wonderful hosts, and a huge thanks to everyone who documented their hackathon experience!
+We're looking forward to the next MirageOS hackathon already!  We've collected some reports from those who were present at our [2016 Spring hackathon](http://marrakech2016.mirage.io) to share our excitement!  Thanks to the folks who put in the time and effort to organize the event and our wonderful hosts, and a huge thanks to everyone who documented their hackathon experience!
 
 More information is also available at [the Canopy site developed and used for information sharing during the hackathon](http://canopy.mirage.io)!
 
 ## Trip Report
 *by David Kaloper* 
 
-![roof-flash](https://berlin.ccc.de/~hannes/marrakech2016/pic8.jpg)
+![roof-flash](/graphics/2016-hackathon/roof_flash.jpg)
 
 Last month, the MirageOS community saw its first community-organized, international
 [hackathon][hweb]. It took place between 11th and 16th March 2016. The venue?
@@ -117,7 +117,7 @@ were forged, skills shared, and courses plotted. And although the same venue has
 already been booked for the next year's event, there is ongoing chit-chat about
 cutting the downtime in half with a summer edition!
 
-![heat](https://berlin.ccc.de/~hannes/marrakech2016/pic1.jpg)
+![heat](/graphics/2016-hackathon/heat.jpg)
 
 
 [hweb]: http://marrakech2016.mirage.io/
