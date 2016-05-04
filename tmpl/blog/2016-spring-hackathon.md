@@ -154,14 +154,14 @@ cutting the downtime in half with a summer edition!
 
 The first [MirageOS hackathon](https://mirage.io/) was held from March 11th-16th 2016, at [Priscilla, Queen of the Medina](http://queenofthemedina.com/en/index.html), Marrakech. It successfully gathered around 30 Mirage enthusiasts, some already familiar with the MirageOS ecosystem, and others new to the community. People travelled from Europe and further afield for a week of sun, tajine and hacking.
 
-![Main room](http://i.imgur.com/uh6IaIm.jpg "The main room")
+![Main room](/graphics/2016-hackathon/main_room.jpg "The main room")
 
 Getting to the guesthouse [was an adventure](https://www.youtube.com/watch?v=zgzwmyxlKBE), and once there we prepared by quickly setting up a nice internet hotspot then organised groups to head to the souk to meet new arrivals. 
 Soon enough the guest house was filled with people, and various new projects and ideas began to emerge. Having a few books and experienced OCaml developers around helped the OCaml newcomers get stuck in, and it didn't take long to get their first unikernel or OCaml library up and running. Daily meetings were arranged at noon on the rooftop in order to allow the exchange of project ideas and questions, and we used the [hackathon notepad](http://canopy.mirage.io/Index) to loosely pair projects and people together. Our [DHCP server](https://mirage.io/blog/introducing-charrua-dhcp) enabled extensive dogfooding and successfully fulfilled our project-testing needs. 
 
 Participants found a wide range of activities to keep themselves occupied during the event: contributing to the [MirageOS Pioneer Projects](https://github.com/mirage/mirage-www/wiki/Pioneer-Projects), starting new projects and libraries, improving the MirageOS ecosystem and core components, discussing new ideas... or simply enjoying the sun, delicious tajine, or walking around Marrakech itself. Some expeditions were also (non)organised during the week, allowing sightseeing of the nicest local spots, or negotiating with local stallholders to get the best prices on souvenirs and fresh fruits to enjoy during hard hacking sessions.
 
-![Food](http://i.imgur.com/yk2a2tc.jpg "Some more food")
+![Food](/graphics/2016-hackathon/food.jpg "Some more food")
 
 ### My week inside the camel's nest
 
@@ -171,11 +171,11 @@ The project was well received and new ideas started to emerge in order to turn i
 
 ### Conclusion
 
-![Rooftop](http://i.imgur.com/zgP0400.jpg "Rooftop view")
+![Rooftop](/graphics/2016-hackathon/rooftop.jpg "Rooftop view")
 
 This hackathon was a huge success and allowed the MirageOS community to combine sun and high productivity in a crazy yet very relaxing week. We hope (and plan) to see more events like this, so anyone interested in OCaml, Mirage - expert or not - is more than welcome to join us next time!
 
-![Cats](http://i.imgur.com/Fe7iawE.jpg "And obviously… Marrakech's cats!")
+![Cats](/graphics/2016-hackathon/cats.jpg "And obviously… Marrakech's cats!")
 
 ---
 
