@@ -712,9 +712,9 @@ the commonly available _netcat_ `nc(1)` utility. From a different console
 execute:
 
 ```
-$ echo -n hello udp world | nc -n4w1 -u 127.0.0.1 53
+$ echo -n hello udp world | nc -unw1 127.0.0.1 53
 [ 1 sec delay ]
-$ echo -n hello tcp world | nc -n4w1 127.0.0.1 8080
+$ echo -n hello tcp world | nc -nw1 127.0.0.1 8080
 ```
 
 On the first console you should now see (each line in red, green and finally
@@ -778,8 +778,8 @@ address we can then trigger the application logic with some network input from
 
 
 ```
-$ echo -n hello udp world | nc -n4 -u -w1 192.168.64.5 53
-$ echo -n hello tcp world | nc -n4 -w1 192.168.64.5 8080
+$ echo -n hello udp world | nc -unw1 192.168.64.5 53
+$ echo -n hello tcp world | nc -nw1 192.168.64.5 8080
 ```
 
 The original terminal reports the ARP transactions invoked by the stack, and
@@ -802,8 +802,10 @@ work on pre-Yosemite Mac OSX, but has not been tested on Yosemite where the new
 
 By default, if we do not use DHCP with a `direct` network stack, Mirage will
 configure the stack to use the `tap0` interface with an address of `10.0.0.2`.
-This requires the tuntap bridge to be configured after the unikernel starts to
-ensure we have a route to it. Thus:
+Verify that you have an existing `tap0` interface by reviewing `$ sudo ip
+link show`; if you do not, load the tuntap kernel module (`$ sudo modprobe tun`)
+and create a `tap0` interface owned by root (`$ sudo tunctl`). Bring `tap0` up
+using `$ sudo ifconfig tap0 10.0.0.1 up`, then:
 
 ```
 $ cd stackv4
@@ -821,11 +823,9 @@ Manager: configuration done
 IP address: 10.0.0.2
 ```
 
-Now in another terminal, configure `tap0` and you should then be able to ping
-the unikernel's interface:
+Now you should be able to ping the unikernel's interface:
 
 ```
-$ sudo ifconfig tap0 10.0.0.1 255.255.255.0 up
 $ ping 10.0.0.2
 PING 10.0.0.2 (10.0.0.2) 56(84) bytes of data.
 64 bytes from 10.0.0.2: icmp_seq=1 ttl=38 time=0.527 ms
@@ -849,8 +849,8 @@ Finally, you can then execute the same `nc(1)` commands as before (modulo the
 target IP address of course!) to interact with the running unikernel:
 
 ```
-$ echo -n hello udp world | nc -n4 -u -w1 10.0.0.2 53
-$ echo -n hello tcp world | nc -n4 -w1 10.0.0.2 8080
+$ echo -n hello udp world | nc -unw1 10.0.0.2 53
+$ echo -n hello tcp world | nc -nw1 10.0.0.2 8080
 ```
 
 And you will see the same output in the unikernel's terminal:
