@@ -67,9 +67,14 @@ The website will now be available on `http://localhost/`.
 ## Building the direct networking version
 
 Now you can build the Unix unikernel using the direct stack, via a similar
-procedure to the [hello world](/wiki/hello-world) examples.
-
-On Unix with a tuntap device:
+procedure to the [hello world](/wiki/hello-world) examples. As before,
+Mirage will configure the stack to use the
+[tap0 interface](http://en.wikipedia.org/wiki/TUN/TAP) with an address
+of `10.0.0.2/255.255.255.0`. Verify that you have an existing `tap0`
+interface by reviewing `$ sudo ip link show`; if you do not,
+load the tuntap kernel module (`$ sudo modprobe tun`)
+and create a `tap0` interface owned by root (`$ sudo tunctl`). Bring `tap0` up
+using `$ sudo ifconfig tap0 10.0.0.1 up`, then:
 
 ```
 $ cd src
@@ -78,13 +83,9 @@ $ make
 $ sudo ./mir-www
 ```
 
-This will open a [tap device](http://en.wikipedia.org/wiki/TUN/TAP) device and
-assign itself a default IP of `10.0.0.2`/`255.255.255.0`. You need to set up
-your routing so that you can see this IP by assigning an IP to the `tap0`
-interface in a separate terminal.
+You should now be able to ping the unikernel's interface:
 
 ```
-$ sudo ifconfig tap0 10.0.0.1 255.255.255.0
 $ ping 10.0.0.2
 ```
 
