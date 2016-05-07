@@ -59,8 +59,17 @@ counter.
 Transmitting corrupt data and disclosing memory is fixed in versions 1.4.2 and
 above.
 
-The recommended way to upgrade is: `opam update ; opam upgrade mirage-net-xen`
-Or, explicitly: `opam upgrade ; opam reinstall mirage-net-xen=1.4.2`
+The recommended way to upgrade is:
+```bash
+opam update
+opam upgrade mirage-net-xen
+```
+
+Or, explicitly:
+```bash
+opam upgrade
+opam reinstall mirage-net-xen=1.4.2
+```
 
 Affected releases have been marked uninstallable in the opam repository.
 
@@ -72,11 +81,13 @@ affected branch.
 Memory disclosure on transmit:
 
 master: [47de2edfad9c56110d98d0312c1a7e0b9dcc8fbf](https://github.com/mirage/mirage-net-xen/commit/47de2edfad9c56110d98d0312c1a7e0b9dcc8fbf)
+
 1.4: [ec9b1046b75cba5ae3473b2d3b223c3d1284489d](https://github.com/mirage/mirage-net-xen/commit/ec9b1046b75cba5ae3473b2d3b223c3d1284489d)
 
 Corrupt data while receiving:
 
 master: [0b1e53c0875062a50e2d5823b7da0d8e0a64dc37](https://github.com/mirage/mirage-net-xen/commit/0b1e53c0875062a50e2d5823b7da0d8e0a64dc37)
+
 1.4: [6daad38af2f0b5c58d6c1fb24252c3eed737ede4](https://github.com/mirage/mirage-net-xen/commit/6daad38af2f0b5c58d6c1fb24252c3eed737ede4)
 
 ### References
