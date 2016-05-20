@@ -229,6 +229,6 @@ module Make
     in
     let callback = create domain c dispatch in
     log c "Listening on %s" (Site_config.base_uri domain);
-    http (`TCP 80) callback
+    http (`TCP (Key_gen.http_port ())) callback
 
 end

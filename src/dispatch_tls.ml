@@ -69,8 +69,8 @@ module Make
     let callback = Https.listen (DS.create domain c dispatch) in
     let https flow = with_tls c cfg flow ~f:callback in
     let http flow = with_http host c flow in
-    S.listen_tcpv4 stack ~port:443 https;
-    S.listen_tcpv4 stack ~port:80  http;
+    S.listen_tcpv4 stack ~port:(Key_gen.https_port ()) https;
+    S.listen_tcpv4 stack ~port:(Key_gen.http_port ()) http;
     S.listen stack
 
 end

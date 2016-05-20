@@ -31,6 +31,20 @@ let tls_key =
   in
   Key.(create "tls" Arg.(opt ~stage:`Configure bool false doc))
 
+let http_port =
+  let doc = Key.Arg.info
+      ~doc:"Port to listen on for plain HTTP connections"
+      ~docv:"PORT" ["http-port"]
+  in
+  Key.(create "http-port" Arg.(opt ~stage:`Both int 80 doc))
+
+let https_port =
+  let doc = Key.Arg.info
+      ~doc:"Port to listen on for encrypted HTTPS connections"
+      ~docv:"PORT" ["https-port"]
+  in
+  Key.(create "https-port" Arg.(opt ~stage:`Both int 443 doc))
+
 let pr_key =
   let doc = Key.Arg.info
       ~doc:"Configuration for running inside a travis PR."
@@ -54,7 +68,8 @@ let redirect_key =
   in
   Key.(create "redirect" Arg.(opt (some string) None doc))
 
-let keys = Key.([ abstract host_key ; abstract redirect_key ])
+let keys = Key.([ abstract host_key ; abstract redirect_key;
+                  abstract http_port ; abstract https_port ])
 
 let fs_key = Key.(value @@ kv_ro ())
 let filesfs = generic_kv_ro ~key:fs_key "../files"
