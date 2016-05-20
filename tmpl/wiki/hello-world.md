@@ -11,11 +11,9 @@ $ cd mirage-skeleton
 ### Step 1: Hello World!
 
 As a first step, let's build and run the MirageOS "Hello World" unikernel -- this
-will print `hello\nworld\n` 5 times before terminating:
+will print `hello\nworld\n` 4 times before terminating:
 
 ```
-hello
-world
 hello
 world
 hello
@@ -30,20 +28,26 @@ First, let's look at the code:
 
 ```
 $ cat console/unikernel.ml
-open Lwt
+open Lwt.Infix
 
 module Main (C: V1_LWT.CONSOLE) = struct
 
   let start c =
-    for_lwt i = 0 to 4 do
-      C.log c "hello" ;
-      lwt () = OS.Time.sleep 1.0 in
-      C.log c "world" ;
-      return ()
-    done
+    let rec loop = function
+      | 0 -> Lwt.return_unit
+      | n ->
+        C.log_s c "hello" >>= fun () ->
+        OS.Time.sleep 1.0 >>= fun () ->
+        C.log_s c "world" >>= fun () ->
+        loop (n-1)
+    in
+    loop 4
 
 end
 ```
+
+**Note**: If you aren't familiar with the Lwt library (and the `>>=` operator it provides),
+you may want to read at least the start of the [Lwt tutorial](tutorial-lwt) first.
 
 To veteran OCaml programmers among you, this might look a little odd: we have a
 `Main` module parameterised by another module (`C`, of type `CONSOLE`) that
@@ -201,48 +205,9 @@ bridge and then run it:
 ```
 $ sudo xl create -c console.xl
 Parsing config from console.xl
-Xen Minimal OS!
-  start_info: 00000000001ff000(VA)
-    nr_pages: 0x10000
-  shared_inf: 0x4ba65000(MA)
-     pt_base: 0000000000202000(VA)
-nr_pt_frames: 0x5
-    mfn_list: 000000000017f000(VA)
-   mod_start: 0x0(VA)
-     mod_len: 0
-       flags: 0x0
-    cmd_line:
-       stack: 000000000015e420-000000000017e420
-MM: Init
-      _text: 0000000000000000(VA)
-     _etext: 00000000000b40ef(VA)
-   _erodata: 00000000000d5000(VA)
-     _edata: 0000000000124d80(VA)
-stack start: 000000000015e420(VA)
-       _end: 000000000017e420(VA)
-  start_pfn: 20a
-    max_pfn: 10000
-Mapping memory range 0x400000 - 0x10000000
-setting 0000000000000000-00000000000d5000 readonly
-skipped 1000
-MM: Initialise page allocator for 288000(288000)-10000000(10000000)
-MM: done
-Demand map pfns at 10001000-0000002010001000.
+MirageOS booting....
 Initialising timer interface
 Initialising console ... done.
-gnttab_table mapped at 0000000010001000.
-getenv(OCAMLRUNPARAM) -> null
-getenv(CAMLRUNPARAM) -> null
-getenv(PATH) -> null
-Unsupported function lseek called in Mini-OS kernel
-Unsupported function lseek called in Mini-OS kernel
-Unsupported function lseek called in Mini-OS kernel
-getenv(OCAMLRUNPARAM) -> null
-getenv(CAMLRUNPARAM) -> null
-getenv(TMPDIR) -> null
-getenv(TEMP) -> null
-hello
-world
 hello
 world
 hello
@@ -360,72 +325,29 @@ the host OS (the Linux or FreeBSD kernel):
 ```
 [root@st20 block]# xl create -c block_test.xl
 Parsing config from block_test.xl
-Xen Minimal OS!
-  start_info: 0000000000237000(VA)
-    nr_pages: 0x10000
-  shared_inf: 0xdf558000(MA)
-     pt_base: 000000000023a000(VA)
-nr_pt_frames: 0x5
-    mfn_list: 00000000001b7000(VA)
-   mod_start: 0x0(VA)
-     mod_len: 0
-       flags: 0x0
-    cmd_line:
-       stack: 0000000000196580-00000000001b6580
-MM: Init
-      _text: 0000000000000000(VA)
-     _etext: 00000000000d04af(VA)
-   _erodata: 00000000000f9000(VA)
-     _edata: 000000000015cee0(VA)
-stack start: 0000000000196580(VA)
-       _end: 00000000001b6580(VA)
-  start_pfn: 242
-    max_pfn: 10000
-Mapping memory range 0x400000 - 0x10000000
-setting 0000000000000000-00000000000f9000 readonly
-skipped 1000
-MM: Initialise page allocator for 2c0000(2c0000)-10000000(10000000)
-MM: done
-Demand map pfns at 10001000-0000002010001000.
+MirageOS booting....
 Initialising timer interface
 Initialising console ... done.
-gnttab_table mapped at 0000000010001000.
-getenv(OCAMLRUNPARAM) -> null
-getenv(CAMLRUNPARAM) -> null
-getenv(PATH) -> null
-Unsupported function lseek called in Mini-OS kernel
-Unsupported function lseek called in Mini-OS kernel
-Unsupported function lseek called in Mini-OS kernel
-getenv(OCAMLRUNPARAM) -> null
-getenv(CAMLRUNPARAM) -> null
-getenv(TMPDIR) -> null
-getenv(TEMP) -> null
-Blkif: add resume hook
-Block.connect 51728: interpreting 51728 as a xen virtual disk bus slot number
-Block.connect 51728 -> 51728
-Blkfront.create; vdev=51728
-Blkback can only use a single-page ring
-Negotiated a single-page ring
-Blkfront ring Blkif.51728 header_size = 64; index slot size = 112; number of entries = 32
-state=Connected
-Blkfront info: sector_size=512 sectors=20480 max_indirect_segments=0
-sectors = 2560
+2016-05-20 13:13.27: INF [blkfront] Blkfront.connect 51728: interpreting 51728 as a xen virtual disk bus slot number
+2016-05-20 13:13.27: INF [blkfront] Blkfront.connect 51728 -> 51728
+2016-05-20 13:13.27: INF [blkfront] Blkfront.plug id=51728
+2016-05-20 13:13.27: INF [blkfront] Blkback can only use a single-page ring
+2016-05-20 13:13.27: INF [blkfront] Negotiated a single-page ring
+2016-05-20 13:13.27: INF [blkfront] Blkfront.alloc ring Blkif.51728 header_size = 64; index slot size = 112; number of entries = 32
+2016-05-20 13:13.27: INF [blkfront] Blkfront info: sector_size=512 sectors=4194304 max_indirect_segments=256
+sectors = 524288
 read_write=true
 sector_size=4096
 writing 1 sectors at 0
-writing 1 sectors at 2559
+writing 1 sectors at 524287
 writing 2 sectors at 0
-writing 2 sectors at 2558
+writing 2 sectors at 524286
 writing 12 sectors at 0
-writing 12 sectors at 2548
-writing 1 sectors at 2560
-start_sector = 20480 start_offset=0 end_offset=7 sector = 20480 nr_segs = 1
-writing 12 sectors at 2549
-start_sector = 20480 start_offset=0 end_offset=7 sector = 20480 nr_segs = 1
-reading 1 sectors at 2560
-start_sector = 20480 start_offset=0 end_offset=7 sector = 20480 nr_segs = 1
-reading 12 sectors at 2549
-start_sector = 20480 start_offset=0 end_offset=7 sector = 20480 nr_segs = 1
+writing 12 sectors at 524276
+writing 1 sectors at 524288
+writing 12 sectors at 524277
+reading 1 sectors at 524288
+reading 12 sectors at 524277
 Test sequence finished
 Total tests started: 10
 Total tests passed:  10
@@ -507,46 +429,11 @@ $ mirage configure --xen
 $ make
 $ sudo xl create -c kv_ro.xl
 Parsing config from kv_ro.xl
-Xen Minimal OS!
-  start_info: 0000000000200000(VA)
-    nr_pages: 0x10000
-  shared_inf: 0x7f209000(MA)
-     pt_base: 0000000000203000(VA)
-nr_pt_frames: 0x5
-    mfn_list: 0000000000180000(VA)
-   mod_start: 0x0(VA)
-     mod_len: 0
-       flags: 0x0
-    cmd_line:
-       stack: 000000000015fee0-000000000017fee0
-MM: Init
-      _text: 0000000000000000(VA)
-     _etext: 00000000000b515f(VA)
-   _erodata: 00000000000d6000(VA)
-     _edata: 0000000000126840(VA)
-stack start: 000000000015fee0(VA)
-       _end: 000000000017fee0(VA)
-  start_pfn: 20b
-    max_pfn: 10000
-Mapping memory range 0x400000 - 0x10000000
-setting 0000000000000000-00000000000d6000 readonly
-skipped 1000
-MM: Initialise page allocator for 289000(289000)-10000000(10000000)
-MM: done
-Demand map pfns at 10001000-0000002010001000.
+MirageOS booting....
 Initialising timer interface
 Initialising console ... done.
-gnttab_table mapped at 0000000010001000.
-getenv(OCAMLRUNPARAM) -> null
-getenv(CAMLRUNPARAM) -> null
-getenv(PATH) -> null
-Unsupported function lseek called in Mini-OS kernel
-Unsupported function lseek called in Mini-OS kernel
-Unsupported function lseek called in Mini-OS kernel
-getenv(OCAMLRUNPARAM) -> null
-getenv(CAMLRUNPARAM) -> null
-getenv(TMPDIR) -> null
-getenv(TEMP) -> null
+YES!
+YES!
 YES!
 YES!
 YES!
