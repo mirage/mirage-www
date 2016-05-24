@@ -35,9 +35,7 @@ MirageOS is in beta stage and the infrastructure you see here is self-hosting. T
 #### Libraries
 
 * Threads: [introduction to Lwt](/wiki/tutorial-lwt)
-* Threads: [delimited continuations vs explicit monadic threads](/wiki/delimcc-vs-lwt)
 * [DNS Performance Tests](/wiki/performance)
-* [Portable Regular Expressions](/wiki/ocaml-regexp)
 * [HTCaML](/wiki/htcaml)
 * [Caml on the Web (COW)](/wiki/cow)
 
