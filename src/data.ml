@@ -267,6 +267,18 @@ module Blog = struct
         body       = "spring-cleaning.md";
         permalink  = "spring-cleaning";
       };
+      { updated    = date (2011, 06, 18, 15, 47);
+        authors    = [anil];
+        subject    = "Delimited Continuations vs Lwt for Threads";
+        body       = "delimcc-vs-lwt.md";
+        permalink  = "delimcc-vs-lwt";
+      };
+      { updated    = date (2011, 08, 12, 15, 0);
+        authors    = [raphael];
+        subject    = "Portable Regular Expressions";
+        body       = "ocaml-regexp.md";
+        permalink  = "ocaml-regexp";
+      };
       { updated    = date (2011, 09, 29, 11, 10);
         authors    = [anil];
         subject    = "An Outing to CUFP 2011";
@@ -577,20 +589,6 @@ module Wiki = struct
       subject    = "Getting Started with Lwt threads";
       body       = File "tutorial-lwt.md";
       permalink  = "tutorial-lwt";
-    };
-
-    { updated    = date (2011, 08, 12, 15, 0);
-      author     = raphael;
-      subject    = "Portable Regular Expressions";
-      body       = File "ocaml-regexp.md";
-      permalink  = "ocaml-regexp";
-    };
-
-    { updated    = date (2011, 06, 18, 15, 47);
-      author     = anil;
-      subject    = "Delimited Continuations vs Lwt for Threads";
-      body       = File "delimcc-vs-lwt.md";
-      permalink  = "delimcc-vs-lwt";
     };
 
     { updated    = date (2013, 12, 20, 23, 00);
