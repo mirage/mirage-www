@@ -24,6 +24,12 @@ module People = struct
     email     = Some "anil@recoil.org";
   }
 
+  let canopy = {
+    Atom.name = "Canopy IRC Logger";
+    uri       = Some "https://github.com/engil/canopy";
+    email     = None;
+  }
+
   let thomas = {
     Atom.name = "Thomas Gazagnaire";
     uri       = Some "http://gazagnaire.org";
@@ -142,6 +148,13 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2016, 6, 29, 16, 00);
+        authors    = [];
+        subject    = "MirageOS Summer 2016 Hackathon announcement, and talk roundup";
+        body       = "2016-summer-hackathon.md";
+        permalink  = "2016-summer-hackathon";
+      };
+
       { updated    = date (2016, 5, 4, 16, 00);
         authors    = [];
         subject    = "MirageOS Spring 2016 Hackathon!";
@@ -452,6 +465,22 @@ module Wiki = struct
   open Cowabloga.Date
   open Cowabloga.Wiki
 
+  let irc_weekly ~y ~m ~d ~a =
+    let s = sprintf "%4d-%02d-%02d" y m d in
+    let s2 = sprintf "%02d-%02d-%04d" d m y in
+    let href = Uri.of_string ("http://canopy.mirage.io/irclogs/" ^ s2) in
+    let body = Html Cow.Html.(
+      p (list [
+       string "The IRC logs from our meetings in #mirage on Freenode are stored in Canopy, and available online from ";
+       a ~href (string (Uri.to_string href))
+    ])) in
+    { updated = date (y,m,d,16,0);
+      author = a;
+      subject = "Weekly IRC meeting: " ^ s;
+      body;
+      permalink = "weekly-"^s;
+    }
+
   let weekly ~y ~m ~d ~a =
     let s = sprintf "%4d-%02d-%02d" y m d in
     { updated = date (y,m,d,16,0);
@@ -462,6 +491,12 @@ module Wiki = struct
     }
 
   let entries = [
+    irc_weekly ~y:2016 ~m:4 ~d:06 ~a:canopy;
+    irc_weekly ~y:2016 ~m:4 ~d:20 ~a:canopy;
+    irc_weekly ~y:2016 ~m:5 ~d:4 ~a:canopy;
+    irc_weekly ~y:2016 ~m:5 ~d:18 ~a:canopy;
+    irc_weekly ~y:2016 ~m:6 ~d:1 ~a:canopy;
+    irc_weekly ~y:2016 ~m:6 ~d:15 ~a:canopy;
     weekly ~y:2016 ~m:3 ~d:2 ~a:amir;
     weekly ~y:2016 ~m:2 ~d:17 ~a:amir;
     weekly ~y:2016 ~m:2 ~d:3 ~a:amir;
