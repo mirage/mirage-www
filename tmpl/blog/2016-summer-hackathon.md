@@ -3,7 +3,8 @@ the second MirageOS hackathon in Cambridge!  It will be held on **Weds 13th
 July** at the lovely [Darwin College](https://www.darwin.cam.ac.uk) from
 9am-11pm, with snacks, teas, coffees and a servery lunch provided (thanks to
 sponsorship from [Docker](http://docker.com) and [OCaml Labs](https://ocaml.io)).
-Anyone is welcome at all skill levels, but we'd appreciate you filling out the
+
+**Anyone is welcome at all skill levels**, but we'd appreciate you filling out the
 [Doodle](http://doodle.com/poll/ngbbviwyb9e65uiw) so that we can plan
 refreshments.  We will be working on a variety of projects from improving ARM
 support, to continuous integration tests, the new Solo5 backend and improving
