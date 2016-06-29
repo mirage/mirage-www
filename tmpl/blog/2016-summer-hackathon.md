@@ -9,7 +9,7 @@ sponsorship from [Docker](http://docker.com) and [OCaml Labs](https://ocaml.io))
 refreshments.  We will be working on a variety of projects from improving ARM
 support, to continuous integration tests, the new Solo5 backend and improving
 the suite of protocol libraries.  If you have something in particular that
-interests you, please drop a note to the [/community](mailing list) or check
+interests you, please drop a note to the [mailing list](/community) or check
 out the full list of [Pioneer Projects](https://github.com/mirage/mirage-www/wiki/Pioneer-Projects).
 
 Some other events of note recently:
@@ -22,14 +22,13 @@ Some other events of note recently:
   few hours, so please join us on `#mirage` on Freenode IRC at 4pm British time if you would like to participate or are just curious!
 
 * Our participation in the [Outreachy](https://wiki.gnome.org/Outreachy/2016/MayAugust) program for 2016 has begun, and the irrepressible
-  [Gina Marie Maini](http://www.gina.codes) (aka [wiredsister](http://twitter.com/wiredsis) has been hacking on syslogd, mentored by [Mindy Preston](http://somerandomidiot.com).
-  Welcome to the crew, Gina!
+  [Gina Marie Maini](http://www.gina.codes) (aka [wiredsister](http://twitter.com/wiredsis)) has been hacking on syslogd, mentored by [Mindy Preston](http://somerandomidiot.com).
+  She has already started blogging ([about syslog](http://www.gina.codes/ocaml/2016/06/06/syslog-a-tale-of-specifications.html) and [OCaml love](http://www.gina.codes/ocaml/2016/02/14/dear-ocaml-i-love-you.html)), as well as [podcasting with the stars](http://hanselminutes.com/531/living-functional-programming-with-ocaml-and-gina-marie-maini).  Welcome to the crew, Gina!
+
+* The new [Docker for Mac](https://docs.docker.com/engine/installation/mac/) and [Docker for Windows](https://docs.docker.com/engine/installation/windows/) products have entered open beta! They use a number of libraries from MirageOS (including most of the network stack) and provide a fast way of getting started with containers and unikernel builds on Mac and Windows.  You can find talks about it at the recent [JS London meetup](https://ocaml.io/w/Blog:News/FP_Meetup:_OCaml,_Facebook_and_Docker_at_Jane_Street) and my [slides](http://www.slideshare.net/AnilMadhavapeddy/advanced-docker-developer-workflows-on-macos-x-and-windows)  I also spoke at OSCON 2016 about it, but those videos aren't online yet.
 
 There have also been a number of talks in the past couple of months about MirageOS and its libraries:
 
-* The new [Docker for Mac](https://docs.docker.com/engine/installation/mac/) and [Docker for Windows](https://docs.docker.com/engine/installation/windows/) products have entered open beta! They use a number of libraries from MirageOS (including most of the network stack)
-  and provide a fast way of getting started with containers and unikernel builds on Mac and Windows.  You can find talks about it at
-  the recent [JS London meetup](https://ocaml.io/w/Blog:News/FP_Meetup:_OCaml,_Facebook_and_Docker_at_Jane_Street) and my [slides](http://www.slideshare.net/AnilMadhavapeddy/advanced-docker-developer-workflows-on-macos-x-and-windows)  I also spoke at OSCON 2016 about it, but those videos aren't online yet.
 * [Amir Chaudhry](https://twitter.com/amirmc) has given several talks and demos recently: check out his slides and detailed
   writeups about [GlueCon 2016](http://amirchaudhry.com/gluecon2016) and [CraftConf 2016](http://amirchaudhry.com/craftconf2016) in particular,
   as they come with instructions on how to reproduce his Mirage/ARM on-stage demonstrations of unikernels.
