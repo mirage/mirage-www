@@ -121,7 +121,7 @@ module Index = struct
             div ~cls:"small-12 medium-6 large-6 columns front_updates"
               (h4 (list [
                    a ~href:(uri "/updates/atom.xml") (i ~cls:"fa fa-rss" empty);
-                   string "Recent Updates ";
+                   string " Recent Updates ";
                    small (a ~href:(uri "/updates/") (string "all"))
                  ])
                ++ recent
