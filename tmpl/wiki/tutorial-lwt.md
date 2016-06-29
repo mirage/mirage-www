@@ -75,7 +75,7 @@ The [Lwt_list](http://ocsigen.org/lwt/2.5.0/api/Lwt_list) module provides many o
 
 ## Challenge 1: Sleep and join
 
-Now write a program that spins off two threads, each of which sleeps for some amount of time, say 1 and 2 seconds and then one prints "Heads", the other "Tails". After both have finished, it prints "Finished" and exits. To sleep for some time use `OS.Time.sleep` and to print to the console use `C.log_s`. Note that `OS` is a Mirage-specific module; if you are using Lwt in another context, use `Lwt_unix.sleep` and `Lwt_io.write`.
+Now write a program that spins off two threads, each of which sleeps for some amount of time, say 1 and 2 seconds and then one prints "Heads", the other "Tails". After both have finished, it prints "Finished" and exits. To sleep for some number of nanoseconds use `OS.Time.sleep_ns`, and to print to the console use `C.log_s`. Note that `OS` is a Mirage-specific module; if you are using Lwt in another context, use `Lwt_unix.sleep` and `Lwt_io.write`.
 
 You will need to have MirageOS [installed](/wiki/install). Create a file `config.ml` with the following content:
 
@@ -124,8 +124,8 @@ or [xen](https://github.com/mirage/mirage-platform/tree/master/xen/lib).
   module Main (C : CONSOLE) = struct
     let start c =
       Lwt.join [
-        (Time.sleep 1.0 >>= fun () -> C.log_s c "Heads");
-        (Time.sleep 2.0 >>= fun () -> C.log_s c "Tails")
+        (Time.sleep 1_000_000_000L >>= fun () -> C.log_s c "Heads");
+        (Time.sleep 2_000_000_000L >>= fun () -> C.log_s c "Tails")
       ] >>= fun () ->
       C.log_s c ("Finished")
   end
@@ -143,8 +143,8 @@ Here is a basic dummy input generator you can use for testing:
 
 ```
   let read_line () =
-    OS.Time.sleep (Random.float 2.5) >|= fun () ->
-    String.make (Random.int 20) 'a'
+    Time.sleep_ns (Int64.of_int (Random.int 2_500_000_000))
+    >|= fun () -> String.make (Random.int 20) 'a'
 ```
 
 By the way, the `>|=` operator ("map") used here is similar to `>>=` but automatically wraps the result of the function you provide with `return`. It's used here because `String.make` is synchronous (it doesn't return a thread). We could also have used `>>=` and `return` together to get the same effect.
@@ -225,7 +225,7 @@ If you want to spawn a thread without waiting for the result, use `Lwt.async`:
 
 ```
 Lwt.async (fun () ->
-  OS.Time.sleep 10.0 >>= fun () ->
+  OS.Time.sleep_ns 10_000_000_000L >>= fun () ->
   C.log_s c "Finished"
 )
 ```
@@ -261,7 +261,7 @@ let test1 () =
     (fun ex -> print_endline "caught exception!"; Lwt.return ())
 
 let test2 () =
-  let t = OS.Time.sleep 1.0 >>= fun () -> raise (Failure "late failure") in
+  let t = OS.Time.sleep_ns 1_000_000_000 >>= fun () -> raise (Failure "late failure") in
   Lwt.catch (fun () -> t)
     (fun ex -> print_endline "caught exception!"; Lwt.return ())
 ```
@@ -383,7 +383,7 @@ In order to cancel a thread, the function `cancel` (provided by the module Lwt) 
   (* In this example and all those afterwards, we consider Lwt and OS to be
      opened *)
   let timeout delay t =
-    Time.sleep delay >|= fun () -> cancel t
+    Time.sleep_ns delay >|= fun () -> cancel t
 ```
 
 ###Challenge 3: Timeouts
@@ -397,17 +397,18 @@ You can test your solution with this application, which creates a thread that ma
 ```
   let start c =
     Random.self_init ();
-    let t = Time.sleep (Random.float 3.0) >|= fun () -> "Heads" in
-    timeout 2.0 t >>= function
-    | None   -> C.log_s c "Cancelled"
-    | Some v -> C.log_s c (Printf.sprintf "Returned %S" v)
+    let t = Time.sleep_ns (Int64.of_int (Random.int 3_000_000_000L)) >|= fun () -> "Heads" in
+    timeout 2_000_000_000L t >>= fun v ->
+    C.log_s c (match v with None -> "cancelled" | Some v -> v) >>= fun () ->
+    C.log c "Finished" >>- fun () ->
+    Lwt.return_unit
 ```
 
 ###Solution
 
 ```
   let timeout delay t =
-    Time.sleep delay >>= fun () ->
+    Time.sleep_ns delay >>= fun () ->
     match Lwt.state t with
     | Lwt.Sleep    -> Lwt.cancel t; Lwt.return None
     | Lwt.Return v -> Lwt.return (Some v)
@@ -438,7 +439,7 @@ In order to test your solution, you can compile it to a mirage executable and ru
 
 ```
   let timeout delay t =
-    let tmout = Time.sleep delay in
+    let tmout = Time.sleep_ns delay in
     pick [
       (tmout >|= fun () -> None);
       (t >|= fun v -> Some v);
