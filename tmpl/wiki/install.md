@@ -62,8 +62,8 @@ We use [OPAM](https://opam.ocaml.org) to manage OCaml compiler and library insta
 
 Note that you require **OPAM 1.2.2 or greater** to use with MirageOS. Some distribution packages provide earlier versions and must be updated; check with
 
-    $ opam --version ## response should be at least 1.2.0, viz.
-    1.2.0
+    $ opam --version ## response should be at least 1.2.2 viz.
+    1.2.2
 
 All the OPAM state is held in the `.opam` directory in your home directory, including compiler installations. You should never need to switch to a root user to install packages. Package listings are obtained through `remote` sources, which defaults to the contents of [github.com/ocaml/opam-repository](https://github.com/ocaml/opam-repository).
 
@@ -77,7 +77,7 @@ Next, make sure you have at least **OCaml 4.02.3 or higher** as your active comp
 
     $ ocaml -version
     # if it is not 4.02.3 or higher, then run this
-    $ opam switch 4.03.0
+    $ opam switch 4.02.3
 
 Once you've got the right version, set up your shell environment to point to the current compiler switch.
 
