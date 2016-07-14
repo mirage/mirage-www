@@ -21,8 +21,8 @@ If you are using Homebrew, run
 
 This has the latest packages required in the base distribution, so just run:
 
-    apt-get update
-    apt-get install opam
+    sudo apt-get update
+    sudo apt-get install opam
     opam init
     opam install mirage
 
@@ -30,9 +30,9 @@ This has the latest packages required in the base distribution, so just run:
 
 The version of OPAM in older Ubuntus is not high enough to run Mirage (which requires OPAM 1.2.2 or higher), so you will need to add a custom PPA for the latest packages:
 
-    add-apt-repository ppa:avsm/ppa
-    apt-get update
-    apt-get install ocaml ocaml-native-compilers camlp4-extra opam
+    sudo add-apt-repository ppa:avsm/ppa
+    sudo apt-get update
+    sudo apt-get install ocaml ocaml-native-compilers camlp4-extra opam
     opam init
     opam install mirage
 
@@ -44,8 +44,8 @@ Also note that the `mirage` configuration and deployment tool relies on the `xl`
 
 Debian Jessie only packages OPAM 1.2.0, but Mirage needs OPAM 1.2.2 or higher.  You can use [0install](http://0install.net) to get the right version of OPAM:
 
-    apt-get update
-    apt-get install ca-certificates curl 0install-core --no-install-recommends -y
+    sudo apt-get update
+    sudo apt-get install ca-certificates curl 0install-core --no-install-recommends -y
     0install add opam http://tools.ocaml.org/opam.xml
     opam init
     opam install mirage
@@ -54,8 +54,8 @@ Debian Jessie only packages OPAM 1.2.0, but Mirage needs OPAM 1.2.2 or higher.  
 
 These distributions include everything you need to run Mirage in the base distribution, so just do:
 
-    apt-get update
-    apt-get install ocaml ocaml-native-compilers camlp4-extra opam
+    sudo apt-get update
+    sudo apt-get install ocaml ocaml-native-compilers camlp4-extra opam
     opam init
     opam install mirage
   
