@@ -42,9 +42,13 @@ Also note that the `mirage` configuration and deployment tool relies on the `xl`
 
 #### Debian Stable (Jessie)
 
-Debian Jessie only packages OPAM 1.2.0, but Mirage needs OPAM 1.2.2 or higher.
+Debian Jessie only packages OPAM 1.2.0, but Mirage needs OPAM 1.2.2 or higher.  You can use [0install](http://0install.net) to get the right version of OPAM:
 
-TODO: no Debs for OPAM 1.2.2 available? Recommend static installer for Debian stable.
+    apt-get update
+    apt-get install ca-certificates curl 0install-core --no-install-recommends -y
+    0install add opam http://tools.ocaml.org/opam.xml
+    opam init
+    opam install mirage
 
 #### Debian Testing (Stretch) or Unstable (Sid)
 
@@ -55,7 +59,6 @@ These distributions include everything you need to run Mirage in the base distri
     opam init
     opam install mirage
   
-
 ## MirageOS Package Management with OPAM
 
 We use [OPAM](https://opam.ocaml.org) to manage OCaml compiler and library installations. It tracks library versions across upgrades and will recompile dependencies automatically if they get out of date. Please refer to OPAM [documentation](https://opam.ocaml.org) if you want to know more, but we will cover the basics to get you started here. There is a [Quick Install Guide](http://opam.ocaml.org/doc/Install.html) if the above instructions don't cover your operating system.
