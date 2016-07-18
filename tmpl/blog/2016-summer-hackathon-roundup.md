@@ -9,14 +9,14 @@ People naturally formed groups to work on similar projects, and we had a handful
 
 We'll write about all of this in more detail, but for now here are the hackathon notes hot off the press...
 
-### Solo5/Mirage integration
+### Solo5/Mirage integration (KVM-based backend)
 
-Progress on the Solo5 project has been steaming ahead [since January](https://mirage.io/blog/introducing-solo5), and this was the perfect opportunity to get everyone together to plan its integration with MirageOS. [Dan Williams](http://researcher.ibm.com/researcher/view.php?person=us-djwillia) from IBM Research flew over to join us for the week, and [Martin Lucina](https://github.com/mato) headed to Cambridge to prepare for the upstreaming of the recent Solo5 work. This included deciding on naming and ownership of the repositories, detailing the relationships between repositories and getting ready to publish the mirage-solo5 packages to OPAM. Mindy Preston, our Mirage 3.0 release manager, and Anil Madhavapeddy and Thomas Gazagnaire (OPAM minions) were on hand to help plan this smoothly.
+Progress on the Solo5 project has been steaming ahead [since January](https://mirage.io/blog/introducing-solo5), and this was the perfect opportunity to get everyone together to plan its integration with MirageOS. [Dan Williams](http://researcher.ibm.com/researcher/view.php?person=us-djwillia) from IBM Research flew over to join us for the week, and [Martin Lucina](https://github.com/mato) headed to Cambridge to prepare for the upstreaming of the recent Solo5 work. This included deciding on naming and ownership of the repositories, detailing the relationships between repositories and getting ready to publish the mirage-solo5 packages to OPAM. [Mindy Preston](http://somerandomidiot.com), our Mirage 3.0 release manager, and [Anil Madhavapeddy](http://anil.recoil.org) and [Thomas Gazagnaire](http://gazagnaire.org) (OPAM minions) were on hand to help plan this smoothly.
 
 See their updates from the day on [Canopy](http://canopy.mirage.io/Posts/Solo5) and related blog posts:
 
 * [Introducing Solo 5](https://mirage.io/blog/introducing-solo5)
-* [Unikernel Monitors] HotCloud 2016 [paper](https://www.usenix.org/system/files/conference/hotcloud16/hotcloud16_williams.pdf) and [slides](https://www.usenix.org/sites/default/files/conference/protected-files/hotcloud16_slides_williams.pdf)
+* Unikernel Monitors HotCloud 2016 [paper](https://www.usenix.org/system/files/conference/hotcloud16/hotcloud16_williams.pdf) and [slides](https://www.usenix.org/sites/default/files/conference/protected-files/hotcloud16_slides_williams.pdf)
 * [upstreaming GitHub issue](https://github.com/Solo5/solo5/issues/36) and [FreeBSD support tracking issue](https://github.com/Solo5/solo5/issues/61)
 
 ### Onboarding new Mirage/OCaml users
@@ -41,8 +41,8 @@ Ian Campbell implemented a (slightly hacky) way to get Alpine Linux onto some Cu
 
 Meanwhile, Qi Li worked on testing and adapting [simple-nat](https://github.com/yomimono/simple-nat) and [mirage-nat](https://github.com/yomimono/mirage-nat) to provide connectivity control for unikernels on ARM Cubieboards to act as network gateways.
 
-* https://github.com/yomimono/simple-nat/tree/ethernet-level-no-irmin
-* https://github.com/yomimono/mirage-nat/tree/depopt_irmin
+* [Simple-NAT ethernet branch](https://github.com/yomimono/simple-nat/tree/ethernet-level-no-irmin)
+* [Mirage NAT with optional Irmin branch](https://github.com/yomimono/mirage-nat/tree/depopt_irmin)
 
 ### MirageOS 3.0 API changes
 
@@ -63,53 +63,7 @@ See the full changelog [online](https://github.com/ocamllabs/ocaml-ctypes/blob/m
 
 ### P2P key-value store over DataKit
 
-KC Sivaramakrishnan and Philip Dexter took on the challenge of grabbing the Docker [DataKit](https://github.com/docker/datakit) release and started building a distributed key-value store that features flexible JSON synching and merging.  Their raw notes are below:
-
-```
-Data Model
-----------
-Key -> File
-Value -> Json
-
-The value is possibly JSON automatically generated for OCaml type definitions
-using ppx_deriving_yojson library. Merge function must be explicitly specified:
-
-val merge : coancestor:Yojson.Safe.json
-       -> theirs:Yojson.Safe.json
-       -> mine:Yojson.Safe.json
-       -> Yojson.Safe.json
-
-Merge must always be defined, and any error state explicitly encoded in the
-resultant type to be handled by the application.
-
-Network model
--------------
-The current design is that each peer will run a datakit 9p server, which
-exposes a 9p fs interface. Each peer also mounts its own datakit 9p volume and
-also the *desired set* of peer’s 9p volumes. This allows the
-programmer to describe the network explicitly.
-
-Peer info stored in a separate branch. Questions: Can peer info also be managed
-the same way as usual kv info? Would the peers watch for updates to the peer
-info table and reorganise the n/w dynamically?
-
-Execution model
----------------
-
-The peers can update their local snapshot of kv store, explicitly fetch changes
-from peers (which fetches updates in the mounted 9p volume and merges using the
-user-defined merge function), or watch a subset of peers & keys for updates
-(and automatic merges).
-
-Status
-------
-
-* Modelling the network by hand. WIP dockerfile: https://github.com/philipdexter/datakit-ssh
-* Filed a bunch of issues:
- + size: https://github.com/docker/datakit/issues/183
- + fetch: https://github.com/docker/datakit/issues/180
- + watching: https://github.com/docker/datakit/issues/178
-```
+KC Sivaramakrishnan and Philip Dexter took on the challenge of grabbing the Docker [DataKit](https://github.com/docker/datakit) release and started building a distributed key-value store that features flexible JSON synching and merging.  Their raw notes are in a [Gist](https://gist.github.com/avsm/3e866050810763c33fe776b0048f0599) -- get in touch with them if you want to help hack on the sync system backed by Git.
 
 ### Developer experience improvements
 
