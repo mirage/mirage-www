@@ -138,7 +138,7 @@ module People = struct
     email     = Some "drupyog@zoho.com";
   }
 
-  let gemma = {
+  let gemmag = {
     Atom.name = "Gemma Gordon";
     uri       =  Some "https://github.com/GemmaG";
     email     = Some "gg417@cl.cam.ac.uk";
