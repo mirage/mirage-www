@@ -63,7 +63,7 @@ See the full changelog [online](https://github.com/ocamllabs/ocaml-ctypes/blob/m
 
 ### P2P key-value store over DataKit
 
-KC Sivaramakrishnan and Philip Dexter took on the challenge of grabbing the Docker [DataKit](https://github.com/docker/datakit) release and started building a distributed key-value store that features flexible JSON synching and merging.  Their raw notes are in a [Gist](https://gist.github.com/avsm/3e866050810763c33fe776b0048f0599) -- get in touch with them if you want to help hack on the sync system backed by Git.
+KC Sivaramakrishnan and Philip Dexter took on the challenge of grabbing the Docker [DataKit](https://github.com/docker/datakit) release and started building a distributed key-value store that features flexible JSON synching and merging.  Their raw notes are in a [Gist](https://gist.github.com/kayceesrk/d3edb2da0aa9a3d40e9e3f838b67bd1a) -- get in touch with them if you want to help hack on the sync system backed by Git.
 
 ### Developer experience improvements
 
