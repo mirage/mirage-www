@@ -50,74 +50,99 @@ Our MirageOS release manager, Mindy Preston, was on hand to talk with everyone a
 
 ### Error logging
 
-Thomas Leonard continued with the work he started in Marrakech by updating the error reporting patches https://github.com/mirage/functoria/pull/55 and https://github.com/mirage/mirage-dev/pull/107 to work with the latest version of Mirage (which has a different logging system). See the original post for more details http://canopy.mirage.io/Posts/Errors.
+Thomas Leonard continued with the work he started in Marrakech by [updating the error reporting patches](https://github.com/mirage/functoria/pull/55) (also [here](https://github.com/mirage/mirage-dev/pull/107)) to work with the latest version of MirageOS (which has a different logging system based on Daniel Buenzlis [Logs](http://erratique.ch/software/logs)). See the [original post](http://canopy.mirage.io/Posts/Errors) for more details.
 
 ### Ctypes 0.7.0 release
 
-Jeremy released Ctypes 0.7.0 which, along with bug fixes, adds the following features:
+Jeremy released [Ctypes 0.7.0](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/0.7.0) which, along with bug fixes, adds the following features:
 
-* Support for bytecode-only architectures https://github.com/ocamllabs/ocaml-ctypes/issues/410
-* A new sint type corresponding to a full-range C integer and updated errno support for its use https://github.com/ocamllabs/ocaml-ctypes/issues/411
+* Support for bytecode-only architectures ([#410](https://github.com/ocamllabs/ocaml-ctypes/issues/410))
+* A new `sint` type corresponding to a full-range C integer and updated errno support for its use ([#411](https://github.com/ocamllabs/ocaml-ctypes/issues/411))
 
-See the full changelog here: https://github.com/ocamllabs/ocaml-ctypes/blob/master/CHANGES.md
+See the full changelog [online](https://github.com/ocamllabs/ocaml-ctypes/blob/master/CHANGES.md).
 
 ### P2P key-value store over DataKit
 
-KC Sivaramakrishnan and Philip Dexter focussed on building a distributed key value store on top of DataKit https://github.com/docker/datakit. Their detailed notes are below:
+KC Sivaramakrishnan and Philip Dexter took on the challenge of grabbing the Docker [DataKit](https://github.com/docker/datakit) release and started building a distributed key-value store that features flexible JSON synching and merging.  Their raw notes are below:
 
+```
 Data Model
 ----------
 Key -> File
 Value -> Json
 
-The value is possibly JSON automatically generated for OCaml type definitions using ppx_deriving_yojson library. Merge function must be explicitly specified:
+The value is possibly JSON automatically generated for OCaml type definitions
+using ppx_deriving_yojson library. Merge function must be explicitly specified:
 
-```val merge : coancestor:Yojson.Safe.json
-         -> theirs:Yojson.Safe.json
-         -> mine:Yojson.Safe.json
-         -> Yojson.Safe.json
-```
+val merge : coancestor:Yojson.Safe.json
+       -> theirs:Yojson.Safe.json
+       -> mine:Yojson.Safe.json
+       -> Yojson.Safe.json
 
-Merge must always be defined, and any error state explicitly encoded in the resultant type to be handled by the application.
+Merge must always be defined, and any error state explicitly encoded in the
+resultant type to be handled by the application.
 
 Network model
 -------------
-The current design is that each peer will run a datakit 9p server, which exposes a 9p fs interface. Each peer also mounts its own datakit 9p volume and also the ​*desired set*​ of peer’s 9p volumes. This allows the programmer to describe the network explicitly.
+The current design is that each peer will run a datakit 9p server, which
+exposes a 9p fs interface. Each peer also mounts its own datakit 9p volume and
+also the *desired set* of peer’s 9p volumes. This allows the
+programmer to describe the network explicitly.
 
-Peer info stored in a separate branch. Questions: Can peer info also be managed the same way as usual kv info? Would the peers watch for updates to the peer info table and reorganise the n/w dynamically?
+Peer info stored in a separate branch. Questions: Can peer info also be managed
+the same way as usual kv info? Would the peers watch for updates to the peer
+info table and reorganise the n/w dynamically?
 
 Execution model
 ---------------
-The peers can update their local snapshot of kv store, explicitly fetch changes from peers (which fetches updates in the mounted 9p volume and merges using the user-defined merge function), or watch a subset of peers & keys for updates (and automatic merges).
+
+The peers can update their local snapshot of kv store, explicitly fetch changes
+from peers (which fetches updates in the mounted 9p volume and merges using the
+user-defined merge function), or watch a subset of peers & keys for updates
+(and automatic merges).
 
 Status
 ------
+
 * Modelling the network by hand. WIP dockerfile: https://github.com/philipdexter/datakit-ssh
 * Filed a bunch of issues:
  + size: https://github.com/docker/datakit/issues/183
  + fetch: https://github.com/docker/datakit/issues/180
  + watching: https://github.com/docker/datakit/issues/178
+```
 
 ### Developer experience improvements
 
-Our UROP undergraduate interns are spending their summers working on user improvements and CI logs with MirageOS, and used the time at the hackathon to focus on these issues.
+The OCaml Labs undergraduate interns are spending their summers working on user improvements and CI logs with MirageOS, and used the time at the hackathon to focus on these issues.
 
-Ciaran is working on an editor implementation, specifically getting the IOcaml kernel working with the Hydrogen plugin for Atom - this will allow developers to run OCaml code directly in Atom.
+Ciaran is working on an editor implementation, specifically getting the [IOcaml kernel](https://github.com/andrewray/iocaml) working with the [Hydrogen](https://github.com/nteract/hydrogen) plugin for the Atom editor. This will allow developers to run OCaml code directly in Atom, and eventually interactively build unikernels!
 
-Joel used Angstrom (a fast parser combinator library developed by Spiros Eliopoulos) https://github.com/inhabitedtype/angstrom to convert the ANSI escape codes, usually displayed as colours and styles into HTML for use in viewing CI logs.
+Joel used [Angstrom](https://github.com/inhabitedtype/angstrom) (a fast parser combinator library developed by Spiros Eliopoulos) to ANSI escape codes, usually displayed as colours and styles into HTML for use in viewing CI logs.
 
 ### Windows Support
 
-Most of the Mirage libraries already work on Windows thanks to lots of work in the wider OCaml community, but other features don't have full support yet
+Most of the Mirage libraries already work on Windows thanks to lots of work in the wider OCaml community, but other features don't have full support yet.
 
-Dave Scott worked on [ocaml-wpcap](https://github.com/djs55/ocaml-wpcap): a [ctypes](https://github.com/ocamllabs/ocaml-ctypes) binding to the Windows [winpcap.dll](http://www.winpcap.org) which lets OCaml programs send and receive ethernet frames on Windows. The ocaml-wpcap library will hopefully let us run the Mirage TCP/IP stack and all the networking applications too.
+[Dave Scott](http://dave.recoil.org) from Docker worked on [ocaml-wpcap](https://github.com/djs55/ocaml-wpcap): a [ctypes](https://github.com/ocamllabs/ocaml-ctypes) binding to the Windows [winpcap.dll](http://www.winpcap.org) which lets OCaml programs send and receive ethernet frames on Windows. The ocaml-wpcap library will hopefully let us run the Mirage TCP/IP stack and all the networking applications too.
 
-David Allsopp continued his OPAM-Windows support by fine-tuning the 80 native Windows OCaml versions - these will hopefully form part of OPAM 2.0. As it turns out, he's not the only person still interested in being able to run OCaml 3.07...
+David Allsopp continued his OPAM-Windows support by fine-tuning the 80 native Windows OCaml versions - these will hopefully form part of OPAM 2.0. As it turns out, he's not the only person still interested in being able to run OCaml 3.07...if you are, get in touch!
 
-----
+### General Libaries and utilities
 
-Not sure where these go....
+Olivier Nicole is working on an implementation of macros in OCaml and started working on the
+HTML and XML templates using this system. The objective is to have the same
+behaviour as the `Pa_tyxml` syntax extension, but in a type-safe and more
+maintainable way without requiring PPX extensions. This project could be
+contributed to the development of [Ocsigen](http://ocsigen.org) once implemented.
 
-Olivier is working on the macros project at OCL, and started working on the HTML and XML templates using this system. The objective is to have the same behaviour as the `Pa_tyxml` syntax extension, but in a type-safe and more maintainable way. This project could contribute to the development of Ocsigen once implemented.
+Nick Betteridge teamed up with Dave Scott to look at using
+[ocaml-btree](https://github.com/djs55/ocaml-btree) as a backend for Irmin/xen
+and spent the day looking at different approaches.
 
-Nick Betteridge is looking at using ocaml-btree as a backend for irmin/xen and spent the day looking at different approaches such as the key/value.
+Anil Madhavapeddy built a Docker wrapper for the CI system and spun up a big cluster
+to run OPAM bulk builds.  Several small utilities like [jsontee](https://github.com/avsm/jsontee) and
+an immutable [log collection server](https://github.com/avsm/opam-log-server) and
+[bulk build scripts](https://github.com/avsm/opam-bulk-builder) will be released in the
+next few weeks once the builds are running stably, and be re-usable by other OPAM-based
+projects to use for their own tests.
+
