@@ -23,30 +23,30 @@ See their updates from the day on [Canopy](http://canopy.mirage.io/Posts/Solo5) 
 
 Our tutorials and onboarding guides _really_ needed a facelift and an update, so Gemma spent the morning with some of our new users to observe their installation process and tried to pinpoint blockers and areas of misunderstanding. Providing the simple, concise instructions needed in a guide together with alternatives for every possible system and version requirement is a tricky combination to get right, but we made some [changes](https://github.com/mirage/mirage-www/pull/468) to the [installation guide](https://mirage.io/wiki/install) that we hope will help. The next task is to do the same for our other popular tutorials, reconfigure the layout for easy reading and centralise the information as much as possible between the OPAM, Mirage and OCaml guides. Thank you to Marwan Aljubeh for his insight into this process.
 
-### FastCGI
+### HTTP and FastCGI
 
-Christophe Troestler is spending a month with us in Cambridge this summer, and spent the hack day working on implementing a library to allow seamless application switching from HTTP to FastCGI. Progress is exploratory at the moment, but Christophe has initiated work on a client and server for this protocol.
+[Christophe Troestler](https://github.com/Chris00) is spending a month at [OCaml Labs](https://ocaml.io) in Cambridge this summer, and spent the hack day working on implementing a library to allow seamless application switching from HTTP to FastCGI. Christophe has initiated work on a client and server for this protocol using [CoHTTP](https://github.com/mirage/ocaml-cohttp) so that it is unikernel-friendly.
 
 ### Packaging
 
-Thomas Gazagnaire was frenetically converting `functoria`, `mirage`, `mirage-types` and `mirage-console` to use `topkg`, who's feedback prompted fixes and a new release from Daniel Buenzli
+Thomas Gazagnaire was frenetically converting `functoria`, `mirage`, `mirage-types` and `mirage-console` to use [topkg](https://github.com/dbuenzli/topkg), and the feedback prompted fixes and a new release from Daniel Buenzli.
 
-* https://github.com/mirage/functoria/pull/64
-* https://github.com/mirage/mirage/pull/558
-* https://github.com/mirage/mirage-console/pull/41
+* [Functoria #64](https://github.com/mirage/functoria/pull/64)
+* [Mirage #558](https://github.com/mirage/mirage/pull/558)
+* [Mirage-console #41](https://github.com/mirage/mirage-console/pull/41)
 
-### Cubieboards
+### ARM and Cubieboards
 
-Ian Campbell implemented a (slightly hacky) way to get Alpine Linux onto some Cubieboard2's and provided notes on his process, including how to tailor the base for KVM and Xen respectively. **** Is the gist he sent over secret? **** https://gist.github.com/ijc25/612b8b7975e9461c3584b1402df2cb34
+Ian Campbell implemented a (slightly hacky) way to get Alpine Linux onto some Cubieboard2 boxes and [provided notes](https://gist.github.com/ijc25/612b8b7975e9461c3584b1402df2cb34) on his process, including how to tailor the base for KVM and Xen respectively.
 
-Qi Li worked on testing and adapting `simple-nat` and `mirage-nat` to provide connectivity control for unikernels on Cubieboard.
+Meanwhile, Qi Li worked on testing and adapting [simple-nat](https://github.com/yomimono/simple-nat) and [mirage-nat](https://github.com/yomimono/mirage-nat) to provide connectivity control for unikernels on ARM Cubieboards to act as network gateways.
 
 * https://github.com/yomimono/simple-nat/tree/ethernet-level-no-irmin
 * https://github.com/yomimono/mirage-nat/tree/depopt_irmin
 
-### Mirage 3.0 API changes
+### MirageOS 3.0 API changes
 
-Our Mirage release manager, Mindy was on hand to talk with everyone about their PRs in preparation for the 3.0 release along with some patches for deprecating out of date code.
+Our MirageOS release manager, Mindy Preston, was on hand to talk with everyone about their PRs in preparation for the 3.0 release along with some patches for deprecating out of date code.  There has been a lot of discussion on the [development list](https://lists.xenproject.org/archives/html/mirageos-devel/2016-07/msg00000.html) about this, and Matthew Gray came up from London to finish up his extensive revision of the [CLOCK](https://github.com/mirage/mirage/issues/442) interface.
 
 ### Error logging
 
