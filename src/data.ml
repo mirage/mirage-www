@@ -137,6 +137,12 @@ module People = struct
     uri       = Some "https://github.com/drup";
     email     = Some "drupyog@zoho.com";
   }
+
+  let gemma = {
+    Atom.name = "Gemma Gordon";
+    uri       =  Some "https://github.com/GemmaG";
+    email     = Some "gg417@cl.cam.ac.uk";
+  }
 end
 
 let rights = Some "All rights reserved by the author"
@@ -148,15 +154,22 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2016, 7, 18, 16, 00);
+        authors    = [gemmag; anil];
+        subject    = "MirageOS Summer 2016 Hackathon roundup";
+        body       = "2016-summer-hackathon-roundup.md";
+        permalink  = "2016-summer-hackathon-roundup";
+      };
+
       { updated    = date (2016, 6, 29, 16, 00);
-        authors    = [];
+        authors    = [gemmag; anil];
         subject    = "MirageOS Summer 2016 Hackathon announcement, and talk roundup";
         body       = "2016-summer-hackathon.md";
         permalink  = "2016-summer-hackathon";
       };
 
       { updated    = date (2016, 5, 4, 16, 00);
-        authors    = [];
+        authors    = [gemmag];
         subject    = "MirageOS Spring 2016 Hackathon!";
         body       = "2016-spring-hackathon.md";
         permalink  = "2016-spring-hackathon";
