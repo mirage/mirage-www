@@ -8,26 +8,21 @@ People naturally formed groups to work on similar projects, and we had a handful
 - __CPU portability__: improving ARM support via a better base OS image.
 - __libraries breadth__: hacking on all the things to fill in the blanks, such as btree support for bare-metal [Irmin](https://github.com/mirage/irmin), or a peer-to-peer layer for the [DataKit](https://github.com/docker/datakit).
 
-
 We'll write about all of this in more detail, but for now here are the hackathon notes hot off the press...
 
-### Solo5/Mirage integration (KVM-based backend)
+### Solo5/MirageOS integration (KVM-based backend)
 
-Progress on the Solo5 project has been steaming ahead [since January](https://mirage.io/blog/introducing-solo5), and this was the perfect opportunity to get everyone together to plan its integration with MirageOS. [Dan Williams](http://researcher.ibm.com/researcher/view.php?person=us-djwillia) from IBM Research flew over to join us for the week, and [Martin Lucina](https://github.com/mato) headed to Cambridge to prepare for the upstreaming of the recent Solo5 work. This included deciding on naming and ownership of the repositories, detailing the relationships between repositories and getting ready to publish the mirage-solo5 packages to OPAM. [Mindy Preston](http://somerandomidiot.com), our Mirage 3.0 release manager, and [Anil Madhavapeddy](http://anil.recoil.org) and [Thomas Gazagnaire](http://gazagnaire.org) (OPAM minions) were on hand to help plan this smoothly.
+Progress on the Solo5 project has been steaming ahead [since January](https://mirage.io/blog/introducing-solo5), and this was the perfect opportunity to get everyone together to plan its integration with MirageOS. [Dan Williams](http://researcher.ibm.com/researcher/view.php?person=us-djwillia) from IBM Research flew over to join us for the week, and [Martin Lucina](https://github.com/mato) headed to Cambridge to prepare for the upstreaming of the recent Solo5 work. This included deciding on naming and ownership of the repositories, detailing the relationships between repositories and getting ready to publish the mirage-solo5 packages to OPAM. [Mindy Preston](http://somerandomidiot.com), our MirageOS 3.0 release manager, and [Anil Madhavapeddy](http://anil.recoil.org) and [Thomas Gazagnaire](http://gazagnaire.org) (OPAM minions) were on hand to help plan this smoothly.
 
 See their updates from the day on [Canopy](http://canopy.mirage.io/Posts/Solo5) and related blog posts:
 
 * [Introducing Solo 5](https://mirage.io/blog/introducing-solo5)
 * Unikernel Monitors HotCloud 2016 [paper](https://www.usenix.org/system/files/conference/hotcloud16/hotcloud16_williams.pdf) and [slides](https://www.usenix.org/sites/default/files/conference/protected-files/hotcloud16_slides_williams.pdf)
-* [upstreaming GitHub issue](https://github.com/Solo5/solo5/issues/36) and [FreeBSD support tracking issue](https://github.com/Solo5/solo5/issues/61)
+* [upstreaming GitHub issue](https://github.com/Solo5/solo5/issues/36) and [FreeBSD support tracking issue](https://github.com/Solo5/solo5/issues/61) from Hannes Mehnert.
 
-### Onboarding new Mirage/OCaml users
+### Onboarding new MirageOS/OCaml users
 
-Our tutorials and onboarding guides _really_ needed a facelift and an update, so Gemma spent the morning with some of our new users to observe their installation process and tried to pinpoint blockers and areas of misunderstanding. Providing the simple, concise instructions needed in a guide together with alternatives for every possible system and version requirement is a tricky combination to get right, but we made some [changes](https://github.com/mirage/mirage-www/pull/468) to the [installation guide](https://mirage.io/wiki/install) that we hope will help. The next task is to do the same for our other popular tutorials, reconfigure the layout for easy reading and centralise the information as much as possible between the OPAM, Mirage and OCaml guides. Thank you to Marwan Aljubeh for his insight into this process.
-
-### HTTP and FastCGI
-
-[Christophe Troestler](https://github.com/Chris00) is spending a month at [OCaml Labs](https://ocaml.io) in Cambridge this summer, and spent the hack day working on implementing a library to allow seamless application switching from HTTP to FastCGI. Christophe has initiated work on a client and server for this protocol using [CoHTTP](https://github.com/mirage/ocaml-cohttp) so that it is unikernel-friendly.
+Our tutorials and onboarding guides _really_ needed a facelift and an update, so Gemma spent the morning with some of our new users to observe their installation process and tried to pinpoint blockers and areas of misunderstanding. Providing the simple, concise instructions needed in a guide together with alternatives for every possible system and version requirement is a tricky combination to get right, but we made some [changes](https://github.com/mirage/mirage-www/pull/468) to the [installation guide](https://mirage.io/wiki/install) that we hope will help. The next task is to do the same for our other popular tutorials, reconfigure the layout for easy reading and centralise the information as much as possible between the OPAM, MirageOS and OCaml guides. Thank you to Marwan Aljubeh for his insight into this process.
 
 ### Packaging
 
@@ -46,9 +41,11 @@ Meanwhile, Qi Li worked on testing and adapting [simple-nat](https://github.com/
 * [Simple-NAT ethernet branch](https://github.com/yomimono/simple-nat/tree/ethernet-level-no-irmin)
 * [Mirage NAT with optional Irmin branch](https://github.com/yomimono/mirage-nat/tree/depopt_irmin)
 
-### MirageOS 3.0 API changes
+[Hannes Mehnert](https://www.cl.cam.ac.uk/~hm519/) recently published a purely functional [ARP package](https://github.com/hannesm/arp) and continued refining it (with code coverage via [bisect](http://bisect.x9c.fr)) during the hackathon.
 
-Our MirageOS release manager, Mindy Preston, was on hand to talk with everyone about their PRs in preparation for the 3.0 release along with some patches for deprecating out of date code.  There has been a lot of discussion on the [development list](https://lists.xenproject.org/archives/html/mirageos-devel/2016-07/msg00000.html) about this, and Matthew Gray came up from London to finish up his extensive revision of the [CLOCK](https://github.com/mirage/mirage/issues/442) interface.
+### MirageOS 3.0 API changes
+ 
+Our MirageOS release manager, Mindy Preston, was on hand to talk with everyone about their PRs in preparation for the 3.0 release along with some patches for deprecating out of date code.  There has been a lot of discussion on the [development list](https://lists.xenproject.org/archives/html/mirageos-devel/2016-07/msg00000.html).  One focus was to address time handling properly in the interfaces: Matthew Gray came up from London to finish up his extensive revision of the [CLOCK](https://github.com/mirage/mirage/issues/442) interface, and Hannes developed a new [duration](https://github.com/hannesm/duration) library to handle time unit conversions effiently and get rid of the need for floating point handling.  We are aiming to minimise the dependency on floating point handling in external interfaces to simplify compilation to very embedded hardware that only has soft floats (particularly for something as ubiquitous as time handling).
 
 ### Error logging
 
@@ -56,7 +53,7 @@ Thomas Leonard continued with the work he started in Marrakech by [updating the 
 
 ### Ctypes 0.7.0 release
 
-Jeremy released [Ctypes 0.7.0](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/0.7.0) which, along with bug fixes, adds the following features:
+Jeremy released the foreign function interface library [Ctypes 0.7.0](https://github.com/ocamllabs/ocaml-ctypes/releases/tag/0.7.0) which, along with bug fixes, adds the following features:
 
 * Support for bytecode-only architectures ([#410](https://github.com/ocamllabs/ocaml-ctypes/issues/410))
 * A new `sint` type corresponding to a full-range C integer and updated errno support for its use ([#411](https://github.com/ocamllabs/ocaml-ctypes/issues/411))
@@ -83,7 +80,7 @@ Most of the Mirage libraries already work on Windows thanks to lots of work in t
 
 David Allsopp continued his OPAM-Windows support by fine-tuning the 80 native Windows OCaml versions - these will hopefully form part of OPAM 2.0. As it turns out, he's not the only person still interested in being able to run OCaml 3.07...if you are, get in touch!
 
-### General Libaries and utilities
+### General Libraries and utilities
 
 Olivier Nicole is working on an implementation of macros in OCaml and started working on the
 HTML and XML templates using this system. The objective is to have the same
@@ -101,4 +98,12 @@ an immutable [log collection server](https://github.com/avsm/opam-log-server) an
 [bulk build scripts](https://github.com/avsm/opam-bulk-builder) will be released in the
 next few weeks once the builds are running stably, and be re-usable by other OPAM-based
 projects to use for their own tests.
+
+[Christophe Troestler](https://github.com/Chris00) is spending a month at
+[OCaml Labs](https://ocaml.io) in Cambridge this summer, and spent the hack day
+working on implementing a library to allow seamless application switching from
+HTTP to FastCGI. Christophe has initiated work on a client and server for this
+protocol using [CoHTTP](https://github.com/mirage/ocaml-cohttp) so that it is
+unikernel-friendly.
+
 
