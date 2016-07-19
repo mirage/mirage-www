@@ -70,9 +70,9 @@ KC Sivaramakrishnan and Philip Dexter took on the challenge of grabbing the Dock
 
 The OCaml Labs undergraduate interns are spending their summers working on user improvements and CI logs with MirageOS, and used the time at the hackathon to focus on these issues.
 
-Ciaran is working on an editor implementation, specifically getting the [IOcaml kernel](https://github.com/andrewray/iocaml) working with the [Hydrogen](https://github.com/nteract/hydrogen) plugin for the Atom editor. This will allow developers to run OCaml code directly in Atom, and eventually interactively build unikernels!
+Ciaran Lawlor is working on an editor implementation, specifically getting the [IOcaml kernel](https://github.com/andrewray/iocaml) working with the [Hydrogen](https://github.com/nteract/hydrogen) plugin for the Atom editor. This will allow developers to run OCaml code directly in Atom, and eventually interactively build unikernels!
 
-Joel used [Angstrom](https://github.com/inhabitedtype/angstrom) (a fast parser combinator library developed by Spiros Eliopoulos) to ANSI escape codes, usually displayed as colours and styles into HTML for use in viewing CI logs.
+Joel Jakubovic used [Angstrom](https://github.com/inhabitedtype/angstrom) (a fast parser combinator library developed by Spiros Eliopoulos) to ANSI escape codes, usually displayed as colours and styles into HTML for use in viewing CI logs.
 
 ### Windows Support
 
