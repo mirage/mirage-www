@@ -9,4 +9,5 @@ at our respective institutions.
 * **[Thomas Gazagnaire](http://thomas.gazagnaire.org)**, University of Cambridge
 * **[Richard Mortier](http://www.cs.nott.ac.uk/~rmm/)**, University of Nottingham
 * **[Thomas Leonard](http://roscidus.com/blog/)**, University of Cambridge
+* **[Mindy Preston](http://www.somerandomidiot.com)**, Docker
 * Community Manager: **[Amir Chaudhry](http://amirchaudhry.com/)**, University of Cambridge
