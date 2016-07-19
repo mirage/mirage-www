@@ -14,7 +14,7 @@ You can launch this domain with `xm create -c app.cfg` (for Xen versions earlier
 Alternatively, for Xen versions greater than 4.1, you can simply invoke Mirage to do this for you:
 
 ```
-    $ mirage configure --xen
+    $ mirage configure -t xen
     $ make
 ```
 
@@ -71,7 +71,7 @@ To use the EC2 `t1.micro` instances the kernel needs to reside inside an EBS vol
 
 * Log out of instance
 * Create EBS snapshot `ec2-create-snapshot ${VOLUME}`
-* You can stop the running mirco instance now
+* You can stop the running micro instance now
 * Register your AMI using `ec2-register --snapshot ${SNAPSHOT} --kernel aki-4e7d9527 --architecture x86_64` Note the familiar kernel id: This is the pv-grub kernel that is also used in `script/ec2.sh`.
 * Start your EBS backed MirageOS kernel in a micro instance: `ec2-run-instances ${EBSAMI} -k mirage -t t1.micro`
 

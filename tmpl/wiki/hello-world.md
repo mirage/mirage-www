@@ -112,7 +112,7 @@ unikernel under Unix first.
 
 ```
 $ cd console
-$ mirage configure --unix
+$ mirage configure -t unix
 ```
 
 `mirage configure` generates a `Makefile` with all the build rules included from
@@ -142,7 +142,7 @@ $ ./mir-console
 <div class="panel callout">
   <i class="fa fa-info fa-3x pull-left"> </i>
   <p>
-    Note that when you execute <code>mirage configure --xen</code>, the target
+    Note that when you execute <code>mirage configure -t xen</code>, the target
     unikernel's <code>target.xl</code> and other auto-generated configuration
     files are regenerated, overwriting any modifications you may have made. If
     you edit any of these, we suggest renaming and/or committing them to source
@@ -153,10 +153,10 @@ $ ./mir-console
 #### Building a Xen unikernel
 
 If you are on a 64-bit Linux system able to build Xen images, simply change
-`--unix` for `--xen` to build a Xen VM:
+`-t unix` for `-t xen` to build a Xen VM:
 
 ```
-$ mirage configure --xen
+$ mirage configure -t xen
 $ make
 ```
 
@@ -281,7 +281,7 @@ Build this on Unix in the same way as the console example.
 
 ```
 $ cd block
-$ mirage configure --unix
+$ mirage configure -t unix
 $ make
 $ ./generate_disk_img.sh
 $ ./mir-block_test
@@ -295,7 +295,7 @@ same (the logic for this is in `unikernel.ml` within the `Block_test` module).
 The Xen version works the same way. First build the code:
 
 ```
-$ mirage configure --xen
+$ mirage configure -t xen
 $ make
 $ ./generate_disk_img.sh # only required if not executed as above
 ```
@@ -416,7 +416,7 @@ Unix:
 
 ```
 $ cd kv_ro_crunch
-$ mirage configure --unix
+$ mirage configure -t unix
 $ make
 $ less static1.ml # the generated filesystem
 $ ./mir-kv_ro
@@ -425,7 +425,7 @@ $ ./mir-kv_ro
 Xen:
 
 ```
-$ mirage configure --xen
+$ mirage configure -t xen
 $ make
 $ sudo xl create -c kv_ro.xl
 Parsing config from kv_ro.xl
@@ -475,7 +475,7 @@ appropriate settings for external filesystem access.
 On OSX:
 
 ```
-$ mirage configure --unix --kv_ro fat
+$ mirage configure -t unix --kv_ro fat
 $ ./make-fat1-image.sh
 $ file fat1.img
 fat1.img: x86 boot sector, code offset 0x0, OEM-ID "ocamlfat",
@@ -486,7 +486,7 @@ sectors/FAT 1, sectors 49 (volumes > 32 MB) , dos < 4.0 BootSector (0x0)
 or, on Linux:
 
 ```
-$ mirage configure --unix --kv_ro fat
+$ mirage configure -t unix --kv_ro fat
 $ ./make-fat1-image.sh
 $ file fat1.img
 fat1.img: x86 boot sector
@@ -583,7 +583,7 @@ first.
 
 ```
 $ cd stackv4
-$ mirage configure --unix --net socket
+$ mirage configure -t unix --net socket
 $ make
 $ sudo ./mir-stackv4
 Manager: connect
@@ -624,7 +624,7 @@ Assuming you've got a DHCP server running:
 
 ```
 $ cd stackv4
-$ mirage configure --unix --dhcp true --net direct
+$ mirage configure -t unix --dhcp true --net direct
 $ make
 $ sudo ./mir-stackv4
 Netif: connect unknown
@@ -696,7 +696,7 @@ using `$ sudo ifconfig tap0 10.0.0.1 up`, then:
 
 ```
 $ cd stackv4
-$ mirage configure --unix --dhcp false --net direct
+$ mirage configure -t unix --dhcp false --net direct
 $ make
 $ sudo ./mir-stackv4
 Netif: plugging into tap0 with mac c2:9d:56:19:d7:2c
@@ -762,7 +762,7 @@ configuration file already disables the socket-based job if a Xen compilation is
 detected, leaving just the OCaml TCP/IP stack.
 
 ```
-$ mirage configure --xen --dhcp true
+$ mirage configure -t xen --dhcp true
 $ make
 ```
 
