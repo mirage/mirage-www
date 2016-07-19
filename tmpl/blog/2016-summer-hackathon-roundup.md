@@ -22,7 +22,9 @@ See their updates from the day on [Canopy](http://canopy.mirage.io/Posts/Solo5) 
 
 ### Onboarding new MirageOS/OCaml users
 
-Our tutorials and onboarding guides _really_ needed a facelift and an update, so Gemma spent the morning with some of our new users to observe their installation process and tried to pinpoint blockers and areas of misunderstanding. Providing the simple, concise instructions needed in a guide together with alternatives for every possible system and version requirement is a tricky combination to get right, but we made some [changes](https://github.com/mirage/mirage-www/pull/468) to the [installation guide](https://mirage.io/wiki/install) that we hope will help. The next task is to do the same for our other popular tutorials, reconfigure the layout for easy reading and centralise the information as much as possible between the OPAM, MirageOS and OCaml guides. Thank you to Marwan Aljubeh for his insight into this process.
+Our tutorials and onboarding guides _really_ needed a facelift and an update, so [Gemma Gordon](https://ocaml.io/w/User:GemmaG) spent the morning with some of our new users to observe their installation process and tried to pinpoint blockers and areas of misunderstanding. Providing the simple, concise instructions needed in a guide together with alternatives for every possible system and version requirement is a tricky combination to get right, but we made some [changes](https://github.com/mirage/mirage-www/pull/468) to the [installation guide](https://mirage.io/wiki/install) that we hope will help. The next task is to do the same for our other popular tutorials, reconfigure the layout for easy reading and centralise the information as much as possible between the OPAM, MirageOS and OCaml guides. Thank you to Marwan Aljubeh for his insight into this process.
+
+Other industrial users are also steaming ahead with their own MirageOS deployments. [Amir Chaudhry](http://amirchaudhry.com) spent the hackathon blogging about [NFV Platforms with MirageOS unikernels](http://unikernel.org/blog/2016/unikernel-nfv-platform), which details how Ericsson Silicon Valley has been using MirageOS to build lightweight routing kernels.
 
 ### Packaging
 
@@ -82,7 +84,7 @@ David Allsopp continued his OPAM-Windows support by fine-tuning the 80 native Wi
 
 ### General Libraries and utilities
 
-Olivier Nicole is working on an implementation of macros in OCaml and started working on the
+[Olivier Nicole](https://github.com/OlivierNicole) is working on an implementation of macros in OCaml and started working on the
 HTML and XML templates using this system. The objective is to have the same
 behaviour as the `Pa_tyxml` syntax extension, but in a type-safe and more
 maintainable way without requiring PPX extensions. This project could be
@@ -105,5 +107,4 @@ working on implementing a library to allow seamless application switching from
 HTTP to FastCGI. Christophe has initiated work on a client and server for this
 protocol using [CoHTTP](https://github.com/mirage/ocaml-cohttp) so that it is
 unikernel-friendly.
-
 
