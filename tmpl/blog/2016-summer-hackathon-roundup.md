@@ -43,11 +43,11 @@ Meanwhile, Qi Li worked on testing and adapting [simple-nat](https://github.com/
 * [Simple-NAT ethernet branch](https://github.com/yomimono/simple-nat/tree/ethernet-level-no-irmin)
 * [Mirage NAT with optional Irmin branch](https://github.com/yomimono/mirage-nat/tree/depopt_irmin)
 
-[Hannes Mehnert](https://www.cl.cam.ac.uk/~hm519/) recently published a purely functional [ARP package](https://github.com/hannesm/arp) and continued refining it (with code coverage via [bisect](http://bisect.x9c.fr)) during the hackathon.
+[Hannes Mehnert](https://www.cl.cam.ac.uk/~hm519/) recently published a purely functional [ARP package](https://github.com/hannesm/arp) and continued refining it (with code coverage via [bisect-ppx](https://github.com/aantron/bisect_ppx)) during the hackathon.
 
 ### MirageOS 3.0 API changes
  
-Our MirageOS release manager, Mindy Preston, was on hand to talk with everyone about their PRs in preparation for the 3.0 release along with some patches for deprecating out of date code.  There has been a lot of discussion on the [development list](https://lists.xenproject.org/archives/html/mirageos-devel/2016-07/msg00000.html).  One focus was to address time handling properly in the interfaces: Matthew Gray came up from London to finish up his extensive revision of the [CLOCK](https://github.com/mirage/mirage/issues/442) interface, and Hannes developed a new [duration](https://github.com/hannesm/duration) library to handle time unit conversions effiently and get rid of the need for floating point handling.  We are aiming to minimise the dependency on floating point handling in external interfaces to simplify compilation to very embedded hardware that only has soft floats (particularly for something as ubiquitous as time handling).
+Our MirageOS release manager, Mindy Preston, was on hand to talk with everyone about their PRs in preparation for the 3.0 release along with some patches for deprecating out of date code.  There has been a lot of discussion on the [development list](https://lists.xenproject.org/archives/html/mirageos-devel/2016-07/msg00000.html).  One focus was to address time handling properly in the interfaces: Matthew Gray came up from London to finish up his extensive revision of the [CLOCK](https://github.com/mirage/mirage/issues/442) interface, and Hannes developed a new [duration](https://github.com/hannesm/duration) library to handle time unit conversions safely and get rid of the need for floating point handling.  We are aiming to minimise the dependency on floating point handling in external interfaces to simplify compilation to very embedded hardware that only has soft floats (particularly for something as ubiquitous as time handling).
 
 ### Error logging
 
