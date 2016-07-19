@@ -9,7 +9,7 @@ an argument).
 
 #### Deprecation: Misc functions
 
-`get_mode` is deprecated. You should use keys instead. And in particular `Key.target` and `Key.is_xen`.
+`get_mode` is deprecated. You should use keys instead. And in particular `Key.target` and `Key.is_xen`.  Users running `mirage configure` should use `-t xen` and `-t unix` instead of `--xen` and `--unix`.
 
 `add_to_ocamlfind_libraries` and `add_to_opam_packages` are deprecated. Both the `foreign` and the `register` functions now possess the `~libraries` and `~packages` arguments to specify libraries dependencies.
 
