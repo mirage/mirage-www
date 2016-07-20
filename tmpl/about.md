@@ -7,7 +7,7 @@ at our respective institutions.
 * **[Anil Madhavapeddy](http://anil.recoil.org)**, University of Cambridge
 * **[David Scott](http://dave.recoil.org)**, Citrix Systems R&D
 * **[Thomas Gazagnaire](http://thomas.gazagnaire.org)**, University of Cambridge
-* **[Richard Mortier](http://www.cs.nott.ac.uk/~rmm/)**, University of Nottingham
+* **[Richard Mortier](http://mort.io/)**, University of Cambridge & Docker
 * **[Thomas Leonard](http://roscidus.com/blog/)**, University of Cambridge
 * **[Mindy Preston](http://www.somerandomidiot.com)**, Docker
 * **[Hannes Mehnert](https://hannes.nqsb.io)**, University of Cambridge
