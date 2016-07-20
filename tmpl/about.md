@@ -4,11 +4,11 @@ One of us will review every patch that goes into the main distribution. Get in
 touch with any of us individually if you're interested in a MirageOS-related
 internship at our respective institutions.
 
-* **[Anil Madhavapeddy](http://anil.recoil.org)**, University of Cambridge
-* **[David Scott](http://dave.recoil.org)**, Citrix Systems R&D
-* **[Thomas Gazagnaire](http://thomas.gazagnaire.org)**, University of Cambridge
+* **[Anil Madhavapeddy](http://anil.recoil.org)**, Docker
+* **[David Scott](http://dave.recoil.org)**, Docker
+* **[Thomas Gazagnaire](http://thomas.gazagnaire.org)**, Docker
 * **[Richard Mortier](http://mort.io/)**, University of Cambridge & Docker
-* **[Thomas Leonard](http://roscidus.com/blog/)**, University of Cambridge
+* **[Thomas Leonard](http://roscidus.com/blog/)**, Docker
 * **[Mindy Preston](http://www.somerandomidiot.com)**, Docker
 * **[Hannes Mehnert](https://hannes.nqsb.io)**, University of Cambridge
 * Community Manager: **[Amir Chaudhry](http://amirchaudhry.com/)**, University of Cambridge
