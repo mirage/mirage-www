@@ -10,4 +10,5 @@ at our respective institutions.
 * **[Richard Mortier](http://www.cs.nott.ac.uk/~rmm/)**, University of Nottingham
 * **[Thomas Leonard](http://roscidus.com/blog/)**, University of Cambridge
 * **[Mindy Preston](http://www.somerandomidiot.com)**, Docker
+* **[Hannes Mehnert](https://hannes.nqsb.io)**, University of Cambridge
 * Community Manager: **[Amir Chaudhry](http://amirchaudhry.com/)**, University of Cambridge
