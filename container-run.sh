@@ -10,6 +10,6 @@ export OPAMYES=1
 eval `opam config env`
 opam depext -ui mirage
 cd src
-mirage configure --unix --net=socket --http-port=8080
+mirage configure -t unix --net=socket --http-port=8080
 rm -f main.native
 make

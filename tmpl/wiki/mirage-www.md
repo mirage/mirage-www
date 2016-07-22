@@ -52,7 +52,7 @@ Then configure and build the website itself:
 
 ```
 $ cd src
-$ mirage configure --unix --kv_ro crunch --net socket
+$ mirage configure -t unix --kv_ro crunch --net socket
 $ make
 ```
 
@@ -78,7 +78,7 @@ using `$ sudo ifconfig tap0 10.0.0.1 up`, then:
 
 ```
 $ cd src
-$ mirage configure --unix --net direct
+$ mirage configure -t unix --net direct
 $ make
 $ sudo ./mir-www
 ```
@@ -110,7 +110,7 @@ variables, so we can quickly try it as follows.
 
 ```
 $ cd src
-$ mirage configure --unix --kv_ro fat
+$ mirage configure -t unix --kv_ro fat
 $ make
 $ sudo ./mir-www & sudo ifconfig tap0 10.0.0.1 255.255.255.0 && fg
 ```
@@ -149,7 +149,7 @@ default, for simplicity's sake.
 
 ```
 $ cd src
-$ mirage configure --xen
+$ mirage configure -t xen
 $ make
 ```
 

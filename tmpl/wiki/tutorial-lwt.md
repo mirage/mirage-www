@@ -105,12 +105,12 @@ Add `foo.ml` with the following content and edit it:
 Assuming you want to build as a normal Unix process, compile the application with:
 
 ```
-  mirage configure --unix
+  mirage configure -t unix
   make
   ./main.native
 ```
 
-If you prefer to build as a Xen kernel image, change the `--unix` to `--xen`.
+If you prefer to build as a Xen kernel image, change the `-t unix` to `-t xen`.
 The `OS` module packs several sub-modules depending on the backend, [unix](https://github.com/mirage/mirage-platform/tree/master/unix/lib)
 or [xen](https://github.com/mirage/mirage-platform/tree/master/xen/lib).
 
