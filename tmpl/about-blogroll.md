@@ -6,3 +6,4 @@
 * **[Some Random Idiot](http://www.somerandomidiot.com/)**
 * **[Thomas Leonard's blog](http://roscidus.com/blog/)**
 * **[My Little Garden of Code](http://philtomson.github.io/)**
+* **[Full stack engineer](https://hannes.nqsb.io/)**
