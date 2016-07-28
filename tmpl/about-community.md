@@ -1,12 +1,12 @@
 ### Contributors
 
-* *Vincent Bernardoff*, [github.com](https://github.com/vbmithr)
-* *Jon Crowcroft*, University of Cambridge, [cl.cam.ac.uk](http://www.cl.cam.ac.uk/~jac22/)
-* *David Kaloper*, [github.com](https://github.com/pqwy)
-* *Steven Hand*, [cl.cam.ac.uk](http://www.cl.cam.ac.uk/~smh22/)
-* *Jon Ludlam*, Citrix Systems R&D, [jon.recoil.org](http://jon.recoil.org/)
-* *Raphael Proust*, University of Cambridge, [cl.cam.ac.uk](http://www.cl.cam.ac.uk/~rp452/)
-* *Haris Rotsos*, University of Cambridge, [cl.cam.ac.uk](http://www.cl.cam.ac.uk/~cr409/)
-* *David Sheets*, University of Cambridge, [github.com](https://github.com/dsheets)
-* *Balraj Singh*, University of Cambridge, [github.com](https://github.com/balrajsingh)
-* *Magnus Skjegstad*, [homepage](http://www.skjegstad.com/)
+* [*Vincent Bernardoff*](https://github.com/vbmithr)
+* [*Jon Crowcroft*](http://www.cl.cam.ac.uk/~jac22/), University of Cambridge
+* [*David Kaloper*](https://github.com/pqwy), University of Cambridge
+* [*Steven Hand*](http://www.cl.cam.ac.uk/~smh22/), University of Cambridge
+* [*Jon Ludlam*](http://jon.recoil.org/), Citrix Systems R&D
+* [*Raphael Proust*](http://www.cl.cam.ac.uk/~rp452/), University of Cambridge
+* [*Haris Rotsos*](http://www.cl.cam.ac.uk/~cr409/), University of Cambridge
+* [*David Sheets*](https://github.com/dsheets), Docker
+* [*Balraj Singh*](https://github.com/balrajsingh), Docker
+* [*Magnus Skjegstad*](http://www.skjegstad.com/), Docker
