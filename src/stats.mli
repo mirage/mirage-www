@@ -16,7 +16,7 @@
 
 (** Gather statisticts about the application. *)
 
-val start: sleep:(float -> unit Lwt.t) -> time:(unit -> float) -> unit
+val start: sleep:(int -> unit Lwt.t) -> time:(unit -> float) -> unit
 (** Start the monitor thread. *)
 
 val page: unit -> Cow.Html.t

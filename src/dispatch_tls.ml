@@ -59,7 +59,8 @@ module Make
   let start stack keys  c fs tmpl _clock () =
     let host = Key_gen.host () in
     let redirect = Key_gen.redirect () in
-    Stats.start ~sleep:OS.Time.sleep ~time:Clock.time;
+    let sleep sec = OS.Time.sleep_ns (Duration.of_sec sec) in
+    Stats.start ~sleep ~time:Clock.time;
     tls_init keys >>= fun cfg ->
     let domain = `Https, host in
     let dispatch = match redirect with

@@ -221,7 +221,8 @@ module Make
   let start http c fs tmpl () =
     let host = Key_gen.host () in
     let red = Key_gen.redirect () in
-    Stats.start ~sleep:OS.Time.sleep ~time:Clock.time;
+    let sleep sec = OS.Time.sleep_ns (Duration.of_sec sec) in
+    Stats.start ~sleep ~time:Clock.time;
     let domain = `Http, host in
     let dispatch = match red with
       | None        -> dispatch domain c fs tmpl

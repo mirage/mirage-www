@@ -105,7 +105,7 @@ let start ~sleep ~time =
     let rec loop () =
       let timestamp = time () in
       update_rrds timestamp (make_dss (Gc.stat ())) rrd;
-      sleep 5. >>= fun () ->
+      sleep 5 >>= fun () ->
       loop () in
     loop () in
   Lwt.async t
