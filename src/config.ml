@@ -81,14 +81,14 @@ let stack = generic_stackv4 tap0
 
 let http =
   foreign ~keys "Dispatch.Make"
-    (http @-> kv_ro @-> kv_ro @-> clock @-> job)
+    (http @-> kv_ro @-> kv_ro @-> pclock @-> job)
 
 let https =
   let libraries = [ "tls"; "tls.mirage"; "mirage-http" ] in
   let packages = ["tls"; "tls"; "mirage-http"] in
   foreign ~libraries ~packages  ~keys "Dispatch_tls.Make"
     ~deps:[abstract nocrypto]
-    (stackv4 @-> kv_ro @-> kv_ro @-> kv_ro @-> clock @-> job)
+    (stackv4 @-> kv_ro @-> kv_ro @-> kv_ro @-> pclock @-> job)
 
 
 let dispatch = if_impl (Key.value tls_key)
@@ -98,12 +98,12 @@ let dispatch = if_impl (Key.value tls_key)
     (** Without tls *)
     (http $ http_server (conduit_direct stack))
 
-let libraries = [ "cow"; "cowabloga"; "rrd" ; "duration" ]
-let packages  = [ "cow"; "cowabloga"; "xapi-rrd"; "c3" ; "duration" ]
+let libraries = [ "cow"; "cowabloga"; "rrd" ; "duration"; "ptime" ]
+let packages  = [ "cow"; "cowabloga"; "xapi-rrd"; "c3" ; "duration"; "ptime" ]
 
 let () =
   let tracing = None in
   (* let tracing = mprof_trace ~size:10000 () in *)
   register ?tracing ~libraries ~packages image [
-    dispatch $ filesfs $ tmplfs $ default_clock
+    dispatch $ filesfs $ tmplfs $ default_posix_clock
   ]
