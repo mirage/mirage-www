@@ -19,7 +19,7 @@ open Lwt.Infix
 module Make
     (S: V1_LWT.STACKV4) (KEYS: V1_LWT.KV_RO)
     (FS: V1_LWT.KV_RO)
-    (TMPL: V1_LWT.KV_RO) (Clock : V1.CLOCK)
+    (TMPL: V1_LWT.KV_RO) (Clock : V1.PCLOCK)
 = struct
 
   let log_src = Logs.Src.create "dispatch_tls" ~doc:"web-over-tls server"
@@ -36,7 +36,7 @@ module Make
   module DS = Dispatch.Make(Https)(FS)(TMPL)(Clock)
 
   let with_tls cfg tcp ~f =
-    let peer, port = TCP.get_dest tcp in
+    let peer, port = TCP.dst tcp in
     let log str = Log.debug (fun f -> f "[%s:%d] %s" (Ipaddr.V4.to_string peer) port str) in
     let with_tls_server k = TLS.server_of_flow cfg tcp >>= k in
     with_tls_server @@ function
@@ -58,7 +58,7 @@ module Make
     let host = Key_gen.host () in
     let redirect = Key_gen.redirect () in
     let sleep sec = OS.Time.sleep_ns (Duration.of_sec sec) in
-    Stats.start ~sleep ~time:Clock.time;
+    Stats.start ~sleep ~time:(fun () -> Clock.now_d_ps clock);
     tls_init keys >>= fun cfg ->
     let domain = `Https, host in
     let dispatch = match redirect with

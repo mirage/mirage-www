@@ -16,17 +16,16 @@
 
 (** HTTPS dispatcher *)
 
-(** The HTTP dispatcher. *)
 module Make
     (S: V1_LWT.STACKV4)
     (KEYS: V1_LWT.KV_RO)
     (FS: V1_LWT.KV_RO)
     (TMPL: V1_LWT.KV_RO)
-    (Clock : V1.CLOCK) :
+    (Clock : V1.PCLOCK) :
 sig
 
   val start:
     S.t -> KEYS.t ->
-    FS.t -> TMPL.t -> unit -> unit -> unit Lwt.t
+    FS.t -> TMPL.t -> Clock.t -> unit -> unit Lwt.t
     (** The HTTP server's start function. *)
 end
