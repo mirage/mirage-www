@@ -77,6 +77,12 @@ The [Lwt_list](http://ocsigen.org/lwt/2.5.0/api/Lwt_list) module provides many o
 
 Now write a program that spins off two threads, each of which sleeps for some amount of time, say 1 and 2 seconds and then one prints "Heads", the other "Tails". After both have finished, it prints "Finished" and exits. To sleep for some number of nanoseconds use `OS.Time.sleep_ns`, and to print to the console use `C.log_s`. Note that `OS` is a Mirage-specific module; if you are using Lwt in another context, use `Lwt_unix.sleep` and `Lwt_io.write`.
 
+For convenience, you'll likely want to also use the [Duration](https://github.com/hannesm/duration) library, which provides handy functions for converting between seconds, milliseconds, nanoseconds, and other units of time.
+
+```
+OS.Time.sleep_ns (Duration.of_sec 3) (* sleep for 3 seconds *)
+```
+
 You will need to have MirageOS [installed](/wiki/install). Create a file `config.ml` with the following content:
 
 ```
@@ -84,7 +90,9 @@ You will need to have MirageOS [installed](/wiki/install). Create a file `config
 
   let () =
     let main = foreign "Foo.Main" (console @-> job) in
-    register "Foo.Main" [
+    let libraries = ["duration"] in
+    let packages = ["duration"] in
+    register ~libraries ~packages "Foo.Main" [
       main $ default_console
     ]
 ```
@@ -124,8 +132,8 @@ or [xen](https://github.com/mirage/mirage-platform/tree/master/xen/lib).
   module Main (C : CONSOLE) = struct
     let start c =
       Lwt.join [
-        (Time.sleep 1_000_000_000L >>= fun () -> C.log_s c "Heads");
-        (Time.sleep 2_000_000_000L >>= fun () -> C.log_s c "Tails")
+        (Time.sleep_ns (Duration.of_sec 1) >>= fun () -> C.log_s c "Heads");
+        (Time.sleep_ns (Duration.of_sec 2) >>= fun () -> C.log_s c "Tails")
       ] >>= fun () ->
       C.log_s c ("Finished")
   end
@@ -143,7 +151,7 @@ Here is a basic dummy input generator you can use for testing:
 
 ```
   let read_line () =
-    Time.sleep_ns (Int64.of_int (Random.int 2_500_000_000))
+    Time.sleep_ns (Duration.of_ms (Random.int 2500))
     >|= fun () -> String.make (Random.int 20) 'a'
 ```
 
@@ -225,7 +233,7 @@ If you want to spawn a thread without waiting for the result, use `Lwt.async`:
 
 ```
 Lwt.async (fun () ->
-  OS.Time.sleep_ns 10_000_000_000L >>= fun () ->
+  OS.Time.sleep_ns (Duration.of_sec 10) >>= fun () ->
   C.log_s c "Finished"
 )
 ```
@@ -261,7 +269,7 @@ let test1 () =
     (fun ex -> print_endline "caught exception!"; Lwt.return ())
 
 let test2 () =
-  let t = OS.Time.sleep_ns 1_000_000_000 >>= fun () -> raise (Failure "late failure") in
+  let t = OS.Time.sleep_ns (Duration.of_sec 1) -> raise (Failure "late failure") in
   Lwt.catch (fun () -> t)
     (fun ex -> print_endline "caught exception!"; Lwt.return ())
 ```
@@ -397,8 +405,8 @@ You can test your solution with this application, which creates a thread that ma
 ```
   let start c =
     Random.self_init ();
-    let t = Time.sleep_ns (Int64.of_int (Random.int 3_000_000_000L)) >|= fun () -> "Heads" in
-    timeout 2_000_000_000L t >>= fun v ->
+    let t = Time.sleep_ns (Duration.of_ms (Random.int 3000)) >|= fun () -> "Heads" in
+    timeout (Duration.of_sec 2) t >>= fun v ->
     C.log_s c (match v with None -> "cancelled" | Some v -> v) >>= fun () ->
     C.log c "Finished" >>- fun () ->
     Lwt.return_unit
