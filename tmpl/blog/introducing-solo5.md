@@ -1,5 +1,5 @@
 I'm excited to announce the release of
-[Solo5](https://github.com/djwillia/solo5/tree/mirage)!
+[Solo5](https://github.com/solo5/solo5)!
 Solo5 is essentially a kernel library that bootstraps the hardware and
 forms a base (similar to Mini-OS) from which unikernels can be built.
 It runs on fully virtualized x86 hardware (e.g., KVM/QEMU), using
@@ -10,7 +10,7 @@ toolstack, so the Solo5 version of the Mirage toolstack can build
 Mirage unikernels that run directly on KVM/QEMU instead of Xen.  As
 such, Solo5 can be considered an alternative to Mini-OS in the Mirage
 stack.  [Try it out
-today!](https://github.com/djwillia/solo5/tree/mirage)
+today!](https://github.com/solo5/solo5)
 
 In the rest of this post, I'll give a bit of motivation about why I
 think the lowest layer of the unikernel is interesting and important,
@@ -125,7 +125,7 @@ If you find the lowest layer of the unikernel interesting, please
 don't hesitate to contact me or get involved.  I've packaged the build
 and test environment for Solo5 into a Docker container to reduce the
 dependency burden in playing around with it.  Check out [the
-repo](https://github.com/djwillia/solo5/tree/mirage) for the full
+repo](https://github.com/solo5/solo5) for the full
 instructions!
 
 I'll be talking about Solo5 at the upcoming [2016 Unikernels and More:
