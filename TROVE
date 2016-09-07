@@ -69,5 +69,8 @@ mirleft/ocaml-tls
 mirleft/ocaml-x509
 mor1/ocaml-tftp
 ocamllabs/ocaml-ctypes
+talex5/irmin-indexeddb
 talex5/mirage-trace-viewer
+talex5/qubes-mirage-firewall
+talex5/qubes-mirage-skeleton
 yomimono/mirage-nat
