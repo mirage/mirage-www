@@ -22,7 +22,7 @@ module Make
     (C: V1_LWT.CONSOLE)
     (FS: V1_LWT.KV_RO)
     (TMPL: V1_LWT.KV_RO)
-    (Clock: V1.CLOCK) :
+    (Clock: V1.PCLOCK) :
 sig
 
   type dispatch = Types.path -> Types.cowabloga Lwt.t
@@ -49,7 +49,7 @@ sig
   type s = Conduit_mirage.server -> S.t -> unit Lwt.t
   (** The type for HTTP callbacks. *)
 
-  val start: s -> C.t -> FS.t -> TMPL.t -> unit -> unit Lwt.t
+  val start: s -> C.t -> FS.t -> TMPL.t -> Clock.t -> unit Lwt.t
   (** The HTTP server's start function. *)
 
 end
