@@ -4,14 +4,16 @@ script: bash -ex .travis-mirage.sh
 env:
   matrix:
   - OCAML_VERSION=4.02 MIRAGE_BACKEND=unix FLAGS="-vv --net socket"
+  - OCAML_VERSION=4.03 MIRAGE_BACKEND=unix FLAGS="-vv --net socket"
   - OCAML_VERSION=4.02 MIRAGE_BACKEND=unix FLAGS="-vv --net direct"
-  - OCAML_VERSION=4.02 MIRAGE_BACKEND=xen  DEPLOY=1 XENIMG="openmirage.org"
+  - OCAML_VERSION=4.03 MIRAGE_BACKEND=unix FLAGS="-vv --net direct"
+  - OCAML_VERSION=4.03 MIRAGE_BACKEND=xen  DEPLOY=1 XENIMG="openmirage.org"
     PINS="mirage-net-xen:1.4.2"
     FLAGS="-vv --net direct --dhcp false --ip 46.43.42.135
     --netmask 255.255.255.240 --gateways 46.43.42.129 --tls false
     --host openmirage.org --redirect https://mirage.io --network 0"
     UPDATE_GCC_BINUTILS=1
-  - OCAML_VERSION=4.02 MIRAGE_BACKEND=xen DEPLOY=1 XENIMG="mirage.io"
+  - OCAML_VERSION=4.03 MIRAGE_BACKEND=xen DEPLOY=1 XENIMG="mirage.io"
     PINS="mirage-net-xen:1.4.2"
     FLAGS="-vv --net direct --dhcp false --ip 46.43.42.136
     --netmask 255.255.255.240 --gateways 46.43.42.129 --tls true
