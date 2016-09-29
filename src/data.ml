@@ -744,7 +744,6 @@ module Wiki = struct
       permalink  = "breaking-changes";
     };
 
-    Bactrian.entry_for_is_mirage_broken_wikipage;
   ]
 end
 
