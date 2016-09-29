@@ -26,7 +26,6 @@ MirageOS is in beta stage and the infrastructure you see here is self-hosting. T
 <li><a href="/wiki/breaking-changes">Breaking changes</a></li>
 <li><a href="/wiki/profiling">Tracing and Profiling</a></li>
 <li><a href="/wiki/contributing">Contributing to MirageOS</a></li>
-<li><a href="/wiki/is-mirage-broken">Build status</a></li>
 </ul>
 </div>
 
