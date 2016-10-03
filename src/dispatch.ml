@@ -49,18 +49,18 @@ module Make
 
   let read_tmpl tmpl name =
     TMPL.size tmpl name >>= function
-    | `Error (TMPL.Unknown_key _) -> err_not_found name
+    | `Error _ -> err_not_found name
     | `Ok size ->
       TMPL.read tmpl name 0 (Int64.to_int size) >>= function
-      | `Error (TMPL.Unknown_key _) -> err_not_found name
+      | `Error _ -> err_not_found name
       | `Ok bufs -> Lwt.return (Cstruct.copyv bufs)
 
   let read_fs fs name =
     FS.size fs name >>= function
-    | `Error (FS.Unknown_key _) -> err_not_found name
+    | `Error _ -> err_not_found name
     | `Ok size ->
       FS.read fs name 0 (Int64.to_int size) >>= function
-      | `Error (FS.Unknown_key _) -> err_not_found name
+      | `Error _ -> err_not_found name
       | `Ok bufs -> Lwt.return (Cstruct.copyv bufs)
 
   let read_entry tmpl name = read_tmpl tmpl name >|= Cow.Markdown.of_string
