@@ -73,14 +73,14 @@ Mirage will configure the stack to use the
 of `10.0.0.2/255.255.255.0`. Verify that you have an existing `tap0`
 interface by reviewing `$ sudo ip link show`; if you do not,
 load the tuntap kernel module (`$ sudo modprobe tun`)
-and create a `tap0` interface owned by root (`$ sudo tunctl`). Bring `tap0` up
-using `$ sudo ifconfig tap0 10.0.0.1 up`, then:
+and create a `tap0` interface owned by you (`$ sudo tunctl -u $USER -t tap0`).
+Bring `tap0` up using `$ sudo ifconfig tap0 10.0.0.1 up`, then:
 
 ```
 $ cd src
 $ mirage configure -t unix --net direct
 $ make
-$ sudo ./mir-www
+$ ./mir-www
 ```
 
 You should now be able to ping the unikernel's interface:
