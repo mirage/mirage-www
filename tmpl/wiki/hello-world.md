@@ -691,14 +691,14 @@ By default, if we do not use DHCP with a `direct` network stack, Mirage will
 configure the stack to use the `tap0` interface with an address of `10.0.0.2`.
 Verify that you have an existing `tap0` interface by reviewing `$ sudo ip
 link show`; if you do not, load the tuntap kernel module (`$ sudo modprobe tun`)
-and create a `tap0` interface owned by root (`$ sudo tunctl`). Bring `tap0` up
-using `$ sudo ifconfig tap0 10.0.0.1 up`, then:
+and create a `tap0` interface owned by you (`$ sudo tunctl -u $USER -t tap0`).
+Bring `tap0` up using `$ sudo ifconfig tap0 10.0.0.1 up`, then:
 
 ```
 $ cd stackv4
 $ mirage configure -t unix --dhcp false --net direct
 $ make
-$ sudo ./mir-stackv4
+$ ./mir-stackv4
 Netif: plugging into tap0 with mac c2:9d:56:19:d7:2c
 Netif: connect tap0
 Manager: connect
