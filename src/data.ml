@@ -513,7 +513,8 @@ module Wiki = struct
     irc_weekly ~y:2016 ~m:6 ~d:29 ~a:canopy;
     irc_weekly ~y:2016 ~m:7 ~d:27 ~a:canopy;
     irc_weekly ~y:2016 ~m:8 ~d:24 ~a:canopy;
-    irc_weekly ~y:2016 ~m:9 ~d:05 ~a:canopy;
+    irc_weekly ~y:2016 ~m:9 ~d:07 ~a:canopy;
+    irc_weekly ~y:2016 ~m:10 ~d:05 ~a:canopy;
     weekly ~y:2016 ~m:3 ~d:2 ~a:amir;
     weekly ~y:2016 ~m:2 ~d:17 ~a:amir;
     weekly ~y:2016 ~m:2 ~d:3 ~a:amir;
