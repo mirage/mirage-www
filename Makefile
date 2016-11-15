@@ -46,6 +46,6 @@ build:
 	cd src && make build
 
 clean:
-	cd src && make clean
+	-make -C src clean
 	cd stats && make clean
 	$(RM) log src/mir-www src/*.img src/make-fat*.sh
