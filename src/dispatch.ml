@@ -36,7 +36,7 @@ let domain_of_string x =
 module Make
     (S: Cohttp_lwt.Server)
     (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
-    (Clock: V1.CLOCK)
+    (Clock: V1.PCLOCK)
 = struct
 
   type dispatch = Types.path -> Types.cowabloga Lwt.t
@@ -47,18 +47,18 @@ module Make
 
   let read_tmpl tmpl name =
     TMPL.size tmpl name >>= function
-    | `Error (TMPL.Unknown_key _) -> err_not_found name
+    | `Error _ -> err_not_found name
     | `Ok size ->
       TMPL.read tmpl name 0 (Int64.to_int size) >>= function
-      | `Error (TMPL.Unknown_key _) -> err_not_found name
+      | `Error _ -> err_not_found name
       | `Ok bufs -> Lwt.return (Cstruct.copyv bufs)
 
   let read_fs fs name =
     FS.size fs name >>= function
-    | `Error (FS.Unknown_key _) -> err_not_found name
+    | `Error _ -> err_not_found name
     | `Ok size ->
       FS.read fs name 0 (Int64.to_int size) >>= function
-      | `Error (FS.Unknown_key _) -> err_not_found name
+      | `Error _ -> err_not_found name
       | `Ok bufs -> Lwt.return (Cstruct.copyv bufs)
 
   let read_entry tmpl name = read_tmpl tmpl name >|= Cow.Markdown.of_string
@@ -218,10 +218,11 @@ module Make
     in
     S.make ~callback ~conn_closed ()
 
-  let start http c fs tmpl () =
+  let start http c fs tmpl clock =
     let host = Key_gen.host () in
     let red = Key_gen.redirect () in
-    Stats.start ~sleep:OS.Time.sleep ~time:Clock.time;
+    let sleep sec = OS.Time.sleep_ns (Duration.of_sec sec) in
+    Stats.start ~sleep ~time:(fun () -> Clock.now_d_ps clock);
     let domain = `Http, host in
     let dispatch = match red with
       | None        -> dispatch domain c fs tmpl

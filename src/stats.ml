@@ -94,7 +94,7 @@ let start ~sleep ~time =
   let t () =
     ( if !rrd_created then rrd
       else begin
-        let timestamp = time () in
+        let timestamp = time () |> Ptime.v |> Ptime.to_float_s in
         let x = create_fresh_rrd timestamp true (make_dss (Gc.stat ())) in
         rrd_created := true;
         Lwt.wakeup rrd_u x;
@@ -103,9 +103,9 @@ let start ~sleep ~time =
     ) >>= fun rrd ->
 
     let rec loop () =
-      let timestamp = time () in
+      let timestamp = time () |> Ptime.v |> Ptime.to_float_s in
       update_rrds timestamp (make_dss (Gc.stat ())) rrd;
-      sleep 5. >>= fun () ->
+      sleep 5 >>= fun () ->
       loop () in
     loop () in
   Lwt.async t

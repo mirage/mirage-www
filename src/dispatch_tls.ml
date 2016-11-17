@@ -20,10 +20,8 @@ module Make
     (S: V1_LWT.STACKV4) (KEYS: V1_LWT.KV_RO)
 
     (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO)
-    (TMPL: V1_LWT.KV_RO) (Clock : V1.CLOCK)
+    (TMPL: V1_LWT.KV_RO) (Clock : V1.PCLOCK)
 = struct
-
-
 
   module TCP  = S.TCPV4
   module TLS  = Tls_mirage.Make (TCP)
@@ -38,7 +36,7 @@ module Make
   let log c fmt = Printf.ksprintf (C.log c) fmt
 
   let with_tls c cfg tcp ~f =
-    let peer, port = TCP.get_dest tcp in
+    let peer, port = TCP.dst tcp in
     let log str = log c "[%s:%d] %s" (Ipaddr.V4.to_string peer) port str in
     let with_tls_server k = TLS.server_of_flow cfg tcp >>= k in
     with_tls_server @@ function
@@ -56,10 +54,11 @@ module Make
     let conf = Tls.Config.server ~certificates:(`Single cert) () in
     Lwt.return conf
 
-  let start stack keys  c fs tmpl _clock () =
+  let start stack keys c fs tmpl clock () =
     let host = Key_gen.host () in
     let redirect = Key_gen.redirect () in
-    Stats.start ~sleep:OS.Time.sleep ~time:Clock.time;
+    let sleep sec = OS.Time.sleep_ns (Duration.of_sec sec) in
+    Stats.start ~sleep ~time:(fun () -> Clock.now_d_ps clock);
     tls_init keys >>= fun cfg ->
     let domain = `Https, host in
     let dispatch = match redirect with
