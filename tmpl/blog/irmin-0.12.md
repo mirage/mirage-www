@@ -6,7 +6,7 @@ Previously, an Irmin application that wanted to use watches would setup file-sys
   let () = Irmin_unix.install_dir_polling_listener 1.0
 ```
 
-which would scan the `.git/refs` directory every second. This worked in practise but was unpredictably latent (if unlucky you might wait for a full second for the watch callbacks to trigger), and disk/CPU intensive as we were scanning the full storage directory every second to detect file changes.  In the cases where the store had 1000s of tags, this could easily saturate the CPU. And in case you wonder, there are increasing number of applications (such as [DataKit](https://github.com/docker/datakit)) that do create thousands of tags regularly, and [Canopy](https://github.com/engil/Canopy) that need low latency for interactive development.
+which would scan the `.git/refs` directory every second. This worked in practice but was unpredictably latent (if unlucky you might wait for a full second for the watch callbacks to trigger), and disk/CPU intensive as we were scanning the full storage directory every second to detect file changes.  In the cases where the store had 1000s of tags, this could easily saturate the CPU. And in case you were wondering, there are increasing number of applications (such as [DataKit](https://github.com/docker/datakit)) that do create thousands of tags regularly, and [Canopy](https://github.com/engil/Canopy) that need low latency for interactive development.
 
 In the new 0.12.0 release, you need to use:
 
