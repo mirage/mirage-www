@@ -8,6 +8,7 @@
 export OPAMJOBS=2
 export OPAMYES=1
 eval `opam config env`
+opam remote add dev git://github.com/mirage/mirage-dev
 opam depext -ui mirage
 cd src
 mirage configure -t unix --net=socket --http-port=8080
