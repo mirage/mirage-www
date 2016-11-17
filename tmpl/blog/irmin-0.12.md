@@ -16,3 +16,6 @@ In the new 0.12.0 release, you need to use:
 
 and the Irmin storage will do "the right thing". If you are on Linux, and have the [inotify OPAM package](https://opam.ocaml.org/packages/inotify/) installed, it will use libinotify to get notified by the kernel on every change and re-scan the whole directory. On OSX, if you have the [osx-fsevents OPAM package](https://opam.ocaml.org/packages/osx-fsevents/) installed, it will do the same thing using the OSX [FSEvents.framework](https://en.wikipedia.org/wiki/FSEvents). The portable compatibility layer between inotify and fsevents comes via the new [irmin-watcher](https://github.com/samoht/irmin-watcher/releases/tag/0.2.0) package that has been released recently as well.  This may also come in useful for other tools that require portable OCaml access to filesystem hierarchies.
 
+If you are using Irmin, please do let us know how you are getting on via the
+[mailing list](https://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel)
+and report any bugs on the [issue tracker](https://github.com/mirage/irmin/issues).
