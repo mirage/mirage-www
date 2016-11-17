@@ -36,7 +36,7 @@ let domain_of_string x =
 module Make
     (S: Cohttp_lwt.Server)
     (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
-    (Clock: V1.CLOCK)
+    (Clock: V1.PCLOCK)
 = struct
 
   type dispatch = Types.path -> Types.cowabloga Lwt.t
@@ -47,18 +47,18 @@ module Make
 
   let read_tmpl tmpl name =
     TMPL.size tmpl name >>= function
-    | `Error (TMPL.Unknown_key _) -> err_not_found name
+    | `Error _ -> err_not_found name
     | `Ok size ->
       TMPL.read tmpl name 0 (Int64.to_int size) >>= function
-      | `Error (TMPL.Unknown_key _) -> err_not_found name
+      | `Error _ -> err_not_found name
       | `Ok bufs -> Lwt.return (Cstruct.copyv bufs)
 
   let read_fs fs name =
     FS.size fs name >>= function
-    | `Error (FS.Unknown_key _) -> err_not_found name
+    | `Error _ -> err_not_found name
     | `Ok size ->
       FS.read fs name 0 (Int64.to_int size) >>= function
-      | `Error (FS.Unknown_key _) -> err_not_found name
+      | `Error _ -> err_not_found name
       | `Ok bufs -> Lwt.return (Cstruct.copyv bufs)
 
   let read_entry tmpl name = read_tmpl tmpl name >|= Cow.Markdown.of_string
@@ -156,7 +156,7 @@ module Make
     let path_s = String.concat "/" path in
     let asset () = Lwt.return (`Asset (read_fs fs path_s)) in
     Lwt.catch asset (fun e ->
-        log c "got an error while getting %s: %s" path_s (Printexc.to_string e);
+        log c "got an error while getting %s: %s" path_s (Printexc.to_string e) >>= fun () ->
         not_found domain path)
 
   (* dispatch non-file URLs *)
@@ -198,7 +198,7 @@ module Make
       let uri = Cohttp.Request.uri request in
       let cid = Cohttp.Connection.to_string conn_id in
       let io = {
-        Cowabloga.Dispatch.log = (fun ~msg -> log c "[%s %s] %s" hdr cid msg);
+        Cowabloga.Dispatch.log = (fun ~msg -> Lwt.async (fun () -> log c "[%s %s] %s" hdr cid msg));
         ok = respond_ok;
         notfound = (fun ~uri -> not_found ~uri ());
         redirect = (fun ~uri -> moved_permanently ~uri ());
@@ -214,21 +214,23 @@ module Make
     in
     let conn_closed (_,conn_id) =
       let cid = Cohttp.Connection.to_string conn_id in
-      log c "[%s %s] OK, closing" hdr cid
+      Lwt.async (fun () -> log c "[%s %s] OK, closing" hdr cid)
+      
     in
     S.make ~callback ~conn_closed ()
 
-  let start http c fs tmpl () =
+  let start http c fs tmpl clock =
     let host = Key_gen.host () in
     let red = Key_gen.redirect () in
-    Stats.start ~sleep:OS.Time.sleep ~time:Clock.time;
+    let sleep sec = OS.Time.sleep_ns (Duration.of_sec sec) in
+    Stats.start ~sleep ~time:(fun () -> Clock.now_d_ps clock);
     let domain = `Http, host in
     let dispatch = match red with
       | None        -> dispatch domain c fs tmpl
       | Some domain -> redirect (domain_of_string domain)
     in
     let callback = create domain c dispatch in
-    log c "Listening on %s" (Site_config.base_uri domain);
+    log c "Listening on %s" (Site_config.base_uri domain) >>= fun () ->
     http (`TCP (Key_gen.http_port ())) callback
 
 end

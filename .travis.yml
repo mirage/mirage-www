@@ -3,21 +3,20 @@ install: wget https://raw.githubusercontent.com/ocaml/ocaml-travisci-skeleton/ma
 script: bash -ex .travis-mirage.sh
 env:
   matrix:
-  - OCAML_VERSION=4.02 MIRAGE_BACKEND=unix FLAGS="-vv --net socket"
-  - OCAML_VERSION=4.02 MIRAGE_BACKEND=unix FLAGS="-vv --net direct"
-  - OCAML_VERSION=4.02 MIRAGE_BACKEND=xen  DEPLOY=1 XENIMG="openmirage.org"
-    PINS="mirage-net-xen:1.4.2"
+  - OCAML_VERSION=4.03 MIRAGE_BACKEND=unix FLAGS="-vv --net socket"
+  - OCAML_VERSION=4.03 MIRAGE_BACKEND=unix FLAGS="-vv --net direct"
+  - OCAML_VERSION=4.03 MIRAGE_BACKEND=xen  DEPLOY=1 XENIMG="openmirage.org"
     FLAGS="-vv --net direct --dhcp false --ip 46.43.42.135
     --netmask 255.255.255.240 --gateways 46.43.42.129 --tls false
     --host openmirage.org --redirect https://mirage.io --network 0"
     UPDATE_GCC_BINUTILS=1
-  - OCAML_VERSION=4.02 MIRAGE_BACKEND=xen DEPLOY=1 XENIMG="mirage.io"
-    PINS="mirage-net-xen:1.4.2"
+  - OCAML_VERSION=4.03 MIRAGE_BACKEND=xen DEPLOY=1 XENIMG="mirage.io"
     FLAGS="-vv --net direct --dhcp false --ip 46.43.42.136
     --netmask 255.255.255.240 --gateways 46.43.42.129 --tls true
     --secrets-kv_ro fat --host mirage.io --network 0"
     UPDATE_GCC_BINUTILS=1
   global:
+  - EXTRA_REMOTES="https://github.com/mirage/mirage-dev.git"
   - secure: PUu3+Enupf9jcIPD/hs5b6zrNuJagTDXJGtYfSUIFvzevSXZzs6mXPu8L2vvAQbQ8ig/8VLToa44vUTG9OEy9SxXrR6yTQGfj4YxJ5BXKHwhYMTBXnR1e+S1gA4a5tilMa7M/a0hWa1rORv3diMIK3dihjc1m6VzpCK/4vly7KU=
   - secure: crnwZ3MDUA9szI/EuwB9o7plXVF2QCx+JpOazy4SwC2v47Vf5voOEAxh7iFMgGziBqzKGVnDw4/37WHVm5vdgaL4lL2T73F1PqXbiCdhhwZVcf+EAXr8KmoaNXRieL7qPsemQVvPWUiERZRmR2okvm60EqifZA9/dy/48dJIGMI=
   - secure: JijSTl0jOOPL0HoWooCBnhokjqboQSgwy3orgG5nUIPrluthNjix4ujds9TOuEtv2pflbgptUUdYJ7R6VfeZk/UWIVUbwBRjtMJRQRDPB0jxyoL9VLGzTwfdovwV0Rg0jeJkBWsAJjIxkdawE2R4wexAOn/tWDiLaSQh/n096Fc=
@@ -31,3 +30,4 @@ env:
   - secure: Juipi/OO05oERAttsFLSow5M1P8YPb3vigGgufaedSI5KjzcPrU6PeKtX6D7nHCbzjZEIj3uRnv9VC8eT46JC7IYQs4ATGnEQnJsGoE2gHWQ348UlK7o/jgPtG9XeYaTgxN4N/hOKk/B08MIJwsJllUUZvBztUIJlUddrFOt0xE=
   - secure: Qq8YWXsJk3R0EJIMnT7cScCp8xDAG5z3Q2seA8d8P2LaR/1FvHkZGUMXwJ27f1ZvOmtBCEhcXbYtYFfedXJwy4JGRWq165te20XZS0gqpdi5DHbv0S1rlE01bdcQFVQSvxeMXsO+KdUmrx9+yjG1r4CarB+m5CpHHJdIs9mxb/c=
   - secure: dIRmXAwM8EVjni3k0POewi0eMXB7Ebr/sTJhYPUYA31TrW98OYO6P2VCR4zND5e7ObmM1pyjXlsP/i6Q8YTch3xxJgBeYOCbsb7BfJ62UioGdWL2E5wlrnDPgHxdPayDajRgmxRjY6EErAfaFv+Kk2OmeeIv4ibfMoMzSGjQT+A=
+  - EXTRA_REMOTES="https://github.com/mirage/mirage-dev.git"
