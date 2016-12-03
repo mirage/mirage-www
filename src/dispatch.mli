@@ -19,7 +19,6 @@
 (** The HTTP dispatcher. *)
 module Make
     (S: Cohttp_lwt.Server)
-    (C: V1_LWT.CONSOLE)
     (FS: V1_LWT.KV_RO)
     (TMPL: V1_LWT.KV_RO)
     (Clock: V1.CLOCK) :
@@ -31,7 +30,7 @@ sig
   val redirect: Types.domain -> dispatch
   (** [redirect d path] redirects the user to [path] on domain [d]. *)
 
-  val dispatch: Types.domain -> C.t -> FS.t -> TMPL.t -> dispatch
+  val dispatch: Types.domain -> FS.t -> TMPL.t -> dispatch
   (** [dispatcher d fs tmpl path] is the object served by the HTTP
       server.
 
@@ -42,14 +41,13 @@ sig
       {- [tmpl] is a read-only key/value store holding the proccessed data such
       as blog posts and wiki entries.}} *)
 
-  val create: Types.domain -> C.t -> dispatch -> S.t
-  (** [create c f] is an HTTP server function using [f] as callback
-      and logging on the console [c].  *)
+  val create: Types.domain -> dispatch -> S.t
+  (** [create f] is an HTTP server function using [f] as callback. *)
 
   type s = Conduit_mirage.server -> S.t -> unit Lwt.t
   (** The type for HTTP callbacks. *)
 
-  val start: s -> C.t -> FS.t -> TMPL.t -> unit -> unit Lwt.t
+  val start: s -> FS.t -> TMPL.t -> unit -> unit Lwt.t
   (** The HTTP server's start function. *)
 
 end
