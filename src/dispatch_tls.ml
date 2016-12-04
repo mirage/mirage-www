@@ -19,11 +19,12 @@ open Lwt.Infix
 module Make
     (S: V1_LWT.STACKV4) (KEYS: V1_LWT.KV_RO)
 
-    (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO)
+    (FS: V1_LWT.KV_RO)
     (TMPL: V1_LWT.KV_RO) (Clock : V1.CLOCK)
 = struct
 
-
+  let log_src = Logs.Src.create "dispatch_tls" ~doc:"web-over-tls server"
+  module Log = (val Logs.src_log log_src : Logs.LOG)
 
   module TCP  = S.TCPV4
   module TLS  = Tls_mirage.Make (TCP)
@@ -32,14 +33,12 @@ module Make
   module Http  = Cohttp_mirage.Server(TCP)
   module Https = Cohttp_mirage.Server(TLS)
 
-  module D  = Dispatch.Make(Http)(C)(FS)(TMPL)(Clock)
-  module DS = Dispatch.Make(Https)(C)(FS)(TMPL)(Clock)
-
-  let log c fmt = Printf.ksprintf (C.log c) fmt
+  module D  = Dispatch.Make(Http)(FS)(TMPL)(Clock)
+  module DS = Dispatch.Make(Https)(FS)(TMPL)(Clock)
 
   let with_tls c cfg tcp ~f =
     let peer, port = TCP.get_dest tcp in
-    let log str = log c "[%s:%d] %s" (Ipaddr.V4.to_string peer) port str in
+    let log str = Log.debug (fun f -> f "[%s:%d] %s" (Ipaddr.V4.to_string peer) port str) in
     let with_tls_server k = TLS.server_of_flow cfg tcp >>= k in
     with_tls_server @@ function
     | `Error _ -> log "TLS failed"; TCP.close tcp

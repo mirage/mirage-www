@@ -35,14 +35,16 @@ let domain_of_string x =
 
 module Make
     (S: Cohttp_lwt.Server)
-    (C: V1_LWT.CONSOLE) (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
+    (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
     (Clock: V1.CLOCK)
 = struct
+
+  let log_src = Logs.Src.create "dispatch" ~doc:"Web server"
+  module Log = (val Logs.src_log log_src : Logs.LOG)
 
   type dispatch = Types.path -> Types.cowabloga Lwt.t
   type s = Conduit_mirage.server -> S.t -> unit Lwt.t
 
-  let log c fmt = Printf.kprintf (C.log c) fmt
   let err_not_found name = err "%s not found" name
 
   let read_tmpl tmpl name =
@@ -152,15 +154,15 @@ module Make
     let feed = Data.empty_feed in
     Pages.About.dispatch ~feed ~domain ~read
 
-  let asset c domain fs path =
+  let asset domain fs path =
     let path_s = String.concat "/" path in
     let asset () = Lwt.return (`Asset (read_fs fs path_s)) in
     Lwt.catch asset (fun e ->
-        log c "got an error while getting %s: %s" path_s (Printexc.to_string e);
+        Log.warn (fun f -> f "got an error while getting %s: %s" path_s (Printexc.to_string e));
         not_found domain path)
 
   (* dispatch non-file URLs *)
-  let dispatch domain c fs tmpl =
+  let dispatch domain fs tmpl =
     let index = index domain tmpl in
     let about = about domain tmpl in
     let releases = releases domain tmpl in
@@ -181,7 +183,7 @@ module Make
     | "security" :: tl -> mk security tl
     | ("wiki"|"docs") :: ["weekly"] -> redirect_notes domain
     | ("wiki"|"docs") :: tl -> mk wiki tl
-    | path -> asset c domain fs path
+    | path -> asset domain fs path
 
   let moved_permanently ~uri () =
     let headers = Cohttp.Header.init_with "location" (Uri.to_string uri) in
@@ -192,13 +194,13 @@ module Make
     incr Stats.total_errors;
     S.respond_not_found ~uri ()
 
-  let create domain c dispatch =
+  let create domain dispatch =
     let hdr = match fst domain with `Http -> "HTTP" | `Https -> "HTTPS" in
     let callback (_, conn_id) request _body =
       let uri = Cohttp.Request.uri request in
       let cid = Cohttp.Connection.to_string conn_id in
       let io = {
-        Cowabloga.Dispatch.log = (fun ~msg -> log c "[%s %s] %s" hdr cid msg);
+        Cowabloga.Dispatch.log = (fun ~msg -> Log.debug (fun f -> f "[%s %s] %s" hdr cid msg));
         ok = respond_ok;
         notfound = (fun ~uri -> not_found ~uri ());
         redirect = (fun ~uri -> moved_permanently ~uri ());
@@ -214,21 +216,21 @@ module Make
     in
     let conn_closed (_,conn_id) =
       let cid = Cohttp.Connection.to_string conn_id in
-      log c "[%s %s] OK, closing" hdr cid
+      Log.debug (fun f -> f "[%s %s] OK, closing" hdr cid)
     in
     S.make ~callback ~conn_closed ()
 
-  let start http c fs tmpl () =
+  let start http fs tmpl () =
     let host = Key_gen.host () in
     let red = Key_gen.redirect () in
     Stats.start ~sleep:OS.Time.sleep ~time:Clock.time;
     let domain = `Http, host in
     let dispatch = match red with
-      | None        -> dispatch domain c fs tmpl
+      | None        -> dispatch domain fs tmpl
       | Some domain -> redirect (domain_of_string domain)
     in
-    let callback = create domain c dispatch in
-    log c "Listening on %s" (Site_config.base_uri domain);
+    let callback = create domain dispatch in
+    Log.info (fun f -> f "Listening on %s" (Site_config.base_uri domain));
     http (`TCP (Key_gen.http_port ())) callback
 
 end
