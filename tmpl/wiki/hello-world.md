@@ -26,7 +26,7 @@ world
 
 First, let's look at the code:
 
-```
+```ocaml
 $ cat console/unikernel.ml
 open Lwt.Infix
 
@@ -59,7 +59,7 @@ The concrete implementation of `CONSOLE` will be supplied at compile-time,
 depending on the target that you are compiling for. This configuration is stored
 in `config.ml`, which is very simple for our first application.
 
-```
+```ocaml
 $ cat console/config.ml
 open Mirage
 
@@ -202,7 +202,7 @@ in Xen 4.5. If you find that you're running the `xend` daemon, then you should
 use the `xm` command. Edit this to customise the VM name, memory or the network
 bridge and then run it:
 
-```
+```bash
 $ sudo xl create -c console.xl
 Parsing config from console.xl
 MirageOS booting....
@@ -246,7 +246,7 @@ device.
 On Unix, the development workflow to handle block devices is by mapping them
 onto local files. The `config.ml` for the block example looks like this:
 
-```
+```ocaml
 open Mirage
 
 let main = foreign "Unikernel.Main" (console @-> block @-> job)
@@ -388,7 +388,7 @@ other file, printing out `YES` if the values match, and `NO` otherwise.
 The `config.ml` should look familiar after the earlier block and console
 examples:
 
-```
+```ocaml
 open Mirage
 
 let main =
@@ -414,7 +414,7 @@ file by looking at the `static1.ml` file in your build tree.
 
 Unix:
 
-```
+```bash
 $ cd kv_ro_crunch
 $ mirage configure -t unix
 $ make
@@ -424,7 +424,7 @@ $ ./mir-kv_ro
 
 Xen:
 
-```
+```bash
 $ mirage configure -t xen
 $ make
 $ sudo xl create -c kv_ro.xl
@@ -456,7 +456,7 @@ dynamically to the underlying filesystem.
 Since the `config.ml` file is normal OCaml that is executed at build time, all
 of this selection logic is simple enough.
 
-```
+```ocaml
 open Mirage
 
 let disk = generic_kv_ro "t"
@@ -474,7 +474,7 @@ appropriate settings for external filesystem access.
 
 On OSX:
 
-```
+```bash
 $ mirage configure -t unix --kv_ro fat
 $ ./make-fat1-image.sh
 $ file fat1.img
@@ -485,7 +485,7 @@ sectors/FAT 1, sectors 49 (volumes > 32 MB) , dos < 4.0 BootSector (0x0)
 
 or, on Linux:
 
-```
+```bash
 $ mirage configure -t unix --kv_ro fat
 $ ./make-fat1-image.sh
 $ file fat1.img
@@ -532,7 +532,7 @@ example below is config.ml from the
 [stackv4/](https://github.com/mirage/mirage-skeleton/tree/master/stackv4)
 directory in `mirage-skeleton`.
 
-```
+```ocaml
 open Mirage
 
 let handler = foreign "Unikernel.Main" (console @-> stackv4 @-> job)
@@ -581,7 +581,7 @@ to set up the networking stack.
 Let's get the network stack compiling using the standard Unix sockets APIs
 first.
 
-```
+```bash
 $ cd stackv4
 $ mirage configure -t unix --net socket
 $ make
@@ -622,7 +622,7 @@ before trying this.
 Assuming you've got a DHCP server running:
 
 
-```
+```bash
 $ cd stackv4
 $ mirage configure -t unix --dhcp true --net direct
 $ make
@@ -694,7 +694,7 @@ link show`; if you do not, load the tuntap kernel module (`$ sudo modprobe tun`)
 and create a `tap0` interface owned by root (`$ sudo tunctl`). Bring `tap0` up
 using `$ sudo ifconfig tap0 10.0.0.1 up`, then:
 
-```
+```bash
 $ cd stackv4
 $ mirage configure -t unix --dhcp false --net direct
 $ make
@@ -712,7 +712,7 @@ IP address: 10.0.0.2
 
 Now you should be able to ping the unikernel's interface:
 
-```
+```bash
 $ ping 10.0.0.2
 PING 10.0.0.2 (10.0.0.2) 56(84) bytes of data.
 64 bytes from 10.0.0.2: icmp_seq=1 ttl=38 time=0.527 ms
