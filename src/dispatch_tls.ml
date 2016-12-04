@@ -18,7 +18,6 @@ open Lwt.Infix
 
 module Make
     (S: V1_LWT.STACKV4) (KEYS: V1_LWT.KV_RO)
-
     (FS: V1_LWT.KV_RO)
     (TMPL: V1_LWT.KV_RO) (Clock : V1.CLOCK)
 = struct
@@ -36,7 +35,7 @@ module Make
   module D  = Dispatch.Make(Http)(FS)(TMPL)(Clock)
   module DS = Dispatch.Make(Https)(FS)(TMPL)(Clock)
 
-  let with_tls c cfg tcp ~f =
+  let with_tls cfg tcp ~f =
     let peer, port = TCP.get_dest tcp in
     let log str = Log.debug (fun f -> f "[%s:%d] %s" (Ipaddr.V4.to_string peer) port str) in
     let with_tls_server k = TLS.server_of_flow cfg tcp >>= k in
@@ -45,9 +44,9 @@ module Make
     | `Ok tls  -> log "TLS ok"; f tls >>= fun () ->TLS.close tls
     | `Eof     -> log "TLS eof"; TCP.close tcp
 
-  let with_http host c flow =
+  let with_http host flow =
     let domain = `Https, host in
-    let t = D.create domain c (D.redirect domain) in
+    let t = D.create domain (D.redirect domain) in
     Http.listen t flow
 
   let tls_init kv =
@@ -55,19 +54,19 @@ module Make
     let conf = Tls.Config.server ~certificates:(`Single cert) () in
     Lwt.return conf
 
-  let start stack keys  c fs tmpl _clock () =
+  let start stack keys fs tmpl _clock () =
     let host = Key_gen.host () in
     let redirect = Key_gen.redirect () in
     Stats.start ~sleep:OS.Time.sleep ~time:Clock.time;
     tls_init keys >>= fun cfg ->
     let domain = `Https, host in
     let dispatch = match redirect with
-      | None        -> DS.dispatch domain c fs tmpl
+      | None        -> DS.dispatch domain fs tmpl
       | Some domain -> DS.redirect (Dispatch.domain_of_string domain)
     in
-    let callback = Https.listen (DS.create domain c dispatch) in
-    let https flow = with_tls c cfg flow ~f:callback in
-    let http flow = with_http host c flow in
+    let callback = Https.listen (DS.create domain dispatch) in
+    let https flow = with_tls cfg flow ~f:callback in
+    let http flow = with_http host flow in
     S.listen_tcpv4 stack ~port:(Key_gen.https_port ()) https;
     S.listen_tcpv4 stack ~port:(Key_gen.http_port ()) http;
     S.listen stack
