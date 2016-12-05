@@ -6,14 +6,14 @@ env:
   - OCAML_VERSION=4.03 MIRAGE_BACKEND=unix FLAGS="-vv --net socket"
   - OCAML_VERSION=4.03 MIRAGE_BACKEND=unix FLAGS="-vv --net direct"
   - OCAML_VERSION=4.03 MIRAGE_BACKEND=xen  DEPLOY=1 XENIMG="openmirage.org"
-    FLAGS="-vv --net direct --dhcp false --ip 46.43.42.147
-    --netmask 255.255.255.128 --gateways 46.43.42.129 
-    --host openmirage.org --redirect https://mirage.io --network 0"
+    FLAGS="-vv --net direct --dhcp false --ipv4 46.43.42.147/25
+    --ipv4-gateway 46.43.42.129
+    --host openmirage.org --redirect https://mirage.io"
     UPDATE_GCC_BINUTILS=1
   - OCAML_VERSION=4.03 MIRAGE_BACKEND=xen DEPLOY=1 XENIMG="mirage.io"
-    FLAGS="-vv --net direct --dhcp false --ip 46.43.42.146
-    --netmask 255.255.255.128 --gateways 46.43.42.129 --tls true
-    --secrets-kv_ro fat --host mirage.io --network 0"
+    FLAGS="-vv --net direct --dhcp false --ipv4 46.43.42.146/25
+    --ipv4-gateway 46.43.42.129 --tls true
+    --secrets-kv_ro fat --host mirage.io"
     UPDATE_GCC_BINUTILS=1
   global:
   - secure: PUu3+Enupf9jcIPD/hs5b6zrNuJagTDXJGtYfSUIFvzevSXZzs6mXPu8L2vvAQbQ8ig/8VLToa44vUTG9OEy9SxXrR6yTQGfj4YxJ5BXKHwhYMTBXnR1e+S1gA4a5tilMa7M/a0hWa1rORv3diMIK3dihjc1m6VzpCK/4vly7KU=
