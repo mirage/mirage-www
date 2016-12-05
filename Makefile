@@ -41,7 +41,7 @@ depend:
 	cd stats && make depend
 	cd src && make depend
 
-build:
+build: depend
 	cd stats && make build
 	cd src && make build
 
