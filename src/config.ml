@@ -77,16 +77,15 @@ let tmplfs = generic_kv_ro ~key:fs_key "../tmpl"
 
 let secrets_key = Key.(value @@ kv_ro ~group:"secrets" ())
 let secrets = generic_kv_ro ~key:secrets_key "../tls"
-let stack = generic_stackv4 tap0
+let stack = generic_stackv4 default_network
 
 let http =
   foreign ~keys "Dispatch.Make"
     (http @-> kv_ro @-> kv_ro @-> pclock @-> job)
 
 let https =
-  let libraries = [ "tls"; "tls.mirage"; "mirage-http" ] in
-  let packages = ["tls"; "tls"; "mirage-http"] in
-  foreign ~libraries ~packages  ~keys "Dispatch_tls.Make"
+  let packages = [package ~sublibs:["mirage"] "tls"; package "mirage-http"] in
+  foreign ~packages  ~keys "Dispatch_tls.Make"
     ~deps:[abstract nocrypto]
     (stackv4 @-> kv_ro @-> kv_ro @-> kv_ro @-> pclock @-> job)
 
@@ -98,12 +97,12 @@ let dispatch = if_impl (Key.value tls_key)
     (** Without tls *)
     (http $ http_server (conduit_direct stack))
 
-let libraries = [ "cow"; "cowabloga"; "rrd" ; "duration"; "ptime" ]
-let packages  = [ "cow"; "cowabloga"; "xapi-rrd"; "c3" ; "duration"; "ptime" ]
+let packages  = [ package "cow"; package "cowabloga"; package ~ocamlfind:["rrd"] "xapi-rrd"; package "c3" ;
+                  package "duration"; package "ptime" ]
 
 let () =
   let tracing = None in
   (* let tracing = mprof_trace ~size:10000 () in *)
-  register ?tracing ~libraries ~packages image [
+  register ?tracing ~packages image [
     dispatch $ filesfs $ tmplfs $ default_posix_clock
   ]

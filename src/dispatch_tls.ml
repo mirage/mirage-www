@@ -40,9 +40,8 @@ module Make
     let log str = Log.debug (fun f -> f "[%s:%d] %s" (Ipaddr.V4.to_string peer) port str) in
     let with_tls_server k = TLS.server_of_flow cfg tcp >>= k in
     with_tls_server @@ function
-    | `Error _ -> log "TLS failed"; TCP.close tcp
-    | `Ok tls  -> log "TLS ok"; f tls >>= fun () ->TLS.close tls
-    | `Eof     -> log "TLS eof"; TCP.close tcp
+    | Error _ -> log "TLS failed"; TCP.close tcp
+    | Ok tls  -> log "TLS ok"; f tls >>= fun () ->TLS.close tls
 
   let with_http host flow =
     let domain = `Https, host in
@@ -54,7 +53,7 @@ module Make
     let conf = Tls.Config.server ~certificates:(`Single cert) () in
     Lwt.return conf
 
-  let start stack keys fs tmpl _clock () =
+  let start stack keys fs tmpl clock () =
     let host = Key_gen.host () in
     let redirect = Key_gen.redirect () in
     let sleep sec = OS.Time.sleep_ns (Duration.of_sec sec) in
