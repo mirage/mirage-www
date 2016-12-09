@@ -48,27 +48,17 @@ module Make
   let err_not_found name = err "%s not found" name
   let err_failure = err "failure"
 
-  let read_tmpl tmpl name =
-    TMPL.size tmpl name >>= function
+  let size_then_read ~size ~read device name =
+    size device name >>= function
     | Error `Unknown_key -> err_not_found name
     | Error (`Msg s) -> err "getting size for %s :%s" name s
     | Ok size ->
-      TMPL.read tmpl name 0L size >>= function
+      read device name 0L size >>= function
       | Error `Unknown_key -> err_not_found name
       | Error (`Msg s) -> err "reading %s :%s" name s
       | Ok bufs -> Lwt.return (Cstruct.copyv bufs)
 
-  let read_fs fs name =
-    FS.size fs name >>= function
-    | Error `Unknown_key -> err_not_found name
-    | Error (`Msg s) -> err "getting size for %s :%s" name s
-    | Ok size ->
-      FS.read fs name 0L size >>= function
-      | Error `Unknown_key -> err_not_found name
-      | Error (`Msg s) -> err "reading %s :%s" name s
-      | Ok bufs -> Lwt.return (Cstruct.copyv bufs)
-
-  let read_entry tmpl name = read_tmpl tmpl name >|= Cow.Markdown.of_string
+  let read_entry tmpl name = size_then_read ~size:TMPL.size ~read:TMPL.read tmpl name >|= Cow.Markdown.of_string
 
   let respond_ok ?(headers=[]) body =
     body >>= fun body ->
@@ -111,22 +101,22 @@ module Make
   let blog domain tmpl =
     let feed = blog_feed domain tmpl in
     let entries = Data.Blog.entries in
-    let read = read_tmpl tmpl in
+    let read = size_then_read ~size:TMPL.size ~read:TMPL.read tmpl in
     Blog.dispatch ~domain ~feed ~entries ~read
 
   let wiki domain tmpl =
-    let read = read_tmpl tmpl in
+    let read = size_then_read ~size:TMPL.size ~read:TMPL.read tmpl in
     let feed = wiki_feed domain tmpl in
     let entries = Data.Wiki.entries in
     Wiki.dispatch ~domain ~read ~feed ~entries
 
   let releases domain tmpl =
-    let read = read_tmpl tmpl in
+    let read = size_then_read ~size:TMPL.size ~read:TMPL.read tmpl in
     let feed = Data.empty_feed in
     Pages.Releases.dispatch ~feed ~domain ~read
 
   let links domain tmpl =
-    let read = read_tmpl tmpl in
+    let read = size_then_read ~size:TMPL.size ~read:TMPL.read tmpl in
     let feed = links_feed domain tmpl in
     let links = Data.Links.entries in
     Pages.Links.dispatch ~domain ~read ~feed ~links
@@ -134,12 +124,12 @@ module Make
   let updates domain tmpl =
     let feed = updates_feed domain tmpl in
     let feeds = updates_feeds domain tmpl in
-    let read = read_tmpl tmpl in
+    let read = size_then_read ~size:TMPL.size ~read:TMPL.read tmpl in
     Pages.Updates.dispatch ~domain ~feed ~feeds ~read
 
   let security domain tmpl =
     let feed = updates_feed domain tmpl in
-    let read = read_tmpl tmpl in
+    let read = size_then_read ~size:TMPL.size ~read:TMPL.read tmpl in
     Pages.Security.dispatch ~domain ~read ~feed
 
   let stats () =
@@ -150,18 +140,18 @@ module Make
     redirect domain ["../wiki#Weeklycallsandreleasenotes"]
 
   let index domain tmpl =
-    let read = read_tmpl tmpl in
+    let read = size_then_read ~size:TMPL.size ~read:TMPL.read tmpl in
     let feeds = updates_feeds domain tmpl in
     Pages.Index.t ~domain ~feeds ~read >|= cowabloga
 
   let about domain tmpl =
-    let read = read_tmpl tmpl in
+    let read = size_then_read ~size:TMPL.size ~read:TMPL.read tmpl in
     let feed = Data.empty_feed in
     Pages.About.dispatch ~feed ~domain ~read
 
   let asset domain fs path =
     let path_s = String.concat "/" path in
-    let asset () = Lwt.return (`Asset (read_fs fs path_s)) in
+    let asset () = Lwt.return (`Asset (size_then_read ~size:FS.size ~read:FS.read fs path_s)) in
     Lwt.catch asset (fun e ->
         Log.warn (fun f -> f "got an error while getting %s: %s" path_s (Printexc.to_string e));
         not_found domain path)
