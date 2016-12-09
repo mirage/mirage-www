@@ -46,22 +46,27 @@ module Make
   type s = Conduit_mirage.server -> S.t -> unit Lwt.t
 
   let err_not_found name = err "%s not found" name
+  let err_failure = err "failure"
 
   let read_tmpl tmpl name =
     TMPL.size tmpl name >>= function
-    | `Error _ -> err_not_found name
-    | `Ok size ->
-      TMPL.read tmpl name 0 (Int64.to_int size) >>= function
-      | `Error _ -> err_not_found name
-      | `Ok bufs -> Lwt.return (Cstruct.copyv bufs)
+    | Error `Unknown_key -> err_not_found name
+    | Error (`Msg s) -> err "getting size for %s :%s" name s
+    | Ok size ->
+      TMPL.read tmpl name 0L size >>= function
+      | Error `Unknown_key -> err_not_found name
+      | Error (`Msg s) -> err "reading %s :%s" name s
+      | Ok bufs -> Lwt.return (Cstruct.copyv bufs)
 
   let read_fs fs name =
     FS.size fs name >>= function
-    | `Error _ -> err_not_found name
-    | `Ok size ->
-      FS.read fs name 0 (Int64.to_int size) >>= function
-      | `Error _ -> err_not_found name
-      | `Ok bufs -> Lwt.return (Cstruct.copyv bufs)
+    | Error `Unknown_key -> err_not_found name
+    | Error (`Msg s) -> err "getting size for %s :%s" name s
+    | Ok size ->
+      FS.read fs name 0L size >>= function
+      | Error `Unknown_key -> err_not_found name
+      | Error (`Msg s) -> err "reading %s :%s" name s
+      | Ok bufs -> Lwt.return (Cstruct.copyv bufs)
 
   let read_entry tmpl name = read_tmpl tmpl name >|= Cow.Markdown.of_string
 
