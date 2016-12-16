@@ -35,7 +35,7 @@ prepare:
 	cd stats && make all
 
 configure: prepare
-	mirage configure -f src/config.ml $(FLAGS) -t $(MODE)
+	cd src && mirage configure $(FLAGS) -t $(MODE)
 
 depend:
 	cd stats && make depend
