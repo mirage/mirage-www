@@ -27,18 +27,17 @@ world
 First, let's look at the code:
 
 ```ocaml
-$ cat console/unikernel.ml
+$ cat hello/unikernel.ml
 open Lwt.Infix
 
-module Main (C: V1_LWT.CONSOLE) = struct
+module Main (C: V1_LWT.CONSOLE) (Time : V1_LWT.TIME) = struct
 
-  let start c =
+  let start c _time =
     let rec loop = function
       | 0 -> Lwt.return_unit
       | n ->
-        C.log_s c "hello" >>= fun () ->
-        OS.Time.sleep 1.0 >>= fun () ->
-        C.log_s c "world" >>= fun () ->
+        C.log c (Key_gen.hello ()) >>= fun () ->
+        Time.sleep_ns (Duration.of_sec 1) >>= fun () ->
         loop (n-1)
     in
     loop 4
@@ -50,24 +49,34 @@ end
 you may want to read at least the start of the [Lwt tutorial](tutorial-lwt) first.
 
 To veteran OCaml programmers among you, this might look a little odd: we have a
-`Main` module parameterised by another module (`C`, of type `CONSOLE`) that
+`Main` module parameterised by two modules (`C`, of type `CONSOLE`, and
+`Time`, of type `TIME`) that
 contains a method `start` taking a single parameter `c` (an instance of a
-`CONSOLE`). This is the basic structure required to make this a MirageOS
+`CONSOLE`) and the ignored parameter `_time` (an instance of a `TIME`).
+This is the basic structure required to make this a MirageOS
 unikernel rather than a standard OCaml POSIX application.
 
-The concrete implementation of `CONSOLE` will be supplied at compile-time,
+The concrete implementations of `CONSOLE` and `TIME` will be supplied at compile-time,
 depending on the target that you are compiling for. This configuration is stored
-in `config.ml`, which is very simple for our first application.
+in `config.ml`, so let's take a look:
 
 ```ocaml
 $ cat console/config.ml
 open Mirage
 
+let key =
+  let doc = Key.Arg.info ~doc:"How to say hello." ["hello"] in
+  Key.(create "hello" Arg.(opt string "Hello World!" doc))
+
 let main =
-  foreign "Unikernel.Main" (console @-> job)
+  foreign
+    ~keys:[Key.abstract key]
+    ~packages:[package "duration"]
+    "Unikernel.Main" (console @-> time @-> job)
 
 let () =
-  register "console" [main $ default_console]
+  register "console" [main $ default_console $ default_time]
+
 ```
 
 The configuration file is a normal OCaml module that calls `register` to create
@@ -82,22 +91,31 @@ to add a device driver to the list of functor arguments in the job definition
 (see `unikernel.ml`), and the final value of using this combinator should always
 be a `job` if you intend to register it.
 
-Notice that we refer to the module name as a string here, instead of directly as
+The `foreign` function also takes some additional arguments: `~keys`, the list of
+configuration keys we want to allow the user to specify at configuration or build time, and
+`packages`, a list of additional `opam` packages that should be included in the list of
+build dependencies for the project.  For more on configuration keys, see
+[blog/introducing-functoria](the blog post introducing
+the configuration language used by MirageOS, which is known as Functoria).
+
+Notice that we refer to the module name as a string (`"Unikernel.Main"`) when
+calling `foreign`, instead of directly as
 an OCaml value. The `mirage` command-line tool evaluates this configuration file
 at build-time and outputs a `main.ml` that has the concrete values filled in for
 you, with the exact modules varying by which backend you selected (e.g. Unix or
 Xen).
 
-MirageOS mirrors the Xen model on UNIX as far as possible: your application is
+MirageOS mirrors the unikernel model on UNIX as far as possible: your application is
 built as a unikernel which needs to be instantiated and run whether on UNIX or
 on Xen. When your unikernel is run, it starts much as a VM on Xen does -- and so
 must be passed references to devices such as the console, network interfaces and
 block devices on startup.
 
-In this case, this simple `hello world` example requires just a console for
-output, so we register a single `Job` consisting of the `Hello.Main` module
-(and, implicitly its `start` function) and passing it a single reference to a
-console.
+In this case, this simple `hello world` example requires a console for
+output and some notion of time, so we register a single `Job` consisting of
+the `Hello.Main` module
+(and, implicitly its `start` function) and passing it references to a
+console and a timer.
 
 You can find the module signatures of all the device drivers (such as `CONSOLE`)
 in the [`types/`](https://github.com/mirage/mirage/tree/master/types) directory
@@ -116,16 +134,22 @@ $ mirage configure -t unix
 ```
 
 `mirage configure` generates a `Makefile` with all the build rules included from
-evaluating the configuration file, and a `main.ml` that represents the entry
-point of your unikernel. The `configure` step should ensure all external OPAM
-dependencies are installed, but in case not, execute `make depend` to check and
-install if any are missing.
+evaluating the configuration file, a `main.ml` that represents the entry
+point of your unikernel, and an `opam` file with a list of the packages necessary to build
+the unikernel.
+
+```
+$ make depend
+```
+
+In order to automatically install the dependencies discovered by `mirage configure`
+in your current `opam` switch, execute `make depend`.
 
 ```
 $ make
 ```
 
-This builds a UNIX binary called `mir-console` that contains the simple console
+This builds a UNIX binary called `console` that contains the simple console
 application.  If you are on a multicore machine and want to do parallel builds,
 `export OPAMJOBS=4` (or some other value equal to the number of cores) will do
 the trick.
@@ -135,7 +159,7 @@ directly and observe the exciting console commands that our `for` loop is
 generating:
 
 ```
-$ ./mir-console
+$ ./console
 ```
 
 <br />
