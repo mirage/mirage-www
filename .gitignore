@@ -34,3 +34,8 @@ stats/main.js
 stats/main.min.js
 
 .*.swp
+
+/src/.mirage.config
+/src/mirage-unikernel-www-unix.opam
+/src/myocamlbuild.ml
+/src/www
