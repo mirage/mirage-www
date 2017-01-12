@@ -1,7 +1,7 @@
 #!/bin/sh
 # Convenience script to run inside a Docker continer.
-# 
-#    docker build -t mirage-www
+#
+#    docker build -t mirage-www .
 #    docker run -Pd mirage-www
 #    docker ps
 
