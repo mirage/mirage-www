@@ -1,7 +1,7 @@
 First make sure you have followed the [installation instructions](/wiki/install)
-to get a working MirageOS installation. The examples below are in the
-[mirage-skeleton](http://github.com/mirage/mirage-skeleton) repository. Begin by
-cloning and changing directory to it:
+to get a working MirageOS installation. The examples below are in
+the [mirage-skeleton](http://github.com/mirage/mirage-skeleton) repository.
+Begin by cloning and changing directory to it:
 
 ```
 $ git clone git://github.com/mirage/mirage-skeleton.git
@@ -10,8 +10,8 @@ $ cd mirage-skeleton
 
 ### Step 1: Hello World!
 
-As a first step, let's build and run the MirageOS "Hello World" unikernel -- this
-will print `hello\nworld\n` 4 times before terminating:
+As a first step, let's build and run the MirageOS "Hello World" unikernel --
+this will print `hello\nworld\n` 4 times before terminating:
 
 ```
 hello
@@ -45,20 +45,20 @@ module Main (C: V1_LWT.CONSOLE) (Time : V1_LWT.TIME) = struct
 end
 ```
 
-**Note**: If you aren't familiar with the Lwt library (and the `>>=` operator it provides),
-you may want to read at least the start of the [Lwt tutorial](tutorial-lwt) first.
+**Note**: If you aren't familiar with the Lwt library (and the `>>=` operator it
+provides), you may want to read at least the start of
+the [Lwt tutorial](tutorial-lwt) first.
 
 To veteran OCaml programmers among you, this might look a little odd: we have a
-`Main` module parameterised by two modules (`C`, of type `CONSOLE`, and
-`Time`, of type `TIME`) that
-contains a method `start` taking a single parameter `c` (an instance of a
-`CONSOLE`) and the ignored parameter `_time` (an instance of a `TIME`).
-This is the basic structure required to make this a MirageOS
-unikernel rather than a standard OCaml POSIX application.
+`Main` module parameterised by two modules (`C`, of type `CONSOLE`, and `Time`,
+of type `TIME`) that contains a method `start` taking a single parameter `c` (an
+instance of a `CONSOLE`) and the ignored parameter `_time` (an instance of a
+`TIME`). This is the basic structure required to make this a MirageOS unikernel
+rather than a standard OCaml POSIX application.
 
-The concrete implementations of `CONSOLE` and `TIME` will be supplied at compile-time,
-depending on the target that you are compiling for. This configuration is stored
-in `config.ml`, so let's take a look:
+The concrete implementations of `CONSOLE` and `TIME` will be supplied at
+compile-time, depending on the target that you are compiling for. This
+configuration is stored in `config.ml`, so let's take a look:
 
 ```
 $ cat console/config.ml
@@ -82,8 +82,8 @@ let () =
 The configuration file is a normal OCaml module that calls `register` to create
 one or more jobs, each of which represent a process (with a start/stop
 lifecycle). Each job most likely depends on some device drivers; all the
-available device drivers are defined in the `Mirage` module (see
-[here](http://mirage.github.io/mirage/)).
+available device drivers are defined in the `Mirage` module
+(see [here](http://mirage.github.io/mirage/)).
 
 In this case, the `main` variable declares that the entry point of the process
 is the `Main` module from the file `unikernel.ml`. The `@->` combinator is used
@@ -91,31 +91,30 @@ to add a device driver to the list of functor arguments in the job definition
 (see `unikernel.ml`), and the final value of using this combinator should always
 be a `job` if you intend to register it.
 
-The `foreign` function also takes some additional arguments: `~keys`, the list of
-configuration keys we want to allow the user to specify at configuration or build time, and
-`packages`, a list of additional `opam` packages that should be included in the list of
-build dependencies for the project.  For more on configuration keys, see
-[blog/introducing-functoria](the blog post introducing
-the configuration language used by MirageOS, which is known as Functoria).
+The `foreign` function also takes some additional arguments: `~keys`, the list
+of configuration keys we want to allow the user to specify at configuration or
+build time, and `packages`, a list of additional `opam` packages that should be
+included in the list of build dependencies for the project. For more on
+configuration keys,
+see
+[blog/introducing-functoria](the blog post introducing the configuration language used by MirageOS, which is known as Functoria).
 
 Notice that we refer to the module name as a string (`"Unikernel.Main"`) when
-calling `foreign`, instead of directly as
-an OCaml value. The `mirage` command-line tool evaluates this configuration file
-at build-time and outputs a `main.ml` that has the concrete values filled in for
-you, with the exact modules varying by which backend you selected (e.g. Unix or
-Xen).
+calling `foreign`, instead of directly as an OCaml value. The `mirage`
+command-line tool evaluates this configuration file at build-time and outputs a
+`main.ml` that has the concrete values filled in for you, with the exact modules
+varying by which backend you selected (e.g. Unix or Xen).
 
-MirageOS mirrors the unikernel model on UNIX as far as possible: your application is
-built as a unikernel which needs to be instantiated and run whether on UNIX or
-on Xen. When your unikernel is run, it starts much as a VM on Xen does -- and so
-must be passed references to devices such as the console, network interfaces and
-block devices on startup.
+MirageOS mirrors the unikernel model on UNIX as far as possible: your
+application is built as a unikernel which needs to be instantiated and run
+whether on UNIX or on Xen. When your unikernel is run, it starts much as a VM on
+Xen does -- and so must be passed references to devices such as the console,
+network interfaces and block devices on startup.
 
-In this case, this simple `hello world` example requires a console for
-output and some notion of time, so we register a single `Job` consisting of
-the `Hello.Main` module
-(and, implicitly its `start` function) and passing it references to a
-console and a timer.
+In this case, this simple `hello world` example requires a console for output
+and some notion of time, so we register a single `Job` consisting of the
+`Hello.Main` module (and, implicitly its `start` function) and passing it
+references to a console and a timer.
 
 You can find the module signatures of all the device drivers (such as `CONSOLE`)
 in the [`types/`](https://github.com/mirage/mirage/tree/master/types) directory
@@ -134,23 +133,23 @@ $ mirage configure -t unix
 ```
 
 `mirage configure` generates a `Makefile` with all the build rules included from
-evaluating the configuration file, a `main.ml` that represents the entry
-point of your unikernel, and an `opam` file with a list of the packages necessary to build
-the unikernel.
+evaluating the configuration file, a `main.ml` that represents the entry point
+of your unikernel, and an `opam` file with a list of the packages necessary to
+build the unikernel.
 
 ```
 $ make depend
 ```
 
-In order to automatically install the dependencies discovered by `mirage configure`
-in your current `opam` switch, execute `make depend`.
+In order to automatically install the dependencies discovered by `mirage
+configure` in your current `opam` switch, execute `make depend`.
 
 ```
 $ make
 ```
 
 This builds a UNIX binary called `console` that contains the simple console
-application.  If you are on a multicore machine and want to do parallel builds,
+application. If you are on a multicore machine and want to do parallel builds,
 `export OPAMJOBS=4` (or some other value equal to the number of cores) will do
 the trick.
 
@@ -193,13 +192,12 @@ instead of Unix.
 When you build the Xen version, you'll have a `mir-console.xen` unikernel that
 can be booted as a standalone kernel. You will also see two generated files
 named `console.xl` and `console.xl.in` in the current directory. The
-`console.xl` file is a Xen configuration file with sensible defaults for
-the VM configuration options, intended for quickly trying the unikernel on
-the build machine. The file `console.xl.in` has all the configuration options
-necessary for the VM to boot but has all the references to resources on the
-deployment host replaced by substitutable variables. The `console.xl.in` is
-intended for production use; while `console.xl` is intended for development
-and test.
+`console.xl` file is a Xen configuration file with sensible defaults for the VM
+configuration options, intended for quickly trying the unikernel on the build
+machine. The file `console.xl.in` has all the configuration options necessary
+for the VM to boot but has all the references to resources on the deployment
+host replaced by substitutable variables. The `console.xl.in` is intended for
+production use; while `console.xl` is intended for development and test.
 
 The `console.xl` will look something like this:
 
@@ -261,8 +259,8 @@ explain this subsystem next.
 
 The [block/](https://github.com/mirage/mirage-skeleton/tree/master/block)
 directory in `mirage-skeleton` contains an example of attaching a raw block
-device to your unikernel. The
-[V1.BLOCK](https://github.com/mirage/mirage/blob/1.1.0/types/V1.mli#L134)
+device to your unikernel.
+The [V1.BLOCK](https://github.com/mirage/mirage/blob/1.1.0/types/V1.mli#L134)
 interface signature contains the operations that are possible on a block device:
 primarily reading and writing aligned buffers to a 64-bit offset within the
 device.
@@ -341,10 +339,10 @@ disk = [ 'format=raw, vdev=xvdb, access=rw, target=/Users/djs/djs55/mirage-skele
 ```
 
 Now you just need to boot the VM as before, and you should see the same output
-(after the VM boot preamble) -- but now MirageOS is linked against the Xen
-[block device driver](https://github.com/mirage/mirage-block-xen) and is mapping
-the unikernel's block requests directly through to it, rather than relying on
-the host OS (the Linux or FreeBSD kernel):
+(after the VM boot preamble) -- but now MirageOS is linked against the
+Xen [block device driver](https://github.com/mirage/mirage-block-xen) and is
+mapping the unikernel's block requests directly through to it, rather than
+relying on the host OS (the Linux or FreeBSD kernel):
 
 ```
 [root@st20 block]# xl create -c block_test.xl
@@ -403,11 +401,11 @@ retrieve buffers from string keys. This is essential for many common uses such
 as retrieving configuration data or website HTML and images.
 
 The
-[kv_ro_crunch/](https://github.com/mirage/mirage-skeleton/tree/master/kv_ro_crunch)
-directory in `mirage-skeleton` contains the simplest key/value store example.
-The subdirectory `t/` contains a couple of data files that the unikernel uses.
-Our example `unikernel.ml` reads in the data from one file and compares to the
-other file, printing out `YES` if the values match, and `NO` otherwise.
+[kv_ro_crunch/](https://github.com/mirage/mirage-skeleton/tree/master/kv_ro_crunch) directory
+in `mirage-skeleton` contains the simplest key/value store example. The
+subdirectory `t/` contains a couple of data files that the unikernel uses. Our
+example `unikernel.ml` reads in the data from one file and compares to the other
+file, printing out `YES` if the values match, and `NO` otherwise.
 
 The `config.ml` should look familiar after the earlier block and console
 examples:
@@ -470,12 +468,12 @@ YES!
 
 Of course, this scheme doesn't really scale up to large websites, and we often
 need a more elaborate configuration for larger datasets depending on how we are
-deploying our unikernels (i.e. for development or production). Switch to the
-[kv_ro/](https://github.com/mirage/mirage-skeleton/tree/master/kv_ro) directory,
-which has exactly the same example as before, but with several new configuration
-options: it can generate a block device that contains a FAT filesystem that
-mirror the directory contents, or (when running under Unix) simply proxy calls
-dynamically to the underlying filesystem.
+deploying our unikernels (i.e. for development or production). Switch to
+the [kv_ro/](https://github.com/mirage/mirage-skeleton/tree/master/kv_ro)
+directory, which has exactly the same example as before, but with several new
+configuration options: it can generate a block device that contains a FAT
+filesystem that mirror the directory contents, or (when running under Unix)
+simply proxy calls dynamically to the underlying filesystem.
 
 Since the `config.ml` file is normal OCaml that is executed at build time, all
 of this selection logic is simple enough.
@@ -535,25 +533,25 @@ networking, which has far more knobs attached. There are several ways that we
 might want to configure our networking:
 
 * On Unix, it's convenient to use the standard kernel socket API for developing
-  higher level protocols (such as
-  [HTTP](http://github.com/mirage/ocaml-cohttp)). These run over TCP or UDP and
-  so sockets work just fine.
+  higher level protocols (such
+  as [HTTP](http://github.com/mirage/ocaml-cohttp)). These run over TCP or UDP
+  and so sockets work just fine.
 * When we want finer control over the network stack, or simply to test the OCaml
   networking subsystem, we can use a userspace device facility such as the
   common Unix [tuntap](http://en.wikipedia.org/wiki/TUN/TAP) to parse Ethernet
   frames from userspace. This requires additional configuration to assign IP
   addresses, and possibly configure a network bridge to let the unikernel talk
   to the outside world.
-* Once the unikernel works under Unix with the direct
-  [OCaml TCP/IP stack](https://github.com/mirage/mirage-tcpip), recompiling it
-  under Xen is just a matter of linking in the
-  [Xen netfront](https://github.com/mirage/mirage-net-xen) driver to provide the
-  Ethernet frames directly to the unikernel.
+* Once the unikernel works under Unix with the
+  direct [OCaml TCP/IP stack](https://github.com/mirage/mirage-tcpip),
+  recompiling it under Xen is just a matter of linking in
+  the [Xen netfront](https://github.com/mirage/mirage-net-xen) driver to provide
+  the Ethernet frames directly to the unikernel.
 
 All of this can be manipulated via the `config.ml` file through standard OCaml
 code as before; we use the `NET` environment variable in the example below. The
-example below is config.ml from the
-[stackv4/](https://github.com/mirage/mirage-skeleton/tree/master/stackv4)
+example below is config.ml from
+the [stackv4/](https://github.com/mirage/mirage-skeleton/tree/master/stackv4)
 directory in `mirage-skeleton`.
 
 ```
@@ -575,7 +573,8 @@ driver.
 
 The `net` handler checks to see if it's building for a socket or direct network
 stack. Crucially, both the socket and direct network stacks have a very similar
-modular API which you can see in
+modular API which you can see
+in
 [mirage/types/V1.mli](https://github.com/mirage/mirage/blob/1.1.0/types/V1.mli#L512).
 This lets your applications be parameterized across either backend.
 
@@ -713,10 +712,10 @@ work on pre-Yosemite Mac OSX, but has not been tested on Yosemite where the new
 
 By default, if we do not use DHCP with a `direct` network stack, Mirage will
 configure the stack to use the `tap0` interface with an address of `10.0.0.2`.
-Verify that you have an existing `tap0` interface by reviewing `$ sudo ip
-link show`; if you do not, load the tuntap kernel module (`$ sudo modprobe tun`)
-and create a `tap0` interface owned by you (`$ sudo tunctl -u $USER -t tap0`).
-Bring `tap0` up using `$ sudo ifconfig tap0 10.0.0.1 up`, then:
+Verify that you have an existing `tap0` interface by reviewing `$ sudo ip link
+show`; if you do not, load the tuntap kernel module (`$ sudo modprobe tun`) and
+create a `tap0` interface owned by you (`$ sudo tunctl -u $USER -t tap0`). Bring
+`tap0` up using `$ sudo ifconfig tap0 10.0.0.1 up`, then:
 
 ```
 $ cd stackv4
@@ -816,9 +815,9 @@ vif = [ 'bridge=xenbr0' ]
 This tells Xen to bring up the virtual network interface and add it to the
 `xenbr0` bridge. Depending on the dom0 interface configuration, usually
 specified in `/etc/network/interfaces`, this will be brought up with a static IP
-address or with a DHCP address. For example, in the Mirage Ubuntu 14.04
-[Vagrant VM](https://github.com/mirage/mirage-vagrant-vms/), the following lines
-are uncommented:
+address or with a DHCP address. For example, in the Mirage Ubuntu
+14.04 [Vagrant VM](https://github.com/mirage/mirage-vagrant-vms/), the following
+lines are uncommented:
 
 ```
 (network-script network-bridge)
@@ -837,5 +836,5 @@ Finally, you can manually inspect the generated `main.ml` file to see what's
 happening under the hood with the functor applications.
 
 Now that we've covered the basics of configuration, block devices and
-networking, let's get the real MirageOS website up and running with a
-[networked application](/wiki/mirage-www).
+networking, let's get the real MirageOS website up and running with
+a [networked application](/wiki/mirage-www).
