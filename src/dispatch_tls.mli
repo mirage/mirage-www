@@ -17,11 +17,11 @@
 (** HTTPS dispatcher *)
 
 module Make
-    (S: V1_LWT.STACKV4)
-    (KEYS: V1_LWT.KV_RO)
-    (FS: V1_LWT.KV_RO)
-    (TMPL: V1_LWT.KV_RO)
-    (Clock : V1.PCLOCK) :
+    (S: Mirage_stack_lwt.V4)
+    (KEYS: Mirage_types_lwt.KV_RO)
+    (FS: Mirage_types_lwt.KV_RO)
+    (TMPL: Mirage_types_lwt.KV_RO)
+    (Clock : Mirage_types.PCLOCK) :
 sig
 
   val start:
