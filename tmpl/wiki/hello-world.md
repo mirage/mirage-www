@@ -8,6 +8,127 @@ $ git clone git://github.com/mirage/mirage-skeleton.git
 $ cd mirage-skeleton
 ```
 
+**Note**: Before we begin, if you aren't familiar with the Lwt library (and the
+`>>=` operator it provides), you may want to read at least the start of
+the [Lwt tutorial](tutorial-lwt) first.
+
+### Step 0: Doing Nothing!
+
+Before we try and do anything complicated, let's do nothing briefly. That is,
+let's build a unikernel that simply starts and then exits -- nothing else. The
+code for this is, as you might hope, fairly short. First the unikernel itself:
+
+```
+$ cat noop/unikernel.ml
+let start =
+  Lwt.return_unit
+```
+
+So this is a unikernel whose entry point (`start`) does nothing other than
+return an `Lwt` thread that will evaluate to `unit`. Easy.
+
+Before we can build even our `noop` unikernel, we must define its configuration.
+That is, we need to tell Mirage what OCaml module contains the `start` entry
+point. We do this by writing a `config.ml` file that sits next to our
+`unikernel.ml` file (although you can name the file containing the configuration
+something else, the `mirage` tool defaults to `config.ml`):
+
+```
+$ cat noop/config.ml
+open Mirage
+
+let main =
+  foreign "Unikernel" job
+
+let () =
+  register "noop" [main]
+```
+
+There's a little more going on here than in `unikernel.ml`. First we open the
+`Mirage` module to save on typing. Next, we define a value `main` (named so by
+convention because, at heart, some of us are still C programmers -- feel free to
+call it something else if you wish!) which calls the `foreign` function passing
+two parameters. The first is a string declaring the module name that contains
+our entry point-- in this case, standard OCaml compilation behaviour means that
+the `unikernel.ml` file produces a module named `Unikernel`. Again, there's
+nothing special about this name -- if you want to sue something else here,
+simply rename `unikernel.ml` accordingly.
+
+The second parameter, `job`, is a bit more interesting. This declares the type
+of our unikernel in terms of the devices (that is, things such as network
+interfaces, network stacks, filesystems and so on) it requires to operate. As
+this is a unikernel that does nothing, it needs no devices and so is simply
+`job`.
+
+Finally, we declare the entry point to OCaml in the usual way (`let () = ...`),
+`register`ing our unikernel entry point (`main`) with a name (`"noop"` in this
+case) to be used when we build our unikernel.
+
+To build our unikernel is then simply a matter of evaluating its configuration:
+
+```bash
+$ cd noop
+/Users/mort/research/projects/mirage/src/mirage-skeleton/noop
+$ mirage configure -t unix
+```
+
+...installing dependencies:
+
+```bash
+$ make depend
+opam pin add --no-action --yes mirage-unikernel-noop-unix .
+[NOTE] Package mirage-unikernel-noop-unix is already path-pinned to /Users/mort/research/projects/mirage/src/mirage-skeleton/noop.
+       This will erase any previous custom definition.
+Proceed ? [Y/n] y
+
+[mirage-unikernel-noop-unix] /Users/mort/research/projects/mirage/src/mirage-skeleton/noop/ synchronized
+[mirage-unikernel-noop-unix] Installing new package description from /Users/mort/research/projects/mirage/src/mirage-skeleton/noop
+
+opam depext --yes mirage-unikernel-noop-unix
+# Detecting depexts using flags: x86_64 osx homebrew
+# The following system packages are needed:
+#  - camlp4
+# All required OS packages found.
+opam install --yes --deps-only mirage-unikernel-noop-unix
+
+=-=- Synchronising pinned packages =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=  🐫
+[mirage-unikernel-noop-unix] /Users/mort/research/projects/mirage/src/mirage-skeleton/noop/ already up-to-date
+opam pin remove --no-action mirage-unikernel-noop-unix
+mirage-unikernel-noop-unix is now unpinned from path /Users/mort/research/projects/mirage/src/mirage-skeleton/noop
+```
+
+...and compiling:
+
+```bash
+$ make
+mirage build
+ocamlfind ocamldep -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -modules main.ml > main.ml.depends
+ocamlfind ocamldep -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -modules key_gen.ml > key_gen.ml.depends
+ocamlfind ocamldep -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -modules unikernel.ml > unikernel.ml.depends
+ocamlfind ocamlc -c -g -g -bin-annot -safe-string -principal -strict-sequence -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -w A-4-41-42-44 -color always -o key_gen.cmo key_gen.ml
+ocamlfind ocamlc -c -g -g -bin-annot -safe-string -principal -strict-sequence -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -w A-4-41-42-44 -color always -o unikernel.cmo unikernel.ml
+ocamlfind ocamlc -c -g -g -bin-annot -safe-string -principal -strict-sequence -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -w A-4-41-42-44 -color always -o main.cmo main.ml
+ocamlfind ocamlopt -c -g -g -bin-annot -safe-string -principal -strict-sequence -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -w A-4-41-42-44 -color always -o key_gen.cmx key_gen.ml
+ocamlfind ocamlopt -c -g -g -bin-annot -safe-string -principal -strict-sequence -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -w A-4-41-42-44 -color always -o unikernel.cmx unikernel.ml
+ocamlfind ocamlopt -c -g -g -bin-annot -safe-string -principal -strict-sequence -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -w A-4-41-42-44 -color always -o main.cmx main.ml
+ocamlfind ocamlopt -g -linkpkg -g -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix key_gen.cmx unikernel.cmx main.cmx -o main.native
+```
+
+As we configured for UNIX (the `-t unix` argument to the `mirage configure`
+command), the result is a standard UNIX ELF binary that can simply be executed:
+
+```
+$ ls -l noop
+lrwxrwxr-x  1 mort  staff  18 Jan 12 12:11 noop@ -> _build/main.native
+$ ls -l _build/main.native
+-rwxrwxr-x  1 mort  staff  2690564 Jan 12 12:11 _build/main.native*
+$ ./noop
+$ echo $?
+0
+```
+
+And that's it -- you've just built and run your very first unikernel!
+
 ### Step 1: Hello World!
 
 As a first step, let's build and run the MirageOS "Hello World" unikernel --
@@ -44,10 +165,6 @@ module Main (C: V1_LWT.CONSOLE) (Time : V1_LWT.TIME) = struct
 
 end
 ```
-
-**Note**: If you aren't familiar with the Lwt library (and the `>>=` operator it
-provides), you may want to read at least the start of
-the [Lwt tutorial](tutorial-lwt) first.
 
 To veteran OCaml programmers among you, this might look a little odd: we have a
 `Main` module parameterised by two modules (`C`, of type `CONSOLE`, and `Time`,
