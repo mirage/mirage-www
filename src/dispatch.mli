@@ -53,6 +53,5 @@ sig
 end
 
 val domain_of_string: string -> Types.domain
-(** [domain_of_string d] parses the string [d] to build a
-    domain. Should be of the form {i http://host} or {i
-    https://host}. *)
+(** [domain_of_string d] parses the string [d] to build a domain. Should be of
+    the form {i http://host} or {i https://host}. *)
