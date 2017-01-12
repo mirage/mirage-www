@@ -117,7 +117,7 @@ ocamlfind ocamlopt -g -linkpkg -g -package mirage-unix -package mirage-types-lwt
 As we configured for UNIX (the `-t unix` argument to the `mirage configure`
 command), the result is a standard UNIX ELF binary that can simply be executed:
 
-```
+```bash
 $ ls -l noop
 lrwxrwxr-x  1 mort  staff  18 Jan 12 12:11 noop@ -> _build/main.native
 $ ls -l _build/main.native
@@ -128,6 +128,67 @@ $ echo $?
 ```
 
 And that's it -- you've just built and run your very first unikernel!
+
+#### Aside: Doing Nothing with Functors!
+
+Functors are one of those OCaml things that can seem a bit intimidating at first
+(traditionally, "monads" get the same sort of reaction). However, as they're
+used fairly widely throughout Mirage, a very brief introduction to the commonest
+way we use them is needed. For a better introduction as to how to actually make
+use of them, what they are, and so on
+see
+[Real World OCaml, Ch.9](https://realworldocaml.org/v1/en/html/functors.html)
+(and probably
+also
+[Ch.10, First-Class Modules](https://realworldocaml.org/v1/en/html/first-class-modules.html).
+
+In short, in Mirage, they're used as a way to abstract over the target
+environment for the unikernel. Functors are, roughly, functions from modules to
+modules, and they allow us to pass modules into a unikernel so that the code
+inside unikernel can interact with its environment (read files, send packets,
+etc) without needing to care whether its been built to target UNIX, Xen, KVM, or
+something else entirely. The modules that are passed into the unikernel in this
+way are required to conform to type signatures that are specified when the
+unikernel `job` value is created in the `config.ml` file.
+
+We'll see several examples of this below but, for now, we need to wrap up our
+`noop` unikernel in a module inside the `Unikernel` module so that we can use it
+as a functor. This is actually quite straightforward -- we simply wrap the
+`start` function in `unikernel.ml` inside some module. For example,
+
+```
+$ cat noop-functor/unikernel.ml
+module Main = struct
+
+  let start =
+    Lwt.return_unit
+
+end
+```
+
+The use of the name `Main` is purely convention -- again, call it something
+completely different if you wish to put C programming firmly behind you!
+
+The only other change is to the corresponding invocation in `config.ml`:
+
+```
+$ cat noop-functor/config.ml
+open Mirage
+
+let main =
+  foreign "Unikernel.Main" job
+
+let () =
+  register "noop" [main]
+```
+
+Note that the string passed to `foreign` is now `"Unikernel.Main"` as we must
+refer to the `Main` module inside the `Unikernel` module. Everything else stays
+the same-- go ahead and try that out by building the unikernel inside
+`noop-functor`.
+
+
+...and now, onwards to unikernels that actually **do** something!
 
 ### Step 1: Hello World!
 
