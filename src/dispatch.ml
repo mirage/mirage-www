@@ -35,8 +35,9 @@ let domain_of_string x =
 
 module Make
     (S: Cohttp_lwt.Server)
-    (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
-    (Clock: V1.PCLOCK)
+    (FS: Mirage_types_lwt.KV_RO)
+    (TMPL: Mirage_types_lwt.KV_RO)
+    (Clock: Mirage_types.PCLOCK)
 = struct
 
   let log_src = Logs.Src.create "dispatch" ~doc:"Web server"
