@@ -1,17 +1,199 @@
 First make sure you have followed the [installation instructions](/wiki/install)
-to get a working MirageOS installation. The examples below are in the
-[mirage-skeleton](http://github.com/mirage/mirage-skeleton) repository. Begin by
-cloning and changing directory to it:
+to get a working MirageOS installation. The examples below are in
+the [mirage-skeleton](http://github.com/mirage/mirage-skeleton) repository.
+Begin by cloning and changing directory to it:
 
 ```
 $ git clone git://github.com/mirage/mirage-skeleton.git
 $ cd mirage-skeleton
 ```
 
+**Note**: Before we begin, if you aren't familiar with the Lwt library (and the
+`>>=` operator it provides), you may want to read at least the start of
+the [Lwt tutorial](tutorial-lwt) first.
+
+### Step 0: Doing Nothing!
+
+Before we try and do anything complicated, let's do nothing briefly. That is,
+let's build a unikernel that simply starts and then exits -- nothing else. The
+code for this is, as you might hope, fairly short. First the unikernel itself:
+
+```
+$ cat noop/unikernel.ml
+let start =
+  Lwt.return_unit
+```
+
+So this is a unikernel whose entry point (`start`) does nothing other than
+return an `Lwt` thread that will evaluate to `unit`. Easy.
+
+Before we can build even our `noop` unikernel, we must define its configuration.
+That is, we need to tell Mirage what OCaml module contains the `start` entry
+point. We do this by writing a `config.ml` file that sits next to our
+`unikernel.ml` file (although you can name the file containing the configuration
+something else, the `mirage` tool defaults to `config.ml`):
+
+```
+$ cat noop/config.ml
+open Mirage
+
+let main =
+  foreign "Unikernel" job
+
+let () =
+  register "noop" [main]
+```
+
+There's a little more going on here than in `unikernel.ml`. First we open the
+`Mirage` module to save on typing. Next, we define a value `main` (named so by
+convention because, at heart, some of us are still C programmers -- feel free to
+call it something else if you wish!) which calls the `foreign` function passing
+two parameters. The first is a string declaring the module name that contains
+our entry point-- in this case, standard OCaml compilation behaviour means that
+the `unikernel.ml` file produces a module named `Unikernel`. Again, there's
+nothing special about this name -- if you want to sue something else here,
+simply rename `unikernel.ml` accordingly.
+
+The second parameter, `job`, is a bit more interesting. This declares the type
+of our unikernel in terms of the devices (that is, things such as network
+interfaces, network stacks, filesystems and so on) it requires to operate. As
+this is a unikernel that does nothing, it needs no devices and so is simply
+`job`.
+
+Finally, we declare the entry point to OCaml in the usual way (`let () = ...`),
+`register`ing our unikernel entry point (`main`) with a name (`"noop"` in this
+case) to be used when we build our unikernel.
+
+To build our unikernel is then simply a matter of evaluating its configuration:
+
+```bash
+$ cd noop
+/Users/mort/research/projects/mirage/src/mirage-skeleton/noop
+$ mirage configure -t unix
+```
+
+...installing dependencies:
+
+```bash
+$ make depend
+opam pin add --no-action --yes mirage-unikernel-noop-unix .
+[NOTE] Package mirage-unikernel-noop-unix is already path-pinned to /Users/mort/research/projects/mirage/src/mirage-skeleton/noop.
+       This will erase any previous custom definition.
+Proceed ? [Y/n] y
+
+[mirage-unikernel-noop-unix] /Users/mort/research/projects/mirage/src/mirage-skeleton/noop/ synchronized
+[mirage-unikernel-noop-unix] Installing new package description from /Users/mort/research/projects/mirage/src/mirage-skeleton/noop
+
+opam depext --yes mirage-unikernel-noop-unix
+# Detecting depexts using flags: x86_64 osx homebrew
+# The following system packages are needed:
+#  - camlp4
+# All required OS packages found.
+opam install --yes --deps-only mirage-unikernel-noop-unix
+
+=-=- Synchronising pinned packages =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=  🐫
+[mirage-unikernel-noop-unix] /Users/mort/research/projects/mirage/src/mirage-skeleton/noop/ already up-to-date
+opam pin remove --no-action mirage-unikernel-noop-unix
+mirage-unikernel-noop-unix is now unpinned from path /Users/mort/research/projects/mirage/src/mirage-skeleton/noop
+```
+
+...and compiling:
+
+```bash
+$ make
+mirage build
+ocamlfind ocamldep -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -modules main.ml > main.ml.depends
+ocamlfind ocamldep -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -modules key_gen.ml > key_gen.ml.depends
+ocamlfind ocamldep -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -modules unikernel.ml > unikernel.ml.depends
+ocamlfind ocamlc -c -g -g -bin-annot -safe-string -principal -strict-sequence -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -w A-4-41-42-44 -color always -o key_gen.cmo key_gen.ml
+ocamlfind ocamlc -c -g -g -bin-annot -safe-string -principal -strict-sequence -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -w A-4-41-42-44 -color always -o unikernel.cmo unikernel.ml
+ocamlfind ocamlc -c -g -g -bin-annot -safe-string -principal -strict-sequence -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -w A-4-41-42-44 -color always -o main.cmo main.ml
+ocamlfind ocamlopt -c -g -g -bin-annot -safe-string -principal -strict-sequence -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -w A-4-41-42-44 -color always -o key_gen.cmx key_gen.ml
+ocamlfind ocamlopt -c -g -g -bin-annot -safe-string -principal -strict-sequence -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -w A-4-41-42-44 -color always -o unikernel.cmx unikernel.ml
+ocamlfind ocamlopt -c -g -g -bin-annot -safe-string -principal -strict-sequence -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -w A-4-41-42-44 -color always -o main.cmx main.ml
+ocamlfind ocamlopt -g -linkpkg -g -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix key_gen.cmx unikernel.cmx main.cmx -o main.native
+```
+
+As we configured for UNIX (the `-t unix` argument to the `mirage configure`
+command), the result is a standard UNIX ELF binary that can simply be executed:
+
+```bash
+$ ls -l noop
+lrwxrwxr-x  1 mort  staff  18 Jan 12 12:11 noop@ -> _build/main.native
+$ ls -l _build/main.native
+-rwxrwxr-x  1 mort  staff  2690564 Jan 12 12:11 _build/main.native*
+$ ./noop
+$ echo $?
+0
+```
+
+And that's it -- you've just built and run your very first unikernel!
+
+#### Aside: Doing Nothing with Functors!
+
+Functors are one of those OCaml things that can seem a bit intimidating at first
+(traditionally, "monads" get the same sort of reaction). However, as they're
+used fairly widely throughout Mirage, a very brief introduction to the commonest
+way we use them is needed. For a better introduction as to how to actually make
+use of them, what they are, and so on
+see
+[Real World OCaml, Ch.9](https://realworldocaml.org/v1/en/html/functors.html)
+(and probably
+also
+[Ch.10, First-Class Modules](https://realworldocaml.org/v1/en/html/first-class-modules.html).
+
+In short, in Mirage, they're used as a way to abstract over the target
+environment for the unikernel. Functors are, roughly, functions from modules to
+modules, and they allow us to pass modules into a unikernel so that the code
+inside unikernel can interact with its environment (read files, send packets,
+etc) without needing to care whether its been built to target UNIX, Xen, KVM, or
+something else entirely. The modules that are passed into the unikernel in this
+way are required to conform to type signatures that are specified when the
+unikernel `job` value is created in the `config.ml` file.
+
+We'll see several examples of this below but, for now, we need to wrap up our
+`noop` unikernel in a module inside the `Unikernel` module so that we can use it
+as a functor. This is actually quite straightforward -- we simply wrap the
+`start` function in `unikernel.ml` inside some module. For example,
+
+```
+$ cat noop-functor/unikernel.ml
+module Main = struct
+
+  let start =
+    Lwt.return_unit
+
+end
+```
+
+The use of the name `Main` is purely convention -- again, call it something
+completely different if you wish to put C programming firmly behind you!
+
+The only other change is to the corresponding invocation in `config.ml`:
+
+```
+$ cat noop-functor/config.ml
+open Mirage
+
+let main =
+  foreign "Unikernel.Main" job
+
+let () =
+  register "noop" [main]
+```
+
+Note that the string passed to `foreign` is now `"Unikernel.Main"` as we must
+refer to the `Main` module inside the `Unikernel` module. Everything else stays
+the same-- go ahead and try that out by building the unikernel inside
+`noop-functor`.
+
+
+...and now, onwards to unikernels that actually **do** something!
+
 ### Step 1: Hello World!
 
-As a first step, let's build and run the MirageOS "Hello World" unikernel -- this
-will print `hello\nworld\n` 4 times before terminating:
+As a first step, let's build and run the MirageOS "Hello World" unikernel --
+this will print `hello\nworld\n` 4 times before terminating:
 
 ```
 hello
@@ -45,20 +227,16 @@ module Main (C: V1_LWT.CONSOLE) (Time : V1_LWT.TIME) = struct
 end
 ```
 
-**Note**: If you aren't familiar with the Lwt library (and the `>>=` operator it provides),
-you may want to read at least the start of the [Lwt tutorial](tutorial-lwt) first.
-
 To veteran OCaml programmers among you, this might look a little odd: we have a
-`Main` module parameterised by two modules (`C`, of type `CONSOLE`, and
-`Time`, of type `TIME`) that
-contains a method `start` taking a single parameter `c` (an instance of a
-`CONSOLE`) and the ignored parameter `_time` (an instance of a `TIME`).
-This is the basic structure required to make this a MirageOS
-unikernel rather than a standard OCaml POSIX application.
+`Main` module parameterised by two modules (`C`, of type `CONSOLE`, and `Time`,
+of type `TIME`) that contains a method `start` taking a single parameter `c` (an
+instance of a `CONSOLE`) and the ignored parameter `_time` (an instance of a
+`TIME`). This is the basic structure required to make this a MirageOS unikernel
+rather than a standard OCaml POSIX application.
 
-The concrete implementations of `CONSOLE` and `TIME` will be supplied at compile-time,
-depending on the target that you are compiling for. This configuration is stored
-in `config.ml`, so let's take a look:
+The concrete implementations of `CONSOLE` and `TIME` will be supplied at
+compile-time, depending on the target that you are compiling for. This
+configuration is stored in `config.ml`, so let's take a look:
 
 ```
 $ cat console/config.ml
@@ -82,8 +260,8 @@ let () =
 The configuration file is a normal OCaml module that calls `register` to create
 one or more jobs, each of which represent a process (with a start/stop
 lifecycle). Each job most likely depends on some device drivers; all the
-available device drivers are defined in the `Mirage` module (see
-[here](http://mirage.github.io/mirage/)).
+available device drivers are defined in the `Mirage` module
+(see [here](http://mirage.github.io/mirage/)).
 
 In this case, the `main` variable declares that the entry point of the process
 is the `Main` module from the file `unikernel.ml`. The `@->` combinator is used
@@ -150,7 +328,7 @@ $ make
 ```
 
 This builds a UNIX binary called `console` that contains the simple console
-application.  If you are on a multicore machine and want to do parallel builds,
+application. If you are on a multicore machine and want to do parallel builds,
 `export OPAMJOBS=4` (or some other value equal to the number of cores) will do
 the trick.
 
@@ -193,13 +371,12 @@ instead of Unix.
 When you build the Xen version, you'll have a `mir-console.xen` unikernel that
 can be booted as a standalone kernel. You will also see two generated files
 named `console.xl` and `console.xl.in` in the current directory. The
-`console.xl` file is a Xen configuration file with sensible defaults for
-the VM configuration options, intended for quickly trying the unikernel on
-the build machine. The file `console.xl.in` has all the configuration options
-necessary for the VM to boot but has all the references to resources on the
-deployment host replaced by substitutable variables. The `console.xl.in` is
-intended for production use; while `console.xl` is intended for development
-and test.
+`console.xl` file is a Xen configuration file with sensible defaults for the VM
+configuration options, intended for quickly trying the unikernel on the build
+machine. The file `console.xl.in` has all the configuration options necessary
+for the VM to boot but has all the references to resources on the deployment
+host replaced by substitutable variables. The `console.xl.in` is intended for
+production use; while `console.xl` is intended for development and test.
 
 The `console.xl` will look something like this:
 
@@ -261,8 +438,8 @@ explain this subsystem next.
 
 The [block/](https://github.com/mirage/mirage-skeleton/tree/master/block)
 directory in `mirage-skeleton` contains an example of attaching a raw block
-device to your unikernel. The
-[V1.BLOCK](https://github.com/mirage/mirage/blob/1.1.0/types/V1.mli#L134)
+device to your unikernel.
+The [V1.BLOCK](https://github.com/mirage/mirage/blob/1.1.0/types/V1.mli#L134)
 interface signature contains the operations that are possible on a block device:
 primarily reading and writing aligned buffers to a 64-bit offset within the
 device.
@@ -341,10 +518,10 @@ disk = [ 'format=raw, vdev=xvdb, access=rw, target=/Users/djs/djs55/mirage-skele
 ```
 
 Now you just need to boot the VM as before, and you should see the same output
-(after the VM boot preamble) -- but now MirageOS is linked against the Xen
-[block device driver](https://github.com/mirage/mirage-block-xen) and is mapping
-the unikernel's block requests directly through to it, rather than relying on
-the host OS (the Linux or FreeBSD kernel):
+(after the VM boot preamble) -- but now MirageOS is linked against the
+Xen [block device driver](https://github.com/mirage/mirage-block-xen) and is
+mapping the unikernel's block requests directly through to it, rather than
+relying on the host OS (the Linux or FreeBSD kernel):
 
 ```
 [root@st20 block]# xl create -c block_test.xl
@@ -403,11 +580,11 @@ retrieve buffers from string keys. This is essential for many common uses such
 as retrieving configuration data or website HTML and images.
 
 The
-[kv_ro_crunch/](https://github.com/mirage/mirage-skeleton/tree/master/kv_ro_crunch)
-directory in `mirage-skeleton` contains the simplest key/value store example.
-The subdirectory `t/` contains a couple of data files that the unikernel uses.
-Our example `unikernel.ml` reads in the data from one file and compares to the
-other file, printing out `YES` if the values match, and `NO` otherwise.
+[kv_ro_crunch/](https://github.com/mirage/mirage-skeleton/tree/master/kv_ro_crunch) directory
+in `mirage-skeleton` contains the simplest key/value store example. The
+subdirectory `t/` contains a couple of data files that the unikernel uses. Our
+example `unikernel.ml` reads in the data from one file and compares to the other
+file, printing out `YES` if the values match, and `NO` otherwise.
 
 The `config.ml` should look familiar after the earlier block and console
 examples:
@@ -470,12 +647,12 @@ YES!
 
 Of course, this scheme doesn't really scale up to large websites, and we often
 need a more elaborate configuration for larger datasets depending on how we are
-deploying our unikernels (i.e. for development or production). Switch to the
-[kv_ro/](https://github.com/mirage/mirage-skeleton/tree/master/kv_ro) directory,
-which has exactly the same example as before, but with several new configuration
-options: it can generate a block device that contains a FAT filesystem that
-mirror the directory contents, or (when running under Unix) simply proxy calls
-dynamically to the underlying filesystem.
+deploying our unikernels (i.e. for development or production). Switch to
+the [kv_ro/](https://github.com/mirage/mirage-skeleton/tree/master/kv_ro)
+directory, which has exactly the same example as before, but with several new
+configuration options: it can generate a block device that contains a FAT
+filesystem that mirror the directory contents, or (when running under Unix)
+simply proxy calls dynamically to the underlying filesystem.
 
 Since the `config.ml` file is normal OCaml that is executed at build time, all
 of this selection logic is simple enough.
@@ -535,25 +712,25 @@ networking, which has far more knobs attached. There are several ways that we
 might want to configure our networking:
 
 * On Unix, it's convenient to use the standard kernel socket API for developing
-  higher level protocols (such as
-  [HTTP](http://github.com/mirage/ocaml-cohttp)). These run over TCP or UDP and
-  so sockets work just fine.
+  higher level protocols (such
+  as [HTTP](http://github.com/mirage/ocaml-cohttp)). These run over TCP or UDP
+  and so sockets work just fine.
 * When we want finer control over the network stack, or simply to test the OCaml
   networking subsystem, we can use a userspace device facility such as the
   common Unix [tuntap](http://en.wikipedia.org/wiki/TUN/TAP) to parse Ethernet
   frames from userspace. This requires additional configuration to assign IP
   addresses, and possibly configure a network bridge to let the unikernel talk
   to the outside world.
-* Once the unikernel works under Unix with the direct
-  [OCaml TCP/IP stack](https://github.com/mirage/mirage-tcpip), recompiling it
-  under Xen is just a matter of linking in the
-  [Xen netfront](https://github.com/mirage/mirage-net-xen) driver to provide the
-  Ethernet frames directly to the unikernel.
+* Once the unikernel works under Unix with the
+  direct [OCaml TCP/IP stack](https://github.com/mirage/mirage-tcpip),
+  recompiling it under Xen is just a matter of linking in
+  the [Xen netfront](https://github.com/mirage/mirage-net-xen) driver to provide
+  the Ethernet frames directly to the unikernel.
 
 All of this can be manipulated via the `config.ml` file through standard OCaml
 code as before; we use the `NET` environment variable in the example below. The
-example below is config.ml from the
-[stackv4/](https://github.com/mirage/mirage-skeleton/tree/master/stackv4)
+example below is config.ml from
+the [stackv4/](https://github.com/mirage/mirage-skeleton/tree/master/stackv4)
 directory in `mirage-skeleton`.
 
 ```
@@ -575,7 +752,8 @@ driver.
 
 The `net` handler checks to see if it's building for a socket or direct network
 stack. Crucially, both the socket and direct network stacks have a very similar
-modular API which you can see in
+modular API which you can see
+in
 [mirage/types/V1.mli](https://github.com/mirage/mirage/blob/1.1.0/types/V1.mli#L512).
 This lets your applications be parameterized across either backend.
 
@@ -713,10 +891,10 @@ work on pre-Yosemite Mac OSX, but has not been tested on Yosemite where the new
 
 By default, if we do not use DHCP with a `direct` network stack, Mirage will
 configure the stack to use the `tap0` interface with an address of `10.0.0.2`.
-Verify that you have an existing `tap0` interface by reviewing `$ sudo ip
-link show`; if you do not, load the tuntap kernel module (`$ sudo modprobe tun`)
-and create a `tap0` interface owned by you (`$ sudo tunctl -u $USER -t tap0`).
-Bring `tap0` up using `$ sudo ifconfig tap0 10.0.0.1 up`, then:
+Verify that you have an existing `tap0` interface by reviewing `$ sudo ip link
+show`; if you do not, load the tuntap kernel module (`$ sudo modprobe tun`) and
+create a `tap0` interface owned by you (`$ sudo tunctl -u $USER -t tap0`). Bring
+`tap0` up using `$ sudo ifconfig tap0 10.0.0.1 up`, then:
 
 ```
 $ cd stackv4
@@ -816,9 +994,9 @@ vif = [ 'bridge=xenbr0' ]
 This tells Xen to bring up the virtual network interface and add it to the
 `xenbr0` bridge. Depending on the dom0 interface configuration, usually
 specified in `/etc/network/interfaces`, this will be brought up with a static IP
-address or with a DHCP address. For example, in the Mirage Ubuntu 14.04
-[Vagrant VM](https://github.com/mirage/mirage-vagrant-vms/), the following lines
-are uncommented:
+address or with a DHCP address. For example, in the Mirage Ubuntu
+14.04 [Vagrant VM](https://github.com/mirage/mirage-vagrant-vms/), the following
+lines are uncommented:
 
 ```
 (network-script network-bridge)
@@ -837,5 +1015,5 @@ Finally, you can manually inspect the generated `main.ml` file to see what's
 happening under the hood with the functor applications.
 
 Now that we've covered the basics of configuration, block devices and
-networking, let's get the real MirageOS website up and running with a
-[networked application](/wiki/mirage-www).
+networking, let's get the real MirageOS website up and running with
+a [networked application](/wiki/mirage-www).
