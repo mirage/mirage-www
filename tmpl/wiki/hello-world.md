@@ -8,6 +8,9 @@ $ git clone git://github.com/mirage/mirage-skeleton.git
 $ cd mirage-skeleton
 ```
 
+The `mirage-skeleton` repository classifies its examples into three groups.
+This document refers to unikernels in the `tutorial` directory.
+
 **Note**: Before we begin, if you aren't familiar with the Lwt library (and the
 `>>=` operator it provides), you may want to read at least the start of
 the [Lwt tutorial](tutorial-lwt) first.
@@ -19,7 +22,7 @@ let's build a unikernel that simply starts and then exits -- nothing else. The
 code for this is, as you might hope, fairly short. First the unikernel itself:
 
 ```
-$ cat noop/unikernel.ml
+$ cat tutorial/noop/unikernel.ml
 let start =
   Lwt.return_unit
 ```
@@ -34,7 +37,7 @@ point. We do this by writing a `config.ml` file that sits next to our
 something else, the `mirage` tool defaults to `config.ml`):
 
 ```
-$ cat noop/config.ml
+$ cat tutorial/noop/config.ml
 open Mirage
 
 let main =
@@ -67,8 +70,8 @@ case) to be used when we build our unikernel.
 To build our unikernel is then simply a matter of evaluating its configuration:
 
 ```bash
-$ cd noop
-/Users/mort/research/projects/mirage/src/mirage-skeleton/noop
+$ cd tutorial/noop
+/Users/mort/research/projects/mirage/src/mirage-skeleton/tutorial/noop
 $ mirage configure -t unix
 ```
 
@@ -157,7 +160,7 @@ as a functor. This is actually quite straightforward -- we simply wrap the
 `start` function in `unikernel.ml` inside some module. For example,
 
 ```
-$ cat noop-functor/unikernel.ml
+$ cat tutorial/noop-functor/unikernel.ml
 module Main = struct
 
   let start =
@@ -172,7 +175,7 @@ completely different if you wish to put C programming firmly behind you!
 The only other change is to the corresponding invocation in `config.ml`:
 
 ```
-$ cat noop-functor/config.ml
+$ cat tutorial/noop-functor/config.ml
 open Mirage
 
 let main =
@@ -193,17 +196,13 @@ the same-- go ahead and try that out by building the unikernel inside
 ### Step 1: Hello World!
 
 As a first step, let's build and run the MirageOS "Hello World" unikernel --
-this will print `hello\nworld\n` 4 times before terminating:
+this will print a log message with the word `hello` 4 times before terminating:
 
 ```
-hello
-world
-hello
-world
-hello
-world
-hello
-world
+2017-02-08 09:54:44 -01:00: INF [application] hello
+2017-02-08 09:54:45 -01:00: INF [application] hello
+2017-02-08 09:54:46 -01:00: INF [application] hello
+2017-02-08 09:54:47 -01:00: INF [application] hello
 ```
 
 First, let's look at the code:
@@ -212,13 +211,14 @@ First, let's look at the code:
 $ cat hello/unikernel.ml
 open Lwt.Infix
 
-module Main (C: V1_LWT.CONSOLE) (Time : V1_LWT.TIME) = struct
+module Hello (Time : Mirage_time_lwt.S) = struct
 
-  let start c _time =
+  let start pclock =
+
     let rec loop = function
       | 0 -> Lwt.return_unit
       | n ->
-        C.log c (Key_gen.hello ()) >>= fun () ->
+        Logs.info (fun f -> f "hello");
         Time.sleep_ns (Duration.of_sec 1) >>= fun () ->
         loop (n-1)
     in
@@ -228,40 +228,39 @@ end
 ```
 
 To veteran OCaml programmers among you, this might look a little odd: we have a
-`Main` module parameterised by two modules (`C`, of type `CONSOLE`, and `Time`,
-of type `TIME`) that contains a method `start` taking a single parameter `c` (an
-instance of a `CONSOLE`) and the ignored parameter `_time` (an instance of a
-`TIME`). This is the basic structure required to make this a MirageOS unikernel
+`Main` module parameterised a module (`Time`, of type `Mirage_time_lwt.S`) that contains a method `start` taking an ignored parameter `_time` (an instance of a `time`).  This is the basic structure required to make this a MirageOS unikernel
 rather than a standard OCaml POSIX application.
 
-The concrete implementations of `CONSOLE` and `TIME` will be supplied at
+The module type for our `Time` module, `Mirage_time_lwt.S`, is defined in an
+external package [mirage-time](https://github.com/mirage/mirage-time).  The name `S` for "the module type of things like this" is a common OCaml convention (comparable to naming the most-used type in a module `t`).  There are many packages defining module types for use in Mirage.  For ease of discovery, a list of the module types that Mirage knows about is maintained
+in the [`types/`](https://github.com/mirage/mirage/tree/master/types) directory
+of the main MirageOS repository.  The `Mirage_types` module gives abstract definitions that leave some important primitives unspecified; the `Mirage_types_lwt` module contains more concrete definitions for use in programs.  Since you'll find yourself referring back to
+these quite often when building MirageOS applications, it's worth bookmarking
+the [documentation](http://mirage.github.io) for this module.
+
+The concrete implementation of `Time` will be supplied at
 compile-time, depending on the target that you are compiling for. This
 configuration is stored in `config.ml`, so let's take a look:
 
-```ocaml
-$ cat console/config.ml
-open Mirage
+```
+$ cat tutorial/hello/config.ml
 
-let key =
-  let doc = Key.Arg.info ~doc:"How to say hello." ["hello"] in
-  Key.(create "hello" Arg.(opt string "Hello World!" doc))
+open Mirage
 
 let main =
   foreign
-    ~keys:[Key.abstract key]
     ~packages:[package "duration"]
-    "Unikernel.Main" (console @-> time @-> job)
+    "Unikernel.Hello" (time @-> job)
 
 let () =
-  register "console" [main $ default_console $ default_time]
-
+  register "hello" [main $ default_time]
 ```
 
 The configuration file is a normal OCaml module that calls `register` to create
 one or more jobs, each of which represent a process (with a start/stop
 lifecycle). Each job most likely depends on some device drivers; all the
 available device drivers are defined in the `Mirage` module
-(see [here](http://mirage.github.io/mirage/)).
+(see [the Mirage module documentation](http://mirage.github.io/mirage/)).
 
 In this case, the `main` variable declares that the entry point of the process
 is the `Main` module from the file `unikernel.ml`. The `@->` combinator is used
@@ -269,36 +268,28 @@ to add a device driver to the list of functor arguments in the job definition
 (see `unikernel.ml`), and the final value of using this combinator should always
 be a `job` if you intend to register it.
 
-The `foreign` function also takes some additional arguments: `~keys`, the list
-of configuration keys we want to allow the user to specify at configuration or
-build time, and `packages`, a list of additional `opam` packages that should be
-included in the list of build dependencies for the project. For more on
-configuration keys,
-see
-[blog/introducing-functoria](the blog post introducing the configuration language used by MirageOS, which is known as Functoria).
+The `foreign` function also takes some additional arguments: `~keys`, the list of
+configuration keys we want to allow the user to specify at configuration or build time, and
+`packages`, a list of additional `opam` packages that should be included in the list of
+build dependencies for the project.  We'll talk more about configuration keys in the next example.
 
 Notice that we refer to the module name as a string (`"Unikernel.Main"`) when
-calling `foreign`, instead of directly as an OCaml value. The `mirage`
-command-line tool evaluates this configuration file at build-time and outputs a
-`main.ml` that has the concrete values filled in for you, with the exact modules
-varying by which backend you selected (e.g. Unix or Xen).
+calling `foreign`, instead of directly as
+an OCaml value. The `mirage` command-line tool evaluates this configuration file
+at build-time and outputs a `main.ml` that has the concrete values filled in for
+you, with the exact modules varying by which backend you selected (e.g. Unix or
+Xen).
 
-MirageOS mirrors the unikernel model on UNIX as far as possible: your
-application is built as a unikernel which needs to be instantiated and run
-whether on UNIX or on Xen. When your unikernel is run, it starts much as a VM on
-Xen does -- and so must be passed references to devices such as the console,
-network interfaces and block devices on startup.
+MirageOS mirrors the unikernel model on UNIX as far as possible: your application is
+built as a unikernel which needs to be instantiated and run whether on UNIX or
+on Xen. When your unikernel is run, it starts much as a VM on Xen does -- and so
+must be passed references to devices such as the console, network interfaces and
+block devices on startup.
 
-In this case, this simple `hello world` example requires a console for output
-and some notion of time, so we register a single `Job` consisting of the
-`Hello.Main` module (and, implicitly its `start` function) and passing it
-references to a console and a timer.
-
-You can find the module signatures of all the device drivers (such as `CONSOLE`)
-in the [`types/`](https://github.com/mirage/mirage/tree/master/types) directory
-of the main MirageOS repository. Since you'll find yourself referring back to
-these quite often when building MirageOS applications, it's worth bookmarking
-the [documentation](http://mirage.github.io) for this module.
+In this case, this simple `hello world` example requires some notion of time, so we register a single `Job` consisting of
+the `Hello.Main` module
+(and, implicitly its `start` function) and passing it references to a
+timer.
 
 #### Building a Unix binary
 
@@ -332,101 +323,36 @@ application. If you are on a multicore machine and want to do parallel builds,
 the trick.
 
 Finally to run your application, as it is a standard Unix binary, simply run it
-directly and observe the exciting console commands that our `for` loop is
+directly and observe the exciting log messages that our `for` loop is
 generating:
 
 ```
-$ ./console
+$ ./hello
 ```
 
-<br />
-<div class="panel callout">
-  <i class="fa fa-info fa-3x pull-left"> </i>
-  <p>
-    Note that when you execute <code>mirage configure -t xen</code>, the target
-    unikernel's <code>target.xl</code> and other auto-generated configuration
-    files are regenerated, overwriting any modifications you may have made. If
-    you edit any of these, we suggest renaming and/or committing them to source
-    control to avoid it being overwritten subsequently.
-  </p>
-</div>
+#### Building for Another Backend
 
-#### Building a Xen unikernel
-
-If you are on a 64-bit Linux system able to build Xen images, simply change
-`-t unix` for `-t xen` to build a Xen VM:
+To make a unikernel that will use [solo5](https://github.com/solo5/solo5) to run on KVM, re-run `mirage configure` and ask for the `ukvm` target instead of `unix`.
 
 ```
-$ mirage configure -t xen
+$ mirage configure -t ukvm
+$ make depend
 $ make
 ```
 
-*Everything* else remains the same! The `main.ml` and `Makefile` generated
-differ significantly, but since the source code of your application was
-parameterised over the `CONSOLE` type, it doesn't matter-- you do not need to
-make any changes for your code to run when linked against the Xen console driver
+*Everything* else remains the same! The set of dependencies required, the `main.ml`, and the `Makefile` differ significantly, but since the source code of your application was
+parameterised over the `Time` type, it doesn't matter-- you do not need to
+make any changes for your code to run when linked against the solo5 console driver
 instead of Unix.
 
-When you build the Xen version, you'll have a `mir-console.xen` unikernel that
-can be booted as a standalone kernel. You will also see two generated files
-named `console.xl` and `console.xl.in` in the current directory. The
-`console.xl` file is a Xen configuration file with sensible defaults for the VM
-configuration options, intended for quickly trying the unikernel on the build
-machine. The file `console.xl.in` has all the configuration options necessary
-for the VM to boot but has all the references to resources on the deployment
-host replaced by substitutable variables. The `console.xl.in` is intended for
-production use; while `console.xl` is intended for development and test.
-
-The `console.xl` will look something like this:
-
+When you build the `ukvm` version, you'll see some new artifacts: a `ukvm-bin` binary and a file called `hello.ukvm`.  `hello.ukvm` is the unikernel, and `ukvm-bin` is a dynamically-generated program that will pass it runtime information.  To try running `hello.ukvm`, pass it as an argument to `ukvm-bin`:
 
 ```
-# Generated by Mirage (Tue, 14 Jul 2015 11:17:40 GMT).
-
-name = 'console'
-kernel = '/home/vagrant/mirage-skeleton/console/mir-console.xen'
-builder = 'linux'
-memory = 256
-on_crash = 'preserve'
-
-disk = [  ]
-
-# if your system uses openvswitch then either edit /etc/xen/xl.conf and set
-#     vif.default.script="vif-openvswitch"
-# or add "script=vif-openvswitch," before the "bridge=" below:
-vif = [ 'bridge=xenbr0' ]
+./ukvm-bin hello.ukvm
 ```
 
-`xl` replaced `xm` as the default in Xen 4.2, with `xm` being removed completely
-in Xen 4.5. If you find that you're running the `xend` daemon, then you should
-use the `xm` command. Edit this to customise the VM name, memory or the network
-bridge and then run it:
 
-```bash
-$ sudo xl create -c console.xl
-Parsing config from console.xl
-MirageOS booting....
-Initialising timer interface
-Initialising console ... done.
-hello
-world
-hello
-world
-hello
-world
-hello
-world
-$
-```
-
-As you can see, after some initial boot messages have been displayed as Xen
-boots the VM, you see the same output on the Xen console as you did on the UNIX
-version you ran earlier. If you need more help, or would like to see how to boot
-your Xen VM on Amazon's EC2, [click here](/wiki/xen-boot). Finally if you are
-using an ARM processor, such as the CubieBoard, you should follow extra
-ARM-specific documentation found
-[here](http://openmirage.org/blog/introducing-xen-minios-arm).
-
+#### Configuration Keys
 
 ### Step 2: Getting a block device
 
