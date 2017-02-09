@@ -371,6 +371,8 @@ Solo5: solo5_app_main() returned with 0
 
 We get some additional output from the initialization of the unikernel and its successful boot, then we see our expected output, and solo5's report of the application's successful completion.
 
+Instead of the output above, you may get an error message if `ukvm-bin` isn't able to access `/dev/kvm`.  If KVM isn't available on your machine, you may be interested in building and running unikernels via [the `virtio` target](https://github.com/solo5/solo5#running-solo5-unikernels-directly).
+
 #### Configuration Keys
 
 It's very common to pass additional runtime information to a program via command-line options or arguments.  But a unikernel doesn't have access to a command line, so how can we pass it runtime information?
@@ -484,10 +486,10 @@ explain this subsystem next.
 
 #### Sector-addressible block devices
 
-The [block/](https://github.com/mirage/mirage-skeleton/tree/master/block)
+The [device-usage/block/](https://github.com/mirage/mirage-skeleton/tree/master/device-usage/block)
 directory in `mirage-skeleton` contains an example of attaching a raw block
 device to your unikernel.
-The [V1.BLOCK](https://github.com/mirage/mirage/blob/1.1.0/types/V1.mli#L134)
+The [Mirage_block_lwt](https://mirage.github.io/mirage-block-lwt)
 interface signature contains the operations that are possible on a block device:
 primarily reading and writing aligned buffers to a 64-bit offset within the
 device.
