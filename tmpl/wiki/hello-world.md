@@ -296,7 +296,7 @@ We invoke all this by configuring, building and finally running the resulting
 unikernel under Unix first.
 
 ```
-$ cd console
+$ cd tutorial/hello
 $ mirage configure -t unix
 ```
 
@@ -347,11 +347,134 @@ instead of Unix.
 When you build the `ukvm` version, you'll see some new artifacts: a `ukvm-bin` binary and a file called `hello.ukvm`.  `hello.ukvm` is the unikernel, and `ukvm-bin` is a dynamically-generated program that will pass it runtime information.  To try running `hello.ukvm`, pass it as an argument to `ukvm-bin`:
 
 ```
-./ukvm-bin hello.ukvm
+$ ./ukvm-bin hello.ukvm
+            |      ___|
+  __|  _ \  |  _ \ __ \
+\__ \ (   | | (   |  ) |
+____/\___/ _|\___/____/
+Solo5: Memory map: 512 MB addressable:
+Solo5:     unused @ (0x0 - 0xfffff)
+Solo5:       text @ (0x100000 - 0x1d8fff)
+Solo5:     rodata @ (0x1d9000 - 0x20bfff)
+Solo5:       data @ (0x20c000 - 0x2b3fff)
+Solo5:       heap >= 0x2b4000 < stack < 0x20000000
+Solo5: Clock source: KVM paravirtualized clock
+Solo5: new bindings
+STUB: getenv() called
+2017-02-08 23:58:20 -00:00: INF [application] hello
+2017-02-08 23:58:21 -00:00: INF [application] hello
+2017-02-08 23:58:22 -00:00: INF [application] hello
+2017-02-08 23:58:23 -00:00: INF [application] hello
+Solo5: solo5_app_main() returned with 0
 ```
 
+We get some additional output from the initialization of the unikernel and its successful boot, then we see our expected output, and solo5's report of the application's successful completion.
 
 #### Configuration Keys
+
+It's very common to pass additional runtime information to a program via command-line options or arguments.  But a unikernel doesn't have access to a command line, so how can we pass it runtime information?
+
+Mirage provides a nice abstraction for this in the form of configuration keys.  The `Mirage` module provides a module `Key`, which contains functions for creating and using configuration keys.  For an example, let's have a look at `hello-key`:
+
+```
+$ cd tutorial/hello-key
+$ cat config.ml
+open Mirage
+
+let key =
+  let doc = Key.Arg.info ~doc:"How to say hello." ["hello"] in
+  Key.(create "hello" Arg.(opt string "Hello World!" doc))
+
+let main =
+  foreign
+    ~keys:[Key.abstract key]
+    ~packages:[package "duration"]
+    "Unikernel.Hello" (time @-> job)
+
+let () =
+  register "hello" [main $ default_time]
+```
+
+We create a `key` with `Key.create` which is an optional bit of configuration.  It will default to "Hello World!" if unspecified.  This particular key happens to be of type `string`, so no conversion will be required, but it's possible to ask for more exotic types in the call to `Arg` -- see [the Functoria Key.Arg module documentation](http://mirage.github.io/functoria/Functoria_key.Arg.html) for more details.
+
+Once we've created our configuration key, we specify that we'd like it used in the unikernel by passing it to `foreign` in the `keys` parameter.
+
+Let's configure the example for UNIX and build it:
+
+```
+$ mirage configure -t unix
+$ make depend
+$ make
+```
+
+When the target is Unix, Mirage will use an implementation for configuration keys that looks at the contents of `OS.Env.argv` -- in other words, it looks directly at the command line that was used to invoke the program.  If we call `hello` with no arguments, the default value is used:
+
+```
+./hello
+2017-02-08 18:18:23 -03:00: INF [application] Hello World!
+2017-02-08 18:18:24 -03:00: INF [application] Hello World!
+2017-02-08 18:18:25 -03:00: INF [application] Hello World!
+2017-02-08 18:18:26 -03:00: INF [application] Hello World!
+```
+
+but we can ask for something else:
+
+```
+./hello --hello="Bonjour!"
+$ ./hello --hello="Bonjour!"
+2017-02-08 18:20:46 +09:00: INF [application] Bonjour!
+2017-02-08 18:20:47 +09:00: INF [application] Bonjour!
+2017-02-08 18:20:48 +09:00: INF [application] Bonjour!
+2017-02-08 18:20:49 +09:00: INF [application] Bonjour!
+```
+
+When the target is Unix, it's also possible to get useful hints by calling the generated program with `--help`.
+
+Many configuration keys can be specified either at configuration time or at run time.  `mirage configure` will allow us to change the default value for `hello`, while retaining the ability to override it at runtime:
+
+```
+$ mirage configure -t unix --hello="Hola!"
+$ make depend
+$ make
+$ ./hello
+2017-02-08 18:30:30 +06:00: INF [application] Hola!
+2017-02-08 18:30:31 +06:00: INF [application] Hola!
+2017-02-08 18:30:32 +06:00: INF [application] Hola!
+2017-02-08 18:30:33 +06:00: INF [application] Hola!
+$ ./hello --hello="Hi!"
+2017-02-08 18:30:54 +06:00: INF [application] Hi!
+2017-02-08 18:30:55 +06:00: INF [application] Hi!
+2017-02-08 18:30:56 +06:00: INF [application] Hi!
+2017-02-08 18:30:57 +06:00: INF [application] Hi!
+```
+
+When configured for non-Unix backends, other mechanisms are used to pass the runtime information to the unikernel.  `ukvm-bin`, which we used to run `hello.ukvm` in the non-keyed example, will pass information given after the kernel when invoked:
+
+```
+$ cd tutorial/hello-key
+$ mirage configure -t ukvm
+$ make depend
+$ make
+$ ./ukvm-bin hello.ukvm --hello="Hola!"
+            |      ___|
+  __|  _ \  |  _ \ __ \
+\__ \ (   | | (   |  ) |
+____/\___/ _|\___/____/
+Solo5: Memory map: 512 MB addressable:
+Solo5:     unused @ (0x0 - 0xfffff)
+Solo5:       text @ (0x100000 - 0x1d8fff)
+Solo5:     rodata @ (0x1d9000 - 0x20bfff)
+Solo5:       data @ (0x20c000 - 0x2b3fff)
+Solo5:       heap >= 0x2b4000 < stack < 0x20000000
+Solo5: Clock source: KVM paravirtualized clock
+Solo5: new bindings
+STUB: getenv() called
+2017-02-09 00:26:00 -00:00: INF [application] Hola!
+2017-02-09 00:26:01 -00:00: INF [application] Hola!
+2017-02-09 00:26:02 -00:00: INF [application] Hola!
+2017-02-09 00:26:03 -00:00: INF [application] Hola!
+Solo5: solo5_app_main() returned with 0
+```
 
 ### Step 2: Getting a block device
 
