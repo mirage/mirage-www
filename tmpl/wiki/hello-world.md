@@ -15,6 +15,10 @@ This document refers to unikernels in the `tutorial` directory.
 `>>=` operator it provides), you may want to read at least the start of
 the [Lwt tutorial](tutorial-lwt) first.
 
+**Additional note**: Throughout the tutorial, we'll use `mirage configure -t unix`
+to demonstrate building MirageOS applications.  If you're using a Mac OS X
+machine, you should use `mirage configure -t macosx` instead.
+
 ### Step 0: Doing Nothing!
 
 Before we try and do anything complicated, let's do nothing briefly. That is,
@@ -624,203 +628,133 @@ retrieve buffers from string keys. This is essential for many common uses such
 as retrieving configuration data or website HTML and images.
 
 The
-[kv_ro_crunch/](https://github.com/mirage/mirage-skeleton/tree/master/kv_ro_crunch) directory
-in `mirage-skeleton` contains the simplest key/value store example. The
-subdirectory `t/` contains a couple of data files that the unikernel uses. Our
-example `unikernel.ml` reads in the data from one file and compares to the other
-file, printing out `YES` if the values match, and `NO` otherwise.
+[device-usage/kv_ro](https://github.com/mirage/mirage-skeleton/tree/master/device-usage/kv_ro) directory
+in `mirage-skeleton` contains a simple key/value store example. The
+subdirectory `t/` contains a few files, one of which the unikernel
+will compare against a known constant.
 
-The `config.ml` should look familiar after the earlier block and console
+The `config.ml` might look familiar after the earlier block and console
 examples:
 
 ```
 open Mirage
 
-let main =
-  foreign "Unikernel.Main" (console @-> kv_ro @-> kv_ro @-> job)
+let disk1 = generic_kv_ro "t"
 
-let disk1 = crunch "t"
-let disk2 = crunch "t"
+let main =
+  foreign
+    "Unikernel.Main" (kv_ro @-> job)
 
 let () =
-  register "kv_ro" [main $ default_console $ disk1 $ disk2]
+  register "kv_ro" [main $ disk]
 ```
 
-We construct the `kv_ro` devices (`disk1` and `disk2`) by using the `crunch`
-function. This takes a single directory as its argument, and converts that
+We construct the `kv_ro` device `disk` by using the `generic_kv_ro`
+function. This takes a single directory as its argument, and will do its best
+to provide the content of that directory to the unikernel by whatever means
+make sense given the target provided at configuration time -- this might be an
+implementation that calls functions from OCaml's `Unix` module, or a function
+that transforms an
 entire directory into a static ML file that can respond with the file contents
 directly. This removes the need to have an external block device entirely and is
 very convenient indeed for small files.
 
-Build the example and run it in the usual way under either Unix or Xen. Because
-this no longer needs an external block device, you can run it under Xen without
-having to edit the `xl` configuration file at all. You can read the generated ML
-file by looking at the `static1.ml` file in your build tree.
-
-Unix:
+Using `generic_kv_ro` in your `config.ml` causes to Mirage to automatically create a
+configuration key, `kv_ro`, which you can use to request a specific implementation
+of the key-value store's implementation.  To see documentation, try:
 
 ```
-$ cd kv_ro_crunch
+$ cd device-usage/kv_ro
+$ mirage help configure
+```
+
+Under the "UNIKERNEL PARAMETERS" section, you should see:
+
+```
+       --kv_ro=KV_RO (absent=crunch)
+           Use a fat, archive, crunch or direct pass-through implementation
+           for the unikernel.
+```
+
+More documentation is available at [the `Mirage` module documentation for generic_kv_ro](http://mirage.github.io/mirage/Mirage.html#VALgeneric_kv_ro).
+
+Let's try a few different kinds of key-value implementations.  First, we'll build a Unix version.  If we don't specify which kind of `kv_ro` we want, we'll get a `crunch` implementation, the contents of which we can see at `static1.ml`:
+
+```
+$ cd device-usage/kv_ro
 $ mirage configure -t unix
+$ make depend
 $ make
 $ less static1.ml # the generated filesystem
-$ ./mir-kv_ro
+$ ./kv_ro
 ```
 
-Xen:
+We can use the `direct` implementation with the Unix target as well:
 
 ```
-$ mirage configure -t xen
+$ cd device-usage/kv_ro
+$ mirage configure -t unix --kv_ro=direct
+$ make depend
 $ make
-$ sudo xl create -c kv_ro.xl
-Parsing config from kv_ro.xl
-MirageOS booting....
-Initialising timer interface
-Initialising console ... done.
-YES!
-YES!
-YES!
-YES!
-YES!
-YES!
-YES!
-YES!
-YES!
-YES!
+$ ./kv_ro
 ```
 
-Of course, this scheme doesn't really scale up to large websites, and we often
-need a more elaborate configuration for larger datasets depending on how we are
-deploying our unikernels (i.e. for development or production). Switch to
-the [kv_ro/](https://github.com/mirage/mirage-skeleton/tree/master/kv_ro)
-directory, which has exactly the same example as before, but with several new
-configuration options: it can generate a block device that contains a FAT
-filesystem that mirror the directory contents, or (when running under Unix)
-simply proxy calls dynamically to the underlying filesystem.
-
-Since the `config.ml` file is normal OCaml that is executed at build time, all
-of this selection logic is simple enough.
-
-```
-open Mirage
-
-let disk = generic_kv_ro "t"
-
-let main =
-  foreign "Unikernel.Main" (console @-> kv_ro @-> kv_ro @-> job)
-
-let () =
-  register "kv_ro" [main $ default_console $ disk $ disk]
-```
-
-This example is controlled by setting the `FS` environment variable at build
-time. If you set it to `fat`, then the configuration tool will generate the
-appropriate settings for external filesystem access.
-
-On OSX:
-
-```
-$ mirage configure -t unix --kv_ro fat
-$ ./make-fat1-image.sh
-$ file fat1.img
-fat1.img: x86 boot sector, code offset 0x0, OEM-ID "ocamlfat",
-sectors/cluster 4, FAT  1, root entries 512, Media descriptor 0xf8,
-sectors/FAT 1, sectors 49 (volumes > 32 MB) , dos < 4.0 BootSector (0x0)
-```
-
-or, on Linux:
-
-```
-$ mirage configure -t unix --kv_ro fat
-$ ./make-fat1-image.sh
-$ file fat1.img
-fat1.img: x86 boot sector
-```
-
-However, notice that the definition of `disk` now checks to see if the build is
-happening on Unix or Xen when crunch mode is requested. If the build is Xen,
-then a statically linked filesystem is used. On Unix however, the overhead of
-building this can be removed by simply passing through to the underlying
-filesystem, which is done via the `direct_kv_ro` implementation.
+You may have noticed that, unlike with our `hello_key` example, the `kv_ro` key
+can't be specified at runtime -- it's only understood as an argument to `mirage configure`.  This is because the `kv_ro` implementation we choose influences the set of dependencies that are assembled and baked into the final product.  If we choose `direct`, we'll get a different set of software than if we choose `crunch` -- in either case, no code that isn't required will be included in the final product.
 
 You should now be seeing the power of the MirageOS configuration tool: we have
 built several applications that use fairly complex concepts such as filesystems
 and block devices that are independent of the implementations (by virtue of our
 application logic being a functor), and then are able to assemble several
-combinations of unikernels via relatively simple configuration files.
+combinations of unikernels via relatively simple configuration files and options
+passed at compile-time and runtime.
 
 ### Step 4: Networking
 
-Block devices don't require a huge amount of configuration, but now we move onto
-networking, which has far more knobs attached. There are several ways that we
-might want to configure our networking:
+There are several ways that we might want to configure our network for a Mirage
+application:
 
 * On Unix, it's convenient to use the standard kernel socket API for developing
   higher level protocols (such
   as [HTTP](http://github.com/mirage/ocaml-cohttp)). These run over TCP or UDP
   and so sockets work just fine.
-* When we want finer control over the network stack, or simply to test the OCaml
-  networking subsystem, we can use a userspace device facility such as the
+* When we want finer control over the network stack, or simply to test the fully-OCaml
+  network implementation , we can use a userspace device facility such as the
   common Unix [tuntap](http://en.wikipedia.org/wiki/TUN/TAP) to parse Ethernet
   frames from userspace. This requires additional configuration to assign IP
   addresses, and possibly configure a network bridge to let the unikernel talk
   to the outside world.
 * Once the unikernel works under Unix with the
   direct [OCaml TCP/IP stack](https://github.com/mirage/mirage-tcpip),
-  recompiling it under Xen is just a matter of linking in
-  the [Xen netfront](https://github.com/mirage/mirage-net-xen) driver to provide
-  the Ethernet frames directly to the unikernel.
+  recompiling it for a unikernel target like `xen`, `ukvm`, or `virtio` shouldn't
+  result in a change in behavior.
 
-All of this can be manipulated via the `config.ml` file through standard OCaml
-code as before; we use the `NET` environment variable in the example below. The
-example below is config.ml from
-the [stackv4/](https://github.com/mirage/mirage-skeleton/tree/master/stackv4)
-directory in `mirage-skeleton`.
+All of this can be manipulated via command-line arguments or environment variables,
+just as we configured the key-value store in the previous example.  The example in
+the `device-usage/network` directory of `mirage-skeleton` is illustrative:
 
 ```
+
 open Mirage
 
-let handler = foreign "Unikernel.Main" (console @-> stackv4 @-> job)
+let port =
+  let doc = Key.Arg.info ~doc:"The TCP port on which to listen for incoming connections." ["port"] in
+  Key.(create "port" Arg.(opt int 8080 doc))
 
-let stack = generic_stackv4 default_console tap0
+let main = foreign ~keys:[Key.abstract port] "Unikernel.Main" (stackv4 @-> job)
+
+let stack = generic_stackv4 default_network
 
 let () =
-  register "stackv4" [handler $ default_console $ stack]
+  register "network" [
+    main $ stack
+  ]
 ```
 
-This configuration shows how composable the network stack subsystem is: the
-application can be configured at compile-time to either listen on a socket port
-(using the Linux kernel) *or* use tuntap directly -- the application code
-remains the same. The definition of `main` just adds a new `stackv4` device
-driver.
+We have a custom configuration key defining which TCP port to listen for connections on.
+The network device is derived from `default_network`, a function provided by Mirage which will choose a reasonable default based on the target the user chooses to pass to `mirage configure` - just like the reasonable default provided by `generic_kv_ro` in the previous example.  
 
-The `net` handler checks to see if it's building for a socket or direct network
-stack. Crucially, both the socket and direct network stacks have a very similar
-modular API which you can see
-in
-[mirage/types/V1.mli](https://github.com/mirage/mirage/blob/1.1.0/types/V1.mli#L512).
-This lets your applications be parameterized across either backend.
-
-We then define the `dhcp` variable to configure the network stack to either use
-DHCP or using the "default" IPv4 address (for convenience, MirageOS assigns a
-default of `10.0.0.2` in this case; this is of course overridden for production
-deployments). The definition of `stack` then uses `dhcp` and `net` accordingly
-to set up the networking stack.
-
-
-<br />
-<div class="panel callout">
-  <i class="fa fa-info fa-3x pull-left"> </i>
-  <p>
-    You will have noticed by this stage that <code>mirage configure</code>
-    invokes OPAM to install any libraries that it needs. If your application
-    needs some extra packages, you can use the optional <code>~packages</code>
-    and <code>~libraries</code> arguments to <code>foreign</code> to add the
-    extra OPAM packages and ocamlfind libraries. For example, you could modify
-    the code above to add an <a
-    href='https://github.com/mirage/mirage-http'>HTTP library</a>.
-  </p>
-</div>
+`generic_stackv4` attempts to build a sensible network stack on top of the physical interface given by `default_network`.  There are quite a few configuration keys exposed when `generic_stackv4` is given related to networking configuration -- for a full list, try `mirage help configure` in the `device-usage/network` directory.
 
 #### Unix / Socket networking
 
@@ -828,132 +762,90 @@ Let's get the network stack compiling using the standard Unix sockets APIs
 first.
 
 ```
-$ cd stackv4
+$ cd device-usage/network
 $ mirage configure -t unix --net socket
+$ make depend
 $ make
-$ sudo ./mir-stackv4
-Manager: connect
-Manager: configuring
-Manager: socket config currently ignored (TODO)
-IP address: 0.0.0.0
-
+$ ./network
 ```
 
-This Unix application is now listening simultaneously on 53/UDP and 8080/TCP,
-and will print to the console information about data received. Let's try, using
+This Unix application is now listening on TCP port 8080,
+and will print to the console information about data received.
+Let's try talking to it using
 the commonly available _netcat_ `nc(1)` utility. From a different console
 execute:
 
 ```
-$ echo -n hello udp world | nc -unw1 127.0.0.1 53
-[ 1 sec delay ]
 $ echo -n hello tcp world | nc -nw1 127.0.0.1 8080
 ```
 
-On the first console you should now see (each line in red, green and finally
-yellow respectively if your console supports it):
+You should see log messages documenting your connection from 127.0.0.1
+in the console running `./network`.  You may have noticed that some
+information that you may have expected to see after looking at `unikernel.ml`
+isn't being output.  That's because we haven't specified the log level for
+`./network`, and it defaults to `info`.  Some of the output for this application
+is sent with the log level set to `debug`, so to see it, we need to run `./network`
+with a higher log level for all logs:
 
 ```
-UDP 127.0.0.1.59406 > 0.0.0.0.53: "hello udp world"
-TCP 127.0.0.1.50997 > _.8080
-read: 15 "hello tcp world"
+$ ./network -l "*:debug"
+```
+
+The program will then output the debug-level logs, which include the content of any messages it reads.  Here's an example of what you might see:
+
+```
+$ ./network -l "*:debug"
+2017-02-10 17:23:24 +02:00: INF [tcpip-stack-socket] Manager: connect
+2017-02-10 17:23:24 +02:00: INF [tcpip-stack-socket] Manager: configuring
+2017-02-10 17:23:27 +02:00: INF [application] new tcp connection from IP 127.0.0.1 on port 36358
+2017-02-10 17:23:27 +02:00: DBG [application] read: 15 bytes:
+hello tcp world
 ```
 
 #### Unix / MirageOS Stack with DHCP
 
-Next, let's try using the direct MirageOS network stack. On a pre-Yosemite Mac,
-be sure to install the [tuntap](http://tuntaposx.sourceforge.net/) kernel module
-before trying this.
+Next, let's try using the direct MirageOS network stack.  It will be necessary to run these programs with `sudo` or as the root user, as they need direct access to a network device.  We won't be able to contact them via the loopback interface on `127.0.0.1` either -- the stack will need to either obtain IP address information via DHCP, or it can be configured directly via the `--ipv4` configuration key.
 
-Assuming you've got a DHCP server running:
-
+To configure via DHCP:
 
 ```
-$ cd stackv4
+$ cd device-usage/network 
 $ mirage configure -t unix --dhcp true --net direct
+$ make depend
 $ make
-$ sudo ./mir-stackv4
-Netif: connect unknown
-Manager: connect
-Manager: configuring
-DHCP: start discovery
-
-Sending DHCP broadcast (length 552)
-DHCP: start discovery
-
-Sending DHCP broadcast (length 552)
-DHCP response:
-input ciaddr 0.0.0.0 yiaddr 192.168.64.5
-siaddr 192.168.64.1 giaddr 0.0.0.0
-chaddr f2edd241cf3200000000000000000000 sname greyjay.mac.cl.cam.ac.uk file
-DHCP: offer received: 192.168.64.5
-DHCP options: Offer : DNS servers(192.168.64.1), Routers(192.168.64.1), Subnet mask(255.255.255.0), Lease time(85536), Server identifer(192.168.64.1)
-Sending DHCP broadcast (length 552)
-DHCP response:
-input ciaddr 0.0.0.0 yiaddr 192.168.64.5
-siaddr 192.168.64.1 giaddr 0.0.0.0
-chaddr f2edd241cf3200000000000000000000 sname greyjay.mac.cl.cam.ac.uk file
-DHCP: offer received
-IPv4: 192.168.64.5
-Netmask: 255.255.255.0
-Gateways: [192.168.64.1]
-ARP: sending gratuitous from 192.168.64.5
-DHCP offer received and bound to 192.168.64.5 nm 255.255.255.0 gw [192.168.64.1]
-Manager: configuration done
-IP address: 192.168.64.5
-
+$ sudo ./network
 ```
 
-The application starts up, issues a DHCP request and (eventually) receives a
-response allocating an address -- in this case, `192.168.64.5`. Using that
-address we can then trigger the application logic with some network input from
-`nc(1)` in a separate terminal as before:
-
-
-```
-$ echo -n hello udp world | nc -unw1 192.168.64.5 53
-$ echo -n hello tcp world | nc -nw1 192.168.64.5 8080
-```
-
-The original terminal reports the ARP transactions invoked by the stack, and
-then reports the input received over UDP and TCP as previously:
-
-```
-ARP responding to: who-has 192.168.64.5?
-UDP 192.168.64.1.61367 > 192.168.64.5.53: "hello udp world"
-ARP: transmitting probe -> 192.168.64.1
-ARP: updating 192.168.64.1 -> 12:dd:b1:3a:68:64
-TCP 192.168.64.1.51631 > _.8080
-read: 15 "hello tcp world"
-```
+Hopefully, the application will successfully receive its network configuration.
+Once the program has completed the lease transaction, it will log the configuration
+information, and you'll be able to contact it as before via its own IP.
 
 #### Unix / MirageOS Stack with static IP addresses
 
-__N.B.__ _This is described below on Linux for Ubuntu 14.04. It was known to
-work on pre-Yosemite Mac OSX, but has not been tested on Yosemite where the new
-`vmnet` framework replaces `tuntap`._
-
 By default, if we do not use DHCP with a `direct` network stack, Mirage will
-configure the stack to use the `tap0` interface with an address of `10.0.0.2`.
+configure the stack to use an address of `10.0.0.2`.  You can specify a different address
+with the `--ipv4` configuration key.  Depending on whether you've
+configured with `-t macosx` or `-t unix`, the logic for contacting the application
+from another terminal will be different.
+
+For unix:
 Verify that you have an existing `tap0` interface by reviewing `$ sudo ip link
 show`; if you do not, load the tuntap kernel module (`$ sudo modprobe tun`) and
 create a `tap0` interface owned by you (`$ sudo tunctl -u $USER -t tap0`). Bring
 `tap0` up using `$ sudo ifconfig tap0 10.0.0.1 up`, then:
 
 ```
-$ cd stackv4
+$ cd device-usage/network
 $ mirage configure -t unix --dhcp false --net direct
+$ make depend
 $ make
-$ ./mir-stackv4
-Netif: plugging into tap0 with mac c2:9d:56:19:d7:2c
-Netif: connect tap0
-Manager: connect
-Manager: configuring
-Manager: Interface to 10.0.0.2 nm 255.255.255.0 gw [10.0.0.1]
+$ sudo ./network
+```
 
-ARP: sending gratuitous from 10.0.0.2
-Manager: configuration done
-IP address: 10.0.0.2
+For macosx:
+
+```
+(* TODO! *)
 ```
 
 Now you should be able to ping the unikernel's interface:
@@ -970,94 +862,39 @@ PING 10.0.0.2 (10.0.0.2) 56(84) bytes of data.
 rtt min/avg/max/mdev = 0.291/0.395/0.527/0.098 ms
 ```
 
-You will see the ARP request being handled in the unikernel's terminal:
-
-```
-ARP responding to: who-has 10.0.0.2?
-ARP: transmitting probe -> 10.0.0.1
-ARP: updating 10.0.0.1 -> 6a:a8:fe:89:3c:67
-```
-
 Finally, you can then execute the same `nc(1)` commands as before (modulo the
 target IP address of course!) to interact with the running unikernel:
 
 ```
-$ echo -n hello udp world | nc -unw1 10.0.0.2 53
 $ echo -n hello tcp world | nc -nw1 10.0.0.2 8080
 ```
 
 And you will see the same output in the unikernel's terminal:
 
 ```
-ARP responding to: who-has 10.0.0.2?
-UDP 10.0.0.1.58784 > 10.0.0.2.53: "hello udp world"
-ARP: transmitting probe -> 10.0.0.1
-ARP: updating 10.0.0.1 -> ee:85:43:d5:d9:4d
-TCP 10.0.0.1.47329 > _.8080
 read: 15 "hello tcp world"
-ARP: timeout 10.0.0.1
 ```
 
-(The last line will be displayed after a delay dependent on the ARP timeout
-setting.)
+#### Ukvm
 
-#### Xen
-
-At this point, recompiling a Xen unikernel is pretty straightforward. The
-configuration file already disables the socket-based job if a Xen compilation is
-detected, leaving just the OCaml TCP/IP stack.
+Let's make a network-enabled unikernel!  The IP configuration should be similar to what you've set up in the previous examples, but instead of `-t unix` or `-t macosx`, build with a `ukvm` target.  If you need to specify a static IP address, remember that it should go at the end of the command in which you invoke `ukvm-bin`, just like the argument to `hello` in the `hello-key` example.
 
 ```
-$ mirage configure -t xen --dhcp true
+$ cd device-usage/network
+$ mirage configure -t ukvm --dhcp true # for environments where DHCP works
+$ make depend
 $ make
+$ ./ukvm-bin network.ukvm
 ```
 
-You will need to configure an appropriate Xen
-[network bridge](http://wiki.xen.org/wiki/Xen_Networking) to connect to this.
-The `mirage configure` command will guess the name of the bridge or openvswitch
-to use based on the configuration of the build host. The generated `stackv4.xl`
-will look like this:
+### What's Next?
 
-```
-# Generated by Mirage (Tue, 11 Aug 2015 21:05:57 GMT).
+There are a number of other examples in `device-usage/` which show some simple invocations
+of various devices like consoles and clocks.  You may also be
+interested in the `applications/` directory of the `mirage-skeleton`
+repository, which contains examples that use multiple devices to build nontrivial
+applications, like DNS, DHCP, and HTTPS servers.
 
-name = 'stackv4'
-kernel = '/root/djs55/mirage-skeleton/stackv4/mir-stackv4.xen'
-builder = 'linux'
-memory = 256
-on_crash = 'preserve'
-
-disk = [  ]
-
-# if your system uses openvswitch then either edit /etc/xen/xl.conf and set
-#     vif.default.script="vif-openvswitch"
-# or add "script=vif-openvswitch," before the "bridge=" below:
-vif = [ 'bridge=xenbr0' ]
-```
-
-This tells Xen to bring up the virtual network interface and add it to the
-`xenbr0` bridge. Depending on the dom0 interface configuration, usually
-specified in `/etc/network/interfaces`, this will be brought up with a static IP
-address or with a DHCP address. For example, in the Mirage Ubuntu
-14.04 [Vagrant VM](https://github.com/mirage/mirage-vagrant-vms/), the following
-lines are uncommented:
-
-```
-(network-script network-bridge)
-(vif-script vif-bridge)
-```
-
-And the bridge interface is configured in `/etc/network/interfaces` as:
-
-```
-auto xenbr0
-iface xenbr0 inet dhcp
-  bridge_ports eth0
-```
-
-Finally, you can manually inspect the generated `main.ml` file to see what's
-happening under the hood with the functor applications.
-
-Now that we've covered the basics of configuration, block devices and
-networking, let's get the real MirageOS website up and running with
-a [networked application](/wiki/mirage-www).
+The real MirageOS website (which is itself a unikernel) may also be of
+interest to you!  Documentation is available at [mirage-www](/wiki/mirage-www),
+and the source code is published [in a public GitHub repository](https://github.com/mirage/mirage-www).
