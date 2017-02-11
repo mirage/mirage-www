@@ -216,7 +216,7 @@ open Lwt.Infix
 
 module Hello (Time : Mirage_time_lwt.S) = struct
 
-  let start pclock =
+  let start _time =
 
     let rec loop = function
       | 0 -> Lwt.return_unit
@@ -239,7 +239,7 @@ external package [mirage-time](https://github.com/mirage/mirage-time).  The name
 in the [`types/`](https://github.com/mirage/mirage/tree/master/types) directory
 of the main MirageOS repository.  The `Mirage_types` module gives abstract definitions that leave some important primitives unspecified; the `Mirage_types_lwt` module contains more concrete definitions for use in programs.  Since you'll find yourself referring back to
 these quite often when building MirageOS applications, it's worth bookmarking
-the [documentation](http://mirage.github.io) for this module.
+the [documentation](http://docs.mirage.io/mirage-types-lwt/Mirage_types_lwt/index.html) for this module.
 
 The concrete implementation of `Time` will be supplied at
 compile-time, depending on the target that you are compiling for. This
