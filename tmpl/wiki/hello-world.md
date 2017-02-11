@@ -37,8 +37,7 @@ return an `Lwt` thread that will evaluate to `unit`. Easy.
 Before we can build even our `noop` unikernel, we must define its configuration.
 That is, we need to tell Mirage what OCaml module contains the `start` entry
 point. We do this by writing a `config.ml` file that sits next to our
-`unikernel.ml` file (although you can name the file containing the configuration
-something else, the `mirage` tool defaults to `config.ml`):
+`unikernel.ml` file:
 
 ```
 $ cat tutorial/noop/config.ml
