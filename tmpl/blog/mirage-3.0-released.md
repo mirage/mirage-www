@@ -2,7 +2,7 @@ We're excited to announce MirageOS 3.0!  [Full release notes are available on Gi
 
 ### Solo5
 
-MirageOS 3.0.0 is the first release that integrates the solo5 targets, `virtio` and `ukvm`, fully with the `mirage` front-end tool.  Now you can `mirage configure -t ukvm`, build a unikernel, and run directly with the generated `ukvm-bin`!  We've updated the "hello world" tutorial to reflect our excitement about `ukvm` -- the `ukvm` target is considerably easier to interface with and configure than `xen` was, and for a lot of users this will be a clearer path toward building and running proper unikernels.
+MirageOS 3.0.0 is the first release that integrates the solo5 targets, `virtio` and `ukvm`, fully with the `mirage` front-end tool.  Now you can `mirage configure -t ukvm`, build a unikernel, and run directly with the generated `ukvm-bin`!  We've updated the "hello world" tutorial to reflect our excitement about `ukvm` -- the `ukvm` target is considerably easier to interface with and configure than `xen` was, and for a lot of users this will be a clearer path toward operational deployment of unikernels.
 
 For a lot more information on the Solo5 targets, see [the earlier blog post announcing solo5](/tmpl/blog/introducing-solo5), [Unikernel Monitors: Extending Minimalism Outside of the Box](https://www.usenix.org/conference/hotcloud16/workshop-program/presentation/williams), and [the very readable solo5 repository README](https://github.com/solo5/solo5/tree/master/README.md).  It's also possible to [run solo5 unikernels on FreeBSD via bhyve](https://hannes.nqsb.io/Posts/Solo5).
 
@@ -10,7 +10,7 @@ We'd like to thank particularly, but in no particular order, the following peopl
 
 ### Playing More Nicely with OPAM
 
-MirageOS 3 has a much richer interface for dealing with the package manager and external library dependencies.  A user can now specify a version or range of versions for a package dependency, and the `mirage` front-end tool will construct a custom `opam` file including both those package dependencies and the ones automatically generated from `mirage configure`.  `mirage` will also consider version constraints for its own packages -- hopefully, this is the last release where `opam` won't know that your unikernels need updating.
+MirageOS 3 has a much richer interface for dealing with the package manager and external library dependencies.  A user can now specify a version or range of versions for a package dependency, and the `mirage` front-end tool will construct a custom `opam` file including both those package dependencies and the ones automatically generated from `mirage configure`.  `mirage` will also consider version constraints for its own packages -- from now on, `opam` should notice that releases of `mirage` are incompatible with your unikernel.
 
 For more information on dealing with packages and dependencies, the documentation for [the Functoria.package function](https://mirage.github.io/functoria/Functoria.html#VALpackage) will likely be of use.  [The PRNG device-usage example in mirage-skeleton](https://github.com/mirage/mirage-skeleton/blob/mirage-dev/device-usage/prng/config.ml) demonstrates some useful invocations of `package`.
 
@@ -24,11 +24,17 @@ We'd like to thank particularly, but in no particular order, the following peopl
 
 ### Result-y Errors
 
-The module types provided by MirageOS 3 replace the previous error paradigm (a combination of exceptions and directly returning polymorphic variants) with one that uses the Result module included in OCaml 4.03 and up.  The MirageOS 3 module types define a core set of likely errors for each module type (see [the mirage-flow module type](https://mirage.github.io/mirage-flow/Mirage_flow.S.html) for an example), which can be extended by any given implementation.  Module types now specify that each implementation must include a pretty-printer that can handle all emitted error types.  Functions that return a `success` type when they run as expected return a `(success, error) Result.t`, which the caller can print with `pp_error` if the value is an `Error`.
+The module types provided by MirageOS 3 replace the previous error paradigm (a combination of exceptions and directly returning polymorphic variants) with one that uses [the Result module included in OCaml 4.03 and up](https://github.com/ocaml/ocaml/pull/147).  The MirageOS 3 module types define a core set of likely errors for each module type (see [the mirage-flow module type](https://mirage.github.io/mirage-flow/Mirage_flow.S.html) for an example), which can be extended by any given implementation.  Module types now specify that each implementation must include a pretty-printer that can handle all emitted error types.  Functions that return a `success` type when they run as expected return a `(success, error) Result.t`, which the caller can print with `pp_error` if the value is an `Error`.
 
-For more background on the result type, see [the pull request adding them to OCaml](https://github.com/ocaml/ocaml/pull/147), the [Rresult library](http://erratique.ch/software/rresult) which defines further useful operations on `Result.t` and is used widely in MirageOS libraries, and [a forthcoming in-depth explanation of errors](TODO write then link).
+For more background on the result type, see the [Rresult library](http://erratique.ch/software/rresult) which defines further useful operations on `Result.t` and is used widely in MirageOS libraries, and [a forthcoming in-depth explanation of errors](TODO write then link).
 
 We'd like to thank particularly, but in no particular order, the following people who contributed to this improvement with code, suggestions, testing, and moral support: Hannes Mehnert, Thomas Gazagnaire, Thomas Leonard, Mindy Preston, Ashish Agarwal, Leo White, Anil Madhavapeddy, Dave Scott, and Daniel Bünzli.
+
+### Logs Where You Want Them
+
+MirageOS version 2.9.0 included automatic support for logging via the `Logs` and `Mirage_logs` library, but by default logs were always printed to the console and changing the log reporter was cumbersome.  In MirageOS 3, you can send logs to a consumer of syslog messages with `syslog_udp`, `syslog_tcp`, or with the full authentication and encryption provided by `ocaml-tls` using `syslog_tls`.  For more information, see [the excellent writeup at hannes.nqsb.io](https://hannes.nqsb.io/Posts/Syslog).
+
+We'd like to thank particularly, but in no particular order, the following people who contributed to this improvement with code, suggestions, testing, related libraries, and discussion: Hannes Mehnert, Jochen Bartl, Gabriel Radanne, GitHub user wiredsister, Daniel Bünzli, Anil Madhavapeddy, and Thomas Leonard.
 
 ### Disaggregated Module Type Definitions
 
@@ -36,7 +42,7 @@ Breaking all of the MirageOS 3.0 APIs showed us that keeping them all in the sam
 
 We hope that this change combined with the `opam` workflow changes above will result in *much* less painful API changes in the future, as it will be possible for unikernel authors to target specific versions more readily.
 
-We'd like to thank particularly, but in no particular order, the following people who contributed to this improvement with code, suggestions, and testing: Hannes Mehnert, Thomas Gazagnaire, Mindy Preston, Anil Madhavapeddy, and Dave Scott.
+We'd like to thank particularly, but in no particular order, the following people who contributed to this improvement with code, suggestions, downstream porting, and testing: Hannes Mehnert, Thomas Gazagnaire, Mindy Preston, Anil Madhavapeddy, and Dave Scott.
 
 ### Clockier Clocks, Timelier Time
 
@@ -48,476 +54,12 @@ We'd like to thank particularly, but in no particular order, the following peopl
 
 ### Build System Shift
 
-In many but not all MirageOS packages, we've replaced `oasis` with `topkg`.  `topkg`, the "transitory OCaml software packager", is a lighter layer over the underlying `ocamlbuild`.  Using `topkg` has allowed us to remove several thousand lines of autogenerated code across the MirageOS package universe, and let our release manager automate a significant amount of the MirageOS 3 release process.  We hope to continue benefitting from the ease of using `topkg` and `topkg-care`.
+In many but not all MirageOS packages, we've replaced `oasis` with `topkg`, the "transitory OCaml software packager". `topkg` is a lighter layer over the underlying `ocamlbuild`.  Using `topkg` has allowed us to remove several thousand lines of autogenerated code across the MirageOS package universe, and let our release manager automate a significant amount of the MirageOS 3 release process.  We hope to continue benefitting from the ease of using `topkg` and `topkg-care`.
 
-Not all packages have moved to `topkg` -- if you see one that isn't, feel free to submit a PR!
+Not all packages are using `topkg` yet -- if you see one that isn't, feel free to submit a PR!
 
 We'd like to thank particularly, but in no particular order, the following people who contributed to this improvement by writing or improving `topkg`, converting existing packages, or using `topkg` in new packages which were automatically releasable: Daniel Bünzli, Hannes Mehnert, Federico Gimenez, David Kaloper, Jochen Bartl, Thomas Gazagnaire, Leonid Rozenberg, Anil Madhavapeddy, Mindy Preston, and Dave Scott.
 
 ### Many, Many Other Changes
 
-There's more in MirageOS 3 than we can fit in one blog post without our eyes glazing over.  The release notes for `mirage` version 3.0.0 are a nice summary, but you might also be interested in the full accounting of chanes for every package released as a part of the MirageOS 3 effort.  The following list was automatically generated by collecting the changelogs from each repository included in the `mirageos-3-beta` opam remote:
-
-
-## mirage-clock v1.1
-### 1.2.0 (2016-12-21)
-
-* import `V1.MCLOCK` and `V1.PCLOCK` from `mirage-types` under `mirage-clock`
-  and `mirage-clock-lwt`
-
-## ocaml-vchan v2.3.0
-2.3.0 (unreleased)
-* add archlinux dependencies
-* build against mirageos version 3, and drop support for earlier versions
-
-## charrua-core v0.4
-## ?? (??)
-
-* use topkg for building
-
-## arp 0.2.0
-## 0.2.0 (2017-01-17)
-
-* MirageOS3 support
-* Don't ship with -warn-error +A, use it only in `./build`
-* Fix testsuite compilation on OCaml 4.02
-* Renamed `Marp` to `Arpv4` (same as MirageOS ARP handler in tcpip)
-
-## logs-syslog 0.1.0
-## 0.1.0 (2017-01-18)
-
-- remove <4.03 compatibility
-- Mirage: use STACK instead of UDP/TCP
-- MirageOS3 support
-
-## mirage-vnetif v0.3
-0.3 (unreleased)
-----
-- Use topkg
-- Use new mirage-time and mirage-clock modules
-- Adapt to MirageOS version 3 errors scheme
-
-## functoria 2.0.0
-## 2.0.0 (unreleased)
-
-* invoke ocamlbuild with quiet (#93 by @hannesm)
-* restrict -f command line argument to items in current working directory (#91 by @hannesm)
-* ocamlify opam filename (#89 by @yomimono)
-* persist configuration arguments (#85, #87 by @hannesm, @Drup)
-* remove Functoria_misc.Log (#84 by @hannesm)
-* remove Functoria_misc.Cmd (#84 by @hannesm)
-* separate configure from build step, both are now done on the graph.  opam file is now generated during configure (#76, #84 by @hannesm)
-* check presence of vertex before removing (#83 by #Drup)
-* split into functoria and functoria-runtime opam packages (#80 by @hannesm)
-* use Astring instead of custom Functoria_misc.String (#77 by @hannesm)
-* expose Functoria_key.name, and use it to generate a list of runtime keys (#68 by @yomimono)
-* remove Functoria_misc.Set (provided `of_list`), now depend on 4.03+ (#75 by @hannesm)
-* signature of `connect` changed: value is now `'a io`, no result (fail hard instead!) (#71 by @hannesm)
-* remove base_context (#65 by @yomimono)
-* Switch to topkg (#64 by @samoht)
-
-## mirage-block v0.2
-## 1.0.0 (2016-12-21)
-
-- Import `V1.BLOCK` from `mirage-types` into `Mirage_block.S` (@samoht)
-- Import `V1_LWT.BLOCK` from `mirage-types-lwt` into `Mirage_bloc_lwt.S` (@samoht)
-
-## mirage-block-ramdisk v0.3
-
-## mirage-block-solo5 v0.2.1
-## v0.2.1 (2017-01-17)
-
-* Declare dependency on result and fmt in opam (@hannesm, #8)
-
-## mirage-block-unix v2.6.0
-2.6.0 (2017-02-13)
-* allow fsync to be used in preference to fcntl for flushing on macOS
-
-2.5.0 (2017-01-17)
-* use MirageOS 3 error scheme & new dependencies; drop support for earlier versions
-
-## mirage-block-xen v1.5.0
-1.5.0 (unreleased)
-* Build with MirageOS 3, and don't build against earlier versions
-* support and test compiler versions 4.03 and 4.04
-* remove unused `id` type
-
-## mirage-bootvar-solo5 v0.2.0
-## v0.2.0 (2017-01-17)
-
-* Port to topkg (@hannesm, #6)
-* Use common parse-argv library (@yomimono, #4)
-
-## mirage-bootvar-xen v0.3.2
-0.4.0 (unreleased)
-----
-
-* Remove examples directory, as the module is now directly used by the mirage front-end tool.
-* Add an optional `filter` parameter to `argv`, allowing users to only pass those arguments which cmdliner might expect to see.
-* Convert to topkg.
-* Change name to mirage-bootvar-xen from mirage-bootvar.
-* Move argv parsing to external library `parse_argv` and depend on that library.
-* Build against MirageOS version 3, and drop support for earlier MirageOS versions.
-
-## mirage-channel v3.0.0
-v3.0.0
-------
-
-Adapt to MirageOS 3 CHANNEL interface:
-
-- use `result` instead of exceptions
-- hide `read_until` as an internal implementation
-- remove `read_stream` from external interface as it is
-  difficult to combine Lwt_stream and error handling.
-
-## mirage-console v2.1.3
-### 2.2.0 (2016-12-21)
-
-* Import `V1.CONSOLE` from `mirage-types` into `Mirage_console.S` and create
-  a new `mirage-console` opam package (@samoht)
-- Import `V1_LWT.CONSOLE` from `mirage-types-lwt` into `Mirage_console_lwt.S`
-  and create a new `mirage-console-lwt` opam package (@samoht)
-
-## mirage-console-solo5 v0.2.0
-## v0.2.0 (2017-01-17)
-
-* Port to topkg (@hannesm, #4)
-* Update types and interface for MirageOS 3 (@hannesm, @yomimono, @samoht)
-
-## mirage-device 1.0.0
-### 1.0.0 (2016-12-20)
-
-- Initial version, code imported from https://github.com/mirage/mirage
-
-## mirage-entropy v0.2.0
-# 0.4.0 (???)
-
-* Compatibility with MirageOS 3 module types.
-* Add a benchmark.
-* Obsolete `mirage-entropy-<BACKEND>`; the repository now contains only `mirage-entropy`.
-* Support Unix, Xen, and Solo5 backends.
-* Prune `oasis`.
-* Move `noalloc` to 4.03-style annotations
-
-## mirage-flow v1.1.0
-### 1.2.0 (2016-12-21)
-
-* Import `V1.FLOW` from `mirage-types` into `Mirage_flow.S` (@samoht)
-* Import `V1_LWT.FLOW` from `mirage-types-lwt` into `Mirage_flow_lwt.S` (@samoht)
-* Rename the existing `Mirage_flow` into `Mirage_flow_lwt` (@samoht)
-* Rename `Lwt_io_flow` into `Mirage_flow_unix` (@samoht)
-
-## mirage-fs v0.6.0
-### 1.0.0 (2016-12-27)
-
-* Import the V1.FS and V1_LWT.FS for mirage-types
-
-## mirage-fs-unix v1.2.1
-1.3.0
-----
-
-* Port to MirageOS 3 interfaces.
-* Improve Travis CI distribution coverage for tests.
-
-## mirage v3.0.0
-### 3.0.0 (2017-soon!)
-
-* rename module types modules: V1 -> Mirage_types, V1_LWT -> Mirage_types_lwt (#766, by @yomimono, @samoht, and @hannesm)
-* split type signatures and error printers into separate libraries (#755, #753, #752, #751, #764, and several others, by @samoht and @yomimono)
-* use mirage-fs instead of ocaml-fat to transform FS into KV_RO (#756, by @samoht)
-* changes to simplify choosing an alternate ARP implementation (#750, by @hannesm)
-* add configurators for syslog reporter (#749, by @hannesm)
-* filter incoming boot-time arguments for all Xen backends, not just QubesOS (#746, by @yomimono)
-* give mirage-types-lwt its own library, instead of a mirage-types sublibrary called lwt (#735, by @hannesm)
-* remove `format` function and `Format_unknown` error from FS module type (#733, by @djs55)
-* ocamlify FAT name (#723 by @yomimono)
-* remove type `error` from DEVICE module type (#728, by @hannesm)
-* UDP requires random for source port randomization (#726 by @hannesm)
-* drop "mir-" prefix from generated binaries (#725 by @hannesm)
-* BLOCK and FS uses result types (#705 by @yomimono)
-* depext fixes (#718 by @mato)
-* workflow changes: separate configure, depend, build phases, generate opam file during configure (#703, #711 by @hannesm)
-* tap0 is now default_network (#715, #719 by @yomimono, @mato)
-* ARP uses result types (#711 by @yomimono)
-* ipv4 key (instead of separate ip and netmask) (#707, #709 by @yomimono)
-* CHANNEL uses result types (#702 by @avsm)
-* no custom myocamlbuild.ml, was needed for OCaml 4.00 (#693 by @hannesm)
-* revert custom ld via pkg-config (#692 by @hannesm)
-* result types for FLOW and other network components (#690 by @yomimono)
-* removed `is_xen` key (#682, by @hannesm)
-* mirage-clock-xen is now mirage-clock-freestanding (#684, by @mato)
-* mirage-runtime is a separate opam package providing common functionality (#681, #615 by @hannesm)
-* add `qubes` target for making Xen unikernels which boot & configure themselves correctly on QubesOS. (#553, by @yomimono)
-* revised V1.CONSOLE interface: removed log, renamed log_s to log (#667, by @hannesm)
-* remove Str module from OCaml runtime (#663, in ocaml-freestanding and mirage-xen-ocaml, by @hannesm)
-* new configuration time keyword: prng to select the default prng (#611, by @hannesm)
-* fail early if tracing is attempted with Solo5 (#657, by @yomimono)
-* refactor ipv4, stackv4, and dhcp handling (#643, by @yomimono)
-* create xen-related helper files only when the target is xen (#639, by @hannesm)
-* improvements to nocrypto handling (#636, by @pqwy)
-* disable warning #42 in generated code for unikernels (#633, by @hannesm)
-* V1.NETWORK functions return a Result.t rather than polyvars indicating success or errors (#615, by @hannesm)
-* remove GNUisms and unnecessary artifacts from build (#623, #627, by @mato and @hannesm)
-* remove type `id` from `DEVICE` module type. (#612, by @yomimono and @talex5)
-* revise the RANDOM signature to provide n random bytes; provide nocrypto_random and stdlib_random (#551 and #610, by @hannesm)
-* expose `direct` as an option for `kv_ro`.  (#607, by @mor1)
-* require a `mem` function in KV_RO, and add `Failure` error variant (#606, by @yomimono)
-* `connect` functions are no longer expected to return polyvars, but rather to raise exceptions if `connect` fails and return the value directly. (#602, by @hannesm)
-* new documentation using `odig` (#591, #593, #594, #597, #598, #599, #600, and more, by @avsm)
-* change build system to `topkg` from `oasis`. (#558, #590, #654, #673, by @avsm, @samoht, @hannesm, @dbuenzli)
-* express io-page dependency of crunch. (#585, by @yomimono and @mato)
-* deprecate the CLOCK module type in favor of PCLOCK (POSIX clock) and
-  MCLOCK (a monotonically increasing counter of elapsed nanoseconds).
-  (#548 and #579, by @mattgray and @yomimono)
-* emit an ocamlfind predicate that matches the target, reducing the
-  amount of duplication by target required of library authors
-  (#568, by @pqwy)
-* implement an `is_unix` key (#575, by @mato)
-* use an int64 representing nanoseconds as the argument for `TIME.sleep`,
-  instead of a float representing seconds. (#547, by @hannesm)
-* expose new targets `virtio` and `ukvm` via the `solo5` project. (#565,
-  by @djwillia, @mato, and @hannesm).
-* remove users of `base_context`, which includes command-line arguments `--unix`
-  and `--xen`, and `config.ml` functions `add_to_ocamlfind_libraries` and
-  `add_to_opam_packages`.  As a side effect, fix a long-standing error message
-  bug when invoking `mirage` against a `config.ml` that does not build.
-  (#560, by @yomimono)
-* link `libgcc.a` only on ARM & other build improvements (#544, by @hannesm)
-* allow users to use `crunch` on unix with `kv_ro`; clean up crunch .mlis on
-  clean (#556, by @yomimono)
-* remove console arguments to network functors (#554, by @talex5 and @yomimono)
-* standardize ip source and destination argument names as `src` and `dst`, and
-  source and destination ports as `src_port` and `dst_port` (#546, by @yomimono)
-* a large number of documentation improvements (#549, by @djs55)
-* require `pseudoheader` function for IP module types. (#541, by @yomimono)
-* always build with `ocamlbuild -r`, to avoid repetitive failure message
-  (#537, by @talex5)
-
-## mirage-http v2.5.2
-### 3.0.0 
-
-* Port to MirageOS 3 CHANNEL interface.
-* Use Travis Docker for more multidistro testing.
-
-## mirage-kv 1.0.0
-### 1.0.0 (2016-12-27)
-
-First release, import V1.KV_RO and V1_LWT.KV_RO from mirage-types
-
-## mirage-logs v0.2
-### 0.3.0 (unreleased)
-
-- Build against MirageOS 3, and drop support for earlier versions.
-- Port to topkg.
-
-## mirage-net 1.0.0
-### 1.0.0 (2016-12-26)
-
-- Add Stats module from mirage-net-xen for common use
-- Initial version, code imported from https://github.com/mirage/mirage
-
-## mirage-net-macosx v1.1.0
-### 1.3.0 (unreleased)
-
-- Adapt to MirageOS 3 types.
-- Bugfixes for `listen`: be tail-recursive (#19, by @samoht), don't restart when canceled (#17, by @yomimono)
-
-## mirage-net-solo5 v0.2.0
-
-## mirage-net-unix v2.2.3
-2.3.0 (unreleased):
-----
-
-* Support MirageOS 3; drop support for earlier versions
-* `listen` no longer restarts itself when canceled (#36, from @yomimono)
-* Remove misleading error message referencing OSX (#31, from @hannesm)
-* Use topkg instead of OASIS
-* `writev` no longer fails when called with a list of total length > 1 page (#26, by @yomimono)
-* `disconnect` no longer causes a crash on invocation (#26, by @yomimono)
-
-## mirage-net-xen v1.7.0
-1.7.0 (unreleased):
-
-* Build against MirageOS version 3, and drop support for previous versions.
-
-* Log exceptions from the `listen` callback.
-
-* Use Cstruct.hexdump_pp to dump frames on error.
-
-* Use the Logs library for logging.
-
-* Use a monotonic counter for the RX id.
-
-## mirage-platform v3.0.0
-3.0.0 (unreleased)
-* [xen-ocaml] Add support for OCaml 4.04.0 (#173, by @yomimono)
-* don't embed Str into the ocaml runtime (#175, by @hannesm)
-* sleep in nanoseconds, not seconds (#168, by @hannesm)
-* avoid memsetting NULL (#179, by @rixed)
-* use mirage-clock-freestanding instead of mirage-clock-xen (#177, by @hannesm)
-* use logs for errors (#171, by @hannesm)
-* [xen-ocaml] for compiler version 4.04, set OCAML_OS_TYPE to "xen" (#178, by @yomimono)
-
-## mirage-protocols 1.0.0
-### 1.0.0 (2016-12-29)
-
-import ETHIF, ARP, IP, IPV4, IPV6, TCP, UDP, ICMP module types from mirage-types and mirage-types-lwt
-
-## mirage-random 1.0.0
-### 1.0.0 (2016-12-20)
-
-- Initial version, code imported from https://github.com/mirage/mirage
-
-## mirage-solo5 v0.2.0
-
-## mirage-stack 1.0.0
-### 1.0.0 (2016-12-29)
-
-import V4 module type from mirage-types and mirage-types-lwt, where it was STACKV4
-
-## mirage-tcpip v3.0.0
-### 3.0.0 (2017-soon!)
-
-* adapt to MirageOS 3 API changes (*many* PRs, from @hannesm, @samoht, and @yomimono):
-  - replace error polyvars in many functions with result types
-  - define and use error types
-  - `connect` in various modules now returns the device directly or raises an exception
-  - refer to mirage-protocols and mirage-stacks, rather than mirage-types
-* if no UDP source port is given to UDP.write, choose a random one (#272, by @hannesm)
-* remove Ipv4.Routing.No\_route\_to\_destination\_address exception; treat routing failures as normal packet loss in TCP (#269, by @yomimono)
-* Ipv6.connect takes a list of IPs (#268, by @yomimono)
-* remove exception "Refused" in TCP (#267, by @yomimono)
-* remove DHCP module. Users may be interested in the replacement charrua-core (#260, by @yomimono)
-* move Ipv4 to Static\_ipv4, which can be used by other IPv4 modules with their own configuration logic (#260, by @yomimono)
-* remove `mode` from STACKV4 record and configuration; Ipv4.connect now requires address parameters and the module exposes no methods for modifying them. (#260, by @yomimono)
-* remove unused `id` types no longer required by mirage-types (#255, by @yomimono)
-* overhaul how `random` is used and handled (#254 and others, by @hannesm)
-* fix redundant `memset` that zeroed out options in Tcp\_packet.Marshal.into\_cstruct (#250, by @balrajsingh)
-* add vnetif backend for triggering fast retransmit in iperf tests (#248, by @magnuss)
-* fixes for incorrect timer values (#247, by @balrajsingh)
-* add vnetif backend that drops packets with no payload (#246, by @magnuss)
-* fix a race when closing test pcap files (#246, by @magnuss)
-
-## mirage-time 1.0.0
-### 1.0.0 (2016-12-20)
-
-- Initial version, code imported from https://github.com/mirage/mirage
-
-## ocaml-conduit v0.15.0
-0.15.0
-* support MirageOS 3, and drop support for earlier versions (#203, #202)
-
-## ocaml-crunch v1.4.1
-## 2.0.0
-
-* Fix reading of files consisting of multiple pages (#30 by @hannesm)
-* Port to MirageOS3 API: removed unused `id` type (#17), add Failure
-  error type (#20), `connect` does not return a result anymore.
-* Generate a `mem` function for the filesystem (#18)
-* Port to topkg and respect the odig packaging convention (#24 via @fgimenez)
-* Add `LICENSE` file to repository (#19 via @djs55)
-
-## ocaml-dns v0.19.0
-## 0.19.1 (2017-02-09)
-
-0.19.0 (unreleased):
-* Port to MirageOS 3 module types.
-* Remove runtime dependency on PPX from META file
-* Bugfixes and improvements for async backend compilation (#100 by vbmithr)
-
-## ocaml-fat v0.10.3
-### 0.12.0 (unreleased):
-
-* Build against MirageOS 3 and drop support for previous versions.
-* Use alcotest instead of ounit.
-* Remove Fat_memoryIO and Fat.MemFS (if needed, use Mirage_block_lwt.Mem).
-* Remove the IO_PAGE functor parameter.
-* Remove Fat_KV_RO, which is now in mirage-fs.
-* Use topkg instead of OASIS.
-
-## ocaml-freestanding v0.2.1
-## v0.2.1 (2017-01-18)
-
-* Declare `OCAML_OS_TYPE` as `freestanding` (@hannesm, #14)
-
-## v0.2.0 (2017-01-18)
-
-* FreeBSD support (@mato, @hannesm)
-* OpenLibm supplied as a git subtree (@mato, #11)
-* Support OCaml 4.04.0 (@mato, #8)
-
-## ocaml-qcow v0.8.1
-
-0.8.1 (2017-02-13)
-- fix error in META file
-
-0.8.0 (2017-02-13)
-- update to Mirage 3 APIs
-- now requires OCaml 4.03+
-- ensure the interval tree is kept balanced
-
-
-## ocaml-nocrypto v0.5.4
-## v0.5.4 2017-01-31:
-* Relicense from BSD2 to ISC.
-* Support MirageOS 3.0.
-* Replace OASIS with topkg.
-* Stricter base64 decoding.
-
-## ocaml-tls 0.8.0
-## 0.8.0 (2017-02-01)
-
-* lwt: in Unix.client_of_fd the named argument host is now optional (#336)
-* mirage: in client_of_flow the (positional) hostname argument is now optional (#336)
-* mirage: adapt to PCLOCK interface (@mattgray #329 #331)
-* build system migrated from oasis to topkg (#342)
-* mirage: adapt to MirageOS3 (@yomimono @samoht #338 #349 #350 #351 #353)
-* lwt: do not crash on double close (@vbmithr #345)
-* fixed docstring typos (@mor1 #340)
-
-## mirage-os-shim v3.0.0
-## v3.0.0 2017-01-30
-
-Adapt to MirageOS 3.0.
-
-## ocb-stubblr v0.1.1
-## v0.1.1 2017-01-30
-
-* Include both `lib` and `share` in pkg-config path.
-* Use `mirage-xen-ocaml` for Xen pkg-config.
-* Add include dirs to `cmxs` linking.
-
-## solo5 v0.2.0
-## 0.2.0 (2017-01-26)
-
-This release is targeted for use with MirageOS 3.0.
-
-High-level user-visible changes in this release:
-
-* Support for building the `virtio` backend on FreeBSD.
-* The `virtio` drivers are now stable and tested on QEMU/KVM, FreeBSD/bhyve and
-  Google Compute Engine.
-* A new option (`--net-mac`) for specifying a user-defined MAC address to `ukvm`.
-* A new script [solo5-mkimage.sh](tools/mkimage/solo5-mkimage.sh) for building
-  MBR-partitioned disk images with a bootloader and Solo5 (`virtio` backed)
-  unikernel, with integrated support for building images for Google Compute
-  Engine.
-* A new script [solo5-run-virtio](tools/run/solo5-run-virtio.sh) for launching
-  Solo5 (`virtio` backed) unikernels on QEMU/KVM and FreeBSD/bhyve.
-* Improvements to the standalone test programs under `tests/`, including an
-  automated test suite.
-* Standardised license headers and copyright notices across the codebase and
-  introduced an AUTHORS file listing contributors and their affiliations.
-
-## mirage-qubes v0.3
-### 0.4 (unreleased)
-
-- Include an ipv4 sublibrary for automatically configuring ipv4 settings from qubesdb.
-
-- Use and provide interfaces compatible with MirageOS version 3.0.0.
-
-## charrua-client 0.1.0
-0.1.0
------
-
-- Initial release, supporting lease acquisition and the `mirage` sublibrary for use with MirageOS version 3.
+There's more in MirageOS 3 than we can fit in one blog post without our eyes glazing over.  The release notes for `mirage` version 3.0.0 are a nice summary, but you might also be interested in the full accounting of chanes for every package released as a part of the MirageOS 3 effort.  Generally speaking, 
