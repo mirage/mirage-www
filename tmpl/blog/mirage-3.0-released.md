@@ -6,7 +6,7 @@ MirageOS 3.0.0 is the first release that integrates the solo5 targets, `virtio` 
 
 For a lot more information on the Solo5 targets, see [the earlier blog post announcing solo5](/tmpl/blog/introducing-solo5), [Unikernel Monitors: Extending Minimalism Outside of the Box](https://www.usenix.org/conference/hotcloud16/workshop-program/presentation/williams), and [the very readable solo5 repository README](https://github.com/solo5/solo5/tree/master/README.md).  It's also possible to [run solo5 unikernels on FreeBSD via bhyve](https://hannes.nqsb.io/Posts/Solo5).
 
-We'd like to thank particularly, but in no particular order, the following people who contributed to Solo5: Dan Williams, Martin Lucina, Ricardo Koller, Hannes Mehnert, Ian Campbell, helpful GitHub users myechuri and waldyrious, Anil Madhavapeddy, Sean Grove, and David Kaloper.
+We'd like to thank particularly, but in no particular order, the following people who contributed to Solo5: Dan Williams, Martin Lucina, Ricardo Koller, Hannes Mehnert, Ian Campbell, Madhuri Yechuri, helpful GitHub user waldyrious, Anil Madhavapeddy, Sean Grove, and David Kaloper.
 
 ### Playing More Nicely with OPAM
 
@@ -72,57 +72,110 @@ For example, [ocaml-fat](https://github.com/mirage/ocaml-fat/compare/0.11.0...0.
 
 A number of improvements were made to `mirage` to limit the number of unnecessary build artifacts and reduce the amount of unnecessary code linked into unikernels.  Modules you're unlikely to use like `Str` are no longer included in the OCaml runtime.  MirageOS 3 is also the first to drop support for OCaml 4.02.3, meaning that all supported compilers support the `flambda` compiler extension and a number of related optimization opportunities.
 
-Very many people were involved in making MirageOS 3 a smaller, better set of code than we had before.  We'd like to thank particularly, but in no particular order, the following people: 
+Very many people were involved in making the MirageOS package universe smaller and better than it was before.  We'd like to thank, in a particular alphabetical order, the following people who contributed code, suggestions, bug reports, comments, mailing lists questions and answers, and other miscellaneous help:
 
-For a summary of changes in each repository involved in MirageOS 3, please see the following list:
-[changes in mirage-clock between v1.1 and 1.2.0](https://github.com/mirage/mirage-clock/compare/v1.1...1.2.0):  51 files changed, 788 insertions(+), 381 deletions(-)
-[changes in ocaml-vchan between v2.2.0 and v2.3.0](http://github.com/mirage/ocaml-vchan/compare/v2.2.0...v2.3.0):  14 files changed, 4384 insertions(+), 3553 deletions(-)
-[changes in charrua-core between v0.3 and v0.4](https://github.com/haesbaert/charrua-core/compare/v0.3...v0.4):  14 files changed, 760 insertions(+), 231 deletions(-)
-[changes in arp between 0.1.1 and 0.2.0](https://github.com/hannesm/arp/compare/0.1.1...0.2.0):  23 files changed, 302 insertions(+), 430 deletions(-)
-[changes in logs-syslog between 0.0.2 and 0.1.0](https://github.com/hannesm/logs-syslog/compare/0.0.2...0.1.0):  25 files changed, 277 insertions(+), 361 deletions(-)
-[changes in mirage-vnetif between 0.2.0 and v0.3](https://github.com/MagnusS/mirage-vnetif/compare/0.2.0...v0.3):  35 files changed, 669 insertions(+), 8551 deletions(-)
-[changes in functoria between 1.1.0 and 2.0.1](https://github.com/mirage/functoria/compare/1.1.0...2.0.1):  46 files changed, 1107 insertions(+), 9666 deletions(-)
-[changes in mirage-block between v0.2 and 1.0.0](https://github.com/mirage/mirage-block/compare/v0.2...1.0.0):  42 files changed, 1194 insertions(+), 925 deletions(-)
-[changes in mirage-block-ramdisk between v0.2 and v0.3](https://github.com/mirage/mirage-block-ramdisk/compare/v0.2...v0.3):  18 files changed, 440 insertions(+), 305 deletions(-)
-[changes in mirage-block-solo5 between v0.1.1 and v0.2.1](https://github.com/mirage/mirage-block-solo5/compare/v0.1.1...v0.2.1):  23 files changed, 187 insertions(+), 7854 deletions(-)
-[changes in mirage-block-unix between v2.5.0 and v2.6.0](https://github.com/mirage/mirage-block-unix/compare/v2.5.0...v2.6.0):  9 files changed, 76 insertions(+), 40 deletions(-)
-[changes in mirage-block-xen between v1.4.0 and v1.5.0](https://github.com/mirage/mirage-block-xen/compare/v1.4.0...v1.5.0):  11 files changed, 4261 insertions(+), 3440 deletions(-)
-[changes in mirage-bootvar-solo5 between v0.1.1 and v0.2.0](https://github.com/mirage/mirage-bootvar-solo5/compare/v0.1.1...v0.2.0):  24 files changed, 78 insertions(+), 7842 deletions(-)
-[changes in mirage-bootvar-xen between v0.3.2 and 0.4.0](https://github.com/mirage/mirage-bootvar-xen/compare/v0.3.2...0.4.0):  24 files changed, 98 insertions(+), 8068 deletions(-)
-[changes in mirage-channel between v1.1.1 and v3.0.0](https://github.com/mirage/mirage-channel/compare/v1.1.1...v3.0.0):  22 files changed, 511 insertions(+), 485 deletions(-)
-[changes in mirage-console between v2.1.3 and 2.2.0](https://github.com/mirage/mirage-console/compare/v2.1.3...2.2.0):  63 files changed, 1364 insertions(+), 9188 deletions(-)
-[changes in mirage-console-solo5 between v0.1.1 and v0.2.0](https://github.com/mirage/mirage-console-solo5/compare/v0.1.1...v0.2.0):  26 files changed, 164 insertions(+), 7814 deletions(-)
-mirage-device is new in MirageOS 3:  13 files changed, 169 insertions(+)
-[changes in mirage-entropy between 0.3.0 and 0.4.0](https://github.com/mirage/mirage-entropy/compare/0.3.0...0.4.0):  34 files changed, 533 insertions(+), 8181 deletions(-)
-[changes in mirage-flow between v1.1.0 and 1.2.0](https://github.com/mirage/mirage-flow/compare/v1.1.0...1.2.0):  48 files changed, 1254 insertions(+), 8865 deletions(-)
-[changes in mirage-fs between v0.6.0 and 1.0.0](https://github.com/mirage/mirage-fs/compare/v0.6.0...1.0.0):  27 files changed, 476 insertions(+), 244 deletions(-)
-[changes in mirage-fs-unix between v1.2.1 and 1.3.0](https://github.com/mirage/mirage-fs-unix/compare/v1.2.1...1.3.0):  41 files changed, 1075 insertions(+), 9477 deletions(-)
-[changes in mirage between v2.9.1 and v3.0.0](https://github.com/mirage/mirage/compare/v2.9.1...v3.0.0):  77 files changed, 2332 insertions(+), 11037 deletions(-)
-[changes in mirage-http between 2.5.3 and 3.0.0](https://github.com/mirage/mirage-http/compare/2.5.3...3.0.0):  14 files changed, 75 insertions(+), 49 deletions(-)
-mirage-kv is new in MirageOS 3:  18 files changed, 282 insertions(+)
-[changes in mirage-logs between v0.2 and 0.3.0](https://github.com/mirage/mirage-logs/compare/v0.2...0.3.0):  30 files changed, 563 insertions(+), 8250 deletions(-)
-mirage-net is new in MirageOS 3:  18 files changed, 345 insertions(+)
-[changes in mirage-net-macosx between 1.2.0 and 1.3.0](https://github.com/mirage/mirage-net-macosx/compare/1.2.0...1.3.0):  15 files changed, 184 insertions(+), 181 deletions(-)
-[changes in mirage-net-solo5 between v0.1.1 and v0.2.0](https://github.com/mirage/mirage-net-solo5/compare/v0.1.1...v0.2.0):  27 files changed, 266 insertions(+), 7969 deletions(-)
-[changes in mirage-net-unix between v2.2.3 and 2.3.0](https://github.com/mirage/mirage-net-unix/compare/v2.2.3...2.3.0):  26 files changed, 365 insertions(+), 8133 deletions(-)
-[changes in mirage-net-xen between v1.4.2 and v1.7.0](https://github.com/mirage/mirage-net-xen/compare/v1.4.2...v1.7.0):  47 files changed, 6279 insertions(+), 4059 deletions(-)
-[changes in mirage-platform between v2.6.0 and v3.0.0](https://github.com/mirage/mirage-platform/compare/v2.6.0...v3.0.0):  36 files changed, 7897 insertions(+), 7449 deletions(-)
-mirage-protocols is new in MirageOS 3:  18 files changed, 780 insertions(+)
-mirage-random is new in MirageOS 3:  16 files changed, 172 insertions(+)
-[changes in mirage-solo5 between v0.1.1 and v0.2.0](https://github.com/mirage/mirage-solo5/compare/v0.1.1...v0.2.0):  69 files changed, 1411 insertions(+), 9130 deletions(-)
-mirage-stack is new in MirageOS 3:  16 files changed, 254 insertions(+)
-[changes in mirage-tcpip between v2.8.1 and v3.0.0](https://github.com/mirage/mirage-tcpip/compare/v2.8.1...v3.0.0):  228 files changed, 15376 insertions(+), 13301 deletions(-)
-mirage-time is new in MirageOS 3:  15 files changed, 198 insertions(+)
-[changes in ocaml-conduit between v0.15.0 and v0.14.5](https://github.com/mirage/ocaml-conduit/compare/v0.15.0...v0.14.5):  14 files changed, 59 insertions(+), 76 deletions(-)
-[changes in ocaml-crunch between v1.4.1 and 2.0.0](https://github.com/mirage/ocaml-crunch/compare/v1.4.1...2.0.0):  34 files changed, 576 insertions(+), 8196 deletions(-)
-[changes in ocaml-dns between v0.18.1 and v0.19.0](https://github.com/mirage/ocaml-dns/compare/v0.18.1...v0.19.0):  24 files changed, 5526 insertions(+), 3824 deletions(-)
-[changes in ocaml-fat between 0.11.0 and 0.12.0](https://github.com/mirage/ocaml-fat/compare/0.11.0...0.12.0):  80 files changed, 3239 insertions(+), 12224 deletions(-)
-[changes in ocaml-freestanding between v0.2.0 and v0.2.1](https://github.com/mirage/ocaml-freestanding/compare/v0.2.0...v0.2.1):  3 files changed, 7 insertions(+), 1 deletion(-)
-[changes in ocaml-qcow between v0.8.0 and v0.8.1](https://github.com/mirage/ocaml-qcow/compare/v0.8.0...v0.8.1):  2 files changed, 5 insertions(+), 2 deletions(-)
-[changes in ocaml-nocrypto between v0.5.3 and v0.5.4](https://github.com/mirleft/ocaml-nocrypto/compare/v0.5.3...v0.5.4):  44 files changed, 513 insertions(+), 576 deletions(-)
-[changes in ocaml-tls between 0.7.1 and 0.8.0](https://github.com/mirleft/ocaml-tls/compare/0.7.1...0.8.0):  43 files changed, 415 insertions(+), 695 deletions(-)
-[changes in mirage-os-shim between v0.0.1 and v3.0.0](https://github.com/pqwy/mirage-os-shim/compare/v0.0.1...v3.0.0):  11 files changed, 62 insertions(+), 143 deletions(-)
-[changes in ocb-stubblr between v0.1.0 and v0.1.1](https://github.com/pqwy/ocb-stubblr/compare/v0.1.0...v0.1.1):  3 files changed, 21 insertions(+), 11 deletions(-)
-[changes in solo5 between v0.1.1 and v0.2.0](https://github.com/solo5/solo5/compare/v0.1.1...v0.2.0):  102 files changed, 5554 insertions(+), 9421 deletions(-)
-[changes in mirage-qubes between v0.3 and 0.4](https://github.com/talex5/mirage-qubes/compare/v0.3...0.4):  28 files changed, 318 insertions(+), 1074 deletions(-)
-[changes in charrua-client between 0.0.1 and 0.1.0](https://github.com/yomimono/charrua-client/compare/0.0.1...0.1.0):  24 files changed, 492 insertions(+), 442 deletions(-)
+* Aaron Cornelius
+* Amir Chaudhry
+* Andrew Stuart
+* Anil Madhavapeddy
+* Ashish Agarwal
+* Balraj Singh
+* Cedric Cellier
+* Christiano Haesbaert
+* Daniel Bünzli
+* Dan Williams
+* Dave Scott
+* David Kaloper
+* David Sheets
+* Enguerrand Decorne
+* Eugene Bagdasaryan
+* Federico Gimenez
+* Gabriel de Perthuis
+* Gabriel Jaldon
+* Gabriel Radanne
+* Gemma Gordon
+* Hannes Mehnert
+* Ian Campbell
+* John P. McDermott
+* Jon Ludlam
+* Kia
+* Leo White
+* Liang Wang
+* Madhuri Yechuri
+* Magnus Skjegstad
+* Martin Lucina
+* Matt Gray
+* Mindy Preston
+* Nick Betteridge
+* Nicolas Ojeda Bar
+* Nik Sultana
+* Pablo Polvorin
+* Petter A. Urkedal
+* Qi LI
+* Ramana Venkata
+* Ricardo Koller
+* Richard Mortier
+* Rudi Grinberg
+* Sean Grove
+* Takayuki Imada
+* Thomas Gazagnaire
+* Thomas Leonard
+* Vincent Bernardoff
+* Vittorio Cozzolino
+* Wassim Haddad
+* Jeremy Yallop
+
+Please let us know if you notice someone (including yourself) is missing so we can add them and apologize!  We're happy to remove or change your listed name if you'd prefer as well.  Names are taken from metadata on commit messages and e-mail headers.
+
+* For a summary of changes in each repository that released code for MirageOS 3, please see the following list:
+* [changes in mirage-clock between v1.1 and 1.2.0](https://github.com/mirage/mirage-clock/compare/v1.1...1.2.0):  51 files changed, 788 insertions(+), 381 deletions(-)
+* [changes in ocaml-vchan between v2.2.0 and v2.3.0](http://github.com/mirage/ocaml-vchan/compare/v2.2.0...v2.3.0):  14 files changed, 4384 insertions(+), 3553 deletions(-)
+* [changes in charrua-core between v0.3 and v0.4](https://github.com/haesbaert/charrua-core/compare/v0.3...v0.4):  14 files changed, 760 insertions(+), 231 deletions(-)
+* [changes in arp between 0.1.1 and 0.2.0](https://github.com/hannesm/arp/compare/0.1.1...0.2.0):  23 files changed, 302 insertions(+), 430 deletions(-)
+* [changes in logs-syslog between 0.0.2 and 0.1.0](https://github.com/hannesm/logs-syslog/compare/0.0.2...0.1.0):  25 files changed, 277 insertions(+), 361 deletions(-)
+* [changes in mirage-vnetif between 0.2.0 and v0.3](https://github.com/MagnusS/mirage-vnetif/compare/0.2.0...v0.3):  35 files changed, 669 insertions(+), 8551 deletions(-)
+* [changes in functoria between 1.1.0 and 2.0.1](https://github.com/mirage/functoria/compare/1.1.0...2.0.1):  46 files changed, 1107 insertions(+), 9666 deletions(-)
+* [changes in mirage-block between v0.2 and 1.0.0](https://github.com/mirage/mirage-block/compare/v0.2...1.0.0):  42 files changed, 1194 insertions(+), 925 deletions(-)
+* [changes in mirage-block-ramdisk between v0.2 and v0.3](https://github.com/mirage/mirage-block-ramdisk/compare/v0.2...v0.3):  18 files changed, 440 insertions(+), 305 deletions(-)
+* [changes in mirage-block-solo5 between v0.1.1 and v0.2.1](https://github.com/mirage/mirage-block-solo5/compare/v0.1.1...v0.2.1):  23 files changed, 187 insertions(+), 7854 deletions(-)
+* [changes in mirage-block-unix between v2.5.0 and v2.6.0](https://github.com/mirage/mirage-block-unix/compare/v2.5.0...v2.6.0):  9 files changed, 76 insertions(+), 40 deletions(-)
+* [changes in mirage-block-xen between v1.4.0 and v1.5.0](https://github.com/mirage/mirage-block-xen/compare/v1.4.0...v1.5.0):  11 files changed, 4261 insertions(+), 3440 deletions(-)
+* [changes in mirage-bootvar-solo5 between v0.1.1 and v0.2.0](https://github.com/mirage/mirage-bootvar-solo5/compare/v0.1.1...v0.2.0):  24 files changed, 78 insertions(+), 7842 deletions(-)
+* [changes in mirage-bootvar-xen between v0.3.2 and 0.4.0](https://github.com/mirage/mirage-bootvar-xen/compare/v0.3.2...0.4.0):  24 files changed, 98 insertions(+), 8068 deletions(-)
+* [changes in mirage-channel between v1.1.1 and v3.0.0](https://github.com/mirage/mirage-channel/compare/v1.1.1...v3.0.0):  22 files changed, 511 insertions(+), 485 deletions(-)
+* [changes in mirage-console between v2.1.3 and 2.2.0](https://github.com/mirage/mirage-console/compare/v2.1.3...2.2.0):  63 files changed, 1364 insertions(+), 9188 deletions(-)
+* [changes in mirage-console-solo5 between v0.1.1 and v0.2.0](https://github.com/mirage/mirage-console-solo5/compare/v0.1.1...v0.2.0):  26 files changed, 164 insertions(+), 7814 deletions(-)
+* mirage-device is new in MirageOS 3:  13 files changed, 169 insertions(+)
+* [changes in mirage-entropy between 0.3.0 and 0.4.0](https://github.com/mirage/mirage-entropy/compare/0.3.0...0.4.0):  34 files changed, 533 insertions(+), 8181 deletions(-)
+* [changes in mirage-flow between v1.1.0 and 1.2.0](https://github.com/mirage/mirage-flow/compare/v1.1.0...1.2.0):  48 files changed, 1254 insertions(+), 8865 deletions(-)
+* [changes in mirage-fs between v0.6.0 and 1.0.0](https://github.com/mirage/mirage-fs/compare/v0.6.0...1.0.0):  27 files changed, 476 insertions(+), 244 deletions(-)
+* [changes in mirage-fs-unix between v1.2.1 and 1.3.0](https://github.com/mirage/mirage-fs-unix/compare/v1.2.1...1.3.0):  41 files changed, 1075 insertions(+), 9477 deletions(-)
+* [changes in mirage between v2.9.1 and v3.0.0](https://github.com/mirage/mirage/compare/v2.9.1...v3.0.0):  77 files changed, 2332 insertions(+), 11037 deletions(-)
+* [changes in mirage-http between 2.5.3 and 3.0.0](https://github.com/mirage/mirage-http/compare/2.5.3...3.0.0):  14 files changed, 75 insertions(+), 49 deletions(-)
+* mirage-kv is new in MirageOS 3:  18 files changed, 282 insertions(+)
+* [changes in mirage-logs between v0.2 and 0.3.0](https://github.com/mirage/mirage-logs/compare/v0.2...0.3.0):  30 files changed, 563 insertions(+), 8250 deletions(-)
+* mirage-net is new in MirageOS 3:  18 files changed, 345 insertions(+)
+* [changes in mirage-net-macosx between 1.2.0 and 1.3.0](https://github.com/mirage/mirage-net-macosx/compare/1.2.0...1.3.0):  15 files changed, 184 insertions(+), 181 deletions(-)
+* [changes in mirage-net-solo5 between v0.1.1 and v0.2.0](https://github.com/mirage/mirage-net-solo5/compare/v0.1.1...v0.2.0):  27 files changed, 266 insertions(+), 7969 deletions(-)
+* [changes in mirage-net-unix between v2.2.3 and 2.3.0](https://github.com/mirage/mirage-net-unix/compare/v2.2.3...2.3.0):  26 files changed, 365 insertions(+), 8133 deletions(-)
+* [changes in mirage-net-xen between v1.4.2 and v1.7.0](https://github.com/mirage/mirage-net-xen/compare/v1.4.2...v1.7.0):  47 files changed, 6279 insertions(+), 4059 deletions(-)
+* [changes in mirage-platform between v2.6.0 and v3.0.0](https://github.com/mirage/mirage-platform/compare/v2.6.0...v3.0.0):  36 files changed, 7897 insertions(+), 7449 deletions(-)
+* mirage-protocols is new in MirageOS 3:  18 files changed, 780 insertions(+)
+* mirage-random is new in MirageOS 3:  16 files changed, 172 insertions(+)
+* [changes in mirage-solo5 between v0.1.1 and v0.2.0](https://github.com/mirage/mirage-solo5/compare/v0.1.1...v0.2.0):  69 files changed, 1411 insertions(+), 9130 deletions(-)
+* mirage-stack is new in MirageOS 3:  16 files changed, 254 insertions(+)
+* [changes in mirage-tcpip between v2.8.1 and v3.0.0](https://github.com/mirage/mirage-tcpip/compare/v2.8.1...v3.0.0):  228 files changed, 15376 insertions(+), 13301 deletions(-)
+* mirage-time is new in MirageOS 3:  15 files changed, 198 insertions(+)
+* [changes in ocaml-conduit between v0.15.0 and v0.14.5](https://github.com/mirage/ocaml-conduit/compare/v0.15.0...v0.14.5):  14 files changed, 59 insertions(+), 76 deletions(-)
+* [changes in ocaml-crunch between v1.4.1 and 2.0.0](https://github.com/mirage/ocaml-crunch/compare/v1.4.1...2.0.0):  34 files changed, 576 insertions(+), 8196 deletions(-)
+* [changes in ocaml-dns between v0.18.1 and v0.19.0](https://github.com/mirage/ocaml-dns/compare/v0.18.1...v0.19.0):  24 files changed, 5526 insertions(+), 3824 deletions(-)
+* [changes in ocaml-fat between 0.11.0 and 0.12.0](https://github.com/mirage/ocaml-fat/compare/0.11.0...0.12.0):  80 files changed, 3239 insertions(+), 12224 deletions(-)
+* [changes in ocaml-freestanding between v0.2.0 and v0.2.1](https://github.com/mirage/ocaml-freestanding/compare/v0.2.0...v0.2.1):  3 files changed, 7 insertions(+), 1 deletion(-)
+* [changes in ocaml-qcow between v0.8.0 and v0.8.1](https://github.com/mirage/ocaml-qcow/compare/v0.8.0...v0.8.1):  2 files changed, 5 insertions(+), 2 deletions(-)
+* [changes in ocaml-nocrypto between v0.5.3 and v0.5.4](https://github.com/mirleft/ocaml-nocrypto/compare/v0.5.3...v0.5.4):  44 files changed, 513 insertions(+), 576 deletions(-)
+* [changes in ocaml-tls between 0.7.1 and 0.8.0](https://github.com/mirleft/ocaml-tls/compare/0.7.1...0.8.0):  43 files changed, 415 insertions(+), 695 deletions(-)
+* [changes in mirage-os-shim between v0.0.1 and v3.0.0](https://github.com/pqwy/mirage-os-shim/compare/v0.0.1...v3.0.0):  11 files changed, 62 insertions(+), 143 deletions(-)
+* [changes in ocb-stubblr between v0.1.0 and v0.1.1](https://github.com/pqwy/ocb-stubblr/compare/v0.1.0...v0.1.1):  3 files changed, 21 insertions(+), 11 deletions(-)
+* [changes in solo5 between v0.1.1 and v0.2.0](https://github.com/solo5/solo5/compare/v0.1.1...v0.2.0):  102 files changed, 5554 insertions(+), 9421 deletions(-)
+* [changes in mirage-qubes between v0.3 and 0.4](https://github.com/talex5/mirage-qubes/compare/v0.3...0.4):  28 files changed, 318 insertions(+), 1074 deletions(-)
+* [changes in charrua-client between 0.0.1 and 0.1.0](https://github.com/yomimono/charrua-client/compare/0.0.1...0.1.0):  24 files changed, 492 insertions(+), 442 deletions(-)
