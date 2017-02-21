@@ -28,13 +28,9 @@ The MirageOS 3 module types define a core set of likely errors for each module t
 
 For more background on the result type, see the [Rresult library](http://erratique.ch/software/rresult) which defines further useful operations on `Result.t` and is used widely in MirageOS libraries, and [a forthcoming in-depth explanation of errors](TODO write then link).
 
-We'd like to thank particularly, but in no particular order, the following people who contributed to this improvement with code, suggestions, testing, and moral support: Hannes Mehnert, Thomas Gazagnaire, Thomas Leonard, Mindy Preston, Ashish Agarwal, Leo White, Anil Madhavapeddy, Dave Scott, and Daniel Bünzli.
-
 ### Logs Where You Want Them
 
 MirageOS version 2.9.0 included automatic support for logging via the `Logs` and `Mirage_logs` library, but by default logs were always printed to the console and changing the log reporter was cumbersome.  In MirageOS 3, you can send logs to a consumer of syslog messages with `syslog_udp`, `syslog_tcp`, or with the full authentication and encryption provided by `ocaml-tls` using `syslog_tls`.  For more information, see [the excellent writeup at hannes.nqsb.io](https://hannes.nqsb.io/Posts/Syslog).
-
-We'd like to thank particularly, but in no particular order, the following people who contributed to this improvement with code, suggestions, testing, related libraries, and discussion: Hannes Mehnert, Jochen Bartl, Gabriel Radanne, Marek Kubica, GitHub user wiredsister, Daniel Bünzli, Anil Madhavapeddy, and Thomas Leonard.
 
 ### Disaggregated Module Type Definitions
 
