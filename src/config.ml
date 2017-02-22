@@ -77,7 +77,7 @@ let tmplfs = generic_kv_ro ~key:fs_key "../tmpl"
 
 let secrets_key = Key.(value @@ kv_ro ~group:"secrets" ())
 let secrets = generic_kv_ro ~key:secrets_key "../tls"
-let stack = generic_stackv4 default_console tap0
+let stack = generic_stackv4 tap0
 
 let http =
   foreign ~keys "Dispatch.Make"
@@ -98,8 +98,8 @@ let dispatch = if_impl (Key.value tls_key)
     (** Without tls *)
     (http $ http_server (conduit_direct stack))
 
-let libraries = [ "cow"; "cowabloga"; "rrd" ]
-let packages  = [ "cow"; "cowabloga"; "xapi-rrd"; "c3" ]
+let libraries = [ "cow"; "cowabloga"; "rrd" ; "duration" ]
+let packages  = [ "cow"; "cowabloga"; "xapi-rrd"; "c3" ; "duration" ]
 
 let () =
   let tracing = None in
