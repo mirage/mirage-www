@@ -53,6 +53,7 @@ Then configure and build the website itself:
 ```
 $ cd src
 $ mirage configure -t unix --kv_ro crunch --net socket
+$ make depend
 $ make
 ```
 
