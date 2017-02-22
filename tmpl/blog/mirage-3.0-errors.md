@@ -109,7 +109,7 @@ module type S = sig
 end
 ```
 
-To combining multiple reads, while propagating read errors to the
+To combine multiple `read`s, while propagating read errors to the
 caller, one can do:
 
 ```ocaml
@@ -155,10 +155,10 @@ end
 ```
 
 The `private` and `>` signs mean that an implementation of the Mirage3
-block device is allowed to defined an `error` type with more
+block device is allowed to define an `error` type with more
 values. But when this implementation is used in the context of a
 Mirage3 block device, all these other cases become abstract and it is
-not possible to pattern-match on these error anymore.
+not possible to pattern-match on these errors anymore.
 
 For instance, the error type for [Unix
 filesystem](https://github.com/mirage/mirage-fs-unix) devices is
@@ -178,15 +178,15 @@ include Mirage_fs_lwt.S with type error := error
 The last line says that `Mirage_fs_unix` satisfies the
 `Mirage_fs_lwt.S` signature but also exposes a concrete `error`
 type. Users of `Mirage_fs_unix` can then pattern-match on the exact
-concrete error (do for instance do something useful when an
-`Unix_error` is raised) -- used the context of MirageOS, only the
-cases defines in `Mirage_fs.error` will be visible to the user. We
+concrete error (for instance, to do something useful when a
+`Unix_error` is raised) -- used in the context of MirageOS, only the
+cases defined in `Mirage_fs.error` will be visible to the user. We
 strongly advocate using the same approach in your libraries, as it
 brings the flexibility of using concrete types vs. proper abstraction
 through composition.
 
 ### Conclusion
 
-Mirage3 use the `result` type pervasively, requires libraries to
-provide pretty-printer for their error types and recommend using
+Mirage3 uses the `result` type pervasively, requires libraries to
+provide pretty-printer for their error types and recommends using
 private row types when abstract error types are not enough.
