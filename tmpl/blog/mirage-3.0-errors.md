@@ -4,7 +4,7 @@ After more than two years
 [of](https://lists.xenproject.org/archives/html/mirageos-devel/2014-07/msg00069.html)
 [discussion](https://github.com/mirage/mirage-www/pull/274), we
 finally agreed and decided which consistent error scheme will be used
-for Mirage3. This blog post describes how library developpers are
+for Mirage3. This blog post describes how library developers are
 supposed to expose errors and how users could handle them.
 
 ### Goals
@@ -30,7 +30,7 @@ thrown at any point in an OCaml program and robust code must be
 prepared to handle this. In particular, this (fictional) code is
 *wrong*:
 
-```
+```ocaml
   let gntref = Gntshr.get () in
   match_lwt f gntref with
   | `Ok () -> Gntshr.put gntref; return (`Ok ())
@@ -40,7 +40,7 @@ prepared to handle this. In particular, this (fictional) code is
 If `f` throws an exception, the grant ref will be leaked.
 The correct pattern is:
 
-```
+```ocaml
   Gntshr.with_ref f
 ```
 
@@ -49,8 +49,8 @@ error code or raises an exception.
 
 ### Errors vs. Exceptions
 
-Real World OCaml's [Chapter 7. Error Handling][rwo-errors] provides an
-excellent overview of the options for handling errors in OCaml. It
+Real World OCaml's [Chapter 7. Error Handling](https://realworldocaml.org/v1/en/html/error-handling.html)
+provides an excellent overview of the options for handling errors in OCaml. It
 finishes with this good advice:
 
 > To be clear, it doesn't make sense to avoid exceptions entirely. The
@@ -83,7 +83,7 @@ provide a default value. This shouldn't even be considered an error.
 
 ### Errors and Results
 
-Since 4.0.3, the OCaml standard library has introduced the
+Since 4.03, the OCaml standard library has introduced the
 [result
 type](https://caml.inria.fr/pub/docs/manual-ocaml/libref/Pervasives.html#TYPEresult):
 
@@ -93,7 +93,7 @@ type ('a, 'b) result = Ok of 'a | Error of 'b
 
 A few useful libraries have also been released with useful
 combinators on result values, including Daniel Bünzli's
-[Rresult](http://erratique.ch/software/rresult/doc/Rresult.html) and
+[Rresult](http://erratique.ch/software/rresult/doc) and
 Simon Cruanes's [Lwt_result](https://github.com/ocsigen/lwt/blob/master/src/core/lwt_result.mli).
 
 In Mirage3, all the base components define an abstract `error` type, a
@@ -129,13 +129,13 @@ also defines a `write_error` type and a `pp_write_error` function.
 ### Errors and Abstraction
 
 So far, we did not mention how abstract the errors should be. Most of
-the time, it will not really matter, as the most commong handling of
+the time, it will not really matter, as the most common handling of
 errors is to print them (using the provided `pp_error` function), or
-to check whether the operation was successful (e.g. that the result if
-[Ok]). In these cases, having an abstract error is perfectly ok.
+to check whether the operation was successful (e.g. that the result is
+`Ok`). In these cases, having an abstract error is perfectly fine.
 
-However, there are some cases where it is important to know what was
-the error in order to take the proper action. In this case we want
+However, there are some cases where it is important to know what
+the error was in order to take the proper action. In this case we want
 something but want something not fully abstract: welcome to [private
 row
 types](https://caml.inria.fr/pub/docs/manual-ocaml/extn.html#sec222).
