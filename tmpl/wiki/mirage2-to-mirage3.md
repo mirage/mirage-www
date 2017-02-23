@@ -570,7 +570,8 @@ module Main (C:Mirage_console_lwt.S) (S:Mirage_stack_lwt.V4) = struct
           T.close flow
 
         | Ok `Eof -> C.log console (red "read: eof")
-        | Error _ -> C.log console (red "read: error")
+        | Error _ -> (* XXX: see next section for proper fix *)
+    	  C.log console (red "read: error")
     );
 
     S.listen s
