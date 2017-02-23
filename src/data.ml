@@ -568,13 +568,6 @@ module Wiki = struct
     weekly ~y:2014 ~m:3 ~d:4 ~a:amir;
     weekly ~y:2014 ~m:2 ~d:26 ~a:amir;
 
-    { updated    = date (2015, 07, 01, 18, 0);
-      author     = dave;
-      subject    = "Coverage Testing with Coveralls";
-      body       = File "coverage.md";
-      permalink  = "coverage";
-    };
-
     { updated    = date (2015, 06, 26, 14, 0);
       author     = hannes;
       subject    = "Unix TLS Tools";
@@ -628,13 +621,6 @@ module Wiki = struct
       subject    = "Synthesizing virtual disks for Xen";
       body       = File "xen-synthesize-virtual-disk.md";
       permalink  = "xen-synthesize-virtual-disk";
-    };
-
-    { updated    = date (2013, 04, 23, 9, 0);
-      author     = anil;
-      subject    = "Developer Preview 1.0 Checklist";
-      body       = File "dev-preview-checklist.md";
-      permalink  = "dev-preview-checklist";
     };
 
     weekly ~y:2013 ~m:6 ~d:11 ~a:anil;
@@ -706,21 +692,6 @@ module Wiki = struct
       subject    = "Presentations";
       body       = File "talks.md";
       permalink  = "talks";
-    };
-
-    { updated    = date (2010, 12, 13, 15, 0);
-      author     = thomas;
-      subject    = "COW: OCaml on the Web";
-      body       = File "cow.md";
-      permalink  = "cow";
-    };
-
-    {
-      updated    = date (2010, 11, 4, 16, 30);
-      author     = thomas;
-      subject    = "Introduction to HTCaML";
-      body       = File "htcaml.md";
-      permalink  = "htcaml";
     };
 
     {
