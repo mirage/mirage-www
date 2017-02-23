@@ -14,7 +14,7 @@ For a lot more information on the Solo5 targets, see [the earlier blog post anno
 
 MirageOS 3 has a much richer interface for dealing with the package manager and external library dependencies.  A user can now specify a version or range of versions for a package dependency, and the `mirage` front-end tool will construct a custom `opam` file including both those package dependencies and the ones automatically generated from `mirage configure`.  `mirage` will also consider version constraints for its own packages -- from now on, `opam` should notice that releases of `mirage` are incompatible with your unikernel.
 
-For more information on dealing with packages and dependencies, the documentation for [the Functoria.package function](https://mirage.github.io/functoria/Functoria.html#VALpackage) will likely be of use.  [The PRNG device-usage example in mirage-skeleton](https://github.com/mirage/mirage-skeleton/blob/mirage-dev/device-usage/prng/config.ml) demonstrates some useful invocations of `package`.
+For more information on dealing with packages and dependencies, the documentation for [the Functoria.package function](http://docs.mirage.io/functoria/Functoria/index.html#pkg) will likely be of use.  [The PRNG device-usage example in mirage-skeleton](https://github.com/mirage/mirage-skeleton/blob/mirage-dev/device-usage/prng/config.ml) demonstrates some useful invocations of `package`.
 
 ### Amazing Docs
 
@@ -24,7 +24,7 @@ Thanks to a lot of hard work, a fully interlinked set of module documentation is
 
 The module types provided by MirageOS 3 replace the previous error paradigm (a combination of exceptions and directly returning polymorphic variants) with one that uses [the Result module included in OCaml 4.03 and up](https://github.com/ocaml/ocaml/pull/147).  A notable exception is when problems occur during the unikernel's initialization (i.e., in `connect` functions), where unikernels will now fail hard as soon as they can.  The goal of these changes is to surface errors when the application cares about them, and to not present any uninitialized or unstable state to an application at start time.
 
-The MirageOS 3 module types define a core set of likely errors for each module type (see [the mirage-flow module type](https://mirage.github.io/mirage-flow/Mirage_flow.S.html) for an example), which can be extended by any given implementation.  Module types now specify that each implementation must include a pretty-printer that can handle all emitted error types.  Functions that return a `success` type when they run as expected return a `(success, error) Result.t`, which the caller can print with `pp_error` if the value is an `Error`.
+The MirageOS 3 module types define a core set of likely errors for each module type (see [the mirage-flow module type](http://docs.mirage.io/mirage-flow/Mirage_flow/module-type-S/index.html) for an example), which can be extended by any given implementation.  Module types now specify that each implementation must include a pretty-printer that can handle all emitted error types.  Functions that return a `success` type when they run as expected return a `(success, error) Result.t`, which the caller can print with `pp_error` if the value is an `Error`.
 
 For more background on the result type, see the [Rresult library](http://erratique.ch/software/rresult) which defines further useful operations on `Result.t` and is used widely in MirageOS libraries.  [A more in-depth explanation of errors](https://mirage.io/wiki/mirage-3.0-errors) in Mirage 3 is also available.
 
