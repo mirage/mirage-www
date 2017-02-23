@@ -60,7 +60,7 @@ $ make
 Finally, run the website application:
 
 ```
-$ sudo ./mir-www
+$ sudo ./www
 ```
 
 The website will now be available on `http://localhost/`.
@@ -71,17 +71,18 @@ Now you can build the Unix unikernel using the direct stack, via a similar
 procedure to the [hello world](/wiki/hello-world) examples. As before,
 Mirage will configure the stack to use the
 [tap0 interface](http://en.wikipedia.org/wiki/TUN/TAP) with an address
-of `10.0.0.2/255.255.255.0`. Verify that you have an existing `tap0`
-interface by reviewing `$ sudo ip link show`; if you do not,
-load the tuntap kernel module (`$ sudo modprobe tun`)
-and create a `tap0` interface owned by you (`$ sudo tunctl -u $USER -t tap0`).
-Bring `tap0` up using `$ sudo ifconfig tap0 10.0.0.1 up`, then:
+of `10.0.0.2/255.255.255.0`.  The application, when run, will create
+a `tap0` interface for itself; in order to communicate with it,
+you must configure the "host OS" end of the tap interface (i.e., your
+operating system) to share compatible IPv4 network settings.
 
 ```
 $ cd src
 $ mirage configure -t unix --net direct
 $ make
-$ ./mir-www
+$ sudo ip link set tap0 up #initialize tap
+$ sudo ip addr add 10.0.0.1/24 dev tap0 #configure IP
+$ sudo ./www
 ```
 
 You should now be able to ping the unikernel's interface:
