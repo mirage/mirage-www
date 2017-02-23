@@ -29,4 +29,3 @@ env:
   - secure: Juipi/OO05oERAttsFLSow5M1P8YPb3vigGgufaedSI5KjzcPrU6PeKtX6D7nHCbzjZEIj3uRnv9VC8eT46JC7IYQs4ATGnEQnJsGoE2gHWQ348UlK7o/jgPtG9XeYaTgxN4N/hOKk/B08MIJwsJllUUZvBztUIJlUddrFOt0xE=
   - secure: Qq8YWXsJk3R0EJIMnT7cScCp8xDAG5z3Q2seA8d8P2LaR/1FvHkZGUMXwJ27f1ZvOmtBCEhcXbYtYFfedXJwy4JGRWq165te20XZS0gqpdi5DHbv0S1rlE01bdcQFVQSvxeMXsO+KdUmrx9+yjG1r4CarB+m5CpHHJdIs9mxb/c=
   - secure: dIRmXAwM8EVjni3k0POewi0eMXB7Ebr/sTJhYPUYA31TrW98OYO6P2VCR4zND5e7ObmM1pyjXlsP/i6Q8YTch3xxJgBeYOCbsb7BfJ62UioGdWL2E5wlrnDPgHxdPayDajRgmxRjY6EErAfaFv+Kk2OmeeIv4ibfMoMzSGjQT+A=
-  - EXTRA_REMOTES="https://github.com/mirage/mirage-dev.git"
