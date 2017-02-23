@@ -708,13 +708,11 @@ because the function `foreign` no longer takes a `libraries` argument.
 
 `libraries` and `packages` were two optional string list arguments in Mirageversions >= 2.7.x but < 3.x.  `libraries` was for `ocamlfind` libraries, and `packages` for OPAM packages; both string lists were simply fed `ocamlfind` and `opam` commands respectively.
 
-The [documentation for `foreign`](http://docs.mirage.io/mirage/Mirage/index.html#val-foreign) will be a useful reference for us.  In Mirage 3, `packages` is now a variable of type `package list`.  One can get a `package` by calling [Mirage.package](http://docs.mirage.io/mirage/Mirage/index.html#val-package), which has the following signature:
+The [documentation for `foreign`](http://docs.mirage.io/mirage/Mirage/index.html#val-foreign) will be a useful reference for us.  In Mirage 3, `packages` is now a variable of type `package list`.  One can get a `package` by calling [Mirage.package](http://docs.mirage.io/functoria/Functoria/index.html#pkg), which has the following signature:
 
 ```
 val package : ?build:bool -> ?sublibs:string list -> ?ocamlfind:string list -> ?min:string -> ?max:string -> string -> package
 ```
-
-`~build` can be set to true to note that the package is required only at build time, and is not needed for a running unikernel; `sublibs` and `ocamlfind` let the caller specify when items that previously were listed in `libraries` are required.  `min` and `max` allow the caller to require specific version numbers for packages.
 
 `ping` needs `tcpip` and the sublibraries `arpv4`, `ethif`, and `ipv4`, so we'll try the following `config.ml`:
 
