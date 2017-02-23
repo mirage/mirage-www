@@ -80,9 +80,9 @@ operating system) to share compatible IPv4 network settings.
 $ cd src
 $ mirage configure -t unix --net direct
 $ make
+$ sudo ./www &
 $ sudo ip link set tap0 up #initialize tap
 $ sudo ip addr add 10.0.0.1/24 dev tap0 #configure IP
-$ sudo ./www
 ```
 
 You should now be able to ping the unikernel's interface:
@@ -113,8 +113,11 @@ variables, so we can quickly try it as follows.
 ```
 $ cd src
 $ mirage configure -t unix --kv_ro fat
+$ make depend
 $ make
-$ sudo ./mir-www & sudo ifconfig tap0 10.0.0.1 255.255.255.0 && fg
+$ sudo ./www &
+$ sudo ip link set tap0 up #initialize tap
+$ sudo ip addr add 10.0.0.1/24 dev tap0 #configure IP
 ```
 
 The `make-fat_*-images.sh` script uses the `fat` command-line helper installed by
