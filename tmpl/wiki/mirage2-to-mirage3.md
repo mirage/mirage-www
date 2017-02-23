@@ -130,7 +130,9 @@ Hint: Recursive traversal of subdirectories was not enabled for this build,
       <dir1> or <dir2>: traverse
 ```
 
-remove the `default_console` argument to `stackv4`, to give the following `config.ml`:
+Note that in the output above, we get an initial error message suggesting that `-t unix` is not understood by `mirage configure`.  The failure to understand any option, including `-t`, is a side effect of `config.ml` itself not being understood by `mirage`  The error message from `ocamlbuild` that follows the `mirage` output about `-t unix` is the right place to start fixing this problem.
+
+Let's remove the `default_console` argument to `stackv4`, to give the following `config.ml`:
 
 ```ocaml
 open Mirage
