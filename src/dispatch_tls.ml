@@ -17,9 +17,11 @@
 open Lwt.Infix
 
 module Make
-    (S: V1_LWT.STACKV4) (KEYS: V1_LWT.KV_RO)
-    (FS: V1_LWT.KV_RO)
-    (TMPL: V1_LWT.KV_RO) (Clock : V1.CLOCK)
+    (S: Mirage_stack_lwt.V4)
+    (KEYS: Mirage_types_lwt.KV_RO)
+    (FS: Mirage_types_lwt.KV_RO)
+    (TMPL: Mirage_types_lwt.KV_RO)
+    (Clock : Mirage_types.PCLOCK)
 = struct
 
   let log_src = Logs.Src.create "dispatch_tls" ~doc:"web-over-tls server"
@@ -36,13 +38,12 @@ module Make
   module DS = Dispatch.Make(Https)(FS)(TMPL)(Clock)
 
   let with_tls cfg tcp ~f =
-    let peer, port = TCP.get_dest tcp in
+    let peer, port = TCP.dst tcp in
     let log str = Log.debug (fun f -> f "[%s:%d] %s" (Ipaddr.V4.to_string peer) port str) in
     let with_tls_server k = TLS.server_of_flow cfg tcp >>= k in
     with_tls_server @@ function
-    | `Error _ -> log "TLS failed"; TCP.close tcp
-    | `Ok tls  -> log "TLS ok"; f tls >>= fun () ->TLS.close tls
-    | `Eof     -> log "TLS eof"; TCP.close tcp
+    | Error _ -> log "TLS failed"; TCP.close tcp
+    | Ok tls  -> log "TLS ok"; f tls >>= fun () ->TLS.close tls
 
   let with_http host flow =
     let domain = `Https, host in
@@ -54,10 +55,11 @@ module Make
     let conf = Tls.Config.server ~certificates:(`Single cert) () in
     Lwt.return conf
 
-  let start stack keys fs tmpl _clock () =
+  let start stack keys fs tmpl clock () =
     let host = Key_gen.host () in
     let redirect = Key_gen.redirect () in
-    Stats.start ~sleep:OS.Time.sleep ~time:Clock.time;
+    let sleep sec = OS.Time.sleep_ns (Duration.of_sec sec) in
+    Stats.start ~sleep ~time:(fun () -> Clock.now_d_ps clock);
     tls_init keys >>= fun cfg ->
     let domain = `Https, host in
     let dispatch = match redirect with

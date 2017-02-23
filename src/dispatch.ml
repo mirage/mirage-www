@@ -17,7 +17,7 @@
 
 open Lwt.Infix
 
-let err fmt = Printf.kprintf (fun f -> raise (Failure f)) fmt
+let err fmt = Fmt.kstrf failwith fmt
 
 let domain_of_string x =
   let uri = Uri.of_string x in
@@ -35,8 +35,9 @@ let domain_of_string x =
 
 module Make
     (S: Cohttp_lwt.Server)
-    (FS: V1_LWT.KV_RO) (TMPL: V1_LWT.KV_RO)
-    (Clock: V1.CLOCK)
+    (FS: Mirage_types_lwt.KV_RO)
+    (TMPL: Mirage_types_lwt.KV_RO)
+    (Clock: Mirage_types.PCLOCK)
 = struct
 
   let log_src = Logs.Src.create "dispatch" ~doc:"Web server"
@@ -45,25 +46,18 @@ module Make
   type dispatch = Types.path -> Types.cowabloga Lwt.t
   type s = Conduit_mirage.server -> S.t -> unit Lwt.t
 
-  let err_not_found name = err "%s not found" name
+  let size_then_read ~pp_error ~size ~read device name =
+    size device name >>= function
+    | Error e -> err "%a" pp_error e
+    | Ok size ->
+      read device name 0L size >>= function
+      | Error e -> err "%a" pp_error e
+      | Ok bufs -> Lwt.return (Cstruct.copyv bufs)
 
-  let read_tmpl tmpl name =
-    TMPL.size tmpl name >>= function
-    | `Error (TMPL.Unknown_key _) -> err_not_found name
-    | `Ok size ->
-      TMPL.read tmpl name 0 (Int64.to_int size) >>= function
-      | `Error (TMPL.Unknown_key _) -> err_not_found name
-      | `Ok bufs -> Lwt.return (Cstruct.copyv bufs)
+  let tmpl_read =
+    size_then_read ~pp_error:TMPL.pp_error ~size:TMPL.size ~read:TMPL.read
 
-  let read_fs fs name =
-    FS.size fs name >>= function
-    | `Error (FS.Unknown_key _) -> err_not_found name
-    | `Ok size ->
-      FS.read fs name 0 (Int64.to_int size) >>= function
-      | `Error (FS.Unknown_key _) -> err_not_found name
-      | `Ok bufs -> Lwt.return (Cstruct.copyv bufs)
-
-  let read_entry tmpl name = read_tmpl tmpl name >|= Cow.Markdown.of_string
+  let read_entry tmpl name = tmpl_read tmpl name >|= Cow.Markdown.of_string
 
   let respond_ok ?(headers=[]) body =
     body >>= fun body ->
@@ -106,22 +100,22 @@ module Make
   let blog domain tmpl =
     let feed = blog_feed domain tmpl in
     let entries = Data.Blog.entries in
-    let read = read_tmpl tmpl in
+    let read = tmpl_read tmpl in
     Blog.dispatch ~domain ~feed ~entries ~read
 
   let wiki domain tmpl =
-    let read = read_tmpl tmpl in
+    let read = tmpl_read tmpl in
     let feed = wiki_feed domain tmpl in
     let entries = Data.Wiki.entries in
     Wiki.dispatch ~domain ~read ~feed ~entries
 
   let releases domain tmpl =
-    let read = read_tmpl tmpl in
+    let read = tmpl_read tmpl in
     let feed = Data.empty_feed in
     Pages.Releases.dispatch ~feed ~domain ~read
 
   let links domain tmpl =
-    let read = read_tmpl tmpl in
+    let read = tmpl_read tmpl in
     let feed = links_feed domain tmpl in
     let links = Data.Links.entries in
     Pages.Links.dispatch ~domain ~read ~feed ~links
@@ -129,12 +123,12 @@ module Make
   let updates domain tmpl =
     let feed = updates_feed domain tmpl in
     let feeds = updates_feeds domain tmpl in
-    let read = read_tmpl tmpl in
+    let read = tmpl_read tmpl in
     Pages.Updates.dispatch ~domain ~feed ~feeds ~read
 
   let security domain tmpl =
     let feed = updates_feed domain tmpl in
-    let read = read_tmpl tmpl in
+    let read = tmpl_read tmpl in
     Pages.Security.dispatch ~domain ~read ~feed
 
   let stats () =
@@ -145,20 +139,24 @@ module Make
     redirect domain ["../wiki#Weeklycallsandreleasenotes"]
 
   let index domain tmpl =
-    let read = read_tmpl tmpl in
+    let read = tmpl_read tmpl in
     let feeds = updates_feeds domain tmpl in
     Pages.Index.t ~domain ~feeds ~read >|= cowabloga
 
   let about domain tmpl =
-    let read = read_tmpl tmpl in
+    let read = tmpl_read tmpl in
     let feed = Data.empty_feed in
     Pages.About.dispatch ~feed ~domain ~read
 
+  let fs_read = size_then_read ~pp_error:FS.pp_error ~size:FS.size ~read:FS.read
+
   let asset domain fs path =
     let path_s = String.concat "/" path in
-    let asset () = Lwt.return (`Asset (read_fs fs path_s)) in
+    let asset () = Lwt.return (`Asset (fs_read fs path_s)) in
     Lwt.catch asset (fun e ->
-        Log.warn (fun f -> f "got an error while getting %s: %s" path_s (Printexc.to_string e));
+        Log.warn (fun f ->
+            f "got an error while getting %s: %s" path_s (Printexc.to_string e))
+        ;
         not_found domain path)
 
   (* dispatch non-file URLs *)
@@ -220,10 +218,11 @@ module Make
     in
     S.make ~callback ~conn_closed ()
 
-  let start http fs tmpl () =
+  let start http fs tmpl clock =
     let host = Key_gen.host () in
     let red = Key_gen.redirect () in
-    Stats.start ~sleep:OS.Time.sleep ~time:Clock.time;
+    let sleep sec = OS.Time.sleep_ns (Duration.of_sec sec) in
+    Stats.start ~sleep ~time:(fun () -> Clock.now_d_ps clock);
     let domain = `Http, host in
     let dispatch = match red with
       | None        -> dispatch domain fs tmpl

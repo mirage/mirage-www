@@ -19,9 +19,9 @@
 (** The HTTP dispatcher. *)
 module Make
     (S: Cohttp_lwt.Server)
-    (FS: V1_LWT.KV_RO)
-    (TMPL: V1_LWT.KV_RO)
-    (Clock: V1.CLOCK) :
+    (FS: Mirage_types_lwt.KV_RO)
+    (TMPL: Mirage_types_lwt.KV_RO)
+    (Clock: Mirage_types.PCLOCK) :
 sig
 
   type dispatch = Types.path -> Types.cowabloga Lwt.t
@@ -47,12 +47,11 @@ sig
   type s = Conduit_mirage.server -> S.t -> unit Lwt.t
   (** The type for HTTP callbacks. *)
 
-  val start: s -> FS.t -> TMPL.t -> unit -> unit Lwt.t
+  val start: s -> FS.t -> TMPL.t -> Clock.t -> unit Lwt.t
   (** The HTTP server's start function. *)
 
 end
 
 val domain_of_string: string -> Types.domain
-(** [domain_of_string d] parses the string [d] to build a
-    domain. Should be of the form {i http://host} or {i
-    https://host}. *)
+(** [domain_of_string d] parses the string [d] to build a domain. Should be of
+    the form {i http://host} or {i https://host}. *)

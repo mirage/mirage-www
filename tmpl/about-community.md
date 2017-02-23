@@ -4,6 +4,7 @@
 * [*Jon Crowcroft*](http://www.cl.cam.ac.uk/~jac22/), University of Cambridge
 * [*David Kaloper*](https://github.com/pqwy), University of Cambridge
 * [*Steven Hand*](http://www.cl.cam.ac.uk/~smh22/), University of Cambridge
+* [*Martin Lucina*](https://github.com/mato), Docker
 * [*Jon Ludlam*](http://jon.recoil.org/), Citrix Systems R&D
 * [*Raphael Proust*](http://www.cl.cam.ac.uk/~rp452/), University of Cambridge
 * [*Haris Rotsos*](http://www.cl.cam.ac.uk/~cr409/), University of Cambridge
