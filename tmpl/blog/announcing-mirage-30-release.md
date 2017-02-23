@@ -8,7 +8,7 @@ Here's a summary of the things in MirageOS 3 that we're most excited about:
 
 MirageOS 3.0 is the first release that integrates the solo5 targets, `virtio` and `ukvm`, fully with the `mirage` front-end tool.  Now you can `mirage configure -t ukvm`, build a unikernel, and run directly with the generated `ukvm-bin`!  We've updated the "hello world" tutorial to reflect our excitement about `ukvm` -- the `ukvm` target is considerably easier to interface with and configure than `xen` was, and for a lot of users this will be a clearer path toward operational deployment of unikernels.
 
-For a lot more information on the Solo5 targets, see [the earlier blog post announcing solo5](/tmpl/blog/introducing-solo5), [Unikernel Monitors: Extending Minimalism Outside of the Box](https://www.usenix.org/conference/hotcloud16/workshop-program/presentation/williams), and [the very readable solo5 repository README](https://github.com/solo5/solo5/tree/master/README.md).  You can also read how to [run solo5 unikernels on FreeBSD via bhyve](https://hannes.nqsb.io/Posts/Solo5).
+For a lot more information on the Solo5 targets, see [the earlier blog post announcing solo5](/blog/introducing-solo5), [Unikernel Monitors: Extending Minimalism Outside of the Box](https://www.usenix.org/conference/hotcloud16/workshop-program/presentation/williams), and [the very readable solo5 repository README](https://github.com/solo5/solo5/tree/master/README.md).  You can also read how to [run solo5 unikernels on FreeBSD via bhyve](https://hannes.nqsb.io/Posts/Solo5).
 
 ### Playing More Nicely with OPAM
 
