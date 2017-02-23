@@ -334,7 +334,9 @@ $ ./hello
 
 #### Building for Another Backend
 
-To make a unikernel that will use [solo5](https://github.com/solo5/solo5) to run on KVM, re-run `mirage configure` and ask for the `ukvm` target instead of `unix`.
+**Note**: The following sections of this tutorial use the `ukvm` backend as an example - this backend is specific to Linux host systems with direct access to KVM via `/dev/kvm`. If KVM isn't available on your machine, or you are using FreeBSD, you may be interested in building and running unikernels via [the `virtio` target](https://github.com/solo5/solo5#running-solo5-unikernels-directly) which provides support for more hypervisors such as KVM/QEMU, bhyve and Google Compute Engine.
+
+To make a unikernel that will use [Solo5](https://github.com/solo5/solo5) to run on KVM, re-run `mirage configure` and ask for the `ukvm` target instead of `unix`.
 
 ```
 $ mirage configure -t ukvm
@@ -344,10 +346,10 @@ $ make
 
 *Everything* else remains the same! The set of dependencies required, the `main.ml`, and the `Makefile` differ significantly, but since the source code of your application was
 parameterised over the `Time` type, it doesn't matter-- you do not need to
-make any changes for your code to run when linked against the solo5 console driver
+make any changes for your code to run when linked against the Solo5 console driver
 instead of Unix.
 
-When you build the `ukvm` version, you'll see some new artifacts: a `ukvm-bin` binary and a file called `hello.ukvm`.  `hello.ukvm` is the unikernel, and `ukvm-bin` is a dynamically-generated program that will pass it runtime information.  To try running `hello.ukvm`, pass it as an argument to `ukvm-bin`:
+When you build the `ukvm` version, you'll see some new artifacts: a `ukvm-bin` binary and a file called `hello.ukvm`.  `hello.ukvm` is the unikernel, and `ukvm-bin` is a dynamically-generated monitor program specialised to your unikernel. To try running `hello.ukvm`, pass it as an argument to `ukvm-bin`:
 
 ```
 $ ./ukvm-bin hello.ukvm
@@ -371,9 +373,7 @@ STUB: getenv() called
 Solo5: solo5_app_main() returned with 0
 ```
 
-We get some additional output from the initialization of the unikernel and its successful boot, then we see our expected output, and solo5's report of the application's successful completion.
-
-Instead of the output above, you may get an error message if `ukvm-bin` isn't able to access `/dev/kvm`.  If KVM isn't available on your machine, you may be interested in building and running unikernels via [the `virtio` target](https://github.com/solo5/solo5#running-solo5-unikernels-directly).
+We get some additional output from the initialization of the unikernel and its successful boot, then we see our expected output, and Solo5's report of the application's successful completion.
 
 #### Configuration Keys
 
@@ -453,7 +453,7 @@ $ ./hello --hello="Hi!"
 2017-02-08 18:30:57 +06:00: INF [application] Hi!
 ```
 
-When configured for non-Unix backends, other mechanisms are used to pass the runtime information to the unikernel.  `ukvm-bin`, which we used to run `hello.ukvm` in the non-keyed example, will pass information given after the kernel when invoked:
+When configured for non-Unix backends, other mechanisms are used to pass the runtime information to the unikernel.  `ukvm-bin`, which we used to run `hello.ukvm` in the non-keyed example, will pass keys specified on the command line to the unikernel when invoked:
 
 ```
 $ cd tutorial/hello-key
@@ -573,7 +573,7 @@ $ make
 
 Now we just need to boot the unikernel with `ukvm-bin` as before, and we should see the same output
 (after the VM boot preamble) -- but now MirageOS is linked against the
-solo5 [block device driver](https://github.com/mirage/mirage-block-solo5) and is
+Solo5 [block device driver](https://github.com/mirage/mirage-block-solo5) and is
 mapping the unikernel's block requests directly through to it, rather than
 relying on the host OS (the Linux or FreeBSD kernel).
 
