@@ -568,6 +568,13 @@ module Wiki = struct
     weekly ~y:2014 ~m:3 ~d:4 ~a:amir;
     weekly ~y:2014 ~m:2 ~d:26 ~a:amir;
 
+    { updated    = date (2017, 02, 23, 16, 00);
+      author     = yomimono;
+      subject    = "Porting Mirage 2.x Projects to Mirage 3.x";
+      body       = File "mirage2-to-mirage3.md";
+      permalink  = "mirage2-to-mirage3";
+     };
+
     { updated    = date (2015, 06, 26, 14, 0);
       author     = hannes;
       subject    = "Unix TLS Tools";
