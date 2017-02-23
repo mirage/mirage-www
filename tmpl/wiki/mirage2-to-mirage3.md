@@ -54,7 +54,7 @@ val default_argv: Functoria_app.argv impl
 
 Many existing unikernels will find it useful to replace their existing network stack detecting code with `generic_stackv4` in particular -- let's see an example.
 
-## porting the stackv4 example to Mirage 3
+## Porting the stackv4 example to Mirage 3
 
 A good example of replacing old configurator code can be seen between [the pre-functoria `network` example](https://github.com/mirage/mirage-skeleton/tree/21adfc85b124e886d871079f28bd0a868ba3c5fb/stackv4), and [the `device-usage/network` example from the Mirage-3.0.0-compatible branch of `mirage-skeleton`](https://github.com/mirage/mirage-skeleton/tree/e9360fa1ce02d26a8931238a16000fa12df40ebf/device-usage/network).  We can replace this old code from `config.ml`:
 
@@ -173,7 +173,7 @@ and then try `mirage configure` to see some success:
 mirage-skeleton/stackv4$ mirage configure -t unix
 ```
 
-### a new step: make depend
+### A new step: make depend
 
 In Mirage 2.x, `mirage configure` would automatically invoke `opam` to install the latest version of any packages it detected were needed.  The automatic alteration of the build environment was surprising to a lot of people, and additionally the invocation of `opam install` was slow enough that many heavy Mirage users usually called `mirage configure` with the `--no-opam` option to disable it.  In Mirage 3, `mirage configure` no longer automatically installs packages, but a convenient shorthand for installing everything necessary is still available with `make depend`.  `make depend` relies on information discovered during `mirage configure`, and is only available after that step.  You should run it when you change `config.ml` or you invoke `mirage configure` with different arguments.  We've just done the former, so we'll need to `make depend` before `make`ing:
 
@@ -232,7 +232,7 @@ Makefile:18: recipe for target 'build' failed
 make: *** [build] Error 1
 ```
 
-### where to find module type definitions
+### Where to find module type definitions
 
 We got a bit further that time, but we're still not quite there.  The module previously known as `V1_LWT`, which contained definitions for all of the module types (e.g. `CONSOLE`, `BLOCK`, `STACKV4`) used to define bits of operating system functionality has renamed.  `V1` is now `Mirage_types`, and `V1_LWT` is now `Mirage_types_lwt`.  Both `Mirage_types` and `Mirage_types_lwt` just refer to definitions in respective packages now, rather than containing the module types directly, and it would be better to directly reference the ones we need rather than opening up all of `Mirage_types_lwt`.  (You may find [the map of module type names from Mirage_types to their true names](https://github.com/mirage/mirage/blob/master/types/mirage_types.mli) useful to keep handy.) Let's edit `unikernel.ml` to refer to `Mirage_console_lwt.S` and `Mirage_stack_lwt.V4` accordingly:
 
@@ -314,7 +314,7 @@ Makefile:18: recipe for target 'build' failed
 make: *** [build] Error 1
 ```
 
-### name changes: C.log_s -> C.log, T.get_dest -> T.dst
+### Name changes: C.log_s -> C.log, T.get_dest -> T.dst
 
 `C` is a module of type `Mirage_console_lwt.S`.  This module type was refactored in Mirage 3 to remove `log`, and rename the more commonly used `log_s` to `log`.  If we really want to be sure that our messages go to the *console*, rather than to another available logging destination, we can change `unikernel.ml` to use `C.log` instead of `C.log_s`:
 
@@ -579,7 +579,7 @@ end
 
 and now, finally, `make` should produce a runnable binary.
 
-### using Logs and pp_error
+### Using Logs and pp_error
 
 The error handling above is very unsatisfying, though, and so is the output -- for a toy application it's okay to output to the console, but for a unikernel which might be deployed to an arbitrary cloud service, console access isn't always a given.  Let's refactor this code to remove the `console` argument to the unikernel, and replace the calls to `C.log` with `Logs` calls of the appropriate level.
 
@@ -652,7 +652,7 @@ end
 
 We can remove the `open Printf` since we're no longer constructing any strings with `sprintf`, and now we can set the log level for this application at configure time or run time -- if we only want to see errors, we can choose to do so by asking for `-l *:warning`, and we can see a lot of debug output (from all layers, including the TCP/IP stack") by asking for `-l *:debug`.  We've also replaced the catchall error message with a call to `T.pp_error`, which will invoke the TCP module's error-printing function to give a string explaining any problems -- much nicer than the `read: error` output we would have gotten previously.
 
-## porting the ping example to Mirage 3
+## Porting the ping example to Mirage 3
 
 To illustrate how to solve some more common problems, let's look at the `ping` example, which has the following `config.ml`:
 
@@ -701,7 +701,7 @@ Hint: Recursive traversal of subdirectories was not enabled for this build,
 
 because the function `foreign` no longer takes a `libraries` argument.
 
-### libraries and packages
+### Libraries and packages
 
 `libraries` and `packages` were two optional string list arguments in Mirageversions >= 2.7.x but < 3.x.  `libraries` was for `ocamlfind` libraries, and `packages` for OPAM packages; both string lists were simply fed `ocamlfind` and `opam` commands respectively.
 
@@ -755,7 +755,7 @@ Hint: Recursive traversal of subdirectories was not enabled for this build,
       <dir1> or <dir2>: traverse
 ```
 
-### clocks, pclocks, and mclocks
+### CLOCKs, PCLOCKs, and MCLOCKs
 
 In Mirage3, the catchall `CLOCK` module type was replaced with two distinct types of clock modules: `PCLOCK`, a POSIX-compatible wall clock, and `MCLOCK`, a monotonically increasing counter.  In our experience porting MirageOS libraries, nearly all users of `CLOCK` wanted something like `MCLOCK` rather than something like `PCLOCK`.
 
@@ -987,7 +987,7 @@ module Main (C:Mirage_console_lwt.S)
 end
 ```
 
-### old ground: console -> logs
+### Old ground: CONSOLE -> logs
 
 When we try to `make` this unikernel, we get a familiar error message about `C.log_s`.  Let's replace the calls to `C.log_s` with calls to the appropriate `Logs` functions, like we did in the previous example, to get the following `config.ml` that no longer passes a console:
 
@@ -1110,7 +1110,7 @@ Makefile:18: recipe for target 'build' failed
 make: *** [build] Error 1
 ```
 
-### connects connect directly
+### `connect` connects directly
 
 The `connect` functions that we're directly invoking no longer return a polymorphic variant, but rather will raise an exception if a problem occurred.  Therefore, we no longer need to wrap them in `or_error`, so we can remove that function from `unikernel.ml`:
 
@@ -1185,7 +1185,7 @@ Makefile:18: recipe for target 'build' failed
 make: *** [build] Error 1
 ```
 
-### another tcpip function change
+### Another tcpip function change
 
 Line 18 is the call to `A.connect`.  The documentation for [the Arpv4 module in mirage-tcpip](http://docs.mirage.io/tcpip/Arpv4/Make/index.html), which we're invoking directly, has a [connect function](http://docs.mirage.io/tcpip/Arpv4/Make/index.html#val-connect) that expects a `Clock.t`, where `Clock` is the second module which was passed to `Arpv4.Make`.  The unikernel receives such a `Clock.t` as an argument to `start`, but it's currently ignoring it.  Let's edit `unikernel.ml` to stop ignoring `_clock`, and pass it as an argument to `A.connect`:
 
@@ -1260,7 +1260,7 @@ Makefile:18: recipe for target 'build' failed
 make: *** [build] Error 1
 ```
 
-### ipv4 configuration
+### Ipv4 configuration
 
 The `IP` module type no longer allows for mutable IP configuration settings.  [The type signature for `I.connect`](http://docs.mirage.io/tcpip/Static_ipv4/Make/index.html#val-connect) shows that, with some help from [Ipaddr.V4](http://docs.mirage.io/ipaddr/Ipaddr/V4/index.html) and a bit of adjustment `gateway` being `Ipaddr.V4.t option` rather than `Ipaddr.V4.t list` as `I.set_ip_gateways` previously expected, we can set the values directly when invoking `I.connect` from `unikernel.ml`:
 
@@ -1409,7 +1409,7 @@ ocamlfind ocamlopt -g -linkpkg -g -package tcpip.ipv4 -package tcpip.ethif -pack
 
 Hooray, we've ported another unikernel!
 
-## My Problem Wasn't Fixed Here
+## My problem wasn't fixed here
 
 If you're encountering problems that weren't discussed here, you may find useful information in the [release notes for Mirage version 3](https://github.com/mirage/mirage/releases/tag/v3.0.0).  The updated examples in [the mirage-skeleton](https://github.com/mirage/mirage-skeleton) may also be of use to you -- look in the `device-usage` directory for examples of unikernels that may be trying to use the same libraries as you are, or the `applications` category for richer examples on which you may have based a running unikernel from Mirage 2.
 
