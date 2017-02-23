@@ -154,6 +154,7 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+
       { updated    = date (2016, 11, 17, 16, 00);
         authors    = [thomas];
         subject    = "Irmin 0.12 with portable filesystem watching released";
@@ -567,6 +568,12 @@ module Wiki = struct
     weekly ~y:2014 ~m:3 ~d:18 ~a:amir;
     weekly ~y:2014 ~m:3 ~d:4 ~a:amir;
     weekly ~y:2014 ~m:2 ~d:26 ~a:amir;
+    { updated    = date (2017, 02, 23, 16, 00);
+      authors    = [thomas; tal];
+      subject    = "Error Handling in Mirage3";
+      body       = "mirage-3.0-errors.md";
+      permalink  = "mirage-3.0-errors";
+     };
 
     { updated    = date (2015, 07, 01, 18, 0);
       author     = dave;
