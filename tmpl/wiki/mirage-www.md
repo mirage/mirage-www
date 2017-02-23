@@ -145,7 +145,7 @@ added to the site recently.)
 
 ## Building a Xen kernel
 
-We're now ready to build a Xen kernel.  This can use eithr FAT or a builtin
+We're now ready to build a Xen kernel.  This can use either FAT or a builtin
 crunch (to avoid the need for an external block device).  The latter is the
 default, for simplicity's sake.
 
