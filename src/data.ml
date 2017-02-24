@@ -154,7 +154,7 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
-      { updated    = date (2017, 02, 24, 17, 00);
+      { updated    = date (2017, 02, 27, 14, 00);
         authors    = [hannes];
         subject    = "Size matters: how Mirage got smaller and less magical";
         body       = "mirage-3-smaller.md";
