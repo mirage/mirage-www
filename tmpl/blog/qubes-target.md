@@ -2,7 +2,7 @@
 
 When I got a new laptop in early 2016, I decided to try out this [QubesOS](https://qubesos.org) all the cool kids were talking about.  QubesOS also runs a hypervisor, but it nicely supports running multiple virtual machines for typical user tasks, like looking at cat photos with a web browser, viewing a PDF, listening to music, or patching MirageOS.  QubesOS also uses Xen, which means we should be able to even *run* our MirageOS unikernels on it... right?
 
-The answer is [yes, after a fashion](http://roscidus.com/blog/blog/2016/01/01/a-unikernel-firewall-for-qubesos/).  Thomas Leonard did the hard work of writing [mirage-qubes](https://github.com/mirage/mirage-qubes), a library that interfaces nicely with the QubesOS management layer and allows MirageOS unikernels to boot, configure themselves, and run as managed by the Qubes management system.  That solution is nice for generating a unikernel once that you're going to run all the time, as part of QubesOS itself, but building a unikernel that will boot and run on QubesOS requires QubesOS-specific code in the unikernel itself.  It's very unfriendly for testing generic unikernels, and as the release manager for Mirage 3, I wanted to do that pretty much all the time.
+The answer is [yes, after a fashion](http://roscidus.com/blog/blog/2016/01/01/a-unikernel-firewall-for-qubesos/).  Thomas Leonard did the hard work of writing [mirage-qubes](https://github.com/mirage/mirage-qubes), a library that interfaces nicely with the QubesOS management layer and allows MirageOS unikernels to boot, configure themselves, and run as managed by the Qubes management system.  That solution is nice for generating, once, a unikernel that you're going to run all the time under QubesOS, but building a unikernel that will boot and run on QubesOS requires QubesOS-specific code in the unikernel itself.  It's very unfriendly for testing generic unikernels, and as the release manager for Mirage 3, I wanted to do that pretty much all the time.
 
 The command-line `mirage` utility was made to automatically build programs against libraries that are specific to a target only when the user has asked to build for that target, which is the exact problem we have!  So let's try to get to `mirage configure -t qubes`.
 
@@ -77,7 +77,7 @@ module Main (N: Mirage_net_lwt.S) = struct
 end
 ```
 
-Our program is in a module that's parameterized over the module `N`, which can be any module that matches the module type `Mirage_net_lwt.S`.  The entry point for execution is the `start` function, which takes one argument of type `N.t`.
+Our program is in a module that's parameterized over the module `N`, which can be any module that matches the module type `Mirage_net_lwt.S`.  The entry point for execution is the `start` function, which takes one argument of type `N.t`.  This is the usual pattern for Mirage unikernels, powered by Functoria's [invocation of otherworldly functors](/blog/introducing-functoria).
 
 But there are other modules which aren't explicitly passed.  Since MirageOS version 2.9.0, for example, a `Logs` module has been available to MirageOS unikernels.  It isn't explicitly passed as a module argument to `Main`, because it's assumed that all unikernels will want to use it, and so it's always made available.  The `OS` module is also always available, although the implementation will be specific to the target for which the unikernel was configured, and there is no module type to which the module is forced to conform.
 
@@ -153,7 +153,7 @@ For details on what both `gui_qubes` and `qrexec_qubes` are actually doing in th
 
 We'll need the `connect` function for both of these configurables to be run before the `start` function of our unikernel.  But we also don't want a corresponding `QRExec.t` or `GUI.t` to be passed to our unikernel, nor do we want to parameterize it over the module type corresponding to either module, since either of these would be nonsensical for a non-Qubes target.
 
-Instead, we need to have `main.ml` take care of this transparently, and we don't want any of the results passed to us.  The trick to doing this is adding some parameters to the `init` call to `Functoria.register`, which is the last call made in `Mirage.register`:
+Instead, we need to have `main.ml` take care of this transparently, and we don't want any of the results passed to us.  In order to accomplish this, we'll need to change the final invocation of Functoria's `register` function from `Mirage.register`:
 
 ```ocaml
 let qrexec_init = match_impl Key.(value target) [
