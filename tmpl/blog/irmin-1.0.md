@@ -1,25 +1,25 @@
 I am really happy to announce the release of Irmin 1.0, which fully
 supports MirageOS 3.0 and which brings a simpler and yet more
-expressive API. Irmin is library to design Git-like distributed
+expressive API. Irmin is a library for designing Git-like distributed
 databases, with built-in branching, snapshoting, reverting and
-auditing capabilities, and with which applications can create tailored
+auditing capabilities. With Irmin, applications can create tailored
 mergeable datastructures to scale seamlessly. Applications built on
-top of Irmin include [Tezos][tezos] a distributed ledger,
-[Datakit][datakit] a distributed and reactive key-value store, or
-[cuekeeper][cuekeeper].
+top of Irmin include [Tezos][tezos], a distributed ledger,
+[Datakit][datakit], a distributed and reactive key-value store, and
+[cuekeeper][cuekeeper], a web-based GTD system.
 
 [tezos]:
 [datakit]:
 [cuekeeper]:
 
-The running example in that post will be an imaginary model for
+The running example in this post will be an imaginary model for
 collecting distributed metrics (for instance to count network
-packets). In this model, every node has a unique ID, and use Irmin to
+packets). In this model, every node has a unique ID, and uses Irmin to
 store its name and counters. Every node is also a distributed
 collector and can sync with the metrics of other nodes at various
-points in time. Client can collect metrics for the network from any
-node. We want the metrics to be eventually consistent. In the
-following this posts will describe:
+points in time. Clients can collect metrics for the network from any
+node. We want the metrics to be eventually consistent.
+This post will describe:
 
 - how to define the metrics as a mergeable data-structures;
 - how to create a new Irmin store with the metrics, the basic
@@ -30,9 +30,9 @@ following this posts will describe:
 ### Mergeable Contents
 
 Irmin now exposes `Irmin.Type` to create new mergeable contents more
-easily. For instance the following type defines the property of simple
-metrics, where `name` a human-readable name `gauge` a metric counting
-the number of occurences for some kind of events:
+easily. For instance, the following type defines the property of simple
+metrics, where `name` is a human-readable name and `gauge` is a metric counting
+the number of occurences for some kind of event:
 
 ```ocaml
 type metric = {
@@ -53,26 +53,34 @@ let metric_t =
   |> sealr
 ```
 
+(* TODO: describe what |+ does? *)
+
 All of the types in Irmin have such a description, so they can be
-easilly and efficiently serialized (to disk and/or over the
-network). For instance to print a value of type `metric` as a JSON object,
+easily and efficiently serialized (to disk and/or over the
+network). For instance, to print a value of type `metric` as a JSON object,
 one can do:
 
 ```ocaml
 let print m = Fmt.pr "%a\n%!" (Irmin.Type.pp_json metric_t) m
 ```
 
-Once this is defined, we now need to write the merge function, The
-consistency model that we want to define is thus the following:
+Once this is defined, we now need to write the merge function. The
+consistency model that we want to define is the following:
 
 - `name` : can change if there is no conflicts between branches.
 - `gauge`: the number of events seen on a branch. Can be updated
   either by incrementing the number (because events occured) or
-  by syncing with othe nodes partial knowledge. This is very
-  similar to CRDT counters (and related vector clock based
-  datatypes). The main difference in Irmin is that we keep the
-  state as simple as possible: `int`, but we attach it a
-  3-way merge function for updates.
+  by syncing with other nodes partial knowledge. This is very
+  similar to [CRDT counters][TODO link] (and related [vector clock based
+  datatypes][TODO link]). The main difference in Irmin is that we keep the
+  state as simple as possible: `int`, but we attach a
+  3-way merge function for updates to it.
+
+(* MCP: I got lost here, maybe -- the function (fun t -> t.gauge) is a merge
+function for int, and it's also required so that we can define a larger merge
+function for the record at large, right?  So we define that and get merge functions
+for the record type, and then we're going to use the record type merge function
+to derive one for pairs? *)
 
 Similarly to the type definitions, the 3-way merge functions can
 defined using "merge" combinators. Merge combinators for records are
@@ -120,7 +128,12 @@ used to create new commit information: `Irmin_unix.info` use the usual
 POSIX clock for timestamps, and can also be tweaked to specify the
 author name.
 
-`Store` [exposes](TODO) various functions to create an manipulated
+(* MCP: I think "a manipulated Irmin store" below should probably be just
+"an Irmin store", although perhaps I misunderstand something?  If there are some
+special properties of a Store being referred to, which other Irmin repositories
+might not have, it would be useful to mention that more? *)
+
+`Store` [exposes](TODO) various functions to create a manipulated
 Irmin store. The most common ones are `Store.Repo.create` to create an
 Irmin repository and `Store.master` to get a handler on the `master`
 branch in that repository. For instance, using the OCaml toplevel:
@@ -160,6 +173,9 @@ when needed (e.g. where the transaction is commited). Trees are also
 stored very efficiently in memory and on-disk as they are immutable
 and deduplicated. An example of a transaction is a custom-defined
 move function:
+
+(* MCP: I didn't understand the relationship between the keys/values and the
+tree operations :( *)
 
 ```ocaml
 let move t src dst =
