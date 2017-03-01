@@ -156,7 +156,7 @@ module Blog = struct
     [
       { updated    = date (2017, 03, 01, 14, 00);
         authors    = [yomimono];
-        subject    = "MirageOS + QubesOS = year of unikernels on the desktop";
+        subject    = "Adding the Qubes target to Mirage";
         body       = "qubes-target.md";
         permalink  = "qubes-target";
       };
