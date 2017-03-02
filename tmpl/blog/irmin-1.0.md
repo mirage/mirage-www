@@ -240,7 +240,7 @@ merge function ensures that the result counter is consistent: see
 [KC's blog post][KC] for more details about the semantic of recursive
 merges.
 
-[KC]:
+[KC]: http://kcsrk.info/ocaml/irmin/crdt/2017/02/15/an-easy-interface-to-irmin-library/
 
 ```ocaml
 let () =
