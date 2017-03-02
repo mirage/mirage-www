@@ -8,31 +8,38 @@ top of Irmin include [Tezos][tezos], a distributed ledger,
 [Datakit][datakit], a distributed and reactive key-value store, and
 [cuekeeper][cuekeeper], a web-based GTD system.
 
-[tezos]:
-[datakit]:
-[cuekeeper]:
+[tezos]: https://tezos.com/
+[datakit]: https://github.com/docker/datakit
+[cuekeeper]: https://github.com/talex5/cuekeeper
+
+To install Irmin 1.0:
+
+```
+opam install irmin
+```
 
 The running example in this post will be an imaginary model for
 collecting distributed metrics (for instance to count network
 packets). In this model, every node has a unique ID, and uses Irmin to
-store its name and counters. Every node is also a distributed
+store metrics names and counters. Every node is also a distributed
 collector and can sync with the metrics of other nodes at various
-points in time. Clients can collect metrics for the network from any
-node. We want the metrics to be eventually consistent.
+points in time. Users of the application can read metrics for the
+network from any node. We want the metrics to be eventually
+consistent.
+
 This post will describe:
 
 - how to define the metrics as a mergeable data-structures;
 - how to create a new Irmin store with the metrics, the basic
-  operations that are available and how to define atomic operations;
-- how to create and merge branches; and
-- how to sync with remote stores.
+  operations that are available and how to define atomic operations; and
+- how to create and merge branches.
 
 ### Mergeable Contents
 
 Irmin now exposes `Irmin.Type` to create new mergeable contents more
-easily. For instance, the following type defines the property of simple
-metrics, where `name` is a human-readable name and `gauge` is a metric counting
-the number of occurences for some kind of event:
+easily. For instance, the following type defines the property of
+simple metrics, where `name` is a human-readable name and `gauge` is a
+metric counting the number of occurences for some kind of event:
 
 ```ocaml
 type metric = {
@@ -42,7 +49,8 @@ type metric = {
 ```
 
 First of all, we need to reflect the structure of the type, to
-automatically derive serialization (to and from JSON) functions:
+automatically derive serialization (to and from JSON, binary encoding,
+etc) functions:
 
 ```ocaml
 let metric_t =
@@ -53,7 +61,11 @@ let metric_t =
   |> sealr
 ```
 
-(* TODO: describe what |+ does? *)
+`record` is used to describe a new (empty) record with a name and a
+constructor; `field` describes record fields with a name a type and an
+accessor function while `|+` is used to stack fields into the
+record. Finally `|> sealr` seals the record, e.g. once applied no more
+fields can be added to it.
 
 All of the types in Irmin have such a description, so they can be
 easily and efficiently serialized (to disk and/or over the
@@ -68,24 +80,23 @@ Once this is defined, we now need to write the merge function. The
 consistency model that we want to define is the following:
 
 - `name` : can change if there is no conflicts between branches.
-- `gauge`: the number of events seen on a branch. Can be updated
-  either by incrementing the number (because events occured) or
-  by syncing with other nodes partial knowledge. This is very
-  similar to [CRDT counters][TODO link] (and related [vector clock based
-  datatypes][TODO link]). The main difference in Irmin is that we keep the
-  state as simple as possible: `int`, but we attach a
-  3-way merge function for updates to it.
 
-(* MCP: I got lost here, maybe -- the function (fun t -> t.gauge) is a merge
-function for int, and it's also required so that we can define a larger merge
-function for the record at large, right?  So we define that and get merge functions
-for the record type, and then we're going to use the record type merge function
-to derive one for pairs? *)
+- `gauge`: the number of events seen on a branch. Can be updated
+  either by incrementing the number (because events occured) or by
+  syncing with other nodes partial knowledge. This is very similar to
+  [conflict-free replicated datatypes][CRDT] and related
+  [vector-clock][vc] based algorithms. However, in Irmin we keep the
+  actual state as simple as possible: for counters, it is a single
+  integer -- but the user needs to provide an external 3-way merge
+  function to be used during merges.
+
+[CRDT]: https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type
+[vc]: https://en.wikipedia.org/wiki/Vector_clock
 
 Similarly to the type definitions, the 3-way merge functions can
 defined using "merge" combinators. Merge combinators for records are
-not yet available, so we need to use `Irmin.Merge.like` to map the
-record definition to a pair:
+not yet available (but they are planned on the roadmap), so we need to
+use `Irmin.Merge.like` to map the record definition to a pair:
 
 ```ocaml
 let merge =
@@ -97,8 +108,10 @@ let merge =
 ```
 
 The final step to define a mergeable data-structure is to wrap
-everything into a module satisfying the [Irmin.Contents.S](TODO)
+everything into a module satisfying the [Irmin.Contents.S][Contents]
 signature:
+
+[Contents]: http://mirage.github.io/irmin/Irmin.Contents.S.html
 
 ```ocaml
 module Metric: Irmin.Contents.S with type t = metric = struct
@@ -121,22 +134,20 @@ let config = Irmin_git.config "/tmp/irmin"
 let info fmt = Irmin_unix.info ~author:"Thomas" fmt
 ```
 
-`config` is used to configure Irmin repositories based on `Store`. In
-that example we decided to keep the store state in `/tmp/irmin` (which
-can be inspected using the usual Git tools). `info` is the function
-used to create new commit information: `Irmin_unix.info` use the usual
-POSIX clock for timestamps, and can also be tweaked to specify the
-author name.
+`Store` [exposes][API] various functions to create and manipulate
+Irmin stores. `config` is used to configure Irmin repositories based
+on `Store`. In that example we decided to keep the store state in
+`"/tmp/irmin"` (which can be inspected using the usual Git
+tools). `info` is the function used to create new commit information:
+`Irmin_unix.info` use the usual POSIX clock for timestamps, and can
+also be tweaked to specify the author name.
 
-(* MCP: I think "a manipulated Irmin store" below should probably be just
-"an Irmin store", although perhaps I misunderstand something?  If there are some
-special properties of a Store being referred to, which other Irmin repositories
-might not have, it would be useful to mention that more? *)
+[API]: http://mirage.github.io/irmin/Irmin.S.html
 
-`Store` [exposes](TODO) various functions to create a manipulated
-Irmin store. The most common ones are `Store.Repo.create` to create an
-Irmin repository and `Store.master` to get a handler on the `master`
-branch in that repository. For instance, using the OCaml toplevel:
+The most common functions to create an Irmin store are
+`Store.Repo.create` to create an Irmin repository and `Store.master`
+to get a handler on the `master` branch in that repository. For
+instance, using the OCaml toplevel:
 
 ```ocaml
 # open Lwt.Infix
@@ -147,8 +158,10 @@ val repo : Store.Repo.t Lwt.t = <abstr>
 val master : Store.t Lwt.t = <abstr>
 ```
 
-`Store` exposes the usual [key/value operations](TODO) using `find`
-and `update`. All the operations are reflected as Git state.
+`Store` also exposes the usual key/value base operations using
+[find](http://mirage.github.io/irmin/Irmin.S.html#VALfind) and
+[set](http://mirage.github.io/irmin/Irmin.S.html#VALset). All the
+operations are reflected as Git state.
 
 ```ocaml
   Lwt_main.run begin
@@ -163,19 +176,22 @@ and `update`. All the operations are reflected as Git state.
 
 ```
 
-`Store.set` is atomic: the implementation ensures that no data is ever
-lost, and if someone else is writing on the same path at the same, the
-operation is retried until it succeeds (see
-[optimistic transaction control](TODO)). More complex atomic
-operations are also possible, using trees. Trees are very efficient:
-all the reads are cached in memory, and write on disk are only done
-when needed (e.g. where the transaction is commited). Trees are also
-stored very efficiently in memory and on-disk as they are immutable
-and deduplicated. An example of a transaction is a custom-defined
-move function:
+Note that `Store.set` is atomic: the implementation ensures that no
+data is ever lost, and if someone else is writing on the same path at
+the same, the operation is retried until it succeeds (see [optimistic
+transaction control][OCC]). More complex atomic operations are also
+possible: the API also exposes function to read and write subtrees
+(simply called trees) instead of single values. Trees are very
+efficient: they are immutable so all the reads are cached in memory
+and done only when really needed; and write on disk are only done the
+final transaction is commited. Trees are also stored very efficiently
+in memory and on-disk as they are deduplicated. For users of previous
+releases of Irmin: trees replaces the concept of views, but have a
+very implementation and usage.
 
-(* MCP: I didn't understand the relationship between the keys/values and the
-tree operations :( *)
+[OCC]: https://en.wikipedia.org/wiki/Optimistic_concurrency_control
+
+An example of a tree transaction is a custom-defined move function:
 
 ```ocaml
 let move t src dst =
@@ -219,10 +235,12 @@ Then, the following program create an empty gauge on `master`,
 increment the metrics, then create a `tmp` branch by cloning
 `master`. It then performs two increments in parallel in both
 branches, and finally merge `tmp` back into `master`. The result is a
-gauge which have been incremented three times in total: the "counter" merge
-function ensures that the result counter is consistent: (TODO add link
-to KC's blog post.)
+gauge which have been incremented three times in total: the "counter"
+merge function ensures that the result counter is consistent: see
+[KC's blog post][KC] for more details about the semantic of recursive
+merges.
 
+[KC]:
 
 ```ocaml
 let () =
@@ -241,9 +259,9 @@ let () =
   end
 ```
 
-### Node Sync
+### Conclusion
 
-So far we have seen only local operations. The Irmin API also have
-function to perform explicit remote syncs.
-
-TODO
+Irmin 1.0 is out. Defining new mergeable contents is now simpler. The
+Irmin API to create stores as also been simplified, as well as
+operations to read and write atomically. Finally, flexible first-class
+support for immutable trees has also been added.
