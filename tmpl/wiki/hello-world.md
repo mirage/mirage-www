@@ -403,7 +403,31 @@ let () =
 
 We create a `key` with `Key.create` which is an optional bit of configuration.  It will default to "Hello World!" if unspecified.  This particular key happens to be of type `string`, so no conversion will be required, but it's possible to ask for more exotic types in the call to `Arg` -- see [the Functoria Key.Arg module documentation](http://mirage.github.io/functoria/Functoria_key.Arg.html) for more details.
 
-Once we've created our configuration key, we specify that we'd like it used in the unikernel by passing it to `foreign` in the `keys` parameter.
+Once we've created our configuration key, we specify that we'd like it available in the unikernel by passing it to `foreign` in the `keys` parameter.
+
+We can then read the value corresponding to configuration key using the generated function `Key_gen.hello` as shown below.
+
+```
+$ cat unikernel.ml
+open Lwt.Infix
+
+module Hello (Time : Mirage_time_lwt.S) = struct
+
+  let start _time =
+
+    let hello = Key_gen.hello () in
+
+    let rec loop = function
+      | 0 -> Lwt.return_unit
+      | n ->
+        Logs.info (fun f -> f "%s" hello);
+        Time.sleep_ns (Duration.of_sec 1) >>= fun () ->
+        loop (n-1)
+    in
+    loop 4
+
+end
+```
 
 Let's configure the example for UNIX and build it:
 
