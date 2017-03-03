@@ -175,7 +175,7 @@ let register
   register ?keys ?packages ?init name jobs
 ```
 
-`qrexec_init` and `gui_init` will only take action if the target is `qubes`; otherwise, the dummy implementation ``Functoria_app.noop` will be used.  The `qrexec_init` and `gui_init` values are added to the `init` list passed to `register` regardless of whether they are the Qubes `impl`s or `Functoria_app.noop`.
+`qrexec_init` and `gui_init` will only take action if the target is `qubes`; otherwise, the dummy implementation `Functoria_app.noop` will be used.  The `qrexec_init` and `gui_init` values are added to the `init` list passed to `register` regardless of whether they are the Qubes `impl`s or `Functoria_app.noop`.
 
 With those additions, `mirage configure -t qubes` will result in a bootable unikernel!  ...but we're not done yet.
 
