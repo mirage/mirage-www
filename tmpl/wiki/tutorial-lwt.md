@@ -1,4 +1,4 @@
-[Lwt](http://www.ocsigen.org/lwt) is a lightweight cooperative threading library for OCaml. A good way to understand Lwt and its use in MirageOS is to write some simple code. This document introduces the basic concepts and suggests programs to write. Code for all examples is in the `mirage-skeleton/lwt/src` [repository](https://github.com/mirage/mirage-skeleton/tree/master/lwt/src).
+[Lwt](http://www.ocsigen.org/lwt) is a lightweight cooperative threading library for OCaml. A good way to understand Lwt and its use in MirageOS is to write some simple code. This document introduces the basic concepts and suggests programs to write. Code for all examples is in the `mirage-skeleton/tutorial/lwt/` [repository](https://github.com/mirage/mirage-skeleton/tree/master/tutorial/lwt).
 
 ##Basics
 
@@ -28,7 +28,7 @@ If you ignore the `Lwt.t` bits in the types above, you can see that `return` loo
 You can convert any synchronous program into an equivalent Lwt-threaded one using just `>>=` and `return`.
 For example consider this code to input two values and add them:
 
-```
+```ocaml
   let x =
     let a = get_input "Enter a" in
     let b = get_input "Enter b" in
@@ -37,7 +37,7 @@ For example consider this code to input two values and add them:
 
 Removing the `let ... in ...` syntax, we could also write:
 
-```
+```ocaml
   let x =
     get_input "Enter a" |> fun a ->
     get_input "Enter b" |> fun b ->
@@ -46,7 +46,7 @@ Removing the `let ... in ...` syntax, we could also write:
 
 If the `get_input` function's type is changed from `string -> int` to the threaded-equivalent, `string -> int Lwt.t`, then our example could be changed to:
 
-```
+```ocaml
   let x =
     get_input "Enter a" >>= fun a ->
     get_input "Enter b" >>= fun b ->
@@ -59,13 +59,13 @@ Since we didn't change `+` to return a thread, we must wrap the result with `ret
 Of course, the reason for using Lwt is to write programs that do more than just behave like synchronous programs: we want to be doing multiple things at once, by composing threads in more ways than just "_a_ then _b_".
 Two important functions to compose threads are `join` and `choose`.
 
-```
+```ocaml
   val join : unit Lwt.t list -> unit Lwt.t
 ```
 
 `join` takes a list of threads and waits for all of them to terminate. If at least one thread fails then `join l` will fail with the same exception as the first to fail, after all threads terminate.
 
-```
+```ocaml
  val choose : 'a t list -> 'a t
 ```
 
@@ -75,84 +75,100 @@ The [Lwt_list](http://ocsigen.org/lwt/2.5.0/api/Lwt_list) module provides many o
 
 ## Challenge 1: Sleep and join
 
-Now write a program that spins off two threads, each of which sleeps for some amount of time, say 1 and 2 seconds and then one prints "Heads", the other "Tails". After both have finished, it prints "Finished" and exits. To sleep for some number of nanoseconds use `OS.Time.sleep_ns`, and to print to the console use `C.log_s`. Note that `OS` is a Mirage-specific module; if you are using Lwt in another context, use `Lwt_unix.sleep` and `Lwt_io.write`.
+Now write a program that spins off two threads, each of which sleeps for some amount of time, say 1 and 2 seconds and then one prints "Heads", the other "Tails". After both have finished, it prints "Finished" and exits. To sleep for some number of nanoseconds use `OS.Time.sleep_ns`, and to print to the console use `C.log`. Note that `OS` is a Mirage-specific module; if you are using Lwt in another context, use `Lwt_unix.sleep` and `Lwt_io.write`.
 
 For convenience, you'll likely want to also use the [Duration](https://github.com/hannesm/duration) library, which provides handy functions for converting between seconds, milliseconds, nanoseconds, and other units of time.
 
-```
+```ocaml
 OS.Time.sleep_ns (Duration.of_sec 3) (* sleep for 3 seconds *)
 ```
 
 You will need to have MirageOS [installed](/wiki/install). Create a file `config.ml` with the following content:
 
-```
-  open Mirage
+```ocaml
+open Mirage
 
-  let () =
-    let main = foreign "Foo.Main" (console @-> job) in
-    let libraries = ["duration"] in
-    let packages = ["duration"] in
-    register ~libraries ~packages "Foo.Main" [
-      main $ default_console
-    ]
+let packages = [package "duration"]
+
+let () =
+  let main = foreign ~packages "Unikernel.Heads1" (console @-> job) in
+  register "heads1" [ main $ default_console ]
 ```
 
-Add `foo.ml` with the following content and edit it:
+Add `unikernel.ml` with the following content and edit it:
 
-```
-  open V1_LWT
-  open Lwt.Infix  (* provides >>= *)
-  open OS
+```ocaml
+open OS
+open Lwt.Infix
 
-  module Main (C : CONSOLE) = struct
-    let start c =
-      (* the guts go here *)
-  end
+module Heads1 (C: Mirage_console_lwt.S) = struct
+
+  let start c =
+    Lwt.join [
+      (Time.sleep_ns (Duration.of_sec 1) >>= fun () -> C.log c "Heads");
+      (Time.sleep_ns (Duration.of_sec 2) >>= fun () -> C.log c "Tails")
+    ] >>= fun () ->
+    C.log c "Finished"
+
+end
 ```
 
 Assuming you want to build as a normal Unix process, compile the application with:
 
 ```
   mirage configure -t unix
+  make depend
   make
   ./main.native
 ```
 
-If you prefer to build as a Xen kernel image, change the `-t unix` to `-t xen`.
-The `OS` module packs several sub-modules depending on the backend, [unix](https://github.com/mirage/mirage-platform/tree/master/unix/lib)
-or [xen](https://github.com/mirage/mirage-platform/tree/master/xen/lib).
+If you prefer to build for another target (like `xen` or `ukvm`), change the `-t` argument to `mirage configure`.  To see the available backends, have a look at the documentation available with `mirage configure --help`.
 
 ###Solution
 
+```ocaml
+open OS
+open Lwt.Infix
+
+module Heads1 (C: Mirage_types_lwt.CONSOLE) = struct
+
+  let start c =
+    Lwt.join [
+      (Time.sleep_ns (Duration.of_sec 1) >>= fun () -> C.log c "Heads");
+      (Time.sleep_ns (Duration.of_sec 2) >>= fun () -> C.log c "Tails")
+    ] >>= fun () ->
+    C.log c "Finished"
+
+end
 ```
-  open V1_LWT     (* provides the CONSOLE signature *)
-  open Lwt.Infix  (* provides >>= *)
-  open OS         (* provides Time *)
 
-  module Main (C : CONSOLE) = struct
-    let start c =
-      Lwt.join [
-        (Time.sleep_ns (Duration.of_sec 1) >>= fun () -> C.log_s c "Heads");
-        (Time.sleep_ns (Duration.of_sec 2) >>= fun () -> C.log_s c "Tails")
-      ] >>= fun () ->
-      C.log_s c ("Finished")
-  end
-```
-
-This code is also found in [lwt/src/unikernels.ml][unikernels.ml] in the [mirage-skeleton](https://github.com/mirage/mirage-skeleton) code repository. Build it by setting the TARGET environment variable to `heads1` before running `mirage configure`.
-
+This code is also found in [tutorial/lwt/heads1/unikernel.ml][heads1_unikernel.ml] in the [mirage-skeleton](https://github.com/mirage/mirage-skeleton) code repository.  Build it with `mirage configure -t unix && make depend && make`, as described above.
 
 ##Challenge 2: Looping echo server
 
 Write an echo server that reads from a dummy input generator and, for each line it reads, writes it to the console. The server should stop after reading 10 lines.
+
 Hint: it's easier to convert a program to use Lwt if you write loops in a functional style (using tail recursion) rather than using special syntax (e.g. `while` and `for`).
 
-Here is a basic dummy input generator you can use for testing:
+For convenience, here is a `config.ml` which you might use for this exercise:
+
+```ocaml
+open Mirage
+
+let packages = [package "duration"; package "randomconv"]
+
+let () =
+  let main = foreign ~packages "Unikernel.Echo_server" (console @-> random @-> job) in
+  register "echo_server" [ main $ default_console $ default_random ]
+```
+
+You might notice that it's very similar to the previous example `config.ml`, but it requires an extra package `randomconv`.  `randomconv` has convenience functions for dealing with random data, which this challenge asks you to do.  Here is a basic dummy input generator you can use for testing:
 
 ```
   let read_line () =
-    Time.sleep_ns (Duration.of_ms (Random.int 2500))
-    >|= fun () -> String.make (Random.int 20) 'a'
+    OS.Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:2500 R.generate))
+    >|= fun () ->
+    String.make (Randomconv.int ~bound:20 R.generate) 'a'
 ```
 
 By the way, the `>|=` operator ("map") used here is similar to `>>=` but automatically wraps the result of the function you provide with `return`. It's used here because `String.make` is synchronous (it doesn't return a thread). We could also have used `>>=` and `return` together to get the same effect.
@@ -160,19 +176,31 @@ By the way, the `>|=` operator ("map") used here is similar to `>>=` but automat
 
 ###Solution
 
-```
-  let start c =
+```ocaml
+open OS
+open Lwt.Infix
+
+module Echo_server (C: Mirage_console_lwt.S) (R: Mirage_random.C) = struct
+
+  let read_line () =
+    OS.Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:2500 R.generate))
+    >|= fun () ->
+    String.make (Randomconv.int ~bound:20 R.generate) 'a'
+
+  let start c _r =
     let rec echo_server = function
       | 0 -> Lwt.return ()
       | n ->
         read_line () >>= fun s ->
-        C.log_s c s >>= fun () ->
+        C.log c s >>= fun () ->
         echo_server (n - 1)
     in
     echo_server 10
+
+end
 ```
 
-This is in [lwt/src/unikernels.ml][unikernels.ml] in the repository. Build with the target `echo_server1`.
+This is in [tutorial/lwt/echo_server/unikernels.ml][unikernels.ml] in the repository.
 
 Note: Lwt's `>>=` operator does the threaded equivalent of a tail-call
 optimisation, so this won't consume more and more memory as it runs.
@@ -234,7 +262,7 @@ If you want to spawn a thread without waiting for the result, use `Lwt.async`:
 ```
 Lwt.async (fun () ->
   OS.Time.sleep_ns (Duration.of_sec 10) >>= fun () ->
-  C.log_s c "Finished"
+  C.log c "Finished"
 )
 ```
 
@@ -286,7 +314,7 @@ Moving the `let t = ` inside the `catch` callback avoids this problem (as does u
 In Mirage code, we typically distinguish two types of error: programming errors (bugs, which should be reported to the programmer to be fixed) and expected errors (e.g. network disconnected or invalid TCP packet received).
 We try to use the type system to ensure that expected errors are handled gracefully.
 
-###Use result for expected errors
+### Use result for expected errors
 
 For expected errors, you should use the `result` type, which provides `Ok` and `Error` constructors.
 This is a built-in in OCaml 4.03 and available from the `result` opam package for older versions.
@@ -402,19 +430,20 @@ Modify the `timeout` function so that it returns either `None` if `t` has not ye
 
 You can test your solution with this application, which creates a thread that may be cancelled before it returns:
 
-```
-  let start c =
-    Random.self_init ();
-    let t = Time.sleep_ns (Duration.of_ms (Random.int 3000)) >|= fun () -> "Heads" in
-    timeout (Duration.of_sec 2) t >>= fun v ->
-    C.log_s c (match v with None -> "cancelled" | Some v -> v) >>= fun () ->
-    C.log c "Finished" >>- fun () ->
-    Lwt.return_unit
+```ocaml
+  let start c _r =
+    let t =
+      Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:3000 R.generate))
+      >|= fun () -> "Heads"
+    in
+    timeout (Duration.of_sec 2) t >>= function
+    | None   -> C.log c "Cancelled"
+    | Some v -> C.log c (Printf.sprintf "Returned %S" v)
 ```
 
 ###Solution
 
-```
+```ocaml
   let timeout delay t =
     Time.sleep_ns delay >>= fun () ->
     match Lwt.state t with
@@ -423,7 +452,7 @@ You can test your solution with this application, which creates a thread that ma
     | Lwt.Fail ex  -> Lwt.fail ex
 ```
 
-This solution and application are found in [lwt/src/unikernels.ml][unikernels.ml] in the repository. Build with target `timeout1`.
+This solution and application are found in [tutorial/lwt/timeout1/unikernels.ml][timeout1_unikernel.ml] in the repository.
 
 Does your solution match the one given here and always return after `f` seconds, even when `t` returns within `delay` seconds?
 
@@ -445,16 +474,16 @@ In order to test your solution, you can compile it to a mirage executable and ru
 
 ###Solution
 
-```
+```ocaml
   let timeout delay t =
     let tmout = Time.sleep_ns delay in
-    pick [
+    Lwt.pick [
       (tmout >|= fun () -> None);
       (t >|= fun v -> Some v);
     ]
 ```
 
-Found in [lwt/src/unikernels.ml][unikernels.ml] in the repository. The target is `timeout2`.
+Found in [lwt/tutorial/timeout2/unikernel.ml][timeout2_unikernel.ml] in the repository.
 
 ###Warning
 
@@ -470,4 +499,8 @@ If you have a function that only responds to cancel, you might want to wrap it i
 Lwt provides many more features. See [the manual](http://ocsigen.org/lwt/manual/) for details.
 However, the vast majority of code will only need the basic features described here.
 
-[unikernels.ml]: https://github.com/mirage/mirage-skeleton/blob/master/lwt/src/unikernels.ml
+[echo_server_unikernel.ml]: https://github.com/mirage/mirage-skeleton/blob/master/tutorial/lwt/echo_server/unikernel.ml
+[heads1_unikernel.ml]: https://github.com/mirage/mirage-skeleton/blob/master/tutorial/lwt/heads1/unikernel.ml
+[heads2_unikernel.ml]: https://github.com/mirage/mirage-skeleton/blob/master/tutorial/lwt/heads2/unikernel.ml
+[timeout1_unikernel.ml]: https://github.com/mirage/mirage-skeleton/blob/master/tutorial/lwt/timeout1/unikernel.ml
+[timeout2_unikernel.ml]: https://github.com/mirage/mirage-skeleton/blob/master/tutorial/lwt/timeout2/unikernel.ml
