@@ -6,11 +6,14 @@ auditing capabilities. With Irmin, applications can create tailored
 mergeable datastructures to scale seamlessly. Applications built on
 top of Irmin include [Tezos][tezos], a distributed ledger,
 [Datakit][datakit], a distributed and reactive key-value store, and
-[cuekeeper][cuekeeper], a web-based GTD system.
+[cuekeeper][cuekeeper], a web-based GTD system. Read ["Introducing
+Irmin: Git-like distributed, branchable storage"][architecture] for a
+description of the concepts and high-level architecture of the system.
 
 [tezos]: https://tezos.com/
 [datakit]: https://github.com/docker/datakit
 [cuekeeper]: https://github.com/talex5/cuekeeper
+[architecture]: https://mirage.io/blog/introducing-irmin
 
 To install Irmin 1.0:
 
@@ -265,3 +268,9 @@ Irmin 1.0 is out. Defining new mergeable contents is now simpler. The
 Irmin API to create stores as also been simplified, as well as
 operations to read and write atomically. Finally, flexible first-class
 support for immutable trees has also been added.
+
+Send us feedback on the [MirageOS mailing-list][ml] or on the [Irmin
+issue tracker on GitHub][gh].
+
+[ml]: https://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel
+[gh]: https://github.com/mirage/irmin
