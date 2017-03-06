@@ -122,7 +122,8 @@ module Metric: Irmin.Contents.S with type t = metric = struct
   let t = metric_t
   let merge = merge
   let pp = Irmin.Type.pp_json metric_t
-  let of_string s = Irmin.Type.decode_json metric_t (Jsonm.decoder (`String s))
+  let of_string s =
+    Irmin.Type.decode_json metric_t (Jsonm.decoder (`String s))
 end
 ```
 
