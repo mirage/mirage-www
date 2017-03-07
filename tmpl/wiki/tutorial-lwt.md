@@ -458,9 +458,9 @@ You can test your solution with this application, which creates a thread that ma
     | Lwt.Fail ex  -> Lwt.fail ex
 ```
 
-This solution and application are found in [tutorial/lwt/timeout1/unikernels.ml][timeout1_unikernel.ml] in the repository.
+This solution and application are found in [tutorial/lwt/timeout1/unikernel.ml][timeout1_unikernel.ml] in the repository.
 
-Does your solution match the one given here and always return after `f` seconds, even when `t` returns within `delay` seconds?
+Does your solution match the one given here and always returns after `f` seconds, even when `t` returns within `delay` seconds?
 
 This is a good place to introduce a third operation to compose threads: `pick`.
 
@@ -471,14 +471,14 @@ This is a good place to introduce a third operation to compose threads: `pick`.
 `pick` behaves exactly like `choose` except that it cancels all other sleeping threads when one terminates.
 
 
-###Challenge 4: Better timeouts
+### Challenge 4: Better timeouts
 
 In a typical use of a timeout, if `t` returns before the timeout has expired, one would want the timeout to be cancelled right away. The next challenge is to modify the timeout function to return `Some v` right after `t` returns. Of course if the timeout does expire then it should cancel `t` and return `None`.
 
 In order to test your solution, you can compile it to a mirage executable and run it using the skeleton provided for the previous challenge.
 
 
-###Solution
+### Solution
 
 ```ocaml
   let timeout delay t =
@@ -491,7 +491,7 @@ In order to test your solution, you can compile it to a mirage executable and ru
 
 Found in [lwt/tutorial/timeout2/unikernel.ml][timeout2_unikernel.ml] in the repository.
 
-###Warning
+### Warning
 
 The `cancel` function should be used very sparingly, since it essentially throws an unexpected exception into the middle of some executing code that probably wasn't expecting it.
 A cancel that occurs when the thread happens to be performing an uncancellable operation will be silently ignored.
@@ -500,7 +500,7 @@ A safer alternative is to use [Lwt_switch](http://ocsigen.org/lwt/2.5.0/api/Lwt_
 This means that cancellation will only happen at well defined points, although it does require explicit support from the code being cancelled.
 If you have a function that only responds to cancel, you might want to wrap it in a function that takes a switch and cancels it when the switch is turned off.
 
-##Other Lwt features
+## Other Lwt features
 
 Lwt provides many more features. See [the manual](http://ocsigen.org/lwt/manual/) for details.
 However, the vast majority of code will only need the basic features described here.
