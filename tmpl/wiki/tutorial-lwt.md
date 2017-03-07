@@ -200,7 +200,8 @@ module Echo_server (C: Mirage_console_lwt.S) (R: Mirage_random.C) = struct
 end
 ```
 
-This is in [tutorial/lwt/echo_server/unikernels.ml][unikernels.ml] in the repository.
+This is in [tutorial/lwt/echo_server/unikernel.ml][echo_server_unikernel.ml] in
+the [mirage-skeleton](https://github.com/mirage/mirage-skeleton) code repository.
 
 Note: Lwt's `>>=` operator does the threaded equivalent of a tail-call
 optimisation, so this won't consume more and more memory as it runs.
@@ -272,7 +273,7 @@ Lwt.async (fun () ->
 
 It is often better to catch such exceptions and log them with some contextual information.
 Here's some real Mirage code that spawns a new background thread to handle a new frame received from the network.
-The log message includes the exception it caught, a dump of the troublesome frame and, like all log messages, information about when it occured and in which module.
+The log message includes the exception it caught, a dump of the troublesome frame and, like all log messages, information about when it occurred and in which module.
 
 ```
 (* Handle a frame of data from the network... *)
