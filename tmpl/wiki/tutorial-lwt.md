@@ -75,15 +75,25 @@ The [Lwt_list](http://ocsigen.org/lwt/2.5.0/api/Lwt_list) module provides many o
 
 ## Challenge 1: Sleep and join
 
-Now write a program that spins off two threads, each of which sleeps for some amount of time, say 1 and 2 seconds and then one prints "Heads", the other "Tails". After both have finished, it prints "Finished" and exits. To sleep for some number of nanoseconds use `OS.Time.sleep_ns`, and to print to the console use `C.log`. Note that `OS` is a Mirage-specific module; if you are using Lwt in another context, use `Lwt_unix.sleep` and `Lwt_io.write`.
+Now write a program that spins off two threads, each of which sleeps for some
+amount of time, say 1 and 2 seconds and then one prints "Heads", the other
+"Tails". After both have finished, it prints "Finished" and exits.
 
-For convenience, you'll likely want to also use the [Duration](https://github.com/hannesm/duration) library, which provides handy functions for converting between seconds, milliseconds, nanoseconds, and other units of time.
+To sleep for some number of nanoseconds use `OS.Time.sleep_ns`, and to print to
+the console use `C.log`. Note that `OS` is a Mirage-specific module; if you are
+using Lwt in another context, use `Lwt_unix.sleep` and `Lwt_io.write`.
+
+For convenience, you'll likely want to also use the
+[Duration](https://github.com/hannesm/duration) library, which provides handy
+functions for converting between seconds, milliseconds, nanoseconds, and other
+units of time.
 
 ```ocaml
 OS.Time.sleep_ns (Duration.of_sec 3) (* sleep for 3 seconds *)
 ```
 
-You will need to have MirageOS [installed](/wiki/install). Create a file `config.ml` with the following content:
+You will need to have MirageOS [installed](/wiki/install). Create a file
+`config.ml` with the following content:
 
 ```ocaml
 open Mirage
@@ -95,21 +105,16 @@ let () =
   register "heads1" [ main $ default_console ]
 ```
 
-Add `unikernel.ml` with the following content and edit it:
+Add a file `unikernel.ml` with the following content and edit it:
 
 ```ocaml
 open OS
 open Lwt.Infix
 
 module Heads1 (C: Mirage_console_lwt.S) = struct
-
   let start c =
-    Lwt.join [
-      (Time.sleep_ns (Duration.of_sec 1) >>= fun () -> C.log c "Heads");
-      (Time.sleep_ns (Duration.of_sec 2) >>= fun () -> C.log c "Tails")
-    ] >>= fun () ->
+    (* Add your implementation here... *)
     C.log c "Finished"
-
 end
 ```
 
@@ -124,7 +129,7 @@ Assuming you want to build as a normal Unix process, compile the application wit
 
 If you prefer to build for another target (like `xen` or `ukvm`), change the `-t` argument to `mirage configure`.  To see the available backends, have a look at the documentation available with `mirage configure --help`.
 
-###Solution
+### Solution
 
 ```ocaml
 open OS
@@ -427,7 +432,7 @@ In order to cancel a thread, the function `cancel` (provided by the module Lwt) 
 
 This `timeout` function does not allow one to use the result returned by the thread `t`.
 
-Modify the `timeout` function so that it returns either `None` if `t` has not yet returned after `delay` seconds or `Some v` if `t` returns `v` within `delay` seconds. In order to achieve this behaviour it is possible to use the function `state` that, given a thread, returns the state it is in, either `Sleep`, `Return` or `Fail`.
+Modify the `timeout` function so that it returns either `None` if `t` has not yet returned after `delay` seconds or `Some v` if `t` returns `v` within `delay` seconds. In order to achieve this behaviour it is possible to use the function `Lwt.state` that, given a thread, returns the state it is in, either `Sleep`, `Return` or `Fail`.
 
 You can test your solution with this application, which creates a thread that may be cancelled before it returns:
 
