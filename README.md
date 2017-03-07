@@ -1,6 +1,6 @@
 ## MirageOS Website
 
-[![Build Status](https://travis-ci.org/mirage/mirage-www.png?branch=master)](https://travis-ci.org/mirage/mirage-www)
+[![Build Status](https://travis-ci.org/mirage/mirage-www.svg?branch=master)](https://travis-ci.org/mirage/mirage-www)
 
 This repository contains the MirageOS public website, <https://mirage.io/>.
 
