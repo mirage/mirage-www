@@ -75,15 +75,25 @@ The [Lwt_list](http://ocsigen.org/lwt/2.5.0/api/Lwt_list) module provides many o
 
 ## Challenge 1: Sleep and join
 
-Now write a program that spins off two threads, each of which sleeps for some amount of time, say 1 and 2 seconds and then one prints "Heads", the other "Tails". After both have finished, it prints "Finished" and exits. To sleep for some number of nanoseconds use `OS.Time.sleep_ns`, and to print to the console use `C.log`. Note that `OS` is a Mirage-specific module; if you are using Lwt in another context, use `Lwt_unix.sleep` and `Lwt_io.write`.
+Now write a program that spins off two threads, each of which sleeps for some
+amount of time, say 1 and 2 seconds and then one prints "Heads", the other
+"Tails". After both have finished, it prints "Finished" and exits.
 
-For convenience, you'll likely want to also use the [Duration](https://github.com/hannesm/duration) library, which provides handy functions for converting between seconds, milliseconds, nanoseconds, and other units of time.
+To sleep for some number of nanoseconds use `OS.Time.sleep_ns`, and to print to
+the console use `C.log`. Note that `OS` is a Mirage-specific module; if you are
+using Lwt in another context, use `Lwt_unix.sleep` and `Lwt_io.write`.
+
+For convenience, you'll likely want to also use the
+[Duration](https://github.com/hannesm/duration) library, which provides handy
+functions for converting between seconds, milliseconds, nanoseconds, and other
+units of time.
 
 ```ocaml
 OS.Time.sleep_ns (Duration.of_sec 3) (* sleep for 3 seconds *)
 ```
 
-You will need to have MirageOS [installed](/wiki/install). Create a file `config.ml` with the following content:
+You will need to have MirageOS [installed](/wiki/install). Create a file
+`config.ml` with the following content:
 
 ```ocaml
 open Mirage
@@ -95,21 +105,16 @@ let () =
   register "heads1" [ main $ default_console ]
 ```
 
-Add `unikernel.ml` with the following content and edit it:
+Add a file `unikernel.ml` with the following content and edit it:
 
 ```ocaml
 open OS
 open Lwt.Infix
 
 module Heads1 (C: Mirage_console_lwt.S) = struct
-
   let start c =
-    Lwt.join [
-      (Time.sleep_ns (Duration.of_sec 1) >>= fun () -> C.log c "Heads");
-      (Time.sleep_ns (Duration.of_sec 2) >>= fun () -> C.log c "Tails")
-    ] >>= fun () ->
+    (* Add your implementation here... *)
     C.log c "Finished"
-
 end
 ```
 
@@ -124,7 +129,7 @@ Assuming you want to build as a normal Unix process, compile the application wit
 
 If you prefer to build for another target (like `xen` or `ukvm`), change the `-t` argument to `mirage configure`.  To see the available backends, have a look at the documentation available with `mirage configure --help`.
 
-###Solution
+### Solution
 
 ```ocaml
 open OS
@@ -427,7 +432,7 @@ In order to cancel a thread, the function `cancel` (provided by the module Lwt) 
 
 This `timeout` function does not allow one to use the result returned by the thread `t`.
 
-Modify the `timeout` function so that it returns either `None` if `t` has not yet returned after `delay` seconds or `Some v` if `t` returns `v` within `delay` seconds. In order to achieve this behaviour it is possible to use the function `state` that, given a thread, returns the state it is in, either `Sleep`, `Return` or `Fail`.
+Modify the `timeout` function so that it returns either `None` if `t` has not yet returned after `delay` seconds or `Some v` if `t` returns `v` within `delay` seconds. In order to achieve this behaviour it is possible to use the function `Lwt.state` that, given a thread, returns the state it is in, either `Sleep`, `Return` or `Fail`.
 
 You can test your solution with this application, which creates a thread that may be cancelled before it returns:
 
@@ -453,9 +458,9 @@ You can test your solution with this application, which creates a thread that ma
     | Lwt.Fail ex  -> Lwt.fail ex
 ```
 
-This solution and application are found in [tutorial/lwt/timeout1/unikernels.ml][timeout1_unikernel.ml] in the repository.
+This solution and application are found in [tutorial/lwt/timeout1/unikernel.ml][timeout1_unikernel.ml] in the repository.
 
-Does your solution match the one given here and always return after `f` seconds, even when `t` returns within `delay` seconds?
+Does your solution match the one given here and always returns after `f` seconds, even when `t` returns within `delay` seconds?
 
 This is a good place to introduce a third operation to compose threads: `pick`.
 
@@ -466,14 +471,14 @@ This is a good place to introduce a third operation to compose threads: `pick`.
 `pick` behaves exactly like `choose` except that it cancels all other sleeping threads when one terminates.
 
 
-###Challenge 4: Better timeouts
+### Challenge 4: Better timeouts
 
 In a typical use of a timeout, if `t` returns before the timeout has expired, one would want the timeout to be cancelled right away. The next challenge is to modify the timeout function to return `Some v` right after `t` returns. Of course if the timeout does expire then it should cancel `t` and return `None`.
 
 In order to test your solution, you can compile it to a mirage executable and run it using the skeleton provided for the previous challenge.
 
 
-###Solution
+### Solution
 
 ```ocaml
   let timeout delay t =
@@ -486,7 +491,7 @@ In order to test your solution, you can compile it to a mirage executable and ru
 
 Found in [lwt/tutorial/timeout2/unikernel.ml][timeout2_unikernel.ml] in the repository.
 
-###Warning
+### Warning
 
 The `cancel` function should be used very sparingly, since it essentially throws an unexpected exception into the middle of some executing code that probably wasn't expecting it.
 A cancel that occurs when the thread happens to be performing an uncancellable operation will be silently ignored.
@@ -495,7 +500,7 @@ A safer alternative is to use [Lwt_switch](http://ocsigen.org/lwt/2.5.0/api/Lwt_
 This means that cancellation will only happen at well defined points, although it does require explicit support from the code being cancelled.
 If you have a function that only responds to cancel, you might want to wrap it in a function that takes a switch and cancels it when the switch is turned off.
 
-##Other Lwt features
+## Other Lwt features
 
 Lwt provides many more features. See [the manual](http://ocsigen.org/lwt/manual/) for details.
 However, the vast majority of code will only need the basic features described here.
