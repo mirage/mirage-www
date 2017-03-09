@@ -35,8 +35,6 @@ MirageOS is in beta stage and the infrastructure you see here is self-hosting. T
 
 * Threads: [introduction to Lwt](/wiki/tutorial-lwt)
 * [DNS Performance Tests](/wiki/performance)
-* [HTCaML](/wiki/htcaml)
-* [Caml on the Web (COW)](/wiki/cow)
 
 #### Xen Backend
 
