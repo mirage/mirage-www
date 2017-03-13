@@ -24,6 +24,7 @@ MirageOS is in beta stage and the infrastructure you see here is self-hosting. T
 <li><a href="/wiki/deploying-via-ci">Deploying via Continuous Integration</a></li>
 <li><a href="/wiki/opam">Keeping up-to-date</a></li>
 <li><a href="/wiki/breaking-changes">Breaking changes</a></li>
+<li><a href="/wiki/mirage-3.0-errors">Error Handling</a></li>
 <li><a href="/wiki/profiling">Tracing and Profiling</a></li>
 <li><a href="/wiki/contributing">Contributing to MirageOS</a></li>
 </ul>
