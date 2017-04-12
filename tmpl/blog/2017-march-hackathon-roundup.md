@@ -21,7 +21,6 @@ In contrast to [last year](/blog/2016-spring-hackathon), we organised several ev
 
 - Body self-awareness workshop (by the resident dancers)
 - Hiking to waterfalls on Sunday
-- Screening of [Hidden Figures](http://www.imdb.com/title/tt4846340/) on Monday
 - Hamam visit on Monday
 - Herbalist visit on Tuesday
 - Talk by the resident dancers on Tuesday
@@ -147,7 +146,7 @@ All of the people I spoke with were very knowledgeble - and I got to see what pe
 
 ## Thomas Leonard
 
-This was my second time at the hackathon, and it was great to see everyone and work on Mirage stuff again! I brought along a NUC which provided an additional wireless access point, running a Mirage/Xen DHCP server using haesbaert's [charrua](https://github.com/mirage/charrua-core library - one of the fruits of last year's efforts.
+This was my second time at the hackathon, and it was great to see everyone and work on Mirage stuff again! I brought along a NUC which provided an additional wireless access point, running a Mirage/Xen DHCP server using haesbaert's [charrua](https://github.com/mirage/charrua-core) library - one of the fruits of last year's efforts.
 
 My goal this year was to update [qubes-mirage-firewall](http://roscidus.com/blog/blog/2016/01/01/a-unikernel-firewall-for-qubesos/) to support Mirage 3 and the latest version of [mirage-nat](https://github.com/yomimono/mirage-nat), and to add support for NAT of ICMP messages (so that `ping` works and connection errors are reported). In the process, I converted mirage-nat to use the new parsers in the Mirage 3 version of the tcpip library, which cleaned up the code a lot. It turned out that the firewall stressed these parsers in new ways and we were able to [make them more robust](https://github.com/mirage/mirage-tcpip/pull/301) as a result. Having Mirage 3 release manager and mirage-nat author yomimono on hand to help out was very useful!
 
