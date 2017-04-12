@@ -176,4 +176,18 @@ I also had time to chat with Mindy about an upcoming talk on MirageOS 3.0, and M
 
 Overall, this was an excellent event and now that it's happened twice, I think we can call it a tradition. I'm looking forward to the next one!
 
-Many thanks to everyone involved!
+----
+
+## Jurre van Bergen
+
+I spent most of my time reading up on functional programming and setting up an developer environment and helped with some small things here and there. I didn't feel confident to do a lot of code yet, but it was a very nice environment to ask questions in, especially as a newcomer to MirageOS and OCaml!
+
+I plan to do more OCaml in my spare time and play more with MirageOS in the future. Maybe someday, we can actually merge in some MirageOS things into [Tails](https://tails.boum.org/). I hope to actually do some OCaml code with people next year!
+Next to that, there was also some time to relax, climbing the Atlas mountains was a welcome change of scenery after reading through up on functional programming for a couple of days. Will definitely do that again some day!
+
+Next to that, shout out to Viktor and Luke for teaching us how to play Cambio, we had a lot of fun with it the entire retreat in the evenings!
+I was excited to learn that so many people were actually into karaoke, I hope those who don't will join us next year ;-)
+
+----
+
+Many thanks to everyone involved!  The hackathon is already booked for next year in the same place...
