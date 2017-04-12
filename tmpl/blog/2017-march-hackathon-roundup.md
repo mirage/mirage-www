@@ -1,8 +1,11 @@
 # Cambio, OCaml and Karaoke: MirageOS Hack Retreat, Marrakech 2017
 
 This March, 34 people from around the world gathered in Marrakech for a spring Mirage hackathon. This is fast becoming a [MirageOS tradition](/blog/2016-spring-hackathon), and we're a little sad that it's over already! We've collected some trip reports from those who attended the 2017 Hack Retreat, and we'd like to thank our amazing hosts, organisers and everyone who took the time to write up their experiences. Props go especially to Hannes Mehnert who initiated the event and took care of many of the logistics, and to Gemma Gordon for designing and printing [limited edition t-shirts](http://reynard.io/2017/03/10/OCamlCollection.html) especially for the occasion!
+<img src="/graphics/medina-2017.jpg" style="float:right; padding: 15px" />
 
-You can find reports from [Olle Jonsson](http://ollehost.dk/blog/2017/03/17/travel-report-mirageos-hack-retreat-in-marrakesh-2017/) and [Reynir Björnsson](https://reyn.ir/posts/2017-03-20-11-27-Marrakech%202017.html) on their personal sites.
+In addition to the reports below, you can find other information online:
+- the daily [tweets about the event](http://ocamllabs.io/events/2017/03/06/MirageHackUpdates.html), including sophisticated "paper slides"
+- [Olle Jonsson](http://ollehost.dk/blog/2017/03/17/travel-report-mirageos-hack-retreat-in-marrakesh-2017/) and [Reynir Björnsson](https://reyn.ir/posts/2017-03-20-11-27-Marrakech%202017.html) wrote up their experiences on their personal sites.
 
 ## Hannes Mehnert
 
@@ -24,6 +27,7 @@ In contrast to [last year](/blog/2016-spring-hackathon), we organised several ev
 - Talk by the resident dancers on Tuesday
 - A [public talk](https://www.dropbox.com/s/w5wnlbxujf7pk5w/Marrakech.pdf?dl=0) led by Amir on Saturday (highly appreciated, it
 was announced rather late, only ~10 external people showed up)
+<img src="/graphics/spiros-camel.jpg" style="float:right; padding: 15px" />
 
 Several voluntary presentations on topics of interest to several people:
 
