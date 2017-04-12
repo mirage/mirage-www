@@ -190,4 +190,18 @@ I was excited to learn that so many people were actually into karaoke, I hope th
 
 ----
 
+## Reynir Bjornsson
+
+A work in progress from Reynir is his work on documentation in the toplevel:
+
+> As mentioned on the midday talkie talkie I've made a OCaml toplevel directive for querying documentation (if available). It's available here <https://github.com/reynir/ocp-index-top>.
+> To test it out you can install it with opam pin:
+>    opam pin add ocp-index-top https://github.com/reynir/ocp-index-top.git
+>
+ It doesn't depend on opam-lib. opam-lib is yuuuuge and the API is unstable. Instead I shell out to opam directly similar to how ocp-browser works. This means installing the package is less likely to make a mess in your dependencies.
+>
+> There is one issue I don't know how to fix (see issue #1). When requiring `ocp-index-top` the `compiler-libs` and `ocp-index.lib` libraries are pulled into scope which is not cool and totally unnecessary.
+
+----
+
 Many thanks to everyone involved!  The hackathon is already booked for next year in the same place...
