@@ -1,12 +1,16 @@
 *This is the fifth in a series of posts that introduce new libraries for a pure OCaml implementation of TLS.
 You might like to begin with the [introduction][tls-intro].*
 
+[Discuss this article on Hacker News][hn].
+
 [ocaml-tls][] is the new, clean-slate implementation of TLS in OCaml
 that we've been working on for the past six months. In this post we
 try to document some of its internal design, the reasons for the
 decisions we made, and the current security status of that work. Try
 our [live interactive demonstration server][demo] which visualises TLS
 sessions.
+
+[hn]: https://news.ycombinator.com/item?id=8031368
 
 ### The OCaml-TLS architecture
 
