@@ -190,7 +190,7 @@ I was excited to learn that so many people were actually into karaoke, I hope th
 
 ----
 
-## Reynir Bjornsson
+## Reynir Björnsson
 
 A work in progress from Reynir is his work on documentation in the toplevel:
 
