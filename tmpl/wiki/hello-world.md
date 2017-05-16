@@ -266,7 +266,7 @@ available device drivers are defined in the `Mirage` module
 (see [the Mirage module documentation](http://mirage.github.io/mirage/)).
 
 In this case, the `main` variable declares that the entry point of the process
-is the `Main` module from the file `unikernel.ml`. The `@->` combinator is used
+is the `Hello` module from the file `unikernel.ml`. The `@->` combinator is used
 to add a device driver to the list of functor arguments in the job definition
 (see `unikernel.ml`), and the final value of using this combinator should always
 be a `job` if you intend to register it.
@@ -276,7 +276,7 @@ configuration keys we want to allow the user to specify at configuration or buil
 `packages`, a list of additional `opam` packages that should be included in the list of
 build dependencies for the project.  We'll talk more about configuration keys in the next example.
 
-Notice that we refer to the module name as a string (`"Unikernel.Main"`) when
+Notice that we refer to the module name as a string (`"Unikernel.Hello"`) when
 calling `foreign`, instead of directly as
 an OCaml value. The `mirage` command-line tool evaluates this configuration file
 at build-time and outputs a `main.ml` that has the concrete values filled in for
@@ -290,7 +290,7 @@ must be passed references to devices such as the console, network interfaces and
 block devices on startup.
 
 In this case, this simple `hello world` example requires some notion of time, so we register a single `Job` consisting of
-the `Hello.Main` module
+the `Unikernel.Hello` module
 (and, implicitly its `start` function) and passing it references to a
 timer.
 
