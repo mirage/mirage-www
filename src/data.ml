@@ -768,7 +768,12 @@ module Wiki = struct
       body       = File "breaking-changes.md";
       permalink  = "breaking-changes";
     };
-
+    { updated    = date (2017, 05, 22, 18, 00);
+      author     = dave;
+      subject    = "Building and packaging with jbuilder and topkg";
+      body       = File "packaging.md";
+      permalink  = "packaging";
+    };
   ]
 end
 
