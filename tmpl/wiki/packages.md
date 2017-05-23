@@ -1,4 +1,4 @@
-## Packing with jbuilder and topkg
+## Packaging with jbuilder and topkg
 
 This post describes the current state-of-the-art in building and releasing
 Mirage libraries with
@@ -41,9 +41,7 @@ We adopt the following conventions:
   multiple `opam` packages via multiple `<name>.opam` files in the same repo.
   See [rgrinberg](http://rgrinberg.com/posts/optional-dependencies-considered-harmful/)'s
   post for a rationale
-- we prefer a one-to-one mapping of `ocamlfind` package to `opam` package.
-  This is to avoid misunderstandings over whether you need to type `mirage-types.lwt`
-  or `mirage-types-lwt` in the current context.
+- we prefer to use the same name for both the `ocamlfind` package and the `opam` package. This is to avoid misunderstandings over whether you need to type `mirage-types.lwt` or `mirage-types-lwt` in the current context.
 - we write `CHANGES.md` entries in the same style, to ensure they are parseable
   by `topkg`
 - we do not enable warnings as errors in the repo; instead we turn these on for
