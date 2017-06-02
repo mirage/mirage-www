@@ -16,7 +16,7 @@
 
 (* Hack to make the image name parametrized *)
 let get ~default name =
-  try String.lowercase @@ Sys.getenv name
+  try String.lowercase_ascii @@ Sys.getenv name
   with Not_found -> default
 
 let image = get "XENIMG" ~default:"www"
