@@ -66,8 +66,6 @@ A Mirage library should have
   and [mirage-block-lwt.1.1.0](https://github.com/mirage/mirage-block/blob/1.1.0/mirage-block-lwt.opam).
   These should have a github pages `doc:` link in order that `topkg` can detect
   the upstream repo.
-- one `<name>.version` file containing the string `%%VERSION%%` per opam package defined in
-  the repo. For example [mirage-block-lwt.3.1.2](https://github.com/mirage/mirage-block/blob/1.1.0/mirage-block-lwt.opam).
 - `Makefile`: contains `jbuilder` invocations including the `--dev` argument
   to enable warnings as errors for local builds.
   For example [mirage-block.3.1.2](https://github.com/mirage/mirage-block/blob/1.1.0/Makefile)
