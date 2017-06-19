@@ -2,9 +2,9 @@
 
 This post describes the current state-of-the-art in building and releasing
 Mirage libraries with
-[jbuilder](https://github.com/janestreet/jbuilder)
+[jbuilder](https://github.com/janestreet/jbuilder) (to build)
 and
-[topkg](https://github.com/dbuenzli/topkg).
+[topkg](https://github.com/dbuenzli/topkg) (to release).
 
 ### Goals
 
@@ -56,7 +56,7 @@ A Mirage library should have
   For example consider [mirage-tcpip.3.1.2](https://github.com/mirage/mirage-tcpip/blob/v3.1.2/CHANGES.md):
   it has a markdown `###` prefix before each release version and the date in
   `(YYYY-MM-DD)` form.
-- `LICENSE`: describing the conditions under which the code can be used
+- `LICENSE.md`: describing the conditions under which the code can be used
   (the Mirage standard license is ISC).
   For example [mirage-tcpip.3.1.2](https://github.com/mirage/mirage-tcpip/blob/v3.1.2/LICENSE).
 - `README.md`: describing what the code is for and linking to examples / docs /
@@ -66,8 +66,6 @@ A Mirage library should have
   and [mirage-block-lwt.1.1.0](https://github.com/mirage/mirage-block/blob/1.1.0/mirage-block-lwt.opam).
   These should have a github pages `doc:` link in order that `topkg` can detect
   the upstream repo.
-- one `<name>.version` file containing the string `%%VERSION%%` per opam package defined in
-  the repo. For example [mirage-block-lwt.3.1.2](https://github.com/mirage/mirage-block/blob/1.1.0/mirage-block-lwt.opam).
 - `Makefile`: contains `jbuilder` invocations including the `--dev` argument
   to enable warnings as errors for local builds.
   For example [mirage-block.3.1.2](https://github.com/mirage/mirage-block/blob/1.1.0/Makefile)
@@ -113,6 +111,9 @@ ok to skip this if the CI was working fine a few moments ago when you merged
 another PR).
 
 When the `CHANGES.md` PR is merged, pull it into your local `master` branch.
+
+Read `topkg help release` to have an overview of the full release workflow.
+
 Type:
 
 ```
@@ -128,9 +129,20 @@ topkg distrib
 ```
 -- topkg will create a release tarball.
 
-Finally type:
+Type:
 
 ```
-TOPKG_GITHUB_AUTH="<github userid>:$(cat ~/.github/token)" topkg publish distrib
+TOPKG_GITHUB_AUTH="<github userid>:$(cat ~/.github/token)" topkg publish
 ```
 -- topkg will push the tag, create a release and upload the release tarball.
+It will also build the docs and push them online.
+
+If you have the [multi-package release rules](https://github.com/mirage/mirage-block/blob/master/Makefile#L12) in your Makefile,
+and assumning that you have a clone on `ocaml/opam-repository` in `../opam-repository`, you can then type:
+
+```
+make opam-pkg
+```
+
+-- this will add new files in your opam-repository clone. `git commit` and push them to your fork on GitHub
+and open a new pull-request.
