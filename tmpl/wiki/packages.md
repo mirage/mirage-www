@@ -78,6 +78,9 @@ A Mirage library should have
   while [mirage-block-unix.2.8.1/lib_test/jbuild](https://github.com/mirage/mirage-block-unix/blob/v2.8.1/lib_test/jbuild)
   defines 2 executables and associates one with an alias `runtest`, triggered by
   `make test` in the root.
+- create an empty `doc/doc.odocl`. This is (hopefully only temporary) needed to
+  release the documentation.
+
 
 ### Developing changes
 
@@ -113,6 +116,8 @@ another PR).
 When the `CHANGES.md` PR is merged, pull it into your local `master` branch.
 
 Read `topkg help release` to have an overview of the full release workflow.
+You need to install `odoc`, `topkg-jbuilder` and `opam-publish` to be installed.
+Run `opam-publish` once to generate a release token.
 
 Type:
 
@@ -129,10 +134,11 @@ topkg distrib
 ```
 -- topkg will create a release tarball.
 
-Type:
+Install `odoc,` topkg-jbuilder Type:
+
 
 ```
-TOPKG_GITHUB_AUTH="<github userid>:$(cat ~/.github/token)" topkg publish
+topkg publish
 ```
 -- topkg will push the tag, create a release and upload the release tarball.
 It will also build the docs and push them online.
@@ -146,3 +152,9 @@ make opam-pkg
 
 -- this will add new files in your opam-repository clone. `git commit` and push them to your fork on GitHub
 and open a new pull-request.
+
+If you only have one package in your repository, you can simply write:
+
+```
+topkg tag && topk bistro
+```
