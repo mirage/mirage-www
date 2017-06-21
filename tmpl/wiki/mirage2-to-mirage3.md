@@ -1,6 +1,6 @@
 # Incompatibilities
 
-For a short summary of breaking changes, see [the Mirage 3.0.0 release notes](https://github.com/mirage/mirage/tags/rel).  This document is a guide to porting your existing unikernel from the Mirage 2.x interface to Mirage 3.x.  If your unikernel was based on one of the examples in [the mirage-skeleton repository](https://github.com/mirage/mirage-skeleton), you may find [hannesm's collection of diffs from v2.9.1 to v3.0.0](http://www.cl.cam.ac.uk/~hm519/mirage-2.9.1-3.0.0-diffs/) for popular unikernels to be a useful reference.
+For a short summary of breaking changes, see [the Mirage 3.0.0 release notes](https://github.com/mirage/mirage/releases/tag/v3.0.0).  This document is a guide to porting your existing unikernel from the Mirage 2.x interface to Mirage 3.x.  If your unikernel was based on one of the examples in [the mirage-skeleton repository](https://github.com/mirage/mirage-skeleton), you may find [hannesm's collection of diffs from v2.9.1 to v3.0.0](http://www.cl.cam.ac.uk/~hm519/mirage-2.9.1-3.0.0-diffs/) for popular unikernels to be a useful reference.
 
 ## config.ml and generic/default functions
 
