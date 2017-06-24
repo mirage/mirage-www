@@ -16,8 +16,10 @@
 
 (** Site configuration *)
 
-val base_uri: Types.domain -> string
+open Www_types
+
+val base_uri: domain -> string
 (** [base_uri d] is the base URI the the domain [d]. *)
 
-val uri: Types.domain -> Types.path -> Uri.t
+val uri: domain -> path -> Uri.t
 (** [uri d p] is the URI with the domain [d] and the path [p]. *)

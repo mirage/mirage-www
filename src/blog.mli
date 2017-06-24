@@ -22,6 +22,6 @@ type t = Cowabloga.Blog.Entry.t
 val dispatch:
   feed:Cowabloga.Atom_feed.t ->
   entries:t list ->
-  read:string Types.read ->
-  Types.dispatch
+  read:string Www_types.read ->
+  Www_types.dispatch
 (** The blog dispatch function. *)

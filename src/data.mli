@@ -49,7 +49,7 @@ end
 module Feed: sig
   (** {1 Static feeds} *)
 
-  type t = Types.domain -> Cow.Html.t Types.read -> Cowabloga.Atom_feed.t
+  type t = Www_types.domain -> Cow.Html.t Www_types.read -> Cowabloga.Atom_feed.t
   (** The type for feed generators. *)
 
   val blog: t
@@ -65,7 +65,7 @@ module Feed: sig
   (** The static feed for external articles about MirageOS. *)
 end
 
-val google_analytics: Types.domain -> string * string
+val google_analytics: Www_types.domain -> string * string
 (** Google analytics configuration. *)
 
 val empty_feed: Cowabloga.Atom_feed.t

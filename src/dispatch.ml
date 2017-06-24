@@ -39,11 +39,12 @@ module Make
     (TMPL: Mirage_types_lwt.KV_RO)
     (Clock: Mirage_types.PCLOCK)
 = struct
+  open Www_types
 
   let log_src = Logs.Src.create "dispatch" ~doc:"Web server"
   module Log = (val Logs.src_log log_src : Logs.LOG)
 
-  type dispatch = Types.path -> Types.cowabloga Lwt.t
+  type dispatch = path -> cowabloga Lwt.t
   type s = Conduit_mirage.server -> S.t -> unit Lwt.t
 
   let size_then_read ~pp_error ~size ~read device name =
@@ -76,7 +77,7 @@ module Make
     let uri = Uri.to_string uri in
     Lwt.return (`Redirect uri)
 
-  let cowabloga (x:Types.contents): Types.cowabloga = match x with
+  let cowabloga (x:contents): cowabloga = match x with
     | `Html _ | `Page _ as e -> e
     | `Not_found p -> `Not_found (Uri.to_string p)
     | `Redirect p  -> `Redirect (Uri.to_string p)
