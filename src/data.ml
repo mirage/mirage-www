@@ -1292,8 +1292,9 @@ module Links = struct
 end
 
 module Feed = struct
+  open Www_types
 
-  type t = Types.domain -> Cow.Html.t Types.read -> Cowabloga.Atom_feed.t
+  type t = domain -> Cow.Html.t read -> Cowabloga.Atom_feed.t
 
   let blog domain read_entry = {
     Cowabloga.Atom_feed.base_uri = Site_config.base_uri domain;

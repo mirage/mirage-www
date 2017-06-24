@@ -19,9 +19,11 @@
 type t = Cowabloga.Wiki.entry
 (** The type for blog entries. *)
 
+open Www_types
+
 val dispatch:
   feed:Cowabloga.Atom_feed.t ->
   entries:t list ->
-  read:string Types.read ->
-  Types.dispatch
+  read:string read ->
+  dispatch
 (** The blog dispatch function. *)

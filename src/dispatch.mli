@@ -16,6 +16,8 @@
 
 (** HTTP dispatcher *)
 
+open Www_types
+
 (** The HTTP dispatcher. *)
 module Make
     (S: Cohttp_lwt.Server)
@@ -24,13 +26,13 @@ module Make
     (Clock: Mirage_types.PCLOCK) :
 sig
 
-  type dispatch = Types.path -> Types.cowabloga Lwt.t
+  type dispatch = path -> cowabloga Lwt.t
   (** The type for dispatch functions. *)
 
-  val redirect: Types.domain -> dispatch
+  val redirect: domain -> dispatch
   (** [redirect d path] redirects the user to [path] on domain [d]. *)
 
-  val dispatch: Types.domain -> FS.t -> TMPL.t -> dispatch
+  val dispatch: domain -> FS.t -> TMPL.t -> dispatch
   (** [dispatcher d fs tmpl path] is the object served by the HTTP
       server.
 
@@ -41,7 +43,7 @@ sig
       {- [tmpl] is a read-only key/value store holding the proccessed data such
       as blog posts and wiki entries.}} *)
 
-  val create: Types.domain -> dispatch -> S.t
+  val create: domain -> dispatch -> S.t
   (** [create f] is an HTTP server function using [f] as callback. *)
 
   type s = Conduit_mirage.server -> S.t -> unit Lwt.t
@@ -52,6 +54,6 @@ sig
 
 end
 
-val domain_of_string: string -> Types.domain
+val domain_of_string: string -> domain
 (** [domain_of_string d] parses the string [d] to build a domain. Should be of
     the form {i http://host} or {i https://host}. *)

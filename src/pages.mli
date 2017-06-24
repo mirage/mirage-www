@@ -16,11 +16,13 @@
 
 (** Various pages. *)
 
-type t = read:string Types.read -> domain:Types.domain -> Types.contents Lwt.t
+open Www_types
+
+type t = read:string read -> domain:domain -> contents Lwt.t
 (** The type for page values. *)
 
 type dispatch =
-  feed:Cowabloga.Atom_feed.t -> read:string Types.read -> Types.dispatch
+  feed:Cowabloga.Atom_feed.t -> read:string read -> Www_types.dispatch
 (** The type for page dispatch. *)
 
 module Global: sig

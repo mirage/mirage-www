@@ -17,10 +17,11 @@
 open Printf
 open Lwt.Infix
 open Cow.Html
+open Www_types
 
-type t = read:string Types.read -> domain:Types.domain -> Types.contents Lwt.t
+type t = read:string read -> domain:domain -> contents Lwt.t
 type dispatch =
-  feed:Cowabloga.Atom_feed.t -> read:string Types.read -> Types.dispatch
+  feed:Cowabloga.Atom_feed.t -> read:string read -> Www_types.dispatch
 
 let not_found ~domain section path =
   (* FIXME: put [section] in the [domain] variable? *)
