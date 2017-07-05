@@ -1,41 +1,27 @@
 .DS_Store
 *~
+.*.swp
 
 /log
+/.mirage.container
 
-/src/log
-/src/_build
-/src/mir-www
-/src/mir-main
-/src/main.native
-/src/www.xl
-/src/www.xl.in
-/src/key_gen.ml
-/src/www.xe
-/src/www_libvirt.xml
-
+/src/.mirage.config
 /src/Makefile
-/src/main.ml
-
-/src/static_files.ml
-/src/static_files.mli
-/src/static_tmpl.ml
-/src/static_tmpl.mli
-/src/static[0-9].ml
-/src/static[0-9].mli
-/src/fat*.img
-/src/make-fat*.sh
-
-files/js/stats
+src/_build/
+src/key_gen.ml
+src/main.ml
+src/main.native
+src/mirage-unikernel*.opam
+src/myocamlbuild.ml
+src/static1.ml
+src/static1.mli
+src/static2.ml
+src/static2.mli
+src/www
 
 stats/_build/
 stats/main.byte
 stats/main.js
 stats/main.min.js
 
-.*.swp
-
-/src/.mirage.config
-/src/mirage-unikernel-www-unix.opam
-/src/myocamlbuild.ml
-/src/www
+files/js/stats/

@@ -16,36 +16,45 @@
 # PERFORMANCE OF THIS SOFTWARE.
 #
 
-# XENIMG: the name to provide for the xen image and configuration
-XENIMG ?= www
+HTTPPORT ?= 80
+HTTPSPORT ?= 443
+FLAGS ?= \
+  -vv --net socket -t unix --http-port $(HTTPPORT) --https-port $(HTTPSPORT)
 
-# FLAGS for the "mirage configure" command.
-FLAGS  ?=
+MIRAGE = DOCKER_FLAGS="$$DOCKER_FLAGS -p $(HTTPPORT) -p $(HTTPSPORT)" \
+    dommage --dommage-chdir src
+EXEC_IN = dommage --dommage-chdir
 
-.PHONY: all configure build run clean
+.PHONY: all clean prepare configure build publish destroy
 
 all:
 	@echo "To build this website, first use \"make prepare\""
 	@echo "You can then build the mirage application in the src/ directory"
-	@echo "cd src && mirage configure && make"
-	@echo "For unikernel configuration option, do \"mirage configure --help\" in src/"
-
-prepare:
-	cd stats && make depend
-	cd stats && make all
-
-configure: prepare
-	cd src && mirage configure $(FLAGS) -t $(MODE)
-
-depend:
-	cd stats && make depend
-	cd src && make depend
-
-build: depend
-	cd stats && make build
-	cd src && make build
+	@echo "\"make configure build\""
 
 clean:
-	-make -C src clean
-	cd stats && make clean
-	$(RM) log src/mir-www src/*.img src/make-fat*.sh
+	$(EXEC_IN) stats run make clean
+	$(RM) -r src/_build
+	$(MIRAGE) clean || true
+	$(MIRAGE) destroy || true
+
+prepare:
+	[ -z ".mirage.container" ] && dommage init $$(cat .mirage.image) || true
+	$(EXEC_IN) stats run make depend
+	$(EXEC_IN) stats run make all
+
+configure:
+	$(MIRAGE) configure $(FLAGS)
+
+build:
+	$(EXEC_IN) stats run make build
+	$(MIRAGE) build
+
+test:
+	$(MIRAGE) run sudo “./www
+
+publish:
+	$(MIRAGE) publish mor1/mirage-www
+
+destroy:
+	$(MIRAGE) destroy
