@@ -51,7 +51,7 @@ build:
 	$(MIRAGE) build
 
 test:
-	$(MIRAGE) run sudo “./www
+	$(MIRAGE) run sudo ./www
 
 publish:
 	$(MIRAGE) publish mor1/mirage-www
