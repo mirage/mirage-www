@@ -13,10 +13,7 @@ src/main.ml
 src/main.native
 src/mirage-unikernel*.opam
 src/myocamlbuild.ml
-src/static1.ml
-src/static1.mli
-src/static2.ml
-src/static2.mli
+src/static*.ml*
 src/www
 
 stats/_build/
