@@ -25,9 +25,7 @@ the "MirageOS quality levels". Ideally this will live in a tool (e.g.
 `mirage lint`) but to start we list the criteria that package aiming
 for increased quality should follow.
 
-### Level 1: Follow Packaging Guidelines
-
-![level-1](https://img.shields.io/badge/level-1-blue.svg)
+### ![Level 1:](https://img.shields.io/badge/level-1-blue.svg) Follow Packaging Guidelines
 
 See the [packaging guidelines](https://mirage.io/wiki/packaging) for more
 details. In summary:
@@ -52,9 +50,7 @@ details. In summary:
   and could break the package in the future if one of a transitive dependency
   is updated) (NOTE: should probably be added in the packaging guideline)
 
-### Level 2: Define Package Scope
-
-![level-2](https://img.shields.io/badge/level-2-blue.svg)
+### ![Level 2](https://img.shields.io/badge/level-2-blue.svg) Define Package Scope
 
 - Have well-identified maintainers. GitHub recently
   [introduced code owners](https://github.com/blog/2392-introducing-code-owners),
@@ -67,9 +63,7 @@ details. In summary:
 
 - Have documentation
 
-### Level 3: Use Good Coding Style
-
-![level-3](https://img.shields.io/badge/level-3-blue.svg)
+### ![Level 3:](https://img.shields.io/badge/level-3-blue.svg) Use Good Coding Style
 
 - Have proper indentation (using ocp-indent + checked-in ocp-indent file).
 
@@ -77,9 +71,7 @@ details. In summary:
 
 - Follow [OCaml programming guidelines](https://ocaml.org/learn/tutorials/guidelines.html).
 
-### Level 4: Keep your Style Functional
-
-![level-4](https://img.shields.io/badge/level-4-blue.svg)
+### ![Level 4:](https://img.shields.io/badge/level-4-blue.svg) Keep your Style Functional
 
 - Avoid global mutable state.
 
@@ -90,15 +82,11 @@ details. In summary:
 - Avoid polymorphic equality and comparison -- when possible define your own
   specialized functions.
 
-### Level 5: Test
-
-![level-5](https://img.shields.io/badge/level-4-blue.svg)
+### ![Level 5:](https://img.shields.io/badge/level-4-blue.svg) Test
 
 - Have unit tests (using alcotest) (ideally with coverage report).
 
-### Level 6: Sane Dependencies
-
-![level-6](https://img.shields.io/badge/level-6-blue.svg)
+### ![Level 6:](https://img.shields.io/badge/level-6-blue.svg) Keep Sane Dependencies
 
 - Depends only on libraries released in opam.
 
@@ -123,16 +111,12 @@ details. In summary:
   improve performance by an order of magnitude, or re-use an existing C library
   that has not been rewritten yet.
 
-### Level 7: Randomized Test
-
-![level-7](https://img.shields.io/badge/level-7-blue.svg)
+### ![Level 7:](https://img.shields.io/badge/level-7-blue.svg) Randomized Test
 
 - Have randomized property-based testing. Using QuickCheck-like libraries or
   even better using fuzz testing (and crowbar) when the tooling will be ready.
 
-### Level 8: Count with Care
-
-![level-8](https://img.shields.io/badge/level-8-blue.svg)
+### ![Level 8:](https://img.shields.io/badge/level-8-blue.svg) Count with Care
 
 - Avoid integer overflows (basically every addition and subtraction, as well
   as multiplication needs to be guarded unless you know that an overflow can
@@ -140,9 +124,7 @@ details. In summary:
 
 - Work on 32bit (esp. in regards to the last point)
 
-### Level 9: Used in Production
-
-![level-9](https://img.shields.io/badge/level-9-blue.svg)
+### ![Level 9:](https://img.shields.io/badge/level-9-blue.svg) Used in Production
 
 - Have a clear indication if the library is used in production (and if yes by
   which project).
@@ -151,8 +133,6 @@ details. In summary:
   needed to build the released version of the binary, for instance by vendoring
   opam metadata.
 
-### Level 10: Verify Formally
-
-![level-10](https://img.shields.io/badge/level-10-blue.svg)
+### ![Level 10:](https://img.shields.io/badge/level-10-blue.svg) Verify Formally
 
 - Has been formally verified.
