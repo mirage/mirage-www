@@ -82,7 +82,7 @@ details. In summary:
 - Avoid polymorphic equality and comparison -- when possible define your own
   specialized functions.
 
-### ![Level 5:](https://img.shields.io/badge/level-4-blue.svg) Test
+### ![Level 5:](https://img.shields.io/badge/level-5-blue.svg) Test
 
 - Have unit tests (using alcotest) (ideally with coverage report).
 
