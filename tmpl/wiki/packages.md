@@ -156,5 +156,5 @@ and open a new pull-request.
 If you only have one package in your repository, you can simply write:
 
 ```
-topkg tag && topk bistro
+topkg tag && topkg bistro
 ```
