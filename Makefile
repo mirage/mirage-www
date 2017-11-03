@@ -16,45 +16,54 @@
 # PERFORMANCE OF THIS SOFTWARE.
 #
 
-HTTPPORT ?= 80
-HTTPSPORT ?= 443
+HTTP  ?= 8080
+HTTPS ?= 4343
 FLAGS ?= \
-  -vv --net socket -t unix --http-port $(HTTPPORT) --https-port $(HTTPSPORT)
+  -vv --net socket -t unix --http-port $(HTTP) --https-port $(HTTPS)
 
-MIRAGE = DOCKER_FLAGS="$$DOCKER_FLAGS -p $(HTTPPORT) -p $(HTTPSPORT)" \
+MIRAGE = DOCKER_FLAGS="$$DOCKER_FLAGS -p $(HTTP):$(HTTP) -p $(HTTPS):$(HTTPS)" \
     dommage --dommage-chdir src
 EXEC_IN = dommage --dommage-chdir
 
-.PHONY: all clean prepare configure build publish destroy
-
+.PHONY: all
 all:
 	@echo "To build this website, first use \"make prepare\""
 	@echo "You can then build the mirage application in the src/ directory"
 	@echo "\"make configure build\""
 
+.PHONY: clean
 clean:
 	$(EXEC_IN) stats run make clean
 	$(RM) -r src/_build
 	$(MIRAGE) clean || true
-	$(MIRAGE) destroy || true
 
+.PHONY: prepare
 prepare:
 	[ -z ".mirage.container" ] && dommage init $$(cat .mirage.image) || true
 	$(EXEC_IN) stats run make depend
 	$(EXEC_IN) stats run make all
 
+.PHONY: configure
 configure:
 	$(MIRAGE) configure $(FLAGS)
 
+.PHONY: build
 build:
 	$(EXEC_IN) stats run make build
 	$(MIRAGE) build
 
-test:
-	$(MIRAGE) run sudo ./www
+.PHONY: destroy
+destroy:
+	$(MIRAGE) destroy
 
+.PHONY: update
+update:
+	$(MIRAGE) update
+
+.PHONY: publish
 publish:
 	$(MIRAGE) publish mor1/mirage-www
 
-destroy:
-	$(MIRAGE) destroy
+.PHONY: run
+run:
+	$(MIRAGE) run sudo ./www
