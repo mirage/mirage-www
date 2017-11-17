@@ -439,7 +439,7 @@ $ make
 When the target is Unix, Mirage will use an implementation for configuration keys that looks at the contents of `OS.Env.argv` -- in other words, it looks directly at the command line that was used to invoke the program.  If we call `hello` with no arguments, the default value is used:
 
 ```
-./hello
+$ ./hello
 2017-02-08 18:18:23 -03:00: INF [application] Hello World!
 2017-02-08 18:18:24 -03:00: INF [application] Hello World!
 2017-02-08 18:18:25 -03:00: INF [application] Hello World!
@@ -449,7 +449,6 @@ When the target is Unix, Mirage will use an implementation for configuration key
 but we can ask for something else:
 
 ```
-./hello --hello="Bonjour!"
 $ ./hello --hello="Bonjour!"
 2017-02-08 18:20:46 +09:00: INF [application] Bonjour!
 2017-02-08 18:20:47 +09:00: INF [application] Bonjour!
