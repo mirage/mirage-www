@@ -4,7 +4,7 @@ MirageOS consists of a set of OCaml libraries that link with a runtime to form e
 
 MirageOS has been tested on many modern Linux distributions, MacOS X 10.10+ and FreeBSD 11+.
 
-You will need OPAM 1.2.2 or later and OCaml 4.03.0 or later.
+You will need OPAM 1.2.2 or later and OCaml 4.04.2 or later.
 
 Some backends have specific requirements for the host system:
 
@@ -84,11 +84,11 @@ After installation, `opam update -u` refreshes the package list and recompiles p
     # list of your remotes, which should include opam.ocaml.org
     $ opam remote
 
-Next, make sure you have at least **OCaml 4.03.0 or higher** as your active compiler. This is generally the case on MacOS X, though Debian only has it in the *testing* distribution at present. But don't worry: if your compiler is out of date, just run `opam switch` to have it locally install the right version for you.
+Next, make sure you have at least **OCaml 4.04.2 or higher** as your active compiler. This is generally the case on MacOS X, though Debian only has it in the *testing* distribution at present. But don't worry: if your compiler is out of date, just run `opam switch` to have it locally install the right version for you.
 
     $ ocaml -version
-    # if it is not 4.03.0 or higher, then run this
-    $ opam switch 4.03.0
+    # if it is not 4.04.2 or higher, then run this
+    $ opam switch 4.04.2
 
 Once you've got the right version, set up your shell environment to point to the current compiler switch.
 
