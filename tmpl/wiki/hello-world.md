@@ -144,9 +144,8 @@ way we use them is needed. For a better introduction as to how to actually make
 use of them, what they are, and so on
 see
 [Real World OCaml, Ch.9](https://realworldocaml.org/v1/en/html/functors.html)
-(and probably
-also
-[Ch.10, First-Class Modules](https://realworldocaml.org/v1/en/html/first-class-modules.html).
+(and also
+[Ch.10, First-Class Modules](https://realworldocaml.org/v1/en/html/first-class-modules.html)).
 
 In short, in Mirage, they're used as a way to abstract over the target
 environment for the unikernel. Functors are, roughly, functions from modules to
@@ -440,7 +439,7 @@ $ make
 When the target is Unix, Mirage will use an implementation for configuration keys that looks at the contents of `OS.Env.argv` -- in other words, it looks directly at the command line that was used to invoke the program.  If we call `hello` with no arguments, the default value is used:
 
 ```
-./hello
+$ ./hello
 2017-02-08 18:18:23 -03:00: INF [application] Hello World!
 2017-02-08 18:18:24 -03:00: INF [application] Hello World!
 2017-02-08 18:18:25 -03:00: INF [application] Hello World!
@@ -450,7 +449,6 @@ When the target is Unix, Mirage will use an implementation for configuration key
 but we can ask for something else:
 
 ```
-./hello --hello="Bonjour!"
 $ ./hello --hello="Bonjour!"
 2017-02-08 18:20:46 +09:00: INF [application] Bonjour!
 2017-02-08 18:20:47 +09:00: INF [application] Bonjour!
