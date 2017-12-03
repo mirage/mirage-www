@@ -1,6 +1,8 @@
 language: c
 install: wget https://raw.githubusercontent.com/ocaml/ocaml-ci-scripts/master/.travis-mirage.sh
 script: bash -ex .travis-mirage.sh
+sudo: required
+dist: trusty
 env:
   matrix:
   - OCAML_VERSION=4.03 MIRAGE_BACKEND=unix FLAGS="-vv --net socket"
@@ -9,13 +11,12 @@ env:
     FLAGS="-vv --net direct --dhcp false --ipv4 46.43.42.135/28
     --ipv4-gateway 46.43.42.129
     --host openmirage.org --redirect https://mirage.io"
-    UPDATE_GCC_BINUTILS=1
   - OCAML_VERSION=4.04 MIRAGE_BACKEND=xen DEPLOY=1 XENIMG="mirageio"
     FLAGS="-vv --net direct --dhcp false --ipv4 46.43.42.136/28
     --ipv4-gateway 46.43.42.129 --tls true
     --secrets-kv_ro fat --host mirage.io"
-    UPDATE_GCC_BINUTILS=1
   global:
+  - UPDATE_GCC_BINUTILS=1
   - secure: PUu3+Enupf9jcIPD/hs5b6zrNuJagTDXJGtYfSUIFvzevSXZzs6mXPu8L2vvAQbQ8ig/8VLToa44vUTG9OEy9SxXrR6yTQGfj4YxJ5BXKHwhYMTBXnR1e+S1gA4a5tilMa7M/a0hWa1rORv3diMIK3dihjc1m6VzpCK/4vly7KU=
   - secure: crnwZ3MDUA9szI/EuwB9o7plXVF2QCx+JpOazy4SwC2v47Vf5voOEAxh7iFMgGziBqzKGVnDw4/37WHVm5vdgaL4lL2T73F1PqXbiCdhhwZVcf+EAXr8KmoaNXRieL7qPsemQVvPWUiERZRmR2okvm60EqifZA9/dy/48dJIGMI=
   - secure: JijSTl0jOOPL0HoWooCBnhokjqboQSgwy3orgG5nUIPrluthNjix4ujds9TOuEtv2pflbgptUUdYJ7R6VfeZk/UWIVUbwBRjtMJRQRDPB0jxyoL9VLGzTwfdovwV0Rg0jeJkBWsAJjIxkdawE2R4wexAOn/tWDiLaSQh/n096Fc=
