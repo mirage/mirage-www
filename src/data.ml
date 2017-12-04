@@ -143,6 +143,13 @@ module People = struct
     uri       =  Some "https://github.com/GemmaG";
     email     = Some "gg417@cl.cam.ac.uk";
   }
+
+  let mk270 = {
+    Atom.name = "Martin Keegan";
+    uri       = Some "http://mk.ucant.org/";
+    email     = None;
+  }
+
 end
 
 let rights = Some "All rights reserved by the author"
@@ -597,6 +604,14 @@ module Wiki = struct
     weekly ~y:2014 ~m:3 ~d:18 ~a:amir;
     weekly ~y:2014 ~m:3 ~d:4 ~a:amir;
     weekly ~y:2014 ~m:2 ~d:26 ~a:amir;
+
+    { updated    = date (2017, 12, 3, 12, 00);
+      author     = mk270;
+      subject    = "Learning about Mirage";
+      body       = File "learning.md";
+      permalink  = "learning";
+    };
+
     { updated    = date (2017, 02, 23, 16, 00);
       author     = thomas (*also tal, but no support for multiple authors in wiki :( *);
       subject    = "Error Handling in Mirage3";
