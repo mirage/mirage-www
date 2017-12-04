@@ -605,6 +605,13 @@ module Wiki = struct
     weekly ~y:2014 ~m:3 ~d:4 ~a:amir;
     weekly ~y:2014 ~m:2 ~d:26 ~a:amir;
 
+    { updated    = date (2017, 12, 4, 15, 00);
+      author     = mk270;
+      subject    = "Solo5 backend";
+      body       = File "backend-solo5.md";
+      permalink  = "backend-solo5";
+    };
+
     { updated    = date (2017, 12, 3, 12, 00);
       author     = mk270;
       subject    = "Learning about Mirage";
