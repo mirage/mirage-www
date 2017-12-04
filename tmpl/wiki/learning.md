@@ -54,5 +54,16 @@ specified with the `-t` option.
 
 ## What are backends?
 
+TBD
+
+Backends include:
+
+* `unix`
+* `ukvm` (part of [Solo5](backend-solo5))
+* `xen`
 
 ## Making your own, non-trivial applications
+
+## Key components
+
+* `functoria`
