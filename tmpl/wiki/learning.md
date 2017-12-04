@@ -10,8 +10,13 @@ If you know some OCaml but don't know about Mirage, your first steps should
 be to try either our [Hello Mirage World](/hello-world) tutorial, or go
 directly to building some of the example apps in [Mirage Skeleton](https://github.com/mirage/mirage-skeleton).
 
-Mirage abstracts away various OS-level functionality, which must be provided
-by backends. These include access to networking and storage.
+Mirage abstracts away various OS-level functionality (e.g., networking
+and storage), which must be provided by backends. Commonly used
+backends are `unix`, `ukvm` and `xen`; the `unix` backend works within
+a normal laptop-based development environment. The others tend to
+involve various degrees of configuration effort, but are more
+realistic for production use. You can write your code, test it on `unix` first,
+and later adapt your environment to run one of the other backends.
 
 ## How to get help
 
@@ -28,7 +33,22 @@ the alternatives, roughly in descending order of preference:
 
 ## Typical development workflow
 
+When checking out an example project, a typical workflow would look something
+like this:
 
+* mirage configure -t unix
+* make depends
+* make
+* ./main.native
+
+Be aware that the behaviour of `mirage configure` depends intimately on the
+contents of the `config.ml` file in your current directory. This is true
+even of its command-line options. It follows that the syntax you observe
+in one tutorial or project may not always carry across to another.
+
+The `mirage configure` phase does the heavy lifting to resolve what
+code must be available for the backend you specify. The backend is
+specified with the `-t` option.
 
 ## What are backends?
 
