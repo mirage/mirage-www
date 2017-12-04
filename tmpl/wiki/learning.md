@@ -36,10 +36,12 @@ the alternatives, roughly in descending order of preference:
 When checking out an example project, a typical workflow would look something
 like this:
 
-* mirage configure -t unix
-* make depends
-* make
-* ./main.native
+```bash
+    $ mirage configure -t unix
+    $ make depends
+    $ make
+    $ ./main.native
+```
 
 Be aware that the behaviour of `mirage configure` depends intimately on the
 contents of the `config.ml` file in your current directory. This is true
