@@ -97,7 +97,8 @@ let dispatch = if_impl (Key.value tls_key)
     (** Without tls *)
     (http $ http_server (conduit_direct stack))
 
-let packages  = [ package "cow"; package "cowabloga"; package ~ocamlfind:["rrd"] "xapi-rrd"; package "c3" ;
+let packages  = [ package "cow"; package "cowabloga"; package ~ocamlfind:["rrd"]
+                    ~min:"1.0.1" "xapi-rrd"; package "c3" ;
                   package "duration"; package "ptime" ]
 
 let () =
