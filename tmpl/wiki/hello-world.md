@@ -22,9 +22,9 @@ machine, you should use `mirage configure -t macosx` instead.
 
 ### Step 0: Doing Nothing!
 
-Before we try and do anything complicated, let's do nothing briefly. That is,
-let's build a unikernel that simply starts and then exits—nothing else. The
-code for this is, as you might hope, fairly short. First the unikernel itself:
+Before we try and do anything complicated, let's build a unikernel that starts
+and then exits, without doing anything else. The code for this is, as you might
+hope, fairly short. First, the unikernel itself:
 
 ```ocaml
 $ cat tutorial/noop/unikernel.ml
@@ -52,13 +52,13 @@ let () =
 ```
 
 There's a little more going on here than in `unikernel.ml`. First we open the
-`Mirage` module to save on typing. Next, we define a value `main` (named so by
-convention because, at heart, some of us are still C programmers—feel free to
-call it something else if you wish!) which calls the `foreign` function passing
-two parameters. The first is a string declaring the module name that contains
-our entry point—in this case, standard OCaml compilation behaviour means that
+`Mirage` module to save on typing. Next, we define a value `main`.  This name is
+only a convention, and you should feel free to change it if you wish.
+`main` calls the `foreign` function, passing two parameters.
+The first is a string declaring the module name that contains
+our entry point — in this case, standard OCaml compilation behaviour means that
 the `unikernel.ml` file produces a module named `Unikernel`. Again, there's
-nothing special about this name—if you want to use something else here,
+nothing special about this name, and if you want to use something else here,
 simply rename `unikernel.ml` accordingly.
 
 The second parameter, `job`, is a bit more interesting. This declares the type
@@ -134,7 +134,7 @@ $ echo $?
 0
 ```
 
-And that's it—you've just built and run your very first unikernel!
+Congratulations! You've just built and run your very first unikernel!
 
 #### Aside: Doing Nothing with Functors!
 
@@ -159,7 +159,7 @@ unikernel `job` value is created in the `config.ml` file.
 
 We'll see several examples of this below but, for now, we need to wrap up our
 `noop` unikernel in a module inside the `Unikernel` module so that we can use it
-as a functor. This is actually quite straightforward—we simply wrap the
+as a functor. This is actually quite straightforward — we simply wrap the
 `start` function in `unikernel.ml` inside some module. For example,
 
 ```ocaml
@@ -172,8 +172,8 @@ module Main = struct
 end
 ```
 
-The use of the name `Main` is purely convention—again, call it something
-completely different if you wish to put C programming firmly behind you!
+The use of the name `Main` is purely convention, and you should feel free to
+replace it with completely different if you wish!
 
 The only other change is to the corresponding invocation in `config.ml`:
 
@@ -190,7 +190,7 @@ let () =
 
 Note that the string passed to `foreign` is now `"Unikernel.Main"` as we must
 refer to the `Main` module inside the `Unikernel` module. Everything else stays
-the same—go ahead and try that out by building the unikernel inside
+the same.  Go ahead and try that out by building the unikernel inside
 `noop-functor`.
 
 
@@ -198,8 +198,8 @@ the same—go ahead and try that out by building the unikernel inside
 
 ### Step 1: Hello World!
 
-As a first step, let's build and run the MirageOS "Hello World" unikernel—
-this will print a log message with the word `hello` 4 times before terminating:
+As a first step, let's build and run the MirageOS "Hello World" unikernel.
+This will print a log message with the word `hello` 4 times before terminating:
 
 ```
 2017-02-08 09:54:44 -01:00: INF [application] hello
@@ -285,13 +285,14 @@ Xen).
 
 MirageOS mirrors the unikernel model on Unix as far as possible: your application is
 built as a unikernel which needs to be instantiated and run whether on Unix or
-on Xen. When your unikernel is run, it starts much like a VM on Xen does—and so
-it must be passed references to devices such as the console, network interfaces and
+on a hypervisor backend like Xen or KVM. When your unikernel is run, it starts
+much like a conventional OS does when run as a virtual machine, and so it must
+be passed references to devices such as the console, network interfaces and
 block devices on startup.
 
-In this case, this simple `hello world` example requires some notion of time, so we register a single `Job` consisting of
-the `Unikernel.Hello` module
-(and, implicitly its `start` function) and passing it references to a
+In this case, this simple `hello world` example requires some notion of time,
+so we register a single `Job` consisting of the `Unikernel.Hello` module
+(and, implicitly its `start` function) and pass it references to a
 timer.
 
 #### Building a Unix binary
@@ -326,7 +327,7 @@ application. If you are on a multicore machine and want to do parallel builds,
 the trick.
 
 Finally to run your application, simply run it
-directly—as it is a standard Unix binary—and observe the exciting log messages that our loop is generating:
+directly — as it is a standard Unix binary — and observe the exciting log messages that our loop is generating:
 
 ```bash
 $ ./hello
@@ -344,7 +345,7 @@ $ make depend
 $ make
 ```
 *Everything* else remains the same! The set of dependencies required, the `main.ml`, and the `Makefile` differ significantly, but since the source code of your application was
-parameterised over the `Time` type, it doesn't matter—you do not need to
+parameterised over the `Time` type, it doesn't matter — you do not need to
 make any changes for your code to run when linked against the Solo5 console driver
 instead of Unix.
 
@@ -399,7 +400,7 @@ let () =
   register "hello" [main $ default_time]
 ```
 
-We create a `key` with `Key.create` which is an optional bit of configuration.  It will default to "Hello World!" if unspecified.  This particular key happens to be of type `string`, so no conversion will be required, but it's possible to ask for more exotic types in the call to `Arg`—see [the Functoria Key.Arg module documentation](http://mirage.github.io/functoria/Functoria_key.Arg.html) for more details.
+We create a `key` with `Key.create` which is an optional bit of configuration.  It will default to "Hello World!" if unspecified.  This particular key happens to be of type `string`, so no conversion will be required, but it's possible to ask for more exotic types in the call to `Arg`.  See [the Functoria Key.Arg module documentation](http://mirage.github.io/functoria/Functoria_key.Arg.html) for more details.
 
 Once we've created our configuration key, we specify that we'd like it available in the unikernel by passing it to `foreign` in the `keys` parameter.
 
@@ -435,7 +436,7 @@ $ make depend
 $ make
 ```
 
-When the target is Unix, Mirage will use an implementation for configuration keys that looks at the contents of `OS.Env.argv`—in other words, it looks directly at the command line that was used to invoke the program.  If we call `hello` with no arguments, the default value is used:
+When the target is Unix, Mirage will use an implementation for configuration keys that looks at the contents of `OS.Env.argv`. In other words, it looks directly at the command line that was used to invoke the program.  If we call `hello` with no arguments, the default value is used:
 
 ```
 $ ./hello
@@ -593,8 +594,8 @@ $ make depend
 $ make
 ```
 
-Now we just need to boot the unikernel with `ukvm-bin` as before, and we should see the same output
-(after the VM boot preamble)—but now MirageOS is linked against the
+Now we just need to boot the unikernel with `ukvm-bin` as before. We should see
+the same output after the VM boot preamble, but now MirageOS is linked against the
 Solo5 [block device driver](https://github.com/mirage/mirage-block-solo5) and is
 mapping the unikernel's block requests directly through to it, rather than
 relying on the host OS (the Linux or FreeBSD kernel).
@@ -672,12 +673,12 @@ let () =
 We construct the `kv_ro` device `disk` by using the `generic_kv_ro`
 function. This takes a single directory as its argument, and will do its best
 to provide the content of that directory to the unikernel by whatever means
-make sense given the target provided at configuration time—this might be an
-implementation that calls functions from OCaml's `Unix` module, or a function
-that transforms an
-entire directory into a static ML file that can respond with the file contents
-directly. This removes the need to have an external block device entirely and is
-very convenient indeed for small files.
+make sense given the target provided at configuration time. The best choice might be an
+implementation that calls functions from OCaml's `Unix` module (referred to as
+`direct` by the `mirage` tool), or perhaps a function
+that transforms an entire directory into a static ML file that can expose
+the file contents directly from memory (called `crunch`). `crunch` removes the need to have
+an external block device entirely and is very convenient indeed for small files.
 
 Using `generic_kv_ro` in your `config.ml` causes Mirage to automatically create a
 configuration key, `kv_ro`, which you can use to request a specific implementation
@@ -720,7 +721,7 @@ $ ./kv_ro
 ```
 
 You may have noticed that, unlike with our `hello_key` example, the `kv_ro` key
-can't be specified at runtime—it's only understood as an argument to `mirage configure`.  This is because the `kv_ro` implementation we choose influences the set of dependencies that are assembled and baked into the final product.  If we choose `direct`, we'll get a different set of software than if we choose `crunch`—in either case, no code that isn't required will be included in the final product.
+can't be specified at runtime — it's only understood as an argument to `mirage configure`.  This is because the `kv_ro` implementation we choose influences the set of dependencies that are assembled and baked into the final product.  If we choose `direct`, we'll get a different set of software than if we choose `crunch`.  In either case, no code that isn't required will be included in the final product.
 
 You should now be seeing the power of the MirageOS configuration tool: We have
 built several applications that use fairly complex concepts such as filesystems
@@ -773,7 +774,7 @@ let () =
 We have a custom configuration key defining which TCP port to listen for connections on.
 The network device is derived from `default_network`, a function provided by Mirage which will choose a reasonable default based on the target the user chooses to pass to `mirage configure` - just like the reasonable default provided by `generic_kv_ro` in the previous example.  
 
-`generic_stackv4` attempts to build a sensible network stack on top of the physical interface given by `default_network`.  There are quite a few configuration keys exposed when `generic_stackv4` is given related to networking configuration—for a full list, try `mirage help configure` in the `device-usage/network` directory.
+`generic_stackv4` attempts to build a sensible network stack on top of the physical interface given by `default_network`.  There are quite a few configuration keys exposed when `generic_stackv4` is given related to networking configuration. For a full list, try `mirage help configure` in the `device-usage/network` directory.
 
 #### Unix / Socket networking
 
@@ -823,7 +824,7 @@ hello tcp world
 
 #### Unix / MirageOS Stack with DHCP
 
-Next, let's try using the direct MirageOS network stack.  It will be necessary to run these programs with `sudo` or as the root user, as they need direct access to a network device.  We won't be able to contact them via the loopback interface on `127.0.0.1` either—the stack will need to either obtain IP address information via DHCP, or it can be configured directly via the `--ipv4` configuration key.
+Next, let's try using the direct MirageOS network stack.  It will be necessary to run these programs with `sudo` or as the root user, as they need direct access to a network device.  We won't be able to contact them via the loopback interface on `127.0.0.1` either — the stack will need to either obtain IP address information via DHCP, or it can be configured directly via the `--ipv4` configuration key.
 
 To configure via DHCP:
 
