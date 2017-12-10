@@ -62,8 +62,7 @@ Backends include:
 * `ukvm` (part of [Solo5](backend-solo5))
 * `xen`
 
-## Making your own, non-trivial applications
+## Configuration
 
-## Key components
+For now, see the [relevant blog post](/blog/introducing-functoria).
 
-* `functoria`
