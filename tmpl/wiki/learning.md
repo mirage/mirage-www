@@ -74,4 +74,3 @@ For now, see the [relevant blog post](/blog/introducing-functoria).
 Mirage effectively treats functionality such as persistent storage, networking,
 protocols, etc, as libraries. The configuration phase for Mirage determines
 which implementations of these libraries will be compiled into your unikernel.
-
