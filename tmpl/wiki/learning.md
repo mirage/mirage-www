@@ -27,7 +27,6 @@ the alternatives, roughly in descending order of preference:
 
 * [the mailing list](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel)
 * filing Issue tickets on relevant [Github repositories](https://github.com/mirage)
-* the OCaml Labs Slack channel
 * [The OCaml message board](https://discuss.ocaml.org/)
 * `#mirage` on the freenode IRC network
 
@@ -54,15 +53,25 @@ specified with the `-t` option.
 
 ## What are backends?
 
-TBD
-
 Backends include:
 
 * `unix`
 * `ukvm` (part of [Solo5](backend-solo5))
 * `xen`
 
+The backends above are listed in ascending order of invasiveness. `unix` runs
+as an unprivileged process on your unmodified Linux kernel. `ukvm` uses
+Solo5, typically in a KVM virtual machine on Linux, which entails some setup
+work, e.g., of IP routing. `xen` requires that Xen be run underneath your
+operating system(s), and that Mirage will be run directly on top of Xen.
+Installing Xen is not hard (about 20 minutes), but your host machine must
+then be dedicated to running Xen.
+
 ## Configuration
 
 For now, see the [relevant blog post](/blog/introducing-functoria).
+
+Mirage effectively treats functionality such as persistent storage, networking,
+protocols, etc, as libraries. The configuration phase for Mirage determines
+which implementations of these libraries will be compiled into your unikernel.
 
