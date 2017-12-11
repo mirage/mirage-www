@@ -10,9 +10,9 @@ unikernels, that provides:
 * Efficient record/replay for deterministic execution and debugging of
   applications.
 
-As an example, a developer builds a MirageOS unikernel using the Solo5
-backend.  The mirage build process uses Solo5 building tools to create
-a sandbox-agnostic binary. The developer then chooses a specific
+As an example, a developer may build a MirageOS unikernel using the Solo5
+backend.  The mirage build process would use Solo5 building tools to create
+a sandbox-agnostic binary. The developer would then choose a specific
 sandbox to execute this binary in, for example the Solo5-KVM monitor.
 
 # Current status
