@@ -13,26 +13,6 @@ unikernels, that provides:
 * An API designed for ease of porting existing and future
   unikernel-native applications.
 
-It includes the following components:
-
-1. Monitors used to implement the Solo5 sandbox abstraction. All
-   monitors do the following: launch the unikernel (with the
-   appropriate bindings, as described below), and arbitrate access to the
-   host system
-   resources needed by the unikernel.
-
-2. Toolchain used to create a single unikernel binary that can run on
-   any of the Solo5 sandboxes. The toolchain is intended to be
-   integrated into the build process of the respective library OS
-   (i.e., MirageOS, IncludeOS).
-
-3. Sandbox-specific bindings which implement the "glue" between the
-   unikernel binary and the Solo5 sandbox.
-
-4. Compatibility layers to run on systems that provide abstractions
-   that differ from the Solo5 sandbox abstraction (e.g., virtio,
-   muen).
-
 As an example, a developer builds a MirageOS unikernel using the Solo5
 backend.  The mirage build process uses Solo5 building tools to create
 a sandbox-agnostic binary. The developer then chooses a specific
