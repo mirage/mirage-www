@@ -7,18 +7,13 @@ unikernels, that provides:
   virtualization, seccomp).
 * Portability to a variety of host systems and processor
   architectures.
-* Fast boot times, suitable for "function as a service" use-cases.
 * Efficient record/replay for deterministic execution and debugging of
   applications.
-* An API designed for ease of porting existing and future
-  unikernel-native applications.
 
 As an example, a developer builds a MirageOS unikernel using the Solo5
 backend.  The mirage build process uses Solo5 building tools to create
 a sandbox-agnostic binary. The developer then chooses a specific
 sandbox to execute this binary in, for example the Solo5-KVM monitor.
-Alternatively, the developer could run the unikernel binary as a
-standard VM by targeting the virtio compatibility layer
 
 # Current status
 
