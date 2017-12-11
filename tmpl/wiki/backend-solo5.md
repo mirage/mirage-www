@@ -1,14 +1,10 @@
 # Solo5
 
 Solo5 is an execution environment and associated tooling for running
-unikernels, that provides:
-
-* Access to a variety of secure sandboxing technologies (e.g. hardware
-  virtualization, seccomp).
-* Portability to a variety of host systems and processor
-  architectures.
-* Efficient record/replay for deterministic execution and debugging of
-  applications.
+unikernels, that provides access to a variety of secure sandboxing
+technologies (e.g. hardware virtualization, seccomp) and advanced
+facilities for efficient debugging. Mirage unikernels are one of Solo5's
+well-supported targets, though Solo5 has a broader focus.
 
 As an example, a developer may build a MirageOS unikernel using the Solo5
 backend.  The mirage build process would use Solo5 building tools to create
