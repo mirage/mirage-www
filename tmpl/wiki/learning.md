@@ -64,8 +64,9 @@ as an unprivileged process on your unmodified Linux kernel. `ukvm` uses
 Solo5, typically in a KVM virtual machine on Linux, which entails some setup
 work, e.g., of IP routing. `xen` requires that Xen be run underneath your
 operating system(s), and that Mirage will be run directly on top of Xen.
-Installing Xen is not hard (about 20 minutes), but your host machine must
-then be dedicated to running Xen.
+Installing Xen is not hard (about 20 minutes), and it may co-exist as
+a dual-booted environment if you don't want to dedicate your host machine
+to it.
 
 ## Configuration
 
