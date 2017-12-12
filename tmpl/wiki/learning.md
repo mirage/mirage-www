@@ -60,7 +60,8 @@ Backends include:
 * `xen`
 
 The backends above are listed in ascending order of invasiveness. `unix` runs
-as an unprivileged process on your unmodified Linux kernel. `ukvm` uses
+as a normal process on your unmodified Linux kernel, albeit it may
+require root privileges. `ukvm` uses
 Solo5, typically in a KVM virtual machine on Linux, which entails some setup
 work, e.g., of IP routing. `xen` requires that Xen be run underneath your
 operating system(s), and that Mirage will be run directly on top of Xen.
