@@ -2,6 +2,7 @@ h1 { font-size: 2.2rem; font-weight: bold; }
 h2 { font-size: 1.8rem; font-weight: bold; }
 h3 { font-size: 1.6rem; font-weight: 600; }
 h4,h5,h6 { color: #222222; font-size: 1.4rem; font-weight: 600; }
+h1,h2,h3,h4,h5,h6 { margin-top: 2rem; }
 
 .front_updates { font-style: italic; }
 .front_updates h4 { font-style: italic; font-size: 1.2rem; }
