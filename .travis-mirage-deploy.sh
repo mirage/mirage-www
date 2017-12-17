@@ -1,6 +1,6 @@
 if [ "$DEPLOY" != "1" ]; then
 	echo "Deployment not requested; set DEPLOY=1 to attempt deployment"
-elif [ "$TRAVIS_PULL_REQUEST" != "" ]; then
+elif [ "$TRAVIS_PULL_REQUEST" != "" ] && [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
 	echo "Deployment will not be performed on a pull request"
 elif [ "$TRAVIS_BRANCH" != "master" ]; then
 	echo "Deployment will not be performed on pushes to the branch $TRAVIS_BRANCH; try pushing to master"
@@ -38,7 +38,7 @@ else
 	git clone git@mir-deploy:${TRAVIS_REPO_SLUG}-deployment
 	# remove and recreate any existing image for this commit
 	mkdir -p $DEPLOYD/xen/$TRAVIS_COMMIT
-	cp $MIRIMG config.ml $DEPLOYD/xen/$TRAVIS_COMMIT
+	cp ${SRC_DIR}/$MIRIMG ${SRC_DIR}/config.ml $DEPLOYD/xen/$TRAVIS_COMMIT
 	rm -f $DEPLOYD/xen/$TRAVIS_COMMIT/${XENIMG}.bz2
 	bzip2 -9 $DEPLOYD/xen/$TRAVIS_COMMIT/$XENIMG
 	echo $TRAVIS_COMMIT > $DEPLOYD/xen/latest
