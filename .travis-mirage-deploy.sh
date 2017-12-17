@@ -1,6 +1,6 @@
 if [ "$DEPLOY" != "1" ]; then
 	echo "Deployment not requested; set DEPLOY=1 to attempt deployment"
-elif [ "$TRAVIS_PULL_REQUEST" != "" ]; then
+elif [ "$TRAVIS_PULL_REQUEST" != "" ] && [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
 	echo "Deployment will not be performed on a pull request"
 elif [ "$TRAVIS_BRANCH" != "master" ]; then
 	echo "Deployment will not be performed on pushes to the branch $TRAVIS_BRANCH; try pushing to master"
@@ -15,15 +15,13 @@ elif [ "$XENIMG" = "" ]; then
 	exit 1
 else
 	# OK, let's do this.
+	eval `opam config env`
 	ssh_config="Host mir-deploy github.com
 	Hostname github.com
 	StrictHostKeyChecking no
 	CheckHostIP no
 	UserKnownHostsFile=/dev/null"
-	export MIRIMG="mir-${XENIMG}"
-	export DEPLOYD="${TRAVIS_REPO_SLUG}/deployment";
-	# deployment target expects `mir-${XENIMG}`, so prepend it
-	mv ${SRC_DIR}/www.xen ${SRC_DIR}/${MIRIMG}
+	export DEPLOYD="/tmp/${TRAVIS_REPO_SLUG}-deployment";
 	# setup ssh
 	opam install travis-senv
 	mkdir -p ~/.ssh
@@ -35,19 +33,19 @@ else
 	git config --global user.name 'Travis the Build Bot'
 	git config --global push.default simple
 	# clone deployment repo
-	git clone git@mir-deploy:${TRAVIS_REPO_SLUG}-deployment
+	git clone git@mir-deploy:${TRAVIS_REPO_SLUG}-deployment ${DEPLOYD}
 	# remove and recreate any existing image for this commit
 	mkdir -p $DEPLOYD/xen/$TRAVIS_COMMIT
-	cp $MIRIMG config.ml $DEPLOYD/xen/$TRAVIS_COMMIT
-	rm -f $DEPLOYD/xen/$TRAVIS_COMMIT/${XENIMG}.bz2
-	bzip2 -9 $DEPLOYD/xen/$TRAVIS_COMMIT/$XENIMG
+	cp ${SRC_DIR}/${XENIMG}.xen ${SRC_DIR}/config.ml $DEPLOYD/xen/$TRAVIS_COMMIT
+	rm -f $DEPLOYD/xen/$TRAVIS_COMMIT/${XENIMG}.xen.bz2
+	bzip2 -9 $DEPLOYD/xen/$TRAVIS_COMMIT/${XENIMG}.xen
 	echo $TRAVIS_COMMIT > $DEPLOYD/xen/latest
 	# commit and push changes
-	cd $DEPLOYD &&
-		\ git add xen/$TRAVIS_COMMIT xen/latest &&
-		\ git commit -m \"adding $TRAVIS_COMMIT for $MIRAGE_BACKEND\" &&
-		\ git status &&
-		\ git clean -fdx &&
-		\ git pull --rebase &&
-		\ git push
+	cd $DEPLOYD && \
+		git add xen/$TRAVIS_COMMIT xen/latest && \
+		git commit -m "adding $TRAVIS_COMMIT for $MIRAGE_BACKEND" && \
+		git status && \
+		git clean -fdx && \
+		git pull --rebase && \
+		git push
 fi
