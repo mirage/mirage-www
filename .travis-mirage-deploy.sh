@@ -14,8 +14,6 @@ elif [ "$XENIMG" = "" ]; then
 	echo "Set XENIMG to the image name to copy (e.g. \"openmirageorg\" or \"mirageio\")"
 	exit 1
 else
-	pwd
-	ls
 	# OK, let's do this.
 	ssh_config="Host mir-deploy github.com
 	Hostname github.com
@@ -25,7 +23,7 @@ else
 	export MIRIMG="mir-${XENIMG}"
 	export DEPLOYD="${TRAVIS_REPO_SLUG}/deployment";
 	# deployment target expects `mir-${XENIMG}`, so prepend it
-	mv www.xen ${MIRIMG}
+	mv ${SRC_DIR}/www.xen ${SRC_DIR}/${MIRIMG}
 	# setup ssh
 	opam install travis-senv
 	mkdir -p ~/.ssh
@@ -40,7 +38,7 @@ else
 	git clone git@mir-deploy:${TRAVIS_REPO_SLUG}-deployment
 	# remove and recreate any existing image for this commit
 	mkdir -p $DEPLOYD/xen/$TRAVIS_COMMIT
-	cp $MIRIMG config.ml $DEPLOYD/xen/$TRAVIS_COMMIT
+	cp ${SRC_DIR}/$MIRIMG ${SRC_DIR}/config.ml $DEPLOYD/xen/$TRAVIS_COMMIT
 	rm -f $DEPLOYD/xen/$TRAVIS_COMMIT/${XENIMG}.bz2
 	bzip2 -9 $DEPLOYD/xen/$TRAVIS_COMMIT/$XENIMG
 	echo $TRAVIS_COMMIT > $DEPLOYD/xen/latest
