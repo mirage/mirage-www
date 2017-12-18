@@ -45,11 +45,11 @@ else
 	bzip2 -9 $DEPLOYD/xen/$TRAVIS_COMMIT/$MIRIMG
 	echo $TRAVIS_COMMIT > $DEPLOYD/xen/latest
 	# commit and push changes
-	cd $DEPLOYD &&
-		\ git add xen/$TRAVIS_COMMIT xen/latest &&
-		\ git commit -m \"adding $TRAVIS_COMMIT for $MIRAGE_BACKEND\" &&
-		\ git status &&
-		\ git clean -fdx &&
-		\ git pull --rebase &&
-		\ git push
+	cd $DEPLOYD && \
+		git add xen/$TRAVIS_COMMIT xen/latest && \
+		git commit -m \"adding $TRAVIS_COMMIT for $MIRAGE_BACKEND\" && \
+		git status && \
+		git clean -fdx && \
+		git pull --rebase && \
+		git push
 fi
