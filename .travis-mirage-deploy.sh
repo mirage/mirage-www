@@ -21,7 +21,7 @@ else
 	StrictHostKeyChecking no
 	CheckHostIP no
 	UserKnownHostsFile=/dev/null"
-	export DEPLOYD="${TRAVIS_REPO_SLUG}/deployment";
+	export DEPLOYD="/tmp/${TRAVIS_REPO_SLUG}-deployment";
 	# deployment target expects `mir-${XENIMG}`, so prepend it
 	export MIRIMG="mir-${XENIMG}"
 	mv ${SRC_DIR}/${XENIMG}.xen ${SRC_DIR}/${MIRIMG}
@@ -36,7 +36,7 @@ else
 	git config --global user.name 'Travis the Build Bot'
 	git config --global push.default simple
 	# clone deployment repo
-	git clone git@mir-deploy:${TRAVIS_REPO_SLUG}-deployment
+	git clone git@mir-deploy:${TRAVIS_REPO_SLUG}-deployment /tmp
 	# remove and recreate any existing image for this commit
 	mkdir -p $DEPLOYD/xen/$TRAVIS_COMMIT
 	cp ${SRC_DIR}/$MIRIMG ${SRC_DIR}/config.ml $DEPLOYD/xen/$TRAVIS_COMMIT
@@ -45,7 +45,6 @@ else
 	echo $TRAVIS_COMMIT > $DEPLOYD/xen/latest
 	# commit and push changes
 	cd $DEPLOYD && \
-		git checkout master && \
 		git add xen/$TRAVIS_COMMIT xen/latest && \
 		git commit -m "adding $TRAVIS_COMMIT for $MIRAGE_BACKEND" && \
 		git status && \
