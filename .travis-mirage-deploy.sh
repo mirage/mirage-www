@@ -47,7 +47,7 @@ else
 	# commit and push changes
 	cd $DEPLOYD && \
 		git add xen/$TRAVIS_COMMIT xen/latest && \
-		git commit -m \"adding $TRAVIS_COMMIT for $MIRAGE_BACKEND\" && \
+		git commit -m "adding $TRAVIS_COMMIT for $MIRAGE_BACKEND" && \
 		git status && \
 		git clean -fdx && \
 		git pull --rebase && \
