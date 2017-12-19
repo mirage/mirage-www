@@ -56,7 +56,7 @@ specified with the `-t` option.
 Backends include:
 
 * `unix`
-* `ukvm` (part of [Solo5](https://github.com/Solo5/solo5)
+* `ukvm` (part of [Solo5](https://github.com/Solo5/solo5))
 * `xen`
 
 The backends above are listed in ascending order of invasiveness. `unix` runs
