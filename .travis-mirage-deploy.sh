@@ -15,6 +15,7 @@ elif [ "$XENIMG" = "" ]; then
 	exit 1
 else
 	# OK, let's do this.
+	eval `opam config env`
 	ssh_config="Host mir-deploy github.com
 	Hostname github.com
 	StrictHostKeyChecking no
