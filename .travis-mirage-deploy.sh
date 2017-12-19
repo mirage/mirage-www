@@ -46,6 +46,7 @@ else
 	echo $TRAVIS_COMMIT > $DEPLOYD/xen/latest
 	# commit and push changes
 	cd $DEPLOYD && \
+		git checkout master && \
 		git add xen/$TRAVIS_COMMIT xen/latest && \
 		git commit -m "adding $TRAVIS_COMMIT for $MIRAGE_BACKEND" && \
 		git status && \
