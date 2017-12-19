@@ -22,9 +22,6 @@ else
 	CheckHostIP no
 	UserKnownHostsFile=/dev/null"
 	export DEPLOYD="/tmp/${TRAVIS_REPO_SLUG}-deployment";
-	# deployment target expects `mir-${XENIMG}`, so prepend it
-	export MIRIMG="mir-${XENIMG}"
-	mv ${SRC_DIR}/${XENIMG}.xen ${SRC_DIR}/${MIRIMG}
 	# setup ssh
 	opam install travis-senv
 	mkdir -p ~/.ssh
@@ -39,9 +36,9 @@ else
 	git clone git@mir-deploy:${TRAVIS_REPO_SLUG}-deployment ${DEPLOYD}
 	# remove and recreate any existing image for this commit
 	mkdir -p $DEPLOYD/xen/$TRAVIS_COMMIT
-	cp ${SRC_DIR}/$MIRIMG ${SRC_DIR}/config.ml $DEPLOYD/xen/$TRAVIS_COMMIT
-	rm -f $DEPLOYD/xen/$TRAVIS_COMMIT/${MIRIMG}.bz2
-	bzip2 -9 $DEPLOYD/xen/$TRAVIS_COMMIT/$MIRIMG
+	cp ${SRC_DIR}/${XENIMG}.xen ${SRC_DIR}/config.ml $DEPLOYD/xen/$TRAVIS_COMMIT
+	rm -f $DEPLOYD/xen/$TRAVIS_COMMIT/${XENIMG}.xen.bz2
+	bzip2 -9 $DEPLOYD/xen/$TRAVIS_COMMIT/${XENIMG}.xen
 	echo $TRAVIS_COMMIT > $DEPLOYD/xen/latest
 	# commit and push changes
 	cd $DEPLOYD && \
