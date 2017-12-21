@@ -161,6 +161,12 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2017, 12, 23, 16, 00);
+        authors    = [hannes];
+        subject    = "MirageOS Winter 2017 Hackathon roundup";
+        body       = "2017-winter-hackathon-roundup.md";
+        permalink  = "2017-winter-hackathon-roundup";
+      };
       { updated    = date (2017, 4, 15, 16, 00);
         authors    = [hannes; gemmag; anil];
         subject    = "MirageOS March 2017 Hackathon roundup";
