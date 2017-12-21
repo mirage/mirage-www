@@ -3,7 +3,7 @@
 This winter, 33 people from around the world gathered in Marrakesh for a Mirage hack retreat. This is fast becoming a [MirageOS](/blog/2016-spring-hackathon) [tradition](/blog/2017-march-hackathon-roundup), and we're a little sad that it's over already! We've collected some trip reports from those who attended the 2017 winter hack retreat, and we'd like to thank our amazing hosts, organisers and everyone who took the time to write up their experiences.
 <img src="/graphics/winter2017.jpg" style="float:right; padding: 15px" />
 
-We, the MirageOS community, strongly beliefs in using their own software: this website is a unikernel since day one^W^W it is possible to run MirageOS unikernels.  In Marrakesh we used our own DHCP and DNS server without trouble.  There are many more services under heavy development (including git, ssh, ...), which we're looking forward to use soon ourselves.
+We, the MirageOS community, strongly believe in using our own software: this website has been a unikernel since day one^W^W it was possible to run MirageOS unikernels.  In Marrakesh we used our own DHCP and DNS server without trouble.  There are many more services under heavy development (including git, ssh, ...), which we're looking forward to using soon ourselves.
 
 Several atteendees joined for the second or third time in Marrakesh, and brought their own projects, spanning over [graphql](https://github.com/andreas/ocaml-graphql-server), [reproducible builds](https://reproducible-builds.org/) (with application to [qubes-mirage-firewall](https://github.com/talex5/qubes-mirage-firewall), see [holger's report](http://layer-acht.org/thinking/blog/20171204-qubes-mirage-firewall/) and [Gabriel's OCaml fixes for build path variation](https://github.com/ocaml/ocaml/pull/1515)).  A stream of improving error messages in the OCaml compiler (based on [Arthur Charguéraud PR](https://github.com/ocaml/ocaml/pull/102)) was prepared and merged ([PR 1496](https://github.com/ocaml/ocaml/pull/1496), [PR 1501](https://github.com/ocaml/ocaml/pull/1501), [PR 1506](https://github.com/ocaml/ocaml/pull/1505), [PR 1510](https://github.com/ocaml/ocaml/pull/1510), and [PR 1534](https://github.com/ocaml/ocaml/pull/1534)).  Our OCaml [git implementation](https://github.com/mirage/ocaml-git/) was rewritten to support git push properly, and this PR was [merged](https://github.com/mirage/ocaml-git/pull/227).  Other projects of interest are [awa-ssh](https://github.com/haesbaert/awa-ssh), [anonymity profiles in DHCP](https://github.com/mirage/charrua-core/pull/76), and fixes to the deployment troubles of [our website](https://github.com/mirage/mirage-www).  There is now a [mirage PNG viewer integrated into Qubes](https://github.com/cfcs/eye-of-mirage) and a [password manager](https://github.com/cfcs/passmenage).  Some [getting started notes](https://github.com/juga0/mirage_mar2017) were written down as well as the new [learning about MirageOS](https://mirage.io/wiki/learning) website.
 
@@ -108,9 +108,9 @@ ocaml-letsencrypt library; I also learned how to integrate ocaml API in C,
 improving and updating the ocaml-scrypt library, used by another fellow mirage
 user in order to develop its own password manager.
 Ultimately, I'm not sure either direction I took was good: a streaming Json library is
-perhaps not the best choice for an application that shares few jsons (samhot
-should have been selling more his easyjson library!), and the ocaml-scrypt
-library has been superseeded by the pure implementation ocaml-scrypt-kdf, which
+perhaps not the best choice for an application that shares few jsons (samoht
+should have been selling more his [easyjson](https://github.com/mirage/ezjsonm) library!), and the ocaml-scrypt
+library has been superseeded by the pure implementation [ocaml-scrypt-kdf](https://github.com/abeaumont/ocaml-scrypt-kdf), which
 supposedly will make the integration in mirage easier.
 
 The overall warm atmosphere and the overall positive attitude of the
