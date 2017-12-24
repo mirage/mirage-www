@@ -9,7 +9,7 @@ Several atteendees joined for the second or third time in Marrakesh, and brought
 
 A huge fraction of the [Solo5 contributors](https://github.com/solo5/solo5) gathered in Marrakesh as well and discussed the future, including terminology, the project scope, and outlined a roadmap for merging branches in various states.  Adrian from the [Muen](https://muen.sk) project joined the discussion, and in the aftermath they are now running their website using MirageOS on top of the Muen separation kernel.
 
-A complete list of fixes and discussions is not available, please bear with us if we forgot anything above.  A sneak preview: there will be another retreat in March 2018 in Marrakesh.  Following are texts written by individual participants about their experience.
+A complete list of fixes and discussions is not available, please bear with us if we forgot anything above.  A sneak preview: there will be [another retreat in March 2018](http://retreat.mirage.io) in Marrakesh.  Following are texts written by individual participants about their experience.
 
 ## Mindy Preston
 
@@ -245,4 +245,4 @@ Thank you for yet another great retreat!
 
 ----
 
-Many thanks to everyone involved!  The hackathon is already booked for March 2018 in the same place...
+Many thanks to everyone involved!  The hostel is already booked for [another retreat in March 2018](http://retreat.mirage.io)...
