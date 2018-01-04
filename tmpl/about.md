@@ -9,6 +9,6 @@ internship at our respective institutions.
 * **[Thomas Gazagnaire](http://thomas.gazagnaire.org)**, Docker
 * **[Richard Mortier](http://mort.io/)**, University of Cambridge & Docker
 * **[Thomas Leonard](http://roscidus.com/blog/)**, Docker
-* **[Mindy Preston](http://www.somerandomidiot.com)**, Docker
+* **[Mindy Preston](http://www.somerandomidiot.com)**
 * **[Hannes Mehnert](https://hannes.nqsb.io)**, [robur](http://robur.io)
 * Community Manager: **[Amir Chaudhry](http://amirchaudhry.com/)**, Docker
