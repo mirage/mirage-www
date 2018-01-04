@@ -112,7 +112,7 @@ of the constituent libraries.
 [^4]: https://github.com/mirleft/ocaml-tls/issues?labels=security+concern&page=1&state=open
 [^5]: https://github.com/mirleft/ocaml-asn1-combinators
 [^6]: https://github.com/mirleft/ocaml-nocrypto
-[^7]: https://tls.openmirage.org/
+[^7]: https://tls.nqsb.io/
 [^8]: https://github.com/mirleft/ocaml-x509
 [^9]: http://lists.xenproject.org/archives/html/mirageos-devel/
 [^10]: https://github.com/mirage/mirage-entropy
@@ -154,8 +154,8 @@ Posts in this TLS series:
  - [OCaml-TLS: ASN.1 and notation embedding][asn1-intro]
  - [OCaml-TLS: the protocol implementation and mitigations to known attacks][tls-api]
 
-[tls-intro]: http://openmirage.org/blog/introducing-ocaml-tls
-[nocrypto-intro]: http://openmirage.org/blog/introducing-nocrypto
-[x509-intro]: http://openmirage.org/blog/introducing-x509
-[asn1-intro]: http://openmirage.org/blog/introducing-asn1
-[tls-api]: http://openmirage.org/blog/ocaml-tls-api-internals-attacks-mitigation
+[tls-intro]: http://mirage.io/blog/introducing-ocaml-tls
+[nocrypto-intro]: http://mirage.io/blog/introducing-nocrypto
+[x509-intro]: http://mirage.io/blog/introducing-x509
+[asn1-intro]: http://mirage.io/blog/introducing-asn1
+[tls-api]: http://mirage.io/blog/ocaml-tls-api-internals-attacks-mitigation

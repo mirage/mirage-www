@@ -21,7 +21,7 @@ reverse engineer. Have fun!
 
 [om-tls]: http://openmirage.org/blog/introducing-ocaml-tls
 [mirleft-map]: https://goo.gl/maps/GpcQs
-[tls-demo]: https://tls.openmirage.org
+[tls-demo]: https://tls.nqsb.io
 [31c3]: http://media.ccc.de/browse/congress/2014/31c3_-_6443_-_en_-_saal_2_-_201412271245_-_trustworthy_secure_modular_operating_system_engineering_-_hannes_-_david_kaloper.html#video
 [tls-pinata]: http://ownme.ipredator.se
 [ac-post]: http://amirchaudhry.com/bitcoin-pinata/

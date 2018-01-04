@@ -547,7 +547,7 @@ testing our code in their services.
 **Please be aware that this release is a *beta* and is missing external code audits.
 It is not yet intended for use in any security critical applications.**
 
-[demo]: https://tls.openmirage.org
+[demo]: https://tls.nqsb.io
 [polar]: https://polarssl.org/tech-updates/security-advisories/polarssl-security-advisory-2014-02
 [java]: http://armoredbarista.blogspot.de/2014/04/easter-hack-even-more-critical-bugs-in.html
 [CVE-2014-1266]: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-1266
@@ -571,7 +571,7 @@ Mirleft, Morocco.
 <img src="/graphics/aftas-mirleft.jpg" alt="Aftas Beach" />
 
 [horizon]: http://www.horizon.ac.uk
-[mirage]: http://www.openmirage.org
+[mirage]: http://mirage.io
 [ocamllabs]: http://www.cl.cam.ac.uk/projects/ocamllabs/
 [aftas]: http://www.aftasmirleft.com/
 [ucn]: http://usercentricnetworking.eu/
@@ -598,8 +598,8 @@ Posts in this TLS series:
  - [OCaml-TLS: ASN.1 and notation embedding][asn1-intro]
  - [OCaml-TLS: the protocol implementation and mitigations to known attacks][tls-api]
 
-[tls-intro]: http://openmirage.org/blog/introducing-ocaml-tls
-[nocrypto-intro]: http://openmirage.org/blog/introducing-nocrypto
-[x509-intro]: http://openmirage.org/blog/introducing-x509
-[asn1-intro]: http://openmirage.org/blog/introducing-asn1
-[tls-api]: http://openmirage.org/blog/ocaml-tls-api-internals-attacks-mitigation
+[tls-intro]: http://mirage.io/blog/introducing-ocaml-tls
+[nocrypto-intro]: http://mirage.io/blog/introducing-nocrypto
+[x509-intro]: http://mirage.io/blog/introducing-x509
+[asn1-intro]: http://mirage.io/blog/introducing-asn1
+[tls-api]: http://mirage.io/blog/ocaml-tls-api-internals-attacks-mitigation

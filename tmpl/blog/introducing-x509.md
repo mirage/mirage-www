@@ -62,7 +62,7 @@ well. Finally, the server name in the server certificate is checked to
 match the expected identity.
 For an example, you can see the sequence diagram of the TLS handshake your browser makes when you visit our [demonstration server][tls-demo].
 
-[tls-demo]: https://tls.openmirage.org
+[tls-demo]: https://tls.nqsb.io
 
 ### Example code for verification
 
@@ -322,8 +322,8 @@ Posts in this TLS series:
  - [OCaml-TLS: ASN.1 and notation embedding][asn1-intro]
  - [OCaml-TLS: the protocol implementation and mitigations to known attacks][tls-api]
 
-[tls-intro]: http://openmirage.org/blog/introducing-ocaml-tls
-[nocrypto-intro]: http://openmirage.org/blog/introducing-nocrypto
-[x509-intro]: http://openmirage.org/blog/introducing-x509
-[asn1-intro]: http://openmirage.org/blog/introducing-asn1
-[tls-api]: http://openmirage.org/blog/ocaml-tls-api-internals-attacks-mitigation
+[tls-intro]: http://mirage.io/blog/introducing-ocaml-tls
+[nocrypto-intro]: http://mirage.io/blog/introducing-nocrypto
+[x509-intro]: http://mirage.io/blog/introducing-x509
+[asn1-intro]: http://mirage.io/blog/introducing-asn1
+[tls-api]: http://mirage.io/blog/ocaml-tls-api-internals-attacks-mitigation
