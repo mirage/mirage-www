@@ -1,6 +1,6 @@
 # Cambio, OCaml and Karaoke: MirageOS Hack Retreat, Marrakech 2017
 
-This March, 34 people from around the world gathered in Marrakech for a spring Mirage hackathon. This is fast becoming a [MirageOS tradition](/blog/2016-spring-hackathon), and we're a little sad that it's over already! We've collected some trip reports from those who attended the 2017 Hack Retreat, and we'd like to thank our amazing hosts, organisers and everyone who took the time to write up their experiences. Props go especially to Hannes Mehnert who initiated the event and took care of many of the logistics, and to Gemma Gordon for designing and printing [limited edition t-shirts](http://reynard.io/2017/03/10/OCamlCollection.html) especially for the occasion!
+This March, 34 people from around the world gathered in Marrakech for a spring Mirage hack retreat. This is fast becoming a [MirageOS tradition](/blog/2016-spring-hackathon), and we're a little sad that it's over already! We've collected some trip reports from those who attended the 2017 Hack Retreat, and we'd like to thank our amazing hosts, organisers and everyone who took the time to write up their experiences. Props go especially to Hannes Mehnert who initiated the event and took care of many of the logistics, and to Gemma Gordon for designing and printing [limited edition t-shirts](http://reynard.io/2017/03/10/OCamlCollection.html) especially for the occasion!
 <img src="/graphics/medina-2017.jpg" style="float:right; padding: 15px" />
 
 In addition to the reports below, you can find other information online:

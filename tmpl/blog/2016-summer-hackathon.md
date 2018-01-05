@@ -1,5 +1,5 @@
 As summer starts to shine over an obstinately rainy England, we are organising
-the second MirageOS hackathon in Cambridge!  It will be held on **Weds 13th
+the second MirageOS hack retreat in Cambridge!  It will be held on **Weds 13th
 July** at the lovely [Darwin College](https://www.darwin.cam.ac.uk) from
 9am-11pm, with snacks, teas, coffees and a servery lunch provided (thanks to
 sponsorship from [Docker](http://docker.com) and [OCaml Labs](https://ocaml.io)).
