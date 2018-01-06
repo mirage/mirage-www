@@ -1,5 +1,5 @@
 <a href="https://www.flickr.com/photos/138528518@N02/sets/72157671241464475"><img src="/graphics/cambridge2016-hackathon.jpg" align="right" width="250px" /></a>
-Our first Cambridge-based MirageOS hackathon took place yesterday - and what a fantastic day it was! The torrential rain may have halted our punting plans, but it didn't stop progress in the Old Library! Darwin College was a fantastic venue, complete with private islands linked by picturesque wooden bridges and an unwavering wifi connection.
+Our first Cambridge-based MirageOS hack retreat took place yesterday - and what a fantastic day it was! The torrential rain may have halted our punting plans, but it didn't stop progress in the Old Library! Darwin College was a fantastic venue, complete with private islands linked by picturesque wooden bridges and an unwavering wifi connection.
 
 People naturally formed groups to work on similar projects, and we had a handful of brand new users keen to get started with OCaml and Mirage.  The major tasks that emerged were:
 
@@ -8,7 +8,7 @@ People naturally formed groups to work on similar projects, and we had a handful
 - __CPU portability__: improving ARM support via a better base OS image.
 - __libraries breadth__: hacking on all the things to fill in the blanks, such as btree support for bare-metal [Irmin](https://github.com/mirage/irmin), or a peer-to-peer layer for the [DataKit](https://github.com/docker/datakit).
 
-We'll write about all of this in more detail, but for now here are the hackathon notes hot off the press...
+We'll write about all of this in more detail, but for now here are the hack retreat notes hot off the press...
 
 ### Solo5/MirageOS integration (KVM-based backend)
 

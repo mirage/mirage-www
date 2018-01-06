@@ -1,8 +1,8 @@
-# Hackathon Trip Reports
+# Hack retreat Trip Reports
 
-We're looking forward to the next MirageOS hackathon already!  We've collected some reports from those who were present at our [2016 Spring hackathon](http://marrakech2016.mirage.io) to share our excitement!  Thanks to the folks who put in the time and effort to organize the event and our wonderful hosts, and a huge thanks to everyone who documented their hackathon experience!
+We're looking forward to the next MirageOS hack retreat already!  We've collected some reports from those who were present at our [2016 Spring hack retreat](http://retreat.mirage.io) to share our excitement!  Thanks to the folks who put in the time and effort to organize the event and our wonderful hosts, and a huge thanks to everyone who documented their hack retreat experience!
 
-More information is also available at [the Canopy site developed and used for information sharing during the hackathon](http://canopy.mirage.io)!
+More information is also available at [the Canopy site developed and used for information sharing during the hack retreat](http://canopy.mirage.io)!
 
 ## Trip Report
 *by David Kaloper* 
@@ -120,7 +120,7 @@ cutting the downtime in half with a summer edition!
 ![heat](/graphics/2016-hackathon/heat.jpg)
 
 
-[hweb]: http://marrakech2016.mirage.io/
+[hweb]: http://retreat.mirage.io/
 [priscilla]: http://queenofthemedina.com/en/index.html
 [mirage-docs]: https://mirage.io/docs
 [charrua]: https://github.com/haesbaert/charrua-core

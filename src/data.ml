@@ -163,13 +163,13 @@ module Blog = struct
     [
       { updated    = date (2017, 12, 23, 16, 00);
         authors    = [hannes];
-        subject    = "MirageOS Winter 2017 Hackathon roundup";
+        subject    = "MirageOS Winter 2017 hack retreat roundup";
         body       = "2017-winter-hackathon-roundup.md";
         permalink  = "2017-winter-hackathon-roundup";
       };
       { updated    = date (2017, 4, 15, 16, 00);
         authors    = [hannes; gemmag; anil];
-        subject    = "MirageOS March 2017 Hackathon roundup";
+        subject    = "MirageOS March 2017 hack retreat roundup";
         body       = "2017-march-hackathon-roundup.md";
         permalink  = "2017-march-hackathon-roundup";
       };
@@ -206,21 +206,21 @@ module Blog = struct
 
       { updated    = date (2016, 7, 18, 16, 00);
         authors    = [gemmag; anil];
-        subject    = "MirageOS Summer 2016 Hackathon roundup";
+        subject    = "MirageOS Summer 2016 hack retreat roundup";
         body       = "2016-summer-hackathon-roundup.md";
         permalink  = "2016-summer-hackathon-roundup";
       };
 
       { updated    = date (2016, 6, 29, 16, 00);
         authors    = [gemmag; anil];
-        subject    = "MirageOS Summer 2016 Hackathon announcement, and talk roundup";
+        subject    = "MirageOS Summer 2016 hack retreat announcement, and talk roundup";
         body       = "2016-summer-hackathon.md";
         permalink  = "2016-summer-hackathon";
       };
 
       { updated    = date (2016, 5, 4, 16, 00);
         authors    = [gemmag];
-        subject    = "MirageOS Spring 2016 Hackathon!";
+        subject    = "MirageOS Spring 2016 hack retreat!";
         body       = "2016-spring-hackathon.md";
         permalink  = "2016-spring-hackathon";
       };
@@ -248,7 +248,7 @@ module Blog = struct
 
       { updated    = date (2016, 1, 1, 23, 42);
         authors    = [hannes];
-        subject    = "MirageOS hackathon";
+        subject    = "MirageOS hack retreat";
         body       = "hackathon-marrakech2016.md";
         permalink  = "hackathon-marrakech2016";
       };
