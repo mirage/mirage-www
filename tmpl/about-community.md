@@ -11,7 +11,7 @@
 * [*Haris Rotsos*](http://www.cl.cam.ac.uk/~cr409/), University of Cambridge
 * [*Adrian-Ken Rueegsegger*](https://github.com/kensan)
 * [*David Sheets*](https://github.com/dsheets)
-* [*Balraj Singh*](https://github.com/balrajsingh), Docker
+* [*Balraj Singh*](https://github.com/balrajsingh)
 * [*Magnus Skjegstad*](http://www.skjegstad.com/), Docker
 * [*Dan Williams*](https://github.com/djwillia), IBM Research
 
