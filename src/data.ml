@@ -161,6 +161,12 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2018, 01, 26, 16, 00);
+        authors    = [anil];
+        subject    = "MirageOS running on the ESP32 embedded chip";
+        body       = "2018-esp32-booting";
+        permalink  = "2018-esp32-booting";
+      };
       { updated    = date (2017, 12, 23, 16, 00);
         authors    = [hannes];
         subject    = "MirageOS Winter 2017 hack retreat roundup";
