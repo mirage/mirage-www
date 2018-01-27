@@ -164,7 +164,7 @@ module Blog = struct
       { updated    = date (2018, 01, 26, 16, 00);
         authors    = [anil];
         subject    = "MirageOS running on the ESP32 embedded chip";
-        body       = "2018-esp32-booting";
+        body       = "2018-esp32-booting.md";
         permalink  = "2018-esp32-booting";
       };
       { updated    = date (2017, 12, 23, 16, 00);
