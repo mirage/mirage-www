@@ -931,7 +931,7 @@ module Links = struct
     };
 
     { id="miso-talk-entrepreneur-first";
-      uri=Uri.of_string "http://amirchaudhry.com/describing-miso-entrepreneur-first-2014/";
+      uri=Uri.of_string "http://amirchaudhry.com/describing-miso-entrepreneur-first-2014";
       title="Describing the MISO stack at Entrepreneur First";
       date=day(2014,07,25);
       stream=blog;
@@ -1225,7 +1225,7 @@ module Links = struct
     };
 
     { id="amirmc-jekyll-1";
-      uri=Uri.of_string "http://amirchaudhry.com/from-jekyll-to-unikernel-in-fifty-lines/";
+      uri=Uri.of_string "http://amirchaudhry.com/from-jekyll-to-unikernel-in-fifty-lines";
       title="From Jekyll site to Unikernel in fifty lines of code";
       date=day(2014,03,10);
       stream=blog;
