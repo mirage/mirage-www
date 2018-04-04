@@ -54,7 +54,7 @@ largely automated -- going from `git push` all the way to live site. You can
 get an idea of the workflows we have set up by looking over the following
 links:
 
-- [Automated unikernel deployment](http://amirchaudhry.com/heroku-for-unikernels-pt1/) -- Description of the end-to-end flow for one of our sites.
+- [Automated unikernel deployment](http://amirchaudhry.com/heroku-for-unikernels-pt1) -- Description of the end-to-end flow for one of our sites.
 - [mirage-www-deployment repo](https://github.com/mirage/mirage-www-deployment) -- The repo from which we pull the site you're currently reading! You might find the scripts useful.
 
 
