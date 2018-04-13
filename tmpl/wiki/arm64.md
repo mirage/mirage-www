@@ -7,7 +7,7 @@ So fahr this has been tested on the following SOCs.
 <li>Broadcom BCM2837 on Raspberry Pi 3/3+</li>
 <li>Allwinner A64 on A64-OLinuXino</li>
 <li>Amlogic S905 on Odroid-C2</li>
-<ul>
+</ul>
 
 It should be possible on all A53 based SOCs as long as a recent Kernel is available.
 
@@ -122,8 +122,8 @@ This will	install a minimal debian stretch root filesystem to your SD card.
 As the kernel that we got from the firmware repo is an rusty old 4.9 with 32bit and no Virtualization we need to build our own. 
 First we need to check out the kernel source. You can probably also get away with using a vanilla mainline kernel, but as there is a well maintained rasperri pi kernel we will use that to not miss any pi related patches.
 
-```ocaml
-	 git clone --depth=1 https://github.com/raspberrypi/linux.git -b rpi-4.16.y
+```bash
+$ git clone --depth=1 https://github.com/raspberrypi/linux.git -b rpi-4.16.y
 ```
 **Note** We check out the branch 4.16 which my be outdate at the time you read this. So you may want to use a newer one. 
 
