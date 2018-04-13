@@ -134,8 +134,8 @@ $ CROSS_COMPILE=aarch64-linux-gnu- ARCH=arm64 make bcmrpi3_defconfig
 to start with an kernel config fitting to the raspi. 
 
 Now we need to enable Virtualization. 
-```ocaml
-  CROSS_COMPILE=aarch64-linux-gnu- ARCH=arm64 make menuconfig
+```bash
+$ CROSS_COMPILE=aarch64-linux-gnu- ARCH=arm64 make menuconfig
   -> Virtualization -> 
 				-> Kernel-based Virtual Machine (KVM) support *
 				-> Host kernel accelerator for virtio net  M
@@ -159,7 +159,7 @@ $ cp arch/arm64/boot/dts/broadcom/bcm2710-rpi-3-b-plus.dtb /<boot partition moun
 Now we need to copy the modules to the root filesystem.
 
 ```bash
-$	sudo CROSS_COMPILE=aarch64-linux-gnu- ARCH=arm64 INSTALL_MOD_PATH=/mnt make modules_install
+$ sudo CROSS_COMPILE=aarch64-linux-gnu- ARCH=arm64 INSTALL_MOD_PATH=/mnt make modules_install
 ```
 
 As debootstrap gives us an unconfigured debian you may want to edit 
