@@ -5,7 +5,7 @@ So far this has been tested on the following SOCs.
 
 <ul>
 <li>Broadcom BCM2837 on Raspberry Pi 3/3+</li>
-<li>Allwinner A64 on A64-OLinuXino</li>
+<li>Allwinner A64 on A64-OLinuXino / Pine A64</li>
 <li>Amlogic S905 on Odroid-C2</li>
 </ul>
 
