@@ -1,7 +1,7 @@
 Thanks to Solo5 and ukvm Mirage can run on ARM CPUs which support the ARM virtualization extensions.
-As the layer for Mirage currently only supports the 64bit architecture a 64bit CPU is requiered.
+As the layer for Mirage currently only supports the 64bit architecture a 64bit CPU is required.
 
-So fahr this has been tested on the following SOCs.
+So far this has been tested on the following SOCs.
 
 <ul>
 <li>Broadcom BCM2837 on Raspberry Pi 3/3+</li>
@@ -11,11 +11,11 @@ So fahr this has been tested on the following SOCs.
 
 It should be possible on all A53 based SOCs as long as a recent Kernel is available.
 
-In the following the prozess to build youre self a firmware image for the raspberry Pi 3/3+ is described.
-For other targets the process is very similar and usaly only differs in the bootloader related part.
+In the following the process to build yourself a firmware image for the raspberry Pi 3/3+ is described.
+For other targets the process is very similar and usually only differs in the bootloader related part.
 
-### Prerequirenments 
-You will need an arm64 / aarch64 cross compiler. You can use e.g. the cross compiler shipped by Ubuntu or get the toolchain of your choice for your OS. We also need debootstrap to generate a root file system and qemu which helps us setting up our userland.
+### Prerequirements 
+You will need an arm64 / aarch64 cross compiler. You can use e.g. the cross compiler shipped by Ubuntu or get the tool chain of your choice for your OS. We also need debootstrap to generate a root file system and qemu which helps us setting up our user land.
 
 ```bash
 $ apt-get install gcc-aarch64-linux-gnu qemu-user-static debootstrap
@@ -25,22 +25,22 @@ $ apt-get install gcc-aarch64-linux-gnu qemu-user-static debootstrap
 The next step is to setup the SD card. We need to create two partitions like shown below
 
 ```ocaml
-Device                                Boot Start     End Sectors  Size Id Type
-2018-03-13-raspbian-stretch-lite.img1       8192   93802   85611 41,8M  c W95 FAT32 (LBA)
-2018-03-13-raspbian-stretch-lite.img2      98304 3629055 3530752  1,7G 83 Linux
+Device Boot Start End Sectors Size Id Type
+2018-03-13-raspbian-stretch-lite.img1 8192 93802 85611 41,8M c W95 FAT32 (LBA)
+2018-03-13-raspbian-stretch-lite.img2 98304 3629055 3530752 1,7G 83 Linux
 ```
 
 You can change the last sector of second partition to the last sector of your SD card.
 You can use fdisk or any other partition tool you fancy to perform this operations.
 
-Now we need filesystems. The first one needs to be fat32. The second one can be anything a linux kernel can open. We use ext4 here.
+Now we need file systems. The first one needs to be fat32. The second one can be anything a Linux kernel can open. We use ext4 here.
 
 ```bash
 $ sudo mkfs.vfat /dev/sdc1
 $ sudo mkfs.ext4 /dev/sdc2
 ``` 
 
-You can know give the paritions names for your convinince.
+You can know give the partitions names for your convenience.
 
 ```bash
 $ sudo fatlabel /dev/sdc1 boot
@@ -56,7 +56,7 @@ Check out the firmware files you will need
 $ git checkout --depth=1 https://github.com/raspberrypi/firmware
 ```
 
-Copy the content of boot to your first partition. There will be some files you dont need like dtb's for older pis and some overlays but for the sake of easy updates in the future and personal lazyness lets ignore that for now.
+Copy the content of boot to your first partition. There will be some files you don't need like dtb's for older pis and some overlays but for the sake of easy updates in the future and personal laziness lets ignore that for now.
 
 ```bash
 $ cp -r boot/* /<boot partition mount>/
@@ -64,7 +64,6 @@ $ cp -r boot/* /<boot partition mount>/
 
 You will need a config.txt in your boot partition. [https://elinux.org/RPiconfig](https://elinux.org/RPiconfig)
 gives an good overview on the options.
- 
 You can start with a default config.ini 
 
 ```bash
@@ -73,13 +72,13 @@ $ wget https://github.com/RPi-Distro/pi-gen/raw/master/stage1/00-boot-files/file
 
 You may want to add
 ```ocaml
- enable_uart=1
- arm_control=0x200
- kernel=Image
+enable_uart=1
+arm_control=0x200
+kernel=Image
 ```
 to enable the serial console (This will disable you bluetooth for now.), set the CPU to 64bit mode and choose the name of your kernel image. 
 
-As we only have one gigabyte of memory on this board you may also want to limit the memory asigned to the GPU.
+As we only have one gigabyte of memory on this board you may also want to limit the memory assigned to the GPU.
 ```ocaml 
 gpu_mem=16
 ```
@@ -91,17 +90,17 @@ $ wget https://github.com/RPi-Distro/pi-gen/raw/master/stage1/00-boot-files/file
 
 here we want to set the rootfs to 
 ```ocaml
-  root=/dev/mmcblk0p2 
+root=/dev/mmcblk0p2 
 ```
 and you may also want to get rid of predictable device names by adding 
 ```ocaml
-  net.ifnames=0
+net.ifnames=0
 ```
 
-We will come back to the boot parition later when we have build our kernel image.
+We will come back to the boot partition later when we have build our kernel image.
 
 ### Root partition
-Now we need a root filesystem. We use qemu-debootrap for this as it will give us very plain debian. For this mount the second partition somewhere. 
+Now we need a root file system. We use qemu-debootrap for this as it will give us very plain Debian. For this mount the second partition somewhere. 
 **Note** We here assume you SD card is present in you host system as /dev/sdc, this path may differ on your system.
 E.g. on many systems it is something like /dev/mmcblk0. Make sure your mount the right partitions as this can break your system.
 
@@ -116,16 +115,16 @@ You may want to read the deboostrap manpage at this point.
 $ sudo qemu-debootstrap --arch arm64 stretch /mnt
 ```
 
-This will	install a minimal debian stretch root filesystem to your SD card.
+This will install a minimal Debian stretch root file system to your SD card.
 
 ### Kernel
-As the kernel that we got from the firmware repo is an rusty old 4.9 with 32bit and no Virtualization we need to build our own. 
-First we need to check out the kernel source. You can probably also get away with using a vanilla mainline kernel, but as there is a well maintained rasperri pi kernel we will use that to not miss any pi related patches.
+As the kernel that we got from the firmware repo is an rusty old 4.9 with 32bit and no virtualization we need to build our own. 
+First we need to check out the kernel source. You can probably also get away with using a vanilla mainline kernel, but as there is a well maintained raspberry pi kernel we will use that to not miss any pi related patches.
 
 ```bash
 $ git clone --depth=1 https://github.com/raspberrypi/linux.git -b rpi-4.16.y
 ```
-**Note** We check out the branch 4.16 which my be outdate at the time you read this. So you may want to use a newer one. 
+**Note** We check out the branch 4.16 which my be outdated at the time you read this. So you may want to use a newer one. 
 
 We use 
 ```bash
@@ -133,12 +132,12 @@ $ CROSS_COMPILE=aarch64-linux-gnu- ARCH=arm64 make bcmrpi3_defconfig
 ```
 to start with an kernel config fitting to the raspi. 
 
-Now we need to enable Virtualization. 
+Now we need to enable virtualization. 
 ```bash
 $ CROSS_COMPILE=aarch64-linux-gnu- ARCH=arm64 make menuconfig
-  -> Virtualization -> 
-				-> Kernel-based Virtual Machine (KVM) support *
-				-> Host kernel accelerator for virtio net  M
+-> Virtualization -> 
+        -> Kernel-based Virtual Machine (KVM) support *
+        -> Host kernel accelerator for virtio net M
 ```
 
 and we are good to go to build our kernel. 
@@ -156,13 +155,13 @@ $ cp arch/arm64/boot/Image /<boot partition mount>/
 $ cp arch/arm64/boot/dts/broadcom/bcm2710-rpi-3-b-plus.dtb /<boot partition mount>/
 ```
 
-Now we need to copy the modules to the root filesystem.
+Now we need to copy the modules to the root file system.
 
 ```bash
 $ sudo CROSS_COMPILE=aarch64-linux-gnu- ARCH=arm64 INSTALL_MOD_PATH=/mnt make modules_install
 ```
 
-As debootstrap gives us an unconfigured debian you may want to edit 
+As debootstrap gives us an unconfigured Debian you may want to edit 
 
 /etc/network/interfaces
 ```ocaml
@@ -172,14 +171,13 @@ iface eth0 inet dhcp
 
 /etc/fstab
 ```ocaml
-UUID=31c566e0-0f1d-475d-9908-4740c8ca3653 / ext4    errors=remount-ro 0       1
+UUID=31c566e0-0f1d-475d-9908-4740c8ca3653 / ext4 errors=remount-ro 0 1
 ```
 you can get the uuid for your root partition by running 
 ```bash
 $ blkid 
 ```
-and you may also want to set a hostname in /etc/hostname and /etc/hosts
- 
+and you may also want to set a host name in /etc/hostname and /etc/hosts
 finally you want to set a root password
 ```bash
 $ sudo chroot /mnt
