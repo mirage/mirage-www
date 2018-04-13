@@ -1,0 +1,191 @@
+Thanks to Solo5 and ukvm Mirage can run on ARM CPUs which support the ARM virtualization extensions.
+As the layer for Mirage currently only supports the 64bit architecture a 64bit CPU is requiered.
+
+So fahr this has been tested on the following SOCs.
+
+<ul>
+<li>Broadcom BCM2837 on Raspberry Pi 3/3+</li>
+<li>Allwinner A64 on A64-OLinuXino</li>
+<li>Amlogic S905 on Odroid-C2</li>
+<ul>
+
+It should be possible on all A53 based SOCs as long as a recent Kernel is available.
+
+In the following the prozess to build youre self a firmware image for the raspberry Pi 3/3+ is described.
+For other targets the process is very similar and usaly only differs in the bootloader related part.
+
+### Prerequirenments 
+You will need an arm64 / aarch64 cross compiler. You can use e.g. the cross compiler shipped by Ubuntu or get the toolchain of your choice for your OS. We also need debootstrap to generate a root file system and qemu which helps us setting up our userland.
+
+```bash
+$ apt-get install gcc-aarch64-linux-gnu qemu-user-static debootstrap
+```
+
+### SD Card
+The next step is to setup the SD card. We need to create two partitions like shown below
+
+```ocaml
+Device                                Boot Start     End Sectors  Size Id Type
+2018-03-13-raspbian-stretch-lite.img1       8192   93802   85611 41,8M  c W95 FAT32 (LBA)
+2018-03-13-raspbian-stretch-lite.img2      98304 3629055 3530752  1,7G 83 Linux
+```
+
+You can change the last sector of second partition to the last sector of your SD card.
+You can use fdisk or any other partition tool you fancy to perform this operations.
+
+Now we need filesystems. The first one needs to be fat32. The second one can be anything a linux kernel can open. We use ext4 here.
+
+```bash
+$ sudo mkfs.vfat /dev/sdc1
+$ sudo mkfs.ext4 /dev/sdc2
+``` 
+
+You can know give the paritions names for your convinince.
+
+```bash
+$ sudo fatlabel /dev/sdc1 boot
+$ sudo tune2fs -L root /dev/sdc2
+```
+
+### Boot partition
+As the raspberry Pi needs firmware for its GPU which is than loading the bootloader to the CPU we need these two blobs.
+There are also so called overlay files which allow to alter e.g. the Pinout of the GPIO header. 
+Check out the firmware files you will need
+
+```bash
+$ git checkout --depth=1 https://github.com/raspberrypi/firmware
+```
+
+Copy the content of boot to your first partition. There will be some files you dont need like dtb's for older pis and some overlays but for the sake of easy updates in the future and personal lazyness lets ignore that for now.
+
+```bash
+$ cp -r boot/* /<boot partition mount>/
+```
+
+You will need a config.txt in your boot partition. [https://elinux.org/RPiconfig](https://elinux.org/RPiconfig)
+gives an good overview on the options.
+ 
+You can start with a default config.ini 
+
+```bash
+$ wget https://github.com/RPi-Distro/pi-gen/raw/master/stage1/00-boot-files/files/config.txt
+```
+
+You may want to add
+```ocaml
+ enable_uart=1
+ arm_control=0x200
+ kernel=Image
+```
+to enable the serial console (This will disable you bluetooth for now.), set the CPU to 64bit mode and choose the name of your kernel image. 
+
+As we only have one gigabyte of memory on this board you may also want to limit the memory asigned to the GPU.
+```ocaml 
+gpu_mem=16
+```
+
+We also need a cmdline.txt to tell the kernel some option. We can get a default by
+```bash
+$ wget https://github.com/RPi-Distro/pi-gen/raw/master/stage1/00-boot-files/files/cmdline.txt
+```
+
+here we want to set the rootfs to 
+```ocaml
+  root=/dev/mmcblk0p2 
+```
+and you may also want to get rid of predictable device names by adding 
+```ocaml
+  net.ifnames=0
+```
+
+We will come back to the boot parition later when we have build our kernel image.
+
+### Root partition
+Now we need a root filesystem. We use qemu-debootrap for this as it will give us very plain debian. For this mount the second partition somewhere. 
+**Note** We here assume you SD card is present in you host system as /dev/sdc, this path may differ on your system.
+E.g. on many systems it is something like /dev/mmcblk0. Make sure your mount the right partitions as this can break your system.
+
+```bash
+$ mount /dev/sdc2 /mnt
+```
+
+Now you can run the qemu debootstrap wrapper
+You may want to read the deboostrap manpage at this point.
+
+```bash
+$ sudo qemu-debootstrap --arch arm64 stretch /mnt
+```
+
+This will	install a minimal debian stretch root filesystem to your SD card.
+
+### Kernel
+As the kernel that we got from the firmware repo is an rusty old 4.9 with 32bit and no Virtualization we need to build our own. 
+First we need to check out the kernel source. You can probably also get away with using a vanilla mainline kernel, but as there is a well maintained rasperri pi kernel we will use that to not miss any pi related patches.
+
+```ocaml
+	 git clone --depth=1 https://github.com/raspberrypi/linux.git -b rpi-4.16.y
+```
+**Note** We check out the branch 4.16 which my be outdate at the time you read this. So you may want to use a newer one. 
+
+We use 
+```bash
+$ CROSS_COMPILE=aarch64-linux-gnu- ARCH=arm64 make bcmrpi3_defconfig
+```
+to start with an kernel config fitting to the raspi. 
+
+Now we need to enable Virtualization. 
+```ocaml
+  CROSS_COMPILE=aarch64-linux-gnu- ARCH=arm64 make menuconfig
+  -> Virtualization -> 
+				-> Kernel-based Virtual Machine (KVM) support *
+				-> Host kernel accelerator for virtio net  M
+```
+
+and we are good to go to build our kernel. 
+**Note** You may want adjust the -j4 to the number of CPU cores you want to use for this. 
+
+```bash
+$ CROSS_COMPILE=aarch64-linux-gnu- ARCH=arm64 make -j4 Image dtbs modules
+```
+
+We now need to copy the kernel image and the dtbs file to the SD card. 
+**Note** We copy the dtb for an raspberrypi 3+, so if you use a different pi you may want to copy a different dtb file.
+
+```bash
+$ cp arch/arm64/boot/Image /<boot partition mount>/
+$ cp arch/arm64/boot/dts/broadcom/bcm2710-rpi-3-b-plus.dtb /<boot partition mount>/
+```
+
+Now we need to copy the modules to the root filesystem.
+
+```bash
+$	sudo CROSS_COMPILE=aarch64-linux-gnu- ARCH=arm64 INSTALL_MOD_PATH=/mnt make modules_install
+```
+
+As debootstrap gives us an unconfigured debian you may want to edit 
+
+/etc/network/interfaces
+```ocaml
+auto eth0
+iface eth0 inet dhcp
+```
+
+/etc/fstab
+```ocaml
+UUID=31c566e0-0f1d-475d-9908-4740c8ca3653 / ext4    errors=remount-ro 0       1
+```
+you can get the uuid for your root partition by running 
+```bash
+$ blkid 
+```
+and you may also want to set a hostname in /etc/hostname and /etc/hosts
+ 
+finally you want to set a root password
+```bash
+$ sudo chroot /mnt
+$ passwd 
+$ exit
+```
+
+You should now have an bootable image. You can either hook up an serial uart cable to the pi or connect it to an HDMI screen.
+You can now e.g. follow the mirage [hello world](https://mirage.io/wiki/hello-world) to setup your unikernel.
