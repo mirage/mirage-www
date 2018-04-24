@@ -28,6 +28,7 @@ MirageOS is in beta stage and the infrastructure you see here is self-hosting. T
 <li><a href="/wiki/mirage-3.0-errors">Error Handling</a></li>
 <li><a href="/wiki/profiling">Tracing and Profiling</a></li>
 <li><a href="/wiki/contributing">Contributing to MirageOS</a></li>
+<li><a href="/wiki/arm64">Mirage on ARM64 (e.g. Raspberry Pi 3)</a></li>
 </ul>
 </div>
 

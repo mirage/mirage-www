@@ -150,6 +150,11 @@ module People = struct
     email     = None;
   }
 
+  let derpeter = {
+    Atom.name = "derpeter";
+    uri       = None;
+    email     = None;
+  }
 end
 
 let rights = Some "All rights reserved by the author"
@@ -616,6 +621,13 @@ module Wiki = struct
     weekly ~y:2014 ~m:3 ~d:18 ~a:amir;
     weekly ~y:2014 ~m:3 ~d:4 ~a:amir;
     weekly ~y:2014 ~m:2 ~d:26 ~a:amir;
+
+    { updated    = date (2018, 4, 20, 14, 00);
+      author     = derpeter;
+      subject    = "MirageOS on ARM64";
+      body       = File "arm64.md";
+      permalink  = "arm64";
+    };
 
     { updated    = date (2017, 12, 3, 12, 00);
       author     = mk270;
