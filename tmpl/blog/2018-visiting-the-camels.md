@@ -1,5 +1,14 @@
 Original posted on [linse's blog](https://linse.me/2018/04/20/Visiting-the-camels.html).
 
+![Jemaa El Fnaa](https://upload.wikimedia.org/wikipedia/commons/7/7f/Maroc_Marrakech_Jemaa-el-Fna_Luc_Viatour.JPG)
+Image by Luc Viatour / https://Lucnix.be
+
+In March 2018, I attended my first [MirageOS hack retreat](http://retreat.mirage.io/) in Morrocco.
+[MirageOS](https://mirage.io/) is a library operating system which allows everyone to build very small, specialized operating system kernels that are intended to run directly on the virtualization layer.
+The application code itself is the guest operating system kernel, and can be deployed at scale without the need for an extra containerization step in between.
+It is written in [OCaml](https://ocaml.org/learn/description.html) and each kernel is built only with exactly the code that is necessary for the particular application.
+A pretty different approach from traditional operating systems. Linux feels [huge](https://www.linuxcounter.net/statistics/kernel) all of a sudden.
+
 I flew in from New York via Casablanca to Marrakesh, and then took a cab to the city center, to the main square, [Jemaa El Fnaa](https://en.wikipedia.org/wiki/Jemaa_el-Fnaa).
 At Cafe de France, Hannes was picking me up and we walked back through the labyrinth of the Medina to the hostel Riad "Priscilla" where we lived with about 20 MirageOS folks, two [turtles](https://www.instagram.com/p/BgPaVbuD3Y3/?taken-by=l1ns3) and a dog.
 We ate some food, and there were talks about Mirage's quickcheck-style fuzzing library [Crowbar](https://github.com/stedolan/crowbar), and an API realized on top of a message queue written in OCaml.
