@@ -157,8 +157,8 @@ module People = struct
   }
 
   let linse = {
-    Atom.name = "Stefanie Schirmer"
-    uri       = "https://linse.me"
+    Atom.name = "Stefanie Schirmer";
+    uri       = Some "https://linse.me";
     email     = None;
   }
 end
