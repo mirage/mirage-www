@@ -155,6 +155,12 @@ module People = struct
     uri       = None;
     email     = None;
   }
+
+  let linse = {
+    Atom.name = "Stefanie Schirmer";
+    uri       = Some "https://linse.me";
+    email     = None;
+  }
 end
 
 let rights = Some "All rights reserved by the author"
@@ -166,6 +172,12 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2018, 04, 20, 16, 00);
+        authors    = [linse];
+        subject    = "Visiting the camels - MirageOS spring hack retreat 2018";
+        body       = "2018-visiting-the-camels.md";
+        permalink  = "2018-visiting-the-camels";
+      };
       { updated    = date (2018, 01, 26, 16, 00);
         authors    = [anil];
         subject    = "MirageOS running on the ESP32 embedded chip";
