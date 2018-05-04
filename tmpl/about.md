@@ -13,4 +13,4 @@ Lexicographically ordered by last name:
 * **[Richard Mortier](http://mort.io/)**, University of Cambridge & Docker
 * **[Mindy Preston](http://www.somerandomidiot.com)**
 * **[David Scott](http://dave.recoil.org)**, Docker
-* Community Manager: **[Amir Chaudhry](http://amirchaudhry.com/)**, Docker
+* **[Amir Chaudhry](http://amirchaudhry.com/)**
