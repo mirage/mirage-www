@@ -7,7 +7,7 @@ machine, then familiarise yourself with the various backends and the
 main modules and techniques used in building and running real unikernels.
 
 If you know some OCaml but don't know about Mirage, your first steps should
-be to try either our [Hello Mirage World](/hello-world) tutorial, or go
+be to try either our [Hello Mirage World](/wiki/hello-world) tutorial, or go
 directly to building some of the example apps in [Mirage Skeleton](https://github.com/mirage/mirage-skeleton).
 
 Mirage abstracts away various OS-level functionality (e.g., networking
