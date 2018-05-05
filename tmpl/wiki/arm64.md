@@ -83,7 +83,7 @@ As we only have one gigabyte of memory on this board you may also want to limit 
 gpu_mem=16
 ```
 
-We also need a cmdline.txt to tell the kernel some option. We can get a default by
+We also need a cmdline.txt to tell the kernel some options. We can get a default by
 ```bash
 $ wget https://github.com/RPi-Distro/pi-gen/raw/master/stage1/00-boot-files/files/cmdline.txt
 ```
@@ -97,19 +97,19 @@ and you may also want to get rid of predictable device names by adding
 net.ifnames=0
 ```
 
-We will come back to the boot partition later when we have build our kernel image.
+We will come back to the boot partition later when we have to build our kernel image.
 
 ### Root partition
-Now we need a root file system. We use qemu-debootrap for this as it will give us very plain Debian. For this mount the second partition somewhere. 
-**Note** We here assume you SD card is present in you host system as /dev/sdc, this path may differ on your system.
-E.g. on many systems it is something like /dev/mmcblk0. Make sure your mount the right partitions as this can break your system.
+Now we need a root file system. We use qemu-debootstrap for this as it will give us very plain Debian. For this mount the second partition somewhere. 
+**Note** We here assume you SD card is present in your host system as /dev/sdc, this path may differ on your system.
+E.g. on many systems it is something like /dev/mmcblk0. Make sure you mount the right partitions as this can break your system.
 
 ```bash
 $ mount /dev/sdc2 /mnt
 ```
 
 Now you can run the qemu debootstrap wrapper
-You may want to read the deboostrap manpage at this point.
+You may want to read the debootstrap manpage at this point.
 
 ```bash
 $ sudo qemu-debootstrap --arch arm64 stretch /mnt
@@ -118,7 +118,7 @@ $ sudo qemu-debootstrap --arch arm64 stretch /mnt
 This will install a minimal Debian stretch root file system to your SD card.
 
 ### Kernel
-As the kernel that we got from the firmware repo is an rusty old 4.9 with 32bit and no virtualization we need to build our own. 
+As the kernel that we got from the firmware repo is a rusty old 4.9 with 32bit and no virtualization we need to build our own. 
 First we need to check out the kernel source. You can probably also get away with using a vanilla mainline kernel, but as there is a well maintained raspberry pi kernel we will use that to not miss any pi related patches.
 
 ```bash
@@ -173,17 +173,17 @@ iface eth0 inet dhcp
 ```ocaml
 UUID=31c566e0-0f1d-475d-9908-4740c8ca3653 / ext4 errors=remount-ro 0 1
 ```
-you can get the uuid for your root partition by running 
+You can get the uuid for your root partition by running 
 ```bash
 $ blkid 
 ```
-and you may also want to set a host name in /etc/hostname and /etc/hosts
-finally you want to set a root password
+And you may also want to set a host name in /etc/hostname and /etc/hosts.
+Finally you want to set a root password
 ```bash
 $ sudo chroot /mnt
 $ passwd 
 $ exit
 ```
 
-You should now have an bootable image. You can either hook up an serial uart cable to the pi or connect it to an HDMI screen.
+You should now have an bootable image. You can either hook up a serial UART cable to the pi or connect it to an HDMI screen.
 You can now e.g. follow the mirage [hello world](https://mirage.io/wiki/hello-world) to setup your unikernel.
