@@ -81,16 +81,9 @@ module Global = struct
       scheme ^ "://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700"
     in
     let font =
-      link ~attrs:[
-        "rel" , "stylesheet";
-        "href", "/css/font-awesome.css"
-      ] empty
+      link ~rel:"stylesheet" (Uri.of_string "/css/font-awesome.css")
       ++
-      link ~attrs:[
-        "href", fonts;
-        "rel" , "stylesheet";
-        "type", "text/css"
-      ] empty
+      link ~rel:"stylesheet" ~ty:"text/css" (Uri.of_string fonts)
     in
     let headers = font @ headers in
     let content = top_nav @ content in
@@ -141,13 +134,7 @@ module Updates = struct
   let make ~read ~domain content =
     (* TODO need a URL routing mechanism instead of assuming / *)
     let uri = Uri.of_string "/updates/atom.xml" in
-    let headers =
-      link ~attrs:[
-        "rel" , "alternate";
-        "type", "application/atom+xml";
-        "href", Uri.to_string uri
-      ] empty
-    in
+    let headers = link ~rel:"alternate" ~ty:"application/atom+xml" uri in
     let title = "Updates" in
     Global.t ~title ~headers ~content ~read ~domain
 
@@ -155,8 +142,8 @@ module Updates = struct
     let content_type_atom  = Cowabloga.Headers.atom in
     let feed =
       Cowabloga.Feed.to_atom ~meta:feed ~feeds
-      >|= Cow.Atom.xml_of_feed
-      >|= Cow.Xml.to_string
+      >|= Cow.Atom.xml_of_feed ?self:None (* XXX: add a self link? *)
+      >|= Cow.Xml.to_string ~decl:false
     in
     Lwt.return (`Page (content_type_atom, feed))
 
@@ -196,7 +183,7 @@ module Links = struct
                   or interesting blog entries that may be useful for MirageOS \n\
                   users. If you'd like to add one, please do"
                ++ a ~href:(uri "/community/") (string "get in touch."));
-            br empty;
+            br;
             body
           ])
       ) in
@@ -234,15 +221,15 @@ module About = struct
         div ~cls:"row" (list [
             div ~cls:"small-12 medium-6 columns" intro;
             div ~cls:"small-12 medium-6 columns" funding;
-            hr empty;
+            hr;
           ]);
         anchor "participate";
-        div ~cls:"row" (div ~cls:"small-12 columns" bb ++ hr empty);
+        div ~cls:"row" (div ~cls:"small-12 columns" bb ++ hr);
         anchor "team";
         div ~cls:"row"(list [
             div ~cls:"small-12 medium-6 columns" main;
             div ~cls:"small-12 medium-6 columns" community;
-            hr empty
+            hr
           ]);
         anchor "blogroll";
         div ~cls:"row" (div ~cls:"small-12 medium-6 columns" blogroll)

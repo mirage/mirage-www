@@ -28,11 +28,7 @@ let make ?title ~read ~domain ~sidebar content =
   (* TODO get atom url from the feed *)
   let url = sprintf "/wiki/atom.xml" in
   let headers =
-    link ~attrs:[
-      "rel" , "alternate";
-      "type", "application/atom+xml";
-      "href", url
-    ] empty
+    link ~rel:"alternate" ~ty:"application/atom+xml" (Uri.of_string url)
   in
   let title = "Docs " ^ match title with None -> "" | Some x -> " :: " ^ x in
   C.Wiki.html_of_page ~content ~sidebar >>= fun content ->
