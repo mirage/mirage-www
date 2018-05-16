@@ -53,7 +53,7 @@ let html_of_paper paper =
         ++ anchor paper.name
         ++ list (List.map html_of_item paper.items));
     p (i (html_of_authors paper.authors)
-       ++ br empty
+       ++ br
        ++ paper.descr);
     tag "blockquote" paper.abstract
   ]
@@ -334,7 +334,7 @@ let html =
           please "
        ++ a ~href:(url "/about") (string "contact")
        ++ string " us.");
-    hr empty;
+    hr;
     list @@ List.map html_of_paper papers;
     h2 (string "Related Work");
     list @@ List.map html_of_paper related_papers;

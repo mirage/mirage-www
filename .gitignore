@@ -39,3 +39,6 @@ stats/main.min.js
 /src/mirage-unikernel-www-unix.opam
 /src/myocamlbuild.ml
 /src/www
+
+_opam
+.envrc

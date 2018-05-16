@@ -116,23 +116,21 @@ let page () =
       a ~href:(Uri.of_string uri) (string t.Rrd_timescales.name)
     ) timescales
   in
+  let uri = Uri.of_string in
   list [
     head (list [
-      meta ~attrs:["charset","utf-8"] empty;
+      meta ["charset","utf-8"];
       title (string "Server statistics");
-      link ~attrs:[
-        "href", "https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.css";
-        "rel" , "stylesheet";
-        "type", "text/css"
-      ] empty;
+      link ~rel:"stylesheet" ~ty:"text/css"
+        (uri "https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.css");
       script
-        ~src:"https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"
+        ~src:(uri "https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js")
         ~charset:"utf-8"
         empty;
       script
-        ~src:"https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"
+        ~src:(uri "https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js")
         empty;
-      script ~src:"/js/stats/main.js" empty;
+      script ~src:(uri "/js/stats/main.js") empty;
     ]);
     body (list [
         h1 (string "Server statistics");

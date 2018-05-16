@@ -30,13 +30,7 @@ let not_found ~domain x =
 let make ?title ~read ~domain content =
   (* TODO need a URL routing mechanism instead of assuming / *)
   let uri = Uri.of_string "/blog/atom.xml" in
-  let headers =
-    link ~attrs:[
-      "rel" , "alternate";
-      "type", "application/atom+xml";
-      "href", Uri.to_string uri;
-    ] empty
-  in
+  let headers = link ~rel:"alternate" ~ty:"application/atom+xml" uri in
   let title = "Blog" ^ match title with None -> "" | Some x -> " :: " ^ x in
   Pages.Global.t ~title ~headers ~content ~domain ~read
 
@@ -77,8 +71,8 @@ let atom_feed ~feed ~entries =
   let headers  = C.Headers.atom in
   let feed =
     C.Blog.to_atom ~feed ~entries
-    >|= Cow.Atom.xml_of_feed
-    >|= Cow.Xml.to_string
+    >|= Cow.Atom.xml_of_feed ?self:None (* XXX: add a self link? *)
+    >|= Cow.Xml.to_string ~decl:false
   in
   Lwt.return (`Page (headers, feed))
 
