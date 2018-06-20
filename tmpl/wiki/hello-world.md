@@ -335,9 +335,9 @@ $ ./hello
 
 #### Building for Another Backend
 
-**Note**: The following sections of this tutorial use the `ukvm` backend as an example. This backend is specific to Linux host systems with direct access to KVM via `/dev/kvm`. If KVM isn't available on your machine, or you are using FreeBSD, you may be interested in building and running unikernels via [the `virtio` target](https://github.com/solo5/solo5#running-solo5-unikernels-directly) which provides support for more hypervisors such as KVM/QEMU, bhyve and Google Compute Engine.
+**Note**: The following sections of this tutorial use the `ukvm` backend as an example. This backend is [supported](https://github.com/Solo5/solo5/blob/v0.3.0/docs/building.md#supported-targets) on Linux, FreeBSD and OpenBSD systems with hardware virtualization. 
 
-To make a unikernel that will use [Solo5](https://github.com/solo5/solo5) to run on KVM, re-run `mirage configure` and ask for the `ukvm` target instead of `unix`.
+To make a unikernel that will use [Solo5](https://github.com/solo5/solo5) to run on a host system with hardware virtualization, re-run `mirage configure` and ask for the `ukvm` target instead of `unix`.
 
 ```bash
 $ mirage configure -t ukvm
@@ -904,8 +904,9 @@ $ cd device-usage/network
 $ mirage configure -t ukvm --dhcp true # for environments where DHCP works
 $ make depend
 $ make
-$ ./ukvm-bin network.ukvm
+$ ./ukvm-bin --net=tap100 network.ukvm
 ```
+See the Solo5 documentation on [running Solo5-based unikernels](https://github.com/Solo5/solo5/blob/v0.3.0/docs/building.md#running-solo5-based-unikernels) for details on how to set up the `tap100` interface used above for ukvm networking.
 
 ### What's Next?
 
