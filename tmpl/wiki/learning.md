@@ -55,14 +55,16 @@ specified with the `-t` option.
 
 Backends include:
 
-* `unix`
-* `ukvm` (part of [Solo5](https://github.com/Solo5/solo5))
-* `xen`
+* `unix` (runs as a normal UNIX process)
+* `ukvm` ([runs](https://github.com/Solo5/solo5/blob/v0.3.0/docs/building.md) on Linux and FreeBSD, requires hardware virtualization)
+* `virtio` ([runs](https://github.com/Solo5/solo5/blob/v0.3.0/docs/building.md) on various virtio-based hypervisors and clouds)
+* `xen` (runs as a PV domain on the [Xen](https://www.xenproject.org/) hypervisor)
+* `muen` (runs as a subject on the [Muen Separation Kernel](https://muen.sk/))
 
 The backends above are listed in ascending order of invasiveness. `unix` runs
 as a normal process on your unmodified Linux kernel, albeit it may
 require root privileges. `ukvm` uses
-Solo5, typically in a KVM virtual machine on Linux, which entails some setup
+[Solo5](https://github.com/Solo5/solo5/tree/v0.3.0) and hardware virtualization on Linux and FreeBSD, which entails some setup
 work, e.g., of IP routing. `xen` requires that Xen be run underneath your
 operating system(s), and that Mirage will be run directly on top of Xen.
 Installing Xen is not hard (about 20 minutes), and it may conveniently

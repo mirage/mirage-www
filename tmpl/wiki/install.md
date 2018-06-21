@@ -9,9 +9,7 @@ You will need OPAM 1.2.2 or later and OCaml 4.04.2 or later.
 Some backends have specific requirements for the host system:
 
 * __ukvm__, __virtio__ and other Solo5-based backends: Please refer to ["Supported targets"](https://github.com/Solo5/solo5/blob/v0.3.0/docs/building.md#supported-targets) in the Solo5 documentation.
-* __xen__: To compile the `xen` backend, you *must* have a 64-bit Linux host. 32-bit is not supported at this time.
-
-For notes specific to installing MirageOS on ARM64, see this [page](/wiki/arm64).
+* __xen__: To compile the `xen` backend, you *must* have a 64-bit Linux host. 32-bit is not supported at this time. Further, this backend only supports OCaml versions up to and including 4.04.2 at this time.
 
 ### MacOS X-specific notes
 
@@ -57,6 +55,10 @@ These distributions include everything you need to run Mirage in the base distri
 ### FreeBSD-specific notes
 
 You will need ports or `pkg` set up. To install OPAM use the `ocaml-opam` port/package. FreeBSD currently packages OCaml 4.02.3, so you will need to install a newer compiler using OPAM.
+
+### ARM64-specific notes
+
+For notes specific to installing and running MirageOS on ARM64 (including embedded boards such as the Raspberry Pi 3), see this [page](/wiki/arm64).
 
 ## MirageOS Package Management with OPAM
 
