@@ -335,9 +335,9 @@ $ ./hello
 
 #### Building for Another Backend
 
-**Note**: The following sections of this tutorial use the `ukvm` backend as an example. This backend is specific to Linux host systems with direct access to KVM via `/dev/kvm`. If KVM isn't available on your machine, or you are using FreeBSD, you may be interested in building and running unikernels via [the `virtio` target](https://github.com/solo5/solo5#running-solo5-unikernels-directly) which provides support for more hypervisors such as KVM/QEMU, bhyve and Google Compute Engine.
+**Note**: The following sections of this tutorial use the [Solo5](https://github.com/Solo5/solo5/tree/v0.3.0)-based `ukvm` backend as an example. This backend is supported on Linux and FreeBSD systems with hardware virtualization. Please see the Solo5 documentation for the support [status](https://github.com/Solo5/solo5/blob/v0.3.0/docs/building.md#supported-targets) of further backends such as `virtio` (for deployment on e.g. Google Compute Engine) and `muen` (for deployment on the [Muen Separation Kernel](https://muen.sk)).
 
-To make a unikernel that will use [Solo5](https://github.com/solo5/solo5) to run on KVM, re-run `mirage configure` and ask for the `ukvm` target instead of `unix`.
+To build a Solo5-based unikernel that will run on a host system with hardware virtualization, re-run `mirage configure` and ask for the `ukvm` target instead of `unix`.
 
 ```bash
 $ mirage configure -t ukvm
@@ -359,18 +359,15 @@ $ ./ukvm-bin hello.ukvm
 ____/\___/ _|\___/____/
 Solo5: Memory map: 512 MB addressable:
 Solo5:     unused @ (0x0 - 0xfffff)
-Solo5:       text @ (0x100000 - 0x1d8fff)
-Solo5:     rodata @ (0x1d9000 - 0x20bfff)
-Solo5:       data @ (0x20c000 - 0x2b3fff)
-Solo5:       heap >= 0x2b4000 < stack < 0x20000000
-Solo5: Clock source: KVM paravirtualized clock
-Solo5: new bindings
-STUB: getenv() called
-2017-02-08 23:58:20 -00:00: INF [application] hello
-2017-02-08 23:58:21 -00:00: INF [application] hello
-2017-02-08 23:58:22 -00:00: INF [application] hello
-2017-02-08 23:58:23 -00:00: INF [application] hello
-Solo5: solo5_app_main() returned with 0
+Solo5:       text @ (0x100000 - 0x1e8fff)
+Solo5:     rodata @ (0x1e9000 - 0x220fff)
+Solo5:       data @ (0x221000 - 0x2d0fff)
+Solo5:       heap >= 0x2d1000 < stack < 0x20000000
+2018-06-21 12:16:28 -00:00: INF [application] hello
+2018-06-21 12:16:29 -00:00: INF [application] hello
+2018-06-21 12:16:30 -00:00: INF [application] hello
+2018-06-21 12:16:31 -00:00: INF [application] hello
+Solo5: solo5_exit(0) called
 ```
 
 We get some additional output from the initialization of the unikernel and its successful boot, then we see our expected output, and Solo5's report of the application's successful completion.
@@ -483,25 +480,22 @@ $ cd tutorial/hello-key
 $ mirage configure -t ukvm
 $ make depend
 $ make
-$ ./ukvm-bin hello.ukvm --hello="Hola!"
+$ ./ukvm-bin -- hello.ukvm --hello="Hola!"
             |      ___|
   __|  _ \  |  _ \ __ \
 \__ \ (   | | (   |  ) |
 ____/\___/ _|\___/____/
 Solo5: Memory map: 512 MB addressable:
 Solo5:     unused @ (0x0 - 0xfffff)
-Solo5:       text @ (0x100000 - 0x1d8fff)
-Solo5:     rodata @ (0x1d9000 - 0x20bfff)
-Solo5:       data @ (0x20c000 - 0x2b3fff)
-Solo5:       heap >= 0x2b4000 < stack < 0x20000000
-Solo5: Clock source: KVM paravirtualized clock
-Solo5: new bindings
-STUB: getenv() called
-2017-02-09 00:26:00 -00:00: INF [application] Hola!
-2017-02-09 00:26:01 -00:00: INF [application] Hola!
-2017-02-09 00:26:02 -00:00: INF [application] Hola!
-2017-02-09 00:26:03 -00:00: INF [application] Hola!
-Solo5: solo5_app_main() returned with 0
+Solo5:       text @ (0x100000 - 0x1e8fff)
+Solo5:     rodata @ (0x1e9000 - 0x220fff)
+Solo5:       data @ (0x221000 - 0x2d1fff)
+Solo5:       heap >= 0x2d2000 < stack < 0x20000000
+2018-06-21 12:18:03 -00:00: INF [application] Hola!
+2018-06-21 12:18:04 -00:00: INF [application] Hola!
+2018-06-21 12:18:05 -00:00: INF [application] Hola!
+2018-06-21 12:18:06 -00:00: INF [application] Hola!
+Solo5: solo5_exit(0) called
 ```
 
 ### Step 2: Getting a block device
@@ -610,35 +604,27 @@ $ ./ukvm-bin --disk=disk.img block_test.ukvm
 ____/\___/ _|\___/____/
 Solo5: Memory map: 512 MB addressable:
 Solo5:     unused @ (0x0 - 0xfffff)
-Solo5:       text @ (0x100000 - 0x1e1fff)
-Solo5:     rodata @ (0x1e2000 - 0x216fff)
-Solo5:       data @ (0x217000 - 0x2c6fff)
-Solo5:       heap >= 0x2c7000 < stack < 0x20000000
-Solo5: Clock source: KVM paravirtualized clock
-Solo5: new bindings
-STUB: getenv() called
-2017-02-09 00:48:14 -00:00: INF [block] sectors = 100000
+Solo5:       text @ (0x100000 - 0x1eefff)
+Solo5:     rodata @ (0x1ef000 - 0x228fff)
+Solo5:       data @ (0x229000 - 0x2dffff)
+Solo5:       heap >= 0x2e0000 < stack < 0x20000000
+2018-06-21 12:21:11 -00:00: INF [block] sectors = 100000
 read_write=true
 sector_size=512
 
-2017-02-09 00:48:14 -00:00: ERR [block] Expecting error output from the following operation...
-blk write failed... 512 to sector=100000
-2017-02-09 00:48:14 -00:00: ERR [block] Expecting error output from the following operation...
-blk write failed... 512 to sector=100000
-2017-02-09 00:48:14 -00:00: ERR [block] Expecting error output from the following operation...
-virtio read failed... 512 from sector=100000
-2017-02-09 00:48:14 -00:00: ERR [block] Expecting error output from the following operation...
-virtio read failed... 512 from sector=100000
-2017-02-09 00:48:14 -00:00: INF [block] Test sequence finished
+2018-06-21 12:21:11 -00:00: ERR [block] Expecting error output from the following operation...
+2018-06-21 12:21:11 -00:00: ERR [block] Expecting error output from the following operation...
+2018-06-21 12:21:11 -00:00: ERR [block] Expecting error output from the following operation...
+2018-06-21 12:21:11 -00:00: ERR [block] Expecting error output from the following operation...
+2018-06-21 12:21:11 -00:00: INF [block] Test sequence finished
 
-2017-02-09 00:48:14 -00:00: INF [block] Total tests started: 10
+2018-06-21 12:21:11 -00:00: INF [block] Total tests started: 10
 
-2017-02-09 00:48:14 -00:00: INF [block] Total tests passed:  10
+2018-06-21 12:21:11 -00:00: INF [block] Total tests passed:  10
 
-2017-02-09 00:48:14 -00:00: INF [block] Total tests failed:  0
+2018-06-21 12:21:11 -00:00: INF [block] Total tests failed:  0
 
-Solo5: solo5_app_main() returned with 0
-
+Solo5: solo5_exit(0) called
 ```
 
 ### Step 3: Key/value stores
@@ -833,7 +819,7 @@ $ cd device-usage/network
 $ mirage configure -t unix --dhcp true --net direct
 $ make depend
 $ make
-$ sudo ./network
+$ sudo ./network -l "*:debug"
 ```
 
 Hopefully, the application will successfully receive its network configuration.
@@ -859,7 +845,7 @@ $ cd device-usage/network
 $ mirage configure -t unix --dhcp false --net direct
 $ make depend
 $ make
-$ sudo ./network
+$ sudo ./network -l "*:debug"
 ```
 
 For macosx:
@@ -897,15 +883,31 @@ read: 15 "hello tcp world"
 
 #### Ukvm
 
-Let's make a network-enabled unikernel!  The IP configuration should be similar to what you've set up in the previous examples, but instead of `-t unix` or `-t macosx`, build with a `ukvm` target.  If you need to specify a static IP address, remember that it should go at the end of the command in which you invoke `ukvm-bin`, just like the argument to `hello` in the `hello-key` example.
+Let's make a network-enabled unikernel with `ukvm`!  The IP configuration should be similar to what you've set up in the previous examples, but instead of `-t unix` or `-t macosx`, build with a `ukvm` target.  If you need to specify a static IP address, remember that it should go at the end of the command in which you invoke `ukvm-bin`, just like the argument to `hello` in the `hello-key` example.
 
 ```
 $ cd device-usage/network
 $ mirage configure -t ukvm --dhcp true # for environments where DHCP works
 $ make depend
 $ make
-$ ./ukvm-bin network.ukvm
+$ ./ukvm-bin --net=tap100 -- network.ukvm --ipv4=10.0.0.10/24
+            |      ___|
+  __|  _ \  |  _ \ __ \
+\__ \ (   | | (   |  ) |
+____/\___/ _|\___/____/
+Solo5: Memory map: 512 MB addressable:
+Solo5:     unused @ (0x0 - 0xfffff)
+Solo5:       text @ (0x100000 - 0x213fff)
+Solo5:     rodata @ (0x214000 - 0x255fff)
+Solo5:       data @ (0x256000 - 0x331fff)
+Solo5:       heap >= 0x332000 < stack < 0x20000000
+2018-06-21 12:24:46 -00:00: INF [netif] Plugging into 0 with mac 3a:40:76:41:5d:b0
+2018-06-21 12:24:46 -00:00: INF [ethif] Connected Ethernet interface 3a:40:76:41:5d:b0
+2018-06-21 12:24:46 -00:00: INF [arpv4] Connected arpv4 device on 3a:40:76:41:5d:b0
+2018-06-21 12:24:46 -00:00: INF [udp] UDP interface connected on 10.0.0.10
+2018-06-21 12:24:46 -00:00: INF [tcpip-stack-direct] stack assembled: mac=3a:40:76:41:5d:b0,ip=10.0.0.10
 ```
+See the Solo5 documentation on [running Solo5-based unikernels](https://github.com/Solo5/solo5/blob/v0.3.0/docs/building.md#running-solo5-based-unikernels) for details on how to set up the `tap100` interface used above for ukvm networking.
 
 ### What's Next?
 
