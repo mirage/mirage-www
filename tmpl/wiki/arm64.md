@@ -53,7 +53,7 @@ There are also so called overlay files which allow to alter e.g. the Pinout of t
 Check out the firmware files you will need
 
 ```bash
-$ git checkout --depth=1 https://github.com/raspberrypi/firmware
+$ git clone --depth=1 https://github.com/raspberrypi/firmware
 ```
 
 Copy the content of boot to your first partition. There will be some files you don't need like dtb's for older pis and some overlays but for the sake of easy updates in the future and personal laziness lets ignore that for now.
