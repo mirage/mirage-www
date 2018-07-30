@@ -25,7 +25,7 @@ module Option = struct
 end
 
 let do_get ~uri =
-  let open XmlHttpRequest in
+  let open Lwt_xmlHttpRequest in
   let uri = Uri.to_string uri in
   get uri
   >>= fun frame ->

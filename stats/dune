@@ -1,0 +1,4 @@
+(executable
+  (name main)
+  (libraries js_of_ocaml-lwt js_of_ocaml-lwt.logger lwt
+             c3 uri re.str rrd bigarray))
