@@ -1,4 +1,4 @@
-PKGS  = dune lwt_log js_of_ocaml js_of_ocaml-lwt c3 uri xapi-rrd re rpc
+PKGS  = dune lwt_log js_of_ocaml js_of_ocaml-lwt c3 uri xapi-rrd re
 BUILD = dune build --profile release
 OPAM  = opam
 
