@@ -29,9 +29,7 @@
 files/js/stats
 
 stats/_build/
-stats/main.byte
-stats/main.js
-stats/main.min.js
+stats/.merlin
 
 .*.swp
 
