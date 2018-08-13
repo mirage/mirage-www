@@ -47,7 +47,7 @@ metric counting the number of occurences for some kind of event:
 ```ocaml
 type metric = {
   name : string;
-  gauge: int;
+  gauge: int64;
 }
 ```
 
@@ -60,7 +60,7 @@ let metric_t =
   let open Irmin.Type in
   record "metric" (fun name gauge -> { name; gauge })
   |+ field "name"  string (fun t -> t.name)
-  |+ field "gauge" int    (fun t -> t.gauge)
+  |+ field "gauge" int64    (fun t -> t.gauge)
   |> sealr
 ```
 
@@ -154,7 +154,7 @@ to get a handler on the `master` branch in that repository. For
 instance, using the OCaml toplevel:
 
 ```ocaml
-# open Lwt.Infix
+# open Lwt.Infix;;
 
 # let repo = Store.Repo.v config;;
 val repo : Store.Repo.t Lwt.t = <abstr>
@@ -169,15 +169,14 @@ operations are reflected as Git state.
 
 ```ocaml
   Lwt_main.run begin
-      master >>= fun master ->
+      Store.Repo.v config >>= Store.master >>= fun master ->
       Store.set master
         ~info:(info "Creating a new metric")
-        ["vm"; "writes"] { name = "write Kb/s"; gauge = 0 }
+        ["vm"; "writes"] { name = "write Kb/s"; gauge = 0L }
       >>= fun () ->
       Store.get master ["vm"; "writes"] >|= fun m ->
-      assert (m.gauge = 0);
+      assert (m.gauge = 0L);
     end
-
 ```
 
 Note that `Store.set` is atomic: the implementation ensures that no
@@ -202,9 +201,13 @@ let move t src dst =
   Store.with_tree t
     ~info:(info "Moving %a to %a" Store.Key.pp src Store.Key.pp dst)
     [] (fun tree ->
-          Store.Tree.find_tree tree src >>= fun v ->
-          Store.Tree.remove tree src >>= fun tree ->
-          Store.Tree.add_tree tree dst v
+          let tree = match tree with
+            | None -> Store.Tree.empty
+            | Some tree -> tree
+          in
+          Store.Tree.get_tree tree src >>= fun v ->
+          Store.Tree.remove tree src >>= fun _ ->
+          Store.Tree.add_tree tree dst v >>= Lwt.return_some
     )
 ```
 
@@ -227,11 +230,16 @@ gauge in a store `t`, using a transaction:
 let incr t =
   let path = ["vm"; "writes"] in
   Store.with_tree ~info:(info "New write event") t path (fun tree ->
+      let tree = match tree with
+        | None -> Store.Tree.empty
+        | Some tree -> tree
+      in
       (Store.Tree.find tree [] >|= function
-        | None   -> { name = "writes in kb/s"; gauge = 0 }
-        | Some x -> { x with gauge = x.gauge + 1 })
+        | None   -> { name = "writes in kb/s"; gauge = 0L }
+        | Some x -> { x with gauge = Int64.succ x.gauge })
       >>= fun m ->
       Store.Tree.add tree [] m
+      >>= Lwt.return_some
     )
 ```
 
