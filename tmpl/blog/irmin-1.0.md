@@ -257,7 +257,7 @@ merges.
 ```ocaml
 let () =
   Lwt_main.run begin
-    master >>= fun master ->  (* gauge = 0 *)
+    Store.Repo.v config >>= Store.master >>= fun master -> (* guage 0 *)
     incr master >>= fun () -> (* gauge = 1 *)
     Store.clone ~src:master ~dst:"tmp" >>= fun tmp ->
     incr master >>= fun () -> (* gauge = 2 on master *)
@@ -267,7 +267,7 @@ let () =
     | Error (`Conflict e) -> failwith e
     | Ok () ->
       Store.get master ["vm"; "writes"] >|= fun m ->
-      Fmt.pr "Gauge is %d\n%!" m.gauge
+      Fmt.pr "Gauge is %Ld\n%!" m.gauge
   end
 ```
 
