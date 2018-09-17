@@ -11,11 +11,13 @@ So far this has been tested on the following SOCs.
 
 It should be possible on all A53 based SOCs as long as a recent Kernel is available.
 
-In the following the process to build yourself a firmware image for the raspberry Pi 3/3+ is described.
+In the following the process to build yourself a debian based firmware image for the raspberry Pi 3/3+ is described.
 For other targets the process is very similar and usually only differs in the bootloader related part.
 
+If you are not into builing your own image, you can try to use Arch Linux as they seem to ship KVM enabled 64bit Kernel for the Raspberry Pi.
+
 ### Prerequirements 
-You will need an arm64 / aarch64 cross compiler. You can use e.g. the cross compiler shipped by Ubuntu or get the tool chain of your choice for your OS. We also need debootstrap to generate a root file system and qemu which helps us setting up our user land.
+You will need an arm64 / aarch64 cross compiler which supports -mgeneral-regs-only which was introduced in GCC-4.8. You can use e.g. the cross compiler shipped by Ubuntu or get the tool chain of your choice for your OS. We also need debootstrap to generate a root file system and qemu which helps us setting up our user land.
 
 ```bash
 $ apt-get install gcc-aarch64-linux-gnu qemu-user-static debootstrap
