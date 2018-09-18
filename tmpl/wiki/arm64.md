@@ -1,4 +1,4 @@
-Thanks to Solo5 and ukvm Mirage can run on ARM CPUs which support the ARM virtualization extensions.
+Thanks to Solo5 and hvt MirageOS can run on ARM CPUs which support the ARM virtualization extensions.
 As the layer for Mirage currently only supports the 64bit architecture a 64bit CPU is required.
 
 So far this has been tested on the following SOCs.

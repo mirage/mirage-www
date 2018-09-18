@@ -8,7 +8,7 @@ You will need OPAM 1.2.2 or later and OCaml 4.04.2 or later.
 
 Some backends have specific requirements for the host system:
 
-* __ukvm__, __virtio__ and other Solo5-based backends: Please refer to ["Supported targets"](https://github.com/Solo5/solo5/blob/v0.3.0/docs/building.md#supported-targets) in the Solo5 documentation.
+* __hvt__, __virtio__ and other Solo5-based backends: Please refer to ["Supported targets"](https://github.com/Solo5/solo5/blob/v0.4.0/docs/building.md#supported-targets) in the Solo5 documentation.
 * __xen__ and __qubes__: To compile the `xen` or `qubes` backend, you *must* have a 64-bit Linux host. 32-bit is not supported at this time. Further, these backends only support OCaml versions up to and including 4.05.0 at this time.
 
 ### MacOS X-specific notes
