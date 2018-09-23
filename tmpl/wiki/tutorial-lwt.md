@@ -127,7 +127,7 @@ Assuming you want to build as a normal Unix process, compile the application wit
   ./main.native
 ```
 
-If you prefer to build for another target (like `xen` or `ukvm`), change the `-t` argument to `mirage configure`.  To see the available backends, have a look at the documentation available with `mirage configure --help`.
+If you prefer to build for another target (like `xen` or `hvt`), change the `-t` argument to `mirage configure`.  To see the available backends, have a look at the documentation available with `mirage configure --help`.
 
 ### Solution
 

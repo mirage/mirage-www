@@ -12,7 +12,7 @@ directly to building some of the example apps in [Mirage Skeleton](https://githu
 
 Mirage abstracts away various OS-level functionality (e.g., networking
 and storage), which must be provided by backends. Commonly used
-backends are `unix`, `ukvm` and `xen`; the `unix` backend works within
+backends are `unix`, `hvt` and `xen`; the `unix` backend works within
 a normal laptop-based development environment. The others tend to
 involve various degrees of configuration effort, but are more
 realistic for production use. You can write your code, test it on `unix` first,
@@ -56,15 +56,15 @@ specified with the `-t` option.
 Backends include:
 
 * `unix` (runs as a normal UNIX process)
-* `ukvm` ([runs](https://github.com/Solo5/solo5/blob/v0.3.0/docs/building.md) on Linux and FreeBSD, requires hardware virtualization)
-* `virtio` ([runs](https://github.com/Solo5/solo5/blob/v0.3.0/docs/building.md) on various virtio-based hypervisors and clouds)
+* `hvt` ([runs](https://github.com/Solo5/solo5/blob/v0.4.0/docs/building.md) on Linux, FreeBSD, and OpenBSD, requires hardware virtualization)
+* `virtio` ([runs](https://github.com/Solo5/solo5/blob/v0.4.0/docs/building.md) on various virtio-based hypervisors and clouds)
 * `xen` and `qubes` (run as a PV domain on the [Xen](https://www.xenproject.org/) hypervisor)
 * `muen` (runs as a subject on the [Muen Separation Kernel](https://muen.sk/))
 
 The backends above are listed in ascending order of invasiveness. `unix` runs
 as a normal process on your unmodified Linux kernel, albeit it may
-require root privileges. `ukvm` uses
-[Solo5](https://github.com/Solo5/solo5/tree/v0.3.0) and hardware virtualization on Linux and FreeBSD, which entails some setup
+require root privileges. `hvt` uses
+[Solo5](https://github.com/Solo5/solo5/tree/v0.4.0) and hardware virtualization on Linux and FreeBSD, which entails some setup
 work, e.g., of IP routing. `xen` requires that Xen be run underneath your
 operating system(s), and that Mirage will be run directly on top of Xen.
 Installing Xen is not hard (about 20 minutes), and it may conveniently

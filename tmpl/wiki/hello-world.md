@@ -335,12 +335,12 @@ $ ./hello
 
 #### Building for Another Backend
 
-**Note**: The following sections of this tutorial use the [Solo5](https://github.com/Solo5/solo5/tree/v0.3.0)-based `ukvm` backend as an example. This backend is supported on Linux and FreeBSD systems with hardware virtualization. Please see the Solo5 documentation for the support [status](https://github.com/Solo5/solo5/blob/v0.3.0/docs/building.md#supported-targets) of further backends such as `virtio` (for deployment on e.g. Google Compute Engine) and `muen` (for deployment on the [Muen Separation Kernel](https://muen.sk)).
+**Note**: The following sections of this tutorial use the [Solo5](https://github.com/Solo5/solo5/tree/v0.4.0)-based `hvt` backend as an example. This backend is supported on Linux, FreeBSD, and OpenBSD systems with hardware virtualization. Please see the Solo5 documentation for the support [status](https://github.com/Solo5/solo5/blob/v0.4.0/docs/building.md#supported-targets) of further backends such as `virtio` (for deployment on e.g. Google Compute Engine) and `muen` (for deployment on the [Muen Separation Kernel](https://muen.sk)).
 
-To build a Solo5-based unikernel that will run on a host system with hardware virtualization, re-run `mirage configure` and ask for the `ukvm` target instead of `unix`.
+To build a Solo5-based unikernel that will run on a host system with hardware virtualization, re-run `mirage configure` and ask for the `hvt` target instead of `unix`.
 
 ```bash
-$ mirage configure -t ukvm
+$ mirage configure -t hvt
 $ make depend
 $ make
 ```
@@ -349,10 +349,10 @@ parameterised over the `Time` type, it doesn't matter — you do not need to
 make any changes for your code to run when linked against the Solo5 console driver
 instead of Unix.
 
-When you build the `ukvm` version, you'll see some new artifacts: a `ukvm-bin` binary and a file called `hello.ukvm`.  `hello.ukvm` is the unikernel, and `ukvm-bin` is a dynamically-generated monitor program specialised to your unikernel. To try running `hello.ukvm`, pass it as an argument to `ukvm-bin`:
+When you build the `hvt` version, you'll see some new artifacts: a `solo5-hvt` binary and a file called `hello.hvt`.  `hello.hvt` is the unikernel, and `solo5-hvt` is a specialised tender for your unikernel. To try running `hello.hvt`, pass it as an argument to `solo5-hvt`:
 
 ```bash
-$ ./ukvm-bin hello.ukvm
+$ ./solo5-hvt hello.hvt
             |      ___|
   __|  _ \  |  _ \ __ \
 \__ \ (   | | (   |  ) |
@@ -473,14 +473,14 @@ $ ./hello --hello="Hi!"
 2017-02-08 18:30:57 +06:00: INF [application] Hi!
 ```
 
-When configured for non-Unix backends, other mechanisms are used to pass the runtime information to the unikernel.  `ukvm-bin`, which we used to run `hello.ukvm` in the non-keyed example, will pass keys specified on the command line to the unikernel when invoked:
+When configured for non-Unix backends, other mechanisms are used to pass the runtime information to the unikernel.  `solo5-hvt`, which we used to run `hello.hvt` in the non-keyed example, will pass keys specified on the command line to the unikernel when invoked:
 
 ```
 $ cd tutorial/hello-key
-$ mirage configure -t ukvm
+$ mirage configure -t hvt
 $ make depend
 $ make
-$ ./ukvm-bin -- hello.ukvm --hello="Hola!"
+$ ./solo5-hvt -- hello.hvt --hello="Hola!"
             |      ___|
   __|  _ \  |  _ \ __ \
 \__ \ (   | | (   |  ) |
@@ -583,21 +583,21 @@ same (the logic for this is in `unikernel.ml` within the `Block_test` module).
 We can build this example for another backend too:
 
 ```bash
-$ mirage configure -t ukvm
+$ mirage configure -t hvt
 $ make depend
 $ make
 ```
 
-Now we just need to boot the unikernel with `ukvm-bin` as before. We should see
+Now we just need to boot the unikernel with `solo5-hvt` as before. We should see
 the same output after the VM boot preamble, but now MirageOS is linked against the
 Solo5 [block device driver](https://github.com/mirage/mirage-block-solo5) and is
 mapping the unikernel's block requests directly through to it, rather than
 relying on the host OS (the Linux or FreeBSD kernel).
 
-If we tell `ukvm-bin` where the disk image is, it will provide that disk image to the unikernel:
+If we tell `solo5-hvt` where the disk image is, it will provide that disk image to the unikernel:
 
 ```bash
-$ ./ukvm-bin --disk=disk.img block_test.ukvm
+$ ./solo5-hvt --disk=disk.img block_test.hvt
             |      ___|
   __|  _ \  |  _ \ __ \
 \__ \ (   | | (   |  ) |
@@ -733,7 +733,7 @@ application:
   to the outside world.
 * Once the unikernel works under Unix with the
   direct [OCaml TCP/IP stack](https://github.com/mirage/mirage-tcpip),
-  recompiling it for a unikernel target like `xen`, `ukvm`, or `virtio` shouldn't
+  recompiling it for a unikernel target like `xen`, `hvt`, or `virtio` shouldn't
   result in a change in behavior.
 
 All of this can be manipulated via command-line arguments or environment variables,
@@ -881,16 +881,16 @@ And you will see the same output in the unikernel's terminal:
 read: 15 "hello tcp world"
 ```
 
-#### Ukvm
+#### Hvt
 
-Let's make a network-enabled unikernel with `ukvm`!  The IP configuration should be similar to what you've set up in the previous examples, but instead of `-t unix` or `-t macosx`, build with a `ukvm` target.  If you need to specify a static IP address, remember that it should go at the end of the command in which you invoke `ukvm-bin`, just like the argument to `hello` in the `hello-key` example.
+Let's make a network-enabled unikernel with `hvt`!  The IP configuration should be similar to what you've set up in the previous examples, but instead of `-t unix` or `-t macosx`, build with a `hvt` target.  If you need to specify a static IP address, remember that it should go at the end of the command in which you invoke `solo5-hvt`, just like the argument to `hello` in the `hello-key` example.
 
 ```
 $ cd device-usage/network
-$ mirage configure -t ukvm --dhcp true # for environments where DHCP works
+$ mirage configure -t hvt --dhcp true # for environments where DHCP works
 $ make depend
 $ make
-$ ./ukvm-bin --net=tap100 -- network.ukvm --ipv4=10.0.0.10/24
+$ ./solo5-hvt --net=tap100 -- network.hvt --ipv4=10.0.0.10/24
             |      ___|
   __|  _ \  |  _ \ __ \
 \__ \ (   | | (   |  ) |
@@ -907,7 +907,7 @@ Solo5:       heap >= 0x332000 < stack < 0x20000000
 2018-06-21 12:24:46 -00:00: INF [udp] UDP interface connected on 10.0.0.10
 2018-06-21 12:24:46 -00:00: INF [tcpip-stack-direct] stack assembled: mac=3a:40:76:41:5d:b0,ip=10.0.0.10
 ```
-See the Solo5 documentation on [running Solo5-based unikernels](https://github.com/Solo5/solo5/blob/v0.3.0/docs/building.md#running-solo5-based-unikernels) for details on how to set up the `tap100` interface used above for ukvm networking.
+See the Solo5 documentation on [running Solo5-based unikernels](https://github.com/Solo5/solo5/blob/v0.4.0/docs/building.md#running-solo5-based-unikernels) for details on how to set up the `tap100` interface used above for hvt networking.
 
 ### What's Next?
 
