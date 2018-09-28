@@ -5,8 +5,8 @@ touch with any of us individually if you're interested in a MirageOS-related
 internship at our respective institutions.
 
 Lexicographically ordered by last name:
-* **[Thomas Gazagnaire](http://thomas.gazagnaire.org)**
-* **[Thomas Leonard](http://roscidus.com/blog/)**, Docker
+* **[Thomas Gazagnaire](http://thomas.gazagnaire.org)**, [Tarides](https://tarides.com)
+* **[Thomas Leonard](http://roscidus.com/blog/)**
 * **[Martin Lucina](https://lucina.net/)**
 * **[Anil Madhavapeddy](http://anil.recoil.org)**, University of Cambridge
 * **[Hannes Mehnert](https://hannes.nqsb.io)**, [robur](http://robur.io)
