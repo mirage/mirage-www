@@ -1,6 +1,7 @@
 ## Package Quality
 
 NOTE: this is WIP
+TODO: where to get the badges, where to put them? an opam tag and README.md link?
 
 The MirageOS ecosystem of libraries is booming:
 
@@ -118,9 +119,10 @@ Style best practises
 - Have proper indentation (using ocp-indent + checked-in ocp-indent file).
 - Use at most 80 columns (`ocp-indent` unfortunately doesn't check this).
 
-The library is documented with a well-defined scope and its API is documented,
-accessible online (e.g. [docs.mirage.io](https://docs.mirage.io))
-and can be generated locally with [odig](http://erratique.ch/software/odig).
+The scope of the library is well-defined and documented. The API is documented,
+especially regarding failure semantics. It is accessible online (e.g.
+[docs.mirage.io](https://docs.mirage.io)) and can be generated using
+[odig](http://erratique.ch/software/odig).
 
 ## ![automated:](https://img.shields.io/badge/mirageos-automated-yellow-green.svg) automated with continuous integration
 
@@ -128,14 +130,11 @@ The library uses continuous integration systems to catch issues early:
 - The [ocaml-ci-scripts](https://github.com/ocaml/ocaml-ci-scripts) contain
   Travis and AppVeyor integration.
 
-## ![approved:](https://img.shields.io/badge/mirageos-approved-green.svg) approved member of the MirageOS ecosystem
+## ![approved:](https://img.shields.io/badge/mirageos-approved-green.svg) approved MirageOS library
 
-- Have well-identified maintainers. GitHub recently
+- Has well-identified maintainers. GitHub recently
   [introduced code owners](https://github.com/blog/2392-introducing-code-owners),
   which may be worth to use for some (of our core) libraries.
-
-- Have a design document specifying the scope of the library (and esp. what is
-  out of scope)
 
 - Avoid the use of C bindings for no good reasons. A good reason would be to
   improve performance by an order of magnitude, or re-use an existing C library
@@ -152,7 +151,6 @@ The library uses continuous integration systems to catch issues early:
 
 - Work on 32bit (esp. in regards to the last point), tested by CI.
 
-
 - Is reproducible by having a way to reproduce the exact binary result. See
   [reproducible builds](https://reproducible-builds.org/) for further information.
   OCaml produces reproducible binaries. A reproducible MirageOS unikernel needs
@@ -161,6 +159,10 @@ The library uses continuous integration systems to catch issues early:
 
 - Have a clear indication if the library is used in production (and if yes by
   which project).
+
+TODO: 'received external security audit'
+TODO: 'YYY' for libraries we use on our infrastructure since TTT and know their behaviour
+TODO: end-to-end testing
 
 ## ![verified:](https://img.shields.io/badge/mirageos-verified-purple.svg) Formally verified
 
