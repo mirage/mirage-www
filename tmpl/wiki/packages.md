@@ -66,6 +66,10 @@ A Mirage library should have
   and [mirage-block-lwt.1.1.0](https://github.com/mirage/mirage-block/blob/1.1.0/mirage-block-lwt.opam).
   These should have a github pages `doc:` link in order that `topkg` can detect
   the upstream repo.
+- The opam file specifies all direct dependencies are specified. Sometimes
+  direct dependencies are included by transitivity, which is not very stable
+  and could break the package in the future if one of the transitive dependencies
+  is updated
 - `Makefile`: contains `jbuilder` invocations including the `--dev` argument
   to enable warnings as errors for local builds.
   For example [mirage-block.3.1.2](https://github.com/mirage/mirage-block/blob/1.1.0/Makefile)
