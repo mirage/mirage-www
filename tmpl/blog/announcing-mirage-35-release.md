@@ -92,7 +92,7 @@ The semantics of arguments passed to a MirageOS unikernel used to vary between d
 
 ## More features and bugfixes
 
-- A [httpaf device](https://github.com/mirage/mirage/pull/955) is now part of mirage
+- More HTTP server choices are supported via a new [httpaf device](https://github.com/mirage/mirage/pull/955) that permits the [high performance httpaf](https://github.com/inhabitedtype/httpaf) stack to run as a unikernel now.
 - [libvirt.xml is generated for virtio target](https://github.com/mirage/mirage/pull/903)
 - [Unix target now include -tags thread](https://github.com/mirage/mirage/issues/861) (for mirage-framebuffer SDL support)
 - Various modules (IPv6, DHCP) are explicit about their dependency to the random device
