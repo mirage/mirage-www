@@ -47,16 +47,9 @@ module Make
   type dispatch = path -> cowabloga Lwt.t
   type s = Conduit_mirage.server -> S.t -> unit Lwt.t
 
-  let size_then_read ~pp_error ~size ~read device name =
-    size device name >>= function
-    | Error e -> err "%a" pp_error e
-    | Ok size ->
-      read device name 0L size >>= function
-      | Error e -> err "%a" pp_error e
-      | Ok bufs -> Lwt.return (Cstruct.copyv bufs)
-
-  let tmpl_read =
-    size_then_read ~pp_error:TMPL.pp_error ~size:TMPL.size ~read:TMPL.read
+  let tmpl_read dev name = TMPL.get dev (Mirage_kv.Key.v name) >|= function
+    | Ok data -> data
+    | Error e -> err "%a" TMPL.pp_error e
 
   let read_entry tmpl name = tmpl_read tmpl name >|= Cow.Markdown.of_string
 
@@ -149,7 +142,10 @@ module Make
     let feed = Data.empty_feed in
     Pages.About.dispatch ~feed ~domain ~read
 
-  let fs_read = size_then_read ~pp_error:FS.pp_error ~size:FS.size ~read:FS.read
+  let fs_read dev name =
+    FS.get dev (Mirage_kv.Key.v name) >|= function
+    | Ok data -> data
+    | Error e -> err "%a" FS.pp_error e
 
   let asset domain fs path =
     let path_s = String.concat "/" path in

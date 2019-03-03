@@ -103,7 +103,8 @@ let packages = [
   package ~ocamlfind:["rrd"] ~min:"1.0.1" "xapi-rrd";
   package "c3" ;
   package "duration";
-  package "ptime"
+  package "ptime";
+  package ~min:"2.0.0" "mirage-kv";
 ]
 
 let () =
