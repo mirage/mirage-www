@@ -84,7 +84,7 @@ let http =
     (http @-> kv_ro @-> kv_ro @-> pclock @-> job)
 
 let https =
-  let packages = [package ~sublibs:["mirage"] "tls"; package "mirage-http"] in
+  let packages = [package ~sublibs:["mirage"] "tls"; package "cohttp-mirage"] in
   foreign ~packages  ~keys "Dispatch_tls.Make"
     ~deps:[abstract nocrypto]
     (stackv4 @-> kv_ro @-> kv_ro @-> kv_ro @-> pclock @-> job)
@@ -100,10 +100,11 @@ let dispatch = if_impl (Key.value tls_key)
 let packages = [
   package "cow" ~min:"2.3.0";
   package "cowabloga";
-  package ~ocamlfind:["rrd"] ~min:"1.0.1" "xapi-rrd";
-  package "c3" ;
+  (*  package ~ocamlfind:["rrd"] ~min:"1.0.1" "xapi-rrd"; *)
+  (* package "c3" ; *)
   package "duration";
-  package "ptime"
+  package "ptime";
+  package ~min:"2.0.0" "mirage-kv";
 ]
 
 let () =
