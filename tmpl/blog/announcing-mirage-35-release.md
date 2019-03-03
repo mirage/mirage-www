@@ -10,8 +10,6 @@ On the OCaml tooling side, since MirageOS 3.0.0 we did several major changes:
 - support for OCaml 4.06.0 (and above), where `safe-string` is enabled by default. Strings are immutable now!!,
 - remove usage of `result` package, which has incorporated into `Pervasives` since OCaml 4.03.0.
 
-We are working on further changes (namely revising the `mirage` internal build system, at the moment using `ocamlbuild`, `ocamlfind`, `pkg-config`, and `make`) to make MirageOS more developer-friendly by using [dune](https://dune.build). Changing the internal build tooling allows for monorepos, incremental builds, cross-compilation, and other oft-requested improvements.
-
 The 3.5.0 release contains several API improvements of different MirageOS interfaces - if you're developing your own MirageOS unikernels, you may want to read this post to adjust to the new APIs.
 
 ## MirageOS interface API changes:
@@ -90,7 +88,7 @@ The semantics of arguments passed to a MirageOS unikernel used to vary between d
 - [dns 1.0.0](https://github.com/mirage/ocaml-dns), see [this announcement](https://discuss.ocaml.org/t/ann-major-releases-of-cohttp-conduit-dns-tcpip)
 - [conduit 1.0.0](https://github.com/mirage/ocaml-conduit), see [this announcement](https://discuss.ocaml.org/t/ann-major-releases-of-cohttp-conduit-dns-tcpip)
 
-## More features and fixes
+## More features and bugfixes
 
 - A [httpaf device](https://github.com/mirage/mirage/pull/955) is now part of mirage
 - [libvirt.xml is generated for virtio target](https://github.com/mirage/mirage/pull/903)
@@ -99,3 +97,7 @@ The semantics of arguments passed to a MirageOS unikernel used to vary between d
 - [QubesDB can be requested in config.ml when the target is Xen](https://github.com/mirage/mirage/pull/807)
 
 You may also want to read the [MirageOS 3.2.0 announcement](https://discuss.ocaml.org/t/ann-mirage-3-2-0) and the [MirageOS 3.3.0 announcement](https://discuss.ocaml.org/t/mirage-3-3-0-released).
+
+## Next steps
+
+We are working on [further](https://github.com/mirage/mirage/issues/969) [changes](https://github.com/mirage/functoria/pull/167) which revise the `mirage` internal build system to [dune](https://dune.build). At the moment it uses `ocamlbuild`, `ocamlfind`, `pkg-config`, and `make`. The goal of this change is to make MirageOS more developer-friendly. On the horizon we have MirageOS unikernel monorepos, incremental builds, pain-free cross-compilation, documentation generation, ...
