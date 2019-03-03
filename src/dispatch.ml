@@ -62,7 +62,7 @@ module Make
   let not_found domain path =
     let uri = Site_config.uri domain path in
     let uri = Uri.to_string uri in
-    incr Stats.total_errors;
+    (*    incr Stats.total_errors; *)
     Lwt.return (`Not_found uri)
 
   let redirect domain r =
@@ -126,7 +126,8 @@ module Make
     Pages.Security.dispatch ~domain ~read ~feed
 
   let stats () =
-    let html = Cow.Html.to_string (Stats.page ()) in
+    (*    let html = Cow.Html.to_string (Stats.page ()) in *)
+    let html = "" in
     Lwt.return (`Html (Lwt.return html))
 
   let redirect_notes domain =
@@ -186,7 +187,7 @@ module Make
 
   let not_found ~uri () =
     (* FIXME: better 404 page *)
-    incr Stats.total_errors;
+    (*    incr Stats.total_errors; *)
     S.respond_not_found ~uri ()
 
   let create domain dispatch =
@@ -200,13 +201,14 @@ module Make
         notfound = (fun ~uri -> not_found ~uri ());
         redirect = (fun ~uri -> moved_permanently ~uri ());
       } in
-      incr Stats.total_requests;
+      (*      incr Stats.total_requests; *)
       (* Cowabloga hides the URI which we need for query parameters *)
       if Uri.path uri = "/rrd_updates" then (
-        Stats.get_rrd_updates uri >>= fun body ->
+        (*        Stats.get_rrd_updates uri >>= fun body -> *)
+        let body = "" in
         S.respond_string ~status:`OK ~body ()
       ) else if Uri.path uri = "/rrd_timescales"
-      then S.respond_string ~status:`OK ~body:(Stats.get_rrd_timescales uri) ()
+      then S.respond_string ~status:`OK ~body:"" (*(Stats.get_rrd_timescales uri)*) ()
       else Cowabloga.Dispatch.f io dispatch uri
     in
     let conn_closed (_,conn_id) =
@@ -219,7 +221,7 @@ module Make
     let host = Key_gen.host () in
     let red = Key_gen.redirect () in
     let sleep sec = OS.Time.sleep_ns (Duration.of_sec sec) in
-    Stats.start ~sleep ~time:(fun () -> Clock.now_d_ps clock);
+    (*    Stats.start ~sleep ~time:(fun () -> Clock.now_d_ps clock); *)
     let domain = `Http, host in
     let dispatch = match red with
       | None        -> dispatch domain fs tmpl

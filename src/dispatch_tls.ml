@@ -59,7 +59,7 @@ module Make
     let host = Key_gen.host () in
     let redirect = Key_gen.redirect () in
     let sleep sec = OS.Time.sleep_ns (Duration.of_sec sec) in
-    Stats.start ~sleep ~time:(fun () -> Clock.now_d_ps clock);
+    (*    Stats.start ~sleep ~time:(fun () -> Clock.now_d_ps clock); *)
     tls_init keys >>= fun cfg ->
     let domain = `Https, host in
     let dispatch = match redirect with
