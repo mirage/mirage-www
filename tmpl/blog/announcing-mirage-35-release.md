@@ -103,3 +103,5 @@ You may also want to read the [MirageOS 3.2.0 announcement](https://discuss.ocam
 ## Next steps
 
 We are working on [further](https://github.com/mirage/mirage/issues/969) [changes](https://github.com/mirage/functoria/pull/167) which revise the `mirage` internal build system to [dune](https://dune.build). At the moment it uses `ocamlbuild`, `ocamlfind`, `pkg-config`, and `make`. The goal of this change is to make MirageOS more developer-friendly. On the horizon we have MirageOS unikernel monorepos, incremental builds, pain-free cross-compilation, documentation generation, ...
+
+Several other MirageOS ecosystem improvements are on the schedule for 2019, including an [irmin 2.0 release](https://zshipko.github.io/irmin-tutorial/), a [seccomp target for Solo5](https://github.com/Solo5/solo5/pull/310), and [easier deployment and multiple interface in Solo5](https://github.com/Solo5/solo5/issues/326).
