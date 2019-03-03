@@ -153,5 +153,6 @@ and open a new pull-request.
 You can simply write:
 
 ```
-dune-release tag && dune-release bistro
+dune-release tag && dune-release
 ```
+-- this will do the above steps (distrib, publish, opam pkg, opam submit).
