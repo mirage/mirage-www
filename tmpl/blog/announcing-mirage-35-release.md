@@ -34,7 +34,7 @@ Major API improvements (in [this PR](https://github.com/mirage/mirage-kv/pull/14
 - The function `size` was removed.
 - The signature `RW` for read-write key-value stores extends `RO` with three functions `set`, `remove`, and `batch`
 
-There is now a [non-persistent in-memory implementation](https://github.com/mirage/mirage-kv-mem) of a read-write key-value store available. Other implementations (such as [crunch](https://github.com/mirage/ocaml-crunch), [mirage-kv-unix](https://github.com/mirage/mirage-kv-unix), [mirage-fs](https://github.com/mirage/mirage-fs), [tar](https://github.com/mirage/ocaml-tar) have been adapted, as well as cliens of mirage-kv (dns, cohttp, tls)).
+There is now a [non-persistent in-memory implementation](https://github.com/mirage/mirage-kv-mem) of a read-write key-value store available. Other implementations (such as [crunch](https://github.com/mirage/ocaml-crunch), [mirage-kv-unix](https://github.com/mirage/mirage-kv-unix), [mirage-fs](https://github.com/mirage/mirage-fs), [tar](https://github.com/mirage/ocaml-tar) have been adapted, as well as clients of mirage-kv (dns, cohttp, tls)).
 
 ### [TCP/IP](https://github.com/mirage/mirage-tcpip)
 
