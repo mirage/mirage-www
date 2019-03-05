@@ -172,7 +172,7 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
-      { updated    = date (2019, 03, 04, 16, 00);
+      { updated    = date (2019, 03, 05, 20, 00);
         authors    = [hannes];
         subject    = "Announcing MirageOS 3.5.0";
         body       = "announcing-mirage-35-release.md";
