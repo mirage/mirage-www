@@ -33,7 +33,7 @@ else
 	git config --global user.name 'Travis the Build Bot'
 	git config --global push.default simple
 	# clone deployment repo
-	git clone git@mir-deploy:${TRAVIS_REPO_SLUG}-deployment ${DEPLOYD}
+	git clone --depth 1 git@mir-deploy:${TRAVIS_REPO_SLUG}-deployment ${DEPLOYD}
 	# remove and recreate any existing image for this commit
 	mkdir -p $DEPLOYD/xen/$TRAVIS_COMMIT
 	cp ${SRC_DIR}/${XENIMG}.xen ${SRC_DIR}/config.ml $DEPLOYD/xen/$TRAVIS_COMMIT
