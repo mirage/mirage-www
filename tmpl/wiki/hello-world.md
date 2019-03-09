@@ -14,7 +14,7 @@ This document refers to unikernels in the `tutorial` directory.
 
 **Note**: Before we begin, if you aren't familiar with the Lwt library (and the
 `>>=` operator it provides), you may want to read at least the start of
-the [Lwt tutorial](tutorial-lwt) first.
+the [Lwt tutorial](/wiki/tutorial-lwt) first.
 
 **Additional note**: Throughout the tutorial, we'll use `mirage configure -t unix`
 to demonstrate building MirageOS applications.  If you're using a macOS

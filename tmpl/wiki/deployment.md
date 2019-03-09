@@ -120,7 +120,7 @@ This fetches a helper library,
 and builds it; and finally fetches, builds and executes
 [travis_mirage.ml](https://github.com/ocaml/ocaml-travisci-skeleton/blob/master/travis_mirage.ml)
 with the environment variables defined in the
-[.travis.yml](https://github.com/mirage/mirage-www/.travis.yml) file. This piece
+[.travis.yml](https://github.com/mirage/mirage-www/blob/master/.travis.yml) file. This piece
 of OCaml sets the environment to use OPAM, installs any pins requested by
 setting the variable `PINS` in the `.travis.yml` file (none in this case), and
 then executes the following commands:

@@ -4,7 +4,7 @@ We've been plugging away on Mirage for the last few months, and things are start
 * [Richard Mortier](http://www.cs.nott.ac.uk/~rmm/) has put together a performance testing framework that lets us analyse the performance of Mirage applications on different backends (e.g. UNIX vs Xen), and against other conventional applications (e.g. BIND for DNS serving). Read more in the wiki [here](/wiki/performance).
 * [Thomas Gazagnaire](http://gazagnaire.org) has rewritten the website to use the COW syntax extensions. He has also started a new job with [OCamlPro](http://www.ocamlpro.com/) doing consultancy on OCaml, so congratulations are in order!
 * Thomas has also started integrating experimental Node.js support to fill in our buzzword quota for the year (and more seriously, to explore alternative VM backends for Mirage applications). 
-* The build system (often a bugbear of such OS projects) now fully uses [ocamlbuild](http://brion.inria.fr/gallium/index.php/Ocamlbuild) for all OCaml and C dependencies, and so the whole OS can be rebuilt with different compilers (e.g. LLVM) or flags with a single invocation.
+* The build system (often a bugbear of such OS projects) now fully uses [ocamlbuild](https://github.com/ocaml/ocamlbuild) for all OCaml and C dependencies, and so the whole OS can be rebuilt with different compilers (e.g. LLVM) or flags with a single invocation.
 
 There are some exciting developments coming up later this year too!
 

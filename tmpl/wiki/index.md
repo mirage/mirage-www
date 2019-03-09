@@ -95,7 +95,7 @@ MirageOS is in beta stage and the infrastructure you see here is self-hosting. T
 * Weekly call [2014-03-18](/wiki/weekly-2014-03-18) on Crypto, GSoC and a Mirage tutorial day.
 * Weekly call [2014-03-04](/wiki/weekly-2014-03-04) on IP addresses and unikernel deployment.
 * Weekly call [2014-02-26](/wiki/weekly-2014-02-26) on homepages and Google Summer of Code.
-* [Checklist for 1.0 Dev Preview](dev-preview-checklist)
+* [Checklist for 1.0 Dev Preview](https://mirage.github.io/wiki/dev-preview-checklist)
 * Weekly call [2013-06-11](/wiki/weekly-2013-06-11) on the end of the start is finally in sight.
 * Weekly call [2013-06-04](/wiki/weekly-2013-06-04) on Amazon EC2, shared ring performance and outreach.
 * Weekly call [2013-05-28](/wiki/weekly-2013-05-28) on build pain reduced to mild ache, TryMirage and benchmarking.

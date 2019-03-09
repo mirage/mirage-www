@@ -1,4 +1,4 @@
-We've had a lot of people trying out MirageOS since the [1.0 release](/blog/releasing-mirage) last week, and so we've been steadily cutting point releases and new libraries to OPAM as they're done.
+We've had a lot of people trying out MirageOS since the [1.0 release](/blog/announcing-mirage10) last week, and so we've been steadily cutting point releases and new libraries to OPAM as they're done.
 The most common build error by far has been people using outdated OPAM packages.  Do make sure that you have at least [OPAM 1.1](http://opam.ocaml.org/doc/Quick_Install.html) installed, and that you've run `opam update -u` to get the latest package lists from the [package repository](https://github.com/ocaml/opam-repository).
 
 [MirageOS 1.0.3](https://github.com/mirage/mirage/releases/tag/1.0.3) improves

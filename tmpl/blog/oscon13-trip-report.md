@@ -69,9 +69,9 @@ blog post about OSCon.
 
 ### Galois and HalVM
 
-We also stopped by the [Galois](http://corp.galois.com) to chat with [Adam
+We also stopped by the [Galois](http://galois.com) to chat with [Adam
 Wick](https://twitter.com/acwpdx), who is the leader of the
-[HalVM](http://corp.galois.com/halvm) project at Galois. This is a similar
+[HalVM](https://galois.com/project/halvm/) project at Galois. This is a similar
 project to Mirage, but, since it's written in Haskell, has more of a focus
 on elegant compositional semantics rather than the more brutal performance
 and predictability that Mirage currently has at its lower levels.
