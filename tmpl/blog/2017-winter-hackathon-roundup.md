@@ -122,7 +122,7 @@ and how they say: failure the best teacher is.
 ## Reynir Björnsson
 
 For the second time this year (and ever) I went to Marrakech to participate in the MirageOS hack retreat / unconference.
-I wrote about my [previous trip](http://reyn.ir/posts/2017-03-20-11-27-Marrakech%202017.html).
+I wrote about my [previous trip](http://reynir.dk/posts/2017-03-20-11-27-Marrakech%202017.html).
 
 ### The walk from the airport
 

@@ -5,7 +5,7 @@ This March, 34 people from around the world gathered in Marrakech for a spring M
 
 In addition to the reports below, you can find other information online:
 - the daily [tweets about the event](http://ocamllabs.io/events/2017/03/06/MirageHackUpdates.html), including sophisticated "paper slides"
-- [Olle Jonsson](http://ollehost.dk/blog/2017/03/17/travel-report-mirageos-hack-retreat-in-marrakesh-2017/) and [Reynir Björnsson](https://reyn.ir/posts/2017-03-20-11-27-Marrakech%202017.html) wrote up their experiences on their personal sites.
+- [Olle Jonsson](http://ollehost.dk/blog/2017/03/17/travel-report-mirageos-hack-retreat-in-marrakesh-2017/) and [Reynir Björnsson](https://reynir.dk/posts/2017-03-20-11-27-Marrakech%202017.html) wrote up their experiences on their personal sites.
 
 ## Hannes Mehnert
 
