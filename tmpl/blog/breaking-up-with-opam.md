@@ -14,7 +14,7 @@ OPAM includes compiler variants for Mirage-friendly environments for Xen and the
 * [ocaml-re](http://github.com/mirage/ocaml-re) is a pure OCaml version of several regular expression engines, including Perl compatibility.
 * [ocaml-uri](http://github.com/mirage/ocaml-uri) handles parsing the surprisingly complex URI strings.
 * [ocaml-cohttp](http://github.com/mirage/ocaml-cohttp) is a portable HTTP parser, with backends for Mirage, Lwt and Core/Async. This is a good example of how to factor out OS-specific concerns using the OCaml type system (and I plan to blog more about this soon).
-* [ocaml-cow](http://github.com/mirage/ocaml-cow) is a set of syntax extensions for JSON, CSS, XML and XHTML, which are explained [here](/wiki/cow), and used by this site.
+* [ocaml-cow](http://github.com/mirage/ocaml-cow) is a set of syntax extensions for JSON, CSS, XML and XHTML, which are explained [here](https://mirage.github.io/wiki/cow), and used by this site.
 * [ocaml-dyntype](http://github.com/mirage/dyntype) uses camlp4 to [generate dynamic types](http://anil.recoil.org/papers/2011-dynamics-ml.pdf) and values from OCaml type declarations.
 * [ocaml-orm](http://github.com/mirage/orm) auto-generates SQL scheme from OCaml types via Dyntype, and currently supports SQLite.
 * [ocaml-openflow](http://github.com/mirage/ocaml-openflow) implements an OCaml switch and controller for the Openflow protocol.

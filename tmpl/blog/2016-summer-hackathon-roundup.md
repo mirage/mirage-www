@@ -4,7 +4,7 @@ Our first Cambridge-based MirageOS hack retreat took place yesterday - and what 
 People naturally formed groups to work on similar projects, and we had a handful of brand new users keen to get started with OCaml and Mirage.  The major tasks that emerged were:
 
 - __new hypervisor target__: the integration of the Solo5 KVM-based hypervisor backend, bringing the number of officially supported targets up to 3 (Xen, Unix and KVM)
-- __build system template__: establishing a new [topkg](TODO)  template for MirageOS libraries, to prepare us for building a unified API documentation bundle that works across all the entire project.
+- __build system template__: establishing a new [topkg](https://erratique.ch/software/topkg)  template for MirageOS libraries, to prepare us for building a unified API documentation bundle that works across all the entire project.
 - __CPU portability__: improving ARM support via a better base OS image.
 - __libraries breadth__: hacking on all the things to fill in the blanks, such as btree support for bare-metal [Irmin](https://github.com/mirage/irmin), or a peer-to-peer layer for the [DataKit](https://github.com/docker/datakit).
 

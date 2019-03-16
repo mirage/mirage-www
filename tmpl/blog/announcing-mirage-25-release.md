@@ -94,7 +94,7 @@ We would love to hear your feedback on this release, either on our
 [pinata-post]: /blog/announcing-bitcoin-pinata
 [tls-benefits]: /blog/why-ocaml-tls
 [tls-unix]: /wiki/tls-unix
-[calls]: /wiki/#Weeklycallsandreleasenotes
+[calls]: /wiki/#Weekly-calls-and-release-notes
 [OPAM]: https://opam.ocaml.org
 [mirage-skeleton]: https://github.com/mirage/mirage-skeleton
 [install]: /wiki/install

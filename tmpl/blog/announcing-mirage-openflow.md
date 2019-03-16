@@ -74,7 +74,7 @@ let main () =
 ```
 
 We've written up some of the gory details of the design, implementation and
-performance in a [short paper](/docs/iccsdn12-mirage.pdf) to the
+performance in a [short paper](/documents/iccsdn12-mirage.pdf) to the
 [ICC](http://www.ieee-icc.org/)
 [Software Defined Networking](http://sdn12.mytestbed.net/) workshop. Thanks to
 some sterling work by [Haris](http://www.cl.cam.ac.uk/~cr409/) and
@@ -86,7 +86,7 @@ times* higher performance than the fully flexible current NOX release. The
 switch's performance  running as a domU virtual machine is indistinguishable
 from the current [Open vSwitch](http://openvswitch.org/) release.
 
-For more details see [the paper](/docs/iccsdn12-mirage.pdf) or contact
+For more details see [the paper](/documents/iccsdn12-mirage.pdf) or contact
 [Mort](mailto:mort@cantab.net),
 [Haris](mailto:charalampos.rotsos@cl.cam.ac.uk) or
 [Anil](mailto:anil@recoil.org). Please do get in touch if you've any comments

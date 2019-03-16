@@ -135,7 +135,7 @@ The main 'business logic' of Xenstore can then be functorised over this signatur
 All we need is to instantiate the functor using Irmin to persist the data somewhere sensible.
 Eventually we will need two instantiations: one which runs as a userspace application and which
 writes to the filesystem; and a second which will run as a
-native Xen kernel (known as a [xenstore stub domain](xenstore-stub.md))
+native Xen kernel (known as a [xenstore stub domain](/blog/xenstore-stub-domain))
 and which will write to a fixed memory region (like a ramdisk).
 The choice of which to use is left to the system administrator. Currently most (if not all)
 distribution packagers choose to run Xenstore in userspace. Administrators who wish to
