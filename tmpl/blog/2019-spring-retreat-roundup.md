@@ -3,9 +3,9 @@
 Early March 2019, 31 MirageOS hackers gathered again in Marrakesh for our bi-annual hack retreat. We'd like to thank our amazing hosts, and everyone who participated on-site or remotely, and especially those who wrote up their experiences.
 <img src="/graphics/spring2019.jpg" style="glot:right; padding: 15px" />
 
-On this retreat, we eat our own dogfood, and used our MirageOS [DHCP](https://github.com/mirage/mirage-skeleton/tree/master/applications/dhcp), [recursive DNS resolver](https://github.com/roburio/unikernels/tree/master/resolver), and [CalDAV](https://github.com/roburio/caldav) unikernels as isolated virtual machines running on a [PC Engines APU](https://pcengines.ch/apu2c4.htm) with [FreeBSD](https://freebsd.org) as host system. The CalDAV server persisted its data in a git repository on the host system, using the raw git protocol for communication, the smart HTTP protocol could have been used as well. As uplink we used a 4G modem with the ADSL line as fallback. We consumed approximately 150GB of data traffic. A local opam mirror of the main opam repository saved us quite a bit of bandwidth.
+On this retreat, we ate our own dogfood, and used our MirageOS [DHCP](https://github.com/mirage/mirage-skeleton/tree/master/applications/dhcp), [recursive DNS resolver](https://github.com/roburio/unikernels/tree/master/resolver), and [CalDAV](https://github.com/roburio/caldav) unikernels as isolated virtual machines running on a [PC Engines APU](https://pcengines.ch/apu2c4.htm) with [FreeBSD](https://freebsd.org) as host system. The CalDAV server persisted its data in a git repository on the host system, using the raw git protocol for communication, the smart HTTP protocol could have been used as well. As uplink we used a 4G modem with the ADSL line as fallback. We consumed approximately 150GB of data traffic. A local opam mirror of the main opam repository saved us quite a bit of bandwidth.
 
-Lots of interesting discussions took place, code was developed, knowledge was exchanes, and issues were solved while we enjoyed the sun and the Moroccan food. The following list is not exhaustive, but gives an overview what was pushed forward.
+Lots of interesting discussions took place, code was developed, knowledge was exchanged, and issues were solved while we enjoyed the sun and the Moroccan food. The following list is not exhaustive, but gives an overview what was pushed forward.
 
 ## [Imagelib](https://github.com/rlepigre/ocaml-imagelib)
 
@@ -15,7 +15,7 @@ During the retreat, imagelib was extended with [support for the BMP format](http
 
 ## [ActivityPub](https://github.com/kit-ty-kate/ocaml-activitypub)
 
-ActivityPub is an open, decentral social networking protocol, as used by [mastodon](https://mastodon.social). It provides a client/server API for creating, updating, and deleting content, and a federated server-to-server API for notifications and content delivery. During the retreat, an initial prototype of a protocol implementation was drafted.
+ActivityPub is an open, decentralized social networking protocol, as used by [mastodon](https://mastodon.social). It provides a client/server API for creating, updating, and deleting content, and a federated server-to-server API for notifications and content delivery. During the retreat, an initial prototype of a protocol implementation was drafted.
 
 ## [opam](https://github.com/ocaml/opam)
 
@@ -60,7 +60,7 @@ The [mrt-format](https://github.com/mor1/mrt-format) library which can parse mul
 
 ## Xen HVT
 
-Xen provides several modes for virtualisation, the para-virtualized (PV) one which does not require any modifications to the guest which runs on it - but has a weak security profile (static mapping of addresses, large attack surface). A more modern virtualisation mode is PVH, which is not yet supported by MirageOS.
+Xen provides several modes for virtualization, the para-virtualized (PV) one which does not require any modifications to the guest which runs on it - but has a weak security profile (static mapping of addresses, large attack surface). A more modern virtualization mode is PVH, which is not yet supported by MirageOS.
 
 During the retreat, lots of bugs porting MirageOS to PVH were solved. It boots and crashes now.
 
@@ -70,7 +70,7 @@ The platform learn OCaml embeds an editor, top-level, and exercises into a HTTP 
 
 ## Network device driver (ixy)
 
-The ixy network driver supports Intel 82599 network interface cards, and [is implemented in OCaml](https://github.com/ixy-languages/ixy.ml). It's performance has been improved, including several failing attempts which degraded its performance. Also, [it has been integrated into the mirage tool](https://github.com/mirage/mirage/pull/977) and is usable as a [mirage-net](https://github.com/mirage/mirage-net) implementation.
+The ixy network driver supports Intel 82599 network interface cards, and [is implemented in OCaml](https://github.com/ixy-languages/ixy.ml). Its performance has been improved, including several failing attempts which degraded its performance. Also, [it has been integrated into the mirage tool](https://github.com/mirage/mirage/pull/977) and is usable as a [mirage-net](https://github.com/mirage/mirage-net) implementation.
 
 ## DNS client API
 
