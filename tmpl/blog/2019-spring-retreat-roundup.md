@@ -25,10 +25,11 @@ Opam, the OCaml package manager, was extended in several directions:
 - [Generalisation of the job scheduler](https://github.com/ocaml/opam/pull/3778)
 - [JSON serialisation, including crowbar round-trip tests](https://github.com/ocaml/opam/pull/3776)
 - Plugin evaluating (binary) [reproducibility](https://reproducible-builds.org/) of opam packages
+- some smaller cleanup PRs ([return values](https://github.com/ocaml/opam/pull/3781), [locking code](https://github.com/ocaml/opam/pull/3783))
 
 ## [marracheck](https://github.com/Armael/marracheck/)
 
-A newly developed utility which installs as many opam packages as possible. It uses opam-lib and Z3 to accomplish this.
+Work was started on a new utility to install as many opam packages as possible on a machine (there just wasn't enough choice with [opam-builder](https://github.com/OCamlPro/opam-builder), [opamcheck](https://github.com/damiendoligez/opamcheck) and [opam-check-all](https://github.com/kit-ty-kate/opam-check-all)). It uses opam-lib and Z3 to accomplish this.
 
 ## [Conex](https://github.com/hannesm/conex)
 
@@ -52,6 +53,21 @@ Irmin is a distributed database that follows the same design principles as git. 
 
 Some hints on type errors for [int literals](https://github.com/ocaml/ocaml/pull/2301) and [int operators](https://github.com/ocaml/ocaml/pull/2307) were developed and merged to the OCaml compiler.
 
+```
+# 1.5 +. 2;;
+         ^
+Error: This expression has type int but an expression was expected of type
+         float
+       Hint: Did you mean `2.'?
+
+# 1.5 + 2.;;
+  ^^^ ^
+Error: This expression has type float but an expression was expected of type
+         int
+Line 1, characters 4-5:
+  Hint: Did you mean to use `+.'?
+```
+
 Also, the [whole program dead code elimination](https://github.com/ocaml/ocaml/pull/608) PR was rebased onto trunk.
 
 ## BGP / lazy trie
@@ -66,7 +82,7 @@ During the retreat, lots of bugs porting MirageOS to PVH were solved. It boots a
 
 ## Learn OCaml as a unikernel
 
-The platform learn OCaml embeds an editor, top-level, and exercises into a HTTP server, and allows students to learn OCaml, and submit solutions via the web interface, where an automated grader runs unit tests etc. to evaluate the submitted solutions. Teachers can assign mandatory exercises, and have an overview how the students are doing. Learn OCaml used to be executable only on a Unix host, but has now been ported as a MirageOS unikernel, executable as a standalone virtual machine.
+The platform learn OCaml embeds an editor, top-level, and exercises into a HTTP server, and allows students to learn OCaml, and submit solutions via the web interface, where an automated grader runs unit tests etc. to evaluate the submitted solutions. Teachers can assign mandatory exercises, and have an overview how the students are doing. Learn OCaml used to be executable only on a Unix host, but is now beeing ported into a MirageOS unikernel, executable as a standalone virtual machine.
 
 ## Network device driver (ixy)
 
