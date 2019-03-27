@@ -64,7 +64,7 @@ The TCP implementation has [preliminary keepalive support](https://github.com/mi
 - The `ukvm` target was renamed to `hvt`, where `solo5-hvt` is the monitoring process
 - Support for [FreeBSD bhyve](http://bhyve.org/) and [OpenBSD VMM](https://man.openbsd.org/vmm.4) hypervisor (within the hvt target)
 - Support for ARM64 and KVM
-- New target [muen.sk](https://muen.sk), a separation kernel developed in Sparc/ADA
+- New target [muen.sk](https://muen.sk), a separation kernel developed in SPARK/Ada
 - New target [GenodeOS](https://genode.org), an operating system framework using a microkernel
 - Debugger support: attach gdb in the host system for improved debugging experience
 - Core dump support
