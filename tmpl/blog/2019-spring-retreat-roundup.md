@@ -74,11 +74,13 @@ Also, the [whole program dead code elimination](https://github.com/ocaml/ocaml/p
 
 The [mrt-format](https://github.com/mor1/mrt-format) library which can parse multi-threaded routing toolkit traces, has been adapted to the modern OCaml ecosystem. The [border gateway protocol (BGP)](https://github.com/jimyuan1995/Mirage-BGP) library was slightly updated, one of its dependencies, [lazy-trie](https://github.com/mirage/ocaml-lazy-trie) was adapted to the modern ecosystem as well.
 
-## Xen HVT
+## Xen PVH
 
-Xen provides several modes for virtualization, the para-virtualized (PV) one which does not require any modifications to the guest which runs on it - but has a weak security profile (static mapping of addresses, large attack surface). A more modern virtualization mode is PVH, which is not yet supported by MirageOS.
+Xen provides several modes for virtualization.  MirageOS's first non-Unix target was the para-virtualized (PV) mode for Xen, which does not require hardware support from the hypervisor's host operating system but has a weak security profile (static mapping of addresses, large attack surface).  However, PV mode provides an attractive target for unikernels because it provides a simple software-based abstraction for dealing with drivers and a simple memory model; this is in contrast to hardware-virtualization mode, which provides greater security but requires more work from the guest OS.
 
-During the retreat, lots of bugs porting MirageOS to PVH were solved. It boots and crashes now.
+A more modern virtualization mode combining the virtues of both approaches is PVH (formerly referred to as HVMLite), which is not yet supported by MirageOS.  Marek Marczykowski-Górecki from the [QubesOS](https://qubes-os.org) project visited to help us bring PVH support to the [unikraft project](https://xenproject.org/developers/teams/unikraft/), a common platform for building unikernels which we hope to use for MirageOS's Xen support in the future.
+
+During the retreat, lots of bugs porting MirageOS to PVH were solved. It boots and crashes now!
 
 ## Learn OCaml as a unikernel
 
