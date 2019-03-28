@@ -183,6 +183,7 @@ module Blog = struct
         subject    = "MirageOS security advisory 01: netchannel 1.10.0";
         body       = "MSA01.md";
         permalink  = "MSA01";
+      };
       { updated    = date (2019, 03, 05, 20, 00);
         authors    = [hannes];
         subject    = "Announcing MirageOS 3.5.0";
