@@ -109,3 +109,10 @@ An OCaml implementation to apply unified diffs. This code has been extracted fro
 ## Statistical memory profiler
 
 Since 2016, Jacques-Henri Jourdan has been working on a [statistical memory profiler for OCaml](https://github.com/ocaml/ocaml/pull/847) (read the [OCaml 2016 paper](https://jhjourdan.mketjh.fr/pdf/jourdan2016statistically.pdf)). An [Emacs user interface](https://github.com/jhjourdan/statmemprof-emacs/) is available since some years. We integrated statmemprof into MirageOS unikernels [using the statmemprof-mirage library](https://github.com/hannesm/statmemprof-mirage), marshal the data via TCP, and provide a proxy that communicates with Emacs over a Unix domain socket, and the unikernel.
+
+## [P2Pcollab](https://github.com/p2pcollab)
+
+P2Pcollab is a collection of composable libraries implementing protocols for P2P collaboration.
+So far various P2P gossip protocols has been implemented.
+At this retreat the focus was on a gossip-based publish-subscribe dissemination protocol.
+Future plans include building P2P unikernels and adding P2P pub/sub sync functionality to Irmin.
