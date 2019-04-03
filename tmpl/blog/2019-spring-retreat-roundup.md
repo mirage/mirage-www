@@ -41,7 +41,7 @@ Conex has been developed since 2015, but is not yet widely deployed. We extended
 
 The simple mail transfer protocol is an Internet standard for sending and receiving eMail. Our OCaml implementation has been improved, and it is possible to send eMails from OCaml code now.
 
-## HTTP2
+## [HTTP2](https://github.com/anmonteiro/ocaml-h2)
 
 The hypertext transfer protocol is an Internet standard widely used for browsing the world wide web. HTTP 1.1 is a line-based protocol which was specified 20 years ago. HTTP2 is an attempt to fix various shortcomings, and uses a binary protocol with multiplexing, priorities, etc. An OCaml implementation of HTTP2 has been actively worked on in Marrakesh.
 
