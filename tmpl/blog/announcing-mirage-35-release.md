@@ -81,7 +81,7 @@ The semantics of arguments passed to a MirageOS unikernel used to vary between d
 
 ### Noteworthy package updates
 
-- [cstruct 3.6.0](https://github.com/mirage/ocaml-cstruct) API changes, repackaging (see [this announcement](https://discuss.ocaml.org/t/ann-cstruct-3-0-0-with-packaging-changes) and [this announcement](https://discuss.ocaml.org/t/psa-cstruct-3-4-0-removes-old-ocamlfind-subpackage-aliases)
+- [cstruct 3.6.0](https://github.com/mirage/ocaml-cstruct) API changes and repackaging, see [this announcement](https://discuss.ocaml.org/t/ann-cstruct-3-0-0-with-packaging-changes) and [this announcement](https://discuss.ocaml.org/t/psa-cstruct-3-4-0-removes-old-ocamlfind-subpackage-aliases)
 - [ipaddr 3.0.0](https://github.com/mirage/ocaml-ipaddr) major API changes, the s-expression serialisation is a separate subpackage, macaddr is now a standalone opam package
 - [base64 3.0.0](https://github.com/mirage/base64) performance and API changes, see [this announcement](https://discuss.ocaml.org/t/ann-major-release-of-base64-article)
 - [git 2.0.0](https://github.com/mirage/ocaml-git), read [this announcement](https://discuss.ocaml.org/t/ann-ocaml-git-2-0), as well as [its design and implementation](https://discuss.ocaml.org/t/ocaml-git-git-design-and-implementation)
