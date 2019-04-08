@@ -45,11 +45,12 @@ The version of OPAM in older Ubuntus is not high enough to run Mirage (which req
 
 #### Debian Stable (Stretch) or Unstable (Sid)
 
-These distributions include everything you need to run Mirage in the base distribution, so just do:
+These distributions include everything you need to run Mirage in the base distribution except that Stretch's version of `opam` is too old so we get it via ocaml.org instead. To install:
 
     sudo apt-get update
-    sudo apt-get install ocaml ocaml-native-compilers camlp4-extra opam
-    opam init
+    sudo apt-get install rsync pkg-config git gcc make m4 patch unzip bubblewrap curl 0install-core
+    0install add opam http://tools.ocaml.org/opam.xml
+    opam init --compiler=4.07.1 --disable-sandboxing
     opam install mirage
 
 ### FreeBSD-specific notes
