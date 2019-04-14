@@ -18,7 +18,7 @@ private key to the Bitcoin address.
 [It is open source](https://github.com/mirleft/btc-pinata),
 and exposes both the client and server side of
 [ocaml-tls](https://github.com/mirleft/ocaml-tls), running as an 8.2MB
-[MirageOS](http://openmirage.org) unikernel.  You can see the [code manifest](https://github.com/mirleft/btc-pinata/blob/master/opam-full.txt) to find out which libraries are involved.  We put this online and invited people to attack it.
+[MirageOS](https://mirage.io) unikernel.  You can see the [code manifest](https://github.com/mirleft/btc-pinata/blob/master/opam-full.txt) to find out which libraries are involved.  We put this online and invited people to attack it.
 
 Any approach was permitted in attacking the Piñata:
 the host system, the MirageOS [TCP/IP

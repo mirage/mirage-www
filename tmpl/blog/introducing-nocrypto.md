@@ -155,7 +155,7 @@ up and ask people.
 
 [schneier-pitfalls]: https://www.schneier.com/essays/archives/1998/01/security_pitfalls_in.html
 [cryptokit]: https://forge.ocamlcore.org/projects/cryptokit/
-[mirage]: http://openmirage.org/
+[mirage]: https://mirage.io/
 [nacl]: http://nacl.cr.yp.to/
 [sodium]: http://labs.opendns.com/2013/03/06/announcing-sodium-a-new-cryptographic-library/
 [ocaml-sodium]: https://github.com/dsheets/ocaml-sodium
@@ -393,8 +393,8 @@ Posts in this TLS series:
  - [OCaml-TLS: ASN.1 and notation embedding][asn1-intro]
  - [OCaml-TLS: the protocol implementation and mitigations to known attacks][tls-api]
 
-[tls-intro]: http://openmirage.org/blog/introducing-ocaml-tls
-[nocrypto-intro]: http://openmirage.org/blog/introducing-nocrypto
-[x509-intro]: http://openmirage.org/blog/introducing-x509
-[asn1-intro]: http://openmirage.org/blog/introducing-asn1
-[tls-api]: http://openmirage.org/blog/ocaml-tls-api-internals-attacks-mitigation
+[tls-intro]: https://mirage.io/blog/introducing-ocaml-tls
+[nocrypto-intro]: https://mirage.io/blog/introducing-nocrypto
+[x509-intro]: https://mirage.io/blog/introducing-x509
+[asn1-intro]: https://mirage.io/blog/introducing-asn1
+[tls-api]: https://mirage.io/blog/ocaml-tls-api-internals-attacks-mitigation

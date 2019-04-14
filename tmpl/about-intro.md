@@ -9,5 +9,5 @@ If you find bugs or installation issues, please report them via the main
 [issue tracker](https://github.com/mirage/mirage/issues).  Broader
 queries or OCaml questions are very welcome on our [mailing list](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel).
 
-Please see the [guide to contributions](http://openmirage.org/wiki/contributing) if
+Please see the [guide to contributions](https://mirage.io/wiki/contributing) if
 you wish to submit a patch.  There is also a list of [pioneer projects](http://canopy.mirage.io/tags/help%20needed) if you are looking for an area in need of work, at various difficulty levels.

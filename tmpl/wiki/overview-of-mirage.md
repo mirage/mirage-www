@@ -1,6 +1,6 @@
 If you're familiar with the using the command line, The best way to
 learn about MirageOS is to try out the [installation
-instructions](http://openmirage.org/wiki/install) for yourself!
+instructions](https://mirage.io/wiki/install) for yourself!
 
 ### What is MirageOS and why is it important?
 

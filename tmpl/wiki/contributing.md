@@ -1,6 +1,6 @@
 MirageOS welcomes contributions from anyone interested in the project.  If you are planning a large contribution, be it a piece of documentation, a patch to the software, a new driver, or something else, please do send a note to [the MirageOS development mailing list](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel) describing your planned contribution - you may discover that other contributors are willing to help.
 
-More information on being in touch with other MirageOS contributors [is available](http://www.openmirage.org/community).
+More information on being in touch with other MirageOS contributors [is available](https://mirage.io/community).
 
 ## Reporting Issues
 
