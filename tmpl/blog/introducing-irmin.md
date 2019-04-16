@@ -298,10 +298,10 @@ as a Git repository which is live-updated!  Here's a sneak preview...
 [merge-queues]: https://github.com/mirage/merge-queues
 [barriers]: http://en.wikipedia.org/wiki/Write_barrier
 [seq-writes]: http://en.wikipedia.org/wiki/Write_amplification#Sequential_writes
-[tls]: http://openmirage.org/blog/ocaml-tls-api-internals-attacks-mitigation
+[tls]: https://mirage.io/blog/ocaml-tls-api-internals-attacks-mitigation
 [xirminstore]: https://www.youtube.com/watch?v=DSzvFwIVm5s
 [xenstore]: http://wiki.xen.org/wiki/XenStoreReference
 [rwo]: https://realworldocaml.org
 [rwo-heap]: https://realworldocaml.org/v1/en/html/memory-representation-of-values.html
 [cas]: http://en.wikipedia.org/wiki/Content-addressable_storage
-[irmin-xen]: http://openmirage.org/blog/introducing-irmin-in-xenstore
+[irmin-xen]: https://mirage.io/blog/introducing-irmin-in-xenstore

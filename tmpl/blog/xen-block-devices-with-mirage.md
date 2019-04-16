@@ -1,4 +1,4 @@
-[MirageOS](http://www.openmirage.org/) is a
+[MirageOS](https://mirage.io/) is a
 [unikernel](http://anil.recoil.org/papers/2013-asplos-mirage.pdf)
 or "library operating system" that allows us to build applications
 which can be compiled to very diverse environments: the same code can be linked
@@ -260,5 +260,5 @@ then Mirage makes those experiments very easy too.
 
 If you come up with a cool example with Mirage, then send us a
 [pull request](https://github.com/mirage) or send us an email to the
-[Mirage mailing list](http://www.openmirage.org/about/) -- we'd
+[Mirage mailing list](https://mirage.io/about/) -- we'd
 love to hear about it!

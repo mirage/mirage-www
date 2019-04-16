@@ -1,5 +1,5 @@
 *Today's post is an update to [Vincent Bernardoff's](https://github.com/vbmithr)
-[introducing vchan](http://openmirage.org/blog/introducing-vchan) blog
+[introducing vchan](https://mirage.io/blog/introducing-vchan) blog
 post, updated to use the modern build scheme for Mirage.*
 
 Unless you are familiar with Xen's source code, there is little chance

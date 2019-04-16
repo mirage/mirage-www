@@ -19,8 +19,8 @@ code for the site itself][decks-code] serves as another example of a simple --
 somewhat simpler than the [Mirage website][website] in fact -- Mirage web
 application.
 
-[mirage-release]: http://openmirage.org/blog/announcing-mirage10
-[website]: http://openmirage.org/
+[mirage-release]: https://mirage.io/blog/announcing-mirage10
+[website]: https://mirage.io/
 [cowabloga]: http://github.com/mirage/cowabloga
 [cohttp]: http://github.com/mirage/ocaml-cohttp
 [zurb]: http://foundation.zurb.com/
