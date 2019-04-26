@@ -172,6 +172,12 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2019, 04, 26, 00, 00);
+        authors    = [tal];
+        subject    = "MirageOS security advisory 02: mirage-xen < 3.3.0";
+        body       = "MSA02.md";
+        permalink  = "MSA02";
+      };
       { updated    = date (2019, 04, 03, 16, 00);
         authors    = [hannes];
         subject    = "MirageOS Spring 2019 hack retreat roundup";
