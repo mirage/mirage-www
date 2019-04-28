@@ -303,7 +303,7 @@ let test1 () =
     (fun ex -> print_endline "caught exception!"; Lwt.return ())
 
 let test2 () =
-  let t = OS.Time.sleep_ns (Duration.of_sec 1) -> raise (Failure "late failure") in
+  let t = OS.Time.sleep_ns (Duration.of_sec 1) >>= fun () -> raise (Failure "late failure") in
   Lwt.catch (fun () -> t)
     (fun ex -> print_endline "caught exception!"; Lwt.return ())
 ```
