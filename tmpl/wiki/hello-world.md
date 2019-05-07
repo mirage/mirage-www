@@ -683,7 +683,7 @@ Under the "UNIKERNEL PARAMETERS" section, you should see:
            for the unikernel.
 ```
 
-More documentation is available at [the `Mirage` module documentation for generic_kv_ro](http://mirage.github.io/mirage/Mirage.html#VALgeneric_kv_ro).
+More documentation is available at [the `Mirage` module documentation for generic_kv_ro](http://mirage.github.io/mirage/mirage/Mirage/index.html#val-generic_kv_ro).
 
 Let's try a few different kinds of key-value implementations.  First, we'll build a Unix version.  If we don't specify which kind of `kv_ro` we want, we'll get a `crunch` implementation, the contents of which we can see at `static1.ml`:
 
