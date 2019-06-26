@@ -845,7 +845,7 @@ module Wiki = struct
     };
     { updated    = date (2017, 05, 22, 18, 00);
       author     = dave;
-      subject    = "Building and packaging with jbuilder and topkg";
+      subject    = "Building and packaging with dune and dune-release";
       body       = File "packages.md";
       permalink  = "packaging";
     };
