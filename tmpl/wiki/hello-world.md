@@ -397,7 +397,7 @@ let () =
   register "hello" [main $ default_time]
 ```
 
-We create a `key` with `Key.create` which is an optional bit of configuration.  It will default to "Hello World!" if unspecified.  This particular key happens to be of type `string`, so no conversion will be required, but it's possible to ask for more exotic types in the call to `Arg`.  See [the Functoria Key.Arg module documentation](http://mirage.github.io/functoria/Functoria_key.Arg.html) for more details.
+We create a `key` with `Key.create` which is an optional bit of configuration.  It will default to "Hello World!" if unspecified.  This particular key happens to be of type `string`, so no conversion will be required, but it's possible to ask for more exotic types in the call to `Arg`.  See [the Functoria Key.Arg module documentation](http://mirage.github.io/functoria/functoria/Functoria_key/Arg/index.html) for more details.
 
 Once we've created our configuration key, we specify that we'd like it available in the unikernel by passing it to `foreign` in the `keys` parameter.
 
