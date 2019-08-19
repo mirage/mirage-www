@@ -1,0 +1,5 @@
+Dockerfile
+**/_build
+.git
+**/*.native
+src/Makefile
