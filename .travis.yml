@@ -12,7 +12,7 @@ env:
     --ipv4-gateway 46.43.42.129
     --host openmirage.org --redirect https://mirage.io"
   - OCAML_VERSION=4.05 MIRAGE_BACKEND=xen DEPLOY=1 XENIMG="mirageio"
-    PINS="mirage-block-xen.1.6.1"
+    PINS="mirage-block-xen:1.6.1"
     FLAGS="-vv --net direct --dhcp false --ipv4 46.43.42.136/28
     --ipv4-gateway 46.43.42.129 --tls true
     --secrets-kv_ro fat --host mirage.io"

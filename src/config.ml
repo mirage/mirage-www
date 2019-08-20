@@ -91,11 +91,11 @@ let https =
 
 
 let dispatch = if_impl (Key.value tls_key)
-    (** With tls *)
+    (* With tls *)
     (https $ stack $ secrets)
 
-    (** Without tls *)
-    (http $ http_server (conduit_direct stack))
+    (* Without tls *)
+    (http $ cohttp_server (conduit_direct stack))
 
 let packages = [
   package "cow" ~min:"2.3.0";
