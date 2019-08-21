@@ -181,7 +181,7 @@ module Links = struct
             p (string
                  "This is a small link blog we maintain as we hear of stories \n\
                   or interesting blog entries that may be useful for MirageOS \n\
-                  users. If you'd like to add one, please do"
+                  users. If you'd like to add one, please do "
                ++ a ~href:(uri "/community/") (string "get in touch."));
             br;
             body
