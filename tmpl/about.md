@@ -11,6 +11,5 @@ Lexicographically ordered by last name:
 * **[Anil Madhavapeddy](http://anil.recoil.org)**, University of Cambridge
 * **[Hannes Mehnert](https://hannes.nqsb.io)**, [robur](http://robur.io)
 * **[Richard Mortier](http://mort.io/)**, University of Cambridge & Docker
-* **[Mindy Preston](http://www.somerandomidiot.com)**
 * **[David Scott](http://dave.recoil.org)**, Docker
 * **[Amir Chaudhry](http://amirchaudhry.com/)**
