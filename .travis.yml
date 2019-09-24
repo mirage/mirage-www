@@ -5,14 +5,14 @@ sudo: required
 dist: trusty
 env:
   matrix:
-  - OCAML_VERSION=4.07 MIRAGE_BACKEND=unix FLAGS="-vv --net socket"
-  - OCAML_VERSION=4.07 MIRAGE_BACKEND=unix FLAGS="-vv --net direct"
-  - OCAML_VERSION=4.07 MIRAGE_BACKEND=xen  DEPLOY=1 XENIMG="openmirageorg"
+  - OCAML_VERSION=4.08 MIRAGE_BACKEND=unix FLAGS="-vv --net socket"
+  - OCAML_VERSION=4.08 MIRAGE_BACKEND=unix FLAGS="-vv --net direct"
+  - OCAML_VERSION=4.08 MIRAGE_BACKEND=xen  DEPLOY=1 XENIMG="openmirageorg"
     PINS="travis-senv:https://github.com/hannesm/travis-senv.git#fix"
     FLAGS="-vv --net direct --dhcp false --ipv4 46.43.42.135/28
     --ipv4-gateway 46.43.42.129
     --host openmirage.org --redirect https://mirage.io"
-  - OCAML_VERSION=4.07 MIRAGE_BACKEND=xen DEPLOY=1 XENIMG="mirageio"
+  - OCAML_VERSION=4.08 MIRAGE_BACKEND=xen DEPLOY=1 XENIMG="mirageio"
     PINS="travis-senv:https://github.com/hannesm/travis-senv.git#fix"
     FLAGS="-vv --net direct --dhcp false --ipv4 46.43.42.136/28
     --ipv4-gateway 46.43.42.129 --tls true
