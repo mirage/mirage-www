@@ -1,4 +1,4 @@
-FROM ocaml/opam2:alpine-3.10-ocaml-4.05
+FROM ocaml/opam2:alpine-3.10-ocaml-4.09
 RUN opam depext -ui mirage
 RUN mkdir -p /home/opam/www/src
 WORKDIR /home/opam/www/src
