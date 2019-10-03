@@ -14,6 +14,6 @@ Lexicographically ordered by last name:
 * **[Richard Mortier](http://mort.io/)**, University of Cambridge & Docker, [@mor1](https://github.com/mor1)
 * **[David Scott](http://dave.recoil.org)**, Docker, [@djs55](https://github.com/djs55)
 
-### Alumni
+### Emeriti
 * **[Amir Chaudhry](http://amirchaudhry.com/)** [@amirmc](https://github.com/amirmc)
 * **[Mindy Preston](http://www.somerandomidiot.com)** [@yomimono](https://github.com/yomimono)
