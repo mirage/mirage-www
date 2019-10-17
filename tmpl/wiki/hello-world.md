@@ -335,7 +335,7 @@ $ ./hello
 
 #### Building for Another Backend
 
-**Note**: The following sections of this tutorial use the [Solo5](https://github.com/Solo5/solo5/tree/v0.4.0)-based `hvt` backend as an example. This backend is supported on Linux, FreeBSD, and OpenBSD systems with hardware virtualization. Please see the Solo5 documentation for the support [status](https://github.com/Solo5/solo5/blob/v0.4.0/docs/building.md#supported-targets) of further backends such as `virtio` (for deployment on e.g. Google Compute Engine) and `muen` (for deployment on the [Muen Separation Kernel](https://muen.sk)).
+**Note**: The following sections of this tutorial use the [Solo5](https://github.com/Solo5/solo5/tree/v0.6.3)-based `hvt` backend as an example. This backend is supported on Linux, FreeBSD, and OpenBSD systems with hardware virtualization. Please see the Solo5 documentation for the support [status](https://github.com/Solo5/solo5/blob/v0.6.3/docs/building.md#supported-targets) of further backends such as `virtio` (for deployment on e.g. Google Compute Engine) and `muen` (for deployment on the [Muen Separation Kernel](https://muen.sk)).
 
 To build a Solo5-based unikernel that will run on a host system with hardware virtualization, re-run `mirage configure` and ask for the `hvt` target instead of `unix`.
 
@@ -349,10 +349,12 @@ parameterised over the `Time` type, it doesn't matter — you do not need to
 make any changes for your code to run when linked against the Solo5 console driver
 instead of Unix.
 
-When you build the `hvt` version, you'll see some new artifacts: a `solo5-hvt` binary and a file called `hello.hvt`.  `hello.hvt` is the unikernel, and `solo5-hvt` is a specialised tender for your unikernel. To try running `hello.hvt`, pass it as an argument to `solo5-hvt`:
+When you build the `hvt` version, you'll see a new artifact which is the
+unikernel: a file called `hello.hvt`.  A `solo5-hvt` binary should be installed
+as a dependency. This is a specialised tender for your unikernel. To try running `hello.hvt`, pass it as an argument to `solo5-hvt`:
 
 ```bash
-$ ./solo5-hvt hello.hvt
+$ solo5-hvt hello.hvt
             |      ___|
   __|  _ \  |  _ \ __ \
 \__ \ (   | | (   |  ) |
@@ -480,7 +482,7 @@ $ cd tutorial/hello-key
 $ mirage configure -t hvt
 $ make depend
 $ make
-$ ./solo5-hvt -- hello.hvt --hello="Hola!"
+$ solo5-hvt -- hello.hvt --hello="Hola!"
             |      ___|
   __|  _ \  |  _ \ __ \
 \__ \ (   | | (   |  ) |
@@ -597,7 +599,7 @@ relying on the host OS (the Linux or FreeBSD kernel).
 If we tell `solo5-hvt` where the disk image is, it will provide that disk image to the unikernel:
 
 ```bash
-$ ./solo5-hvt --disk=disk.img block_test.hvt
+$ solo5-hvt --block:storage=disk.img block_test.hvt
             |      ___|
   __|  _ \  |  _ \ __ \
 \__ \ (   | | (   |  ) |
@@ -890,7 +892,7 @@ $ cd device-usage/network
 $ mirage configure -t hvt --dhcp true # for environments where DHCP works
 $ make depend
 $ make
-$ ./solo5-hvt --net=tap100 -- network.hvt --ipv4=10.0.0.10/24
+$ solo5-hvt --net:service=tap100 -- network.hvt --ipv4=10.0.0.10/24
             |      ___|
   __|  _ \  |  _ \ __ \
 \__ \ (   | | (   |  ) |
@@ -907,7 +909,7 @@ Solo5:       heap >= 0x332000 < stack < 0x20000000
 2018-06-21 12:24:46 -00:00: INF [udp] UDP interface connected on 10.0.0.10
 2018-06-21 12:24:46 -00:00: INF [tcpip-stack-direct] stack assembled: mac=3a:40:76:41:5d:b0,ip=10.0.0.10
 ```
-See the Solo5 documentation on [running Solo5-based unikernels](https://github.com/Solo5/solo5/blob/v0.4.0/docs/building.md#running-solo5-based-unikernels) for details on how to set up the `tap100` interface used above for hvt networking.
+See the Solo5 documentation on [running Solo5-based unikernels](https://github.com/Solo5/solo5/blob/v0.6.3/docs/building.md#running-solo5-based-unikernels) for details on how to set up the `tap100` interface used above for hvt networking.
 
 ### What's Next?
 
