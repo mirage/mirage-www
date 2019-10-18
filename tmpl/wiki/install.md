@@ -8,7 +8,7 @@ You will need OPAM 2.0.0 or later and OCaml 4.05.0 or later.
 
 Some backends have specific requirements for the host system:
 
-* __hvt__, __virtio__ and other Solo5-based backends: Please refer to ["Supported targets"](https://github.com/Solo5/solo5/blob/v0.6.3/docs/building.md#supported-targets) in the Solo5 documentation.
+* __hvt__, __spt__, __virtio__ and other Solo5-based backends: Please refer to ["Supported targets"](https://github.com/Solo5/solo5/blob/v0.6.3/docs/building.md#supported-targets) in the Solo5 documentation.
 * __xen__ and __qubes__: To compile the `xen` or `qubes` backend, you *must* have a 64-bit Linux host. 32-bit is not supported at this time. Further, these backends only support OCaml versions up to and including 4.05.0 at this time.
 
 ### MacOS X-specific notes
@@ -43,14 +43,13 @@ The version of OPAM in older Ubuntus is not high enough to run Mirage (which req
     opam init
     opam install mirage
 
-#### Debian Stable (Stretch) or Unstable (Sid)
+#### Debian Stable (Buster) or Unstable (Sid)
 
-These distributions include everything you need to run Mirage in the base distribution except that Stretch's version of `opam` is too old so we get it via ocaml.org instead. To install:
+This has the latest packages required in the base distribution, so just run:
 
     sudo apt-get update
-    sudo apt-get install rsync pkg-config git gcc make m4 patch unzip bubblewrap curl 0install-core
-    0install add opam http://tools.ocaml.org/opam.xml
-    opam init --compiler=4.07.1 --disable-sandboxing
+    sudo apt-get install opam
+    opam init
     opam install mirage
 
 ### FreeBSD-specific notes

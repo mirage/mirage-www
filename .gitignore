@@ -34,9 +34,11 @@ stats/.merlin
 .*.swp
 
 /src/.mirage.config
-/src/mirage-unikernel-www-unix.opam
+/src/mirage-unikernel-www-*.opam
 /src/myocamlbuild.ml
 /src/www
+/src/www.hvt
+/src/www.spt
 
 _opam
 .envrc

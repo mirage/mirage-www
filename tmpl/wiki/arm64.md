@@ -1,3 +1,17 @@
+MirageOS unikernels can run on 64-bit ARM Linux systems using the [Solo5](https://github.com/Solo5/solo5)-based `hvt` and `spt` targets.
+
+At least the following boards/SoCs have been tested:
+
+* Raspberry Pi 3 or newer / Broadcom BCM2837
+* A64-OLinuXino / Allwinner A64
+* Odroid-C2 / Amlogic S905
+
+In all cases you will need a Linux distribution using a recent **64-bit kernel**. For the Raspberry Pi 3 or newer, we recommend installing Debian Buster. You can download pre-built images from [here](https://wiki.debian.org/RaspberryPiImages).
+
+_(Updated 2019-10-18. The following information is of historical interest, or for those who might want to cross-build a custom Linux kernel for their ARM64 board, so keeping it for now.)_
+
+---------
+
 Thanks to Solo5 and hvt MirageOS can run on ARM CPUs which support the ARM virtualization extensions.
 As the layer for Mirage currently only supports the 64bit architecture a 64bit CPU is required.
 

@@ -335,7 +335,7 @@ $ ./hello
 
 #### Building for Another Backend
 
-**Note**: The following sections of this tutorial use the [Solo5](https://github.com/Solo5/solo5/tree/v0.6.3)-based `hvt` backend as an example. This backend is supported on Linux, FreeBSD, and OpenBSD systems with hardware virtualization. Please see the Solo5 documentation for the support [status](https://github.com/Solo5/solo5/blob/v0.6.3/docs/building.md#supported-targets) of further backends such as `virtio` (for deployment on e.g. Google Compute Engine) and `muen` (for deployment on the [Muen Separation Kernel](https://muen.sk)).
+**Note**: The following sections of this tutorial use the [Solo5](https://github.com/Solo5/solo5/tree/v0.6.3)-based `hvt` backend as an example. This backend is supported on Linux, FreeBSD, and OpenBSD systems with hardware virtualization. Please see the Solo5 documentation for the support [status](https://github.com/Solo5/solo5/blob/v0.6.3/docs/building.md#supported-targets) of further backends such as `spt` (for deployment on Linux using a strict seccomp sandbox), `virtio` (for deployment on e.g. Google Compute Engine) and `muen` (for deployment on the [Muen Separation Kernel](https://muen.sk)).
 
 To build a Solo5-based unikernel that will run on a host system with hardware virtualization, re-run `mirage configure` and ask for the `hvt` target instead of `unix`.
 
@@ -350,8 +350,7 @@ make any changes for your code to run when linked against the Solo5 console driv
 instead of Unix.
 
 When you build the `hvt` version, you'll see a new artifact which is the
-unikernel: a file called `hello.hvt`.  A `solo5-hvt` binary should be installed
-as a dependency. This is a specialised tender for your unikernel. To try running `hello.hvt`, pass it as an argument to `solo5-hvt`:
+unikernel: a file called `hello.hvt`.  A `solo5-hvt` binary will be installed by OPAM on your `$PATH`. This binary is a _tender_, responsible for loading your unikernel, attaching to host system devices and running it. To try running `hello.hvt`, pass it as an argument to `solo5-hvt`:
 
 ```bash
 $ solo5-hvt hello.hvt

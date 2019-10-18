@@ -161,6 +161,12 @@ module People = struct
     uri       = Some "https://linse.me";
     email     = None;
   }
+
+  let mato = {
+    Atom.name = "Martin Lucina";
+    uri       = Some "https://lucina.net/";
+    email     = Some "martin@lucina.net";
+  }
 end
 
 let rights = Some "All rights reserved by the author"
@@ -172,6 +178,12 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2019, 10, 18, 15, 00);
+        authors    = [mato];
+        subject    = "Announcing MirageOS 3.6.0";
+        body       = "announcing-mirage-36-release.md";
+        permalink  = "announcing-mirage-36-release";
+      };
       { updated    = date (2019, 04, 26, 00, 00);
         authors    = [tal];
         subject    = "MirageOS security advisory 02: mirage-xen < 3.3.0";
@@ -658,7 +670,7 @@ module Wiki = struct
     weekly ~y:2014 ~m:3 ~d:4 ~a:amir;
     weekly ~y:2014 ~m:2 ~d:26 ~a:amir;
 
-    { updated    = date (2018, 4, 20, 14, 00);
+    { updated    = date (2019, 10, 18, 19, 00);
       author     = derpeter;
       subject    = "MirageOS on ARM64";
       body       = File "arm64.md";
@@ -757,7 +769,7 @@ module Wiki = struct
       permalink  = "tutorial-lwt";
     };
 
-    { updated    = date (2013, 12, 20, 23, 00);
+    { updated    = date (2019, 10, 18, 19, 00);
       author     = anil; (* ++ mort ++ vb -- need multiple author support *)
       subject    = "Installation";
       body       = File "install.md";
@@ -778,7 +790,7 @@ module Wiki = struct
       permalink  = "mirage-www";
     };
 
-    { updated    = date (2013, 12, 31, 19, 00);
+    { updated    = date (2019, 10, 18, 15, 00);
       author     = mort;
       subject    = "Hello MirageOS World";
       body       = File "hello-world.md";
