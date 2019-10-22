@@ -769,7 +769,7 @@ module Wiki = struct
       permalink  = "tutorial-lwt";
     };
 
-    { updated    = date (2019, 10, 18, 19, 00);
+    { updated    = date (2019, 10, 22, 15, 00);
       author     = anil; (* ++ mort ++ vb -- need multiple author support *)
       subject    = "Installation";
       body       = File "install.md";

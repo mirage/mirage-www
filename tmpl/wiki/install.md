@@ -2,16 +2,21 @@ MirageOS consists of a set of OCaml libraries that link with a runtime to form e
 
 ## Requirements
 
-MirageOS has been tested on many modern Linux distributions, MacOS X 10.10+ and FreeBSD 11+.
+MirageOS has been tested on many modern Linux distributions, macOS 10.10+ and FreeBSD 11+.
 
 You will need OPAM 2.0.0 or later and OCaml 4.05.0 or later.
 
-Some backends have specific requirements for the host system:
+Further requirements for the host/build system depend on the specific backend in use:
 
-* __hvt__, __spt__, __virtio__ and other Solo5-based backends: Please refer to ["Supported targets"](https://github.com/Solo5/solo5/blob/v0.6.3/docs/building.md#supported-targets) in the Solo5 documentation.
+* __unix__ and __macos__: These backends build a MirageOS unikernel that runs as a normal UNIX binary, without any special isolation or sandboxing. They should build on any modern UNIX (or macOS) system with OCaml and OPAM installed.
 * __xen__ and __qubes__: To compile the `xen` or `qubes` backend, you *must* have a 64-bit Linux host. 32-bit is not supported at this time. Further, these backends only support OCaml versions up to and including 4.05.0 at this time.
+* [Solo5](https://github.com/Solo5/solo5)-based backends:
+    * __hvt__: This backend builds a MirageOS unikernel using Solo5 and hardware virtualization for isolation. Compiling the `hvt` backend is supported on Linux (`x86_64`, `aarch64`), FreeBSD and OpenBSD (`x86_64`) hosts. Running `hvt` unikernels requires a host system with access to hardware virtualization.
+    * __spt__: This backend builds a MirageOS unikernel using Solo5 and Linux seccomp for isolation. To compile the `spt` backend, or run an `spt` unikernel, you _must_ have a Linux (`x86_64` or `aarch64`) host.
+    * __virtio__: This backend builds a MirageOS unikernel using Solo5 and capable of running standalone on any _virtio_-compliant hypervisor on the `x86_64` architecture, such as Google Compute Engine. Building is supported on Linux, FreeBSD and OpenBSD.
+    * For more details and information on further Solo5-based backends, refer to ["Supported targets"](https://github.com/Solo5/solo5/blob/v0.6.3/docs/building.md#supported-targets) in the Solo5 documentation.
 
-### MacOS X-specific notes
+### macOS-specific notes
 
 * __10.10__: No special requirements beyond Homebrew or MacPorts to get OCaml and OPAM.
 * __10.9 or lower__: You will also need the [tuntap](http://tuntaposx.sourceforge.net/) kernel module if you want to use the MirageOS network stack from userspace.  Note that we do not test older versions of OSX beyond 10.10.
