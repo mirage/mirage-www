@@ -17,15 +17,15 @@
 (** HTTPS dispatcher *)
 
 module Make
-    (S: Mirage_stack_lwt.V4)
-    (KEYS: Mirage_types_lwt.KV_RO)
-    (FS: Mirage_types_lwt.KV_RO)
-    (TMPL: Mirage_types_lwt.KV_RO)
-    (Clock : Mirage_types.PCLOCK) :
+    (S: Mirage_stack.V4)
+    (KEYS: Mirage_kv.RO)
+    (FS: Mirage_kv.RO)
+    (TMPL: Mirage_kv.RO)
+    (Clock : Mirage_clock.PCLOCK) :
 sig
 
   val start:
     S.t -> KEYS.t ->
-    FS.t -> TMPL.t -> Clock.t -> unit -> unit Lwt.t
+    FS.t -> TMPL.t -> unit -> unit -> unit Lwt.t
     (** The HTTP server's start function. *)
 end

@@ -21,9 +21,9 @@ open Www_types
 (** The HTTP dispatcher. *)
 module Make
     (S: Cohttp_lwt.S.Server)
-    (FS: Mirage_types_lwt.KV_RO)
-    (TMPL: Mirage_types_lwt.KV_RO)
-    (Clock: Mirage_types.PCLOCK) :
+    (FS: Mirage_kv.RO)
+    (TMPL: Mirage_kv.RO)
+    (Clock: Mirage_clock.PCLOCK) :
 sig
 
   type dispatch = path -> cowabloga Lwt.t
@@ -49,7 +49,7 @@ sig
   type s = Conduit_mirage.server -> S.t -> unit Lwt.t
   (** The type for HTTP callbacks. *)
 
-  val start: s -> FS.t -> TMPL.t -> Clock.t -> unit Lwt.t
+  val start: s -> FS.t -> TMPL.t -> unit -> unit Lwt.t
   (** The HTTP server's start function. *)
 
 end
