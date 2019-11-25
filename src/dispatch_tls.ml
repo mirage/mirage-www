@@ -17,11 +17,11 @@
 open Lwt.Infix
 
 module Make
-    (S: Mirage_stack_lwt.V4)
-    (KEYS: Mirage_types_lwt.KV_RO)
-    (FS: Mirage_types_lwt.KV_RO)
-    (TMPL: Mirage_types_lwt.KV_RO)
-    (Clock : Mirage_types.PCLOCK)
+    (S: Mirage_stack.V4)
+    (KEYS: Mirage_kv.RO)
+    (FS: Mirage_kv.RO)
+    (TMPL: Mirage_kv.RO)
+    (Clock : Mirage_clock.PCLOCK)
 = struct
 
   let log_src = Logs.Src.create "dispatch_tls" ~doc:"web-over-tls server"
@@ -55,11 +55,9 @@ module Make
     let conf = Tls.Config.server ~certificates:(`Single cert) () in
     Lwt.return conf
 
-  let start stack keys fs tmpl clock () =
+  let start stack keys fs tmpl () () =
     let host = Key_gen.host () in
     let redirect = Key_gen.redirect () in
-    let sleep sec = OS.Time.sleep_ns (Duration.of_sec sec) in
-    (*    Stats.start ~sleep ~time:(fun () -> Clock.now_d_ps clock); *)
     tls_init keys >>= fun cfg ->
     let domain = `Https, host in
     let dispatch = match redirect with

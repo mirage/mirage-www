@@ -35,9 +35,9 @@ let domain_of_string x =
 
 module Make
     (S: Cohttp_lwt.S.Server)
-    (FS: Mirage_types_lwt.KV_RO)
-    (TMPL: Mirage_types_lwt.KV_RO)
-    (Clock: Mirage_types.PCLOCK)
+    (FS: Mirage_kv.RO)
+    (TMPL: Mirage_kv.RO)
+    (Clock: Mirage_clock.PCLOCK)
 = struct
   open Www_types
 
@@ -217,11 +217,9 @@ module Make
     in
     S.make ~callback ~conn_closed ()
 
-  let start http fs tmpl clock =
+  let start http fs tmpl () =
     let host = Key_gen.host () in
     let red = Key_gen.redirect () in
-    let sleep sec = OS.Time.sleep_ns (Duration.of_sec sec) in
-    (*    Stats.start ~sleep ~time:(fun () -> Clock.now_d_ps clock); *)
     let domain = `Http, host in
     let dispatch = match red with
       | None        -> dispatch domain fs tmpl
