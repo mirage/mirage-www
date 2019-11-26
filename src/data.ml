@@ -178,6 +178,12 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2019, 11, 26, 15, 00);
+        authors    = [anil; thomas];
+        subject    = "Announcing Irmin 2.0.0";
+        body       = "introducing-irmin-v2.md";
+        permalink  = "introducing-irmin-v2";
+      };
       { updated    = date (2019, 10, 18, 15, 00);
         authors    = [mato];
         subject    = "Announcing MirageOS 3.6.0";
