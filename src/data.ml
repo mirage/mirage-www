@@ -167,6 +167,12 @@ module People = struct
     uri       = Some "https://lucina.net/";
     email     = Some "martin@lucina.net";
   }
+
+  let damien_leloup = {
+    Atom.name = "Damien Leloup";
+    uri       = Some "https://www.lemonde.fr/signataires/damien-leloup/";
+    email     = None;
+  }
 end
 
 let rights = Some "All rights reserved by the author"
@@ -178,6 +184,12 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2020, 01, 08, 20, 00);
+        authors    = [damien_leloup];
+        subject    = "Hackers and climate activists join forces in Leipzig";
+        body       = "ccc-2019-leipzig.md";
+        permalink  = "ccc-2019-leipzig";
+      };
       { updated    = date (2019, 11, 26, 15, 00);
         authors    = [anil; thomas];
         subject    = "Announcing Irmin 2.0.0";
