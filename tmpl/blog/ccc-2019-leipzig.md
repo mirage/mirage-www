@@ -8,7 +8,7 @@ In front of Leipzig station, around fifty students and high school students are 
 
 Organized each year for thirty-six years, this gigantic gathering of hackers and activists - 18,000 participants, dozens of conference talks around the clock - invades the Leipzig convention center for four days, in an atmosphere that is both anarcho-libertarian and very family oriented.  For the first time, the slogan of the 2019 edition is devoted to the environment: “Resource exhaustion”, a reference both to a computer [attack technique](https://en.wikipedia.org/wiki/Resource_exhaustion_attack) and to the preservation of the planet.
 
-_"It makes sense: it's a major issue, and the environmental movement is a highlight of the year, isn't it?"_, Notes, hair dyed pink and megaphone in hand, Rune, one of the organizers of the event. _“In any case, we are very happy that the CCC opened its doors to us and supports us."_
+_"It makes sense: it's a major issue, and the environmental movement is a highlight of the year, isn't it?"_, notes, hair dyed pink and megaphone in hand, Rune, one of the organizers of the event. _“In any case, we are very happy that the CCC opened its doors to us and supports us."_
 
 The conference program gave pride of place to ecological themes and organizations such as Fridays for Future or Extinction Rebellion. These themes were all features in the main talks.  The audience for the event, marked on the far left, is quite sensitive to environmental issues.  [Fridays for Future's](https://www.fridaysforfuture.org/) review of the year was sold out;  the track where some scientists explained how they build their climate models was full and was not able to host all the attendees.
 
