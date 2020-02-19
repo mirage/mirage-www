@@ -214,7 +214,7 @@ First, let's look at the code:
 $ cat hello/unikernel.ml
 open Lwt.Infix
 
-module Hello (Time : Mirage_time_lwt.S) = struct
+module Hello (Time : Mirage_time.S) = struct
 
   let start _time =
 
@@ -231,10 +231,10 @@ end
 ```
 
 To veteran OCaml programmers among you, this might look a little odd: We have a
-`Main` module parameterised by a module (`Time`, of type `Mirage_time_lwt.S`) that contains a method `start` taking an ignored parameter `_time` (an instance of a `time`).  This is the basic structure required to make this a MirageOS unikernel
+main `Hello` module parameterised by a module (`Time`, of type `Mirage_time.S`) that contains a method `start` taking an ignored parameter `_time` (an instance of a `time`).  This is the basic structure required to make this a MirageOS unikernel
 rather than a standard OCaml POSIX application.
 
-The module type for our `Time` module, `Mirage_time_lwt.S`, is defined in an
+The module type for our `Time` module, `Mirage_time.S`, is defined in an
 external package [mirage-time](https://github.com/mirage/mirage-time).  The name `S` for "the module type of things like this" is a common OCaml convention (comparable to naming the most-used type in a module `t`).  There are many packages defining module types for use in Mirage.  For ease of discovery, a list of the module types that Mirage knows about is maintained
 in the [`types/`](https://github.com/mirage/mirage/tree/master/types) directory
 of the main MirageOS repository.  The `Mirage_types` module gives abstract definitions that leave some important primitives unspecified; the `Mirage_types_lwt` module contains more concrete definitions for use in programs.  Since you'll find yourself referring back to
@@ -509,7 +509,7 @@ explain this subsystem next.
 The [device-usage/block/](https://github.com/mirage/mirage-skeleton/tree/master/device-usage/block)
 directory in `mirage-skeleton` contains an example of attaching a raw block
 device to your unikernel.
-The [Mirage_block_lwt](https://mirage.github.io/mirage-block-lwt)
+The [Mirage_block](https://mirage.github.io/mirage-block)
 interface signature contains the operations that are possible on a block device:
 primarily reading and writing aligned buffers to a 64-bit offset within the
 device.
@@ -759,7 +759,7 @@ let () =
 ```
 
 We have a custom configuration key defining which TCP port to listen for connections on.
-The network device is derived from `default_network`, a function provided by Mirage which will choose a reasonable default based on the target the user chooses to pass to `mirage configure` - just like the reasonable default provided by `generic_kv_ro` in the previous example.  
+The network device is derived from `default_network`, a function provided by Mirage which will choose a reasonable default based on the target the user chooses to pass to `mirage configure` - just like the reasonable default provided by `generic_kv_ro` in the previous example.
 
 `generic_stackv4` attempts to build a sensible network stack on top of the physical interface given by `default_network`.  There are quite a few configuration keys exposed when `generic_stackv4` is given related to networking configuration. For a full list, try `mirage help configure` in the `device-usage/network` directory.
 
@@ -816,7 +816,7 @@ Next, let's try using the direct MirageOS network stack.  It will be necessary t
 To configure via DHCP:
 
 ```bash
-$ cd device-usage/network 
+$ cd device-usage/network
 $ mirage configure -t unix --dhcp true --net direct
 $ make depend
 $ make
