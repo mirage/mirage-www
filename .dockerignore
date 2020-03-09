@@ -2,4 +2,6 @@ Dockerfile
 **/_build
 .git
 **/*.native
+**/*.xen
+**/*.hvt
 src/Makefile
