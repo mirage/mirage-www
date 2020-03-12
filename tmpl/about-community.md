@@ -13,6 +13,7 @@
 * [*David Sheets*](https://github.com/dsheets)
 * [*Balraj Singh*](https://github.com/balrajsingh)
 * [*Magnus Skjegstad*](http://www.skjegstad.com/), Docker
+* [*Jeremy Yallop*](https://www.cl.cam.ac.uk/~jdy22/), University of Cambridge
 * [*Dan Williams*](https://github.com/djwillia), IBM Research
 
 [The MirageOS3 release announcement](/blog/announcing-mirage-30-release) contained a more complete list.  For a complete list, please look at the contributors to individual git repositories.  If you are missing here, please add yourself via a PR to the [mirage-www](https://github.com/mirage/mirage-www) repository.
