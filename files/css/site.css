@@ -29,6 +29,7 @@ article a:hover {
 body {
   background-image: url(/graphics/cloud-bg.png);
   background-repeat: repeat-x;
+  padding-bottom: 1.5em;
 }
 
 code {
