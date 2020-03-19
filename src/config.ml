@@ -84,7 +84,7 @@ let http =
     (http @-> kv_ro @-> kv_ro @-> pclock @-> job)
 
 let https =
-  let packages = [package ~sublibs:["mirage"] "tls"; package "cohttp-mirage"] in
+  let packages = [package "tls-mirage"; package "cohttp-mirage"] in
   foreign ~packages  ~keys "Dispatch_tls.Make"
     ~deps:[abstract nocrypto]
     (stackv4 @-> kv_ro @-> kv_ro @-> kv_ro @-> pclock @-> job)
