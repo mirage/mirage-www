@@ -1,8 +1,8 @@
-[Lwt](http://www.ocsigen.org/lwt) is a lightweight cooperative threading library for OCaml. A good way to understand Lwt and its use in MirageOS is to write some simple code. This document introduces the basic concepts and suggests programs to write. Code for all examples is in the `mirage-skeleton/tutorial/lwt/` [repository](https://github.com/mirage/mirage-skeleton/tree/master/tutorial/lwt).
+[Lwt](https://www.ocsigen.org/lwt) is a lightweight cooperative threading library for OCaml. A good way to understand Lwt and its use in MirageOS is to write some simple code. This document introduces the basic concepts and suggests programs to write. Code for all examples is in the `mirage-skeleton/tutorial/lwt/` [repository](https://github.com/mirage/mirage-skeleton/tree/master/tutorial/lwt).
 
 ##Basics
 
-The full Lwt manual is available [elsewhere](https://ocsigen.org/lwt/5.1.2/manual/manual), but the minimal stuff needed to get started is here.
+The full Lwt manual is available [elsewhere](https://ocsigen.org/lwt), but the minimal stuff needed to get started is here.
 
 The core type in Lwt is a "thread" (also known as a "promise" in some other systems).
 An `'a Lwt.t` is a thread that should produce a value of type `'a` (for example, an `int Lwt.t` should produce a single `int`).
@@ -229,7 +229,7 @@ event that will wake up the associated thread when possible.
 
 ##Mutexes and cooperation
 
-With Lwt, it is often possible to avoid mutexes altogether! The web server from the [Ocsigen](http://ocsigen.org) project uses only two, for example. In usual concurrent systems, mutexes are used to prevent two (or more) threads executing concurrently on a given piece of data. This can happen when a thread is preemptively interrupted and another one starts running. In Lwt, a thread executes serially until it explicitly yields (most commonly via `>>=`); for this reason, Lwt threads are said to be [cooperative](http://en.wikipedia.org/wiki/Cooperative_multitasking#Cooperative_multitasking.2Ftime-sharing).
+With Lwt, it is often possible to avoid mutexes altogether! The web server from the [Ocsigen](https://ocsigen.org) project uses only two, for example. In usual concurrent systems, mutexes are used to prevent two (or more) threads executing concurrently on a given piece of data. This can happen when a thread is preemptively interrupted and another one starts running. In Lwt, a thread executes serially until it explicitly yields (most commonly via `>>=`); for this reason, Lwt threads are said to be [cooperative](https://en.wikipedia.org/wiki/Cooperative_multitasking#Cooperative_multitasking.2Ftime-sharing).
 
 For example, consider this code to generate unique IDs:
 
@@ -497,13 +497,13 @@ Found in [lwt/tutorial/timeout2/unikernel.ml][timeout2_unikernel.ml] in the repo
 The `cancel` function should be used very sparingly, since it essentially throws an unexpected exception into the middle of some executing code that probably wasn't expecting it.
 A cancel that occurs when the thread happens to be performing an uncancellable operation will be silently ignored.
 
-A safer alternative is to use [Lwt_switch](http://ocsigen.org/lwt/5.1.2/api/Lwt_switch).
+A safer alternative is to use [Lwt_switch](https://ocsigen.org/lwt/5.1.2/api/Lwt_switch).
 This means that cancellation will only happen at well defined points, although it does require explicit support from the code being cancelled.
 If you have a function that only responds to cancel, you might want to wrap it in a function that takes a switch and cancels it when the switch is turned off.
 
 ## Other Lwt features
 
-Lwt provides many more features. See [the manual](http://ocsigen.org/lwt/) for details.
+Lwt provides many more features. See [the manual](https://ocsigen.org/lwt/) for details.
 However, the vast majority of code will only need the basic features described here.
 
 [echo_server_unikernel.ml]: https://github.com/mirage/mirage-skeleton/blob/master/tutorial/lwt/echo_server/unikernel.ml
