@@ -82,7 +82,7 @@ amount of time, say 1 and 2 seconds and then one prints "Heads", the other
 To sleep for some number of nanoseconds use `OS.Time.sleep_ns`, and to print to
 the console use `C.log`. Note that `OS` is a Mirage-specific module; if you are
 using Lwt in another context, use `Lwt_unix.sleep` and `Lwt_io.write`. (You will
-also need to manually start the main evnt loop with `Lwt_main.run`.)
+also need to manually start the main event loop with `Lwt_main.run`.)
 
 For convenience, you'll likely want to also use the
 [Duration](https://github.com/hannesm/duration) library, which provides handy
