@@ -5,6 +5,11 @@
 
 /src/log
 /src/_build
+/src/dune
+/src/dune.build
+/src/dune.config
+/src/dune-project
+/src/.merlin
 /src/mir-www
 /src/mir-main
 /src/main.native
