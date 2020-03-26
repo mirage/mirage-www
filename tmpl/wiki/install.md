@@ -4,12 +4,12 @@ MirageOS consists of a set of OCaml libraries that link with a runtime to form e
 
 MirageOS has been tested on many modern Linux distributions, macOS 10.10+ and FreeBSD 11+.
 
-You will need OPAM 2.0.0 or later and OCaml 4.05.0 or later.
+You will need OPAM 2.0.0 or later and OCaml 4.07.0 or later.
 
 Further requirements for the host/build system depend on the specific backend in use:
 
 * __unix__ and __macos__: These backends build a MirageOS unikernel that runs as a normal UNIX binary, without any special isolation or sandboxing. They should build on any modern UNIX (or macOS) system with OCaml and OPAM installed.
-* __xen__ and __qubes__: To compile the `xen` or `qubes` backend, you *must* have a 64-bit Linux host. 32-bit is not supported at this time. Further, these backends only support OCaml versions up to and including 4.05.0 at this time.
+* __xen__ and __qubes__: To compile the `xen` or `qubes` backend, you *must* have a 64-bit Linux host. 32-bit is not supported at this time. Further, these backends only support OCaml versions up to and including 4.09.0 at this time.
 * [Solo5](https://github.com/Solo5/solo5)-based backends:
     * __hvt__: This backend builds a MirageOS unikernel using Solo5 and hardware virtualization for isolation. Compiling the `hvt` backend is supported on Linux (`x86_64`, `aarch64`), FreeBSD and OpenBSD (`x86_64`) hosts. Running `hvt` unikernels requires a host system with access to hardware virtualization.
     * __spt__: This backend builds a MirageOS unikernel using Solo5 and Linux seccomp for isolation. To compile the `spt` backend, or run an `spt` unikernel, you _must_ have a Linux (`x86_64` or `aarch64`) host.
@@ -59,7 +59,7 @@ This has the latest packages required in the base distribution, so just run:
 
 ### FreeBSD-specific notes
 
-You will need ports or `pkg` set up. To install OPAM use the `ocaml-opam` port/package. FreeBSD currently packages OCaml 4.02.3, so you will need to install a newer compiler using OPAM.
+You will need ports or `pkg` set up. To install OPAM use the `ocaml-opam` port/package. FreeBSD currently packages OCaml 4.05.0, so you will need to install a newer compiler using OPAM.
 
 ### ARM64-specific notes
 
@@ -82,11 +82,11 @@ After installation, `opam update -u` refreshes the package list and recompiles p
     # list of your remotes, which should include opam.ocaml.org
     $ opam remote
 
-Next, make sure you have at least **OCaml 4.05.0 or higher** as your active compiler. This is generally the case on MacOS X, though Debian only has it in the *testing* distribution at present. But don't worry: if your compiler is out of date, just run `opam switch` to have it locally install the right version for you.
+Next, make sure you have at least **OCaml 4.07.0 or higher** as your active compiler. This is generally the case on MacOS X, though Debian only has it in the *testing* distribution at present. But don't worry: if your compiler is out of date, just run `opam switch` to have it locally install the right version for you.
 
     $ ocaml -version
-    # if it is not 4.05.0 or higher, then run this
-    $ opam switch 4.05.0
+    # if it is not 4.07.0 or higher, then run this
+    $ opam switch 4.07.0
 
 Once you've got the right version, set up your shell environment to point to the current compiler switch.
 
