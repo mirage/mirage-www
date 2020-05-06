@@ -12,7 +12,6 @@
 * [*Adrian-Ken Rueegsegger*](https://github.com/kensan)
 * [*David Sheets*](https://github.com/dsheets)
 * [*Balraj Singh*](https://github.com/balrajsingh)
-* [*Magnus Skjegstad*](http://www.skjegstad.com/), Docker
 * [*Jeremy Yallop*](https://www.cl.cam.ac.uk/~jdy22/), University of Cambridge
 * [*Dan Williams*](https://github.com/djwillia), IBM Research
 
