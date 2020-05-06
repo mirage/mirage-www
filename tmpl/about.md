@@ -13,6 +13,7 @@ Lexicographically ordered by last name:
 * **[Hannes Mehnert](https://hannes.nqsb.io)**, [robur](http://robur.io), [@hannesm](https://github.com/hannesm)
 * **[Richard Mortier](http://mort.io/)**, University of Cambridge & Docker, [@mor1](https://github.com/mor1)
 * **[David Scott](http://dave.recoil.org)**, Docker, [@djs55](https://github.com/djs55)
+* **[Magnus Skjegstad](http://www.skjegstad.com)**, [@magnuss](https://github.com/magnuss)
 
 ### Emeriti
 * **[Amir Chaudhry](http://amirchaudhry.com/)** [@amirmc](https://github.com/amirmc)
