@@ -52,7 +52,6 @@ let pr_key =
   in
   Key.(create "pr" Arg.(opt ~stage:`Configure (some int) None doc))
 
-
 let host_key =
   let doc = Key.Arg.info
       ~doc:"Hostname of the unikernel."
@@ -84,10 +83,15 @@ let key_seed =
   let doc = Key.Arg.info ~doc:"certificate key seed" ["key-seed"] in
   Key.(create "key-seed" Arg.(required string doc))
 
+let additional_hostnames =
+  let doc = Key.Arg.info ~doc:"Additional names (used for certificates)" ["additional-hostname"] in
+  Key.(create "additional-hostnames" Arg.(opt (list string) [] doc))
+
 let keys = Key.([ abstract host_key ; abstract redirect_key ;
                   abstract http_port ; abstract https_port ;
                   abstract dns_key ; abstract dns_server ;
                   abstract dns_port ; abstract key_seed ;
+                  abstract additional_hostnames ;
                 ])
 
 let fs_key = Key.(value @@ kv_ro ())

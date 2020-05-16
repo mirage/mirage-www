@@ -66,9 +66,9 @@ module Make
       end
     | _ -> ()
 
-  let tls_init stack hostname =
+  let tls_init stack hostname additional_hostnames =
     C.retrieve_certificate stack ~dns_key:(Key_gen.dns_key ())
-      ~hostname ~key_seed:(Key_gen.key_seed ())
+      ~hostname ~additional_hostnames ~key_seed:(Key_gen.key_seed ())
       (Key_gen.dns_server ()) (Key_gen.dns_port ()) >>= function
     | Error (`Msg m) -> Lwt.fail_with m
     | Ok certificates ->
@@ -80,7 +80,11 @@ module Make
     let host = Key_gen.host () in
     let redirect = Key_gen.redirect () in
     let hostname = Domain_name.(of_string_exn (Key_gen.host ()) |> host_exn) in
-    tls_init stack hostname >>= fun cfg ->
+    let additional_hostnames =
+      List.map (fun n -> Domain_name.(host_exn (of_string_exn n)))
+        (Key_gen.additional_hostnames ())
+    in
+    tls_init stack hostname additional_hostnames >>= fun cfg ->
     let domain = `Https, host in
     let dispatch = match redirect with
       | None        -> DS.dispatch domain fs tmpl
