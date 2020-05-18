@@ -17,8 +17,8 @@
 open Lwt.Infix
 
 module Make
+    (R: Mirage_random.S)
     (S: Mirage_stack.V4)
-    (KEYS: Mirage_kv.RO)
     (FS: Mirage_kv.RO)
     (TMPL: Mirage_kv.RO)
     (Clock : Mirage_clock.PCLOCK)
@@ -29,13 +29,14 @@ module Make
 
   module TCP  = S.TCPV4
   module TLS  = Tls_mirage.Make (TCP)
-  module X509 = Tls_mirage.X509 (KEYS) (Clock)
 
   module Http  = Cohttp_mirage.Server(TCP)
   module Https = Cohttp_mirage.Server(TLS)
 
   module D  = Dispatch.Make(Http)(FS)(TMPL)(Clock)
   module DS = Dispatch.Make(Https)(FS)(TMPL)(Clock)
+
+  module C = Dns_certify_mirage.Make(R)(Clock)(OS.Time)(S)
 
   let with_tls cfg tcp ~f =
     let peer, port = TCP.dst tcp in
@@ -50,15 +51,40 @@ module Make
     let t = D.create domain (D.redirect domain) in
     Http.listen t flow
 
-  let tls_init kv =
-    X509.certificate kv `Default >>= fun cert ->
-    let conf = Tls.Config.server ~certificates:(`Single cert) () in
-    Lwt.return conf
+  let restart_before_expire = function
+    | `Single (server :: _, _) ->
+      let expiry = snd (X509.Certificate.validity server) in
+      let diff = Ptime.diff expiry (Ptime.v (Clock.now_d_ps ())) in
+      begin match Ptime.Span.to_int_s diff with
+        | None -> invalid_arg "couldn't convert span to seconds"
+        | Some x when x < 0 -> invalid_arg "diff is negative"
+        | Some x ->
+          Lwt.async (fun () ->
+              OS.Time.sleep_ns
+                (Int64.sub (Duration.of_sec x) (Duration.of_day 1)) >|= fun () ->
+              exit 42)
+      end
+    | _ -> ()
 
-  let start stack keys fs tmpl () () =
+  let tls_init stack hostname additional_hostnames =
+    C.retrieve_certificate stack ~dns_key:(Key_gen.dns_key ())
+      ~hostname ~additional_hostnames ~key_seed:(Key_gen.key_seed ())
+      (Key_gen.dns_server ()) (Key_gen.dns_port ()) >>= function
+    | Error (`Msg m) -> Lwt.fail_with m
+    | Ok certificates ->
+      restart_before_expire certificates;
+      let conf = Tls.Config.server ~certificates () in
+      Lwt.return conf
+
+  let start _ stack fs tmpl () =
     let host = Key_gen.host () in
     let redirect = Key_gen.redirect () in
-    tls_init keys >>= fun cfg ->
+    let hostname = Domain_name.(of_string_exn (Key_gen.host ()) |> host_exn) in
+    let additional_hostnames =
+      List.map (fun n -> Domain_name.(host_exn (of_string_exn n)))
+        (Key_gen.additional_hostnames ())
+    in
+    tls_init stack hostname additional_hostnames >>= fun cfg ->
     let domain = `Https, host in
     let dispatch = match redirect with
       | None        -> DS.dispatch domain fs tmpl

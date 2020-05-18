@@ -52,7 +52,6 @@ let pr_key =
   in
   Key.(create "pr" Arg.(opt ~stage:`Configure (some int) None doc))
 
-
 let host_key =
   let doc = Key.Arg.info
       ~doc:"Hostname of the unikernel."
@@ -68,15 +67,37 @@ let redirect_key =
   in
   Key.(create "redirect" Arg.(opt (some string) None doc))
 
-let keys = Key.([ abstract host_key ; abstract redirect_key;
-                  abstract http_port ; abstract https_port ])
+let dns_key =
+  let doc = Key.Arg.info ~doc:"nsupdate key (name:type:value,...)" ["dns-key"] in
+  Key.(create "dns-key" Arg.(required string doc))
+
+let dns_server =
+  let doc = Key.Arg.info ~doc:"dns server IP" ["dns-server"] in
+  Key.(create "dns-server" Arg.(required ipv4_address doc))
+
+let dns_port =
+  let doc = Key.Arg.info ~doc:"dns server port" ["dns-port"] in
+  Key.(create "dns-port" Arg.(opt int 53 doc))
+
+let key_seed =
+  let doc = Key.Arg.info ~doc:"certificate key seed" ["key-seed"] in
+  Key.(create "key-seed" Arg.(required string doc))
+
+let additional_hostnames =
+  let doc = Key.Arg.info ~doc:"Additional names (used for certificates)" ["additional-hostname"] in
+  Key.(create "additional-hostnames" Arg.(opt (list string) [] doc))
+
+let keys = Key.([ abstract host_key ; abstract redirect_key ;
+                  abstract http_port ; abstract https_port ;
+                  abstract dns_key ; abstract dns_server ;
+                  abstract dns_port ; abstract key_seed ;
+                  abstract additional_hostnames ;
+                ])
 
 let fs_key = Key.(value @@ kv_ro ())
 let filesfs = generic_kv_ro ~key:fs_key "../files"
 let tmplfs = generic_kv_ro ~key:fs_key "../tmpl"
 
-let secrets_key = Key.(value @@ kv_ro ~group:"secrets" ())
-let secrets = generic_kv_ro ~key:secrets_key "../tls"
 let stack = generic_stackv4 default_network
 
 let http =
@@ -86,13 +107,11 @@ let http =
 let https =
   let packages = [package "tls-mirage"; package "cohttp-mirage"] in
   foreign ~packages  ~keys "Dispatch_tls.Make"
-    ~deps:[abstract nocrypto]
-    (stackv4 @-> kv_ro @-> kv_ro @-> kv_ro @-> pclock @-> job)
-
+    (random @-> stackv4 @-> kv_ro @-> kv_ro @-> pclock @-> job)
 
 let dispatch = if_impl (Key.value tls_key)
     (* With tls *)
-    (https $ stack $ secrets)
+    (https $ default_random $ stack)
 
     (* Without tls *)
     (http $ cohttp_server (conduit_direct stack))
@@ -100,6 +119,7 @@ let dispatch = if_impl (Key.value tls_key)
 let packages = [
   package "cow" ~min:"2.3.0";
   package "cowabloga";
+  package ~sublibs:["mirage"] "dns-certify";
   (*  package ~ocamlfind:["rrd"] ~min:"1.0.1" "xapi-rrd"; *)
   (* package "c3" ; *)
   package "duration";
