@@ -8,4 +8,4 @@ library (from [Project Everest](https://project-everest.github.io/)) for the X25
 
 Part of our TLS 1.3 stack is support for pre-shared keys, and 0 RTT. If you're keen to try these features, please do so and report any issues you encounter [to our issue tracker](https://github.com/mirleft/ocaml-tls).
 
-We are still lacking support for RSA-PSS certificates and EC certificates, post-handshake authentication, and the chacha20-poly1305 ciphersuite. We will continue to work on these, patches are welcome.
+We are still lacking support for RSA-PSS certificates and EC certificates, post-handshake authentication, and the chacha20-poly1305 ciphersuite. There is also a [minor symbol clash](https://github.com/mirage/hacl/issues/32) with the upstream F* C bindings which we are aware of. We will continue to work on these, and patches are welcome.
