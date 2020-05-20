@@ -184,6 +184,12 @@ module Blog = struct
     let open Cowabloga.Date in
     let open Cowabloga.Blog.Entry in
     [
+      { updated    = date (2020, 05, 20, 14, 00);
+        authors    = [hannes];
+        subject    = "TLS 1.3 support for MirageOS";
+        body       = "tls-1-3-mirageos.md";
+        permalink  = "tls-1-3-mirageos";
+      };
       { updated    = date (2020, 01, 08, 20, 00);
         authors    = [damien_leloup];
         subject    = "Hackers and climate activists join forces in Leipzig";
