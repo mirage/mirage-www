@@ -98,8 +98,6 @@ let fs_key = Key.(value @@ kv_ro ())
 let filesfs = generic_kv_ro ~key:fs_key "../files"
 let tmplfs = generic_kv_ro ~key:fs_key "../tmpl"
 
-let stack = generic_stackv4 default_network
-
 let http =
   foreign ~keys "Dispatch.Make"
     (http @-> kv_ro @-> kv_ro @-> pclock @-> job)
@@ -111,10 +109,10 @@ let https =
 
 let dispatch = if_impl (Key.value tls_key)
     (* With tls *)
-    (https $ default_random $ stack)
+    (https $ default_random $ generic_stackv4 default_network)
 
     (* Without tls *)
-    (http $ cohttp_server (conduit_direct stack))
+    (http $ cohttp_server (conduit_direct (generic_stackv4 default_network)))
 
 let packages = [
   package "cow" ~min:"2.3.0";
