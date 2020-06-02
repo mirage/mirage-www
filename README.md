@@ -1,7 +1,5 @@
 ## MirageOS Website
 
-[![Build Status](https://travis-ci.org/mirage/mirage-www.svg?branch=master)](https://travis-ci.org/mirage/mirage-www)
-
 This repository contains the MirageOS public website, <https://mirage.io/>.
 
 It provides information about the project as well as the blog and wiki.
@@ -33,7 +31,8 @@ cd src && mirage configure && make
 
 For unikernel configuration options, use `mirage configure --help` in `src`.
 
-To update, send a pull request. When successfully merged, the Travis CI scripts,
-fetched from <https://github.com/ocaml/ocaml-travisci-skeleton/>, will cause the
-generated Xen unikernel to be committed back to the
-<https://github.com/mirage/mirage-www-deployment> repo.
+To update, send a pull request. When successfully merged, the OCurrent deployer
+at <https://deploy.ocamllabs.io/> will build the new unikernel and deploy it
+to our packet.net hosting, where it should appear at <https://mirage.io/>.
+See [pipeline.ml](https://github.com/ocurrent/ocurrent-deployer/blob/master/src/pipeline.ml)
+for the deployment pipeline.
