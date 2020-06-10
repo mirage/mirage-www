@@ -694,6 +694,13 @@ module Wiki = struct
     weekly ~y:2014 ~m:3 ~d:4 ~a:amir;
     weekly ~y:2014 ~m:2 ~d:26 ~a:amir;
 
+    { updated    = date (2020, 06, 10, 14, 00);
+      author     = hannes;
+      subject    = "MirageOS unikernel gallery";
+      body       = File "gallery.md";
+      permalink  = "gallery";
+    };
+
     { updated    = date (2019, 10, 18, 19, 00);
       author     = derpeter;
       subject    = "MirageOS on ARM64";
