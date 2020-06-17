@@ -1,5 +1,5 @@
 FROM ocurrent/opam:alpine-3.10-ocaml-4.10
-RUN cd ~/opam-repository && git pull origin master && git reset --hard 4dd2620bcc821418bae53669a6c6163964c090a2 && opam update
+RUN cd ~/opam-repository && git pull origin master && git reset --hard 2d5e10966e239ee1ce2c4d8135bf7c40e5d25e92 && opam update
 RUN opam depext -ui mirage
 RUN mkdir -p /home/opam/www/src
 WORKDIR /home/opam/www/src
