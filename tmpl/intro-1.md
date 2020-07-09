@@ -7,7 +7,7 @@ specialised unikernel that runs under a [Xen](http://xen.org/) or [KVM](http://w
 This lets your services run more efficiently, securely and with finer control than
 with a full conventional software stack.
 
-MirageOS uses the [OCaml](https://ocaml.org/) language, with [libraries](http://docs.mirage.io) that
+MirageOS uses the [OCaml](https://ocaml.org/) language, with [libraries](http://mirage.io/docs) that
 provide networking, storage and concurrency support that work under Unix during
 development, but become operating system drivers when being compiled for
 production deployment. The framework is fully event-driven, with no support for
