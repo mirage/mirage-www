@@ -17,7 +17,7 @@ docker run --rm -it --init -p 80:8080 mirage-www ./www --http-port 8080
 
 Then browse to <http://127.0.0.1/>.
 
-You can build for other targets with e.g. `docker build --build-arg TARGET=hvt ...`.
+You can build for other targets with e.g. `docker build --build-arg TARGET=hvt ...`
 
 ### Building without Docker
 
