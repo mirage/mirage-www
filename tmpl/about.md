@@ -11,10 +11,10 @@ Lexicographically ordered by last name:
 * **[Martin Lucina](https://lucina.net/)**, [@mato](https://github.com/mato)
 * **[Anil Madhavapeddy](http://anil.recoil.org)**, University of Cambridge, [@avsm](https://github.com/avsm)
 * **[Hannes Mehnert](https://hannes.nqsb.io)**, [robur](http://robur.io), [@hannesm](https://github.com/hannesm)
-* **[Richard Mortier](http://mort.io/)**, University of Cambridge & Docker, [@mor1](https://github.com/mor1)
 * **[David Scott](http://dave.recoil.org)**, Docker, [@djs55](https://github.com/djs55)
 * **[Magnus Skjegstad](http://www.skjegstad.com)**, [@magnuss](https://github.com/magnuss)
 
 ### Emeriti
 * **[Amir Chaudhry](http://amirchaudhry.com/)** [@amirmc](https://github.com/amirmc)
+* **[Richard Mortier](http://mort.io/)**, University of Cambridge & Kvasir Analytics [@mor1](https://github.com/mor1)
 * **[Mindy Preston](http://www.somerandomidiot.com)** [@yomimono](https://github.com/yomimono)
