@@ -1,4 +1,4 @@
-## MirageOS Website
+## MirageOS
 
 This repository contains the MirageOS public website, <https://mirage.io/>.
 
@@ -27,7 +27,7 @@ You can then build the mirage application in the src/ directory:
 cd src && mirage configure && make
 ```
 
-### Configuration
+### Configurations
 
 For unikernel configuration options, use `mirage configure --help` in `src`.
 
