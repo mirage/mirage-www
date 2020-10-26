@@ -66,10 +66,15 @@ module Make
       end
     | _ -> ()
 
+  let required key_name key =
+    match (key ()) with
+      | Some x -> x
+      | None -> Log.err (fun m -> m "TLS is enabled but required key %s missing" key_name); exit 64
+
   let tls_init stack hostname additional_hostnames =
-    C.retrieve_certificate stack ~dns_key:(Key_gen.dns_key ())
-      ~hostname ~additional_hostnames ~key_seed:(Key_gen.key_seed ())
-      (Key_gen.dns_server ()) (Key_gen.dns_port ()) >>= function
+    C.retrieve_certificate stack ~dns_key:(required "--dns-key" Key_gen.dns_key)
+      ~hostname ~additional_hostnames ~key_seed:(required "--key-seed" Key_gen.key_seed)
+      (required "--dns-server" Key_gen.dns_server) (required "--dns-port" Key_gen.dns_port) >>= function
     | Error (`Msg m) -> Lwt.fail_with m
     | Ok certificates ->
       restart_before_expire certificates;

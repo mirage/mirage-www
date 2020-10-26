@@ -26,7 +26,7 @@ open Mirage
 
 let tls_key =
   let doc = Key.Arg.info
-      ~doc:"Enable serving the website over https. Do not forget to put certificates in tls/"
+      ~doc:"Enable serving the website over https. Requires --dns-key, --dns-server and --key-seed."
       ~docv:"BOOL" ~env:"TLS" ["tls"]
   in
   Key.(create "tls" Arg.(opt ~stage:`Configure bool false doc))
@@ -69,19 +69,19 @@ let redirect_key =
 
 let dns_key =
   let doc = Key.Arg.info ~doc:"nsupdate key (name:type:value,...)" ["dns-key"] in
-  Key.(create "dns-key" Arg.(required string doc))
+  Key.(create "dns-key" Arg.(opt (some string) None doc))
 
 let dns_server =
   let doc = Key.Arg.info ~doc:"dns server IP" ["dns-server"] in
-  Key.(create "dns-server" Arg.(required ipv4_address doc))
+  Key.(create "dns-server" Arg.(opt (some ipv4_address) None doc))
 
 let dns_port =
   let doc = Key.Arg.info ~doc:"dns server port" ["dns-port"] in
-  Key.(create "dns-port" Arg.(opt int 53 doc))
+  Key.(create "dns-port" Arg.(opt (some int) (Some 53) doc))
 
 let key_seed =
   let doc = Key.Arg.info ~doc:"certificate key seed" ["key-seed"] in
-  Key.(create "key-seed" Arg.(required string doc))
+  Key.(create "key-seed" Arg.(opt (some string) None doc))
 
 let additional_hostnames =
   let doc = Key.Arg.info ~doc:"Additional names (used for certificates)" ["additional-hostname"] in
