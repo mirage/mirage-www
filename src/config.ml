@@ -26,7 +26,7 @@ open Mirage
 
 let tls_key =
   let doc = Key.Arg.info
-      ~doc:"Enable serving the website over https. Do not forget to put certificates in tls/"
+      ~doc:"Enable serving the website over https."
       ~docv:"BOOL" ~env:"TLS" ["tls"]
   in
   Key.(create "tls" Arg.(opt ~stage:`Configure bool false doc))
@@ -88,11 +88,14 @@ let additional_hostnames =
   Key.(create "additional-hostnames" Arg.(opt (list string) [] doc))
 
 let keys = Key.([ abstract host_key ; abstract redirect_key ;
-                  abstract http_port ; abstract https_port ;
-                  abstract dns_key ; abstract dns_server ;
-                  abstract dns_port ; abstract key_seed ;
-                  abstract additional_hostnames ;
+                  abstract http_port ;
                 ])
+
+let tls_only_keys = Key.([ abstract https_port ;
+                      abstract dns_key ; abstract dns_server ;
+                      abstract dns_port ; abstract key_seed ;
+                      abstract additional_hostnames ;
+                    ])
 
 let fs_key = Key.(value @@ kv_ro ())
 let filesfs = generic_kv_ro ~key:fs_key "../files"
@@ -104,6 +107,7 @@ let http =
 
 let https =
   let packages = [package "tls-mirage"; package "cohttp-mirage"] in
+  let keys = keys @ tls_only_keys in
   foreign ~packages  ~keys "Dispatch_tls.Make"
     (random @-> stackv4 @-> kv_ro @-> kv_ro @-> pclock @-> job)
 
