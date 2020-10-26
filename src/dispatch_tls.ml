@@ -67,7 +67,7 @@ module Make
     | _ -> ()
 
   let required key_name key =
-    match (key ()) with
+    match key () with
       | Some x -> x
       | None -> Log.err (fun m -> m "TLS is enabled but required key %s missing" key_name); exit 64
 
