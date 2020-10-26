@@ -116,6 +116,8 @@ and then calls
 
 ### How does MirageOS handle Xen events?
 
+_(Updated 2020-10-26. The following information is of historical interest, since MirageOS 3.9.0 our Xen backend has been revised, and only supports PVH mode and does not use mini-os anymore.)_
+
 MirageOS applications running on Xen are linked with
 [a small C library](https://github.com/mirage/mirage-platform/tree/master/xen/runtime/kernel)
 derived from
