@@ -15,10 +15,9 @@ The remainder of this guide covers:
 
 
 
-## Warning: OUT OF DATE
+## Warning: Out of date
 
-These instructions no longer work, as some of the Git branches referred to no longer exist. Instead, please look at the scripts in the [mirage/xen-arm-builder](https://github.com/mirage/xen-arm-builder) repository.
-They are based on these instructions, but are kept up-to-date.
+_(Updated 2020-10-26. The following information is of historical interest, since MirageOS 3.9.0 our Xen backend has been revised, and only supports PVH mode and x86_64 as architecture.)_
 
 
 ## Glossary
