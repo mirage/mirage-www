@@ -6,8 +6,8 @@ Our last release announcement was for [MirageOS 3.6.0](https://mirage.io/blog/an
 
 New features:
 
-- The Xen backend has been re-written from scratch to be based on Solo5, and now supports PVHv2 on Xen 4.10 or higher, and QubesOS 4.0.
-- As part of this re-write, the existing Mini-OS based implementation has been retired, and all non-UNIX backends now use a unified OCaml runtime.
+- The Xen backend has been [re-written from scratch](https://github.com/mirage/mirage/issues/1159) to be based on Solo5, and now supports PVHv2 on Xen 4.10 or higher, and QubesOS 4.0.
+- As part of this re-write, the existing Mini-OS based implementation has been retired, and all non-UNIX backends now use a unified OCaml runtime based on `ocaml-freestanding`.
 - OCaml runtime settings settable via the `OCAMLRUNPARAM` environment variable are now exposed as unikernel boot parameters. For details, refer to [#1180](https://github.com/mirage/mirage/pull/1180).
 
 Security posture improvements:

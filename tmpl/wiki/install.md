@@ -82,7 +82,7 @@ After installation, `opam update -u` refreshes the package list and recompiles p
     # list of your remotes, which should include opam.ocaml.org
     $ opam remote
 
-Next, make sure you have at least **OCaml 4.08.0 or higher** as your active compiler. This is generally the case on MacOS X, though Debian only has it in the *testing* distribution at present. But don't worry: if your compiler is out of date, just run `opam switch` to have it locally install the right version for you.
+Next, make sure you have at least **OCaml 4.08.0 or higher** as your active compiler. This is generally the case on macOS, though Debian only has it in the *testing* distribution at present. But don't worry: if your compiler is out of date, just run `opam switch` to have it locally install the right version for you.
 
     $ ocaml -version
     # if it is not 4.08.0 or higher, then run this
