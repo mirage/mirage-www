@@ -15,7 +15,7 @@ The remainder of this guide covers:
 
 
 
-## Warning: OUT OF DATE
+## Warning: Out of date
 
 _(Updated 2020-10-26. The following information is of historical interest, since MirageOS 3.9.0 our Xen backend has been revised, and only supports PVH mode and x86_64 as architecture.)_
 
