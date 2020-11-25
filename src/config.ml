@@ -14,14 +14,6 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *)
 
-(* Hack to make the image name parametrized *)
-let get ~default name =
-  try String.lowercase_ascii @@ Sys.getenv name
-  with Not_found -> default
-
-let image = get "XENIMG" ~default:"www"
-
-
 open Mirage
 
 let tls_key =
@@ -44,13 +36,6 @@ let https_port =
       ~docv:"PORT" ["https-port"]
   in
   Key.(create "https-port" Arg.(opt ~stage:`Both int 443 doc))
-
-let pr_key =
-  let doc = Key.Arg.info
-      ~doc:"Configuration for running inside a travis PR."
-      ~env:"TRAVIS_PULL_REQUEST" ["pr"]
-  in
-  Key.(create "pr" Arg.(opt ~stage:`Configure (some int) None doc))
 
 let host_key =
   let doc = Key.Arg.info
@@ -132,6 +117,6 @@ let packages = [
 let () =
   let tracing = None in
   (* let tracing = mprof_trace ~size:10000 () in *)
-  register ?tracing ~packages image [
+  register ?tracing ~packages "www" [
     dispatch $ filesfs $ tmplfs $ default_posix_clock
   ]
