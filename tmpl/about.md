@@ -11,6 +11,7 @@ Lexicographically ordered by last name:
 * **[Martin Lucina](https://lucina.net/)**, [@mato](https://github.com/mato)
 * **[Anil Madhavapeddy](http://anil.recoil.org)**, University of Cambridge, [@avsm](https://github.com/avsm)
 * **[Hannes Mehnert](https://hannes.nqsb.io)**, [robur](http://robur.io), [@hannesm](https://github.com/hannesm)
+* **[Lucas Pluvinage](https://www.lortex.org)**, [@TheLortex](https://github.com/TheLortex)
 * **[David Scott](http://dave.recoil.org)**, Docker, [@djs55](https://github.com/djs55)
 * **[Magnus Skjegstad](http://www.skjegstad.com)**, [@magnuss](https://github.com/magnuss)
 
