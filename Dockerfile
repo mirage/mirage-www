@@ -14,7 +14,7 @@ RUN opam pin -n add conduit-lwt.2.3.0 $CONDUIT
 RUN opam pin -n add conduit-mirage.2.3.0 $CONDUIT
 
 # pin cohttp
-ARG COHTTP=https://github.com/samoht/ocaml-cohttp.git#conduit-2.3
+ARG COHTTP=https://github.com/samoht/ocaml-cohttp.git#32b8b8e9c9b95c4c0758377704489e138fc44367
 RUN opam pin -n add cohttp.2.3.0 $COHTTP
 RUN opam pin -n add cohttp-lwt.2.3.0 $COHTTP
 RUN opam pin -n add cohttp-mirage.2.3.0 $COHTTP
