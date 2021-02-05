@@ -5,3 +5,4 @@ Dockerfile
 **/*.xen
 **/*.hvt
 src/Makefile
+_opam

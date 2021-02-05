@@ -1,4 +1,4 @@
-PKG cohttp cow cowabloga cstruct lwt mirage mirage-unix mirage-http
+PKG cohttp cow cowabloga cstruct lwt mirage mirage-unix cohttp-mirage
 PKG mirage-net-unix mirage-clock-unix mirage-console.unix mirage-fs-unix
 PKG rrd
 

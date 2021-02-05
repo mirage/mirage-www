@@ -34,10 +34,9 @@ let domain_of_string x =
   scheme, host
 
 module Make
-    (S: Cohttp_lwt.S.Server)
+    (S: Cohttp_mirage.Server.S)
     (FS: Mirage_kv.RO)
     (TMPL: Mirage_kv.RO)
-    (Clock: Mirage_clock.PCLOCK)
 = struct
   open Www_types
 
@@ -217,7 +216,7 @@ module Make
     in
     S.make ~callback ~conn_closed ()
 
-  let start http fs tmpl () =
+  let start http fs tmpl =
     let host = Key_gen.host () in
     let red = Key_gen.redirect () in
     let domain = `Http, host in
