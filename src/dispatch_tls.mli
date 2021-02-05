@@ -17,8 +17,8 @@
 (** HTTPS dispatcher *)
 
 module Make
-    (Clock : Mirage_clock.PCLOCK)
-    (R: Mirage_random.S)
+    (_ : Mirage_clock.PCLOCK)
+    (_: Mirage_random.S)
     (S: Mirage_stack.V4)
     (FS: Mirage_kv.RO)
     (TMPL: Mirage_kv.RO) :
