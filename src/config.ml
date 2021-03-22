@@ -72,14 +72,14 @@ let additional_hostnames =
   let doc = Key.Arg.info ~doc:"Additional names (used for certificates)" ["additional-hostname"] in
   Key.(create "additional-hostnames" Arg.(opt (list string) [] doc))
 
-let keys = Key.([ abstract host_key ; abstract redirect_key ;
-                  abstract http_port ;
+let keys = Key.([ v host_key ; v redirect_key ;
+                  v http_port ;
                 ])
 
-let tls_only_keys = Key.([ abstract https_port ;
-                      abstract dns_key ; abstract dns_server ;
-                      abstract dns_port ; abstract key_seed ;
-                      abstract additional_hostnames ;
+let tls_only_keys = Key.([ v https_port ;
+                      v dns_key ; v dns_server ;
+                      v dns_port ; v key_seed ;
+                      v additional_hostnames ;
                     ])
 
 let fs_key = Key.(value @@ kv_ro ())
