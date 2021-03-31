@@ -83,8 +83,8 @@ let tls_only_keys = Key.([ v https_port ;
                     ])
 
 let fs_key = Key.(value @@ kv_ro ())
-let filesfs = generic_kv_ro ~key:fs_key "../files"
-let tmplfs = generic_kv_ro ~key:fs_key "../tmpl"
+let filesfs = generic_kv_ro ~key:fs_key "files"
+let tmplfs = generic_kv_ro ~key:fs_key "tmpl"
 
 let http =
   foreign ~keys "Dispatch.Make"
