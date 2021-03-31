@@ -11,21 +11,21 @@ There is also a [link blog](/links) of other articles available.
 
 **[Garett Smith][garett] at CityCode - Oct 2015**  
 <div class="flex-video">
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/cUvNths_5RA" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/cUvNths_5RA" frameborder="0" allowfullscreen=""></iframe>
 </div>
 
 ### Taking the Operating System out of Operations
 
 **[Gareth Rushgrove][gareth] at Operability - Sep 2015**  
 <div class="flex-video">
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/nxofKgwgjHs" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/nxofKgwgjHs" frameborder="0" allowfullscreen=""></iframe>
 </div>
 
 ### Look ma, no OS! Unikernels and their applications
 
 **[Matt Bajor][matt] at Strangeloop - Sep 2015**  
 <div class="flex-video">
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/W9F4pn9Lngc" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/W9F4pn9Lngc" frameborder="0" allowfullscreen=""></iframe>
 </div>
 
 
@@ -33,7 +33,7 @@ There is also a [link blog](/links) of other articles available.
 
 **[Mindy Preston][mindy] at Strangeloop - Sep 2015**  
 <div class="flex-video">
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/GNc1t6Q5Dls" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/GNc1t6Q5Dls" frameborder="0" allowfullscreen=""></iframe>
 </div>
 
 Mindy also wrote a post that has some information and links:
@@ -43,14 +43,14 @@ Mindy also wrote a post that has some information and links:
 
 **[Hannes Mehnert][hannes] at Source_Code Berlin - Aug 2015**  
 <div class="flex-video">
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/PTtI8hpR7hQ" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/PTtI8hpR7hQ" frameborder="0" allowfullscreen=""></iframe>
 </div>
 
 ### Unikernels!
 
 **[Amir Chaudhry][amir] at PolyConf - July 2015**  
 <div class="flex-video">
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/nZLy19eRWLk" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/nZLy19eRWLk" frameborder="0" allowfullscreen=""></iframe>
 </div>
 
 There's more information about this talk in the blog post at:
@@ -60,7 +60,7 @@ There's more information about this talk in the blog post at:
 
 **[Russell Pavlicek][russ] at SouthEast LinuxFest - June 2015**  
 <div class="flex-video">
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/8UgiPODw3CY" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/8UgiPODw3CY" frameborder="0" allowfullscreen=""></iframe>
 </div>
 
 *Russ has also been at many other Linuxfests this year!*
@@ -69,7 +69,7 @@ There's more information about this talk in the blog post at:
 
 **[Anil Madhavapeddy][anil] at Esper Technologies - May 2015**  
 <div class="flex-video">
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/bC7rTUEZfmI" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/bC7rTUEZfmI" frameborder="0" allowfullscreen=""></iframe>
 </div>
 
 

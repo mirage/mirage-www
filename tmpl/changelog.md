@@ -1527,8 +1527,8 @@ Released on 2015-02-06 as [v1.2.0](https://github.com/mirage/ocaml-cow/releases/
 * New `Html.doctype` value of the HTML5 DOCTYPE.
 * New `Html.output` and `Html.output_doc` functions for generic polyglot output.
 * Atom support is now deprecated in favor of Syndic
-* New `Html.img` constructor for easy creation of <img> tags
-* New `Html.a` constructor for easy creation of <a> tags
+* New `Html.img` constructor for easy creation of `<img>` tags
+* New `Html.a` constructor for easy creation of `<a>` tags
 * Deprecate function `Html.html_of_link` and type `Html.link`
 
 ### ocaml-git-1.4.10: Fix the smart HTTP protocol
