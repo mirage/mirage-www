@@ -34,7 +34,7 @@ let domain_of_string x =
   scheme, host
 
 module Make
-    (S: Cohttp_lwt.S.Server)
+    (S: Cohttp_mirage.Server.S)
     (FS: Mirage_kv.RO)
     (TMPL: Mirage_kv.RO)
     (Clock: Mirage_clock.PCLOCK)
