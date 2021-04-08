@@ -68,7 +68,7 @@ module Make
     let redirect = Key_gen.redirect () in
     let hostname = Domain_name.(of_string_exn (Key_gen.host ()) |> host_exn) in
     let additional_hostnames =
-      List.map (fun n -> Domain_name.(raw (of_string_exn n)))
+      List.map Domain_name.of_string_exn
         (Key_gen.additional_hostnames ())
     in
     tls_init stack hostname additional_hostnames >>= fun cfg ->
