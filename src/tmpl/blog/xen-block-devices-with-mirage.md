@@ -112,7 +112,7 @@ should be able to run:
   xen-disk connect <vmname>
 ```
 
-which will hotplug a fresh block device into the VM "<vmname>" using the
+which will hotplug a fresh block device into the VM "`<vmname>`" using the
 "discard" backend, which returns "success" to all read and write requests,
 but actually throws all data away. Obviously this backend should only be
 used for basic testing!
