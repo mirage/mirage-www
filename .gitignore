@@ -39,11 +39,12 @@ stats/.merlin
 .*.swp
 
 /src/.mirage.config
-/src/mirage-unikernel-www-*.opam
-/src/myocamlbuild.ml
-/src/www
-/src/www.hvt
-/src/www.spt
+/src/dist/
+/src/mirage/
+/src/duniverse/
+/src/dune-workspace
 
 _opam
 .envrc
+
+.vscode
