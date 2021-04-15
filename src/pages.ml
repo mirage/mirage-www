@@ -75,6 +75,17 @@ module Global = struct
       ~title_uri:(Uri.of_string "/")
       ~nav_links
 
+  let mirage_4_announce =
+      div ~id:"mirage-4-announce" ~attrs:["style", "background-color: #627288; padding: 8px 0; color: white;"] (
+        div ~cls:"row" (
+        div ~cls:"small-12 columns" (
+          string "MirageOS 4.0 is on its way ! See the "
+          ++ a ~attrs:["style", "color: wheat"] ~href:(Uri.of_string "/docs/mirage-4") (string "documentation")
+          ++ string " for more information on what's new, and how to test the preview."
+        )
+      )
+    )
+
   let t ~title ~headers ~content ~read:_ ~domain =
     let scheme = match fst domain with `Http -> "http" | `Https -> "https" in
     let fonts =
@@ -86,7 +97,7 @@ module Global = struct
       link ~rel:"stylesheet" ~ty:"text/css" (Uri.of_string fonts)
     in
     let headers = font @ headers in
-    let content = top_nav @ content in
+    let content = top_nav @ mirage_4_announce @ content in
     let google_analytics = Data.google_analytics domain in
     let body =
       Cowabloga.Foundation.body ~highlight:"/css/magula.css"

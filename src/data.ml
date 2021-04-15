@@ -173,6 +173,12 @@ module People = struct
     uri       = Some "https://www.lemonde.fr/signataires/damien-leloup/";
     email     = None;
   }
+
+  let lortex = {
+    Atom.name = "Lucas Pluvinage";
+    uri       = Some "https://lortex.org/";
+    email     = Some "lucas@tarides.com";
+  }
 end
 
 let rights = Some "All rights reserved by the author"
@@ -903,6 +909,13 @@ module Wiki = struct
       subject    = "Building and packaging with dune and dune-release";
       body       = File "packages.md";
       permalink  = "packaging";
+    };
+
+    { updated    = date (2021, 04, 14, 17, 46);
+      author     = lortex;
+      subject    = "MirageOS 4";
+      body       = File "mirage-4.md";
+      permalink  = "mirage-4";
     };
   ]
 end
