@@ -1,7 +1,7 @@
 MirageOS is a library operating system that constructs [unikernels](https://en.wikipedia.org/wiki/Unikernel)
 for secure, high-performance network applications across a variety
 of cloud computing and mobile platforms.  Code can be developed on a normal OS
-such as Linux or MacOS X, and then compiled into a fully-standalone,
+such as Linux or macOS, and then compiled into a fully-standalone,
 specialised unikernel that runs under a [Xen](https://xenproject.org) or [KVM](http://www.linux-kvm.org/page/Main_Page) hypervisor.
 
 This lets your services run more efficiently, securely and with finer control than
