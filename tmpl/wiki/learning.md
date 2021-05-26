@@ -28,7 +28,7 @@ the alternatives, roughly in descending order of preference:
 * [the mailing list](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel)
 * filing Issue tickets on relevant [Github repositories](https://github.com/mirage)
 * [The OCaml message board](https://discuss.ocaml.org/)
-* `#mirage` on the freenode IRC network
+* `#mirage` on the libera.chat IRC network
 
 ## Typical development workflow
 
