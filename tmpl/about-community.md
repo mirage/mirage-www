@@ -14,5 +14,6 @@
 * [*Balraj Singh*](https://github.com/balrajsingh)
 * [*Jeremy Yallop*](https://www.cl.cam.ac.uk/~jdy22/), University of Cambridge
 * [*Dan Williams*](https://github.com/djwillia), IBM Research
+* [*Christiano Haesbaert*](https://github.com/haesbaert), genua mbh
 
 [The MirageOS3 release announcement](/blog/announcing-mirage-30-release) contained a more complete list.  For a complete list, please look at the contributors to individual git repositories.  If you are missing here, please add yourself via a PR to the [mirage-www](https://github.com/mirage/mirage-www) repository.
