@@ -49,7 +49,7 @@ error code or raises an exception.
 
 ### Errors vs. Exceptions
 
-Real World OCaml's [Chapter 7. Error Handling](https://realworldocaml.org/v1/en/html/error-handling.html)
+Real World OCaml's [Chapter 7. Error Handling](https://dev.realworldocaml.org/error-handling.html)
 provides an excellent overview of the options for handling errors in OCaml. It
 finishes with this good advice:
 

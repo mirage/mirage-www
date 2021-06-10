@@ -144,9 +144,9 @@ used fairly widely throughout Mirage, a very brief introduction to the commonest
 way we use them is needed. For a better introduction as to how to actually make
 use of them, what they are, and so on
 see
-[Real World OCaml, Ch.9](https://realworldocaml.org/v1/en/html/functors.html)
+[Real World OCaml, Ch.9](https://dev.realworldocaml.org/functors.html)
 (and also
-[Ch.10, First-Class Modules](https://realworldocaml.org/v1/en/html/first-class-modules.html)).
+[Ch.10, First-Class Modules](https://dev.realworldocaml.org/first-class-modules.html)).
 
 In short, in Mirage, they're used as a way to abstract over the target
 environment for the unikernel. Functors are, roughly, functions from modules to
