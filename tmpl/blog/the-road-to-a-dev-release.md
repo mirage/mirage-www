@@ -17,6 +17,6 @@ Here's some other significant news from the past few months:
 In the next few months, the installation notes and getting started guides will
 all be revamped to match the reality of the new tooling, so expect some flux
 there.   If you want to take an early try of Mirage beforehand, don't forget to
-hop on the `#mirage` IRC channel on Freenode and ping us with questions
+hop on the `#mirage` IRC channel on libera.chat and ping us with questions
 directly.  We will also be migrating some of the project infrastructure to be fully
 self-hosted on Mirage and Xen, and placing some of the services onto the new [xenproject.org](http://xenproject.org) infrastructure. 

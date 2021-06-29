@@ -63,7 +63,7 @@ as they happen.
 Since we're now also a proud Xen and Linux Foundation incubator project, our mailing
 list is shifting to [mirageos-devel@lists.xenproject.org](http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel), and we very much
 welcome comments and feedback on our efforts over there.
-The `#mirage` channel on FreeNode IRC is also growing increasingly popular, as
+The `#mirage` channel on Libera Chat IRC is also growing increasingly popular, as
 is simply reporting issues on the main [Mirage GitHub](http://github.com/mirage/mirage) repository.
 
 Several people have also commented that they want to learn OCaml properly to

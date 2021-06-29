@@ -1,5 +1,5 @@
 Welcome to the MirageOS wiki. Feel free to subscribe to the [Atom](/wiki/atom.xml) feed to keep up-to-date with our progress.
-MirageOS is in beta stage and the infrastructure you see here is self-hosting. The authors hang on out #mirage on FreeNode IRC, so drop by with any questions you might have.
+MirageOS is in beta stage and the infrastructure you see here is self-hosting. The authors hang on out #mirage on libera.chat IRC, so drop by with any questions you might have.
 
 <div class="row">
 
