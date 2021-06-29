@@ -549,4 +549,4 @@ we can verify that things are as we expect from any VM that has the appropriate 
 
 # What's Next?
 
-The implementation work above leaves a lot to be desired, noted in the [comments to the original pull request](https://github.com/mirage/mirage/pull/553#issuecomment-231529011).  We welcome further contributions in this area, particularly from QubesOS users and developers!  If you have questions or comments, please get in touch on the [mirageos-devel mailing list](https://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel) or on our IRC channel at #mirage on irc.freenode.net !
+The implementation work above leaves a lot to be desired, noted in the [comments to the original pull request](https://github.com/mirage/mirage/pull/553#issuecomment-231529011).  We welcome further contributions in this area, particularly from QubesOS users and developers!  If you have questions or comments, please get in touch on the [mirageos-devel mailing list](https://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel) or on our IRC channel at #mirage on irc.libera.chat !

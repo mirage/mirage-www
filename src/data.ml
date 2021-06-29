@@ -629,7 +629,7 @@ module Wiki = struct
     let href = Uri.of_string ("http://canopy.mirage.io/irclogs/" ^ s2) in
     let body = Html Cow.Html.(
       p (list [
-       string "The IRC logs from our meetings in #mirage on Freenode are stored in Canopy, and available online from ";
+       string "The IRC logs from our meetings in #mirage on libera.chat are stored in Canopy, and available online from ";
        a ~href (string (Uri.to_string href))
     ])) in
     { updated = date (y,m,d,16,0);

@@ -19,7 +19,7 @@ Some other events of note recently:
   directly to a [repository](https://github.com/hannesm/canopy-data) which is [available online](http://canopy.mirage.io/irclogs).  Thanks Amir
   and Enguerrand for all their hard work on recording the growing amount of development in MirageOS.  [Gemma Gordon](https://ocaml.io/w/User:GemmaG)
   has also joined the project and been coordinating the [meetings](https://github.com/mirage/mirage-www/wiki/Call-Agenda).  The next one is in a
-  few hours, so please join us on `#mirage` on Freenode IRC at 4pm British time if you would like to participate or are just curious!
+  few hours, so please join us on `#mirage` on Libera Chat IRC at 4pm British time if you would like to participate or are just curious!
 
 * Our participation in the [Outreachy](https://wiki.gnome.org/Outreachy/2016/MayAugust) program for 2016 has begun, and the irrepressible
   [Gina Marie Maini](http://www.gina.codes) (aka [wiredsister](http://twitter.com/wiredsis)) has been hacking on syslogd, mentored by [Mindy Preston](http://somerandomidiot.com).

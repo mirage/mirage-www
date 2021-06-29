@@ -373,7 +373,7 @@ We intend to re-evaluate the effectiveness of this design after getting some
 experience with how it works in the wild. To this end, we particularly
 appreciate the community feedback and
 you can reach us through our [mailing list][mirageos-devel-web], or hop onto
-`freenode` and join `#mirage`.
+`libera chat` and join `#mirage`.
 
 [mirageos-devel-web]: http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel
 

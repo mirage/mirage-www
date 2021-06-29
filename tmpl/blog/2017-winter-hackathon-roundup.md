@@ -210,7 +210,7 @@ The parser returns an existential
 This is causing me a problem: the `'req_type` existential would escape.
 I do not know how to solve this problem, or if it's possible to solve it at all.
 I discussed this issue with [@infinity0](http://github.com/infinity0) after the retreat, and we're not very optimistic.
-Perhaps someone in `#ocaml` on Freenode might know a trick.
+Perhaps someone in `#ocaml` on Libera Chat might know a trick.
 
 ```OCaml
     let listen ((ic, oc) : in_channel * out_channel)
