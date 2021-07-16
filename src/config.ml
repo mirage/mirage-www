@@ -88,17 +88,17 @@ let tmplfs = generic_kv_ro ~key:fs_key "../tmpl"
 
 let http =
   foreign ~keys "Dispatch.Make"
-    (http @-> kv_ro @-> kv_ro @-> pclock @-> job)
+    (http @-> kv_ro @-> kv_ro @-> job)
 
 let https =
   let packages = [package "tls-mirage"; package "cohttp-mirage"] in
   let keys = keys @ tls_only_keys in
   foreign ~packages  ~keys "Dispatch_tls.Make"
-    (random @-> stackv4 @-> kv_ro @-> kv_ro @-> pclock @-> job)
+    (pclock @-> random @-> stackv4 @-> kv_ro @-> kv_ro @-> job)
 
 let dispatch = if_impl (Key.value tls_key)
     (* With tls *)
-    (https $ default_random $ generic_stackv4 default_network)
+    (https $ default_posix_clock $ default_random $ generic_stackv4 default_network)
 
     (* Without tls *)
     (http $ cohttp_server (conduit_direct (generic_stackv4 default_network)))
@@ -118,5 +118,5 @@ let () =
   let tracing = None in
   (* let tracing = mprof_trace ~size:10000 () in *)
   register ?tracing ~packages "www" [
-    dispatch $ filesfs $ tmplfs $ default_posix_clock
+    dispatch $ filesfs $ tmplfs
   ]

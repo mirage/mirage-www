@@ -17,11 +17,11 @@
 open Lwt.Infix
 
 module Make
+    (Clock : Mirage_clock.PCLOCK)
     (R: Mirage_random.S)
     (S: Mirage_stack.V4)
     (FS: Mirage_kv.RO)
     (TMPL: Mirage_kv.RO)
-    (Clock : Mirage_clock.PCLOCK)
 = struct
 
   let log_src = Logs.Src.create "dispatch_tls" ~doc:"web-over-tls server"
@@ -30,11 +30,11 @@ module Make
   module TCP  = S.TCPV4
   module TLS  = Tls_mirage.Make (TCP)
 
-  module Http  = Cohttp_mirage.Server(TCP)
-  module Https = Cohttp_mirage.Server(TLS)
+  module Http  = Cohttp_mirage.Server.Flow(TCP)
+  module Https = Cohttp_mirage.Server.Flow(TLS)
 
-  module D  = Dispatch.Make(Http)(FS)(TMPL)(Clock)
-  module DS = Dispatch.Make(Https)(FS)(TMPL)(Clock)
+  module D  = Dispatch.Make(Http)(FS)(TMPL)
+  module DS = Dispatch.Make(Https)(FS)(TMPL)
 
   module C = Dns_certify_mirage.Make(R)(Clock)(OS.Time)(S)
 
@@ -49,7 +49,7 @@ module Make
   let with_http host flow =
     let domain = `Https, host in
     let t = D.create domain (D.redirect domain) in
-    Http.listen t flow
+    Http.callback t flow
 
   let restart_before_expire = function
     | `Single (server :: _, _) ->
@@ -76,12 +76,12 @@ module Make
       let conf = Tls.Config.server ~certificates () in
       Lwt.return conf
 
-  let start _ stack fs tmpl () =
+  let start () _ stack fs tmpl =
     let host = Key_gen.host () in
     let redirect = Key_gen.redirect () in
     let hostname = Domain_name.(of_string_exn (Key_gen.host ()) |> host_exn) in
     let additional_hostnames =
-      List.map (fun n -> Domain_name.(host_exn (of_string_exn n)))
+      List.map (fun n -> Domain_name.(of_string_exn n))
         (Key_gen.additional_hostnames ())
     in
     tls_init stack hostname additional_hostnames >>= fun cfg ->
@@ -90,7 +90,7 @@ module Make
       | None        -> DS.dispatch domain fs tmpl
       | Some domain -> DS.redirect (Dispatch.domain_of_string domain)
     in
-    let callback = Https.listen (DS.create domain dispatch) in
+    let callback = Https.callback (DS.create domain dispatch) in
     let https flow = with_tls cfg flow ~f:callback in
     let http flow = with_http host flow in
     S.listen_tcpv4 stack ~port:(Key_gen.https_port ()) https;
