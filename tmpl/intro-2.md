@@ -1,5 +1,3 @@
-MirageOS uses the [OCaml](http://ocaml.org/) language, with libraries that
-provide networking, storage and concurrency support that work under Unix during
-development, but become operating system drivers when being compiled for
-production deployment. The framework is fully event-driven, with no support for
-preemptive threading.
+MirageOS uses the [OCaml](https://ocaml.org/) language along with [libraries](https://docs.mirage.io/) that provide networking, storage, and concurrency support. This all works under Unix during development but become operating system drivers when compiled for production deployment. The framework is fully event-driven with no support for preemptive threading.
+
+By default, MirageOS does not have access to a POSIX filesystem; instead, it can use a mergeable, branchable distributed data stores with a large range of pre-provided storage backends called **Irmin**. Please visit [irmin.org](Irmin.org) for more information. 

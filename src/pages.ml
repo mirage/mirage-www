@@ -57,7 +57,7 @@ module Global = struct
       tag "li" (a ~href:(uri "/blog/") (string "Blog"));
       tag "li" (a ~href:(uri "/docs/") (string "Docs"));
       tag "li" (a ~href:(uri "http://docs.mirage.io") (string "API"));
-      tag "li" (a ~href:(uri "http://canopy.mirage.io") (string "Canopy"));
+      tag "li" (a ~href:(uri "http://irmin.org") (string "Irmin"));
       tag "li"~cls:"has-dropdown" (list [
           a ~href:(uri "/community/") (string "Community");
           ul ~cls:"dropdown" [

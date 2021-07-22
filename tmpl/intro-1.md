@@ -1,14 +1,7 @@
-MirageOS is a library operating system that constructs [unikernels](https://en.wikipedia.org/wiki/Unikernel)
-for secure, high-performance network applications across a variety
-of cloud computing and mobile platforms.  Code can be developed on a normal OS
-such as Linux or macOS, and then compiled into a fully-standalone,
-specialised unikernel that runs under a [Xen](https://xenproject.org) or [KVM](http://www.linux-kvm.org/page/Main_Page) hypervisor.
+MirageOS is a library operating system that constructs *[unikernels](https://en.wikipedia.org/wiki/Unikernel)* for secure, high-performance network applications across a variety of cloud and edge computing. Unikernels are specialised applications that target a large range of deployment objects—for instance, deployed as a minimal virtual machine (VM) running on top of an hypervisor or as a pure JavaScript library inside a browser. 
 
-This lets your services run more efficiently, securely and with finer control than
-with a full conventional software stack.
+MirageOS code can be developed on a normal OS such as Linux or Mac, and then compiled into an independent, specialised unikernel that runs under a [Xen](https://xenproject.org) or [KVM](http://www.linux-kvm.org/page/Main_Page) hypervisor. This lets your services run more efficiently and securely. Plus, you have finer control than with a full conventional software stack.
 
-MirageOS uses the [OCaml](https://ocaml.org/) language, with [libraries](https://docs.mirage.io) that
-provide networking, storage and concurrency support that work under Unix during
-development, but become operating system drivers when being compiled for
-production deployment. The framework is fully event-driven, with no support for
-preemptive threading.
+MirageOS uses the [OCaml](https://ocaml.org/) language along with [libraries](https://docs.mirage.io/) that provide networking, storage, and concurrency support. This all works under Unix during development but become operating system drivers when compiled for production deployment. The framework is fully event-driven with no support for preemptive threading.
+
+By default, MirageOS does not have access to a POSIX filesystem; instead, it can use a mergeable, branchable distributed data stores with a large range of pre-provided storage backends called **Irmin**. Please visit [irmin.org](Irmin.org) for more information. 

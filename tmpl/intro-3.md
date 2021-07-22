@@ -1,4 +1,4 @@
-[MirageOS 3.0](/blog/announcing-mirage-30-release) was released in February 2017, preceded by [MirageOS 2.0](/blog/announcing-mirage-20-release) in July 2014 and [MirageOS 1.0](/blog/announcing-mirage10) in December 2013.
-All the infrastructure you see here is [self-hosted](https://github.com/mirage/mirage-www).
-Check out the [documentation](/wiki), compile your [hello world
-unikernel](/wiki/hello-world), get started with the [public cloud](/wiki/xen-boot), or watch the [talks](/wiki/talks).
+[MirageOS 1.0](https://mirage.io/blog/announcing-mirage10) was created in December 2013, and it was updated to [MirageOS 2.0](https://mirage.io/blog/announcing-mirage-20-release) in July 2014. The latest version, [MirageOS 3.0](https://mirage.io/blog/announcing-mirage-30-release), was released in February 2017. Since, then multiple minor releases have been done (TODO: link to the last one? Risk: it can be outdated soon) ; TODO: also we plan to release Mirage 4.0 in 2021.
+
+All the infrastructure you see here is [self-hosted](https://github.com/mirage/mirage-www). Check out the [documentation](https://mirage.io/wiki), compile your [hello world unikernel](https://mirage.io/wiki/hello-world), get started with the [public cloud](https://mirage.io/wiki/xen-boot), or watch the [talks](https://mirage.io/wiki/talks).
+
