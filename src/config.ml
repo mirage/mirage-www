@@ -101,7 +101,7 @@ let dispatch = if_impl (Key.value tls_key)
     (https $ default_random $ generic_stackv4 default_network)
 
     (* Without tls *)
-    (http $ cohttp_server (conduit_direct (generic_stackv4 default_network)))
+    (http $ cohttp_server (conduit_direct (generic_stackv4v6 default_network)))
 
 let packages = [
   package "cow" ~min:"2.3.0";
