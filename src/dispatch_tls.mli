@@ -18,7 +18,7 @@
 
 module Make
     (R: Mirage_random.S)
-    (S: Mirage_stack.V4)
+    (S: Mirage_stack.V4V6)
     (FS: Mirage_kv.RO)
     (TMPL: Mirage_kv.RO)
     (Clock : Mirage_clock.PCLOCK) :

@@ -58,7 +58,7 @@ let dns_key =
 
 let dns_server =
   let doc = Key.Arg.info ~doc:"dns server IP" ["dns-server"] in
-  Key.(create "dns-server" Arg.(required ipv4_address doc))
+  Key.(create "dns-server" Arg.(required ip_address doc))
 
 let dns_port =
   let doc = Key.Arg.info ~doc:"dns server port" ["dns-port"] in

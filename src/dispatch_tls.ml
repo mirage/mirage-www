@@ -39,7 +39,7 @@ module Make
   module C = Dns_certify_mirage.Make(R)(Clock)(OS.Time)(S)
 
   let restart_before_expire = function
-    | `Single (server :: _, _) ->
+    | (server :: _, _) ->
       let expiry = snd (X509.Certificate.validity server) in
       let diff = Ptime.diff expiry (Ptime.v (Clock.now_d_ps ())) in
       begin match Ptime.Span.to_int_s diff with
@@ -60,7 +60,7 @@ module Make
     | Error (`Msg m) -> Lwt.fail_with m
     | Ok certificates ->
       restart_before_expire certificates;
-      let conf = Tls.Config.server ~certificates () in
+      let conf = Tls.Config.server ~certificates:(`Single certificates) () in
       Lwt.return conf
 
   let start _ stack fs tmpl () =
