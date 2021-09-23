@@ -1,4 +1,4 @@
-FROM ocaml/opam:ubuntu-ocaml-4.11
+FROM ocurrent/opam:ubuntu-20.10-ocaml-4.10
 RUN sudo apt install -y m4 pkg-config
 RUN cd ~/opam-repository && git pull origin master && git reset --hard ef82e5bc09e89868e9393bc8ded218b02517876e && opam update
 RUN opam repo add mirage-dev https://github.com/mirage/mirage-dev.git#713b884b36a58579515b2ea55ec057f6fe310a52
