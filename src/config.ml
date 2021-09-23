@@ -94,11 +94,11 @@ let https =
   let packages = [package "tls-mirage"; package "cohttp-mirage"] in
   let keys = keys @ tls_only_keys in
   foreign ~packages  ~keys "Dispatch_tls.Make"
-    (random @-> stackv4 @-> kv_ro @-> kv_ro @-> pclock @-> job)
+    (random @-> stackv4v6 @-> kv_ro @-> kv_ro @-> pclock @-> job)
 
 let dispatch = if_impl (Key.value tls_key)
     (* With tls *)
-    (https $ default_random $ generic_stackv4 default_network)
+    (https $ default_random $ generic_stackv4v6 default_network)
 
     (* Without tls *)
     (http $ cohttp_server (conduit_direct (generic_stackv4v6 default_network)))
