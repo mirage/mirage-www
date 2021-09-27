@@ -45,7 +45,7 @@ $ cat tutorial/noop/config.ml
 open Mirage
 
 let main =
-  foreign "Unikernel" job
+  main "Unikernel" job
 
 let () =
   register "noop" [main]
@@ -54,7 +54,7 @@ let () =
 There's a little more going on here than in `unikernel.ml`. First we open the
 `Mirage` module to save on typing. Next, we define a value `main`.  This name is
 only a convention, and you should feel free to change it if you wish.
-`main` calls the `foreign` function, passing two parameters.
+`main` calls the `Mirage.main` function, passing two parameters.
 The first is a string declaring the module name that contains
 our entry point — in this case, standard OCaml compilation behaviour means that
 the `unikernel.ml` file produces a module named `Unikernel`. Again, there's
@@ -71,7 +71,8 @@ Finally, we declare the entry point to OCaml in the usual way (`let () = ...`),
 `register`ing our unikernel entry point (`main`) with a name (`"noop"` in this
 case) to be used when we build our unikernel.
 
-Building our unikernel is then simply a matter of evaluating its configuration:
+Building our unikernel is then simply a matter of:
+1. Evaluating its configuration:
 
 ```bash
 $ cd tutorial/noop
@@ -79,57 +80,63 @@ $ cd tutorial/noop
 $ mirage configure -t unix
 ```
 
-...installing dependencies:
+2. Installating dependencies:
 
-```bash
+- `opam install` for installing the build tools in the opam switch.
+- `opam-monorepo lock` resolves the unikernel dependencies a generates a 
+  _lockfile_.
+- `lockfile depext` installs the external dependencies of the unikernel
+  dependencies (another set of potential build tools).
+- `opam-monorepo pull` locally fetch unikernel dependencies.
+
+NOTE: while performing the _lock_ step, an additional repository 
+(https://github.com/mirage/opam-overlays.git) is added in your opam switch. 
+This repository contains packages that have been changed to use the _dune_ build 
+system. The `--extra-repo` argument in `mirage configure` changes the additional 
+repository to use. `--no-extra-repo` can be used to disable the extra repository, 
+but the _lock_ step might fail because of dependencies that are not using the 
+_dune_ build system.
+
+```json
 $ make depend
-opam pin add --no-action --yes mirage-unikernel-noop-unix .
-[NOTE] Package mirage-unikernel-noop-unix is already path-pinned to /Users/mort/research/projects/mirage/src/mirage-skeleton/noop.
-       This will erase any previous custom definition.
-Proceed ? [Y/n] y
+ ↳ opam depexts
+ ↳ opam install global dependencies
+Nothing to do.
+using overlay repository mirage-tmp: https://github.com/mirage/opam-overlays.git
+[mirage-tmp] no changes from git+https://github.com/mirage/opam-overlays.git
+[NOTE] Repository mirage-tmp has been added to the selections of switch
+       mirage-4.12.0 only.
+       Run `opam repository add mirage-tmp
+       --all-switches|--set-default' to use it in all existing
+       switches, or in newly created switches, respectively.
 
-[mirage-unikernel-noop-unix] /Users/mort/research/projects/mirage/src/mirage-skeleton/noop/ synchronized
-[mirage-unikernel-noop-unix] Installing new package description from /Users/mort/research/projects/mirage/src/mirage-skeleton/noop
-
-opam depext --yes mirage-unikernel-noop-unix
-# Detecting depexts using flags: x86_64 osx homebrew
-# The following system packages are needed:
-#  - camlp4
-# All required OS packages found.
-opam install --yes --deps-only mirage-unikernel-noop-unix
-
-=-=- Synchronising pinned packages =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=  🐫
-[mirage-unikernel-noop-unix] /Users/mort/research/projects/mirage/src/mirage-skeleton/noop/ already up-to-date
-opam pin remove --no-action mirage-unikernel-noop-unix
-mirage-unikernel-noop-unix is now unpinned from path /Users/mort/research/projects/mirage/src/mirage-skeleton/noop
+ ↳ opam-monorepo lock
+==> Using 1 locally scanned package as the root.
+==> Found 55 opam dependencies for the root package.
+==> Querying opam database for their metadata and Dune compatibility.
+==> Calculating exact pins for each of them.
+==> Wrote lockfile with 39 entries to mirage/noop-unix.opam.locked. You can now run opam monorepo pull to fetch their sources.
+ ↳ lockfile depexts
+removing overlay repository mirage-tmp
+Repositories removed from the selections of switch mirage-4.12.0. Use '--all' to forget about them altogether.
+ ↳ opam-monorepo pull
+==> Pulling lockfile mirage/noop-unix.opam.locked          
+Successfully pulled 39/39 repositories
 ```
 
 ...and compiling:
 
 ```bash
 $ make
-mirage build
-ocamlfind ocamldep -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -modules main.ml > main.ml.depends
-ocamlfind ocamldep -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -modules key_gen.ml > key_gen.ml.depends
-ocamlfind ocamldep -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -modules unikernel.ml > unikernel.ml.depends
-ocamlfind ocamlc -c -g -g -bin-annot -safe-string -principal -strict-sequence -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -w A-4-41-42-44 -color always -o key_gen.cmo key_gen.ml
-ocamlfind ocamlc -c -g -g -bin-annot -safe-string -principal -strict-sequence -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -w A-4-41-42-44 -color always -o unikernel.cmo unikernel.ml
-ocamlfind ocamlc -c -g -g -bin-annot -safe-string -principal -strict-sequence -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -w A-4-41-42-44 -color always -o main.cmo main.ml
-ocamlfind ocamlopt -c -g -g -bin-annot -safe-string -principal -strict-sequence -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -w A-4-41-42-44 -color always -o key_gen.cmx key_gen.ml
-ocamlfind ocamlopt -c -g -g -bin-annot -safe-string -principal -strict-sequence -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -w A-4-41-42-44 -color always -o unikernel.cmx unikernel.ml
-ocamlfind ocamlopt -c -g -g -bin-annot -safe-string -principal -strict-sequence -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix -w A-4-41-42-44 -color always -o main.cmx main.ml
-ocamlfind ocamlopt -g -linkpkg -g -package mirage-unix -package mirage-types-lwt -package mirage-types -package mirage-runtime -package mirage-logs -package mirage-clock-unix -package lwt -package functoria-runtime -predicates mirage_unix key_gen.cmx unikernel.cmx main.cmx -o main.native
 ```
 
 As we configured for Unix (the `-t unix` argument to the `mirage configure`
 command), the result is a standard Unix ELF binary that can simply be executed:
 
 ```bash
-$ ls -l noop
-lrwxrwxr-x  1 mort  staff  18 Jan 12 12:11 noop@ -> _build/main.native
-$ ls -l _build/main.native
--rwxrwxr-x  1 mort  staff  2690564 Jan 12 12:11 _build/main.native*
-$ ./noop
+$ ls -l dist/noop
+-rwxr-xr-x 1 lucas lucas 5280056 Sep 27 11:52 noop
+$ dist/noop
 $ echo $?
 0
 ```
@@ -182,13 +189,13 @@ $ cat tutorial/noop-functor/config.ml
 open Mirage
 
 let main =
-  foreign "Unikernel.Main" job
+  main "Unikernel.Main" job
 
 let () =
   register "noop" [main]
 ```
 
-Note that the string passed to `foreign` is now `"Unikernel.Main"` as we must
+Note that the string passed to `main` is now `"Unikernel.Main"` as we must
 refer to the `Main` module inside the `Unikernel` module. Everything else stays
 the same.  Go ahead and try that out by building the unikernel inside
 `noop-functor`.
@@ -235,11 +242,7 @@ main `Hello` module parameterised by a module (`Time`, of type `Mirage_time.S`) 
 rather than a standard OCaml POSIX application.
 
 The module type for our `Time` module, `Mirage_time.S`, is defined in an
-external package [mirage-time](https://github.com/mirage/mirage-time).  The name `S` for "the module type of things like this" is a common OCaml convention (comparable to naming the most-used type in a module `t`).  There are many packages defining module types for use in Mirage.  For ease of discovery, a list of the module types that Mirage knows about is maintained
-in the [`types/`](https://github.com/mirage/mirage/tree/master/types) directory
-of the main MirageOS repository.  The `Mirage_types` module gives abstract definitions that leave some important primitives unspecified; the `Mirage_types_lwt` module contains more concrete definitions for use in programs.  Since you'll find yourself referring back to
-these quite often when building MirageOS applications, it's worth bookmarking
-the [documentation](http://docs.mirage.io/mirage-types-lwt/Mirage_types_lwt/index.html) for this module.
+external package [mirage-time](https://github.com/mirage/mirage-time).  The name `S` for "the module type of things like this" is a common OCaml convention (comparable to naming the most-used type in a module `t`).  There are many packages defining module types for use in Mirage.
 
 The concrete implementation of `Time` will be supplied at
 compile time, depending on the target that you are compiling for. This
@@ -251,7 +254,7 @@ $ cat tutorial/hello/config.ml
 open Mirage
 
 let main =
-  foreign
+  main
     ~packages:[package "duration"]
     "Unikernel.Hello" (time @-> job)
 
@@ -277,7 +280,7 @@ configuration keys we want to allow the user to specify at configuration or buil
 build dependencies for the project.  We'll talk more about configuration keys in the next example.
 
 Notice that we refer to the module name as a string (`"Unikernel.Hello"`) when
-calling `foreign`, instead of directly as
+calling `main`, instead of directly as
 an OCaml value. The `mirage` command-line tool evaluates this configuration file
 at build time and outputs a `main.ml` that has the concrete values filled in for
 you, with the exact modules varying by which backend you selected (e.g. Unix or
@@ -322,9 +325,9 @@ $ make
 ```
 
 This builds a Unix binary called `hello` that contains the simple console
-application. If you are on a multicore machine and want to do parallel builds,
-`export OPAMJOBS=4` (or some other value equal to the number of cores) will do
-the trick.
+application, it is available in the `dist` folder. Note that `make` simply calls
+`mirage build` which itself turns into a simple `dune build` command. If you are 
+familiar with `dune` it is possible to inspect the build rules for the unikernel. 
 
 Finally to run your application, simply run it
 directly — as it is a standard Unix binary — and observe the exciting log messages that our loop is generating:
@@ -335,7 +338,7 @@ $ ./hello
 
 #### Building for Another Backend
 
-**Note**: The following sections of this tutorial use the [Solo5](https://github.com/Solo5/solo5/tree/v0.6.3)-based `hvt` backend as an example. This backend is supported on Linux, FreeBSD, and OpenBSD systems with hardware virtualization. Please see the Solo5 documentation for the support [status](https://github.com/Solo5/solo5/blob/v0.6.3/docs/building.md#supported-targets) of further backends such as `spt` (for deployment on Linux using a strict seccomp sandbox), `virtio` (for deployment on e.g. Google Compute Engine) and `muen` (for deployment on the [Muen Separation Kernel](https://muen.sk)).
+**Note**: The following sections of this tutorial use the [Solo5](https://github.com/Solo5/solo5/tree/v0.7.0)-based `hvt` backend as an example. This backend is supported on Linux, FreeBSD, and OpenBSD systems with hardware virtualization. Please see the Solo5 documentation for the support [status](https://github.com/Solo5/solo5/blob/v0.7.0/docs/building.md#supported-targets) of further backends such as `spt` (for deployment on Linux using a strict seccomp sandbox), `virtio` (for deployment on e.g. Google Compute Engine) and `muen` (for deployment on the [Muen Separation Kernel](https://muen.sk)).
 
 To build a Solo5-based unikernel that will run on a host system with hardware virtualization, re-run `mirage configure` and ask for the `hvt` target instead of `unix`.
 
@@ -353,7 +356,7 @@ When you build the `hvt` version, you'll see a new artifact which is the
 unikernel: a file called `hello.hvt`.  A `solo5-hvt` binary will be installed by OPAM on your `$PATH`. This binary is a _tender_, responsible for loading your unikernel, attaching to host system devices and running it. To try running `hello.hvt`, pass it as an argument to `solo5-hvt`:
 
 ```bash
-$ solo5-hvt hello.hvt
+$ solo5-hvt dist/hello.hvt
             |      ___|
   __|  _ \  |  _ \ __ \
 \__ \ (   | | (   |  ) |
@@ -384,13 +387,13 @@ $ cd tutorial/hello-key
 $ cat config.ml
 open Mirage
 
-let key =
+let hello =
   let doc = Key.Arg.info ~doc:"How to say hello." ["hello"] in
   Key.(create "hello" Arg.(opt string "Hello World!" doc))
 
 let main =
-  foreign
-    ~keys:[Key.abstract key]
+  main
+    ~keys:[key hello]
     ~packages:[package "duration"]
     "Unikernel.Hello" (time @-> job)
 
@@ -400,7 +403,7 @@ let () =
 
 We create a `key` with `Key.create` which is an optional bit of configuration.  It will default to "Hello World!" if unspecified.  This particular key happens to be of type `string`, so no conversion will be required, but it's possible to ask for more exotic types in the call to `Arg`.  See [the Functoria Key.Arg module documentation](http://mirage.github.io/functoria/functoria/Functoria_key/Arg/index.html) for more details.
 
-Once we've created our configuration key, we specify that we'd like it available in the unikernel by passing it to `foreign` in the `keys` parameter.
+Once we've created our configuration key, we specify that we'd like it available in the unikernel by passing it to `main` in the `keys` parameter.
 
 We can then read the value corresponding to configuration key using the generated function `Key_gen.hello` as shown below.
 
@@ -437,7 +440,7 @@ $ make
 When the target is Unix, Mirage will use an implementation for configuration keys that looks at the contents of `OS.Env.argv`. In other words, it looks directly at the command line that was used to invoke the program.  If we call `hello` with no arguments, the default value is used:
 
 ```
-$ ./hello
+$ dist/hello
 2017-02-08 18:18:23 -03:00: INF [application] Hello World!
 2017-02-08 18:18:24 -03:00: INF [application] Hello World!
 2017-02-08 18:18:25 -03:00: INF [application] Hello World!
@@ -447,7 +450,7 @@ $ ./hello
 but we can ask for something else:
 
 ```
-$ ./hello --hello="Bonjour!"
+$ dist/hello --hello="Bonjour!"
 2017-02-08 18:20:46 +09:00: INF [application] Bonjour!
 2017-02-08 18:20:47 +09:00: INF [application] Bonjour!
 2017-02-08 18:20:48 +09:00: INF [application] Bonjour!
@@ -462,12 +465,12 @@ Many configuration keys can be specified either at configuration time or at run 
 $ mirage configure -t unix --hello="Hola!"
 $ make depend
 $ make
-$ ./hello
+$ dist/hello
 2017-02-08 18:30:30 +06:00: INF [application] Hola!
 2017-02-08 18:30:31 +06:00: INF [application] Hola!
 2017-02-08 18:30:32 +06:00: INF [application] Hola!
 2017-02-08 18:30:33 +06:00: INF [application] Hola!
-$ ./hello --hello="Hi!"
+$ dist/hello --hello="Hi!"
 2017-02-08 18:30:54 +06:00: INF [application] Hi!
 2017-02-08 18:30:55 +06:00: INF [application] Hi!
 2017-02-08 18:30:56 +06:00: INF [application] Hi!
@@ -481,7 +484,7 @@ $ cd tutorial/hello-key
 $ mirage configure -t hvt
 $ make depend
 $ make
-$ solo5-hvt -- hello.hvt --hello="Hola!"
+$ solo5-hvt -- dist/hello.hvt --hello="Hola!"
             |      ___|
   __|  _ \  |  _ \ __ \
 \__ \ (   | | (   |  ) |
@@ -521,30 +524,24 @@ onto local files. The `config.ml` for the block example contains some logic for 
 open Mirage
 
 type shellconfig = ShellConfig
-let shellconfig = Type ShellConfig
+let shellconfig = typ ShellConfig
 
-let config_shell = impl @@ object
-    inherit base_configurable
-
-    method build _i =
-      Bos.OS.Cmd.run Bos.Cmd.(v "dd" % "if=/dev/zero" % "of=disk.img" % "count=100000")
-
-    method clean _i =
-      Bos.OS.File.delete (Fpath.v "disk.img")
-
-    method module_name = "Functoria_runtime"
-    method name = "shell_config"
-    method ty = shellconfig
-end
-
+let config_shell = impl
+  ~dune:(fun _i -> [Dune.stanza {|
+(rule (targets disk.img)
+ (action (run dd if=/dev/zero of=disk.img count=100000))
+)|}])
+  ~install:(fun _ -> Functoria.Install.v ~etc:[Fpath.v "disk.img"] ())
+  "shell_config"
+  shellconfig
 
 let main =
   let packages = [ package "io-page"; package "duration"; package ~build:true "bos"; package ~build:true "fpath" ] in
-  foreign
+  main
     ~packages
-    ~deps:[abstract config_shell] "Unikernel.Main" (time @-> block @-> job)
+    ~deps:[dep config_shell] "Unikernel.Main" (time @-> block @-> job)
 
-let img = block_of_file "disk.img"
+let img = Key.(if_impl is_solo5 (block_of_file "storage") (block_of_file "disk.img"))
 
 let () =
   register "block_test" [main $ default_time $ img]
@@ -552,7 +549,10 @@ let () =
 
 The `main` binding looks much like the earlier `hello` example, except for the
 addition of a `block` device in the list. When we register the job, we supply a
-block device from a local file via `block_of_file`.
+block device from a local file via [`block_of_file`](https://docs.mirage.io/mirage/Mirage/#val-block_of_file).
+
+Using `deps` we also supply a _custom dependency_ `config_shell` in charge of 
+building the `disk.img` image. This is done using _dune_ rules.
 
 <br />
 <div class="panel callout">
@@ -574,7 +574,7 @@ $ cd device-usage/block
 $ mirage configure -t unix
 $ make depend
 $ make
-$ ./block_test
+$ ./dist/block_test
 ```
 
 `block_test` will write a series
@@ -598,7 +598,7 @@ relying on the host OS (the Linux or FreeBSD kernel).
 If we tell `solo5-hvt` where the disk image is, it will provide that disk image to the unikernel:
 
 ```bash
-$ solo5-hvt --block:storage=disk.img block_test.hvt
+$ solo5-hvt --block:storage=disk.img dist/block_test.hvt
             |      ___|
   __|  _ \  |  _ \ __ \
 \__ \ (   | | (   |  ) |
@@ -650,7 +650,7 @@ open Mirage
 let disk = generic_kv_ro "t"
 
 let main =
-  foreign
+  main
     "Unikernel.Main" (kv_ro @-> job)
 
 let () =
@@ -686,15 +686,15 @@ Under the "UNIKERNEL PARAMETERS" section, you should see:
 
 More documentation is available at [the `Mirage` module documentation for generic_kv_ro](http://mirage.github.io/mirage/mirage/Mirage/index.html#val-generic_kv_ro).
 
-Let's try a few different kinds of key-value implementations.  First, we'll build a Unix version.  If we don't specify which kind of `kv_ro` we want, we'll get a `crunch` implementation, the contents of which we can see at `static1.ml`:
+Let's try a few different kinds of key-value implementations.  First, we'll build a Unix version.  If we don't specify which kind of `kv_ro` we want, we'll get a `crunch` implementation, the contents of which we can see at `_build/default/static_t.ml`, the file being generated by `dune` rules described in `dune.build`:
 
 ```
 $ cd device-usage/kv_ro
 $ mirage configure -t unix
 $ make depend
 $ make
-$ less static1.ml # the generated filesystem
-$ ./kv_ro
+$ less _build/default/static_t.ml # the generated filesystem
+$ dist/kv_ro
 ```
 
 We can use the `direct` implementation with the Unix target as well:
@@ -704,7 +704,7 @@ $ cd device-usage/kv_ro
 $ mirage configure -t unix --kv_ro=direct
 $ make depend
 $ make
-$ ./kv_ro
+$ dist/kv_ro
 ```
 
 You may have noticed that, unlike with our `hello_key` example, the `kv_ro` key
@@ -748,7 +748,7 @@ let port =
   let doc = Key.Arg.info ~doc:"The TCP port on which to listen for incoming connections." ["port"] in
   Key.(create "port" Arg.(opt int 8080 doc))
 
-let main = foreign ~keys:[Key.abstract port] "Unikernel.Main" (stackv4 @-> job)
+let main = main ~keys:[Key.abstract port] "Unikernel.Main" (stackv4 @-> job)
 
 let stack = generic_stackv4 default_network
 
@@ -773,7 +773,7 @@ $ cd device-usage/network
 $ mirage configure -t unix --net socket
 $ make depend
 $ make
-$ ./network
+$ dist/network
 ```
 
 This Unix application is now listening on TCP port 8080,
@@ -787,21 +787,21 @@ $ echo -n hello tcp world | nc -nw1 127.0.0.1 8080
 ```
 
 You should see log messages documenting your connection from 127.0.0.1
-in the console running `./network`.  You may have noticed that some
+in the console running `dist/network`.  You may have noticed that some
 information that you may have expected to see after looking at `unikernel.ml`
 isn't being output.  That's because we haven't specified the log level for
-`./network`, and it defaults to `info`.  Some of the output for this application
-is sent with the log level set to `debug`, so to see it, we need to run `./network`
+`dist/network`, and it defaults to `info`.  Some of the output for this application
+is sent with the log level set to `debug`, so to see it, we need to run `dist/network`
 with a higher log level for all logs:
 
 ```
-$ ./network -l "*:debug"
+$ dist/network -l "*:debug"
 ```
 
 The program will then output the debug-level logs, which include the content of any messages it reads.  Here's an example of what you might see:
 
 ```
-$ ./network -l "*:debug"
+$ dist/network -l "*:debug"
 2017-02-10 17:23:24 +02:00: INF [tcpip-stack-socket] Manager: connect
 2017-02-10 17:23:24 +02:00: INF [tcpip-stack-socket] Manager: configuring
 2017-02-10 17:23:27 +02:00: INF [application] new tcp connection from IP 127.0.0.1 on port 36358
@@ -820,7 +820,7 @@ $ cd device-usage/network
 $ mirage configure -t unix --dhcp true --net direct
 $ make depend
 $ make
-$ sudo ./network -l "*:debug"
+$ sudo dist/network -l "*:debug"
 ```
 
 Hopefully, the application will successfully receive its network configuration.
@@ -846,7 +846,7 @@ $ cd device-usage/network
 $ mirage configure -t unix --dhcp false --net direct
 $ make depend
 $ make
-$ sudo ./network -l "*:debug"
+$ sudo dist/network -l "*:debug"
 ```
 
 For macosx:
@@ -891,7 +891,7 @@ $ cd device-usage/network
 $ mirage configure -t hvt --dhcp true # for environments where DHCP works
 $ make depend
 $ make
-$ solo5-hvt --net:service=tap100 -- network.hvt --ipv4=10.0.0.10/24
+$ solo5-hvt --net:service=tap100 -- dist/network.hvt --ipv4=10.0.0.10/24
             |      ___|
   __|  _ \  |  _ \ __ \
 \__ \ (   | | (   |  ) |

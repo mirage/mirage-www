@@ -77,7 +77,8 @@ features that were slowing down the MirageOS development workflow.
 To sum it up, here are the **portable compilation rules** for a package to support Mirage 4.0: 
 1) Don't depend on `unix`
 2) Build your project with `dune`, and have your transitive dependencies buildable using `dune`.
-3) If your project use C stubs, assume the `libc` is minimal.
+3) If your project use C stubs, assume the `libc` is minimal. See `ocaml-freestanding`'s `nolibc` 
+   for reference: [github.com/mirage/ocaml-freestanding/tree/master/nolibc/include](https://github.com/mirage/ocaml-freestanding/tree/master/nolibc/include)
 
 ### Tool changes
 
@@ -95,16 +96,18 @@ The `mirage` command-line interface hasn't fundamentally changed, but when a pro
 the following additional files are generated:
 
 - **dune.build**: the dune rules to build the unikernel.
+- **dune.config**: the dune rules to build the unikernel's configuration.
+- **dune**: switch between `dune.build` and `dune.config` depending on the context.
 - **dune-workspace**: the compilation workspace definition, asking dune to use the ocaml-freestanding 
   cross-compiler. 
-- **mirage/UNIKERNEL.opam**: the unikernel dependencies to lock and fetch.
-- **mirage/UNIKERNEL-install.opam**: the tool dependencies to `opam-install` (it includes `solo5` and `ocaml-freestanding`)
+- **mirage/UNIKERNEL-monorepo.opam**: the unikernel dependencies to lock and fetch using `opam-monorepo`.
+- **mirage/UNIKERNEL-switch.opam**: the tool dependencies to `opam install` (it includes `solo5` and `ocaml-freestanding`)
 
 ##### Fetch
 
 To fetch and install the dependencies, `make depends` is still the command to go:
-- it globally, installs using `opam`, the build dependencies
-- it fetches, using `opam-monorepo` the unikernel dependencies.
+- it globally installs the build dependencies in the switch.
+- it locally fetches using `opam-monorepo` the unikernel dependencies in the `duniverse/` folder.
 
 ##### Build
 
