@@ -40,6 +40,12 @@ code {
   line-height: 1.2;
 }
 
+pre code {
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
 .side-nav li a {
   color: #333399;
 }
