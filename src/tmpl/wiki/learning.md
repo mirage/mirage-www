@@ -39,7 +39,7 @@ like this:
     $ mirage configure -t unix
     $ make depends
     $ make
-    $ ./main.native
+    $ dist/main
 ```
 
 Be aware that the behaviour of `mirage configure` depends intimately on the

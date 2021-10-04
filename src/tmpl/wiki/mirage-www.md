@@ -60,7 +60,7 @@ $ make
 Finally, run the website application:
 
 ```
-$ sudo ./www
+$ sudo dist/www
 ```
 
 The website will now be available on `http://localhost/`.
@@ -80,7 +80,7 @@ operating system) to share compatible IPv4 network settings.
 $ cd src
 $ mirage configure -t unix --net direct
 $ make
-$ sudo ./www &
+$ sudo dist/www &
 $ sudo ip link set tap0 up #initialize tap
 $ sudo ip addr add 10.0.0.1/24 dev tap0 #configure IP
 ```
@@ -115,7 +115,7 @@ $ cd src
 $ mirage configure -t unix --kv_ro fat
 $ make depend
 $ make
-$ sudo ./www &
+$ sudo dist/www &
 $ sudo ip link set tap0 up #initialize tap
 $ sudo ip addr add 10.0.0.1/24 dev tap0 #configure IP
 ```
