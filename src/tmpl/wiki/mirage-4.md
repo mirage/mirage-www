@@ -118,7 +118,7 @@ The output is available in the `dist/` folder.
 
 ```sh
 # Add the MirageOS 4 development repository
-$ opam repo add mirage https://github.com/mirage/mirage-dev.git#mirage-4
+$ opam repo add mirage https://github.com/mirage/mirage-dev.git#master
 
 # Install MirageOS 4
 $ opam install mirage
