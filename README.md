@@ -1,38 +1,43 @@
-## MirageOS Website
+# Mirage.io
 
-This repository contains the MirageOS public website, <https://mirage.io/>.
+Website infrastructure and content for mirage.io
 
-It provides information about the project as well as the blog and wiki.
+## Set up your development environment
 
-It also serves as a good first self-hosting test case.
+You need opam. You can install it by following [opam's documentation](https://opam.ocaml.org/doc/Install.html).
 
-### Building with Docker
+With opam installed, you can install the dependencies in a new local switch with:
 
-The easiest way to get started is to build using Docker:
-
-```
-docker build -t mirage-www .
-docker run --rm -it --init -p 80:8080 mirage-www ./www --http-port 8080
+```bash
+make switch
 ```
 
-Then browse to <http://127.0.0.1/>.
+Or globally, with:
 
-You can build for other targets with e.g. `docker build --build-arg TARGET=hvt ...`
-
-### Building without Docker
-
-To build this website, first use `make prepare`
-You can then build the mirage application in the src/ directory:
-```
-cd src && mirage configure && make
+```bash
+make deps
 ```
 
-### Configuration
+You'll also need to download the TailwindCSS CLI. You can follow the [TailwindCSS documentation](https://tailwindcss.com/blog/standalone-cli#get-started) to do this. Put the binary in `/tailwindcss`.
 
-For unikernel configuration options, use `mirage configure --help` in `src`.
+Then, build the project with:
 
-To update, send a pull request. When successfully merged, the OCurrent deployer
-at <https://deploy.ocamllabs.io/> will build the new unikernel and deploy it
-to our packet.net hosting, where it should appear at <https://mirage.io/>.
-See [pipeline.ml](https://github.com/ocurrent/ocurrent-deployer/blob/master/src/pipeline.ml)
-for the deployment pipeline.
+```bash
+make build
+```
+
+### Running the server
+
+After building the project, you can run the server with:
+
+```bash
+make start
+```
+
+To start the server in watch mode, you can run:
+
+```bash
+make watch
+```
+
+This will restart the server on filesystem changes and reload the pages automatically.

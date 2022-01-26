@@ -1,0 +1,21 @@
+(subdir
+ asset/
+ (rule
+  (target main.css)
+  (mode promote-until-clean)
+  (deps
+   %{workspace_root}/tailwind.config.js
+   %{workspace_root}/template/styles.css
+   (glob_files %{workspace_root}/template/*.eml))
+  (action
+   (chdir
+    %{workspace_root}
+    (run
+     ./tailwindcss
+     build
+     -c
+     tailwind.config.js
+     -i
+     template/styles.css
+     -o
+     %{target})))))

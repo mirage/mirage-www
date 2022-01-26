@@ -1,0 +1,6 @@
+pin-depends: [
+  ["dream.dev" "git+https://github.com/TheLortex/dream.git#master+mirage"]
+  ["dream-mirage.dev" "git+https://github.com/TheLortex/dream.git#master+mirage"]
+  ["dream-pure.dev" "git+https://github.com/TheLortex/dream.git#master+mirage"]
+  ["dream-httpaf.dev" "git+https://github.com/TheLortex/dream.git#master+mirage"]
+]

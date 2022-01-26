@@ -1,0 +1,5 @@
+- Move blog and wiki inner titles up
+- Links of icons on navbar and homepage
+- Links on homepage
+- Links on community
+- Correct mention of atom feed in documentation

@@ -1,0 +1,11 @@
+(executable
+ (name main)
+ (libraries mirageio mirage-clock-unix mirage-unix tcpip.stack-socket))
+
+(rule
+ (alias run)
+ (deps main.exe)
+ (action
+  (chdir
+   %{workspace_root}
+   (run %{workspace_root}/bin/main.exe))))

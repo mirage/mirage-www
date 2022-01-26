@@ -1,1 +1,0 @@
-SYNTAX += -tag-line "not (<main*.*> or <static*.*>): warn_error(+1..49), warn(A-4-41-44-48)"
