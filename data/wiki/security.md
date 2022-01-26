@@ -1,3 +1,13 @@
+---
+updated: 2019-14-26 17:23
+author:
+  name: Amir Chaudhry
+  uri: http://amirchaudhry.com
+  email: amirmc@gmail.com
+subject: Security
+permalink: security
+---
+
 It's important to consider the process of disclosing issues to us. Many bugs
 can be reported as usual on our [issue tracker][issues], but public forums are
 sometimes inappropriate for reporting security issues.
