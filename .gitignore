@@ -1,49 +1,34 @@
-.DS_Store
-*~
+# Dune generated files
+_build/
+*.install
 
-/log
+# Merlin configuring file for Vim and Emacs
+.merlin
 
-/src/log
-/src/_build
-/src/dune
-/src/dune.build
-/src/dune.config
-/src/dune-project
-/src/.merlin
-/src/mir-www
-/src/mir-main
-/src/main.native
-/src/www.xl
-/src/www.xl.in
-/src/key_gen.ml
-/src/www.xe
-/src/www_libvirt.xml
+# Local OPAM switch
+_opam/
 
-/src/Makefile
-/src/main.ml
 
-/src/static_files.ml
-/src/static_files.mli
-/src/static_tmpl.ml
-/src/static_tmpl.mli
-/src/static[0-9].ml
-/src/static[0-9].mli
-/src/fat*.img
-/src/make-fat*.sh
+# Normal npm stuff
+npm-debug.log
+yarn-error.log
+node_modules/
+.cache/
+dist/
+build/
 
-files/js/stats
+# IDE related
+.vscode*
 
-stats/_build/
-stats/.merlin
+# TailwindCSS
+/tailwindcss
 
-.*.swp
-
-/src/.mirage.config
-/src/mirage-unikernel-www-*.opam
-/src/myocamlbuild.ml
-/src/www
-/src/www.hvt
-/src/www.spt
-
-_opam
-.envrc
+# mirage material
+mirage/duniverse/
+mirage/dist/
+mirage/mirage/
+mirage/dune
+dune-workspace
+mirage/dune.build
+mirage/dune.config
+Makefile
