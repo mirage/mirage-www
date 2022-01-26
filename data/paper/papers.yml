@@ -1,0 +1,164 @@
+- name: "cacm"
+  links: 
+    - description: "Read Online"
+      uri: "http://queue.acm.org/detail.cfm?id=2566628"
+  title: "Unikernels: Rise of the Virtual Library Operating System"
+  authors:
+    - Anil Madhavapeddy
+    - David Scott
+  description: "In Communications of the ACM, January 2014."
+  abstract: >
+    What if all the software layers in a virtual appliance were compiled within the same safe, high-level language framework?
+- name: "rwo"
+  links:
+    - description: "Read Online"
+      uri: "https://realworldocaml.org"
+  title: "Real World OCaml: functional programming for the masses"
+  authors:
+    - Anil Madhavapeddy
+    - Yaron Minsky
+    - Jason Hickey
+  description: "Published by O'Reilly Associates, 510 pages, Nov 2013."
+  abstract: >
+    This fast-moving tutorial introduces you to OCaml, an industrial-strength programming language designed for expressiveness, safety, and speed. Through the book’s many examples, you’ll quickly learn how OCaml stands out as a tool for writing fast, succinct, and readable systems code. Real World OCaml takes you through the concepts of the language at a brisk pace, and then helps you explore the tools and techniques that make OCaml an effective and practical tool. In the book’s third section, you’ll delve deep into the details of the compiler toolchain and OCaml’s simple and efficient runtime system.
+- name: "asplos"
+  links: 
+    - description: "Download PDF"
+      uri: "http://anil.recoil.org/papers/2013-asplos-mirage.pdf"
+  title: "Unikernels: library operating systems for the cloud"
+  authors:
+    - Anil Madhavapeddy
+    - Richard Mortier
+    - Charalampos Rotsos
+    - David Scott
+    - Balraj Singh
+    - Thomas Gazagnaire
+    - Steven Smith
+    - Steven Hand
+    - Jon Crowcroft
+  description: "Proceedings of the 18th International Conference on Architectural Support for Programming Languages and Operating Systems ASPLOS '13, April, 2013."
+  abstract: >
+    We present <em>unikernels</em>, a new approach to deploying cloud services via applications written in high-level source code. Unikernels are single-purpose appliances that are compile-time specialised into standalone kernels, and sealed against modification when deployed to a cloud platform. In return they offer significant reduction in image sizes, improved efficiency and security, and should reduce operational costs. Our MirageOS prototype compiles OCaml code into unikernels that run on commodity clouds and offer an order of magnitude reduction in code size without significant performance penalty. The architecture combines static type-safety with a single address-space layout that can be made immutable via a hypervisor extension. MirageOS contributes a suite of type-safe protocol libraries, and our results demonstrate that the hypervisor is a platform that overcomes the hardware compatibility issues that have made past library operating systems impractical to deploy in the real-world.
+- name: "openflow"
+  links: 
+    - description: "Download PDF"
+      uri: "http://www.cs.nott.ac.uk/~rmm/papers/pdf/iccsdn12-mirageof.pdf"
+  title: "Cost, Performance & Flexibility in OpenFlow: Pick Three"
+  authors:
+    - Richard Mortier
+    - Charalampos Rotsos
+    - Anil Madhavapeddy
+    - Balraj Singh
+    - Andrew Moore
+  description: "Proceedings of IEEE ICC Software Defined Networking workshop, June 2012."
+  abstract: >
+    ...
+- name: "droplets"
+  links: 
+    - description: "Download PDF"
+      uri: "http://www.cs.nott.ac.uk/~rmm/papers/pdf/icdcn11-droplets.pdf"
+  title: "Unclouded Vision"
+  authors:
+    - Jon Crowcroft
+    - Anil Madhavapeddy
+    - Malte Schwarzkopf
+    - Theo Hong
+    - Richard Mortier
+  description: "Proceedings of 12th International Conference on Distributed Computing and Networking ICDCN '11, January 2011. Invited paper."
+  abstract: >
+    ...
+- name: "hotcloud"
+  links: 
+    - description: "Download PDF"
+      uri: "http://anil.recoil.org/papers/2010-hotcloud-lamp.pdf"
+  title: "Turning down the LAMP: Software Specialisation for the Cloud"
+  authors:
+    - Anil Madhavapeddy
+    - Richard Mortier
+    - Ripduman Sohan
+    - Thomas Gazagnaire
+    - Steven Hand
+    - Tim Deegan
+    - Derek McAuley
+    - Jon Crowcroft
+  description: "2nd USENIX Workshop on Hot Topics in Cloud Computing HotCloud '10, June 2010."
+  abstract: >
+    This paper positions work on the Xen backend for MirageOS. It is a decent summary of the idea, although some details such as the filesystem extension are likely to be significantly different in the first release.
+- name: "dustclouds"
+  links: 
+    - description: "Download PDF"
+      uri: "http://www.cs.nott.ac.uk/~rmm/papers/pdf/iwsp10-dustclouds.pdf"
+  title: "Using Dust Clouds to Enhance Anonymous Communication"
+  authors:
+    - Richard Mortier
+    - Anil Madhavapeddy
+    - Theo Hong
+    - Derek Murray
+    - Malte Schwarzkopf
+  description: "Proceedings of the 18th International Workshop on Security Protocols (IWSP), April 2010"
+  abstract: >
+    ...
+- name: "visions"
+  links: 
+    - description: "Download PDF"
+      uri: "http://anil.recoil.org/papers/2010-bcs-visions.pdf"
+    - description: "BCS Homepage"
+      uri: "http://www.bcs.org/server.php?show=nav.11980"
+  title: "Multiscale not Multicore: Efficient Heterogeneous Cloud Computing"
+  authors:
+    - Anil Madhavapeddy
+    - Richard Mortier
+    - Jon Crowcroft
+    - Steven Hand
+  description: "ACM/BCS Visions of Computer Science, April 2010"
+  abstract: >
+    This is a vision paper that lays out the broader background to the project, including some of the problem areas we are tackling in social networking and scientific computing. The first half is a good introduction to the area, but read the later HotCloud paper instead of the technical second half.
+- name: "wgt"
+  links: 
+    - description: "Download PDF"
+      uri: "http://anil.recoil.org/papers/2010-dyntype-wgt.pdf"
+    - description: "Prezy Presentation"
+      uri: "http://prezi.com/qjkrijlacqiq/mirage/"
+  title: "Statically-typed value persistence for ML"
+  authors:
+    - Thomas Gazagnaire
+    - Anil Madhavapeddy
+  description: "Workshop on Generative Technologies, April 2010"
+  abstract: >
+    This paper defines the dyntype dynamic typing extension we developed for OCaml, and the SQL mapper that converts ML values directly into SQL calls. The approach is useful as it is purely meta-programming instead of compiler patching, and thus much easier to integrate with other OCaml code.
+- name: "icfem"
+  links: 
+    - description: "Download PDF"
+      uri: "http://anil.recoil.org/papers/2009-icfem-spl.pdf"
+  title: "Combining Static Model Checking with Dynamic Enforcement using the Statecall Policy Language"
+  authors:
+    - Anil Madhavapeddy
+  description: "International Conference on Formal Engineering Methods ICFEM, December 2009."
+  abstract: >
+    A small domain-specific language which compiles to both PROMELA (for static model checking) and OCaml (for dynamic enforcement) of state machines. This paper defines the DSL and an example against an SSH server written in pure OCaml.
+- name: "eurosys"
+  links: 
+    - description: "Download PDF"
+      uri: "http://anil.recoil.org/papers/2007-eurosys-melange.pdf"
+    - description: "ACM Portal"
+      uri: "http://portal.acm.org/citation.cfm?id=1272996.1273009"
+  title: "Melange: Towards a \"functional\" Internet"
+  authors:
+    - Anil Madhavapeddy
+    - Alex Ho
+    - Tim Deegan
+    - David Scott
+    - Ripduman Sohan
+  description: "EuroSys 2007, March 2007."
+  abstract: >
+    The original paper that formed the basis of MirageOS. We define MPL, a DSL to express bi-directional packet descriptions and compile them into efficient, type-safe OCaml code. Performance is tested for DNS and SSH servers written in OCaml versus their C counterparts (BIND and OpenSSH
+- name: "mainname"
+  links: 
+    - description: "Download PDF"
+      uri: "http://www.tjd.phlegethon.org/words/thesis.pdf"
+  title: "The Main Name System"
+  authors:
+    - "Tim Deegan"
+  description: "PhD Thesis, University of Cambridge, 2006."
+  abstract: >
+    This thesis describes the Main Name System, an approach to centralising DNS for improved reliability. The source code for the MirageOS DNS library is based directly off the data structures described in this thesis.

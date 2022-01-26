@@ -1,0 +1,8 @@
+let person (person : Mirageio_data.People.t) = 
+  match person.uri with
+  | Some uri -> 
+    <a href="<%s uri %>" class="link-blue"><%s person.name %></a>
+  | None -> 
+    <%s person.name %>
+
+let people people = String.concat ", " (List.map person people)

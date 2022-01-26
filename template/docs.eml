@@ -1,0 +1,81 @@
+let render ~(weeklies : Mirageio_data.Weekly.t list) = Layout.render
+~title:"MirageOS Documentation"
+~description:"Learn how to build your own operating system from the MirageOS documentation."
+~tab:Docs @@
+<div class="text-left px-8 py-7">
+  <div class="flex items-baseline">
+    <h1 class="text-3xl font-bold">Documentation</h1>
+    <p class="font-bold text-grey ml-2">and guides</p>
+  </div>
+  <div class="text-grey mt-2 text-sm">
+    Welcome to the MirageOS wiki. Feel free to subscribe to the Atom feed to keep up-to-date with our progress. MirageOS is in beta stage and the infrastructure you see here is self-hosting. The authors hang on out #mirage on libera.chat IRC, so drop by with any questions you might have.
+  </div>
+</div>
+<hr class="border-black" />
+<div class="flex flex-col lg:flex-row">
+  <div class="flex-1">
+    <div class="grid grid-cols-1 lg:grid-cols-2">
+      <div class="px-8 py-6 border-b border-black">
+        <div class="text-lg font-space font-bold mb-4">Background</div>
+        <div class="space-y-2 flex flex-col">
+          <a href="/docs/overview-of-mirage" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">♦</span> Overview of MirageOS</a>
+          <a href="/docs/security" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">🛡</span> Security disclosure process</a>
+          <a href="/docs/technical-background" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">⚙</span> Technical Background</a>
+          <a href="/docs/faq" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">❓</span> Frequently Asked Questions</a>
+          <a href="/papers" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">📝</span> Papers and Articles</a>
+          <a href="/docs/talks" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">🎞</span> Videos and Slides</a>
+          <a href="/docs/gallery" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">📢</span> Unikernels used in production</a>
+        </div>
+      </div>
+      <div class="px-8 py-6 border-b border-black lg:border-l">
+        <div class="text-lg font-space font-bold mb-4">Getting Started</div>
+        <div class="space-y-2 flex flex-col">
+          <a href="/docs/install" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">✨</span> Installation</a>
+          <a href="/docs/hello-world" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">👋</span> Hello Mirage World</a>
+          <a href="/docs/learning" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">📖</span> Learning about Mirage</a>
+          <a href="/docs/mirage-www" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">🛠</span> Building the website</a>
+          <a href="/docs/deploying-via-ci" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">🏗</span> Deploying via Continuous Integration</a>
+          <a href="/docs/opam" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">📔</span> Keeping up-to-date</a>
+          <a href="/docs/breaking-changes" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">🔨</span> Breaking changes</a>
+          <a href="/docs/mirage-3.0-errors" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">🆘</span> Error Handling</a>
+          <a href="/docs/profiling" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">⌮</span> Tracing and Profiling</a>
+          <a href="/docs/contributing" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">☝</span> Contributing to MirageOS</a>
+          <a href="/docs/arm64" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">💾</span> Mirage on ARM64 (e.g. Raspberry Pi 3)</a>
+        </div>
+      </div>
+      <div class="px-8 py-6 border-b border-black">
+        <div class="text-lg font-space font-bold mb-4">Xen Backend</div>
+        <div class="space-y-2 flex flex-col">
+          <a href="/docs/xen-events" class="link-blue">How the Xen VM event system works</a>
+          <a href="/docs/xen-synthesize-virtual-disk" class="link-blue">Synthesizing virtual disks for Xen</a>
+          <a href="/docs/xen-suspend" class="link-blue">How Suspend and Resume work</a>
+          <a href="/docs/xen-on-cubieboard2" class="link-blue">Installing Xen on the Cubieboard2</a>
+          <a href="/docs/libvirt-on-cubieboard" class="link-blue">LibVirt on Cubieboard2</a>
+        </div>
+      </div>
+      <div class="px-8 py-6 border-b border-black lg:border-l">
+        <div class="text-lg font-space font-bold mb-4">Libraries</div>
+        <div class="space-y-2 flex flex-col">
+          <a href="/docs/tutorial-lwt" class="link-blue">Threads: introduction to Lwt</a>
+          <a href="/docs/performance" class="link-blue">DNS Performance Tests</a>
+        </div>
+      </div>
+      <div class="px-8 py-6 lg:border-l lg:col-span-2">
+        <div class="mb-4">
+          <div class="text-lg font-space font-bold">Weekly calls and release notes</div>
+          <p class="text-grey text-xs">Calls take place every two weeks and are announced on the mailing list.</p>
+        </div>
+        <div class="space-y-2 flex flex-col">
+          <div class="text-sm italic space-y-3">
+            <% weeklies |> List.iter (fun (item : Mirageio_data.Weekly.t) -> %>
+            <div>
+              <a href="/weekly/<%s item.permalink %>" class="link-blue"><%s item.subject %></a>
+              <p><span class="text-grey">on</span> <%s item.description %></p>
+            </div>
+            <% ); %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

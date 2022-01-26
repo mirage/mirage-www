@@ -1,0 +1,49 @@
+let render ~blog_posts ~contributors ~last_update =
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://mirage.io/wiki/</id>
+  <title>The MirageOS Blog</title>
+  <subtitle>The MirageOS Blog on building functional operating systems</subtitle>
+  <rights>All rights reserved by the author</rights>
+  <updated><%s last_update %></updated>
+  <link rel="self" href="https://mirage.io/feed.xml" />
+  <link rel="alternate" href="https://mirage.io/blog/" type="text/html" />
+
+  <% contributors |> List.iter (fun (item : Mirageio_data.People.t) -> %>
+  <contributor>
+    <name><%s! item.name %></name>
+    <% (match item.uri with | None -> () | Some uri -> %>
+    <uri><%s uri %></uri>
+    <% ); %>
+    <% (match item.email with | None -> () | Some email -> %>
+    <email><%s email %></email>
+    <% ); %>
+  </contributor>
+  <% ); %>
+
+  <% blog_posts |> List.iter (fun (item : Mirageio_data.Blog.t) -> %>
+  <entry>
+    <id>https://mirage.io/blog/<%s item.permalink %></id>
+    <title><%s item.subject %></title>
+    <% item.authors |> List.iter (fun (item : Mirageio_data.People.t) -> %>
+    <author>
+      <name><%s! item.name %></name>
+      <% (match item.uri with | None -> () | Some uri -> %>
+      <uri><%s uri %></uri>
+      <% ); %>
+      <% (match item.email with | None -> () | Some email -> %>
+      <email><%s email %></email>
+      <% ); %>
+    </author>
+    <% ); %>
+    <rights>All rights reserved by the author</rights>
+    <updated><%s item.updated %></updated>
+    <link rel="alternate" href="https://mirage.io/blog/<%s item.permalink %>" type="text/html" />
+    <content type="xhtml">
+      <div xmlns="http://www.w3.org/1999/xhtml">
+        <%s! item.body %>
+      </div>
+    </content>
+  </entry>
+  <% ); %>
+</feed>

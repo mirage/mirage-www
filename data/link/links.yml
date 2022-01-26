@@ -1,0 +1,352 @@
+- id: talk-big-techday8
+  uri: http://www.techcast.com/events/bigtechday8/salvator-1130/
+  title: 'Nymote: Git your own cloud here'
+  date: 2015-06-12
+  stream: public-talk
+- id: tls-podcast-ohm
+  uri: http://monoxyd.de/20150408-ohm-008-ohne-heftige-mangel
+  title: "(german) OHM #008 \u2013 Ohne Heftige M\xE4ngel: TLS und dessen Probleme;
+    robuste Implementierung von Sicherheitsprotokollen; OCaml-TLS und MirageOS"
+  date: 2015-04-08
+  stream: press-coverage
+- id: cam-news-nymote
+  uri: http://www.cambridge-news.co.uk/personal-cloud-private-data-reality-thanks-Nymote/story-26074338-detail/story.html
+  title: A personal cloud for your private data could become a reality thanks to Nymote
+  date: 2015-02-24
+  stream: press-coverage
+- id: acolyer-mergeable-structures
+  uri: http://blog.acolyer.org/2015/01/14/mergeable-persistent-data-structures/
+  title: Mergeable persistent data structures
+  date: 2015-01-14
+  stream: public-blog
+- id: acolyer-unikernels
+  uri: http://blog.acolyer.org/2015/01/13/unikernels-library-operating-systems-for-the-cloud/
+  title: 'Unikernels: Library Operating Systems for the Cloud'
+  date: 2015-01-13
+  stream: public-blog
+- id: gfx-os-tech-to-watch
+  uri: http://gfxmonk.net/2015/01/04/os-technologies-to-watch.html
+  title: OS Technologies To Watch In 2015
+  date: 2015-01-04
+  stream: public-blog
+- id: 31c3-secure-modular-os-tls
+  uri: http://media.ccc.de/browse/congress/2014/31c3_-_6443_-_en_-_saal_2_-_201412271245_-_trustworthy_secure_modular_operating_system_engineering_-_hannes_-_david_kaloper.html#video
+  title: Trustworthy secure modular operating system engineering
+  date: 2014-12-27
+  stream: public-talk
+- id: oups-dec2014-state-of-mirage
+  uri: https://www.irill.org/videos/oups-december-2014/MirageOS
+  title: 'OCaml Users Paris: State of the Mirage'
+  date: 2014-12-09
+  stream: public-talk
+- id: techrepublic-unikernels
+  uri: http://www.techrepublic.com/article/unikernels-offer-a-stripped-down-alternative-to-linux/
+  title: Unikernels offer a stripped down alternative to Linux
+  date: 2014-12-18
+  stream: press-coverage
+- id: after-docker-immutable-infra
+  uri: https://medium.com/@darrenrush/after-docker-unikernels-and-immutable-infrastructure-93d5a91c849e
+  title: 'After Docker: Unikernels and Immutable Infrastructure'
+  date: 2014-11-06
+  stream: public-blog
+- id: unikernels-what-where-why-awick
+  uri: https://www.youtube.com/watch?v=oHcHTFleNtg
+  title: 'Unikernels: Who, What, Where, When, Why - Adam Wick, Galois'
+  date: 2014-10-17
+  stream: public-talk
+- id: enterprise-oss-2014
+  uri: http://www.linux.com/news/software/applications/789241--5-new-enterprise-open-source-projects-to-watch/
+  title: 5 New Enterprise Open Source Projects to Watch
+  date: 2014-09-24
+  stream: press-coverage
+- id: haskell-symposium-2014-keynote
+  uri: https://www.youtube.com/watch?v=UEIHfXLMtwA
+  title: Haskell Symposium 2014 Keynote on Unikernels
+  date: 2014-09-05
+  stream: public-talk
+- id: edge-cases-episode-101
+  uri: http://edgecasesshow.com/101-a-program-that-runs-on-metal.html
+  title: A Program That Runs on Metal
+  date: 2014-08-14
+  stream: public-blog
+- id: miso-talk-entrepreneur-first
+  uri: http://amirchaudhry.com/describing-miso-entrepreneur-first-2014
+  title: Describing the MISO stack at Entrepreneur First
+  date: 2014-07-25
+  stream: public-blog
+- id: mirage-20-pr-congoo
+  uri: http://www.congoo.com/news/addstorycomment.aspx?st=291376442&Channel_ID=8&Category_ID=-1
+  title: Xen Project Introduces New Mirage OS Release
+  date: 2014-07-22
+  stream: press-coverage
+- id: mirage-20-pr-reuters
+  uri: http://www.reuters.com/article/2014/07/22/idUSnMKWyFRLBa+1de+MKW20140722
+  title: Xen Project Introduces New Mirage OS Release
+  date: 2014-07-22
+  stream: press-coverage
+- id: mirage-20-pr-phoronix
+  uri: http://www.phoronix.com/scan.php?page=news_item&px=MTc0NjY
+  title: Xen Project Announces Mirage OS 2.0
+  date: 2014-07-22
+  stream: press-coverage
+- id: mirage-20-pr-linux-embedded
+  uri: https://www.linux.com/news/embedded-mobile/mobile-linux/781359-xen-project-announces-mirage-os-20
+  title: Xen Project Announces Mirage OS 2.0
+  date: 2014-07-22
+  stream: press-coverage
+- id: mirage-20-pr-slashdot
+  uri: http://beta.slashdot.org/submission/3717339/news-mirage-os-20----compile-your-own-cloud
+  title: 'News: Mirage OS 2.0 -- Compile Your Own Cloud'
+  date: 2014-07-22
+  stream: press-coverage
+- id: mirage-20-pr-vmblog
+  uri: http://vmblog.com/archive/2014/07/22/xen-project-introduces-new-mirage-os-release.aspx
+  title: Xen Project Introduces New Mirage OS Release
+  date: 2014-07-22
+  stream: press-coverage
+- id: mirage-20-pr-lastminutegeek
+  uri: http://www.lastminutegeek.com/english/77-linuxtoday/1151651-mirage-os-v20-the-new-features.html
+  title: 'Mirage OS v2.0: The new features'
+  date: 2014-07-22
+  stream: press-coverage
+- id: mirage-20-pr-techinvestornews
+  uri: http://www.techinvestornews.com/Cloud/Latest-Cloud-Computing-News/xen-unveils-mirage-os-2.0-for-open-source-virtual-cloud-apps
+  title: Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps
+  date: 2014-07-22
+  stream: press-coverage
+- id: mirage-20-pr-slashdot-2
+  uri: http://beta.slashdot.org/submission/3720459/xen-unveils-mirage-os-20-for-open-source-virtual-cloud-apps
+  title: Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps
+  date: 2014-07-22
+  stream: press-coverage
+- id: mirage-20-pr-linuxtoday
+  uri: http://www.linuxtoday.com/high_performance/mirage-os-v2.0-the-new-features.html
+  title: 'Mirage OS v2.0: The new features'
+  date: 2014-07-23
+  stream: press-coverage
+- id: mirage-20-pr-twit
+  uri: https://plus.google.com/+TWiT/posts/6DkCPz3TSdd
+  title: FLOSS Weekly 302 | TWiT.TV
+  date: 2014-07-23
+  stream: press-coverage
+- id: mirage-20-pr-cloudcomputinginfo
+  uri: http://cloudcomputing.info/en/news/2014/07/xen-project-releases-mirage-os-2-0.html
+  title: Xen Project releases Mirage OS 2.0
+  date: 2014-07-23
+  stream: press-coverage
+- id: mirage-20-pr-vibriefing
+  uri: http://www.vibriefing.com/xen-unveils-mirage-os-2-0-for-open-source-virtual-cloud-apps/
+  title: Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps
+  date: 2014-07-25
+  stream: press-coverage
+- id: mirage-20-pr-marketwatch
+  uri: http://www.marketwatch.com/story/xen-project-introduces-new-mirage-os-release-2014-07-22
+  title: Xen Project Introduces New Mirage OS Release
+  date: 2014-07-22
+  stream: press-coverage
+- id: mirage-20-pr-linuxquestions
+  uri: http://www.linuxquestions.org/questions/syndicated-linux-news-67/lxer-xen-unveils-mirage-os-2-0-for-open-source-virtual-cloud-apps-4175512075/
+  title: 'LXer: Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps'
+  date: 2014-07-22
+  stream: press-coverage
+- id: mirage-20-pr-4-traders
+  uri: http://www.4-traders.com/news/Xen-Project-Introduces-New-Mirage-OS-Release--18774589/
+  title: ' Xen Project Introduces New Mirage OS Release'
+  date: 2014-07-22
+  stream: press-coverage
+- id: mirage-20-pr-release
+  uri: http://www.marketwired.com/press-release/xen-project-introduces-new-mirage-os-release-1931602.htm
+  title: Xen Project Introduces New Mirage OS Release
+  date: 2014-07-22
+  stream: press-coverage
+- id: yahoo-pr-mirage-20-release
+  uri: http://finance.yahoo.com/news/xen-project-introduces-mirage-os-120000542.html
+  title: Yahoo Finance - Xen Project Introduces New Mirage OS Release
+  date: 2014-07-22
+  stream: press-coverage
+- id: cloud-computing-mirage-20
+  uri: http://cloudcomputing.info/en/news/2014/07/xen-project-releases-mirage-os-2-0.html
+  title: CloudComputing - Xen Project releases Mirage OS 2.0
+  date: 2014-07-22
+  stream: press-coverage
+- id: xenblog-mirage-20-release
+  uri: http://blog.xen.org/index.php/2014/07/22/mirage-os-v2-0-the-new-features/
+  title: 'XenBlog: Mirage OS v2.0: The new features'
+  date: 2014-07-22
+  stream: public-blog
+- id: varguy-mirage-20-release
+  uri: http://thevarguy.com/virtualization-applications-and-technologies/072314/xen-unveils-mirage-os-20-open-source-virtual-cloud-apps
+  title: Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps
+  date: 2014-07-23
+  stream: press-coverage
+- id: mirage-20-release-linux-magazin-de
+  uri: http://www.linux-magazin.de/NEWS/Ocaml-Cloud-OS-Mirage-OS-2.0-erhoeht-Sicherheit
+  title: "(german) OCaml-Cloud-OS Mirage OS 2.0 erh\xF6ht Sicherheit"
+  date: 2014-07-23
+  stream: press-coverage
+- id: mirage-20-release-yc-isvoc
+  uri: http://yc.isvoc.com/201407231852-xen-project-introduces-new-mirage-os-release.html#.U9AWkhZD3nc
+  title: "(chinese) Xen\u9879\u76EE\u63A8\u51FA\u65B0\u7684\u5E7B\u5F71\u64CD\u4F5C\u7CFB\u7EDF\u7248\u672C"
+  date: 2014-07-23
+  stream: press-coverage
+- id: mirage-20-release-admin-magazin-de
+  uri: http://www.admin-magazin.de/News/Mirage-OS-2.0-veroeffentlicht
+  title: "(german) Mirage OS 2.0 ver\xF6ffentlicht"
+  date: 2014-07-22
+  stream: press-coverage
+- id: bww-mirage-20-release
+  uri: http://www.broadwayworld.com/bwwgeeks/article/Xen-Project-Introduces-New-Mirage-OS-Release-20140722#.U9AX5xZD3nc
+  title: 'BWW: Xen Project Introduces New Mirage OS Release'
+  date: 2014-07-22
+  stream: press-coverage
+- id: open-source-china-mirage-20-release
+  uri: http://www.oschina.net/news/53851/mirage-os-2-0-released
+  title: "(chinese) Mirage OS 2.0 \u53D1\u5E03\uFF0C\u4E91\u7F16\u7A0B\u5E73\u53F0"
+  date: 2014-07-23
+  stream: press-coverage
+- id: seedhack-experience
+  uri: http://seedcamp.com/seedhack-5-0/
+  title: The Seedhack Experience
+  date: 2014-07-23
+  stream: public-blog
+- id: hn-introducing-irmin
+  uri: https://news.ycombinator.com/item?id=8053687
+  title: 'HN: Irmin: Git-like distributed, branchable storage'
+  date: 2014-07-18
+  stream: hackernews
+- id: hn-introducing-asn1
+  uri: https://news.ycombinator.com/item?id=8020125
+  title: 'HN: OCaml-TLS: ASN.1 and notation embedding'
+  date: 2014-07-11
+  stream: hackernews
+- id: hn-mirage-os-unikernel-for-xen-hypervisor
+  uri: https://news.ycombinator.com/item?id=7726748
+  title: 'HN: Mirage OS: A Unikernel For The Xen Hypervisor'
+  date: 2014-05-10
+  stream: hackernews
+- id: hn-ocaml-tls-api-internals-attacks-mitigation
+  uri: https://news.ycombinator.com/item?id=8031368
+  title: 'HN: OCaml-TLS: the protocol implementation and mitigations to known attacks'
+  date: 2014-07-14
+  stream: hackernews
+- id: hn-announcing-mirage-20-release
+  uri: https://news.ycombinator.com/item?id=8069132
+  title: 'HN: Mirage v2.0: a recap of the new features'
+  date: 2014-07-22
+  stream: hackernews
+- id: hn-acm-queue-01
+  uri: https://news.ycombinator.com/item?id=7053638
+  title: 'HN: Unikernels: Rise of the Virtual Library Operating System'
+  date: 2014-01-14
+  stream: hackernews
+- id: hn-acm-queue-02
+  uri: https://news.ycombinator.com/item?id=8025493
+  title: 'HN: Unikernels: Rise of the Virtual Library Operating System'
+  date: 2014-07-12
+  stream: hackernews
+- id: hn-introducing-tls
+  uri: https://news.ycombinator.com/item?id=8005130
+  title: 'HN: Introducing Transport Layer Security in pure OCaml'
+  date: 2014-07-08
+  stream: hackernews
+- id: digital-conversations-2014
+  uri: http://www.brondbjerg.co.uk/blog/2014/06/building-the-next-generation-of-the-web/
+  title: Digital Conversations - Building the Next Generation of the Web
+  date: 2014-06-12
+  stream: press-coverage
+- id: linux-magazin-de-zero-install
+  uri: http://www.linux-magazin.de/Ausgaben/2014/06/Ocaml/%28language%29/ger-DE/
+  title: Programmieren in OCaml (German)
+  date: 2014-06-01
+  stream: press-coverage
+- id: se-radio-2014
+  uri: http://www.se-radio.net/2014/05/episode-204-anil-madhavapeddy-on-the-mirage-cloud-operating-system-and-the-ocaml-language/
+  title: 'Software Engineering Radio: podcast on MirageOS and OCaml with Anil Madhavapeddy'
+  date: 2014-05-30
+  stream: press-coverage
+- id: nw-lang-mirageos
+  uri: http://www.networkworld.com/slideshow/149127/beyond-the-usual-suspects-10-hot-programming-languages-on-the-rise.html#slide10
+  title: 'Beyond the usual suspects: 10 hot programming languages on the rise'
+  date: 2014-04-17
+  stream: press-coverage
+- id: citirx-containers-xen
+  uri: http://open.citrix.com/blog/328-are-containers-the-right-answer-to-the-wrong-question.html
+  title: Are Containers the Right Answer to the Wrong Question?
+  date: 2014-04-08
+  stream: public-blog
+- id: mindy-unikernel-1
+  uri: http://www.somerandomidiot.com/blog/2014/03/14/its-a-mirage/
+  title: It's a Mirage! (or, How to Shave a Yak.)
+  date: 2014-03-14
+  stream: public-blog
+- id: amirmc-jekyll-1
+  uri: http://amirchaudhry.com/from-jekyll-to-unikernel-in-fifty-lines
+  title: From Jekyll site to Unikernel in fifty lines of code
+  date: 2014-03-10
+  stream: public-blog
+- id: pcworld-2014-xenarm
+  uri: http://www.pcworld.com/article/2106460/xen-hypervisor-moves-into-arm-space.html
+  title: Xen hypervisor moves into ARM space
+  date: 2014-03-10
+  stream: press-coverage
+- id: fosdem-2014-video
+  uri: http://video.fosdem.org/2014/Janson/Sunday/MirageOS_compiling_functional_library_operating_systems.webm
+  title: 'FOSDEM 2014: MirageOS: compiling functional library operating systems'
+  date: 2014-02-02
+  stream: public-talk
+- id: fosdem-2014
+  uri: https://fosdem.org/2014/interviews/2014-anil-madhavapeddy-richard-mortier/
+  title: Interview with Anil Madhavapeddy and Richard Mortier on MirageOS
+  date: 2014-01-29
+  stream: press-coverage
+- id: osnews-2014
+  uri: http://www.osnews.com/comments/27516?view=threaded&sort=&threshold=0
+  title: 'OSNews: MirageOS: rise of the virtual library operating system'
+  date: 2014-01-15
+  stream: press-coverage
+- id: nymote-mirage-ann-2014
+  uri: http://nymote.org/blog/2014/announcing-first-mirage-release/
+  title: 'Nymote.org: Announcing the first major release of Mirage - the Cloud Operating
+    System'
+  date: 2014-01-13
+  stream: press-coverage
+- id: infoworld-mirage-2014
+  uri: http://www.infoworld.com/t/operating-systems/xen-mirage-the-less-more-cloud-os-233823
+  title: 'Xen Mirage: The less-is-more cloud OS'
+  date: 2014-01-09
+  stream: press-coverage
+- id: infoq-rwo-2013
+  uri: http://www.infoq.com/articles/real-world-ocaml-interview
+  title: 'Book Review and Interview: Real World OCaml'
+  date: 2014-01-08
+  stream: press-coverage
+- id: techweek-europe-2013
+  uri: http://www.techweekeurope.co.uk/comment/xen-launches-mirage-cloud-os-133875
+  title: Xen Launches The Mirage Cloud OS
+  date: 2013-12-11
+  stream: press-coverage
+- id: linuxcom-cloud-os-2013
+  uri: http://www.linux.com/news/enterprise/cloud-computing/751156-are-cloud-operating-systems-the-next-big-thing-
+  title: 'Linux.com: Are Cloud Operating Systems the Next Big Thing?'
+  date: 2013-12-03
+  stream: press-coverage
+- id: infoq-mirageos-2013
+  uri: http://www.infoq.com/news/2013/12/mirageos
+  title: 'InfoQ: Xen Project Releases 1.0 of Mirage OS'
+  date: 2013-12-23
+  stream: press-coverage
+- id: eweek-mirageos-2013
+  uri: http://www.eweek.com/cloud/xen-project-builds-its-own-cloud-os-mirage.html/
+  title: 'eWeek: Xen Project Builds Its Own Cloud OS Mirage'
+  date: 2013-12-09
+  stream: press-coverage
+- id: xenproject-mirageos-2013
+  uri: http://www.xenproject.org/about/in-the-news/162-xen-project-releases-mirage-os-welcomes-arm-as-newest-member.html
+  title: Xen Project Releases Mirage OS, Welcomes ARM as Newest Member
+  date: 2013-12-09
+  stream: press-coverage
+- id: voxoz-docker-2013
+  uri: http://blog.docker.io/2013/09/powering-voxoz-ecosystem-with-docker/
+  title: Powering Voxoz ecosystem with Docker
+  date: 2013-09-26
+  stream: public-blog

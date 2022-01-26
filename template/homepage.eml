@@ -1,0 +1,121 @@
+let render ~blog_posts = Layout.render
+~title:"Welcome to MirageOS"
+~description:"MirageOS is a programming framework for building type-safe, modular systems."
+~tab:Home @@
+<div class="text-center font-space w-4/5 mx-auto py-8 space-y-6">
+  <h1 class="text-3xl font-bold">A programming framework for building type-safe, modular systems</h1>
+  <div class="flex flex-col sm:flex-row justify-center items-center sm:space-x-6 sm:space-y-0 space-y-4">
+    <a href="#" class="btn">
+      <div>
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g clip-path="url(#clip0_317_1697)">
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M12.8119 0.642883C5.80696 0.642883 0.133301 6.31654 0.133301 13.3214C0.133301 18.9317 3.76254 23.6703 8.80227 25.3502C9.4362 25.4612 9.67392 25.0808 9.67392 24.748C9.67392 24.4469 9.65807 23.4485 9.65807 22.3866C6.47258 22.973 5.64848 21.6101 5.39491 20.8969C5.25227 20.5324 4.63419 19.4072 4.09535 19.106C3.6516 18.8683 3.01767 18.2819 4.0795 18.2661C5.07794 18.2502 5.79111 19.1853 6.02883 19.5656C7.1699 21.4833 8.99245 20.9444 9.72147 20.6116C9.8324 19.7875 10.1652 19.2328 10.5297 18.9159C7.70874 18.5989 4.76098 17.5054 4.76098 12.6558C4.76098 11.277 5.25227 10.136 6.06053 9.24846C5.93375 8.9315 5.48999 7.63194 6.18732 5.88864C6.18732 5.88864 7.24915 5.55583 9.67392 7.18819C10.6882 6.90292 11.7659 6.76029 12.8436 6.76029C13.9212 6.76029 14.9989 6.90292 16.0132 7.18819C18.438 5.53998 19.4998 5.88864 19.4998 5.88864C20.1971 7.63194 19.7534 8.9315 19.6266 9.24846C20.4349 10.136 20.9261 11.2612 20.9261 12.6558C20.9261 17.5212 17.9625 18.5989 15.1416 18.9159C15.6012 19.3121 15.9974 20.0728 15.9974 21.2614C15.9974 22.9572 15.9815 24.3201 15.9815 24.748C15.9815 25.0808 16.2192 25.477 16.8532 25.3502C19.37 24.5005 21.5571 22.8829 23.1065 20.7251C24.6559 18.5673 25.4897 15.9779 25.4904 13.3214C25.4904 6.31654 19.8168 0.642883 12.8119 0.642883Z"
+              class="fill-current"
+            />
+          </g>
+          <defs>
+            <clipPath id="clip0_317_1697">
+              <rect width="25.3571" height="25.3571" class="fill-current" transform="translate(0.133301 0.642883)" />
+            </clipPath>
+          </defs>
+        </svg>
+        <span>See on Github</span>
+      </div>
+    </a>
+    <a href="#" class="btn">
+      <div>
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M12.8832 26C19.8853 26 25.5617 20.3236 25.5617 13.3214C25.5617 6.31927 19.8853 0.642883 12.8832 0.642883C5.88098 0.642883 0.20459 6.31927 0.20459 13.3214C0.20459 20.3236 5.88098 26 12.8832 26ZM6.01602 6.98218C8.24831 6.99208 9.91567 7.27108 11.1086 7.84062C11.4934 8.02073 11.8521 8.25196 12.175 8.52804C12.2317 8.57733 12.2771 8.63821 12.3082 8.70656C12.3393 8.77491 12.3554 8.84915 12.3553 8.92424V20.0546C12.3554 20.0812 12.3477 20.1073 12.3332 20.1295C12.3186 20.1518 12.2979 20.1693 12.2734 20.1798C12.249 20.1904 12.2221 20.1935 12.1959 20.1889C12.1697 20.1842 12.1455 20.172 12.1262 20.1537C10.7163 18.8211 8.36255 18.6019 6.01602 18.6019C5.41379 18.6019 4.95947 18.1202 4.95947 17.4816V8.03542C4.95916 7.8623 5.00139 7.69175 5.08245 7.53878C5.16352 7.38581 5.28092 7.25511 5.42436 7.15816C5.5991 7.04071 5.80549 6.97932 6.01602 6.98218ZM19.7511 6.98218C19.9616 6.97896 20.168 7.04001 20.3428 7.15717C20.4867 7.25409 20.6044 7.38494 20.6858 7.53817C20.7671 7.6914 20.8094 7.86229 20.809 8.03575V17.5447C20.809 17.8249 20.6977 18.0936 20.4995 18.2918C20.3014 18.4899 20.0327 18.6012 19.7525 18.6012C15.9674 18.6009 14.48 19.3048 13.6324 20.1468C13.6141 20.1646 13.591 20.1767 13.5659 20.1815C13.5408 20.1863 13.5149 20.1836 13.4913 20.1737C13.4677 20.1638 13.4476 20.1471 13.4335 20.1258C13.4194 20.1045 13.4118 20.0795 13.4119 20.054V8.92292C13.4118 8.84787 13.4279 8.77367 13.4589 8.70534C13.49 8.637 13.5353 8.57609 13.5918 8.52672C13.915 8.25118 14.2738 8.02041 14.6586 7.84062C15.8515 7.26976 17.5188 6.99208 19.7511 6.98218Z"
+            class="fill-current"
+          />
+        </svg>
+        <span>See Paper</span>
+      </div>
+    </a>
+  </div>
+</div>
+<hr class="border-black" />
+<div class="flex flex-col lg:flex-row">
+  <div class="p-9 space-y-4 flex-1">
+    <p class="font-medium font-space text-lg">MirageOS is a library operating system that constructs <a href="#" class="link-blue">unikernels</a> for secure, high-performance network applications across a variety of cloud computing and mobile platforms.</p>
+
+    <p class="font-inter">Code can be developed on a normal OS such as Linux or macOS, and then compiled into a fully-standalone, specialised unikernel that runs under a Xen or KVM hypervisor.</p>
+
+    <p class="font-inter">This lets your services run more efficiently, securely and with finer control than with a full conventional software stack.</p>
+  </div>
+  <div class="p-9 border-t lg:border-t-0 lg:border-l border-black bg-cyan flex-1 space-y-6">
+    <div class="space-y-1">
+      <div class="flex items-center space-x-2.5">
+        <img src="/icon/fast-start.svg" alt="Fast Start Icon" />
+        <div class="font-bold font-space text-lg">Fast Start</div>
+      </div>
+      <p class="text-grey text-sm">MirageOS applications takes a few milliseconds to start-up instead of the few minutes that takes traditional OS.</p>
+    </div>
+    <div class="space-y-1">
+      <div class="flex items-center space-x-2.5">
+        <img src="/icon/binaries.svg" alt="Binaries Icon" />
+        <div class="font-bold font-space text-lg">Small Binaries</div>
+      </div>
+      <p class="text-grey text-sm">MirageOS binaries are self-contained: they do not need an additional OS to execute. Despite this, the size of MirageOS binary is usually a few megabytes.</p>
+    </div>
+    <div class="space-y-1">
+      <div class="flex items-center space-x-2.5">
+        <img src="/icon/footprint.svg" alt="Footprint Icon" />
+        <div class="font-bold font-space text-lg">Small Footprint</div>
+      </div>
+      <p class="text-grey text-sm">MirageOS applications use a few megabytes of memory, while traditional application and their associated OS waste gigabytes for simple applications.</p>
+    </div>
+    <div class="space-y-1">
+      <div class="flex items-center space-x-2.5">
+        <img src="/icon/safe-logic.svg" alt="Safe Logic Icon" />
+        <div class="font-bold font-space text-lg">Safe Logic</div>
+      </div>
+      <p class="text-grey text-sm">MirageOS applications are written in OCaml, an industrial strength programming language supporting functional, imperative and object-oriented styles.</p>
+    </div>
+  </div>
+</div>
+<hr class="border-black" />
+<div class="flex flex-col md:flex-row">
+  <div class="p-9 bg-green flex-1 space-y-6 w-full md:w-1/2 lg:w-1/3">
+    <p>
+      MirageOS uses the <a href="" class="link-blue">OCaml</a> language, with <a href="" class="link-blue">libraries</a> that provide networking, storage and concurrency support that work under Unix during development, but become operating system drivers when being compiled for production
+      deployment.
+    </p>
+
+    <p>The framework is fully event-driven, with no support for preemptive threading.</p>
+
+    <p>
+      <a href="#" class="link-blue">MirageOS 3.0</a> was released in February 2017, preceded by <a href="#" class="link-blue">MirageOS 2.0</a> in July 2014 and <a href="#" class="link-blue">MirageOS 1.0</a> in December 2013. All the infrastructure you see here is
+      <a href="#" class="link-blue">self-hosted</a>.
+    </p>
+
+    <p>Check out the <a href="#" class="link-blue">documentation</a>, compile your <a href="#" class="link-blue">hello world unikernel</a>, get started with the <a href="#" class="link-blue">public cloud</a>, or watch the <a href="#" class="link-blue">talks</a>.</p>
+  </div>
+  <div class="w-full md:w-1/2 lg:w-2/3 border-t md:border-t-0 md:border-l border-black flex flex-col justify-between">
+    <div class="px-10 py-8">
+      <h2 class="text-3xl font-bold">Blog</h2>
+      <div class="space-y-2 mt-3">
+        <% blog_posts |> List.iter (fun (item : Mirageio_data.Blog.t) -> %>
+        <div class="items-center space-x-2">
+          <img class="inline" src="/icon/speech-bubble.svg" alt="Speech Bubble Icon" />
+          <a href="/blog/<%s item.permalink %>" class="link-blue"> <%s item.subject %> </a>
+          <span class="text-grey">(<%s! item.updated %>)</span>
+        </div>
+        <% ); %>
+        <div>
+          <a href="/blog" class="link-blue">-> More on the blog</a>
+        </div>
+      </div>
+    </div>
+    <div class="px-10 py-8 bg-orange flex flex-col lg:flex-row justify-center items-center border-t border-black">
+      <img src="/img/xen.png" class="mb-7 lg:mb-0 lg:mr-8" alt="Xen Image" />
+      <div class="font-medium text-lg font-space">MirageOS is a Xen and Linux Foundation incubator project.</div>
+    </div>
+  </div>
+</div>

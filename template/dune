@@ -1,0 +1,75 @@
+(library
+ (name mirageio_template)
+ (libraries dream-mirage mirageio_data))
+
+(rule
+ (targets atom.ml)
+ (deps atom.eml)
+ (action
+  (run %{bin:dream_eml} %{deps} --workspace %{workspace_root})))
+
+(rule
+ (targets not_found.ml)
+ (deps not_found.eml)
+ (action
+  (run %{bin:dream_eml} %{deps} --workspace %{workspace_root})))
+
+(rule
+ (targets component.ml)
+ (deps component.eml)
+ (action
+  (run %{bin:dream_eml} %{deps} --workspace %{workspace_root})))
+
+(rule
+ (targets layout.ml)
+ (deps layout.eml)
+ (action
+  (run %{bin:dream_eml} %{deps} --workspace %{workspace_root})))
+
+(rule
+ (targets homepage.ml)
+ (deps homepage.eml)
+ (action
+  (run %{bin:dream_eml} %{deps} --workspace %{workspace_root})))
+
+(rule
+ (targets community.ml)
+ (deps community.eml)
+ (action
+  (run %{bin:dream_eml} %{deps} --workspace %{workspace_root})))
+
+(rule
+ (targets blog.ml)
+ (deps blog.eml)
+ (action
+  (run %{bin:dream_eml} %{deps} --workspace %{workspace_root})))
+
+(rule
+ (targets blog_inner.ml)
+ (deps blog_inner.eml)
+ (action
+  (run %{bin:dream_eml} %{deps} --workspace %{workspace_root})))
+
+(rule
+ (targets docs_inner.ml)
+ (deps docs_inner.eml)
+ (action
+  (run %{bin:dream_eml} %{deps} --workspace %{workspace_root})))
+
+(rule
+ (targets docs.ml)
+ (deps docs.eml)
+ (action
+  (run %{bin:dream_eml} %{deps} --workspace %{workspace_root})))
+
+(rule
+ (targets weekly.ml)
+ (deps weekly.eml)
+ (action
+  (run %{bin:dream_eml} %{deps} --workspace %{workspace_root})))
+
+(rule
+ (targets papers.ml)
+ (deps papers.eml)
+ (action
+  (run %{bin:dream_eml} %{deps} --workspace %{workspace_root})))

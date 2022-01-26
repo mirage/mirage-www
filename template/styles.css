@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+  @apply relative inline-flex text-sm font-inter font-medium;
+}
+
+.btn > div {
+  @apply h-9 px-3.5 flex items-center justify-center border border-body bg-white relative hover:bg-primary transition-colors hover:text-white space-x-2;
+  z-index: 1;
+}
+
+.btn svg {
+  width: 18px;
+}
+
+.btn:after {
+  @apply absolute w-full h-full;
+  content: "";
+  border: 1px solid #181818;
+  top: 3px;
+  left: 3px;
+  filter: blur(1px);
+}
+
+body {
+  @apply bg-cover bg-top min-h-screen font-inter text-body;
+  background-image: url("../img/wavesbg.png");
+}
+
+.content-container {
+  @apply bg-primary p-4 flex flex-col;
+  border-radius: 10px;
+  max-width: 1080px;
+  margin: 12px;
+}
+
+@media (min-width: 768px) {
+  .content-container {
+    @apply flex-row;
+  }
+}
+
+@media (min-width: 1080px) {
+  .content-container {
+    margin: 92px auto;
+  }
+}
+
+@media (min-width: 2000px) {
+  .content-container {
+    max-width: 1738px;
+  }
+}
+
+.content-sidebar {
+  @apply font-space flex flex-col items-center justify-center;
+}
+
+@media (min-width: 768px) {
+  .content-sidebar {
+    @apply justify-start items-start;
+    width: 152px;
+    flex: 0 0 152px;
+  }
+}
+
+.content-center {
+  @apply flex-1 bg-white ml-4;
+  border-radius: 10px;
+}
+
+.link-blue-container a {
+  @apply text-blue hover:underline;
+}
+
+.link-blue {
+  @apply text-blue hover:underline;
+}
+
+.link-orange {
+  @apply text-darkOrange hover:underline;
+}
+
+.link-green {
+  @apply text-darkGreen hover:underline;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-space;
+}

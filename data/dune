@@ -1,0 +1,27 @@
+(executable
+ (name gen_data)
+ (modules
+  (:standard \ mirageio_data))
+ (libraries omd yaml fmt)
+ (preprocess
+  (pps ppx_deriving_yaml)))
+
+(library
+ (name mirageio_data)
+ (modules mirageio_data))
+
+(rule
+ (targets mirageio_data.ml)
+ (mode promote-until-clean)
+ (deps
+  (source_tree blog/)
+  (source_tree link/)
+  (source_tree paper/)
+  (source_tree weekly/)
+  (source_tree wiki/))
+ (action
+  (chdir
+   %{workspace_root}
+   (with-stdout-to
+    %{targets}
+    (run data/gen_data.exe)))))

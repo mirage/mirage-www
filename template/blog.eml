@@ -1,0 +1,43 @@
+let render ~latest ~recent = Layout.render
+~title:"MirageOS Blog"
+~description:"Read our latest news and announcements from MirageOS Blog."
+~tab:Blog @@
+<div class="text-left px-8 py-7">
+  <h1 class="text-3xl font-bold">The MirageOS Blog</h1>
+  <p class="font-bold text-grey mt-2">on building functional operating systems</p>
+</div>
+<hr class="border-black" />
+<div class="flex flex-col lg:flex-row">
+  <div class="flex-1">
+    <% latest |> List.iter (fun (item : Mirageio_data.Blog.t) -> %>
+    <div class="px-8 py-6 border-b border-black">
+      <div class="text-lg font-bold"><%s item.subject %></div>
+      <div class="text-sm mt-2">
+        By <%s! Component.people item.authors %>
+        -
+        <span class="text-grey"><%s! item.updated %></span>
+      </div>
+      <div class="mt-2 prose prose-sm prose-pre:bg-primary max-h-72 text-ellipsis overflow-hidden">
+        <%s! item.body %>
+      </div>
+      <div class="mt-2">
+        <a href="/blog/<%s item.permalink %>" class="link-blue">-> Read more</a>
+      </div>
+    </div>
+    <% ); %>
+  </div>
+
+  <div class="bg-primary w-full lg:w-1/3">
+    <div class="px-5 py-6">
+      <div class="text-lg text-white font-space mb-3">Recent Posts</div>
+      <div class="space-y-2 italic">
+        <% recent |> List.iter (fun (item : Mirageio_data.Blog.t) -> %>
+        <div class="items-center space-x-2">
+          <img class="inline" src="/icon/speech-bubble.svg" alt="Speech Bubble Icon" />
+          <a href="/blog/<%s item.permalink %>" class="link-blue"> <%s item.subject %> </a>
+        </div>
+        <% ); %>
+      </div>
+    </div>
+  </div>
+</div>

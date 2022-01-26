@@ -1,0 +1,20 @@
+let render (item : Mirageio_data.Blog.t) = Layout.render
+~title:(Printf.sprintf "%s | MirageOS" item.subject)
+~description:(Printf.sprintf "Read the post on \"%s\" from our blog." item.subject)
+~tab:Blog @@
+<div class="text-left px-8 py-7">
+  <h1 class="text-3xl font-bold">The MirageOS Blog</h1>
+  <p class="font-bold text-grey mt-2">on building functional operating systems</p>
+</div>
+<hr class="border-black" />
+<div class="p-8">
+  <div class="text-lg font-bold"><%s item.subject %></div>
+  <div class="text-sm mt-2">
+    By <%s! Component.people item.authors %>
+    -
+    <span class="text-grey"><%s! item.updated %></span>
+  </div>
+  <div class="mt-2 prose prose-sm prose-pre:bg-primary max-w-full">
+    <%s! item.body %>
+  </div>
+</div>

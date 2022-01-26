@@ -1,0 +1,19 @@
+let render () =
+Layout.render
+~title:"Page not Found | MirageOS"
+~description:"This page does not exist."
+~tab:Home @@
+<main class="min-h-full bg-cover bg-top sm:bg-top">
+  <div class="max-w-7xl mx-auto px-4 py-16 text-center sm:px-6 sm:py-24 lg:px-8 lg:py-48">
+    <p class="text-sm font-semibold text-blue uppercase tracking-wide">404 error</p>
+    <h1 class="mt-2 text-4xl font-extrabold text-black tracking-tight sm:text-5xl">Uh oh! I think you’re lost.</h1>
+    <p class="mt-2 text-lg font-medium text-black text-opacity-50">It looks like the page you’re looking for doesn't exist.</p>
+    <div class="mt-6">
+      <a href="/" class="btn">
+        <div>
+          <span>Go back home</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</main>

@@ -1,0 +1,37 @@
+let render (papers : Mirageio_data.Paper.t list) =
+Layout.render
+~description:"Discover research papers and articles on MirageOS and related projects."
+~title:"MirageOS Papers"
+~tab:Docs @@
+<div class="text-left px-8 py-7">
+  <h1 class="text-3xl font-bold">MirageOS Papers</h1>
+  <p class="font-bold text-grey mt-2">and reseach articles</p>
+</div>
+<hr class="border-black" />
+<div class="p-8">
+  <table class="max-w-5xl lg:max-w-full align-top">
+    <thead class="bg-primary text-white text-left rounded-xl">
+      <tr>
+        <th class="py-4 px-6 rounded-l-lg text-x w-2/5">Title</th>
+        <th class="py-4 px-6 w-56">Authors</th>
+        <th class="py-4 px-6 rounded-r-lg">Links</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% papers |> List.iter (fun (paper : Mirageio_data.Paper.t) -> %>
+      <tr>
+        <td class="py-4 px-6 font-semibold">
+          <div class="font-semibold"><%s paper.title %></div>
+          <div class="font-normal text-sm mt-2 text-body-400"><%s paper.abstract %></div>
+        </td>
+        <td class="py-4 px-6 font-medium align-top"><%s String.concat ", " paper.authors %></td>
+        <td class="py-4 px-6 align-top">
+          <% paper.links |> List.iter (fun (link : Mirageio_data.Paper.link) -> %>
+          <a href="<%s link.uri %>" class="link-blue font-medium block whitespace-nowrap"> <%s link.description %> </a>
+          <% ); %>
+        </td>
+      </tr>
+      <% ); %>
+    </tbody>
+  </table>
+</div>
