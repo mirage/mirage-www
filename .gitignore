@@ -8,27 +8,12 @@ _build/
 # Local OPAM switch
 _opam/
 
-
 # Normal npm stuff
-npm-debug.log
-yarn-error.log
 node_modules/
-.cache/
-dist/
-build/
-
-# IDE related
-.vscode*
 
 # TailwindCSS
 /tailwindcss
 
-# mirage material
-mirage/duniverse/
-mirage/dist/
-mirage/mirage/
-mirage/dune
+# Mirage generated files
 dune-workspace
-mirage/dune.build
-mirage/dune.config
 Makefile
