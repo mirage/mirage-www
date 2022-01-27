@@ -13,7 +13,8 @@ depends: [
   "dune" {>= "2.7"}
   "dream"
   "dream-mirage"
-  "mimic"
+  "mirage-clock-unix"
+  "mirage-unix"
   "crunch" {build}
   "omd" {build}
   "yaml" {build}
