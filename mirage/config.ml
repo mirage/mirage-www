@@ -14,7 +14,7 @@ let http_port =
   in
   Key.(create "http-port" Arg.(opt ~stage:`Both int 80 doc))
 
-let keys = Key.[ v host_key; v redirect_key; v http_port ]
+let keys = Key.[ v http_port ]
 
 let https_port =
   let doc =
