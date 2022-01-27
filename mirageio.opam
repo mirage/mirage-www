@@ -42,5 +42,4 @@ pin-depends: [
   ["dream-mirage.dev" "git+https://github.com/TheLortex/dream.git#8585c63dd59920a008e6f9579bc18910d08d6370"]
   ["dream-pure.dev" "git+https://github.com/TheLortex/dream.git#8585c63dd59920a008e6f9579bc18910d08d6370"]
   ["dream-httpaf.dev" "git+https://github.com/TheLortex/dream.git#8585c63dd59920a008e6f9579bc18910d08d6370"]
-  ["yaml.3.0.0" "git+https://github.com/TheLortex/ocaml-yaml.git#7e1f117645ea10fbec2bd3dbbf0d8f581cce891f"] # branch v3.0.0+fix
 ]
