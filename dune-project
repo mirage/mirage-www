@@ -25,7 +25,8 @@
   dune
   dream
   dream-mirage
-  mimic ; dependency of dream-mirage.paf
+  mirage-clock-unix
+  mirage-unix
   (crunch :build)
   (omd :build)
   (yaml :build)
