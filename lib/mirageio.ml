@@ -28,7 +28,7 @@ struct
       let post_opt =
         Mirageio_data.Blog.all
         |> List.find_opt (fun (x : Mirageio_data.Blog.t) ->
-              x.permalink = permalink)
+               x.permalink = permalink)
       in
       match post_opt with
       | Some post -> Dream.html (Blog_inner.render post)
@@ -43,7 +43,7 @@ struct
       let doc_opt =
         Mirageio_data.Wiki.all
         |> List.find_opt (fun (x : Mirageio_data.Wiki.t) ->
-              x.permalink = permalink)
+               x.permalink = permalink)
       in
       match doc_opt with
       | Some doc -> Dream.html (Docs_inner.render doc)
@@ -54,7 +54,7 @@ struct
       let weekly_opt =
         Mirageio_data.Weekly.all
         |> List.find_opt (fun (x : Mirageio_data.Weekly.t) ->
-              x.permalink = permalink)
+               x.permalink = permalink)
       in
       match weekly_opt with
       | Some weekly -> Dream.html (Weekly.render weekly)
@@ -98,7 +98,9 @@ struct
     let router = Dream.router routes
   end
 
-  let start _ _ stack =
-    let router = Dream.logger @@ Router.router @@ Dream.not_found in
-    Dream.http ~port:8080 (Stack.tcp stack) router
+  let router = Dream.logger @@ Router.router @@ Dream.not_found
+  let http ?(port = 80) stack = Dream.http ~port (Stack.tcp stack) router
+
+  let https ?(port = 443) ?tls stack =
+    Dream.https ~port ?cfg:tls (Stack.tcp stack) router
 end

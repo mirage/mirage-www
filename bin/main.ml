@@ -1,5 +1,5 @@
 module Stack = Tcpip_stack_socket.V4V6
-module Mirageio = Mirageio.Make (Pclock) (OS.Time) (Stack)
+module Mirageio = Mirageio.Make (Pclock) (Unix_os.Time) (Stack)
 open Lwt.Syntax
 
 let stack_of_addr addr =
@@ -16,4 +16,4 @@ let () =
   Sys.(set_signal sigpipe Signal_ignore);
   Lwt_main.run
   @@ let* stack = stack_of_addr "0.0.0.0/0" in
-     Mirageio.start () () stack
+     Mirageio.http ~port:8080 stack
