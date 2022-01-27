@@ -21,7 +21,18 @@ let host_key =
   in
   Key.(create "host" Arg.(opt string "localhost" doc))
 
-let keys = Key.[ v host_key; v http_port ]
+let redirect_key =
+  let doc =
+    Key.Arg.info
+      ~doc:
+        "Where to redirect to. Must start with http:// or https://. When tls \
+         is enabled, the default is https://$HOST, with the effect that all \
+         http requests will be redirected to https"
+      ~docv:"URL" ~env:"REDIRECT" [ "redirect" ]
+  in
+  Key.(create "redirect" Arg.(opt (some string) None doc))
+
+let keys = Key.[ v host_key; v redirect_key; v http_port ]
 
 let https_port =
   let doc =

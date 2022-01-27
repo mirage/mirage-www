@@ -39,6 +39,8 @@ struct
         Lwt.return conf
 
   let start _ _ _ stack =
+    let host = Key_gen.host () in
+    let redirect = Key_gen.redirect () in
     let hostname = Domain_name.(of_string_exn (Key_gen.host ()) |> host_exn) in
     let additional_hostnames =
       List.map
@@ -46,9 +48,18 @@ struct
         (Key_gen.additional_hostnames ())
     in
     let* cfg = tls_init stack hostname additional_hostnames in
-    Lwt.join
-      [
-        WWW.http ~port:(Key_gen.http_port ()) stack;
-        WWW.https ~port:(Key_gen.https_port ()) ~tls:cfg stack;
-      ]
+    let http =
+      WWW.Dream.(
+        http ~port:(Key_gen.http_port ()) (Stack.tcp stack) @@ fun req ->
+        redirect ~status:`Moved_Permanently req ("https://" ^ host))
+    in
+    let https =
+      match redirect with
+      | None -> WWW.https ~port:(Key_gen.https_port ()) ~tls:cfg stack
+      | Some domain ->
+          WWW.Dream.(
+            https ~port:(Key_gen.https_port ()) (Stack.tcp stack) @@ fun req ->
+            redirect ~status:`Moved_Permanently req domain)
+    in
+    Lwt.join [ http; https ]
 end
