@@ -37,9 +37,9 @@ build: [
 ]
 dev-repo: "git+https://github.com/tmattio/mirageio.git"
 pin-depends: [
-  ["dream.dev" "git+https://github.com/TheLortex/dream.git#master+mirage"]
-  ["dream-mirage.dev" "git+https://github.com/TheLortex/dream.git#master+mirage"]
-  ["dream-pure.dev" "git+https://github.com/TheLortex/dream.git#master+mirage"]
-  ["dream-httpaf.dev" "git+https://github.com/TheLortex/dream.git#master+mirage"]
-  ["yaml.3.0.0" "git+https://github.com/TheLortex/ocaml-yaml.git#v3.0.0+fix"]
+  ["dream.dev" "git+https://github.com/TheLortex/dream.git#c67f3da631e05272b3f5011380909509dce4379c"] # branch master+mirage
+  ["dream-mirage.dev" "git+https://github.com/TheLortex/dream.git#c67f3da631e05272b3f5011380909509dce4379c"]
+  ["dream-pure.dev" "git+https://github.com/TheLortex/dream.git#c67f3da631e05272b3f5011380909509dce4379c"]
+  ["dream-httpaf.dev" "git+https://github.com/TheLortex/dream.git#c67f3da631e05272b3f5011380909509dce4379c"]
+  ["yaml.3.0.0" "git+https://github.com/TheLortex/ocaml-yaml.git#7e1f117645ea10fbec2bd3dbbf0d8f581cce891f"] # branch v3.0.0+fix
 ]
