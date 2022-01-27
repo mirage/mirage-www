@@ -8,7 +8,7 @@ let render ~(weeklies : Mirageio_data.Weekly.t list) = Layout.render
     <p class="font-bold text-grey ml-2">and guides</p>
   </div>
   <div class="text-grey mt-2 text-sm">
-    Welcome to the MirageOS wiki. Feel free to subscribe to the Atom feed to keep up-to-date with our progress. MirageOS is in beta stage and the infrastructure you see here is self-hosting. The authors hang on out #mirage on libera.chat IRC, so drop by with any questions you might have.
+    Welcome to the MirageOS wiki! Read along to learn how to build unikernels.
   </div>
 </div>
 <hr class="border-black" />
