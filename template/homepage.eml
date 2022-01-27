@@ -1,11 +1,8 @@
-let render ~blog_posts = Layout.render
-~title:"Welcome to MirageOS"
-~description:"MirageOS is a programming framework for building type-safe, modular systems."
-~tab:Home @@
+let render ~blog_posts = Layout.render ~title:"Welcome to MirageOS" ~description:"MirageOS is a programming framework for building type-safe, modular systems." ~tab:Home @@
 <div class="text-center font-space w-4/5 mx-auto py-8 space-y-6">
   <h1 class="text-3xl font-bold">A programming framework for building type-safe, modular systems</h1>
   <div class="flex flex-col sm:flex-row justify-center items-center sm:space-x-6 sm:space-y-0 space-y-4">
-    <a href="#" class="btn">
+    <a href="https://github.com/mirage" class="btn">
       <div>
         <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g clip-path="url(#clip0_317_1697)">
@@ -25,7 +22,7 @@ let render ~blog_posts = Layout.render
         <span>See on Github</span>
       </div>
     </a>
-    <a href="#" class="btn">
+    <a href="https://queue.acm.org/detail.cfm?id=2566628" class="btn">
       <div>
         <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -43,7 +40,7 @@ let render ~blog_posts = Layout.render
 <hr class="border-black" />
 <div class="flex flex-col lg:flex-row">
   <div class="p-9 space-y-4 flex-1">
-    <p class="font-medium font-space text-lg">MirageOS is a library operating system that constructs <a href="#" class="link-blue">unikernels</a> for secure, high-performance network applications across a variety of cloud computing and mobile platforms.</p>
+    <p class="font-medium font-space text-lg">MirageOS is a library operating system that constructs <a href="https://en.wikipedia.org/wiki/Unikernel" class="link-blue">unikernels</a> for secure, high-performance network applications across a variety of cloud computing and mobile platforms.</p>
 
     <p class="font-inter">Code can be developed on a normal OS such as Linux or macOS, and then compiled into a fully-standalone, specialised unikernel that runs under a Xen or KVM hypervisor.</p>
 
@@ -84,18 +81,18 @@ let render ~blog_posts = Layout.render
 <div class="flex flex-col md:flex-row">
   <div class="p-9 bg-green flex-1 space-y-6 w-full md:w-1/2 lg:w-1/3">
     <p>
-      MirageOS uses the <a href="" class="link-blue">OCaml</a> language, with <a href="" class="link-blue">libraries</a> that provide networking, storage and concurrency support that work under Unix during development, but become operating system drivers when being compiled for production
-      deployment.
+      MirageOS uses the <a href="https://ocaml.org/" class="link-blue">OCaml</a> language, with <a href="https://github.com/mirage" class="link-blue">libraries</a> that provide networking, storage and concurrency support that work under Unix during development, but become operating system drivers
+      when being compiled for production deployment.
     </p>
 
     <p>The framework is fully event-driven, with no support for preemptive threading.</p>
 
     <p>
-      <a href="#" class="link-blue">MirageOS 3.0</a> was released in February 2017, preceded by <a href="#" class="link-blue">MirageOS 2.0</a> in July 2014 and <a href="#" class="link-blue">MirageOS 1.0</a> in December 2013. All the infrastructure you see here is
-      <a href="#" class="link-blue">self-hosted</a>.
+      <a href="/blog/announcing-mirage-30-release" class="link-blue">MirageOS 3.0</a> was released in February 2017, preceded by <a href="/blog/announcing-mirage-20-release" class="link-blue">MirageOS 2.0</a> in July 2014 and <a href="/blog/announcing-mirage10" class="link-blue">MirageOS 1.0</a> in
+      December 2013. All the infrastructure you see here is <a href="https://github.com/mirage/mirage-www" class="link-blue">self-hosted</a>.
     </p>
 
-    <p>Check out the <a href="#" class="link-blue">documentation</a>, compile your <a href="#" class="link-blue">hello world unikernel</a>, get started with the <a href="#" class="link-blue">public cloud</a>, or watch the <a href="#" class="link-blue">talks</a>.</p>
+    <p>Check out the <a href="/docs" class="link-blue">documentation</a>, compile your <a href="/docs/hello-world" class="link-blue">hello world unikernel</a>, get started with the <a href="/docs/xen-boot" class="link-blue">public cloud</a>, or watch the <a href="/docs/talks" class="link-blue">talks</a>.</p>
   </div>
   <div class="w-full md:w-1/2 lg:w-2/3 border-t md:border-t-0 md:border-l border-black flex flex-col justify-between">
     <div class="px-10 py-8">

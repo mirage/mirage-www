@@ -1,32 +1,40 @@
-let render () = Layout.render
-~title:"MirageOS Community"
-~description:"Get in touch with the a community of hackers, developers, and enthusiasts who use MirageOS to build stable and safe systems."
-~tab:Community @@
+let render () = Layout.render ~title:"MirageOS Community" ~description:"Get in touch with the a community of hackers, developers, and enthusiasts who use MirageOS to build stable and safe systems." ~tab:Community @@
 <div class="divide-black divide-y">
   <div class="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-black">
     <div class="p-8 space-y-6 flex-1 text-center">
-      <div class="pt-6"><img src="/img/community/community.svg" height="150px" class="inline-block" alt="Community Image" /></div>
+      <div class="pt-6">
+        <img src="/img/community/community.svg" height="150px" class="inline-block" alt="Community Image" />
+      </div>
       <h2 class="text-3xl font-bold">The Community</h2>
       <div class="text-left text-sm text-darkGrey space-y-6">
         <p>
-          All MirageOS development is done via <a href="#" class="link-blue">GitHub</a>, consisting of a set of libraries that form the core distribution. It is all glued together via the <a href="#" class="link-blue">OPAM</a> package manager. All of the libraries are either under the
-          <a href="#" class="link-blue">LGPLv2</a> or the liberal <a href="#" class="link-blue">ISC</a> license. If you find bugs or installation issues, please report them via the main <a href="#" class="link-blue">issue tracker</a>. Broader queries or OCaml questions are very welcome on our
-          <a href="#" class="link-blue">mailing list</a>.
+          All MirageOS development is done via <a class="link-blue" href="https://github.com">GitHub</a>, consisting of a set of <a class="link-blue" href="https://github.com/mirage">libraries</a> that form the core distribution. It is all glued together via the
+          <a class="link-blue" href="https://opam.ocaml.org">OPAM</a> package manager. All of the libraries are either under the <a class="link-blue" href="http://www.gnu.org/licenses/lgpl-2.1.html">LGPLv2</a> or the liberal
+          <a class="link-blue" href="http://en.wikipedia.org/wiki/ISC_license">ISC</a> license. If you find bugs or installation issues, please report them via the main <a class="link-blue" href="https://github.com/mirage/mirage/issues">issue tracker</a>. Broader queries or OCaml questions are very
+          welcome on our <a class="link-blue" href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a>.
         </p>
-        <p>Please see the <a href="#" class="link-blue">guide to contributions</a> if you wish to submit a patch. There is also a list of <a href="#" class="link-blue">pioneer projects</a> if you are looking for an area in need of work, at various difficulty levels.</p>
+        <p>
+          Please see the <a class="link-blue" href="https://mirage.io/docs/contributing">guide to contributions</a> if you wish to submit a patch. There is also a list of <a class="link-blue" href="http://canopy.mirage.io/tags/help%20needed">pioneer projects</a> if you are looking for an area in
+          need of work, at various difficulty levels.
+        </p>
       </div>
     </div>
     <div class="p-8 flex-1 space-y-6 text-center">
-      <div class="pt-6"><img src="/img/community/research.svg" height="150px" class="inline-block" alt="Community Image" /></div>
+      <div class="pt-6">
+        <img src="/img/community/research.svg" height="150px" class="inline-block" alt="Community Image" />
+      </div>
       <h2 class="text-3xl font-bold">The Research Project</h2>
       <div class="text-left text-sm text-darkGrey space-y-6">
         <p>
-          MirageOS started with funding in 2009 from the <a href="#" class="link-blue">RCUK Horizon Digital Economy</a> Research Hub grant, <a href="#" class="link-blue">EP/G065802/1</a>. Amazon also granted us an <a href="#" class="link-blue">Amazon in Education award</a> and Verisign
-          <a href="#" class="link-blue">sponsored</a> work via an Internet Infrastructure Award, and Rackspace gives us developer resources on their cloud. Work has also been supported by the <a href="#" class="link-blue">MRC2</a> and <a href="#" class="link-blue">OCaml Labs</a> projects.
+          MirageOS started with funding in 2009 from the <a class="link-blue" href="http://www.rcuk.ac.uk/">RCUK</a> <a class="link-blue" href="http://horizon.ac.uk">Horizon Digital Economy</a> Research Hub grant,
+          <a class="link-blue" href="http://gow.epsrc.ac.uk/NGBOViewGrant.aspx?GrantRef=EP/G065802/1">EP/G065802/1</a>. Amazon also granted us an <a class="link-blue" href="http://aws.amazon.com/education/">Amazon in Education</a> award and Verisign
+          <a class="link-blue" href="http://www.cl.cam.ac.uk/news/2011/03/anil-madhavapeddy-wins-verisign-grant/">sponsored</a> work via an <a class="link-blue" href="http://www.youtube.com/watch?v=5-4lbyD_Fvw">Internet Infrastructure Award</a>, and
+          <a class="link-blue" href="http://www.rackspace.com/cloud/">Rackspace</a> gives us developer resources on their cloud. Work has also been supported by the <a class="link-blue" href="http://www.cl.cam.ac.uk/research/srg/netos/mrc2/">MRC2</a> and
+          <a class="link-blue" href="http://ocaml.io">OCaml Labs</a> projects.
         </p>
         <p>
-          The research leading to this code has also received funding from the European Union's Seventh Framework Programme FP7/2007-2013 under the <a href="#" class="link-blue">Trilogy 2 project</a> (grant agreement no 317756) and the <a href="#" class="link-blue">User Centric</a> Networking
-          project (grant agreement no 611001). Publications are open access.
+          The research leading to this code has also received funding from the European Union's Seventh Framework Programme FP7/2007-2013 under the <a class="link-blue" href="http://www.trilogy2.eu/">Trilogy 2</a> project (grant agreement no 317756) and the
+          <a class="link-blue" href="http://usercentricnetworking.eu/">User Centric Networking</a> project (grant agreement no 611001). Publications are <a class="link-blue" href="/docs/papers">open access</a>.
         </p>
       </div>
     </div>
@@ -34,15 +42,18 @@ let render () = Layout.render
   <div class="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-black text-sm">
     <div class="bg-cyan py-5 px-6 space-y-3">
       <img src="/img/community/users.svg" alt="Community icon" />
-      <p>Browse through our <a href="#" class="link-blue">discussion forum</a> and participate or start a new thread. We use the discourse instance kindly provided by OCaml.</p>
+      <p>Browse through our <a href="https://discuss.ocaml.org/tags/mirageos" class="link-blue">discussion forum</a> and participate or start a new thread. We use the discourse instance kindly provided by OCaml.</p>
     </div>
     <div class="py-5 px-6 space-y-3">
       <img src="/img/community/envelope.svg" alt="Envelope icon" />
-      <p>Join the e-mail <a href="#" class="link-blue">developer mailing list</a> or search the past archives. This is a fairly low-volume list, and beginner questions are welcome.</p>
+      <p>Join the e-mail <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel" class="link-blue">developer mailing list</a> or search the past archives. This is a fairly low-volume list, and beginner questions are welcome.</p>
     </div>
     <div class="bg-orange bg-opacity-40 py-5 px-6 space-y-3">
       <img src="/img/community/mirc.svg" alt="MIRC icon" />
-      <p class="">We hang out on IRC in the #mirage channel on <a href="#" class="link-orange">Libera.Chat</a> (<a href="#" class="link-orange">regular scheduled meetings</a>). Bear in mind that questions are more likely to be answered via e-mail if we're idling on IRC.</p>
+      <p class="">
+        We hang out on IRC in the #mirage channel on <a href="https://libera.chat/" class="link-orange">Libera.Chat</a> (<a href="https://github.com/mirage/mirage-www/wiki/Call-Agenda" class="link-orange">regular scheduled meetings</a>). Bear in mind that questions are more likely to be answered via
+        e-mail if we're idling on IRC.
+      </p>
     </div>
   </div>
   <div class="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-black link-blue-container">
@@ -54,23 +65,51 @@ let render () = Layout.render
       <div>
         <div>Lexicographically ordered by last name:</div>
         <ul class="list-disc ml-4 space-y-2 mt-2">
-          <li>Romain Calascibetta <a href="">@dinosaure</a></li>
-          <li><a href="">Thomas Gazagnaire</a>, <a href="">Tarides</a>, <a href="">@samoht</a></li>
-          <li><a href="">Thomas Leonard</a>, <a href="">@talex5</a></li>
-          <li><a href="">Martin Lucina</a>, <a href="">@mato</a></li>
-          <li><a href="">Anil Madhavapeddy</a>, University of Cambridge, <a href="">@avsm</a></li>
-          <li><a href="">Hannes Mehnert</a>, <a href="">robur</a>, <a href="">@hannesm</a></li>
-          <li><a href="">Lucas Pluvinage</a>, <a href="">@TheLortex</a></li>
-          <li><a href="">David Scott</a>, <a href="">Docker</a>, <a href="">@djs55</a></li>
-          <li><a href="">Magnus Skjegstad</a>, <a href="">@magnuss</a></li>
+          <li><strong>Romain Calascibetta</strong> <a href="https://github.com/dinosaure">@dinosaure</a></li>
+          <li>
+            <strong> <a href="http://thomas.gazagnaire.org">Thomas Gazagnaire</a> </strong>, <a href="https://tarides.com">Tarides</a>, <a href="https://github.com/samoht">@samoht</a>
+          </li>
+          <li>
+            <strong> <a href="http://roscidus.com/blog/">Thomas Leonard</a> </strong>, <a href="https://github.com/talex5">@talex5</a>
+          </li>
+          <li>
+            <strong> <a href="https://lucina.net/">Martin Lucina</a> </strong>, <a href="https://github.com/mato">@mato</a>
+          </li>
+          <li>
+            <strong> <a href="http://anil.recoil.org">Anil Madhavapeddy</a> </strong>, University of Cambridge, <a href="https://github.com/avsm">@avsm</a>
+          </li>
+          <li>
+            <strong> <a href="https://hannes.nqsb.io">Hannes Mehnert</a> </strong>, <a href="http://robur.io">robur</a>, <a href="https://github.com/hannesm">@hannesm</a>
+          </li>
+          <li>
+            <strong> <a href="https://www.lortex.org">Lucas Pluvinage</a> </strong>, <a href="https://github.com/TheLortex">@TheLortex</a>
+          </li>
+          <li>
+            <strong> <a href="http://dave.recoil.org">David Scott</a> </strong>, Docker, <a href="https://github.com/djs55">@djs55</a>
+          </li>
+          <li>
+            <strong> <a href="http://www.skjegstad.com">Magnus Skjegstad</a> </strong>, <a href="https://github.com/magnuss">@magnuss</a>
+          </li>
         </ul>
       </div>
       <div>
         <h3 class="text-lg font-bold">Emeriti</h3>
         <ul class="list-disc ml-4 space-y-2 mt-2">
-          <li><a href="">Amir Chaudhry @amirmc</a></li>
-          <li><a href="">Richard Mortier</a>, University of Cambridge & Kvasir Analytics <a href="">@mor1</a></li>
-          <li><a href="">Mindy Preston @yomimono</a></li>
+          <li>
+            <strong>
+              <a href="http://amirchaudhry.com/">Amir Chaudhry</a>
+            </strong>
+            <a href="https://github.com/amirmc">@amirmc</a>
+          </li>
+          <li>
+            <strong> <a href="http://mort.io/">Richard Mortier</a> </strong>, University of Cambridge &amp; Kvasir Analytics <a href="https://github.com/mor1">@mor1</a>
+          </li>
+          <li>
+            <strong>
+              <a href="http://www.somerandomidiot.com">Mindy Preston</a>
+            </strong>
+            <a href="https://github.com/yomimono">@yomimono</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -81,21 +120,59 @@ let render () = Layout.render
       </div>
       <div>
         <ul class="list-disc ml-4 space-y-2 mb-4">
-          <li><a href="">Vincent Bernardoff</a></li>
-          <li><a href="">Wei Chen</a>, ARM</li>
-          <li><a href="">Jon Crowcroft</a>, University of Cambridge</li>
-          <li><a href="">David Kaloper</a>, University of Cambridge</li>
-          <li><a href="">Steven Hand</a>, Google</li>
-          <li><a href="">Ricardo Koller</a>, IBM Research</li>
-          <li><a href="">Jon Ludlam</a>, Citrix Systems R&D</li>
-          <li><a href="">Raphael Proust</a>, University of Cambridge</li>
-          <li><a href="">Haris Rotsos</a>, University of Cambridge</li>
-          <li><a href="">Adrian-Ken Rueegsegger</a></li>
-          <li><a href="">David Sheets</a></li>
-          <li><a href="">Balraj Singh</a></li>
-          <li><a href="">Jeremy Yallop</a>, University of Cambridge</li>
-          <li><a href="">Dan Williams</a>, IBM Research</li>
-          <li><a href="">Christiano Haesbaert</a>, genua mbh</li>
+          <li>
+            <a href="https://github.com/vbmithr">
+              <em>Vincent Bernardoff</em>
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/Weichen81"> <em>Wei Chen</em> </a>, ARM
+          </li>
+          <li>
+            <a href="http://www.cl.cam.ac.uk/~jac22/"> <em>Jon Crowcroft</em> </a>, University of Cambridge
+          </li>
+          <li>
+            <a href="https://github.com/pqwy"> <em>David Kaloper</em> </a>, University of Cambridge
+          </li>
+          <li>
+            <a href="http://www.cl.cam.ac.uk/~smh22/"> <em>Steven Hand</em> </a>, Google
+          </li>
+          <li>
+            <a href="https://github.com/ricarkol"> <em>Ricardo Koller</em> </a>, IBM Research
+          </li>
+          <li>
+            <a href="http://jon.recoil.org/"> <em>Jon Ludlam</em> </a>, Citrix Systems R&amp;D
+          </li>
+          <li>
+            <a href="http://www.cl.cam.ac.uk/~rp452/"> <em>Raphael Proust</em> </a>, University of Cambridge
+          </li>
+          <li>
+            <a href="http://www.cl.cam.ac.uk/~cr409/"> <em>Haris Rotsos</em> </a>, University of Cambridge
+          </li>
+          <li>
+            <a href="https://github.com/kensan">
+              <em>Adrian-Ken Rueegsegger</em>
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/dsheets">
+              <em>David Sheets</em>
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/balrajsingh">
+              <em>Balraj Singh</em>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.cl.cam.ac.uk/~jdy22/"> <em>Jeremy Yallop</em> </a>, University of Cambridge
+          </li>
+          <li>
+            <a href="https://github.com/djwillia"> <em>Dan Williams</em> </a>, IBM Research
+          </li>
+          <li>
+            <a href="https://github.com/haesbaert"> <em>Christiano Haesbaert</em> </a>, genua mbh
+          </li>
         </ul>
         <p>The MirageOS3 release announcement contained a more complete list. For a complete list, please look at the contributors to individual git repositories. If you are missing here, please add yourself via a PR to the mirage-www repository.</p>
       </div>
