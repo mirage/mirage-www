@@ -14,4 +14,4 @@ RUN opam config exec -- make depend
 COPY --chown=opam:root . /home/opam/www
 RUN opam config exec -- mirage configure -f mirage/config.ml -t $TARGET $EXTRA_FLAGS
 RUN opam config exec -- dune build mirage/ --profile release
-RUN if [ $TARGET = hvt ]; then sudo cp mirage/dist/dream.$TARGET /unikernel.$TARGET; fi
+RUN if [ $TARGET = hvt ]; then sudo cp mirage/dist/www.$TARGET /unikernel.$TARGET; fi
