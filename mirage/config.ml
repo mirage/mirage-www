@@ -5,7 +5,7 @@ let tls_key =
     Key.Arg.info ~doc:"Enable serving the website over https." ~docv:"BOOL"
       ~env:"TLS" [ "tls" ]
   in
-  Key.(create "tls" Arg.(flag ~stage:`Configure doc))
+  Key.(create "tls" Arg.(opt ~stage:`Configure bool false doc))
 
 let http_port =
   let doc =
