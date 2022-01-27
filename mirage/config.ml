@@ -14,7 +14,14 @@ let http_port =
   in
   Key.(create "http-port" Arg.(opt ~stage:`Both int 80 doc))
 
-let keys = Key.[ v http_port ]
+let host_key =
+  let doc =
+    Key.Arg.info ~doc:"Hostname of the unikernel." ~docv:"URL" ~env:"HOST"
+      [ "host" ]
+  in
+  Key.(create "host" Arg.(opt string "localhost" doc))
+
+let keys = Key.[ v host_key; v http_port ]
 
 let https_port =
   let doc =
