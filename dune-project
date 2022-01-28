@@ -32,3 +32,15 @@
   (yaml :build)
   (fmt :build)
   (ppx_deriving_yaml :build)))
+
+(package 
+ (name mirageio-bin)
+ (synopsis "Unix binary for the mirage.io website")
+ (description "Unix binary for the mirage.io website")
+ (depends
+  (ocaml (>= 4.08.0))
+  dune
+  mirageio
+  mirage-clock-unix
+  mirage-unix
+  (tcpip (>= 7.0.0))))
