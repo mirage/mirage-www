@@ -47,3 +47,38 @@ make watch
 ```
 
 This will restart the server on filesystem changes and reload the pages automatically.
+
+### MirageOS unikernel
+
+Alternatively, the `mirage/` folder implements the webserver as a MirageOS 4 unikernel.
+To set it up, install the _mirage_ tool:
+
+```bash
+opam repo add mirage-dev https://github.com/mirage/mirage-dev.git # until MirageOS 4 is released
+opam install "mirage>=4.0.0"
+```
+
+Then, the unikernel can be _configured_:
+
+```bash
+mirage configure -f mirage/config.ml -t <TARGET> ...
+```
+
+Fetch the dependencies:
+
+```bash
+make depends
+```
+
+Build the unikernel:
+
+```bash
+dune build mirage/
+```
+
+Clean up:
+
+```bash
+mirage clean -f mirage/config.ml
+rm -rf mirage/duniverse
+```
