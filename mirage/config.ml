@@ -77,16 +77,24 @@ let tls_only_keys =
       v additional_hostnames;
     ]
 
+let packages =
+  [
+    package "mirageio";
+    package
+      ~pin:
+        "git+https://github.com/TheLortex/ocaml-yaml.git#7e1f117645ea10fbec2bd3dbbf0d8f581cce891f"
+      "yaml";
+  ]
+
 let https =
   let keys = keys @ tls_only_keys in
-  main "Unikernel_tls.Make" ~keys
-    ~packages:
-      [ package "mirageio"; package ~sublibs:[ "mirage" ] "dns-certify" ]
+  let packages = package ~sublibs:[ "mirage" ] "dns-certify" :: packages in
+  main "Unikernel_tls.Make" ~keys ~packages
     (random @-> pclock @-> time @-> stackv4v6 @-> job)
 
 let http =
   main "Unikernel.Make" ~keys
-    ~packages:[ package "mirageio" ]
+    ~packages
     (pclock @-> time @-> stackv4v6 @-> job)
 
 let app = if_impl (Key.value tls_key) (https $ default_random) http
