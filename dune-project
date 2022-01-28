@@ -25,6 +25,7 @@
   dune
   dream
   dream-mirage
+  mirage-kv-mem
   mirage-clock-unix
   mirage-unix
   (crunch :build)

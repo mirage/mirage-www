@@ -75,12 +75,79 @@ struct
         (Atom.render ~blog_posts ~contributors ~last_update)
   end
 
-  module Router = struct
-    let loader _root path request =
-      match Asset.read path with
-      | None -> Handler.not_found request
-      | Some asset -> Dream.respond asset
+  module Last_modified = struct
+    (* https://github.com/roburio/unipi/blob/main/unikernel.ml *)
+    let ptime_to_http_date ptime =
+      let (y, m, d), ((hh, mm, ss), _) = Ptime.to_date_time ptime
+      and weekday =
+        match Ptime.weekday ptime with
+        | `Mon -> "Mon"
+        | `Tue -> "Tue"
+        | `Wed -> "Wed"
+        | `Thu -> "Thu"
+        | `Fri -> "Fri"
+        | `Sat -> "Sat"
+        | `Sun -> "Sun"
+      and month =
+        [|
+          "Jan";
+          "Feb";
+          "Mar";
+          "Apr";
+          "May";
+          "Jun";
+          "Jul";
+          "Aug";
+          "Sep";
+          "Oct";
+          "Nov";
+          "Dec";
+        |]
+      in
+      let m' = Array.get month (pred m) in
+      Printf.sprintf "%s, %02d %s %04d %02d:%02d:%02d GMT" weekday d m' y hh mm
+        ss
+  end
 
+  module Static = struct
+    open Lwt.Syntax
+
+    let store = Asset.connect ()
+
+    let not_modified ~last_modified request =
+      match Dream.header request "If-Modified-Since" with
+      | None -> false
+      | Some date -> String.equal date last_modified
+
+    let max_age = 60 * 60 (* one hour *)
+
+    let loader _root path request =
+      let key = Mirage_kv.Key.v path in
+      let* store = store in
+      let* last_modified = Asset.last_modified store key in
+      match last_modified with
+      | Error _ -> Handler.not_found request
+      | Ok last_modified -> (
+          let last_modified =
+            Last_modified.ptime_to_http_date (Ptime.v last_modified)
+          in
+          if not_modified ~last_modified request then
+            Dream.respond ~status:`Not_Modified ""
+          else
+            let* result = Asset.get store (Mirage_kv.Key.v path) in
+            match result with
+            | Error _ -> Handler.not_found request
+            | Ok asset ->
+                Dream.respond
+                  ~headers:
+                    [
+                      ("Cache-Control", Fmt.str "max-age=%d" max_age);
+                      ("Last-Modified", last_modified);
+                    ]
+                  asset)
+  end
+
+  module Router = struct
     let routes =
       [
         Dream.get "/" Handler.index;
@@ -92,7 +159,7 @@ struct
         Dream.get "/weekly/:permalink" Handler.weekly;
         Dream.get "/papers" Handler.papers;
         Dream.get "/feed.xml" Handler.atom;
-        Dream.get "/**" (Dream.static ~loader "");
+        Dream.get "/**" (Dream.static ~loader:Static.loader "");
       ]
 
     let router = Dream.router routes

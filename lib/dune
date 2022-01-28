@@ -1,9 +1,9 @@
 (library
  (name mirageio)
- (libraries dream-mirage mirage-time tcpip mirageio_template mirageio_data))
+ (libraries dream-mirage mirage-time tcpip mirageio_template mirageio_data mirage-kv-mem))
 
 (rule
- (targets asset.ml)
+ (targets asset.ml asset.mli)
  (deps
   ; Not specifying dependencies on main.css on purpose so we can skip the generation
   ; of the CSS file if we only want to run the server.
@@ -13,4 +13,4 @@
  (action
   (with-stdout-to
    %{null}
-   (run %{bin:ocaml-crunch} -m plain ../asset -o %{targets}))))
+   (run %{bin:ocaml-crunch} -m lwt ../asset -o asset.ml))))
