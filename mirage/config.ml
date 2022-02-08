@@ -1,11 +1,34 @@
 open Mirage
 
+type tls = No | Local | Letsencrypt
+
+let tls_to_string = function
+  | No -> "false"
+  | Local -> "local"
+  | Letsencrypt -> "true"
+
+let tls_conv =
+  Cmdliner.Arg.conv
+    ( (function
+      | "false" -> Ok No
+      | "local" -> Ok Local
+      | "true" -> Ok Letsencrypt
+      | v -> Error (`Msg (v ^ " is invalid"))),
+      Fmt.(using tls_to_string string) )
+
+let tls =
+  Key.Arg.conv ~conv:tls_conv ~runtime_conv:"tls" ~serialize:(fun fmt ->
+    function
+    | No -> Format.fprintf fmt "`False"
+    | Local -> Format.fprintf fmt "`Local"
+    | Letsencrypt -> Format.fprintf fmt "`True")
+
 let tls_key =
   let doc =
     Key.Arg.info ~doc:"Enable serving the website over https." ~docv:"BOOL"
       ~env:"TLS" [ "tls" ]
   in
-  Key.(create "tls" Arg.(opt ~stage:`Configure bool false doc))
+  Key.(create "tls" Arg.(opt ~stage:`Configure tls No doc))
 
 let http_port =
   let doc =
@@ -80,8 +103,7 @@ let tls_only_keys =
 let packages =
   [
     package "mirageio";
-    package
-      ~build:true
+    package ~build:true
       ~pin:
         "git+https://github.com/TheLortex/ocaml-yaml.git#7e1f117645ea10fbec2bd3dbbf0d8f581cce891f"
       "yaml";
@@ -93,12 +115,17 @@ let https =
   main "Unikernel_tls.Make" ~keys ~packages
     (random @-> pclock @-> time @-> stackv4v6 @-> job)
 
-let http =
-  main "Unikernel.Make" ~keys
-    ~packages
-    (pclock @-> time @-> stackv4v6 @-> job)
+let https_local =
+  let keys = keys @ Key.[ v https_port; v additional_hostnames ] in
+  main "Unikernel_tls_local.Make" ~keys ~packages
+    (random @-> pclock @-> time @-> stackv4v6 @-> job)
 
-let app = if_impl (Key.value tls_key) (https $ default_random) http
+let http =
+  main "Unikernel.Make" ~keys ~packages (pclock @-> time @-> stackv4v6 @-> job)
+
+let app =
+  match_impl ~default:http (Key.value tls_key)
+    [ (No, http); (Local, https_local $ default_random); (Letsencrypt, https $ default_random) ]
 
 let () =
   register "www"
