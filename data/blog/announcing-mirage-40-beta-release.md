@@ -46,6 +46,6 @@ That new tool, called [opam-monorepo](https://github.com/ocamllabs/opam-monorepo
 
 ## Next Steps
 
-Your feedback on this beta release is very much appreciated. You can follow the tutorials on https://mirage.io/wiki/mirage-4, our self-hosted staging site using MirageOS 4. Issues are very welcome on https://github.com/mirage/mirage/issues, or come find us on Matrix in the MirageOS channel: [#mirageos:matrix.org](https://matrix.to/#/#mirageos:matrix.org).
+Your feedback on this beta release is very much appreciated. You can follow the tutorials [here](https://mirage.io/docs/mirage-4). Issues are very welcome on our [bug-tracker](https://github.com/mirage/mirage/issues), or come find us on Matrix in the MirageOS channel: [#mirageos:matrix.org](https://matrix.to/#/#mirageos:matrix.org).
 
 The **final release** will happen in about a month. This release will incorporate your early feedback. It will also ensure the existing MirageOS ecosystem is compatible with MirageOS 4 by reducing the overlay packages to the bare minimum. We also plan to write more on `opam-monorepo` and all the new things MirageOS 4.0 will bring.
