@@ -125,7 +125,11 @@ let http =
 
 let app =
   match_impl ~default:http (Key.value tls_key)
-    [ (No, http); (Local, https_local $ default_random); (Letsencrypt, https $ default_random) ]
+    [
+      (No, http);
+      (Local, https_local $ default_random);
+      (Letsencrypt, https $ default_random);
+    ]
 
 let () =
   register "www"

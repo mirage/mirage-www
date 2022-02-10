@@ -11,17 +11,72 @@ module Blog = struct
     body : string;
   }
 
-  let all = 
-[
-    { updated = {js|2020-12-08 13:30|js}
-    ; authors = [
-    { name = {js|Hannes Mehnert|js}
-    ; uri = Some {js|https://github.com/hannesm|js}
-    ; email = Some {js|hm519@cam.ac.uk|js}
-    }]
-    ; subject = {js|Announcing MirageOS 3.10|js}
-    ; permalink = {js|announcing-mirage-310-release|js}
-    ; body = {js|<p>IPv6 and dual (IPv4 and IPv6) stack support https://github.com/mirage/mirage/pull/1187 https://github.com/mirage/mirage/issues/1190</p>
+  let all =
+    [
+      {
+        updated = {js|2022-02-10 17:00|js};
+        authors =
+          [
+            {
+              name = {js|Thomas Gazagnaire|js};
+              uri = Some {js|https://gazagnaire.org|js};
+              email = None;
+            };
+          ];
+        subject = {js|Announcing MirageOS 4.0.0 Beta Release|js};
+        permalink = {js|announcing-mirage-40-beta-release|js};
+        body =
+          {js|<p><strong>On behalf of the Mirage team, I am delighted to announce the beta release of MirageOS 4.0!</strong></p>
+<p><a href="https://next.mirage.io">MirageOS</a> is a library operating system that constructs unikernels for secure, high-performance network applications across a variety of hypervisor and embedded platforms. For example, OCaml code can be developed on a standard OS, such as Linux or macOS, and then compiled into a fully standalone, specialised unikernel that runs under a Xen or KVM hypervisor. The MirageOS project also supplies several protocol and storage implementations written in pure OCaml, ranging from TCP/IP to TLS to a full Git-like storage stack.</p>
+<p>The beta of the MirageOS 4.00 release contains:</p>
+<ul>
+<li><code>mirage.4.0.0~beta</code>: the CLI tool;
+</li>
+<li><code>ocaml-freestanding.0.7.0</code>: a libc-free OCaml runtime;
+</li>
+<li>and <code>solo5.0.7.0</code>: a cross-compiler for OCaml.
+</li>
+</ul>
+<p>They are all available in <code>opam</code> by using:</p>
+<pre><code>opam install 'mirage&gt;=4.0'
+</code></pre>
+<p><em>Note</em>: you need to explicitly add the <code>4.0&gt;=0</code> version here, otherwise <code>opam</code> will select the latest <code>3.*</code> stable release. For a good experience, check that at least version <code>4.0.0~beta3</code> is installed.</p>
+<h2>New Features</h2>
+<p>This new release of MirageOS adds systematic support for cross-compilation to all supported unikernel targets. This means that libraries that use C stubs (like Base, for example) can now seamlessly have those stubs cross-compiled to the desired target.  Previous releases of MirageOS required specific support to accomplish this by adding the stubs to a central package.</p>
+<p>MirageOS implements cross-compilation using <em>Dune Workspaces</em>, which can take a whole collection of OCaml code (including all transitive dependencies) and compile it with a given set of C and OCaml compiler flags. This workflow also unlocks support for familiar IDE tools (such as <code>ocaml-lsp-server</code> and Merlin) while developing unikernels in OCaml. It makes day-to-day coding much faster because builds are decoupled from configuration and package updates. This means that live-builds, such as Dune's watch mode, now work fine even for exotic build targets!</p>
+<p>A complete list of features can be found on the <a href="https://next.mirage.io/docs/mirage-4">MirageOS 4 release page</a>.</p>
+<h2>Cross-Compilation and Dune Overlays</h2>
+<p>This release introduces a significant change in the way MirageOS projects are compiled based on Dune Workspaces. This required implementing a new developer experience for Opam users in order to simplify cross-compilation of large OCaml projects.</p>
+<p>That new tool, called <a href="https://github.com/ocamllabs/opam-monorepo">opam-monorepo</a> (née duniverse), separates package management from building the resulting source code. It is an Opam plugin that:</p>
+<ul>
+<li>creates a lock file for the project dependencies
+</li>
+<li>downloads and extracts the dependency sources locally
+</li>
+<li>sets up a Dune Workspace so that <code>dune build</code> builds everything in one go.
+</li>
+</ul>
+<p><a href="https://asciinema.org/a/rRf6s8cNyHUbBsDDfZkBjkf7X?speed=2"><img src="https://asciinema.org/a/rRf6s8cNyHUbBsDDfZkBjkf7X.svg" alt="asciicast" /></a></p>
+<p><code>opam-monorepo</code> is already available in Opam and can be used on many projects which use <code>dune</code> as a build system. However, as we don't expect the complete set of OCaml dependencies to use <code>dune</code>, we MirageOS maintainers are committed to maintaining patches to build the most common dependencies with <code>dune</code>. These packages are hosted in a separate <a href="https://github.com/mirage/opam-overlays">dune-universe/mirage-opam-overlays</a> repository, which can be used by <code>opam-monorepo</code> and is enabled by default when using the Mirage CLI tool.</p>
+<h2>Next Steps</h2>
+<p>Your feedback on this beta release is very much appreciated. You can follow the tutorials on https://next.mirage.io/wiki/mirage-4, our self-hosted staging site using MirageOS 4. Issues are very welcome on https://github.com/mirage/mirage/issues, or come find us on Matrix in the MirageOS channel: <a href="https://matrix.to/#/#mirageos:matrix.org">#mirageos:matrix.org</a>.</p>
+<p>The <strong>final release</strong> will happen in about a month. This release will incorporate your early feedback. It will also ensure the existing MirageOS ecosystem is compatible with MirageOS 4 by reducing the overlay packages to the bare minimum. We also plan to write more on <code>opam-monorepo</code> and all the new things MirageOS 4.0 will bring.</p>
+|js};
+      };
+      {
+        updated = {js|2020-12-08 13:30|js};
+        authors =
+          [
+            {
+              name = {js|Hannes Mehnert|js};
+              uri = Some {js|https://github.com/hannesm|js};
+              email = Some {js|hm519@cam.ac.uk|js};
+            };
+          ];
+        subject = {js|Announcing MirageOS 3.10|js};
+        permalink = {js|announcing-mirage-310-release|js};
+        body =
+          {js|<p>IPv6 and dual (IPv4 and IPv6) stack support https://github.com/mirage/mirage/pull/1187 https://github.com/mirage/mirage/issues/1190</p>
 <p>Since a long time, IPv6 code was around in our TCP/IP stack (thanks to @nojb who developed it in 2014). Some months ago, @hannesm and @MagnusS got excited to use it. After we managed to fix some bugs and add some test cases, and writing more code to setup IPv6-only and dual stacks, we are eager to share this support for MirageOS in a released version. We expect there to be bugs lingering around, but duplicate address detection (neighbour solicitation and advertisements) has been implemented, and (unless &quot;--accept-router-advertisement=false&quot;) router advertisements are decoded and used to configure the IPv6 part of the stack. Configuring a static IPv6 address is also possible (with
 &quot;--ipv6=2001::42/64&quot;).</p>
 <p>While at it, we unified the boot arguments between the different targets: namely, on Unix (when using the socket stack), you can now pass &quot;--ipv4=127.0.0.1/24&quot; to the same effect as the direct stack: only listen on 127.0.0.1 (the subnet mask is ignored for the Unix socket stack).</p>
@@ -106,23 +161,27 @@ established connection: %a&quot; S.TCP.pp_error e); Lwt.return_unit
      S.listen s
 </code></pre>
 <p>Other bug fixes include https://github.com/mirage/mirage/issues/1188 (in https://github.com/mirage/mirage/pull/1201) and adapt to charrua 1.3.0 and arp 2.3.0 changes (https://github.com/mirage/mirage/pull/1199).</p>
-|js}
-    };
- 
-    { updated = {js|2020-10-27 15:00|js}
-    ; authors = [
-    { name = {js|Martin Lucina|js}
-    ; uri = Some {js|https://lucina.net/|js}
-    ; email = Some {js|martin@lucina.net|js}
-    };
-                                                            
-    { name = {js|Hannes Mehnert|js}
-    ; uri = Some {js|https://github.com/hannesm|js}
-    ; email = Some {js|hm519@cam.ac.uk|js}
-    }]
-    ; subject = {js|Announcing MirageOS 3.9.0|js}
-    ; permalink = {js|announcing-mirage-39-release|js}
-    ; body = {js|<p>We are pleased to announce the release of MirageOS 3.9.0.</p>
+|js};
+      };
+      {
+        updated = {js|2020-10-27 15:00|js};
+        authors =
+          [
+            {
+              name = {js|Martin Lucina|js};
+              uri = Some {js|https://lucina.net/|js};
+              email = Some {js|martin@lucina.net|js};
+            };
+            {
+              name = {js|Hannes Mehnert|js};
+              uri = Some {js|https://github.com/hannesm|js};
+              email = Some {js|hm519@cam.ac.uk|js};
+            };
+          ];
+        subject = {js|Announcing MirageOS 3.9.0|js};
+        permalink = {js|announcing-mirage-39-release|js};
+        body =
+          {js|<p>We are pleased to announce the release of MirageOS 3.9.0.</p>
 <p>Our last release announcement was for <a href="https://mirage.io/blog/announcing-mirage-36-release">MirageOS 3.6.0</a>, so we will also cover changes since 3.7.x and 3.8.x in this announcement.</p>
 <p>New features:</p>
 <ul>
@@ -174,18 +233,22 @@ established connection: %a&quot; S.TCP.pp_error e); Lwt.return_unit
 <li>Thanks to @palainp on Github for help with testing on QubesOS.
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2020-05-20 14:00|js}
-    ; authors = [
-    { name = {js|Hannes Mehnert|js}
-    ; uri = Some {js|https://github.com/hannesm|js}
-    ; email = Some {js|hm519@cam.ac.uk|js}
-    }]
-    ; subject = {js|TLS 1.3 support for MirageOS|js}
-    ; permalink = {js|tls-1-3-mirageos|js}
-    ; body = {js|<p>We are pleased to announce that <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security#TLS_1.3">TLS 1.3</a> support for MirageOS is available. With
+|js};
+      };
+      {
+        updated = {js|2020-05-20 14:00|js};
+        authors =
+          [
+            {
+              name = {js|Hannes Mehnert|js};
+              uri = Some {js|https://github.com/hannesm|js};
+              email = Some {js|hm519@cam.ac.uk|js};
+            };
+          ];
+        subject = {js|TLS 1.3 support for MirageOS|js};
+        permalink = {js|tls-1-3-mirageos|js};
+        body =
+          {js|<p>We are pleased to announce that <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security#TLS_1.3">TLS 1.3</a> support for MirageOS is available. With
 mirage 3.7.7 and tls 0.12 the <a href="https://tools.ietf.org/html/rfc8446">Transport Layer Security (TLS) Protocol Version 1.3</a>
 is available in all MirageOS unikernels, including on our main website. If you're reading this, you've likely established a TLS 1.3 connection already :)</p>
 <p>Getting there was some effort: we now embed the Coq-verified <a href="https://github.com/mirage/fiat/">fiat</a>
@@ -193,18 +256,23 @@ library (from <a href="https://github.com/mit-plv/fiat-crypto/">fiat-crypto</a>)
 library (from <a href="https://project-everest.github.io/">Project Everest</a>) for the X25519 elliptic curve to establish 1.3 handshakes with ECDHE.</p>
 <p>Part of our TLS 1.3 stack is support for pre-shared keys, and 0 RTT. If you're keen to try these features, please do so and report any issues you encounter <a href="https://github.com/mirleft/ocaml-tls">to our issue tracker</a>.</p>
 <p>We are still lacking support for RSA-PSS certificates and EC certificates, post-handshake authentication, and the chacha20-poly1305 ciphersuite. There is also a <a href="https://github.com/mirage/hacl/issues/32">minor symbol clash</a> with the upstream F* C bindings which we are aware of. We will continue to work on these, and patches are welcome.</p>
-|js}
-    };
- 
-    { updated = {js|2020-01-08 20:00|js}
-    ; authors = [
-    { name = {js|Damien Leloup|js}
-    ; uri = Some {js|https://www.lemonde.fr/signataires/damien-leloup/|js}
-    ; email = None
-    }]
-    ; subject = {js|Hackers and climate activists join forces in Leipzig|js}
-    ; permalink = {js|ccc-2019-leipzig|js}
-    ; body = {js|<p><em>By Damien Leloup, special correspondent, Le Monde. Originally <a href="https://www.lemonde.fr/pixels/article/2019/12/30/a-leipzig-hackers-et-militants-pour-le-climat-font-front-commun_6024362_4408996.html">published</a> by Le Monde on December 30, 2019. English translation by the MirageOS Core Team.</em></p>
+|js};
+      };
+      {
+        updated = {js|2020-01-08 20:00|js};
+        authors =
+          [
+            {
+              name = {js|Damien Leloup|js};
+              uri =
+                Some {js|https://www.lemonde.fr/signataires/damien-leloup/|js};
+              email = None;
+            };
+          ];
+        subject = {js|Hackers and climate activists join forces in Leipzig|js};
+        permalink = {js|ccc-2019-leipzig|js};
+        body =
+          {js|<p><em>By Damien Leloup, special correspondent, Le Monde. Originally <a href="https://www.lemonde.fr/pixels/article/2019/12/30/a-leipzig-hackers-et-militants-pour-le-climat-font-front-commun_6024362_4408996.html">published</a> by Le Monde on December 30, 2019. English translation by the MirageOS Core Team.</em></p>
 <p><strong>The Chaos Communication Congress, the world's largest self-managed event dedicated to IT security, hosted its 36th edition this weekend in Germany.</strong></p>
 <p>In front of Leipzig station, around fifty students and high school students are gathered.  It's Sunday, but the local branch of the Fridays for Future movement, which organizes demonstrations on Fridays at the call of activist Greta Thunberg, made an exception to its usual calendar to take advantage of the presence, a few kilometers from there, of the Chaos Communication Congress (CCC).</p>
 <p>Organized each year for thirty-six years, this gigantic gathering of hackers and activists - 18,000 participants, dozens of conference talks around the clock - invades the Leipzig convention center for four days, in an atmosphere that is both anarcho-libertarian and very family oriented.  For the first time, the slogan of the 2019 edition is devoted to the environment: “Resource exhaustion”, a reference both to a computer <a href="https://en.wikipedia.org/wiki/Resource_exhaustion_attack">attack technique</a> and to the preservation of the planet.</p>
@@ -221,23 +289,27 @@ library (from <a href="https://project-everest.github.io/">Project Everest</a>) 
 <p>But the collaboration between environmentalists and privacy advocates seemed much broader than just focusing on technical issues. That mix was everywhere: for instance the corridor walls had graffiti concerned with the the excessive consumption of CO2 on the planet close to others highlighting the fact that every human being generates, on average, 1.7 MB of data per second. The posters of the anarchist or anti-fascist movements were also mixed with the flyers of the collective Hackers against <a href="https://hacc.uber.space/Main_Page">Climate Change</a>, which attracted the curious with a joke typical of the place: <em>&quot;cli / mate crisis is real&quot;</em>, in reference to Club-Mate, an ubiquitous drink at the event.</p>
 <p>This community of views between hackers and climate activists comes as little surprise in Germany, where both movements are very present, and even less in Leipzig, the flagship city of the former GDR where pre-Internet mass surveillance tools from the Stasi were also directed against environmental activists in the 1980s. Some environmental movements feel naturally close to the anarchist spirit of the German hackers of the Chaos Computer Club, which organizes the CCC: a talk by <a href="https://rebellion.earth/">Extinction Rebellion</a> detailed the security measures they took to ensure their privacy, and how they didn't depend on third-party tools from Facebook, Google or Amazon - responsible, in their eyes, both for mass surveillance and <em>green washing</em>.</p>
 <p>However, in this atmosphere of global collaboration some questions remained unanswered.  In some specific cases, better IT security can also consume more resources.  A talk dedicated to encrypted messaging thus presented many tools which make it possible to reinforce the confidentiality of exchanges, but also require using more computing power, to encrypt or decrypt messages, or even request the sending of large quantities of data to scramble the origin or volume of a message.  This first CCC under the sign of environmental protection did not really address this contradiction - pending, perhaps, a next edition?</p>
-|js}
-    };
- 
-    { updated = {js|2019-11-26 15:00|js}
-    ; authors = [
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    };
-                                                            
-    { name = {js|Thomas Gazagnaire|js}
-    ; uri = Some {js|http://gazagnaire.org|js}
-    ; email = Some {js|thomas@gazagnaire.org|js}
-    }]
-    ; subject = {js|Announcing Irmin 2.0.0|js}
-    ; permalink = {js|introducing-irmin-v2|js}
-    ; body = {js|<p>We are pleased to announce <a href="https://github.com/mirage/irmin/releases">Irmin
+|js};
+      };
+      {
+        updated = {js|2019-11-26 15:00|js};
+        authors =
+          [
+            {
+              name = {js|Anil Madhavapeddy|js};
+              uri = Some {js|http://anil.recoil.org|js};
+              email = Some {js|anil@recoil.org|js};
+            };
+            {
+              name = {js|Thomas Gazagnaire|js};
+              uri = Some {js|http://gazagnaire.org|js};
+              email = Some {js|thomas@gazagnaire.org|js};
+            };
+          ];
+        subject = {js|Announcing Irmin 2.0.0|js};
+        permalink = {js|introducing-irmin-v2|js};
+        body =
+          {js|<p>We are pleased to announce <a href="https://github.com/mirage/irmin/releases">Irmin
 2.0.0</a>, a major release of the
 Git-like distributed branching and storage substrate that underpins MirageOS.
 We began the release process for all the components that make up Irmin <a href="https://tarides.com/blog/2019-05-13-on-the-road-to-irmin-v2">back in
@@ -250,18 +322,22 @@ post</a>.  Enjoy the new release,
 and stay tuned for the upcoming Wodan integration in 2020 that will be a stable
 filesystem for the hypervisor targets for MirageOS that do not have a
 conventional OS kernel underneath them!</p>
-|js}
-    };
- 
-    { updated = {js|2019-10-18 15:00|js}
-    ; authors = [
-    { name = {js|Martin Lucina|js}
-    ; uri = Some {js|https://lucina.net/|js}
-    ; email = Some {js|martin@lucina.net|js}
-    }]
-    ; subject = {js|Announcing MirageOS 3.6.0|js}
-    ; permalink = {js|announcing-mirage-36-release|js}
-    ; body = {js|<p>We are pleased to announce the release of MirageOS 3.6.0. This release updates MirageOS to support <a href="https://github.com/Solo5/solo5">Solo5</a> 0.6.0 and later.</p>
+|js};
+      };
+      {
+        updated = {js|2019-10-18 15:00|js};
+        authors =
+          [
+            {
+              name = {js|Martin Lucina|js};
+              uri = Some {js|https://lucina.net/|js};
+              email = Some {js|martin@lucina.net|js};
+            };
+          ];
+        subject = {js|Announcing MirageOS 3.6.0|js};
+        permalink = {js|announcing-mirage-36-release|js};
+        body =
+          {js|<p>We are pleased to announce the release of MirageOS 3.6.0. This release updates MirageOS to support <a href="https://github.com/Solo5/solo5">Solo5</a> 0.6.0 and later.</p>
 <p>New features:</p>
 <ul>
 <li>Support for the Solo5 <code>spt</code> (sandboxed process tender) target via <code>mirage configure -t spt</code>. The <code>spt</code> target runs MirageOS unikernels in a minimal strict seccomp sandbox on Linux <code>x86_64</code>, <code>aarch64</code> and <code>ppc64le</code> hosts.
@@ -281,18 +357,22 @@ conventional OS kernel underneath them!</p>
 </li>
 </ul>
 <p>Thanks to Hannes Mehnert for help with the release engineering for MirageOS 3.6.0.</p>
-|js}
-    };
- 
-    { updated = {js|2019-04-26 00:00|js}
-    ; authors = [
-    { name = {js|Thomas Leonard|js}
-    ; uri = Some {js|http://roscidus.com/blog/|js}
-    ; email = Some {js|talex5@gmail.com|js}
-    }]
-    ; subject = {js|MirageOS security advisory 02: mirage-xen < 3.3.0|js}
-    ; permalink = {js|MSA02|js}
-    ; body = {js|<h2>MirageOS Security Advisory 02 - grant unshare vulnerability in mirage-xen</h2>
+|js};
+      };
+      {
+        updated = {js|2019-04-26 00:00|js};
+        authors =
+          [
+            {
+              name = {js|Thomas Leonard|js};
+              uri = Some {js|http://roscidus.com/blog/|js};
+              email = Some {js|talex5@gmail.com|js};
+            };
+          ];
+        subject = {js|MirageOS security advisory 02: mirage-xen < 3.3.0|js};
+        permalink = {js|MSA02|js};
+        body =
+          {js|<h2>MirageOS Security Advisory 02 - grant unshare vulnerability in mirage-xen</h2>
 <ul>
 <li>Module:       mirage-xen
 </li>
@@ -396,18 +476,22 @@ by downloading our public key from a keyserver (<code>gpg --recv-key 4A732D757C0
 downloading the raw markdown source of this advisory from
 <a href="https://raw.githubusercontent.com/mirage/mirage-www/master/tmpl/advisories/02.txt.asc">GitHub</a>
 and executing <code>gpg --verify 02.txt.asc</code>.</p>
-|js}
-    };
- 
-    { updated = {js|2019-04-03 16:00|js}
-    ; authors = [
-    { name = {js|Hannes Mehnert|js}
-    ; uri = Some {js|https://github.com/hannesm|js}
-    ; email = Some {js|hm519@cam.ac.uk|js}
-    }]
-    ; subject = {js|MirageOS Spring 2019 hack retreat roundup|js}
-    ; permalink = {js|2019-spring-retreat-roundup|js}
-    ; body = {js|<p>Early March 2019, 31 MirageOS hackers gathered again in Marrakesh for our bi-annual hack retreat. We'd like to thank our amazing hosts, and everyone who participated on-site or remotely, and especially those who wrote up their experiences.
+|js};
+      };
+      {
+        updated = {js|2019-04-03 16:00|js};
+        authors =
+          [
+            {
+              name = {js|Hannes Mehnert|js};
+              uri = Some {js|https://github.com/hannesm|js};
+              email = Some {js|hm519@cam.ac.uk|js};
+            };
+          ];
+        subject = {js|MirageOS Spring 2019 hack retreat roundup|js};
+        permalink = {js|2019-spring-retreat-roundup|js};
+        body =
+          {js|<p>Early March 2019, 31 MirageOS hackers gathered again in Marrakesh for our bi-annual hack retreat. We'd like to thank our amazing hosts, and everyone who participated on-site or remotely, and especially those who wrote up their experiences.
 <img src="/graphics/spring2019.jpg" style="glot:right; padding: 15px" /></p>
 <p>On this retreat, we ate our own dogfood, and used our MirageOS <a href="https://github.com/mirage/mirage-skeleton/tree/master/applications/dhcp">DHCP</a>, <a href="https://github.com/roburio/unikernels/tree/master/resolver">recursive DNS resolver</a>, and <a href="https://github.com/roburio/caldav">CalDAV</a> unikernels as isolated virtual machines running on a <a href="https://pcengines.ch/apu2c4.htm">PC Engines APU</a> with <a href="https://freebsd.org">FreeBSD</a> as host system. The CalDAV server persisted its data in a git repository on the host system, using the raw git protocol for communication, the smart HTTP protocol could have been used as well. Lynxis wrote a <a href="https://lunarius.fe80.eu/blog/mirageos-2019.html">detailed blog post about our uplink situation</a>.</p>
 <p>Lots of interesting discussions took place, code was developed, knowledge was exchanged, and issues were solved while we enjoyed the sun and the Moroccan food. The following list is not exhaustive, but gives an overview what was pushed forward.</p>
@@ -484,18 +568,22 @@ Line 1, characters 4-5:
 So far various P2P gossip protocols has been implemented.
 At this retreat the focus was on a gossip-based publish-subscribe dissemination protocol.
 Future plans include building P2P unikernels and adding P2P pub/sub sync functionality to Irmin.</p>
-|js}
-    };
- 
-    { updated = {js|2019-03-21 18:00|js}
-    ; authors = [
-    { name = {js|Mindy Preston|js}
-    ; uri = Some {js|https://github.com/yomimono|js}
-    ; email = Some {js|mindy.preston@cl.cam.ac.uk|js}
-    }]
-    ; subject = {js|MirageOS security advisory 01: netchannel 1.10.0|js}
-    ; permalink = {js|MSA01|js}
-    ; body = {js|<h2>MirageOS Security Advisory 01 - memory disclosure in mirage-net-xen</h2>
+|js};
+      };
+      {
+        updated = {js|2019-03-21 18:00|js};
+        authors =
+          [
+            {
+              name = {js|Mindy Preston|js};
+              uri = Some {js|https://github.com/yomimono|js};
+              email = Some {js|mindy.preston@cl.cam.ac.uk|js};
+            };
+          ];
+        subject = {js|MirageOS security advisory 01: netchannel 1.10.0|js};
+        permalink = {js|MSA01|js};
+        body =
+          {js|<h2>MirageOS Security Advisory 01 - memory disclosure in mirage-net-xen</h2>
 <ul>
 <li>Module:       netchannel
 </li>
@@ -565,18 +653,22 @@ affected branch.</p>
 by downloading our public key from a keyserver (<code>gpg --recv-key 4A732D757C0EDA74</code>),
 downloading the raw markdown source of this advisory from <a href="https://raw.githubusercontent.com/mirage/mirage-www/master/tmpl/advisories/01.txt.asc">GitHub</a>
 and executing <code>gpg --verify 01.txt.asc</code>.</p>
-|js}
-    };
- 
-    { updated = {js|2019-03-05 20:00|js}
-    ; authors = [
-    { name = {js|Hannes Mehnert|js}
-    ; uri = Some {js|https://github.com/hannesm|js}
-    ; email = Some {js|hm519@cam.ac.uk|js}
-    }]
-    ; subject = {js|Announcing MirageOS 3.5.0|js}
-    ; permalink = {js|announcing-mirage-35-release|js}
-    ; body = {js|<p>We are happy to announce our MirageOS 3.5.0 release. We didn't announce post 3.0.0 releases too well -- that's why this post tries to summarize the changes in the MirageOS ecosystem over the past two years. MirageOS consists of over 100 opam packages, lots of which are reused in other OCaml projects and deployments without MirageOS. These opam packages are maintained and developed further by lots of developers.</p>
+|js};
+      };
+      {
+        updated = {js|2019-03-05 20:00|js};
+        authors =
+          [
+            {
+              name = {js|Hannes Mehnert|js};
+              uri = Some {js|https://github.com/hannesm|js};
+              email = Some {js|hm519@cam.ac.uk|js};
+            };
+          ];
+        subject = {js|Announcing MirageOS 3.5.0|js};
+        permalink = {js|announcing-mirage-35-release|js};
+        body =
+          {js|<p>We are happy to announce our MirageOS 3.5.0 release. We didn't announce post 3.0.0 releases too well -- that's why this post tries to summarize the changes in the MirageOS ecosystem over the past two years. MirageOS consists of over 100 opam packages, lots of which are reused in other OCaml projects and deployments without MirageOS. These opam packages are maintained and developed further by lots of developers.</p>
 <p>On the OCaml tooling side, since MirageOS 3.0.0 we did several major changes:</p>
 <ul>
 <li>moved most packages to <a href="https://dune.build/">dune</a> (formerly jbuilder) and began using <a href="https://github.com/samoht/dune-release">dune-release</a> for smooth developer experience and simple releases,
@@ -702,18 +794,23 @@ The API used to include two functions, <code>allocate_frame</code> and <code>wri
 <h2>Next steps</h2>
 <p>We are working on <a href="https://github.com/mirage/mirage/issues/969">further</a> <a href="https://github.com/mirage/functoria/pull/167">changes</a> which revise the <code>mirage</code> internal build system to <a href="https://dune.build">dune</a>. At the moment it uses <code>ocamlbuild</code>, <code>ocamlfind</code>, <code>pkg-config</code>, and <code>make</code>. The goal of this change is to make MirageOS more developer-friendly. On the horizon we have MirageOS unikernel monorepos, incremental builds, pain-free cross-compilation, documentation generation, ...</p>
 <p>Several other MirageOS ecosystem improvements are on the schedule for 2019, including an <a href="https://zshipko.github.io/irmin-tutorial/">irmin 2.0 release</a>, a <a href="https://github.com/Solo5/solo5/pull/310">seccomp target for Solo5</a>, and <a href="https://github.com/Solo5/solo5/issues/326">easier deployment and multiple interface in Solo5</a>.</p>
-|js}
-    };
- 
-    { updated = {js|2018-04-20 16:00|js}
-    ; authors = [
-    { name = {js|Stefanie Schirmer|js}
-    ; uri = Some {js|https://linse.me|js}
-    ; email = None
-    }]
-    ; subject = {js|Visiting the camels - MirageOS spring hack retreat 2018|js}
-    ; permalink = {js|2018-visiting-the-camels|js}
-    ; body = {js|<p>Original posted on <a href="https://linse.me/2018/04/20/Visiting-the-camels.html">linse's blog</a>.</p>
+|js};
+      };
+      {
+        updated = {js|2018-04-20 16:00|js};
+        authors =
+          [
+            {
+              name = {js|Stefanie Schirmer|js};
+              uri = Some {js|https://linse.me|js};
+              email = None;
+            };
+          ];
+        subject =
+          {js|Visiting the camels - MirageOS spring hack retreat 2018|js};
+        permalink = {js|2018-visiting-the-camels|js};
+        body =
+          {js|<p>Original posted on <a href="https://linse.me/2018/04/20/Visiting-the-camels.html">linse's blog</a>.</p>
 <p><img src="https://upload.wikimedia.org/wikipedia/commons/7/7f/Maroc_Marrakech_Jemaa-el-Fna_Luc_Viatour.JPG" alt="Jemaa El Fnaa" />
 Image by Luc Viatour / https://Lucnix.be</p>
 <p>In March 2018, I attended my first <a href="http://retreat.mirage.io/">MirageOS hack retreat</a> in Morrocco.
@@ -749,43 +846,51 @@ Derpeter gave me a nice introduction about how to do this with wireshark, which 
 <p>During the last days I wanted to write a unikernel that does something new, and I thought about monitoring, as there is no monitoring for MirageOS yet. I set up a <a href="https://grafana.com/">grafana</a> on my computer and sent some simple data packets to grafana from a unikernel, producing little peaks in a test graph. Reynir and I played with this a bit and restructured the program.</p>
 <p>After this, the week was over, I walked back to Jemaa el Fnaa with Jeremie, I feel I learned a ton and yet am still at the very beginning, excited what to build next. On the way back I got stuck in a weird hotel in Casablanca due to the flight being cancelled, where I bumped into a Moroccan wedding and met some awesome travelling women from Brazil and the US who also got stuck. All in all a fun adventure!</p>
 <p><img src="https://scontent-frt3-2.cdninstagram.com/vp/b7383ad87744d99eae8940b38789fc94/5B58DFFC/t51.2885-15/e35/28764104_231320117439563_2956918922680467456_n.jpg" alt="" /></p>
-|js}
-    };
- 
-    { updated = {js|2018-01-26 16:00|js}
-    ; authors = [
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }]
-    ; subject = {js|MirageOS running on the ESP32 embedded chip|js}
-    ; permalink = {js|2018-esp32-booting|js}
-    ; body = {js|<p>Now that the winter holiday break is over, we are starting to see the results of winter hacking among our community.</p>
+|js};
+      };
+      {
+        updated = {js|2018-01-26 16:00|js};
+        authors =
+          [
+            {
+              name = {js|Anil Madhavapeddy|js};
+              uri = Some {js|http://anil.recoil.org|js};
+              email = Some {js|anil@recoil.org|js};
+            };
+          ];
+        subject = {js|MirageOS running on the ESP32 embedded chip|js};
+        permalink = {js|2018-esp32-booting|js};
+        body =
+          {js|<p>Now that the winter holiday break is over, we are starting to see the results of winter hacking among our community.</p>
 <p>The first great hack for 2018 is from <a href="http://toao.com">Sadiq Jaffer</a>, who got OCaml booting on a tiny and relatively new CPU architecture -- the <a href="http://esp32.net">Espressif ESP32</a>.  After proudly demonstrating a battery powered version to the folks at <a href="https://ocamllabs.io">OCaml Labs</a>, he then proceeded to clean it up enough tha it can be built with a <a href="https://github.com/sadiqj/ocaml-esp32-docker">Dockerfile</a>, so that others can start to do a native code port and get bindings to the networking interface working.</p>
 <p><a href="http://toao.com/blog/getting-ocaml-running-on-the-esp32#getting-ocaml-running-on-the-esp32">Read all about it on Sadiq's blog</a>, and thanks for sharing this with us, Sadiq!</p>
 <p>We also noticed that another OCaml generic virtual machine for even smaller microcontrollers has <a href="https://github.com/stevenvar/omicrob">shown up on GitHub</a>.  This, combined with some functional metaprogramming, may mean that 2018 is the year of OCaml in all the tiny embedded things...</p>
-|js}
-    };
- 
-    { updated = {js|2017-4-15 16:00|js}
-    ; authors = [
-    { name = {js|Hannes Mehnert|js}
-    ; uri = Some {js|https://github.com/hannesm|js}
-    ; email = Some {js|hm519@cam.ac.uk|js}
-    };
-                                                           
-    { name = {js|Gemma Gordon|js}
-    ; uri = Some {js|https://github.com/GemmaG|js}
-    ; email = Some {js|gg417@cl.cam.ac.uk|js}
-    };
-                                                           
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }]
-    ; subject = {js|MirageOS March 2017 hack retreat roundup|js}
-    ; permalink = {js|2017-march-hackathon-roundup|js}
-    ; body = {js|<p>This March, 34 people from around the world gathered in Marrakech for a spring Mirage hack retreat. This is fast becoming a <a href="/blog/2016-spring-hackathon">MirageOS tradition</a>, and we're a little sad that it's over already! We've collected some trip reports from those who attended the 2017 Hack Retreat, and we'd like to thank our amazing hosts, organisers and everyone who took the time to write up their experiences. Props go especially to Hannes Mehnert who initiated the event and took care of many of the logistics, and to Gemma Gordon for designing and printing <a href="http://reynard.io/2017/03/10/OCamlCollection.html">limited edition t-shirts</a> especially for the occasion!
+|js};
+      };
+      {
+        updated = {js|2017-4-15 16:00|js};
+        authors =
+          [
+            {
+              name = {js|Hannes Mehnert|js};
+              uri = Some {js|https://github.com/hannesm|js};
+              email = Some {js|hm519@cam.ac.uk|js};
+            };
+            {
+              name = {js|Gemma Gordon|js};
+              uri = Some {js|https://github.com/GemmaG|js};
+              email = Some {js|gg417@cl.cam.ac.uk|js};
+            };
+            {
+              name = {js|Anil Madhavapeddy|js};
+              uri = Some {js|http://anil.recoil.org|js};
+              email = Some {js|anil@recoil.org|js};
+            };
+          ];
+        subject = {js|MirageOS March 2017 hack retreat roundup|js};
+        permalink = {js|2017-march-hackathon-roundup|js};
+        body =
+          {js|<p>This March, 34 people from around the world gathered in Marrakech for a spring Mirage hack retreat. This is fast becoming a <a href="/blog/2016-spring-hackathon">MirageOS tradition</a>, and we're a little sad that it's over already! We've collected some trip reports from those who attended the 2017 Hack Retreat, and we'd like to thank our amazing hosts, organisers and everyone who took the time to write up their experiences. Props go especially to Hannes Mehnert who initiated the event and took care of many of the logistics, and to Gemma Gordon for designing and printing <a href="http://reynard.io/2017/03/10/OCamlCollection.html">limited edition t-shirts</a> especially for the occasion!
 <img src="/graphics/medina-2017.jpg" style="float:right; padding: 15px" /></p>
 <p>In addition to the reports below, you can find other information online:</p>
 <ul>
@@ -921,18 +1026,22 @@ opam pin add ocp-index-top https://github.com/reynir/ocp-index-top.git</p>
 </blockquote>
 <hr />
 <p>Many thanks to everyone involved!  The hackathon is already booked for next year in the same place...</p>
-|js}
-    };
- 
-    { updated = {js|2017-12-23 16:00|js}
-    ; authors = [
-    { name = {js|Hannes Mehnert|js}
-    ; uri = Some {js|https://github.com/hannesm|js}
-    ; email = Some {js|hm519@cam.ac.uk|js}
-    }]
-    ; subject = {js|MirageOS Winter 2017 hack retreat roundup|js}
-    ; permalink = {js|2017-winter-hackathon-roundup|js}
-    ; body = {js|<p>This winter, 33 people from around the world gathered in Marrakesh for a Mirage hack retreat. This is fast becoming a <a href="/blog/2016-spring-hackathon">MirageOS</a> <a href="/blog/2017-march-hackathon-roundup">tradition</a>, and we're a little sad that it's over already! We've collected some trip reports from those who attended the 2017 winter hack retreat, and we'd like to thank our amazing hosts, organisers and everyone who took the time to write up their experiences.
+|js};
+      };
+      {
+        updated = {js|2017-12-23 16:00|js};
+        authors =
+          [
+            {
+              name = {js|Hannes Mehnert|js};
+              uri = Some {js|https://github.com/hannesm|js};
+              email = Some {js|hm519@cam.ac.uk|js};
+            };
+          ];
+        subject = {js|MirageOS Winter 2017 hack retreat roundup|js};
+        permalink = {js|2017-winter-hackathon-roundup|js};
+        body =
+          {js|<p>This winter, 33 people from around the world gathered in Marrakesh for a Mirage hack retreat. This is fast becoming a <a href="/blog/2016-spring-hackathon">MirageOS</a> <a href="/blog/2017-march-hackathon-roundup">tradition</a>, and we're a little sad that it's over already! We've collected some trip reports from those who attended the 2017 winter hack retreat, and we'd like to thank our amazing hosts, organisers and everyone who took the time to write up their experiences.
 <img src="/graphics/winter2017.jpg" style="float:right; padding: 15px" /></p>
 <p>We, the MirageOS community, strongly believe in using our own software: this website has been a unikernel since day one^W^W it was possible to run MirageOS unikernels.  In Marrakesh we used our own DHCP and DNS server without trouble.  There are many more services under heavy development (including git, ssh, ...), which we're looking forward to using soon ourselves.</p>
 <p>Several atteendees joined for the second or third time in Marrakesh, and brought their own projects, spanning over <a href="https://github.com/andreas/ocaml-graphql-server">graphql</a>, <a href="https://reproducible-builds.org/">reproducible builds</a> (with application to <a href="https://github.com/talex5/qubes-mirage-firewall">qubes-mirage-firewall</a>, see <a href="http://layer-acht.org/thinking/blog/20171204-qubes-mirage-firewall/">holger's report</a> and <a href="https://github.com/ocaml/ocaml/pull/1515">Gabriel's OCaml fixes for build path variation</a>).  A stream of improving error messages in the OCaml compiler (based on <a href="https://github.com/ocaml/ocaml/pull/102">Arthur Charguéraud PR</a>) was prepared and merged (<a href="https://github.com/ocaml/ocaml/pull/1496">PR 1496</a>, <a href="https://github.com/ocaml/ocaml/pull/1501">PR 1501</a>, <a href="https://github.com/ocaml/ocaml/pull/1505">PR 1505</a>, <a href="https://github.com/ocaml/ocaml/pull/1510">PR 1510</a>, and <a href="https://github.com/ocaml/ocaml/pull/1534">PR 1534</a>).  Our OCaml <a href="https://github.com/mirage/ocaml-git/">git implementation</a> was rewritten to support git push properly, and this PR was <a href="https://github.com/mirage/ocaml-git/pull/227">merged</a>.  Other projects of interest are <a href="https://github.com/haesbaert/awa-ssh">awa-ssh</a>, <a href="https://github.com/mirage/charrua-core/pull/76">anonymity profiles in DHCP</a>, and fixes to the deployment troubles of <a href="https://github.com/mirage/mirage-www">our website</a>.  There is now a <a href="https://github.com/cfcs/eye-of-mirage">mirage PNG viewer integrated into Qubes</a> and a <a href="https://github.com/cfcs/passmenage">password manager</a>.  Some <a href="https://github.com/juga0/mirage_mar2017">getting started notes</a> were written down as well as the new <a href="https://mirage.io/wiki/learning">learning about MirageOS</a> website.</p>
@@ -1120,18 +1229,22 @@ I will see a lot of the participants at 34c3 in 3 weeks already, while others I 
 I do hope to stay in contact with most of them online!</p>
 <h2>Thank you for yet another great retreat!</h2>
 <p>Many thanks to everyone involved!  The hostel is already booked for <a href="http://retreat.mirage.io">another retreat in March 2018</a>...</p>
-|js}
-    };
- 
-    { updated = {js|2017-03-06 14:00|js}
-    ; authors = [
-    { name = {js|Thomas Gazagnaire|js}
-    ; uri = Some {js|http://gazagnaire.org|js}
-    ; email = Some {js|thomas@gazagnaire.org|js}
-    }]
-    ; subject = {js|Easy distributed analytics with Irmin 1.0|js}
-    ; permalink = {js|irmin-1.0|js}
-    ; body = {js|<p>I am really happy to announce the release of Irmin 1.0, which fully
+|js};
+      };
+      {
+        updated = {js|2017-03-06 14:00|js};
+        authors =
+          [
+            {
+              name = {js|Thomas Gazagnaire|js};
+              uri = Some {js|http://gazagnaire.org|js};
+              email = Some {js|thomas@gazagnaire.org|js};
+            };
+          ];
+        subject = {js|Easy distributed analytics with Irmin 1.0|js};
+        permalink = {js|irmin-1.0|js};
+        body =
+          {js|<p>I am really happy to announce the release of Irmin 1.0, which fully
 supports MirageOS 3.0 and which brings a simpler and yet more
 expressive API. Irmin is a library for designing Git-like distributed
 databases, with built-in branching, snapshoting, reverting and
@@ -1354,18 +1467,22 @@ operations to read and write atomically. Finally, flexible first-class
 support for immutable trees has also been added.</p>
 <p>Send us feedback on the <a href="https://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">MirageOS mailing-list</a> or on the <a href="https://github.com/mirage/irmin">Irmin
 issue tracker on GitHub</a>.</p>
-|js}
-    };
- 
-    { updated = {js|2017-03-01 14:00|js}
-    ; authors = [
-    { name = {js|Mindy Preston|js}
-    ; uri = Some {js|https://github.com/yomimono|js}
-    ; email = Some {js|mindy.preston@cl.cam.ac.uk|js}
-    }]
-    ; subject = {js|Adding the Qubes target to Mirage|js}
-    ; permalink = {js|qubes-target|js}
-    ; body = {js|<p>When I got a new laptop in early 2016, I decided to try out this <a href="https://qubesos.org">QubesOS</a> all the cool kids were talking about.  QubesOS also runs a hypervisor, but it nicely supports running multiple virtual machines for typical user tasks, like looking at cat photos with a web browser, viewing a PDF, listening to music, or patching MirageOS.  QubesOS also uses Xen, which means we should be able to even <em>run</em> our MirageOS unikernels on it... right?</p>
+|js};
+      };
+      {
+        updated = {js|2017-03-01 14:00|js};
+        authors =
+          [
+            {
+              name = {js|Mindy Preston|js};
+              uri = Some {js|https://github.com/yomimono|js};
+              email = Some {js|mindy.preston@cl.cam.ac.uk|js};
+            };
+          ];
+        subject = {js|Adding the Qubes target to Mirage|js};
+        permalink = {js|qubes-target|js};
+        body =
+          {js|<p>When I got a new laptop in early 2016, I decided to try out this <a href="https://qubesos.org">QubesOS</a> all the cool kids were talking about.  QubesOS also runs a hypervisor, but it nicely supports running multiple virtual machines for typical user tasks, like looking at cat photos with a web browser, viewing a PDF, listening to music, or patching MirageOS.  QubesOS also uses Xen, which means we should be able to even <em>run</em> our MirageOS unikernels on it... right?</p>
 <p>The answer is <a href="http://roscidus.com/blog/blog/2016/01/01/a-unikernel-firewall-for-qubesos/">yes, after a fashion</a>.  Thomas Leonard did the hard work of writing <a href="https://github.com/mirage/mirage-qubes">mirage-qubes</a>, a library that interfaces nicely with the QubesOS management layer and allows MirageOS unikernels to boot, configure themselves, and run as managed by the Qubes management system.  That solution is nice for generating, once, a unikernel that you're going to run all the time under QubesOS, but building a unikernel that will boot and run on QubesOS requires QubesOS-specific code in the unikernel itself.  It's very unfriendly for testing generic unikernels, and as the release manager for Mirage 3, I wanted to do that pretty much all the time.</p>
 <p>The command-line <code>mirage</code> utility was made to automatically build programs against libraries that are specific to a target only when the user has asked to build for that target, which is the exact problem we have!  So let's try to get to <code>mirage configure -t qubes</code>.</p>
 <h2>teach a robot to do human tricks</h2>
@@ -1839,18 +1956,22 @@ gnttab_stubs.c: initialised mini-os gntmap
 </code></pre>
 <h1>What's Next?</h1>
 <p>The implementation work above leaves a lot to be desired, noted in the <a href="https://github.com/mirage/mirage/pull/553#issuecomment-231529011">comments to the original pull request</a>.  We welcome further contributions in this area, particularly from QubesOS users and developers!  If you have questions or comments, please get in touch on the <a href="https://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mirageos-devel mailing list</a> or on our IRC channel at #mirage on irc.freenode.net !</p>
-|js}
-    };
- 
-    { updated = {js|2017-02-27 14:00|js}
-    ; authors = [
-    { name = {js|Hannes Mehnert|js}
-    ; uri = Some {js|https://github.com/hannesm|js}
-    ; email = Some {js|hm519@cam.ac.uk|js}
-    }]
-    ; subject = {js|Size matters: how Mirage got smaller and less magical|js}
-    ; permalink = {js|mirage-3-smaller|js}
-    ; body = {js|<p>In this article, some technical background and empirical evidence is given how
+|js};
+      };
+      {
+        updated = {js|2017-02-27 14:00|js};
+        authors =
+          [
+            {
+              name = {js|Hannes Mehnert|js};
+              uri = Some {js|https://github.com/hannesm|js};
+              email = Some {js|hm519@cam.ac.uk|js};
+            };
+          ];
+        subject = {js|Size matters: how Mirage got smaller and less magical|js};
+        permalink = {js|mirage-3-smaller|js};
+        body =
+          {js|<p>In this article, some technical background and empirical evidence is given how
 we reduced the lines of code in Mirage3, which has about 25% fewer lines of
 code than Mirage2, while providing <a href="https://mirage.io/blog/announcing-mirage-30-release">more features</a>.</p>
 <p>Mirage does a fair amount of code generation since its initial release to extend
@@ -2043,18 +2164,22 @@ to evaluate the performance of
 <a href="https://blogs.janestreet.com/flambda/">flambda</a> intermediate language in OCaml
 and <a href="https://github.com/ocaml/ocaml/pull/608">dead code elimination</a>.  These should
 decrease the binary size and improve the performance.</p>
-|js}
-    };
- 
-    { updated = {js|2017-02-23 17:00|js}
-    ; authors = [
-    { name = {js|Mindy Preston|js}
-    ; uri = Some {js|https://github.com/yomimono|js}
-    ; email = Some {js|mindy.preston@cl.cam.ac.uk|js}
-    }]
-    ; subject = {js|Announcing MirageOS 3.0.0|js}
-    ; permalink = {js|announcing-mirage-30-release|js}
-    ; body = {js|<p>We're excited to announce MirageOS 3.0! MirageOS is a modern, modular library operating system that allows the creation of small, secure, legacy-free services. MirageOS applications can be compiled to run as self-contained virtual machines (a few MB in size) on Xen or KVM hosts, FreeBSD's bhyve, or even as regular Unix processes (allowing access to regular debugging tools).  The system libraries themselves can be reused in traditional applications, just like any other software library.</p>
+|js};
+      };
+      {
+        updated = {js|2017-02-23 17:00|js};
+        authors =
+          [
+            {
+              name = {js|Mindy Preston|js};
+              uri = Some {js|https://github.com/yomimono|js};
+              email = Some {js|mindy.preston@cl.cam.ac.uk|js};
+            };
+          ];
+        subject = {js|Announcing MirageOS 3.0.0|js};
+        permalink = {js|announcing-mirage-30-release|js};
+        body =
+          {js|<p>We're excited to announce MirageOS 3.0! MirageOS is a modern, modular library operating system that allows the creation of small, secure, legacy-free services. MirageOS applications can be compiled to run as self-contained virtual machines (a few MB in size) on Xen or KVM hosts, FreeBSD's bhyve, or even as regular Unix processes (allowing access to regular debugging tools).  The system libraries themselves can be reused in traditional applications, just like any other software library.</p>
 <p><a href="https://github.com/mirage/mirage/releases/tag/v3.0.0">Full release notes are available on GitHub</a>.  If you're interested in getting started with MirageOS 3 right away, you might be interested in the <a href="https://mirage.io/wiki/hello-world">revamped guide to getting started</a>, <a href="https://github.com/mirage/mirage-skeleton">a small collection of example unikernels</a>, or the <a href="https://mirage.io/wiki/mirage2-to-mirage3">porting guide for updating Mirage 2.x unikernels to Mirage 3</a>.</p>
 <p>Here's a summary of the things in MirageOS 3 that we're most excited about:</p>
 <h3>Solo5</h3>
@@ -2301,23 +2426,27 @@ decrease the binary size and improve the performance.</p>
 <li><a href="https://github.com/yomimono/charrua-client/compare/0.0.1...0.1.0">changes in charrua-client between 0.0.1 and 0.1.0</a>:  24 files changed, 492 insertions(+), 442 deletions(-)
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2016-7-18 16:00|js}
-    ; authors = [
-    { name = {js|Gemma Gordon|js}
-    ; uri = Some {js|https://github.com/GemmaG|js}
-    ; email = Some {js|gg417@cl.cam.ac.uk|js}
-    };
-                                                           
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }]
-    ; subject = {js|MirageOS Summer 2016 hack retreat roundup|js}
-    ; permalink = {js|2016-summer-hackathon-roundup|js}
-    ; body = {js|<p><a href="https://www.flickr.com/photos/138528518@N02/sets/72157671241464475"><img src="/graphics/cambridge2016-hackathon.jpg" align="right" width="250px" /></a>
+|js};
+      };
+      {
+        updated = {js|2016-7-18 16:00|js};
+        authors =
+          [
+            {
+              name = {js|Gemma Gordon|js};
+              uri = Some {js|https://github.com/GemmaG|js};
+              email = Some {js|gg417@cl.cam.ac.uk|js};
+            };
+            {
+              name = {js|Anil Madhavapeddy|js};
+              uri = Some {js|http://anil.recoil.org|js};
+              email = Some {js|anil@recoil.org|js};
+            };
+          ];
+        subject = {js|MirageOS Summer 2016 hack retreat roundup|js};
+        permalink = {js|2016-summer-hackathon-roundup|js};
+        body =
+          {js|<p><a href="https://www.flickr.com/photos/138528518@N02/sets/72157671241464475"><img src="/graphics/cambridge2016-hackathon.jpg" align="right" width="250px" /></a>
 Our first Cambridge-based MirageOS hack retreat took place yesterday - and what a fantastic day it was! The torrential rain may have halted our punting plans, but it didn't stop progress in the Old Library! Darwin College was a fantastic venue, complete with private islands linked by picturesque wooden bridges and an unwavering wifi connection.</p>
 <p>People naturally formed groups to work on similar projects, and we had a handful of brand new users keen to get started with OCaml and Mirage.  The major tasks that emerged were:</p>
 <ul>
@@ -2409,23 +2538,28 @@ working on implementing a library to allow seamless application switching from
 HTTP to FastCGI. Christophe has initiated work on a client and server for this
 protocol using <a href="https://github.com/mirage/ocaml-cohttp">CoHTTP</a> so that it is
 unikernel-friendly.</p>
-|js}
-    };
- 
-    { updated = {js|2016-6-29 16:00|js}
-    ; authors = [
-    { name = {js|Gemma Gordon|js}
-    ; uri = Some {js|https://github.com/GemmaG|js}
-    ; email = Some {js|gg417@cl.cam.ac.uk|js}
-    };
-                                                           
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }]
-    ; subject = {js|MirageOS Summer 2016 hack retreat announcement, and talk roundup|js}
-    ; permalink = {js|2016-summer-hackathon|js}
-    ; body = {js|<p>As summer starts to shine over an obstinately rainy England, we are organising
+|js};
+      };
+      {
+        updated = {js|2016-6-29 16:00|js};
+        authors =
+          [
+            {
+              name = {js|Gemma Gordon|js};
+              uri = Some {js|https://github.com/GemmaG|js};
+              email = Some {js|gg417@cl.cam.ac.uk|js};
+            };
+            {
+              name = {js|Anil Madhavapeddy|js};
+              uri = Some {js|http://anil.recoil.org|js};
+              email = Some {js|anil@recoil.org|js};
+            };
+          ];
+        subject =
+          {js|MirageOS Summer 2016 hack retreat announcement, and talk roundup|js};
+        permalink = {js|2016-summer-hackathon|js};
+        body =
+          {js|<p>As summer starts to shine over an obstinately rainy England, we are organising
 the second MirageOS hack retreat in Cambridge!  It will be held on <strong>Weds 13th
 July</strong> at the lovely <a href="https://www.darwin.cam.ac.uk">Darwin College</a> from
 9am-11pm, with snacks, teas, coffees and a servery lunch provided (thanks to
@@ -2477,18 +2611,22 @@ like Unikernels, efficient JS/ARM output, &amp; easy host interop.
 </li>
 </ul>
 </blockquote>
-|js}
-    };
- 
-    { updated = {js|2016-5-4 16:00|js}
-    ; authors = [
-    { name = {js|Gemma Gordon|js}
-    ; uri = Some {js|https://github.com/GemmaG|js}
-    ; email = Some {js|gg417@cl.cam.ac.uk|js}
-    }]
-    ; subject = {js|MirageOS Spring 2016 hack retreat!|js}
-    ; permalink = {js|2016-spring-hackathon|js}
-    ; body = {js|<p>We're looking forward to the next MirageOS hack retreat already!  We've collected some reports from those who were present at our <a href="http://retreat.mirage.io">2016 Spring hack retreat</a> to share our excitement!  Thanks to the folks who put in the time and effort to organize the event and our wonderful hosts, and a huge thanks to everyone who documented their hack retreat experience!</p>
+|js};
+      };
+      {
+        updated = {js|2016-5-4 16:00|js};
+        authors =
+          [
+            {
+              name = {js|Gemma Gordon|js};
+              uri = Some {js|https://github.com/GemmaG|js};
+              email = Some {js|gg417@cl.cam.ac.uk|js};
+            };
+          ];
+        subject = {js|MirageOS Spring 2016 hack retreat!|js};
+        permalink = {js|2016-spring-hackathon|js};
+        body =
+          {js|<p>We're looking forward to the next MirageOS hack retreat already!  We've collected some reports from those who were present at our <a href="http://retreat.mirage.io">2016 Spring hack retreat</a> to share our excitement!  Thanks to the folks who put in the time and effort to organize the event and our wonderful hosts, and a huge thanks to everyone who documented their hack retreat experience!</p>
 <p>More information is also available at <a href="http://canopy.mirage.io">the Canopy site developed and used for information sharing during the hack retreat</a>!</p>
 <h2>Trip Report</h2>
 <p><em>by David Kaloper</em></p>
@@ -2678,18 +2816,22 @@ productive and had enough new things to learn.</h2>
 </li>
 </ul>
 <p>In terms of the event it was great - everything worked out very well, I don't have any suggestions for improvements :)</p>
-|js}
-    };
- 
-    { updated = {js|2016-5-3 18:00|js}
-    ; authors = [
-    { name = {js|Hannes Mehnert|js}
-    ; uri = Some {js|https://github.com/hannesm|js}
-    ; email = Some {js|hm519@cam.ac.uk|js}
-    }]
-    ; subject = {js|MirageOS security advisory 00: mirage-net-xen|js}
-    ; permalink = {js|MSA00|js}
-    ; body = {js|<h2>MirageOS Security Advisory 00 - memory disclosure in mirage-net-xen</h2>
+|js};
+      };
+      {
+        updated = {js|2016-5-3 18:00|js};
+        authors =
+          [
+            {
+              name = {js|Hannes Mehnert|js};
+              uri = Some {js|https://github.com/hannesm|js};
+              email = Some {js|hm519@cam.ac.uk|js};
+            };
+          ];
+        subject = {js|MirageOS security advisory 00: mirage-net-xen|js};
+        permalink = {js|MSA00|js};
+        body =
+          {js|<h2>MirageOS Security Advisory 00 - memory disclosure in mirage-net-xen</h2>
 <ul>
 <li>Module:       mirage-net-xen
 </li>
@@ -2767,18 +2909,22 @@ affected branch.</p>
 by downloading our public key from a keyserver (<code>gpg --recv-key 4A732D757C0EDA74</code>),
 downloading the raw markdown source of this advisory from <a href="https://raw.githubusercontent.com/mirage/mirage-www/master/tmpl/advisories/00.txt.asc">GitHub</a>
 and executing <code>gpg --verify 00.md.asc</code>.</p>
-|js}
-    };
- 
-    { updated = {js|2016-2-29 12:00|js}
-    ; authors = [
-    { name = {js|Gabriel Radanne|js}
-    ; uri = Some {js|https://github.com/drup|js}
-    ; email = Some {js|drupyog@zoho.com|js}
-    }]
-    ; subject = {js|Introducing Functoria|js}
-    ; permalink = {js|introducing-functoria|js}
-    ; body = {js|<p>For the last few months, I've been working with <a href="http://www.gazagnaire.org">Thomas</a> on improving the <code>mirage</code> tool and
+|js};
+      };
+      {
+        updated = {js|2016-2-29 12:00|js};
+        authors =
+          [
+            {
+              name = {js|Gabriel Radanne|js};
+              uri = Some {js|https://github.com/drup|js};
+              email = Some {js|drupyog@zoho.com|js};
+            };
+          ];
+        subject = {js|Introducing Functoria|js};
+        permalink = {js|introducing-functoria|js};
+        body =
+          {js|<p>For the last few months, I've been working with <a href="http://www.gazagnaire.org">Thomas</a> on improving the <code>mirage</code> tool and
 I'm happy to present <a href="https://github.com/mirage/functoria">Functoria</a>, a library to create arbitrary MirageOS-like DSLs. Functoria is independent from <code>mirage</code> and will replace the core engine, which was somewhat bolted on to the tool until now.</p>
 <p>This introduces a few breaking changes so please consult
 <a href="../docs/breaking-changes">the breaking changes page</a> to see what is different and how to fix things if needed.
@@ -2900,18 +3046,22 @@ To force non-sharing of two devices, it is enough to give them different names.<
 <p>However, to wrap up this blog post, I offer you a visualization of the MirageOS website itself (brace yourself). <a href="../graphics/dot/www.svg">Enjoy!</a></p>
 <p><em>Thanks to <a href="http://mort.io">Mort</a>, <a href="http://somerandomidiot.com">Mindy</a>, <a href="http://amirchaudhry.com">Amir</a> and <a href="https://github.com/yallop">Jeremy</a>
 for their comments on earlier drafts.</em></p>
-|js}
-    };
- 
-    { updated = {js|2016-11-17 16:00|js}
-    ; authors = [
-    { name = {js|Thomas Gazagnaire|js}
-    ; uri = Some {js|http://gazagnaire.org|js}
-    ; email = Some {js|thomas@gazagnaire.org|js}
-    }]
-    ; subject = {js|Irmin 0.12 with portable filesystem watching released|js}
-    ; permalink = {js|irmin-0.12|js}
-    ; body = {js|<p>Development of the <a href="https://github.com/mirage/irmin">Irmin</a> Git-like data store continues (see <a href="/blog/introducing-irmin">here</a> for an introduction). We are releasing <a href="https://github.com/mirage/irmin/releases/tag/0.12.0">Irmin 0.12.0</a> which brings support for native file-system watchers to greatly improve the performance of watches on the datastore.</p>
+|js};
+      };
+      {
+        updated = {js|2016-11-17 16:00|js};
+        authors =
+          [
+            {
+              name = {js|Thomas Gazagnaire|js};
+              uri = Some {js|http://gazagnaire.org|js};
+              email = Some {js|thomas@gazagnaire.org|js};
+            };
+          ];
+        subject = {js|Irmin 0.12 with portable filesystem watching released|js};
+        permalink = {js|irmin-0.12|js};
+        body =
+          {js|<p>Development of the <a href="https://github.com/mirage/irmin">Irmin</a> Git-like data store continues (see <a href="/blog/introducing-irmin">here</a> for an introduction). We are releasing <a href="https://github.com/mirage/irmin/releases/tag/0.12.0">Irmin 0.12.0</a> which brings support for native file-system watchers to greatly improve the performance of watches on the datastore.</p>
 <p>Previously, an Irmin application that wanted to use watches would setup file-system scanning/polling by doing:</p>
 <pre><code>  let () = Irmin_unix.install_dir_polling_listener 1.0
 </code></pre>
@@ -2923,18 +3073,22 @@ for their comments on earlier drafts.</em></p>
 <p>If you are using Irmin, please do let us know how you are getting on via the
 <a href="https://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a>
 and report any bugs on the <a href="https://github.com/mirage/irmin/issues">issue tracker</a>.</p>
-|js}
-    };
- 
-    { updated = {js|2016-1-7 18:10|js}
-    ; authors = [
-    { name = {js|Dan Williams|js}
-    ; uri = Some {js|https://github.com/djwillia|js}
-    ; email = Some {js|djwillia@us.ibm.com|js}
-    }]
-    ; subject = {js|Run Mirage Unikernels on KVM/QEMU with Solo5|js}
-    ; permalink = {js|introducing-solo5|js}
-    ; body = {js|<p>I'm excited to announce the release of
+|js};
+      };
+      {
+        updated = {js|2016-1-7 18:10|js};
+        authors =
+          [
+            {
+              name = {js|Dan Williams|js};
+              uri = Some {js|https://github.com/djwillia|js};
+              email = Some {js|djwillia@us.ibm.com|js};
+            };
+          ];
+        subject = {js|Run Mirage Unikernels on KVM/QEMU with Solo5|js};
+        permalink = {js|introducing-solo5|js};
+        body =
+          {js|<p>I'm excited to announce the release of
 <a href="https://github.com/solo5/solo5">Solo5</a>!
 Solo5 is essentially a kernel library that bootstraps the hardware and
 forms a base (similar to Mini-OS) from which unikernels can be built.
@@ -3073,32 +3227,40 @@ look forward to meeting some of you there!</p>
 <a href="http://mort.io">Mort</a>,
 and <a href="https://github.com/yallop">Jeremy</a>,
 for taking the time to read and comment on earlier drafts.</em></p>
-|js}
-    };
- 
-    { updated = {js|2016-1-1 23:42|js}
-    ; authors = [
-    { name = {js|Hannes Mehnert|js}
-    ; uri = Some {js|https://github.com/hannesm|js}
-    ; email = Some {js|hm519@cam.ac.uk|js}
-    }]
-    ; subject = {js|MirageOS hack retreat|js}
-    ; permalink = {js|hackathon-marrakech2016|js}
-    ; body = {js|<p>The first MirageOS hack retreat will take place in Marrakech, Morocco, from 11th till 16th March 2016.  It is open for everybody.  The main goal is to get together people motivated to contribute to MirageOS.</p>
+|js};
+      };
+      {
+        updated = {js|2016-1-1 23:42|js};
+        authors =
+          [
+            {
+              name = {js|Hannes Mehnert|js};
+              uri = Some {js|https://github.com/hannesm|js};
+              email = Some {js|hm519@cam.ac.uk|js};
+            };
+          ];
+        subject = {js|MirageOS hack retreat|js};
+        permalink = {js|hackathon-marrakech2016|js};
+        body =
+          {js|<p>The first MirageOS hack retreat will take place in Marrakech, Morocco, from 11th till 16th March 2016.  It is open for everybody.  The main goal is to get together people motivated to contribute to MirageOS.</p>
 <p>Find more details on <a href="http://retreat.mirage.io">the hack retreat website</a>.</p>
 <p><em>Edit: discuss this post on <a href="https://devel.unikernel.org/t/1st-mirageos-hackathon/24/1">devel.unikernel.org</a></em></p>
-|js}
-    };
- 
-    { updated = {js|2015-12-29 15:30|js}
-    ; authors = [
-    { name = {js|Christiano Haesbaert|js}
-    ; uri = Some {js|http://www.haesbaert.org/|js}
-    ; email = Some {js|haesbaert@haesbaert.org|js}
-    }]
-    ; subject = {js|Introducing Charrua — a DHCP implementation|js}
-    ; permalink = {js|introducing-charrua-dhcp|js}
-    ; body = {js|<p>Almost every network needs to support
+|js};
+      };
+      {
+        updated = {js|2015-12-29 15:30|js};
+        authors =
+          [
+            {
+              name = {js|Christiano Haesbaert|js};
+              uri = Some {js|http://www.haesbaert.org/|js};
+              email = Some {js|haesbaert@haesbaert.org|js};
+            };
+          ];
+        subject = {js|Introducing Charrua — a DHCP implementation|js};
+        permalink = {js|introducing-charrua-dhcp|js};
+        body =
+          {js|<p>Almost every network needs to support
 <a href="https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol">DHCP</a>
 (Dynamic
 Host Configuration Protocol), that is, a way for clients to request network
@@ -3288,18 +3450,22 @@ Thanks also to <a href="http://roscidus.com/blog/">Thomas</a> and <a href="https
 I also
 would like to thank my <a href="https://www.genua.de">employer</a> for letting me work on this
 project in our hackathons.</p>
-|js}
-    };
- 
-    { updated = {js|2015-12-17 12:00|js}
-    ; authors = [
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }]
-    ; subject = {js|Unikernel.org|js}
-    ; permalink = {js|unikernel-org|js}
-    ; body = {js|<p>Unikernels are specialised single address space machine images that are
+|js};
+      };
+      {
+        updated = {js|2015-12-17 12:00|js};
+        authors =
+          [
+            {
+              name = {js|Amir Chaudhry|js};
+              uri = Some {js|http://amirchaudhry.com|js};
+              email = Some {js|amirmc@gmail.com|js};
+            };
+          ];
+        subject = {js|Unikernel.org|js};
+        permalink = {js|unikernel-org|js};
+        body =
+          {js|<p>Unikernels are specialised single address space machine images that are
 constructed by using library operating systems. With MirageOS, we've taken a
 clean-slate approach to unikernels with a focus on safety. This involved
 writing protocol libraries from the ground up and it also afforded the ability
@@ -3332,18 +3498,22 @@ improving unikernels!</p>
 <p><em>Edit: discuss this post on <a href="https://devel.unikernel.org/t/why-we-need-unikernel-org/18/1">devel.unikernel.org</a></em></p>
 <p><em>Thanks to <a href="http://anil.recoil.org">Anil</a>, <a href="https://github.com/yallop">Jeremy</a> and <a href="http://somerandomidiot.com">Mindy</a> for
 comments on an earlier draft.</em></p>
-|js}
-    };
- 
-    { updated = {js|2015-10-23 11:00|js}
-    ; authors = [
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }]
-    ; subject = {js|Videos from around the world!|js}
-    ; permalink = {js|videos-around-world-2015|js}
-    ; body = {js|<p>Word about Unikernels and MirageOS is spreading and as the community grows,
+|js};
+      };
+      {
+        updated = {js|2015-10-23 11:00|js};
+        authors =
+          [
+            {
+              name = {js|Amir Chaudhry|js};
+              uri = Some {js|http://amirchaudhry.com|js};
+              email = Some {js|amirmc@gmail.com|js};
+            };
+          ];
+        subject = {js|Videos from around the world!|js};
+        permalink = {js|videos-around-world-2015|js};
+        body =
+          {js|<p>Word about Unikernels and MirageOS is spreading and as the community grows,
 more people have been giving talks at user groups and conferences. Below are a
 selection of those that have been recorded, which alone is about 5 hours of
 content.  The topics are wide ranging and include discussions about where
@@ -3401,18 +3571,22 @@ one of your videos, please do <a href="mailto:mirageos-devel@lists.xenproject.or
 <div class="flex-video">
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/cUvNths_5RA" frameborder="0" allowfullscreen=""></iframe>
 </div>
-|js}
-    };
- 
-    { updated = {js|2015-10-15 19:00|js}
-    ; authors = [
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }]
-    ; subject = {js|Getting Started Screencasts|js}
-    ; permalink = {js|getting-started-screencasts|js}
-    ; body = {js|<p>We put together some quick screencasts to make it easier for people to get
+|js};
+      };
+      {
+        updated = {js|2015-10-15 19:00|js};
+        authors =
+          [
+            {
+              name = {js|Amir Chaudhry|js};
+              uri = Some {js|http://amirchaudhry.com|js};
+              email = Some {js|amirmc@gmail.com|js};
+            };
+          ];
+        subject = {js|Getting Started Screencasts|js};
+        permalink = {js|getting-started-screencasts|js};
+        body =
+          {js|<p>We put together some quick screencasts to make it easier for people to get
 started with MirageOS. They're all in a playlist below, which is around 10
 minutes in total.</p>
 <p>There are currently 4 videos which walk through some of the typical steps.
@@ -3427,18 +3601,22 @@ in touch on the <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mi
 <div class="flex-video">
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/videoseries?list=PLgjWYrrJw8_wlrkveCXULbg6oIYDvNuDU" frameborder="0" allowfullscreen=""></iframe>
 </div>
-|js}
-    };
- 
-    { updated = {js|2015-07-22 17:00|js}
-    ; authors = [
-    { name = {js|David Kaloper|js}
-    ; uri = Some {js|https://github.com/pqwy|js}
-    ; email = Some {js|david.mersinjak@cl.cam.ac.uk|js}
-    }]
-    ; subject = {js|Organized chaos: managing randomness|js}
-    ; permalink = {js|mirage-entropy|js}
-    ; body = {js|<p>This post gives a bit of background on the <em>Random Number Generator</em> (RNG) in
+|js};
+      };
+      {
+        updated = {js|2015-07-22 17:00|js};
+        authors =
+          [
+            {
+              name = {js|David Kaloper|js};
+              uri = Some {js|https://github.com/pqwy|js};
+              email = Some {js|david.mersinjak@cl.cam.ac.uk|js};
+            };
+          ];
+        subject = {js|Organized chaos: managing randomness|js};
+        permalink = {js|mirage-entropy|js};
+        body =
+          {js|<p>This post gives a bit of background on the <em>Random Number Generator</em> (RNG) in
 the recent MirageOS v2.5 release.</p>
 <p>First we give background about why RNGs are really critical for security. Then
 we try to clarify the often-confused concepts of &quot;randomness&quot; and &quot;entropy&quot;, as
@@ -3733,23 +3911,27 @@ you can reach us through our <a href="http://lists.xenproject.org/cgi-bin/mailma
 <code>freenode</code> and join <code>#mirage</code>.</p>
 <p><em>Thanks to <a href="http://erratique.ch">Daniel</a>, <a href="http://mort.io">Mort</a> and <a href="http://amirchaudhry.com">Amir</a> for their comments on earlier
 drafts.</em></p>
-|js}
-    };
- 
-    { updated = {js|2015-07-07 12:00|js}
-    ; authors = [
-    { name = {js|Mindy Preston|js}
-    ; uri = Some {js|https://github.com/yomimono|js}
-    ; email = Some {js|mindy.preston@cl.cam.ac.uk|js}
-    };
-                                                            
-    { name = {js|Hannes Mehnert|js}
-    ; uri = Some {js|https://github.com/hannesm|js}
-    ; email = Some {js|hm519@cam.ac.uk|js}
-    }]
-    ; subject = {js|Easy HTTPS Unikernels with mirage-seal|js}
-    ; permalink = {js|mirage-seal|js}
-    ; body = {js|<p>Building a static website is one of the better-supported user stories for MirageOS, but it currently results in an HTTP-only site, with no capability for TLS.  Although there's been a great TLS stack <a href="https://mirage.io/blog/introducing-ocaml-tls">available for a while now</a>, it was a bit fiddly to assemble the pieces of TLS, Cohttp, and the MirageOS frontend tool in order to construct an HTTPS unikernel.  With MirageOS 2.5, that's changed!  Let's celebrate by building an HTTPS-serving unikernel of our very own.</p>
+|js};
+      };
+      {
+        updated = {js|2015-07-07 12:00|js};
+        authors =
+          [
+            {
+              name = {js|Mindy Preston|js};
+              uri = Some {js|https://github.com/yomimono|js};
+              email = Some {js|mindy.preston@cl.cam.ac.uk|js};
+            };
+            {
+              name = {js|Hannes Mehnert|js};
+              uri = Some {js|https://github.com/hannesm|js};
+              email = Some {js|hm519@cam.ac.uk|js};
+            };
+          ];
+        subject = {js|Easy HTTPS Unikernels with mirage-seal|js};
+        permalink = {js|mirage-seal|js};
+        body =
+          {js|<p>Building a static website is one of the better-supported user stories for MirageOS, but it currently results in an HTTP-only site, with no capability for TLS.  Although there's been a great TLS stack <a href="https://mirage.io/blog/introducing-ocaml-tls">available for a while now</a>, it was a bit fiddly to assemble the pieces of TLS, Cohttp, and the MirageOS frontend tool in order to construct an HTTPS unikernel.  With MirageOS 2.5, that's changed!  Let's celebrate by building an HTTPS-serving unikernel of our very own.</p>
 <h2>Prerequisites</h2>
 <h2>Get a Certificate</h2>
 <p>To serve HTTPS, we'll need a certificate to present to clients (i.e., browsers) for authentication and establishing asymmetric encryption. For just testing things out, or when it's okay to cause a big scary warning message to appear for anyone browsing a site, we can just use a self-signed certificate.  Alternatively, the domain name registrar or hosting provider for a site will be happy to sell (or in some cases, give!) a certificate -- both options are explained in more detail below.</p>
@@ -3812,18 +3994,22 @@ opam install certify
 <pre><code>sudo xl create seal.xl -c
 </code></pre>
 <p>Via the console, we can see the sealed unikernel boot and obtain an IP through DHCP.  Congratulations -- you made a static site unikernel browsable over HTTPS!</p>
-|js}
-    };
- 
-    { updated = {js|2015-06-29 16:00|js}
-    ; authors = [
-    { name = {js|Hannes Mehnert|js}
-    ; uri = Some {js|https://github.com/hannesm|js}
-    ; email = Some {js|hm519@cam.ac.uk|js}
-    }]
-    ; subject = {js|Reviewing the Bitcoin Pinata|js}
-    ; permalink = {js|bitcoin-pinata-results|js}
-    ; body = {js|<p>TL;DR: Nobody took our BTC.  Random people from the Internet even donated
+|js};
+      };
+      {
+        updated = {js|2015-06-29 16:00|js};
+        authors =
+          [
+            {
+              name = {js|Hannes Mehnert|js};
+              uri = Some {js|https://github.com/hannesm|js};
+              email = Some {js|hm519@cam.ac.uk|js};
+            };
+          ];
+        subject = {js|Reviewing the Bitcoin Pinata|js};
+        permalink = {js|bitcoin-pinata-results|js};
+        body =
+          {js|<p>TL;DR: Nobody took our BTC.  Random people from the Internet even donated
 into our BTC wallet.
 We showed the feasibility of a
 transparent self-service bounty.  In the style of Dijkstra: security
@@ -3955,23 +4141,27 @@ over network connections -- to make it use OCaml-TLS, set
 </ul>
 <p>Again, a big thank you to <a href="https://ipredator.se">IPredator</a> for
 hosting our BTC Piñata and lending us the BTC!</p>
-|js}
-    };
- 
-    { updated = {js|2015-06-26 16:00|js}
-    ; authors = [
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    };
-                                                            
-    { name = {js|Thomas Gazagnaire|js}
-    ; uri = Some {js|http://gazagnaire.org|js}
-    ; email = Some {js|thomas@gazagnaire.org|js}
-    }]
-    ; subject = {js|MirageOS v2.5 with full TLS support|js}
-    ; permalink = {js|announcing-mirage-25-release|js}
-    ; body = {js|<p>Today we're announcing the new release of MirageOS v2.5, which includes
+|js};
+      };
+      {
+        updated = {js|2015-06-26 16:00|js};
+        authors =
+          [
+            {
+              name = {js|Amir Chaudhry|js};
+              uri = Some {js|http://amirchaudhry.com|js};
+              email = Some {js|amirmc@gmail.com|js};
+            };
+            {
+              name = {js|Thomas Gazagnaire|js};
+              uri = Some {js|http://gazagnaire.org|js};
+              email = Some {js|thomas@gazagnaire.org|js};
+            };
+          ];
+        subject = {js|MirageOS v2.5 with full TLS support|js};
+        permalink = {js|announcing-mirage-25-release|js};
+        body =
+          {js|<p>Today we're announcing the new release of MirageOS v2.5, which includes
 first-class support for SSL/TLS in the MirageOS configuration language. We
 introduced the pure OCaml implementation of
 <a href="/blog/introducing-ocaml-tls">transport layer security (TLS)</a> last summer and have been working since
@@ -4043,18 +4233,22 @@ page of <a href="/wiki/breaking-changes">backward incompatible changes</a> to ex
 do.</p>
 <p>We would love to hear your feedback on this release, either on our
 <a href="https://github.com/mirage/mirage/issues">issue tracker</a> or <a href="/community">our mailing lists</a>!</p>
-|js}
-    };
- 
-    { updated = {js|2015-06-26 14:00|js}
-    ; authors = [
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }]
-    ; subject = {js|Why OCaml-TLS?|js}
-    ; permalink = {js|why-ocaml-tls|js}
-    ; body = {js|<p>TLS implementations have a history of security flaws, which are often the
+|js};
+      };
+      {
+        updated = {js|2015-06-26 14:00|js};
+        authors =
+          [
+            {
+              name = {js|Amir Chaudhry|js};
+              uri = Some {js|http://amirchaudhry.com|js};
+              email = Some {js|amirmc@gmail.com|js};
+            };
+          ];
+        subject = {js|Why OCaml-TLS?|js};
+        permalink = {js|why-ocaml-tls|js};
+        body =
+          {js|<p>TLS implementations have a history of security flaws, which are often the
 result of implementation errors.  These security flaws stem from the
 underlying challenges of interpreting ambiguous specifications, the
 complexities of large APIs and code bases, and the use of unsafe programming
@@ -4094,18 +4288,22 @@ using our TLS stack, is less than 4% the size of an equivalent, traditional
 stack (102 kloc as opposed to 2560 kloc).</p>
 <p>These are just some of the benefits of re-engineering critical software using
 modern techniques.</p>
-|js}
-    };
- 
-    { updated = {js|2015-02-10 16:00|js}
-    ; authors = [
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }]
-    ; subject = {js|Smash the Bitcoin Pinata for fun and profit!|js}
-    ; permalink = {js|announcing-bitcoin-pinata|js}
-    ; body = {js|<p><a href="http://ownme.ipredator.se/"><img src="http://amirchaudhry.com/images/btc-pinata/btc-pinata.png" style="float:right; padding: 10px" width="300px" /></a></p>
+|js};
+      };
+      {
+        updated = {js|2015-02-10 16:00|js};
+        authors =
+          [
+            {
+              name = {js|Amir Chaudhry|js};
+              uri = Some {js|http://amirchaudhry.com|js};
+              email = Some {js|amirmc@gmail.com|js};
+            };
+          ];
+        subject = {js|Smash the Bitcoin Pinata for fun and profit!|js};
+        permalink = {js|announcing-bitcoin-pinata|js};
+        body =
+          {js|<p><a href="http://ownme.ipredator.se/"><img src="http://amirchaudhry.com/images/btc-pinata/btc-pinata.png" style="float:right; padding: 10px" width="300px" /></a></p>
 <p>Last summer we announced the beta release of a clean-slate implementation of
 TLS in pure OCaml, alongside a <a href="https://mirage.io/blog/introducing-ocaml-tls">series of blog posts</a> that described
 the libraries and the thinking behind them.  It took two hackers six months
@@ -4121,18 +4319,23 @@ able to smash your way in, then you get to keep the spoils.</p>
 the details on the <a href="http://ownme.ipredator.se">site itself</a>. Remember that the codebase is
 <a href="https://github.com/mirleft/">all open</a> (as well as <a href="https://github.com/mirleft/ocaml-tls/issues?q=label%3A%22security+concern%22+">issues</a>) so there's nothing to
 reverse engineer. Have fun!</p>
-|js}
-    };
- 
-    { updated = {js|2014-12-31 16:00|js}
-    ; authors = [
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }]
-    ; subject = {js|MirageOS 2014 review: IPv6, TLS, Irmin, Jitsu and community growth|js}
-    ; permalink = {js|2014-in-review|js}
-    ; body = {js|<small>
+|js};
+      };
+      {
+        updated = {js|2014-12-31 16:00|js};
+        authors =
+          [
+            {
+              name = {js|Anil Madhavapeddy|js};
+              uri = Some {js|http://anil.recoil.org|js};
+              email = Some {js|anil@recoil.org|js};
+            };
+          ];
+        subject =
+          {js|MirageOS 2014 review: IPv6, TLS, Irmin, Jitsu and community growth|js};
+        permalink = {js|2014-in-review|js};
+        body =
+          {js|<small>
   This work funded in part by the EU FP7 User-Centric Networking project, Grant
   No. 611001.
 </small>
@@ -4268,18 +4471,22 @@ One very important project that has had a lot of work put into it in 2014 (but i
 <h3>Want to get involved?</h3>
 <p>This is a really fun time to get involved with unikernels and the MirageOS project. The year of 2014 has seen <a href="https://mirage.io/links/">lots of discussion</a> about the potential of unikernels and we'll see some of the first big deployments involving them in 2015.  For the ones among you who wish to learn more, then check out the <a href="https://github.com/mirage/mirage-www/wiki/Pioneer-Projects">pioneer projects</a>, watch out for <a href="https://mirage.io/wiki">Amir's meeting notes</a> and join the voice calls if you want a more interactive discussion, and engage on the <a href="https://mirage.io/community/">mailing lists</a> with any questions you might have.</p>
 <p>For me personally, it's been a real privilege to spend the year working with and learning from the friendly, intelligent and diverse community that is springing up around the project.  The progression from experiment to reality has been a lot of work, but the unikernel dream is finally coming together rath[er nicely thanks to everyone's hard work and enthusiasm.  I'd also like to thank all of our <a href="https://mirage.io/community/">funding bodies</a> and the <a href="http://linuxfoundation.org">Linux Foundation</a> and the <a href="http://xenproject.org">Xen Project</a> (especially Lars Kurth and Russell Pavlicek) for their support throughout the year that made all this work possible.  Happy new year, everyone!</p>
-|js}
-    };
- 
-    { updated = {js|2014-07-22 11:00|js}
-    ; authors = [
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }]
-    ; subject = {js|MirageOS v2.0: a recap of the new features|js}
-    ; permalink = {js|announcing-mirage-20-release|js}
-    ; body = {js|<small>
+|js};
+      };
+      {
+        updated = {js|2014-07-22 11:00|js};
+        authors =
+          [
+            {
+              name = {js|Anil Madhavapeddy|js};
+              uri = Some {js|http://anil.recoil.org|js};
+              email = Some {js|anil@recoil.org|js};
+            };
+          ];
+        subject = {js|MirageOS v2.0: a recap of the new features|js};
+        permalink = {js|announcing-mirage-20-release|js};
+        body =
+          {js|<small>
   This work funded in part by the EU FP7 User-Centric Networking project, Grant
   No. 611001.
 </small>
@@ -4346,18 +4553,22 @@ release to!  And finally, the lifeblood of MirageOS is about sharing and
 <a href="http://opam.ocaml.org/doc/Packaging.html">publishing libraries</a> that add new functionality to the framework, so do get
 involved and open-source your own efforts.</p>
 <p><em>Breaking news</em>: <a href="http://mort.io">Richard Mortier</a> and I will be speaking at <a href="http://www.oscon.com">OSCON</a> this week on Thursday morning about the new features <a href="http://www.oscon.com/oscon2014/public/schedule/detail/35024">in F150 in the Cloud Track</a>. Come along if you are in rainy Portland at the moment!</p>
-|js}
-    };
- 
-    { updated = {js|2014-07-22 10:00|js}
-    ; authors = [
-    { name = {js|Thomas Leonard|js}
-    ; uri = Some {js|http://roscidus.com/blog/|js}
-    ; email = Some {js|talex5@gmail.com|js}
-    }]
-    ; subject = {js|Building an ARMy of Xen unikernels|js}
-    ; permalink = {js|introducing-xen-minios-arm|js}
-    ; body = {js|<p>Mirage has just gained the ability to compile unikernels for the Xen/arm32
+|js};
+      };
+      {
+        updated = {js|2014-07-22 10:00|js};
+        authors =
+          [
+            {
+              name = {js|Thomas Leonard|js};
+              uri = Some {js|http://roscidus.com/blog/|js};
+              email = Some {js|talex5@gmail.com|js};
+            };
+          ];
+        subject = {js|Building an ARMy of Xen unikernels|js};
+        permalink = {js|introducing-xen-minios-arm|js};
+        body =
+          {js|<p>Mirage has just gained the ability to compile unikernels for the Xen/arm32
 platform, allowing Mirage guests to run under the Xen hypervisor on ARM
 devices such as the <a href="http://cubietruck.com/collections/frontpage/products/cubieboard2-allwinner-a20-arm-cortex-a7-dual-core-development-board">Cubieboard 2</a> and <a href="http://cubietruck.com/collections/frontpage/products/cubietruck-cubieboard3-cortex-a7-dual-core-2gb-ram-8gb-flash-with-wifi-bt">CubieTruck</a>.</p>
 <h3>Introduction</h3>
@@ -4493,18 +4704,23 @@ and finally the rest of the RAM, which is handed over to the malloc system.</p>
 development version, but has only been lightly tested.
 If you have any problems or questions, or get it working on other devices,
 please <a href="https://mirage.io/community/">let us know</a>!</p>
-|js}
-    };
- 
-    { updated = {js|2014-07-21 11:00|js}
-    ; authors = [
-    { name = {js|Dave Scott|js}
-    ; uri = Some {js|http://dave.recoil.org/|js}
-    ; email = Some {js|dave@recoil.org|js}
-    }]
-    ; subject = {js|Using Irmin to add fault-tolerance to the Xenstore database|js}
-    ; permalink = {js|introducing-irmin-in-xenstore|js}
-    ; body = {js|<p><em>This is the second in a series of posts that introduces the <a href="https://github.com/mirage/irmin">Irmin</a> distributed storage engine.
+|js};
+      };
+      {
+        updated = {js|2014-07-21 11:00|js};
+        authors =
+          [
+            {
+              name = {js|Dave Scott|js};
+              uri = Some {js|http://dave.recoil.org/|js};
+              email = Some {js|dave@recoil.org|js};
+            };
+          ];
+        subject =
+          {js|Using Irmin to add fault-tolerance to the Xenstore database|js};
+        permalink = {js|introducing-irmin-in-xenstore|js};
+        body =
+          {js|<p><em>This is the second in a series of posts that introduces the <a href="https://github.com/mirage/irmin">Irmin</a> distributed storage engine.
 You might like to begin with the <a href="https://mirage.io/blog/introducing-irmin">introductory post</a>.</em></p>
 <p><a href="http://wiki.xen.org/wiki/XenStore">Xenstore</a> is a critical service found on all hosts
 running <a href="http://www.xen.org/">Xen</a>. Xenstore is necessary to</p>
@@ -4797,18 +5013,23 @@ actually have to run Xen):</p>
   git log
 </code></pre>
 <p>Comments and/or contributions are welcome: join the <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">Mirage email list</a> and say hi!</p>
-|js}
-    };
- 
-    { updated = {js|2014-07-18 13:00|js}
-    ; authors = [
-    { name = {js|Thomas Gazagnaire|js}
-    ; uri = Some {js|http://gazagnaire.org|js}
-    ; email = Some {js|thomas@gazagnaire.org|js}
-    }]
-    ; subject = {js|Introducing Irmin: Git-like distributed, branchable storage|js}
-    ; permalink = {js|introducing-irmin|js}
-    ; body = {js|<blockquote>
+|js};
+      };
+      {
+        updated = {js|2014-07-18 13:00|js};
+        authors =
+          [
+            {
+              name = {js|Thomas Gazagnaire|js};
+              uri = Some {js|http://gazagnaire.org|js};
+              email = Some {js|thomas@gazagnaire.org|js};
+            };
+          ];
+        subject =
+          {js|Introducing Irmin: Git-like distributed, branchable storage|js};
+        permalink = {js|introducing-irmin|js};
+        body =
+          {js|<blockquote>
 <p>This is the first post in a series which will describe <a href="https://github.com/mirage/irmin">Irmin</a>,
 the new Git-like storage layer for Mirage OS 2.0. This post gives a
 high-level description on Irmin and its overall architecture, and
@@ -5065,18 +5286,22 @@ as a Git repository which is live-updated!  Here's a sneak preview...</p>
 <div class="flex-video">
   <iframe width="480" height="360" src="//www.youtube-nocookie.com/embed/DSzvFwIVm5s" frameborder="0" allowfullscreen="1"></iframe>
 </div>
-|js}
-    };
- 
-    { updated = {js|2014-07-17 13:00|js}
-    ; authors = [
-    { name = {js|Mindy Preston|js}
-    ; uri = Some {js|https://github.com/yomimono|js}
-    ; email = Some {js|mindy.preston@cl.cam.ac.uk|js}
-    }]
-    ; subject = {js|Fitting the modular MirageOS TCP/IP stack together|js}
-    ; permalink = {js|intro-tcpip|js}
-    ; body = {js|<p>A critical part of any unikernel is its network stack -- it's difficult to
+|js};
+      };
+      {
+        updated = {js|2014-07-17 13:00|js};
+        authors =
+          [
+            {
+              name = {js|Mindy Preston|js};
+              uri = Some {js|https://github.com/yomimono|js};
+              email = Some {js|mindy.preston@cl.cam.ac.uk|js};
+            };
+          ];
+        subject = {js|Fitting the modular MirageOS TCP/IP stack together|js};
+        permalink = {js|intro-tcpip|js};
+        body =
+          {js|<p>A critical part of any unikernel is its network stack -- it's difficult to
 think of a project that needs a cloud platform or runs on a set-top box with no
 network communications.</p>
 <p>Mirage provides a number of <a href="https://github.com/mirage/mirage/tree/master/types">module
@@ -5279,18 +5504,22 @@ end
 <p><a href="https://tls.nqsb.io/">The OCaml-TLS demonstration server</a> announced here <a href="http://mirage.io/blog/introducing-ocaml-tls">just a few days ago</a> is also running atop Cohttp - <a href="https://github.com/mirleft/tls-demo-server">source is available on Github</a>.</p>
 <h2>The future</h2>
 <p>Mirage's TCP/IP stack is under active development!  <a href="https://github.com/mirage/mirage-tcpip/search?q=TODO&amp;ref=cmdform">Some low-level details</a> are still stubbed out, and we're working on implementing some of the trickier corners of TCP, as well as <a href="http://somerandomidiot.com/blog/2014/05/22/throwing-some-fuzzy-dice/">doing automated testing</a> on the stack.  We welcome testing tools, bug reports, bug fixes, and new protocol implementations!</p>
-|js}
-    };
- 
-    { updated = {js|2014-07-16 12:00|js}
-    ; authors = [
-    { name = {js|Jon Ludlam|js}
-    ; uri = Some {js|http://jon.recoil.org|js}
-    ; email = Some {js|jon@recoil.org|js}
-    }]
-    ; subject = {js|Vchan: Low-latency inter-VM communication channels|js}
-    ; permalink = {js|update-on-vchan|js}
-    ; body = {js|<p><em>Today's post is an update to <a href="https://github.com/vbmithr">Vincent Bernardoff's</a>
+|js};
+      };
+      {
+        updated = {js|2014-07-16 12:00|js};
+        authors =
+          [
+            {
+              name = {js|Jon Ludlam|js};
+              uri = Some {js|http://jon.recoil.org|js};
+              email = Some {js|jon@recoil.org|js};
+            };
+          ];
+        subject = {js|Vchan: Low-latency inter-VM communication channels|js};
+        permalink = {js|update-on-vchan|js};
+        body =
+          {js|<p><em>Today's post is an update to <a href="https://github.com/vbmithr">Vincent Bernardoff's</a>
 <a href="https://mirage.io/blog/introducing-vchan">introducing vchan</a> blog
 post, updated to use the modern build scheme for Mirage.</em></p>
 <p>Unless you are familiar with Xen's source code, there is little chance
@@ -5508,18 +5737,22 @@ HELLO FROM DOM0
 this topic will address how to use it in combination with a name resolver
 to intelligently map connection requests to use <code>vchan</code> if available, and
 otherwise fall back to normal TCP or TCP+TLS.</p>
-|js}
-    };
- 
-    { updated = {js|2014-07-15 12:00|js}
-    ; authors = [
-    { name = {js|Jeremy Yallop|js}
-    ; uri = Some {js|https://github.com/yallop|js}
-    ; email = Some {js|jeremy.yallop@cl.cam.ac.uk|js}
-    }]
-    ; subject = {js|Modular foreign function bindings|js}
-    ; permalink = {js|modular-foreign-function-bindings|js}
-    ; body = {js|<p>One of the most frequent questions about MirageOS from developers is
+|js};
+      };
+      {
+        updated = {js|2014-07-15 12:00|js};
+        authors =
+          [
+            {
+              name = {js|Jeremy Yallop|js};
+              uri = Some {js|https://github.com/yallop|js};
+              email = Some {js|jeremy.yallop@cl.cam.ac.uk|js};
+            };
+          ];
+        subject = {js|Modular foreign function bindings|js};
+        permalink = {js|modular-foreign-function-bindings|js};
+        body =
+          {js|<p>One of the most frequent questions about MirageOS from developers is
 &quot;do I really need to write all my code in OCaml&quot;?  There are, of
 course, very good reasons to build the core system in pure OCaml: the
 module system permits reusing algorithmic abstractions at scale, and
@@ -5806,23 +6039,28 @@ number of projects across a variety of domains: <a href="http://erratique.ch/sof
 <a href="https://github.com/nojb/ocaml-gsasl">security</a>, <a href="https://github.com/hcarty/ocaml-gdal">geospatial data</a>, <a href="http://github.com/rgrinberg/onanomsg">communication</a>,
 and many others.  Further resources (documentation, forums, etc.) are
 available via the <a href="https://github.com/ocamllabs/ocaml-ctypes">home page</a>.</p>
-|js}
-    };
- 
-    { updated = {js|2014-07-14 12:00|js}
-    ; authors = [
-    { name = {js|David Kaloper|js}
-    ; uri = Some {js|https://github.com/pqwy|js}
-    ; email = Some {js|david.mersinjak@cl.cam.ac.uk|js}
-    };
-                                                            
-    { name = {js|Hannes Mehnert|js}
-    ; uri = Some {js|https://github.com/hannesm|js}
-    ; email = Some {js|hm519@cam.ac.uk|js}
-    }]
-    ; subject = {js|OCaml-TLS: the protocol implementation and mitigations to known attacks|js}
-    ; permalink = {js|ocaml-tls-api-internals-attacks-mitigation|js}
-    ; body = {js|<p><em>This is the fifth in a series of posts that introduce new libraries for a pure OCaml implementation of TLS.
+|js};
+      };
+      {
+        updated = {js|2014-07-14 12:00|js};
+        authors =
+          [
+            {
+              name = {js|David Kaloper|js};
+              uri = Some {js|https://github.com/pqwy|js};
+              email = Some {js|david.mersinjak@cl.cam.ac.uk|js};
+            };
+            {
+              name = {js|Hannes Mehnert|js};
+              uri = Some {js|https://github.com/hannesm|js};
+              email = Some {js|hm519@cam.ac.uk|js};
+            };
+          ];
+        subject =
+          {js|OCaml-TLS: the protocol implementation and mitigations to known attacks|js};
+        permalink = {js|ocaml-tls-api-internals-attacks-mitigation|js};
+        body =
+          {js|<p><em>This is the fifth in a series of posts that introduce new libraries for a pure OCaml implementation of TLS.
 You might like to begin with the <a href="http://mirage.io/blog/introducing-ocaml-tls">introduction</a>.</em></p>
 <p><a href="https://github.com/mirleft/ocaml-tls">ocaml-tls</a> is the new, clean-slate implementation of TLS in OCaml
 that we've been working on for the past six months. In this post we
@@ -6220,18 +6458,22 @@ Mirleft, Morocco.</p>
 <li><a href="http://mirage.io/blog/ocaml-tls-api-internals-attacks-mitigation">OCaml-TLS: the protocol implementation and mitigations to known attacks</a>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2014-07-11 12:00|js}
-    ; authors = [
-    { name = {js|David Kaloper|js}
-    ; uri = Some {js|https://github.com/pqwy|js}
-    ; email = Some {js|david.mersinjak@cl.cam.ac.uk|js}
-    }]
-    ; subject = {js|OCaml-TLS: ASN.1 and notation embedding|js}
-    ; permalink = {js|introducing-asn1|js}
-    ; body = {js|<p><em>This is the fourth in a series of posts that introduce new libraries for a pure OCaml implementation of TLS.
+|js};
+      };
+      {
+        updated = {js|2014-07-11 12:00|js};
+        authors =
+          [
+            {
+              name = {js|David Kaloper|js};
+              uri = Some {js|https://github.com/pqwy|js};
+              email = Some {js|david.mersinjak@cl.cam.ac.uk|js};
+            };
+          ];
+        subject = {js|OCaml-TLS: ASN.1 and notation embedding|js};
+        permalink = {js|introducing-asn1|js};
+        body =
+          {js|<p><em>This is the fourth in a series of posts that introduce new libraries for a pure OCaml implementation of TLS.
 You might like to begin with the <a href="https://mirage.io/blog/introducing-ocaml-tls">introduction</a>.</em></p>
 <p><a href="https://github.com/mirleft/ocaml-asn1-combinators">asn1-combinators</a> is a library that allows one to express
 <a href="https://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One">ASN.1</a> grammars directly in OCaml, manipulate them as first-class entities,
@@ -6637,18 +6879,23 @@ impossible to hide from the user of the library, creating unwelcome noise.</p>
 <li><a href="https://mirage.io/blog/ocaml-tls-api-internals-attacks-mitigation">OCaml-TLS: the protocol implementation and mitigations to known attacks</a>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2014-07-10 13:00|js}
-    ; authors = [
-    { name = {js|Hannes Mehnert|js}
-    ; uri = Some {js|https://github.com/hannesm|js}
-    ; email = Some {js|hm519@cam.ac.uk|js}
-    }]
-    ; subject = {js|OCaml-TLS: Adventures in X.509 certificate parsing and validation|js}
-    ; permalink = {js|introducing-x509|js}
-    ; body = {js|<p><em>This is the third in a series of posts that introduce new libraries for a pure OCaml implementation of TLS.
+|js};
+      };
+      {
+        updated = {js|2014-07-10 13:00|js};
+        authors =
+          [
+            {
+              name = {js|Hannes Mehnert|js};
+              uri = Some {js|https://github.com/hannesm|js};
+              email = Some {js|hm519@cam.ac.uk|js};
+            };
+          ];
+        subject =
+          {js|OCaml-TLS: Adventures in X.509 certificate parsing and validation|js};
+        permalink = {js|introducing-x509|js};
+        body =
+          {js|<p><em>This is the third in a series of posts that introduce new libraries for a pure OCaml implementation of TLS.
 You might like to begin with the <a href="http://mirage.io/blog/introducing-ocaml-tls">introduction</a>.</em></p>
 <h3>The problem of authentication</h3>
 <p>The authenticity of the remote server needs to be verified while
@@ -6876,18 +7123,22 @@ on the <a href="https://github.com/mirleft/ocaml-x509/issues">GitHub issue track
 <li><a href="http://mirage.io/blog/ocaml-tls-api-internals-attacks-mitigation">OCaml-TLS: the protocol implementation and mitigations to known attacks</a>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2014-07-09 16:00|js}
-    ; authors = [
-    { name = {js|David Kaloper|js}
-    ; uri = Some {js|https://github.com/pqwy|js}
-    ; email = Some {js|david.mersinjak@cl.cam.ac.uk|js}
-    }]
-    ; subject = {js|OCaml-TLS: building the nocrypto library core|js}
-    ; permalink = {js|introducing-nocrypto|js}
-    ; body = {js|<p><em>This is the second in a series of posts that introduce new libraries for a pure OCaml implementation of TLS.
+|js};
+      };
+      {
+        updated = {js|2014-07-09 16:00|js};
+        authors =
+          [
+            {
+              name = {js|David Kaloper|js};
+              uri = Some {js|https://github.com/pqwy|js};
+              email = Some {js|david.mersinjak@cl.cam.ac.uk|js};
+            };
+          ];
+        subject = {js|OCaml-TLS: building the nocrypto library core|js};
+        permalink = {js|introducing-nocrypto|js};
+        body =
+          {js|<p><em>This is the second in a series of posts that introduce new libraries for a pure OCaml implementation of TLS.
 You might like to begin with the <a href="https://mirage.io/blog/introducing-ocaml-tls">introduction</a>.</em></p>
 <h3>What is nocrypto?</h3>
 <p><a href="https://github.com/mirleft/ocaml-nocrypto">nocrypto</a> is the small cryptographic library behind the
@@ -7184,23 +7435,28 @@ comments, ideas, and especially audits and code.</p>
 <li><a href="https://mirage.io/blog/ocaml-tls-api-internals-attacks-mitigation">OCaml-TLS: the protocol implementation and mitigations to known attacks</a>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2014-07-08 15:00|js}
-    ; authors = [
-    { name = {js|Hannes Mehnert|js}
-    ; uri = Some {js|https://github.com/hannesm|js}
-    ; email = Some {js|hm519@cam.ac.uk|js}
-    };
-                                                            
-    { name = {js|David Kaloper|js}
-    ; uri = Some {js|https://github.com/pqwy|js}
-    ; email = Some {js|david.mersinjak@cl.cam.ac.uk|js}
-    }]
-    ; subject = {js|Introducing transport layer security (TLS) in pure OCaml|js}
-    ; permalink = {js|introducing-ocaml-tls|js}
-    ; body = {js|<p>We announce a <strong>beta</strong> release of <code>ocaml-tls</code>, a clean-slate implementation of
+|js};
+      };
+      {
+        updated = {js|2014-07-08 15:00|js};
+        authors =
+          [
+            {
+              name = {js|Hannes Mehnert|js};
+              uri = Some {js|https://github.com/hannesm|js};
+              email = Some {js|hm519@cam.ac.uk|js};
+            };
+            {
+              name = {js|David Kaloper|js};
+              uri = Some {js|https://github.com/pqwy|js};
+              email = Some {js|david.mersinjak@cl.cam.ac.uk|js};
+            };
+          ];
+        subject =
+          {js|Introducing transport layer security (TLS) in pure OCaml|js};
+        permalink = {js|introducing-ocaml-tls|js};
+        body =
+          {js|<p>We announce a <strong>beta</strong> release of <code>ocaml-tls</code>, a clean-slate implementation of
 <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">Transport Layer Security</a> (TLS) in
 OCaml.</p>
 <h3>What is TLS?</h3>
@@ -7319,18 +7575,22 @@ of the constituent libraries.</p>
 <li><a href="http://mirage.io/blog/ocaml-tls-api-internals-attacks-mitigation">OCaml-TLS: the protocol implementation and mitigations to known attacks</a>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2014-07-08 11:00|js}
-    ; authors = [
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }]
-    ; subject = {js|MirageOS 1.2 released and the 2.0 runup begins|js}
-    ; permalink = {js|mirage-1.2-released|js}
-    ; body = {js|<p>Summer is in full swing here in MirageOS HQ with torrential rainstorms, searing
+|js};
+      };
+      {
+        updated = {js|2014-07-08 11:00|js};
+        authors =
+          [
+            {
+              name = {js|Anil Madhavapeddy|js};
+              uri = Some {js|http://anil.recoil.org|js};
+              email = Some {js|anil@recoil.org|js};
+            };
+          ];
+        subject = {js|MirageOS 1.2 released and the 2.0 runup begins|js};
+        permalink = {js|mirage-1.2-released|js};
+        body =
+          {js|<p>Summer is in full swing here in MirageOS HQ with torrential rainstorms, searing
 sunshine, and our <a href="http://www.oscon.com/oscon2014/public/schedule/detail/35024">OSCON 2014</a> talk
 rapidly approaching in just a few weeks.  We've been steadily releasing point releases
 since the <a href="/blog/mirage-1.1-released">first release</a> back in December, and today's <a href="https://github.com/mirage/mirage/releases/tag/v1.2.0">MirageOS
@@ -7402,18 +7662,22 @@ or <a href="/community">get in touch directly</a>.  There will be a lot of relea
 in the next few weeks (including a beta of the new version of <a href="http://opam.ocaml.org">OPAM</a>,
 so <a href="https://github.com/mirage/mirage/issues">bug reports</a> are very much appreciated for those
 things that slip past <a href="http://travis-ci.org">Travis CI</a>!</p>
-|js}
-    };
- 
-    { updated = {js|2014-05-08 18:00|js}
-    ; authors = [
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }]
-    ; subject = {js|Welcome to the summer MirageOS hackers|js}
-    ; permalink = {js|welcome-to-our-summer-hackers|js}
-    ; body = {js|<p>Following our participation in the <a href="https://mirage.io/blog/applying-for-gsoc2014">Google Summer of Code</a> program, we've now finalised selections.  We've also got a number of other visitors joining us to hack on Mirage over the summer time, so here are introductions!</p>
+|js};
+      };
+      {
+        updated = {js|2014-05-08 18:00|js};
+        authors =
+          [
+            {
+              name = {js|Anil Madhavapeddy|js};
+              uri = Some {js|http://anil.recoil.org|js};
+              email = Some {js|anil@recoil.org|js};
+            };
+          ];
+        subject = {js|Welcome to the summer MirageOS hackers|js};
+        permalink = {js|welcome-to-our-summer-hackers|js};
+        body =
+          {js|<p>Following our participation in the <a href="https://mirage.io/blog/applying-for-gsoc2014">Google Summer of Code</a> program, we've now finalised selections.  We've also got a number of other visitors joining us to hack on Mirage over the summer time, so here are introductions!</p>
 <ul>
 <li><strong>SSL support</strong>: <a href="https://github.com/hannesm">Hannes Mehnert</a> and <a href="https://github.com/pqwy">David Kaloper</a> have been working hard on a safe <a href="https://github.com/mirleft/ocaml-tls">OCaml TLS</a> implementation. They're going to hack on <a href="https://github.com/mirage/mirage/issues/242">integrating it all</a> into working under Xen so we can make HTTPS requests (and our Twitter bot will finally be able to tweet!).  Both are also interested in formal verification of the result, and several loooong conversations with <a href="http://www.cl.cam.ac.uk/~pes20/">Peter Sewell</a> will magically transform into machine specifications by summer's end, I'm reliably informed.
 </li>
@@ -7429,18 +7693,22 @@ things that slip past <a href="http://travis-ci.org">Travis CI</a>!</p>
 </li>
 </ul>
 <p>Of course, work continues apace by the rest of the team as usual, with a <a href="https://mirage.io/releases">steady stream of releases</a> that are building up to some exciting new features.  We'll be blogging about ARM support, PVHVM, Irmin storage and SSL integration just as soon as they're pushed into the stable branches.  As always, <a href="https://mirage.io/community/">get in touch</a> via the IRC channel (<code>#mirage</code> on Freenode) or the mailing lists with questions.</p>
-|js}
-    };
- 
-    { updated = {js|2014-02-25 18:00|js}
-    ; authors = [
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }]
-    ; subject = {js|MirageOS is in Google Summer of Code 2014|js}
-    ; permalink = {js|applying-for-gsoc2014|js}
-    ; body = {js|<p>MirageOS will part of the <a href="https://www.google-melange.com/gsoc/homepage/google/gsoc2014">Google Summer of Code</a> 2014
+|js};
+      };
+      {
+        updated = {js|2014-02-25 18:00|js};
+        authors =
+          [
+            {
+              name = {js|Anil Madhavapeddy|js};
+              uri = Some {js|http://anil.recoil.org|js};
+              email = Some {js|anil@recoil.org|js};
+            };
+          ];
+        subject = {js|MirageOS is in Google Summer of Code 2014|js};
+        permalink = {js|applying-for-gsoc2014|js};
+        body =
+          {js|<p>MirageOS will part of the <a href="https://www.google-melange.com/gsoc/homepage/google/gsoc2014">Google Summer of Code</a> 2014
 program, thanks to the Xen Project's participation!  It's been a few years
 since I've mentored for GSoc, but I still have fond memories of some great
 projects in the past (such as the legendary <a href="http://vmgl.sourceforge.net/">Quake testing</a>
@@ -7478,18 +7746,22 @@ stop you from applying for a project idea.  In general though, it's best
 to only depend on your own computer resources if practical to do so.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2014-02-11 16:00|js}
-    ; authors = [
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }]
-    ; subject = {js|MirageOS 1.1.0: the eat-your-own-dogfood release|js}
-    ; permalink = {js|mirage-1.1-released|js}
-    ; body = {js|<p>We've just released <a href="https://github.com/ocaml/opam-repository/pull/1655">MirageOS 1.1.0</a> into OPAM.  Once the
+|js};
+      };
+      {
+        updated = {js|2014-02-11 16:00|js};
+        authors =
+          [
+            {
+              name = {js|Anil Madhavapeddy|js};
+              uri = Some {js|http://anil.recoil.org|js};
+              email = Some {js|anil@recoil.org|js};
+            };
+          ];
+        subject = {js|MirageOS 1.1.0: the eat-your-own-dogfood release|js};
+        permalink = {js|mirage-1.1-released|js};
+        body =
+          {js|<p>We've just released <a href="https://github.com/ocaml/opam-repository/pull/1655">MirageOS 1.1.0</a> into OPAM.  Once the
 live site updates, you should be able to run <code>opam update -u</code> and get the latest
 version.  This release is the &quot;<a href="http://en.wikipedia.org/wiki/Eating_your_own_dog_food">eat our own
 dogfood</a>&quot; release; as I
@@ -7619,18 +7891,22 @@ and now MirageOS lets us build <em>backend</em> device drivers that service VMs 
 </ul>
 <p>We'd also like to thank several conference organizers for giving us the opportunity to demonstrate MirageOS.  The talk video from <a href="http://www.infoq.com/presentations/mirage-os">QCon SF</a> is now live, and we also had a <em>great</em> time at <a href="http://fosdem.org">FOSDEM</a> recently (summarized by Amir <a href="http://nymote.org/blog/2014/fosdem-summary/">here</a>).
 So lots of activities, and no doubt little bugs lurking in places (particularly around installation).  As always, please do let us know of any problem by <a href="https://github.com/mirage/mirage/issues">reporting bugs</a>, or feel free to <a href="/community">contact us</a> via our e-mail lists or IRC.  Next stop: our unikernel homepages!</p>
-|js}
-    };
- 
-    { updated = {js|2014-01-03 16:00|js}
-    ; authors = [
-    { name = {js|Richard Mortier|js}
-    ; uri = Some {js|http://mort.io/|js}
-    ; email = Some {js|mort@cantab.net|js}
-    }]
-    ; subject = {js|Presenting Decks|js}
-    ; permalink = {js|decks-n-drums|js}
-    ; body = {js|<p>A few months ago, partly as a stunt, mostly because we could, Anil and I put together <a href="http://decks.openmirage.org/oscon13/">a presentation</a> for <a href="http://www.oscon.com/oscon2013/">OSCON'13</a> about Mirage in Mirage. That is, as a self-hosting Mirage web application that served up slides using <a href="http://lab.hakim.se/reveal-js/">RevealJS</a>. It was a bit of a hack, but it was cool (we thought!) and it worked. Several more presentations were written and given this way, at venues ranging from the [XenSummit 2013][xensummit] to [ACM FOCI 2013][foci] to the Cambridge Computer Lab's [MSc in Advanced Computer Science][acs].</p>
+|js};
+      };
+      {
+        updated = {js|2014-01-03 16:00|js};
+        authors =
+          [
+            {
+              name = {js|Richard Mortier|js};
+              uri = Some {js|http://mort.io/|js};
+              email = Some {js|mort@cantab.net|js};
+            };
+          ];
+        subject = {js|Presenting Decks|js};
+        permalink = {js|decks-n-drums|js};
+        body =
+          {js|<p>A few months ago, partly as a stunt, mostly because we could, Anil and I put together <a href="http://decks.openmirage.org/oscon13/">a presentation</a> for <a href="http://www.oscon.com/oscon2013/">OSCON'13</a> about Mirage in Mirage. That is, as a self-hosting Mirage web application that served up slides using <a href="http://lab.hakim.se/reveal-js/">RevealJS</a>. It was a bit of a hack, but it was cool (we thought!) and it worked. Several more presentations were written and given this way, at venues ranging from the [XenSummit 2013][xensummit] to [ACM FOCI 2013][foci] to the Cambridge Computer Lab's [MSc in Advanced Computer Science][acs].</p>
 <p>[foci]: https://www.usenix.org/conference/foci13‎
 [xensummit]: http://www.youtube.com/watch?v=3Jype6sP6MQ
 [acs]: http://decks.openmirage.org/cam13/</p>
@@ -7645,18 +7921,23 @@ rapid development, some of the older content may already be outdated. But <a hre
 code for the site itself</a> serves as another example of a simple --
 somewhat simpler than the <a href="https://mirage.io/">Mirage website</a> in fact -- Mirage web
 application.</p>
-|js}
-    };
- 
-    { updated = {js|2013-12-19 23:00|js}
-    ; authors = [
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }]
-    ; subject = {js|MirageOS 1.0.3 released; tutorial on building this website available|js}
-    ; permalink = {js|mirage-1.0.3-released|js}
-    ; body = {js|<p>We've had a lot of people trying out MirageOS since the <a href="/blog/announcing-mirage10">1.0 release</a> last week, and so we've been steadily cutting point releases and new libraries to OPAM as they're done.
+|js};
+      };
+      {
+        updated = {js|2013-12-19 23:00|js};
+        authors =
+          [
+            {
+              name = {js|Anil Madhavapeddy|js};
+              uri = Some {js|http://anil.recoil.org|js};
+              email = Some {js|anil@recoil.org|js};
+            };
+          ];
+        subject =
+          {js|MirageOS 1.0.3 released; tutorial on building this website available|js};
+        permalink = {js|mirage-1.0.3-released|js};
+        body =
+          {js|<p>We've had a lot of people trying out MirageOS since the <a href="/blog/announcing-mirage10">1.0 release</a> last week, and so we've been steadily cutting point releases and new libraries to OPAM as they're done.
 The most common build error by far has been people using outdated OPAM packages.  Do make sure that you have at least <a href="http://opam.ocaml.org/doc/Quick_Install.html">OPAM 1.1</a> installed, and that you've run <code>opam update -u</code> to get the latest package lists from the <a href="https://github.com/ocaml/opam-repository">package repository</a>.</p>
 <p><a href="https://github.com/mirage/mirage/releases/tag/1.0.3">MirageOS 1.0.3</a> improves
 Xen configuration generation, cleans up HTTP support, and adds support for FAT
@@ -7695,18 +7976,22 @@ filesystems.  Here are some of the libraries we've released this week to go alon
 </li>
 </ul>
 <p>As always, please feel free to report any issues via the <a href="https://github.com/mirage/mirage/issues">bug tracker</a> and ask questions on the <a href="mailto:mirageos-devel@lists.xenproject.org">mailing list</a>.</p>
-|js}
-    };
- 
-    { updated = {js|2013-12-09 12:00|js}
-    ; authors = [
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }]
-    ; subject = {js|MirageOS 1.0: not just a hallucination!|js}
-    ; permalink = {js|announcing-mirage10|js}
-    ; body = {js|<p><em>First</em>: read the <a href="/wiki/overview-of-mirage">overview</a> and
+|js};
+      };
+      {
+        updated = {js|2013-12-09 12:00|js};
+        authors =
+          [
+            {
+              name = {js|Anil Madhavapeddy|js};
+              uri = Some {js|http://anil.recoil.org|js};
+              email = Some {js|anil@recoil.org|js};
+            };
+          ];
+        subject = {js|MirageOS 1.0: not just a hallucination!|js};
+        permalink = {js|announcing-mirage10|js};
+        body =
+          {js|<p><em>First</em>: read the <a href="/wiki/overview-of-mirage">overview</a> and
 <a href="/wiki/technical-background">technical background</a> behind the project.</p>
 <p>When we started hacking on MirageOS back in 2009, it started off looking like a
 conventional OS, except written in OCaml.   The <a href="https://github.com/mirage/mirage/tree/old-master">monolithic
@@ -7781,18 +8066,22 @@ also written an excellent <a href="http://ocaml-book.com/">introductory text</a>
 you can generally find more resources <a href="http://ocaml.org/docs/">online</a>.
 Feel free to ask beginner OCaml questions on our mailing lists and we'll help
 as best we can!</p>
-|js}
-    };
- 
-    { updated = {js|2013-08-23 17:43|js}
-    ; authors = [
-    { name = {js|Vincent Bernardoff|js}
-    ; uri = Some {js|https://github.com/vbmithr|js}
-    ; email = Some {js|vb@luminar.eu.org|js}
-    }]
-    ; subject = {js|Introducing vchan|js}
-    ; permalink = {js|introducing-vchan|js}
-    ; body = {js|<p><em>Editor</em>: Note that some of the toolchain details of this blog post are
+|js};
+      };
+      {
+        updated = {js|2013-08-23 17:43|js};
+        authors =
+          [
+            {
+              name = {js|Vincent Bernardoff|js};
+              uri = Some {js|https://github.com/vbmithr|js};
+              email = Some {js|vb@luminar.eu.org|js};
+            };
+          ];
+        subject = {js|Introducing vchan|js};
+        permalink = {js|introducing-vchan|js};
+        body =
+          {js|<p><em>Editor</em>: Note that some of the toolchain details of this blog post are
 now out-of-date with Mirage 1.1, so we will update this shortly.</p>
 <p>Unless you are familiar with Xen's source code, there is little chance
 that you've ever heard of the <em>vchan</em> library or
@@ -7866,18 +8155,22 @@ is nearly identical to what you are used to.</p>
 <p>Please let us know if you use or plan to use this library in any way!
 If you need tremedous speed or more security, this might fit your
 needs.</p>
-|js}
-    };
- 
-    { updated = {js|2013-08-08 16:00|js}
-    ; authors = [
-    { name = {js|Richard Mortier|js}
-    ; uri = Some {js|http://mort.io/|js}
-    ; email = Some {js|mort@cantab.net|js}
-    }]
-    ; subject = {js|MirageOS travels to OSCON'13: a trip report|js}
-    ; permalink = {js|oscon13-trip-report|js}
-    ; body = {js|<p>Now that Mirage OS is rapidly converging on a
+|js};
+      };
+      {
+        updated = {js|2013-08-08 16:00|js};
+        authors =
+          [
+            {
+              name = {js|Richard Mortier|js};
+              uri = Some {js|http://mort.io/|js};
+              email = Some {js|mort@cantab.net|js};
+            };
+          ];
+        subject = {js|MirageOS travels to OSCON'13: a trip report|js};
+        permalink = {js|oscon13-trip-report|js};
+        body =
+          {js|<p>Now that Mirage OS is rapidly converging on a
 <a href="http://github.com/avsm/mirage/issues/102">Developer Preview Release 1</a>, we
 took it for a first public outing at
 <a href="http://www.oscon.com/oscon2013/">OSCON'13</a>, the O'Reilly Open Source
@@ -7953,18 +8246,22 @@ stable.</p>
 returning to with a more mature version of MirageOS, to build on the momentum
 begun this year!  Portland was an amazing host city too, but what happens in
 Portland, stays in Portland...</p>
-|js}
-    };
- 
-    { updated = {js|2013-07-18 11:20|js}
-    ; authors = [
-    { name = {js|Dave Scott|js}
-    ; uri = Some {js|http://dave.recoil.org/|js}
-    ; email = Some {js|dave@recoil.org|js}
-    }]
-    ; subject = {js|Creating Xen block devices with MirageOS|js}
-    ; permalink = {js|xen-block-devices-with-mirage|js}
-    ; body = {js|<p><a href="https://mirage.io/">MirageOS</a> is a
+|js};
+      };
+      {
+        updated = {js|2013-07-18 11:20|js};
+        authors =
+          [
+            {
+              name = {js|Dave Scott|js};
+              uri = Some {js|http://dave.recoil.org/|js};
+              email = Some {js|dave@recoil.org|js};
+            };
+          ];
+        subject = {js|Creating Xen block devices with MirageOS|js};
+        permalink = {js|xen-block-devices-with-mirage|js};
+        body =
+          {js|<p><a href="https://mirage.io/">MirageOS</a> is a
 <a href="http://anil.recoil.org/papers/2013-asplos-mirage.pdf">unikernel</a>
 or &quot;library operating system&quot; that allows us to build applications
 which can be compiled to very diverse environments: the same code can be linked
@@ -8182,18 +8479,22 @@ then Mirage makes those experiments very easy too.</p>
 <a href="https://github.com/mirage">pull request</a> or send us an email to the
 <a href="https://mirage.io/about/">Mirage mailing list</a> -- we'd
 love to hear about it!</p>
-|js}
-    };
- 
-    { updated = {js|2013-05-20 16:20|js}
-    ; authors = [
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }]
-    ; subject = {js|The road to a developer preview at OSCON 2013|js}
-    ; permalink = {js|the-road-to-a-dev-release|js}
-    ; body = {js|<p>There's been a crazy stream of activity since the start of the year, but the most important news is that we have a release target for an integrated developer preview of the Mirage stack: a talk at <a href="http://www.oscon.com/oscon2013/public/schedule/detail/28956">O'Reilly OSCon</a> in July!  Do turn up there and find <a href="http://dave.recoil.org">Dave Scott</a> and <a href="http://anil.recoil.org">Anil Madhavapeddy</a> showing off interactive demonstrations.</p>
+|js};
+      };
+      {
+        updated = {js|2013-05-20 16:20|js};
+        authors =
+          [
+            {
+              name = {js|Anil Madhavapeddy|js};
+              uri = Some {js|http://anil.recoil.org|js};
+              email = Some {js|anil@recoil.org|js};
+            };
+          ];
+        subject = {js|The road to a developer preview at OSCON 2013|js};
+        permalink = {js|the-road-to-a-dev-release|js};
+        body =
+          {js|<p>There's been a crazy stream of activity since the start of the year, but the most important news is that we have a release target for an integrated developer preview of the Mirage stack: a talk at <a href="http://www.oscon.com/oscon2013/public/schedule/detail/28956">O'Reilly OSCon</a> in July!  Do turn up there and find <a href="http://dave.recoil.org">Dave Scott</a> and <a href="http://anil.recoil.org">Anil Madhavapeddy</a> showing off interactive demonstrations.</p>
 <p>Meanwhile, another significant announcement has been that Xen is <a href="http://www.linuxfoundation.org/news-media/announcements/2013/04/xen-become-linux-foundation-collaborative-project">joining the Linux Foundation</a> as a collaborative project.  This is great news for Mirage: as a library operating system, we can operate just as easily under other hypervisors, and even on bare-metal devices such as the <a href="http://raspberrypi.org">Raspberry Pi</a>.  We're very much looking forward to getting the Xen-based developer release done, and interacting with the wider Linux community (and FreeBSD, for that matter, thanks to Gabor Pali's <a href="https://github.com/pgj/mirage-kfreebsd">kFreeBSD</a> backend).</p>
 <p>Here's some other significant news from the past few months:</p>
 <ul>
@@ -8219,18 +8520,22 @@ there.   If you want to take an early try of Mirage beforehand, don't forget to
 hop on the <code>#mirage</code> IRC channel on Freenode and ping us with questions
 directly.  We will also be migrating some of the project infrastructure to be fully
 self-hosted on Mirage and Xen, and placing some of the services onto the new <a href="http://xenproject.org">xenproject.org</a> infrastructure.</p>
-|js}
-    };
- 
-    { updated = {js|2012-9-12 0:00|js}
-    ; authors = [
-    { name = {js|Dave Scott|js}
-    ; uri = Some {js|http://dave.recoil.org/|js}
-    ; email = Some {js|dave@recoil.org|js}
-    }]
-    ; subject = {js|Building a "Xenstore stub domain" with MirageOS|js}
-    ; permalink = {js|xenstore-stub-domain|js}
-    ; body = {js|<p>[ <em>Due to continuing development, some of the details in this blog post are now out-of-date. It is archived here.</em> ]</p>
+|js};
+      };
+      {
+        updated = {js|2012-9-12 0:00|js};
+        authors =
+          [
+            {
+              name = {js|Dave Scott|js};
+              uri = Some {js|http://dave.recoil.org/|js};
+              email = Some {js|dave@recoil.org|js};
+            };
+          ];
+        subject = {js|Building a "Xenstore stub domain" with MirageOS|js};
+        permalink = {js|xenstore-stub-domain|js};
+        body =
+          {js|<p>[ <em>Due to continuing development, some of the details in this blog post are now out-of-date. It is archived here.</em> ]</p>
 <p>On all hosts running <a href="http://www.xen.org/">Xen</a>, there is a critical service called <a href="http://wiki.xen.org/wiki/XenStore">xenstore</a>.
 Xenstore is used to allow <em>untrusted</em> user VMs to communicate with <em>trusted</em> system VMs, so that</p>
 <ul>
@@ -8375,18 +8680,22 @@ the default) but for now you need the following:</p>
 <p>To turn the stub xenstored on, you need to edit whichever <code>init.d</code> script is currently starting xenstore and modify it to call</p>
 <pre><code>    init-xenstore-domain /path/to/server_xen.xen 256 flask_label
 </code></pre>
-|js}
-    };
- 
-    { updated = {js|2012-10-17 17:30|js}
-    ; authors = [
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }]
-    ; subject = {js|Breaking up is easy to do (with OPAM)|js}
-    ; permalink = {js|breaking-up-is-easy-with-opam|js}
-    ; body = {js|<p>When we first started developing Mirage in 2009, we were rewriting huge chunks of operating system and runtime code in OCaml. This ranged from low-level device drivers to higher-level networking protocols such as TCP/IP or HTTP.  The changes weren't just straight rewrites of C code either, but also involved experimenting with interfaces such as iteratees and <a href="/wiki/tutorial-lwt">lightweight threading</a> to take advantage of OCaml's static type system.  To make all of this easy to work with, we decided to lump everything into a <a href="http://github.com/avsm/mirage">single Git repository</a> that would bootstrap the entire system with a single <code>make</code> invocation.</p>
+|js};
+      };
+      {
+        updated = {js|2012-10-17 17:30|js};
+        authors =
+          [
+            {
+              name = {js|Anil Madhavapeddy|js};
+              uri = Some {js|http://anil.recoil.org|js};
+              email = Some {js|anil@recoil.org|js};
+            };
+          ];
+        subject = {js|Breaking up is easy to do (with OPAM)|js};
+        permalink = {js|breaking-up-is-easy-with-opam|js};
+        body =
+          {js|<p>When we first started developing Mirage in 2009, we were rewriting huge chunks of operating system and runtime code in OCaml. This ranged from low-level device drivers to higher-level networking protocols such as TCP/IP or HTTP.  The changes weren't just straight rewrites of C code either, but also involved experimenting with interfaces such as iteratees and <a href="/wiki/tutorial-lwt">lightweight threading</a> to take advantage of OCaml's static type system.  To make all of this easy to work with, we decided to lump everything into a <a href="http://github.com/avsm/mirage">single Git repository</a> that would bootstrap the entire system with a single <code>make</code> invocation.</p>
 <p>Nowadays though, Mirage is self-hosting, the interfaces are settling down, the number of libraries are growing every day, and portions of it are being used in <a href="/blog/xenstore-stub-domain">the Xen Cloud Platform</a>. So for the first developer release, we wanted to split up the monolithic repository into more manageable chunks, but still make it as easy as possible for the average OCaml developer to try out Mirage.</p>
 <p>Thanks to much hard work from <a href="http://gazagnaire.org">Thomas</a> and his colleagues at <a href="http://ocamlpro.com">OCamlPro</a>, we now have <a href="http://opam.ocamlpro.com">OPAM</a>: a fully-fledged package manager for Mirage!  OPAM is a source-based package manager that supports a growing number of community OCaml libraries.  More importantly for Mirage, it can also switch between multiple compiler installations, and so support cross-compiled runtimes and modified standard libraries.</p>
 <p>OPAM includes compiler variants for Mirage-friendly environments for Xen and the UNIX <code>tuntap</code> backends.  The <a href="/wiki/install">installation instructions</a> now give you instructions on how to use OPAM, and the old monolithic repository is considered deprecated.  We're still working on full documentation for the first beta release, but all the repositories are on the <a href="http://github.com/mirage">Mirage organisation</a> on Github, with some of the important ones being:</p>
@@ -8417,18 +8726,22 @@ the default) but for now you need the following:</p>
 </li>
 </ul>
 <p>There are quite a few more that are still being hacked for release by the team, but we're getting there very fast now. We also have the Mirage ports of <a href="http://github.com/avsm/ocaml-ssh">SSH</a> to integrate before the first release this year, and Haris has got some <a href="http://github.com/mirage/ocaml-crypto-keys">interesting DNSSEC</a> code!  If you want to get involved, join the <a href="/about">mailing list</a> or IRC channel!</p>
-|js}
-    };
- 
-    { updated = {js|2012-02-29 11:10|js}
-    ; authors = [
-    { name = {js|Richard Mortier|js}
-    ; uri = Some {js|http://mort.io/|js}
-    ; email = Some {js|mort@cantab.net|js}
-    }]
-    ; subject = {js|Connected Cloud Control: OpenFlow in MirageOS|js}
-    ; permalink = {js|announcing-mirage-openflow|js}
-    ; body = {js|<p><strong>Due to continuing development, some of the details in this blog post are now out-of-date. It is archived here.</strong></p>
+|js};
+      };
+      {
+        updated = {js|2012-02-29 11:10|js};
+        authors =
+          [
+            {
+              name = {js|Richard Mortier|js};
+              uri = Some {js|http://mort.io/|js};
+              email = Some {js|mort@cantab.net|js};
+            };
+          ];
+        subject = {js|Connected Cloud Control: OpenFlow in MirageOS|js};
+        permalink = {js|announcing-mirage-openflow|js};
+        body =
+          {js|<p><strong>Due to continuing development, some of the details in this blog post are now out-of-date. It is archived here.</strong></p>
 <p>Something we've been working on for a little while now that we're pretty
 excited about is an <a href="http://openflow.org/">OpenFlow</a> implementation for
 MirageOS. For those who're not networking types, in short, OpenFlow is a
@@ -8515,18 +8828,22 @@ from the current <a href="http://openvswitch.org/">Open vSwitch</a> release.</p>
 <a href="mailto:charalampos.rotsos@cl.cam.ac.uk">Haris</a> or
 <a href="mailto:anil@recoil.org">Anil</a>. Please do get in touch if you've any comments
 or questions, or you do anything interesting with it!</p>
-|js}
-    };
- 
-    { updated = {js|2011-09-29 11:10|js}
-    ; authors = [
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }]
-    ; subject = {js|An Outing to CUFP 2011|js}
-    ; permalink = {js|an-outing-to-cufp|js}
-    ; body = {js|<p>The team signed up to do a tutorial at <a href="http://cufp.org">CUFP</a> on the topic of <a href="http://cufp.org/conference/sessions/2011/t3-building-functional-os">Building a Functional OS</a>, which meant zooming off to Tokyo!  This was the first public show of the project, and resulted in a furious <a href="https://github.com/avsm/mirage/graphs/impact">flurry of commits</a> from the whole team to get it ready. The 45-strong crowd at the tutorial were really full of feedback, and particular thanks to <a href="http://www.deinprogramm.de/sperber/">Michael</a> for organising the event, and <a href="http://ocaml.janestreet.com/?q=blog/5">Yaron</a>, <a href="http://monkey.org/~marius/">Marius</a>, <a href="https://twitter.com/#!/stevej">Steve</a>, <a href="https://twitter.com/wil">Wil</a>, <a href="https://twitter.com/#!/adoemon">Adrian</a> and the rest for shouting out questions regularly!</p>
+|js};
+      };
+      {
+        updated = {js|2011-09-29 11:10|js};
+        authors =
+          [
+            {
+              name = {js|Anil Madhavapeddy|js};
+              uri = Some {js|http://anil.recoil.org|js};
+              email = Some {js|anil@recoil.org|js};
+            };
+          ];
+        subject = {js|An Outing to CUFP 2011|js};
+        permalink = {js|an-outing-to-cufp|js};
+        body =
+          {js|<p>The team signed up to do a tutorial at <a href="http://cufp.org">CUFP</a> on the topic of <a href="http://cufp.org/conference/sessions/2011/t3-building-functional-os">Building a Functional OS</a>, which meant zooming off to Tokyo!  This was the first public show of the project, and resulted in a furious <a href="https://github.com/avsm/mirage/graphs/impact">flurry of commits</a> from the whole team to get it ready. The 45-strong crowd at the tutorial were really full of feedback, and particular thanks to <a href="http://www.deinprogramm.de/sperber/">Michael</a> for organising the event, and <a href="http://ocaml.janestreet.com/?q=blog/5">Yaron</a>, <a href="http://monkey.org/~marius/">Marius</a>, <a href="https://twitter.com/#!/stevej">Steve</a>, <a href="https://twitter.com/wil">Wil</a>, <a href="https://twitter.com/#!/adoemon">Adrian</a> and the rest for shouting out questions regularly!</p>
 <ul>
 <li>
 <p><em>The tutorial</em> is <a href="http://github.com/avsm/mirage-tutorial">a Mirage application</a>, so you can clone it and view it locally through your web browser. The content is mirrored at <a href="http://tutorial.openmirage.org">tutorial.openmirage.org</a>, although it does require cleanup to make it suitable to an online audience. The SVG integration is awkward and it only works on Chrome/Safari, so I will probably rewrite it using <a href="http://imakewebthings.github.com/deck.js/">deck.js</a> soon. The tutorial is a good showcase of Mirage, as it compiles to Xen, UNIX (both kernel sockets and direct tuntap) with a RAMdisk or external filesystem, and is a good way to mess around with application synthesis (look at the <code>Makefile</code> targets in <code>slides/</code>).</p>
@@ -8554,18 +8871,22 @@ or questions, or you do anything interesting with it!</p>
 </li>
 </ul>
 <p>So as you can see, it has been a busy few months!  Much of the core of Mirage is settling down now, and we are writing a paper with detailed performance benchmarks of our various backends.  Keep an eye on the <a href="https://github.com/avsm/mirage/issues?milestone=2&amp;state=open">Github milestone</a> for the preview release, join our <a href="https://lists.cam.ac.uk/mailman/listinfo/cl-mirage">new mailing list</a>, or follow the newly sentient <a href="http://twitter.com/openmirage">openmirage on twitter</a>!</p>
-|js}
-    };
- 
-    { updated = {js|2011-08-12 15:00|js}
-    ; authors = [
-    { name = {js|Raphael Proust|js}
-    ; uri = Some {js|https://github.com/raphael-proust|js}
-    ; email = Some {js|raphlalou@gmail.com|js}
-    }]
-    ; subject = {js|Portable Regular Expressions|js}
-    ; permalink = {js|ocaml-regexp|js}
-    ; body = {js|<p>MirageOS targets different backends: micro-kernels for the Xen hypervisor, Unix
+|js};
+      };
+      {
+        updated = {js|2011-08-12 15:00|js};
+        authors =
+          [
+            {
+              name = {js|Raphael Proust|js};
+              uri = Some {js|https://github.com/raphael-proust|js};
+              email = Some {js|raphlalou@gmail.com|js};
+            };
+          ];
+        subject = {js|Portable Regular Expressions|js};
+        permalink = {js|ocaml-regexp|js};
+        body =
+          {js|<p>MirageOS targets different backends: micro-kernels for the Xen hypervisor, Unix
 executables and Javascript programs. The recent inclusion of the Javascript
 backend makes many C bindings unsuitable. In order to push backend incompatibilities
 closer to the application level, it is necessary to either reimplement the C
@@ -8645,18 +8966,22 @@ performance gain/loss (which we will do shortly).</p>
 <p>In addition to cosmetic and speed considerations, it is important to consider the
 portability increase: MirageOS's standard library is <a href="http://nodejs.org">Node.js</a> compatible,
 a feature we will explore shortly!</p>
-|js}
-    };
- 
-    { updated = {js|2011-06-18 15:47|js}
-    ; authors = [
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }]
-    ; subject = {js|Delimited Continuations vs Lwt for Threads|js}
-    ; permalink = {js|delimcc-vs-lwt|js}
-    ; body = {js|<p>MirageOS is a fully event-driven system, with no support for conventional <a href="http://en.wikipedia.org/wiki/POSIX_Threads">preemptive threads</a>.  Instead, programs are woken by events such as incoming network packets, and event callbacks execute until they themselves need to block (due to I/O or timers) or complete their task.</p>
+|js};
+      };
+      {
+        updated = {js|2011-06-18 15:47|js};
+        authors =
+          [
+            {
+              name = {js|Anil Madhavapeddy|js};
+              uri = Some {js|http://anil.recoil.org|js};
+              email = Some {js|anil@recoil.org|js};
+            };
+          ];
+        subject = {js|Delimited Continuations vs Lwt for Threads|js};
+        permalink = {js|delimcc-vs-lwt|js};
+        body =
+          {js|<p>MirageOS is a fully event-driven system, with no support for conventional <a href="http://en.wikipedia.org/wiki/POSIX_Threads">preemptive threads</a>.  Instead, programs are woken by events such as incoming network packets, and event callbacks execute until they themselves need to block (due to I/O or timers) or complete their task.</p>
 <p>Event-driven systems are simple to implement, scalable to lots of network clients, and very hip due to frameworks like <a href="http://nodejs.org">node.js</a>. However, programming event callbacks directly leads to the control logic being scattered across many small functions, and so we need some abstractions to hide the interruptions of registering and waiting for an event to trigger.</p>
 <p>OCaml has the excellent <a href="http://ocsigen.org">Lwt</a> threading library that utilises a monadic approach to solving this.
 Consider this simplified signature:</p>
@@ -8836,18 +9161,22 @@ Delimcc can be combined with Lwt very elegantly, and Jake Donham did just this w
 <p>Every iteration of the recursive loop requires the allocation of a closure (the <code>Lwt.bind</code> call). In the <code>delimcc</code> case, the function operates as a normal recursive function that uses the stack, until the very end when it needs to save the stack in one pass.</p>
 <p>Overall, I'm convinced now that the performance difference is insignificant for the purposes of choosing one thread system over the other for MirageOS.  Instead, the question of code interoperability is more important. Lwt-enabled protocol code will work unmodified in Javascript, and Delimcc code helps migrate existing code over.</p>
 <p>Interestingly, <a href="https://developer.mozilla.org/en/new_in_javascript_1.7">Javascript 1.7</a> introduces a <em>yield</em> operator, which <a href="http://parametricity.net/dropbox/yield.subc.pdf">has been shown</a> to have comparable expressive power to the <em>shift-reset</em> delimcc operators. Perhaps convergence isn't too far away after all...</p>
-|js}
-    };
- 
-    { updated = {js|2011-04-11 15:00|js}
-    ; authors = [
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }]
-    ; subject = {js|A Spring Wiki Cleaning|js}
-    ; permalink = {js|spring-cleaning|js}
-    ; body = {js|<p>We've been plugging away on Mirage for the last few months, and things are starting to take shape nicely. As the older blog entries were out-of-date, we have shifted the descriptive material to a new <a href="/wiki">wiki</a> section instead. What else has been happening?</p>
+|js};
+      };
+      {
+        updated = {js|2011-04-11 15:00|js};
+        authors =
+          [
+            {
+              name = {js|Anil Madhavapeddy|js};
+              uri = Some {js|http://anil.recoil.org|js};
+              email = Some {js|anil@recoil.org|js};
+            };
+          ];
+        subject = {js|A Spring Wiki Cleaning|js};
+        permalink = {js|spring-cleaning|js};
+        body =
+          {js|<p>We've been plugging away on Mirage for the last few months, and things are starting to take shape nicely. As the older blog entries were out-of-date, we have shifted the descriptive material to a new <a href="/wiki">wiki</a> section instead. What else has been happening?</p>
 <ul>
 <li>The Xen unikernel backend is fully event-driven (no interrupts) and very stable under stress testing now. The TCP stack is also complete enough to self-host this website, and you can try it out by navigating to <a href="http://xen.openmirage.org">xen.openmirage.org</a>. The stack doesnt actually do retransmissions yet, so your user experience may &quot;vary&quot;. Check out the <a href="/wiki/install">installation</a> and <a href="/wiki/hello-world">hello world</a> guides to try it out for yourself.
 </li>
@@ -8871,21 +9200,26 @@ Delimcc can be combined with Lwt very elegantly, and Jake Donham did just this w
 <li><a href="http://dave.recoil.org">David Scott</a> (chief architect of the Xen Cloud Platform) and <a href="http://anil.recoil.org">Anil Madhavapeddy</a> will give a joint tutorial on constructing functional operating systems at the <a href="http://cufp.org">Commercial Users of Functional Programming</a> workshop in Tokyo, Japan in September.
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2010-10-11 15:00|js}
-    ; authors = [
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }]
-    ; subject = {js|Self-hosting MirageOS website|js}
-    ; permalink = {js|self-hosting-mirage-website|js}
-    ; body = {js|<p>Welcome to the new self-hosting website for the Mirage project!  As we go about preparing a release for later in the year, this blog will contain technical musings and work-in-progress reports of various bits of the operating system as they mature. Since there's so much to talk about, we decided to start with a blog format, and eventually collect things into a proper document as they stabilise.</p>
+|js};
+      };
+      {
+        updated = {js|2010-10-11 15:00|js};
+        authors =
+          [
+            {
+              name = {js|Anil Madhavapeddy|js};
+              uri = Some {js|http://anil.recoil.org|js};
+              email = Some {js|anil@recoil.org|js};
+            };
+          ];
+        subject = {js|Self-hosting MirageOS website|js};
+        permalink = {js|self-hosting-mirage-website|js};
+        body =
+          {js|<p>Welcome to the new self-hosting website for the Mirage project!  As we go about preparing a release for later in the year, this blog will contain technical musings and work-in-progress reports of various bits of the operating system as they mature. Since there's so much to talk about, we decided to start with a blog format, and eventually collect things into a proper document as they stabilise.</p>
 <p>Feel free to subscribe to the <a href="/blog/atom.xml">Atom</a> feed to keep up-to-date with our progress, or just e-mail us or comment on individual posts with any queries.</p>
-|js}
-    }]
+|js};
+      };
+    ]
 end
 
 module Wiki = struct
@@ -8897,17 +9231,20 @@ module Wiki = struct
     body : string;
   }
 
-  let all = 
-[
-    { updated = {js|2022-01-24 16:00|js}
-    ; author = 
-    { name = {js|Thomas Gazagnaire|js}
-    ; uri = Some {js|http://gazagnaire.org|js}
-    ; email = Some {js|thomas@gazagnaire.org|js}
-    }
-    ; subject = {js|Mirage 4|js}
-    ; permalink = {js|mirage-4|js}
-    ; body = {js|<p>Welcome to the MirageOS 4 release page. No official announcement has been made,
+  let all =
+    [
+      {
+        updated = {js|2022-01-24 16:00|js};
+        author =
+          {
+            name = {js|Thomas Gazagnaire|js};
+            uri = Some {js|http://gazagnaire.org|js};
+            email = Some {js|thomas@gazagnaire.org|js};
+          };
+        subject = {js|Mirage 4|js};
+        permalink = {js|mirage-4|js};
+        body =
+          {js|<p>Welcome to the MirageOS 4 release page. No official announcement has been made,
 but the current work is available as a bleeding-edge repository.</p>
 <p>You can follow the advances in the release process through the
 <a href="https://github.com/mirage/mirage/issues/1217">tracking issue</a>.</p>
@@ -9053,18 +9390,20 @@ $ mirage build
 # Launch it (a tap interface needs to be configured for the hvt target)
 $ solo5-hvt --net:service=tap100 dist/www.hvt
 </code></pre>
-|js}
-    };
- 
-    { updated = {js|2020-06-10 14:00|js}
-    ; author = 
-    { name = {js|Hannes Mehnert|js}
-    ; uri = Some {js|https://github.com/hannesm|js}
-    ; email = Some {js|hm519@cam.ac.uk|js}
-    }
-    ; subject = {js|MirageOS unikernel gallery|js}
-    ; permalink = {js|gallery|js}
-    ; body = {js|<p>The MirageOS gallery features unikernels that are used in production.</p>
+|js};
+      };
+      {
+        updated = {js|2020-06-10 14:00|js};
+        author =
+          {
+            name = {js|Hannes Mehnert|js};
+            uri = Some {js|https://github.com/hannesm|js};
+            email = Some {js|hm519@cam.ac.uk|js};
+          };
+        subject = {js|MirageOS unikernel gallery|js};
+        permalink = {js|gallery|js};
+        body =
+          {js|<p>The MirageOS gallery features unikernels that are used in production.</p>
 <ul>
 <li><a href="https://github.com/mirage/qubes-mirage-firewall">QubesOS Firewall</a> <a href="http://roscidus.com/blog/blog/2016/01/01/a-unikernel-firewall-for-qubesos/">writeup</a>
 </li>
@@ -9109,18 +9448,20 @@ $ solo5-hvt --net:service=tap100 dist/www.hvt
 <li><a href="https://github.com/roburio/unikernels">robur unikernels</a>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2019-14-26 17:23|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Security|js}
-    ; permalink = {js|security|js}
-    ; body = {js|<p>It's important to consider the process of disclosing issues to us. Many bugs
+|js};
+      };
+      {
+        updated = {js|2019-14-26 17:23|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Security|js};
+        permalink = {js|security|js};
+        body =
+          {js|<p>It's important to consider the process of disclosing issues to us. Many bugs
 can be reported as usual on our <a href="https://github.com/mirage/mirage/issues">issue tracker</a>, but public forums are
 sometimes inappropriate for reporting security issues.</p>
 <p>If you think you've discovered a <strong>security vulnerability</strong>, the best way to
@@ -9135,18 +9476,20 @@ team will respond and we will take it from there.</p>
 <li><a href="https://mirage.io/blog/MSA00">3rd May 2016: MSA00 mirage-net-xen&lt;1.4.2</a>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2019-10-22 15:00|js}
-    ; author = 
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }
-    ; subject = {js|Installation|js}
-    ; permalink = {js|install|js}
-    ; body = {js|<p>MirageOS consists of a set of OCaml libraries that link with a runtime to form either a standalone <a href="https://en.wikipedia.org/wiki/Unikernel">unikernel</a> or a normal UNIX binary. These libraries are managed via the <a href="https://opam.ocaml.org">OPAM</a> tool. After describing MirageOS's system requirements, we will introduce the basics of OPAM and setting up for MirageOS.</p>
+|js};
+      };
+      {
+        updated = {js|2019-10-22 15:00|js};
+        author =
+          {
+            name = {js|Anil Madhavapeddy|js};
+            uri = Some {js|http://anil.recoil.org|js};
+            email = Some {js|anil@recoil.org|js};
+          };
+        subject = {js|Installation|js};
+        permalink = {js|install|js};
+        body =
+          {js|<p>MirageOS consists of a set of OCaml libraries that link with a runtime to form either a standalone <a href="https://en.wikipedia.org/wiki/Unikernel">unikernel</a> or a normal UNIX binary. These libraries are managed via the <a href="https://opam.ocaml.org">OPAM</a> tool. After describing MirageOS's system requirements, we will introduce the basics of OPAM and setting up for MirageOS.</p>
 <h2>Requirements</h2>
 <p>MirageOS has been tested on many modern Linux distributions, macOS 10.10+ and FreeBSD 11+.</p>
 <p>You will need OPAM 2.0.0 or later and OCaml 4.08.0 or later.</p>
@@ -9243,18 +9586,15 @@ base-unix             base  Unix library distributed with the OCaml compiler
 $ mirage --help
 </code></pre>
 <p>That's it. You now have everything required to start developing MirageOS unikernels that will run either as POSIX processes or as standalone unikernels. Next, why not try <a href="/wiki/hello-world">building a MirageOS <em>hello world</em></a>?</p>
-|js}
-    };
- 
-    { updated = {js|2019-10-18 19:00|js}
-    ; author = 
-    { name = {js|derpeter|js}
-    ; uri = None
-    ; email = None
-    }
-    ; subject = {js|MirageOS on ARM64|js}
-    ; permalink = {js|arm64|js}
-    ; body = {js|<p>MirageOS unikernels can run on 64-bit ARM Linux systems using the <a href="https://github.com/Solo5/solo5">Solo5</a>-based <code>hvt</code> and <code>spt</code> targets.</p>
+|js};
+      };
+      {
+        updated = {js|2019-10-18 19:00|js};
+        author = { name = {js|derpeter|js}; uri = None; email = None };
+        subject = {js|MirageOS on ARM64|js};
+        permalink = {js|arm64|js};
+        body =
+          {js|<p>MirageOS unikernels can run on 64-bit ARM Linux systems using the <a href="https://github.com/Solo5/solo5">Solo5</a>-based <code>hvt</code> and <code>spt</code> targets.</p>
 <p>At least the following boards/SoCs have been tested:</p>
 <ul>
 <li>Raspberry Pi 3 or newer / Broadcom BCM2837
@@ -9390,18 +9730,20 @@ $ exit
 </code></pre>
 <p>You should now have an bootable image. You can either hook up a serial UART cable to the pi or connect it to an HDMI screen.
 You can now e.g. follow the mirage <a href="https://mirage.io/wiki/hello-world">hello world</a> to setup your unikernel.</p>
-|js}
-    };
- 
-    { updated = {js|2019-10-18 15:00|js}
-    ; author = 
-    { name = {js|Richard Mortier|js}
-    ; uri = Some {js|http://mort.io/|js}
-    ; email = Some {js|mort@cantab.net|js}
-    }
-    ; subject = {js|Hello MirageOS World|js}
-    ; permalink = {js|hello-world|js}
-    ; body = {js|<p>First, make sure you have followed the <a href="/wiki/install">installation instructions</a>
+|js};
+      };
+      {
+        updated = {js|2019-10-18 15:00|js};
+        author =
+          {
+            name = {js|Richard Mortier|js};
+            uri = Some {js|http://mort.io/|js};
+            email = Some {js|mort@cantab.net|js};
+          };
+        subject = {js|Hello MirageOS World|js};
+        permalink = {js|hello-world|js};
+        body =
+          {js|<p>First, make sure you have followed the <a href="/wiki/install">installation instructions</a>
 to get a working MirageOS installation. The examples below are in
 the <a href="http://github.com/mirage/mirage-skeleton">mirage-skeleton</a> repository.
 Begin by cloning and changing directory to it:</p>
@@ -10133,18 +10475,20 @@ applications, like DNS, DHCP, and HTTPS servers.</p>
 <p>The real MirageOS website (which is itself a unikernel) may also be of
 interest to you!  Documentation is available at <a href="/wiki/mirage-www">mirage-www</a>,
 and the source code is published <a href="https://github.com/mirage/mirage-www">in a public GitHub repository</a>.</p>
-|js}
-    };
- 
-    { updated = {js|2017-12-3 12:00|js}
-    ; author = 
-    { name = {js|Martin Keegan|js}
-    ; uri = Some {js|http://mk.ucant.org/|js}
-    ; email = None
-    }
-    ; subject = {js|Learning about Mirage|js}
-    ; permalink = {js|learning|js}
-    ; body = {js|<h1>How to learn about Mirage</h1>
+|js};
+      };
+      {
+        updated = {js|2017-12-3 12:00|js};
+        author =
+          {
+            name = {js|Martin Keegan|js};
+            uri = Some {js|http://mk.ucant.org/|js};
+            email = None;
+          };
+        subject = {js|Learning about Mirage|js};
+        permalink = {js|learning|js};
+        body =
+          {js|<h1>How to learn about Mirage</h1>
 <p>The Mirage <a href="/community">community</a> is very welcoming of newcomers; your
 optimal learning route is try out the software on your own development
 machine, then familiarise yourself with the various backends and the
@@ -10217,18 +10561,20 @@ host machine exclusively to it.</p>
 <p>Mirage effectively treats functionality such as persistent storage, networking,
 protocols, etc, as libraries. The configuration phase for Mirage determines
 which implementations of these libraries will be compiled into your unikernel.</p>
-|js}
-    };
- 
-    { updated = {js|2017-05-22 18:00|js}
-    ; author = 
-    { name = {js|Dave Scott|js}
-    ; uri = Some {js|http://dave.recoil.org/|js}
-    ; email = Some {js|dave@recoil.org|js}
-    }
-    ; subject = {js|Building and packaging with dune and dune-release|js}
-    ; permalink = {js|packaging|js}
-    ; body = {js|<h2>Packaging with dune and dune-release</h2>
+|js};
+      };
+      {
+        updated = {js|2017-05-22 18:00|js};
+        author =
+          {
+            name = {js|Dave Scott|js};
+            uri = Some {js|http://dave.recoil.org/|js};
+            email = Some {js|dave@recoil.org|js};
+          };
+        subject = {js|Building and packaging with dune and dune-release|js};
+        permalink = {js|packaging|js};
+        body =
+          {js|<h2>Packaging with dune and dune-release</h2>
 <p>This post describes the current state-of-the-art in building and releasing
 MirageOS packages with
 <a href="https://github.com/ocaml/dune">dune</a> (to build)
@@ -10377,18 +10723,20 @@ and open a new pull-request.</p>
 <pre><code>dune-release tag &amp;&amp; dune-release
 </code></pre>
 <p>-- this will do the above steps (distrib, publish, opam pkg, opam submit).</p>
-|js}
-    };
- 
-    { updated = {js|2017-02-23 16:00|js}
-    ; author = 
-    { name = {js|Thomas Gazagnaire|js}
-    ; uri = Some {js|http://gazagnaire.org|js}
-    ; email = Some {js|thomas@gazagnaire.org|js}
-    }
-    ; subject = {js|Error Handling in Mirage3|js}
-    ; permalink = {js|mirage-3.0-errors|js}
-    ; body = {js|<h2>Error Handling in Mirage3</h2>
+|js};
+      };
+      {
+        updated = {js|2017-02-23 16:00|js};
+        author =
+          {
+            name = {js|Thomas Gazagnaire|js};
+            uri = Some {js|http://gazagnaire.org|js};
+            email = Some {js|thomas@gazagnaire.org|js};
+          };
+        subject = {js|Error Handling in Mirage3|js};
+        permalink = {js|mirage-3.0-errors|js};
+        body =
+          {js|<h2>Error Handling in Mirage3</h2>
 <p>After more than two years
 <a href="https://lists.xenproject.org/archives/html/mirageos-devel/2014-07/msg00069.html">of</a>
 <a href="https://github.com/mirage/mirage-www/pull/274">discussion</a>, we
@@ -10543,18 +10891,20 @@ through composition.</p>
 <p>Mirage3 uses the <code>result</code> type pervasively, requires libraries to
 provide pretty-printer for their error types and recommends using
 private row types when abstract error types are not enough.</p>
-|js}
-    };
- 
-    { updated = {js|2017-02-23 16:00|js}
-    ; author = 
-    { name = {js|Mindy Preston|js}
-    ; uri = Some {js|https://github.com/yomimono|js}
-    ; email = Some {js|mindy.preston@cl.cam.ac.uk|js}
-    }
-    ; subject = {js|Porting Mirage 2.x Projects to Mirage 3.x|js}
-    ; permalink = {js|mirage2-to-mirage3|js}
-    ; body = {js|<h1>Incompatibilities</h1>
+|js};
+      };
+      {
+        updated = {js|2017-02-23 16:00|js};
+        author =
+          {
+            name = {js|Mindy Preston|js};
+            uri = Some {js|https://github.com/yomimono|js};
+            email = Some {js|mindy.preston@cl.cam.ac.uk|js};
+          };
+        subject = {js|Porting Mirage 2.x Projects to Mirage 3.x|js};
+        permalink = {js|mirage2-to-mirage3|js};
+        body =
+          {js|<h1>Incompatibilities</h1>
 <p>For a short summary of breaking changes, see <a href="https://github.com/mirage/mirage/releases/tag/v3.0.0">the Mirage 3.0.0 release notes</a>.  This document is a guide to porting your existing unikernel from the Mirage 2.x interface to Mirage 3.x.  If your unikernel was based on one of the examples in <a href="https://github.com/mirage/mirage-skeleton">the mirage-skeleton repository</a>, you may find <a href="http://www.cl.cam.ac.uk/~hm519/mirage-2.9.1-3.0.0-diffs/">hannesm's collection of diffs from v2.9.1 to v3.0.0</a> for popular unikernels to be a useful reference.</p>
 <h2>config.ml and generic/default functions</h2>
 <p>A number of refinements to the configuration language for Mirage were made in the Mirage 2.7.0 release, which incorporated the <a href="https://github.com/mirage/functoria">functoria</a> DSL.  It was still possible to use the previous calls, however, until Mirage 3.0.0 where support for them was dropped.  Many users whose unikernels predate Mirage 2.7.0 will first notice the functoria improvements in the 3.0.0 release, as they'll finally be forced to use them.</p>
@@ -11804,18 +12154,15 @@ ocamlfind ocamlopt -g -linkpkg -g -package tcpip.ipv4 -package tcpip.ethif -pack
 <h2>My problem wasn't fixed here</h2>
 <p>If you're encountering problems that weren't discussed here, you may find useful information in the <a href="https://github.com/mirage/mirage/releases/tag/v3.0.0">release notes for Mirage version 3</a>.  The updated examples in <a href="https://github.com/mirage/mirage-skeleton">the mirage-skeleton</a> may also be of use to you -- look in the <code>device-usage</code> directory for examples of unikernels that may be trying to use the same libraries as you are, or the <code>applications</code> category for richer examples on which you may have based a running unikernel from Mirage 2.</p>
 <p>If neither of those is helpful to you and you're stuck, please feel free to ask in the #mirage IRC channel on <a href="https://freenode.net">FreeNode</a>, via e-mail at <a href="https://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">our mailing list, mirageos-devel</a>, or by raising an issue on <a href="https://github.com/mirage/mirage/issues/new">the mirage front-end tool repository at GitHub</a>.  We welcome problem reports and contributions (including suggestions for improving this document).  Thank you for helping us improve Mirage!</p>
-|js}
-    };
- 
-    { updated = {js|2016-03-13 10:30|js}
-    ; author = 
-    { name = {js|Thomas Gazagnaire|js}
-    ; uri = None
-    ; email = None
-    }
-    ; subject = {js|DNS Performance Tests|js}
-    ; permalink = {js|performance|js}
-    ; body = {js|<p>This page describes some of the measurements we have doneduringdevelopment of MirageOS, and descriptions of some of the problems we encountered and how they were fixed. We use DNS serving performance as the first measure of I/O performance, for several reasons:</p>
+|js};
+      };
+      {
+        updated = {js|2016-03-13 10:30|js};
+        author = { name = {js|Thomas Gazagnaire|js}; uri = None; email = None };
+        subject = {js|DNS Performance Tests|js};
+        permalink = {js|performance|js};
+        body =
+          {js|<p>This page describes some of the measurements we have doneduringdevelopment of MirageOS, and descriptions of some of the problems we encountered and how they were fixed. We use DNS serving performance as the first measure of I/O performance, for several reasons:</p>
 <ul>
 <li>
 <p>UDP is more straightforward to implement than TCP and is stateless. This lets us test the performance of the event loop, Xen rings and the Ethernet/IPv4 stack without getting mixed up in the intricacies of TCP at the same time.</p>
@@ -11850,18 +12197,20 @@ ocamlfind ocamlopt -g -linkpkg -g -package tcpip.ipv4 -package tcpip.ethif -pack
 <p>If you do ever decide to run these tests and try to reproduce our results, please do archive up your <code>dns/data/</code> directory and send them to us too, along with a description of the hardware and Xen/Linux versions you used.</p>
 <h2>Results</h2>
 <p>Stay tuned, still working on publishing these...</p>
-|js}
-    };
- 
-    { updated = {js|2015-06-26 14:00|js}
-    ; author = 
-    { name = {js|Hannes Mehnert|js}
-    ; uri = Some {js|https://github.com/hannesm|js}
-    ; email = Some {js|hm519@cam.ac.uk|js}
-    }
-    ; subject = {js|Unix TLS Tools|js}
-    ; permalink = {js|tls-unix|js}
-    ; body = {js|<h1>Deploying OCaml-TLS</h1>
+|js};
+      };
+      {
+        updated = {js|2015-06-26 14:00|js};
+        author =
+          {
+            name = {js|Hannes Mehnert|js};
+            uri = Some {js|https://github.com/hannesm|js};
+            email = Some {js|hm519@cam.ac.uk|js};
+          };
+        subject = {js|Unix TLS Tools|js};
+        permalink = {js|tls-unix|js};
+        body =
+          {js|<h1>Deploying OCaml-TLS</h1>
 <p>We developed various Unix applications which use the OCaml-TLS stack.
 In this article, we will describe them in detail and getting you ready
 to deploy.</p>
@@ -11891,18 +12240,20 @@ a hostname and port it will connect there and do a TLS handshake, and
 report back the certificate chain and security parameters.  A
 directory with trust anchors can be provided, which will be used to
 verify the certificate chain.</p>
-|js}
-    };
- 
-    { updated = {js|2015-06-18 11:00|js}
-    ; author = 
-    { name = {js|Thomas Leonard|js}
-    ; uri = Some {js|http://roscidus.com/blog/|js}
-    ; email = Some {js|talex5@gmail.com|js}
-    }
-    ; subject = {js|Breaking changes|js}
-    ; permalink = {js|breaking-changes|js}
-    ; body = {js|<p>This page records API changes that require existing code to be updated.</p>
+|js};
+      };
+      {
+        updated = {js|2015-06-18 11:00|js};
+        author =
+          {
+            name = {js|Thomas Leonard|js};
+            uri = Some {js|http://roscidus.com/blog/|js};
+            email = Some {js|talex5@gmail.com|js};
+          };
+        subject = {js|Breaking changes|js};
+        permalink = {js|breaking-changes|js};
+        body =
+          {js|<p>This page records API changes that require existing code to be updated.</p>
 <h3>2021-XX-XX: MirageOS 4</h3>
 <h4>Functoria</h4>
 <p>In Mirage 3.x, <code>functoria</code> devices were described by extending the <code>base_configurable</code> object.
@@ -11992,18 +12343,20 @@ dependencies. In the case of nocrypto, this is <code>()</code>.</p>
 <p>Note that the <code>Port</code> tag has also been removed.</p>
 <p>This change was needed to support TLS servers, since TLS configuration (keys and certificates) is more complex and cannot be declared in the <code>config.ml</code>.</p>
 <p>Commit: <a href="https://github.com/mirage/mirage/commit/56e500d4210bf7fdcdc296f3c34ce13c9f57cdf5">https://github.com/mirage/mirage/commit/56e500d4210bf7fdcdc296f3c34ce13c9f57cdf5</a></p>
-|js}
-    };
- 
-    { updated = {js|2014-12-11 17:23|js}
-    ; author = 
-    { name = {js|Thomas Leonard|js}
-    ; uri = Some {js|http://roscidus.com/blog/|js}
-    ; email = Some {js|talex5@gmail.com|js}
-    }
-    ; subject = {js|Tracing and Profiling|js}
-    ; permalink = {js|profiling|js}
-    ; body = {js|<p>When tracking down bugs or performance problems, or just trying to understand how something works, it is often useful to look at a trace of the execution of your unikernel.</p>
+|js};
+      };
+      {
+        updated = {js|2014-12-11 17:23|js};
+        author =
+          {
+            name = {js|Thomas Leonard|js};
+            uri = Some {js|http://roscidus.com/blog/|js};
+            email = Some {js|talex5@gmail.com|js};
+          };
+        subject = {js|Tracing and Profiling|js};
+        permalink = {js|profiling|js};
+        body =
+          {js|<p>When tracking down bugs or performance problems, or just trying to understand how something works, it is often useful to look at a trace of the execution of your unikernel.</p>
 <p>As a motivating example, we'll track down a (real, but now fixed) bug in MirageOS's TCP stack.</p>
 <p>Here's a small program that demonstrates the problem:</p>
 <pre><code class="language-OCaml">let target_ip = Ipaddr.V4.of_string_exn &quot;10.0.0.1&quot;
@@ -12185,18 +12538,20 @@ If you think your annotations would be generally useful, please send a pull requ
 <p>In general, any code that uses <code>Lwt.wait</code>, <code>Lwt.task</code>, <code>Lwt_condition.create</code>, or <code>Lwt_mvar.create</code> should be changed to use the corresponding labelled version in <a href="https://github.com/mirage/mirage-profile">mirage-profile</a> (e.g. <code>MProf.Trace.named_wait</code>, etc).
 When Lwt is compiled without tracing support, these labels will be optimised out and have no runtime cost.</p>
 <script type="text/javascript" src="/js/profile-examples.js"></script>
-|js}
-    };
- 
-    { updated = {js|2014-08-21 11:19|js}
-    ; author = 
-    { name = {js|Nick Betteridge|js}
-    ; uri = Some {js|https://github.com/buzzheavyyear|js}
-    ; email = Some {js|buzzheavyyear@hotmail.com|js}
-    }
-    ; subject = {js|Libvirt On Cubieboard|js}
-    ; permalink = {js|libvirt-on-cubieboard|js}
-    ; body = {js|<h4>Warning: Out of date</h4>
+|js};
+      };
+      {
+        updated = {js|2014-08-21 11:19|js};
+        author =
+          {
+            name = {js|Nick Betteridge|js};
+            uri = Some {js|https://github.com/buzzheavyyear|js};
+            email = Some {js|buzzheavyyear@hotmail.com|js};
+          };
+        subject = {js|Libvirt On Cubieboard|js};
+        permalink = {js|libvirt-on-cubieboard|js};
+        body =
+          {js|<h4>Warning: Out of date</h4>
 <p><em>(Updated 2020-10-26. The following information is of historical interest, since MirageOS 3.9.0 our Xen backend has been revised, and only supports PVH mode and x86_64 as architecture.)</em></p>
 <h4>Bringing up the board</h4>
 <ol>
@@ -12598,18 +12953,20 @@ esac
 exit 0
 
 </code></pre>
-|js}
-    };
- 
-    { updated = {js|2014-08-12 22:56|js}
-    ; author = 
-    { name = {js|Mindy Preston|js}
-    ; uri = Some {js|https://github.com/yomimono|js}
-    ; email = Some {js|mindy.preston@cl.cam.ac.uk|js}
-    }
-    ; subject = {js|Contributing to MirageOS|js}
-    ; permalink = {js|contributing|js}
-    ; body = {js|<p>MirageOS welcomes contributions from anyone interested in the project.  If you are planning a large contribution, be it a piece of documentation, a patch to the software, a new driver, or something else, please do send a note to <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">the MirageOS development mailing list</a> describing your planned contribution - you may discover that other contributors are willing to help.</p>
+|js};
+      };
+      {
+        updated = {js|2014-08-12 22:56|js};
+        author =
+          {
+            name = {js|Mindy Preston|js};
+            uri = Some {js|https://github.com/yomimono|js};
+            email = Some {js|mindy.preston@cl.cam.ac.uk|js};
+          };
+        subject = {js|Contributing to MirageOS|js};
+        permalink = {js|contributing|js};
+        body =
+          {js|<p>MirageOS welcomes contributions from anyone interested in the project.  If you are planning a large contribution, be it a piece of documentation, a patch to the software, a new driver, or something else, please do send a note to <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">the MirageOS development mailing list</a> describing your planned contribution - you may discover that other contributors are willing to help.</p>
 <p>More information on being in touch with other MirageOS contributors <a href="https://mirage.io/community">is available</a>.</p>
 <h2>Reporting Issues</h2>
 <p>Issues (e.g. bugs in the software, unclear documentation, missing functionality) are best reported on the main <a href="http://www.github.com/mirage/mirage/issues">MirageOS repository</a> at GitHub, unless the issue is clearly contained in, and only relevant to, another specific repository.</p>
@@ -12645,18 +13002,20 @@ exit 0
 <li>Keep an eye out for notifications on your pull request!  By default, GitHub will email you when other contributors have questions or comments that they'd like to discuss with you before merging your changes.
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2014-04-16 17:30|js}
-    ; author = 
-    { name = {js|Thomas Leonard|js}
-    ; uri = Some {js|http://roscidus.com/blog/|js}
-    ; email = Some {js|talex5@gmail.com|js}
-    }
-    ; subject = {js|Running Xen on the Cubieboard2|js}
-    ; permalink = {js|xen-on-cubieboard2|js}
-    ; body = {js|<p><strong>Author:</strong> Thomas Leonard, addendums from Anil Madhavapeddy</p>
+|js};
+      };
+      {
+        updated = {js|2014-04-16 17:30|js};
+        author =
+          {
+            name = {js|Thomas Leonard|js};
+            uri = Some {js|http://roscidus.com/blog/|js};
+            email = Some {js|talex5@gmail.com|js};
+          };
+        subject = {js|Running Xen on the Cubieboard2|js};
+        permalink = {js|xen-on-cubieboard2|js};
+        body =
+          {js|<p><strong>Author:</strong> Thomas Leonard, addendums from Anil Madhavapeddy</p>
 <p>These notes detail the process of setting up a Xen system on a Cubieboard2 (or Cubietruck).
 They are based on the <a href="http://wiki.xen.org/wiki/Xen_ARM_with_Virtualization_Extensions/Allwinner">Xen ARM with Virtualization Extensions/Allwinner</a> documentation, but try to collect everything into one place.
 I'm trying to document the exact steps I took (with the wrong turns removed); some changes will be needed for other systems.</p>
@@ -13168,18 +13527,20 @@ vif = ['bridge=br0']
 ...
 </code></pre>
 <p>You can now try <a href="/blog/introducing-xen-minios-arm">running a MirageOS unikernel</a>.</p>
-|js}
-    };
- 
-    { updated = {js|2014-02-02 17:56|js}
-    ; author = 
-    { name = {js|Dave Scott|js}
-    ; uri = Some {js|http://dave.recoil.org/|js}
-    ; email = Some {js|dave@recoil.org|js}
-    }
-    ; subject = {js|Synthesizing virtual disks for Xen|js}
-    ; permalink = {js|xen-synthesize-virtual-disk|js}
-    ; body = {js|<p>[ updated 2014-02-01 for mirage.1.1.0 and xen-disk.1.2.1 ]</p>
+|js};
+      };
+      {
+        updated = {js|2014-02-02 17:56|js};
+        author =
+          {
+            name = {js|Dave Scott|js};
+            uri = Some {js|http://dave.recoil.org/|js};
+            email = Some {js|dave@recoil.org|js};
+          };
+        subject = {js|Synthesizing virtual disks for Xen|js};
+        permalink = {js|xen-synthesize-virtual-disk|js};
+        body =
+          {js|<p>[ updated 2014-02-01 for mirage.1.1.0 and xen-disk.1.2.1 ]</p>
 <p>This page describes how to create a synthetic, high-performance
 virtual disk implementation for Xen based on the MirageOS libraries.</p>
 <h2>Disk devices under Xen</h2>
@@ -13364,18 +13725,20 @@ let write t offset bufs =
 <p>Plus we should be able to mount the filesystem inside the VM, make changes and
 then disconnect (send SIGINT to xen-disk by hitting Control+C on your terminal)
 without disturbing the underlying disk contents.</p>
-|js}
-    };
- 
-    { updated = {js|2014-02-01 01:00|js}
-    ; author = 
-    { name = {js|Jon Ludlam|js}
-    ; uri = Some {js|http://jon.recoil.org|js}
-    ; email = Some {js|jon@recoil.org|js}
-    }
-    ; subject = {js|How Xen suspend and resume works|js}
-    ; permalink = {js|xen-suspend|js}
-    ; body = {js|<p>This article is part of a series documenting how MirageOS applications run under
+|js};
+      };
+      {
+        updated = {js|2014-02-01 01:00|js};
+        author =
+          {
+            name = {js|Jon Ludlam|js};
+            uri = Some {js|http://jon.recoil.org|js};
+            email = Some {js|jon@recoil.org|js};
+          };
+        subject = {js|How Xen suspend and resume works|js};
+        permalink = {js|xen-suspend|js};
+        body =
+          {js|<p>This article is part of a series documenting how MirageOS applications run under
 <a href="http://www.xenproject.org/">Xen</a>. This article is about suspend, resume and
 live migration.</p>
 <h4>Background</h4>
@@ -13566,18 +13929,20 @@ disk, but this time unmarshalling them straight back into memory. When it <a hre
 suspend logic above and sends through only the last few dirty
 pages, which will be much faster than the entire memory image. The
 resume logic is then invoked and the domain starts running again.</p>
-|js}
-    };
- 
-    { updated = {js|2013-12-29 17:00|js}
-    ; author = 
-    { name = {js|Dave Scott|js}
-    ; uri = Some {js|http://dave.recoil.org/|js}
-    ; email = Some {js|dave@recoil.org|js}
-    }
-    ; subject = {js|Understanding Xen events with MirageOS|js}
-    ; permalink = {js|xen-events|js}
-    ; body = {js|<p>This article is part of a series documenting how MirageOS applications run under
+|js};
+      };
+      {
+        updated = {js|2013-12-29 17:00|js};
+        author =
+          {
+            name = {js|Dave Scott|js};
+            uri = Some {js|http://dave.recoil.org/|js};
+            email = Some {js|dave@recoil.org|js};
+          };
+        subject = {js|Understanding Xen events with MirageOS|js};
+        permalink = {js|xen-events|js};
+        body =
+          {js|<p>This article is part of a series documenting how MirageOS applications run under
 <a href="http://www.xenproject.org/">Xen</a>. This article is about &quot;events&quot;; i.e. how
 can an app wait for input to arrive and tell someone that output is available?</p>
 <h4>Background: Xen, domains, I/O, etc</h4>
@@ -13753,36 +14118,40 @@ Future articles in this series will answer the following questions:</p>
 <li>how does the network work?
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2013-12-25 22:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Deploying via Continuous Integration|js}
-    ; permalink = {js|deploying-via-ci|js}
-    ; body = {js|<p>This live MirageOS website is written as a MirageOS application itself, with the
+|js};
+      };
+      {
+        updated = {js|2013-12-25 22:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Deploying via Continuous Integration|js};
+        permalink = {js|deploying-via-ci|js};
+        body =
+          {js|<p>This live MirageOS website is written as a MirageOS application itself, with the
 source code on <a href="https://github.com/mirage/mirage-www">mirage/mirage-www</a> on
 GitHub. Our workflow is such that we can send a
 <a href="https://github.com/mirage/mirage-www/pulls?direction=desc&amp;page=1&amp;sort=created&amp;state=closed">pull request</a>
 to update the website, and have a fully standalone unikernel
 deployed at <a href="https://mirage.io/">https://mirage.io/</a>.</p>
 <p>See <a href="https://github.com/ocurrent/ocurrent-deployer">https://github.com/ocurrent/ocurrent-deployer</a> for the deployment pipeline.</p>
-|js}
-    };
- 
-    { updated = {js|2013-12-21 12:50|js}
-    ; author = 
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }
-    ; subject = {js|Building mirage-www|js}
-    ; permalink = {js|mirage-www|js}
-    ; body = {js|<p>This assumes that you've followed the <a href="/wiki/hello-world">Hello World</a>
+|js};
+      };
+      {
+        updated = {js|2013-12-21 12:50|js};
+        author =
+          {
+            name = {js|Anil Madhavapeddy|js};
+            uri = Some {js|http://anil.recoil.org|js};
+            email = Some {js|anil@recoil.org|js};
+          };
+        subject = {js|Building mirage-www|js};
+        permalink = {js|mirage-www|js};
+        body =
+          {js|<p>This assumes that you've followed the <a href="/wiki/hello-world">Hello World</a>
 instructions from earlier and are now familiar with the basic console, block
 device and networking configurations from the
 <a href="https://github.com/mirage/mirage-skeleton">mirage-skeleton</a> repository. To
@@ -13916,18 +14285,20 @@ unikernels you want to build.</p>
 <p>We'll talk about the deployment scripts that run the
 <a href="https://mirage.io">live site</a> in the
 <a href="/docs/deploying-via-ci">next article</a>.</p>
-|js}
-    };
- 
-    { updated = {js|2013-12-09 16:00|js}
-    ; author = 
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }
-    ; subject = {js|Frequently Asked Questions (FAQ)|js}
-    ; permalink = {js|faq|js}
-    ; body = {js|<p><em>Q: Is MirageOS 'still' Linux? Does it require a Linux host on which to run?</em></p>
+|js};
+      };
+      {
+        updated = {js|2013-12-09 16:00|js};
+        author =
+          {
+            name = {js|Anil Madhavapeddy|js};
+            uri = Some {js|http://anil.recoil.org|js};
+            email = Some {js|anil@recoil.org|js};
+          };
+        subject = {js|Frequently Asked Questions (FAQ)|js};
+        permalink = {js|faq|js};
+        body =
+          {js|<p><em>Q: Is MirageOS 'still' Linux? Does it require a Linux host on which to run?</em></p>
 <p>MirageOS is a '<a href="http://anil.recoil.org/papers/2013-asplos-mirage.pdf">library operating system</a>', which means that it can run on any target for which a suitable bootloader and drivers exist. Versions earlier than 3 supported Unix and Xen targets; MirageOS version 3 added support for the KVM hypervisor via <a href="/blog/introducing-solo5">solo5</a>.  We have prototypes that compile the same application source code (e.g. the MirageOS website) to run as kernel modules inside FreeBSD, or even to JavaScript. MirageOS provides support to more easily target such diverse environments due to its emphasis on modular programming and compile-time specialisation.  If you'd like to dig into some code, see <a href="https://github.com/mirage/mirage-platform">the mirage-platform library</a>, which has the OCaml modules referred to in the Unix and Xen targets.</p>
 <p><em>Q: Is MirageOS 'production ready'?</em></p>
 <p>The 1.0 release is the first 'stable toolkit' release that is sufficient to self-host its infrastructure on the Internet.  <a href="https://github.com/mirage/mirage/releases/latest">The current release</a> includes many improvements to stability and more supported features, including support for <a href="/blog/mirage-entropy">gathering entropy</a>, <a href="http://roscidus.com/blog/blog/2014/10/27/visualising-an-asynchronous-monad/">execution trace collection and visualisation</a>, and <a href="https://mirage.io/blog/introducing-xen-minios-arm">ARM</a>.  The various libraries used in MirageOS (e.g. <a href="https://github.com/mirage/mirage-tcpip">mirage-tcpip</a> and <a href="https://github.com/mirage/irmin">Irmin</a>) follow their own release cadences, but similarly are in use in self-hosting infrastructure.  Some libraries are currently being used in large-scale commercial products like <a href="https://blog.docker.com/2016/03/docker-for-mac-windows-beta/">Docker for Mac and Windows</a>.</p>
@@ -13941,18 +14312,20 @@ unikernels you want to build.</p>
 <p>OCaml (the programming language that we use under the hood of MirageOS) also has deep connections to the formal methods community, with other major tools such as Coq (a widely used theorem prover) and CompCert (a verified C compiler) written in it. We have several initiatives (<a href="http://rems.io">http://rems.io</a>) ongoing to verify components of MirageOS (such as the garbage collector), to support hardware compilation to FPGAs for datacenters (via the EPSRC-funded Networks-as-a-Service project) and support new experimental CPU targets such as the <a href="http://www.cl.cam.ac.uk/research/security/ctsrd/beri.html">BERI processor</a>.</p>
 <p>We're extremely grateful to our research funding bodies (RCUK, EPSRC, EU FP7 and DARPA) for supporting such long-term research and making MirageOS possible. <a href="http://janestreet.com">Jane Street</a> and <a href="http://www.citrix.com">Citrix</a> have also contributed funding and expertise for an entire research group called <a href="http://ocamllabs.io/">OCaml Labs</a> in the Cambridge Computer Lab to support the continued growth of the functional programming ecosystem. Anil has also recently published an O'Reilly book called Real World OCaml that's freely available at <a href="https://realworldocaml.org">https://realworldocaml.org</a>.</p>
 <p>Last but not least it's simply more fun to exploit the flexibility of the MirageOS approach as a programmer to regain control over the myriad complexity of current software systems. Too much of modern systems construction involves wrestling with configuration files, mystical kernel policies, and occasionally documented APIs. Simply put, MirageOS is just a lot more enjoyable to use and develop code in when building server systems and network services. Several of the developers have replaced pieces of their personal infrastructure (like homepages, DNS servers, and home routers) with MirageOS unikernels!</p>
-|js}
-    };
- 
-    { updated = {js|2013-11-10 16:00|js}
-    ; author = 
-    { name = {js|Christine Koppelt|js}
-    ; uri = Some {js|https://github.com/cko|js}
-    ; email = Some {js|ch.ko123@gmail.com|js}
-    }
-    ; subject = {js|Technical Background of MirageOS|js}
-    ; permalink = {js|technical-background|js}
-    ; body = {js|<p>(based on the <a href="http://queue.acm.org/detail.cfm?id=2566628">article</a> by Anil Madhavapeddy and David J. Scott)</p>
+|js};
+      };
+      {
+        updated = {js|2013-11-10 16:00|js};
+        author =
+          {
+            name = {js|Christine Koppelt|js};
+            uri = Some {js|https://github.com/cko|js};
+            email = Some {js|ch.ko123@gmail.com|js};
+          };
+        subject = {js|Technical Background of MirageOS|js};
+        permalink = {js|technical-background|js};
+        body =
+          {js|<p>(based on the <a href="http://queue.acm.org/detail.cfm?id=2566628">article</a> by Anil Madhavapeddy and David J. Scott)</p>
 <p>Operating system virtualization such as Xen or VMWare allows to multiplex virtual machines (VMs) on a shared cluster of physical machines. Each VM presents as a self-contained computer, booting a standard OS kernel and running unmodified applications just as if it were executing on a physical machine.</p>
 <p>While this is useful in many situations, it adds yet another layer to an already highly-layered software stack now including: support for old physical protocols (e.g. disk standards developed in the 80s such as IDE); irrelevant optimisations (e.g. disk elevator algorithms on SSD drives); backward-compatible interfaces (e.g. POSIX); user-space processes and threads (in addition to VMs on a hypervisor); managed code runtimes (e.g. OCaml, .NET or Java) which all sit beneath your application code. Are we really doomed to adding new layers of indirection and abstraction every few years, leaving future generations of programmers to become virtual archeologists as they dig through hundreds of layers of software emulation to debug even the simplest applications?</p>
 <p>Our goal with MirageOS is to restructure entire VMs - including all kernel and userspace code - into more modular components that are flexible, secure and reusable in the style of a library operating system.</p>
@@ -14008,18 +14381,20 @@ the conventional virtualized equivalents, and are more  resource-efficient in te
 <li>Java: <a href="https://kenai.com/projects/guestvm">GuestVM</a>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2013-10-15 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Overview of MirageOS|js}
-    ; permalink = {js|overview-of-mirage|js}
-    ; body = {js|<p>If you're familiar with the using the command line, The best way to
+|js};
+      };
+      {
+        updated = {js|2013-10-15 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Overview of MirageOS|js};
+        permalink = {js|overview-of-mirage|js};
+        body =
+          {js|<p>If you're familiar with the using the command line, The best way to
 learn about MirageOS is to try out the <a href="https://mirage.io/wiki/install">installation
 instructions</a> for yourself!</p>
 <h3>What is MirageOS and why is it important?</h3>
@@ -14119,18 +14494,20 @@ cloud and embedded devices. Together with
 <a href="http://nymote.org/software/signpost">Signpost</a>, MirageOS forms a core
 piece of the Nymote/MISO toolstack to power the coming wave of <a href="http://en.wikipedia.org/wiki/Internet_of_Things">Internet of
 Things devices</a>.</p>
-|js}
-    };
- 
-    { updated = {js|2013-08-15 16:00|js}
-    ; author = 
-    { name = {js|Balraj Singh|js}
-    ; uri = None
-    ; email = Some {js|balraj.singh@cl.cam.ac.uk|js}
-    }
-    ; subject = {js|Getting Started with Lwt threads|js}
-    ; permalink = {js|tutorial-lwt|js}
-    ; body = {js|<p><a href="https://www.ocsigen.org/lwt">Lwt</a> is a lightweight cooperative threading library for OCaml. A good way to understand Lwt and its use in MirageOS is to write some simple code. This document introduces the basic concepts and suggests programs to write. Code for all examples is in the <code>mirage-skeleton/tutorial/lwt/</code> <a href="https://github.com/mirage/mirage-skeleton/tree/master/tutorial/lwt">repository</a>.</p>
+|js};
+      };
+      {
+        updated = {js|2013-08-15 16:00|js};
+        author =
+          {
+            name = {js|Balraj Singh|js};
+            uri = None;
+            email = Some {js|balraj.singh@cl.cam.ac.uk|js};
+          };
+        subject = {js|Getting Started with Lwt threads|js};
+        permalink = {js|tutorial-lwt|js};
+        body =
+          {js|<p><a href="https://www.ocsigen.org/lwt">Lwt</a> is a lightweight cooperative threading library for OCaml. A good way to understand Lwt and its use in MirageOS is to write some simple code. This document introduces the basic concepts and suggests programs to write. Code for all examples is in the <code>mirage-skeleton/tutorial/lwt/</code> <a href="https://github.com/mirage/mirage-skeleton/tree/master/tutorial/lwt">repository</a>.</p>
 <p>##Basics</p>
 <p>The full Lwt manual is available <a href="https://ocsigen.org/lwt">elsewhere</a>, but the minimal stuff needed to get started is here.</p>
 <p>The core type in Lwt is a &quot;thread&quot; (also known as a &quot;promise&quot; in some other systems).
@@ -14471,18 +14848,20 @@ If you have a function that only responds to cancel, you might want to wrap it i
 <h2>Other Lwt features</h2>
 <p>Lwt provides many more features. See <a href="https://ocsigen.org/lwt/">the manual</a> for details.
 However, the vast majority of code will only need the basic features described here.</p>
-|js}
-    };
- 
-    { updated = {js|2013-08-14 10:00|js}
-    ; author = 
-    { name = {js|Richard Mortier|js}
-    ; uri = Some {js|http://mort.io/|js}
-    ; email = Some {js|mort@cantab.net|js}
-    }
-    ; subject = {js|Presentations|js}
-    ; permalink = {js|talks|js}
-    ; body = {js|<p>This page links to various technical talks and slide decks on MirageOS.  The bulk
+|js};
+      };
+      {
+        updated = {js|2013-08-14 10:00|js};
+        author =
+          {
+            name = {js|Richard Mortier|js};
+            uri = Some {js|http://mort.io/|js};
+            email = Some {js|mort@cantab.net|js};
+          };
+        subject = {js|Presentations|js};
+        permalink = {js|talks|js};
+        body =
+          {js|<p>This page links to various technical talks and slide decks on MirageOS.  The bulk
 of slide decks that we give are now hosted using MirageOS on
 <a href="http://decks.openmirage.org">http://decks.openmirage.org</a>, so please browse there for the latest content.</p>
 <h2>Videos</h2>
@@ -14574,18 +14953,20 @@ inspiration for trying out OCaml in a microkernel environment came out of this
 work. The <a href="http://portal.acm.org/citation.cfm?id=1863557">video</a> is
 unfortunately only available behind the ACM paywall, but the paper can be found
 <a href="/wiki/papers">here</a>.</p>
-|js}
-    };
- 
-    { updated = {js|2013-08-11 15:00|js}
-    ; author = 
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }
-    ; subject = {js|Running MirageOS Xen kernels|js}
-    ; permalink = {js|xen-boot|js}
-    ; body = {js|<p>Building a MirageOS unikernel for the Xen backend results in a Xen PV kernel with a <code>.xen</code> extension. This must be booted as a normal Xen domU kernel.  If you manage your own Xen, you'll be able to use configuration information automatically generated by <code>mirage</code>; some advice on booting with popular Xen-based cloud providers is also given below.</p>
+|js};
+      };
+      {
+        updated = {js|2013-08-11 15:00|js};
+        author =
+          {
+            name = {js|Anil Madhavapeddy|js};
+            uri = Some {js|http://anil.recoil.org|js};
+            email = Some {js|anil@recoil.org|js};
+          };
+        subject = {js|Running MirageOS Xen kernels|js};
+        permalink = {js|xen-boot|js};
+        body =
+          {js|<p>Building a MirageOS unikernel for the Xen backend results in a Xen PV kernel with a <code>.xen</code> extension. This must be booted as a normal Xen domU kernel.  If you manage your own Xen, you'll be able to use configuration information automatically generated by <code>mirage</code>; some advice on booting with popular Xen-based cloud providers is also given below.</p>
 <h2>Locally Managed Xen</h2>
 <p>For recent Xen versions, Mirage will attempt to provide a reasonable configuration document for use with the <code>xl</code> tool.  The filename will be based on the string argument given to <code>register</code> in the unikernel's <code>config.ml</code>.  For instance, if your <code>config.ml</code> has lines like this:</p>
 <pre><code>let () =
@@ -14681,18 +15062,20 @@ It is found at <a href="https://raw.githubusercontent.com/mirage/mirage/master/s
 </ul>
 <h2>Rackspace?  Other Xen-based Cloud Providers?</h2>
 <p>No one has tried this yet. Get in touch if you do!</p>
-|js}
-    };
- 
-    { updated = {js|2013-07-17 15:00|js}
-    ; author = 
-    { name = {js|Richard Mortier|js}
-    ; uri = Some {js|http://mort.io/|js}
-    ; email = Some {js|mort@cantab.net|js}
-    }
-    ; subject = {js|OPAM Libraries|js}
-    ; permalink = {js|opam|js}
-    ; body = {js|<h3>Maintenance</h3>
+|js};
+      };
+      {
+        updated = {js|2013-07-17 15:00|js};
+        author =
+          {
+            name = {js|Richard Mortier|js};
+            uri = Some {js|http://mort.io/|js};
+            email = Some {js|mort@cantab.net|js};
+          };
+        subject = {js|OPAM Libraries|js};
+        permalink = {js|opam|js};
+        body =
+          {js|<h3>Maintenance</h3>
 <p>The <code>opam update</code> command refreshes all your package repositories. The <code>opam upgrade</code> command recompiles any outdated libraries. You need to run this once per compiler installed, so <code>opam switch</code> between them.</p>
 <p>If you run into any problems with OPAM, then first ask on the MirageOS <a href="/about">mailing list</a>, or report a <a href="http://github.com/OCamlPro/opam/issues">bug</a>. It is safe to delete <code>~/.opam</code> and just start the installation again if you run into an unrecoverable situation, as OPAM doesn't use any files outside of that space.</p>
 <h3>Development</h3>
@@ -14714,8 +15097,9 @@ $ opam repository add mypkg .
 </li>
 </ul>
 <p>It's easiest to copy the files from an existing package and modify them to your needs (and read the <a href="http://opam.ocaml.org">doc</a> for more information). Once you're done, add and commit the files, issue an <code>opam update</code>, and the new package should be available for installation (<code>opam install</code>) or upgrade (<code>opam upgrade</code>).</p>
-|js}
-    }]
+|js};
+      };
+    ]
 end
 
 module Weekly = struct
@@ -14728,18 +15112,22 @@ module Weekly = struct
     body : string;
   }
 
-  let all = 
-[
-    { updated = {js|2016-03-02 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2016-03-02|js}
-    ; permalink = {js|weekly-2016-03-02|js}
-    ; description = {js|2nd Mar 2016: Decision to drop 4.01, 2.7 released, Hackathon and CI.|js}
-    ; body = {js|<h3>Agenda</h3>
+  let all =
+    [
+      {
+        updated = {js|2016-03-02 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2016-03-02|js};
+        permalink = {js|weekly-2016-03-02|js};
+        description =
+          {js|2nd Mar 2016: Decision to drop 4.01, 2.7 released, Hackathon and CI.|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Quality and Test
 </li>
@@ -14902,19 +15290,22 @@ an agenda. Can try an IRC meeting during the Hackathon.</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2016-02-17 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2016-02-17|js}
-    ; permalink = {js|weekly-2016-02-17|js}
-    ; description = {js|17th Feb 2016: Containers, 2.7 prep, Hackathon and Netmap.|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2016-02-17 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2016-02-17|js};
+        permalink = {js|weekly-2016-02-17|js};
+        description =
+          {js|17th Feb 2016: Containers, 2.7 prep, Hackathon and Netmap.|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Quality and Test
 </li>
@@ -15032,19 +15423,21 @@ instead? Gemma offered to help. Amir will discuss with Gemma.</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2016-02-03 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2016-02-03|js}
-    ; permalink = {js|weekly-2016-02-03|js}
-    ; description = {js|3rd Feb 2016: Dropping 4.01 support and Hackathon.|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2016-02-03 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2016-02-03|js};
+        permalink = {js|weekly-2016-02-03|js};
+        description = {js|3rd Feb 2016: Dropping 4.01 support and Hackathon.|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Quality and Test
 </li>
@@ -15167,19 +15560,22 @@ in a clean fashion. People have been working on this.</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2016-01-13 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2016-01-13|js}
-    ; permalink = {js|weekly-2016-01-13|js}
-    ; description = {js|13th January 2016: Test, Hackathon, Talks and Blog posts.|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2016-01-13 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2016-01-13|js};
+        permalink = {js|weekly-2016-01-13|js};
+        description =
+          {js|13th January 2016: Test, Hackathon, Talks and Blog posts.|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Quality and Test
 </li>
@@ -15307,19 +15703,22 @@ notes. Would be better than having delayed notes. :)</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2015-12-16 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-12-16|js}
-    ; permalink = {js|weekly-2015-12-16|js}
-    ; description = {js|16th December 2015: Conduit, Unikernel Events and end of 2015!|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2015-12-16 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2015-12-16|js};
+        permalink = {js|weekly-2015-12-16|js};
+        description =
+          {js|16th December 2015: Conduit, Unikernel Events and end of 2015!|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>vchan and conduit
 </li>
@@ -15413,19 +15812,22 @@ send packets. Looking at Mindy's NAT lib - soon to make firewall for QubesOS!</p
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2015-12-02 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-12-02|js}
-    ; permalink = {js|weekly-2015-12-02|js}
-    ; description = {js|2nd December 2015: Website stability, Functoria, QubesOS and Hackathons|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2015-12-02 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2015-12-02|js};
+        permalink = {js|weekly-2015-12-02|js};
+        description =
+          {js|2nd December 2015: Website stability, Functoria, QubesOS and Hackathons|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Quality and Test
 </li>
@@ -15609,19 +16011,22 @@ useful. Anil has blog post somewhere that he can link to.</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2015-11-11 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-11-11|js}
-    ; permalink = {js|weekly-2015-11-11|js}
-    ; description = {js|11th November 2015: Functoria, Logs, Protocol lists and unikernel logos|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2015-11-11 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2015-11-11|js};
+        permalink = {js|weekly-2015-11-11|js};
+        description =
+          {js|11th November 2015: Functoria, Logs, Protocol lists and unikernel logos|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Functoria release
 </li>
@@ -15729,19 +16134,22 @@ work, we can cut a release!</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2015-10-28 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-10-28|js}
-    ; permalink = {js|weekly-2015-10-28|js}
-    ; description = {js|28th October 2015: Logging, Pioneer Projects and Error Handling|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2015-10-28 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2015-10-28|js};
+        permalink = {js|weekly-2015-10-28|js};
+        description =
+          {js|28th October 2015: Logging, Pioneer Projects and Error Handling|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Quality and Test
 </li>
@@ -15840,19 +16248,22 @@ networking (UDP, VLAN, etc) for people on certain networks.</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2015-10-14 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-10-14|js}
-    ; permalink = {js|weekly-2015-10-14|js}
-    ; description = {js|14th October 2015: Functoria, Irmin roadmap and upcoming blog posts|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2015-10-14 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2015-10-14|js};
+        permalink = {js|weekly-2015-10-14|js};
+        description =
+          {js|14th October 2015: Functoria, Irmin roadmap and upcoming blog posts|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Functoria
 </li>
@@ -15981,19 +16392,22 @@ a better way to manage logs. Should add this to the agenda for next time.</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2015-09-30 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-09-30|js}
-    ; permalink = {js|weekly-2015-09-30|js}
-    ; description = {js|30th September 2015: Functoria, Irmin plans, numbering and Pioneers|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2015-09-30 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2015-09-30|js};
+        permalink = {js|weekly-2015-09-30|js};
+        description =
+          {js|30th September 2015: Functoria, Irmin plans, numbering and Pioneers|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Functoria
 </li>
@@ -16140,19 +16554,22 @@ be able to finish it off. DavidK will look at this and release when ready.</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2015-09-09 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-09-09|js}
-    ; permalink = {js|weekly-2015-09-09|js}
-    ; description = {js|9th September 2015: Xen file generation, functoria and end-to-end systems|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2015-09-09 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2015-09-09|js};
+        permalink = {js|weekly-2015-09-09|js};
+        description =
+          {js|9th September 2015: Xen file generation, functoria and end-to-end systems|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Outstanding patches
 <ul>
@@ -16232,19 +16649,22 @@ but it looks like we may need to shift the date. Please add any
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2015-08-26 16:00|js}
-    ; author = 
-    { name = {js|Richard Mortier|js}
-    ; uri = Some {js|http://mort.io/|js}
-    ; email = Some {js|mort@cantab.net|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-08-26|js}
-    ; permalink = {js|weekly-2015-08-26|js}
-    ; description = {js|26th August 2015: QA, Rust progress, Irmin API changes and minutes of previous calls|js}
-    ; body = {js|<ul>
+|js};
+      };
+      {
+        updated = {js|2015-08-26 16:00|js};
+        author =
+          {
+            name = {js|Richard Mortier|js};
+            uri = Some {js|http://mort.io/|js};
+            email = Some {js|mort@cantab.net|js};
+          };
+        subject = {js|Weekly Meeting: 2015-08-26|js};
+        permalink = {js|weekly-2015-08-26|js};
+        description =
+          {js|26th August 2015: QA, Rust progress, Irmin API changes and minutes of previous calls|js};
+        body =
+          {js|<ul>
 <li>Quality and Test
 </li>
 <li>Rust progress
@@ -16331,19 +16751,22 @@ website logs to (effectively) explore multiplexing factors of unikernel
 (websites at least). @anil said he will look into this.</p>
 <h3>AoB</h3>
 <p>None specified at this time.</p>
-|js}
-    };
- 
-    { updated = {js|2015-07-01 16:00|js}
-    ; author = 
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-07-01|js}
-    ; permalink = {js|weekly-2015-07-01|js}
-    ; description = {js|1st July 2015: Network stack testing and Mirage 2.5 release|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2015-07-01 16:00|js};
+        author =
+          {
+            name = {js|Anil Madhavapeddy|js};
+            uri = Some {js|http://anil.recoil.org|js};
+            email = Some {js|anil@recoil.org|js};
+          };
+        subject = {js|Weekly Meeting: 2015-07-01|js};
+        permalink = {js|weekly-2015-07-01|js};
+        description =
+          {js|1st July 2015: Network stack testing and Mirage 2.5 release|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Networking stack
 </li>
@@ -16448,19 +16871,22 @@ which works fine if you control the Xen host (not the case with EC2).</p>
 <p><strong>Live stats</strong>: are <a href="https://mirage.io/stats/gc">now working</a> on the mirage-www website
 thanks to Dave Scott and are very fancy!  Anil encourages everyone to not put functionality
 directly into the mirage-www repo, but to create a small library with it instead.</p>
-|js}
-    };
- 
-    { updated = {js|2015-06-03 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-06-03|js}
-    ; permalink = {js|weekly-2015-06-03|js}
-    ; description = {js|3rd Jun 2015: TLS releases, TCP bug-squishing and best-practice docs|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2015-06-03 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2015-06-03|js};
+        permalink = {js|weekly-2015-06-03|js};
+        description =
+          {js|3rd Jun 2015: TLS releases, TCP bug-squishing and best-practice docs|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Quality and Test
 </li>
@@ -16565,19 +16991,22 @@ across browser tabs ... but perhaps not just yet.</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2015-05-20 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-05-20|js}
-    ; permalink = {js|weekly-2015-05-20|js}
-    ; description = {js|20th May 2015: TLS release progress, Mirage.io, Jitsu and Irmin|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2015-05-20 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2015-05-20|js};
+        permalink = {js|weekly-2015-05-20|js};
+        description =
+          {js|20th May 2015: TLS release progress, Mirage.io, Jitsu and Irmin|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Quality and Test
 </li>
@@ -16697,19 +17126,22 @@ cf. typeconv from JaneStreet.</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2015-05-06 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-05-06|js}
-    ; permalink = {js|weekly-2015-05-06|js}
-    ; description = {js|6th May 2015: TLS integration, Irmin-in-browser and MirageOS Hangout|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2015-05-06 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2015-05-06|js};
+        permalink = {js|weekly-2015-05-06|js};
+        description =
+          {js|6th May 2015: TLS integration, Irmin-in-browser and MirageOS Hangout|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Quality and Test
 </li>
@@ -16788,19 +17220,22 @@ DHCP server before, please let us know.</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2015-04-23 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-04-23|js}
-    ; permalink = {js|weekly-2015-04-23|js}
-    ; description = {js|23rd Apr 2015: Release of 2.4.0, Irmin updates, TLS and Jitsu|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2015-04-23 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2015-04-23|js};
+        permalink = {js|weekly-2015-04-23|js};
+        description =
+          {js|23rd Apr 2015: Release of 2.4.0, Irmin updates, TLS and Jitsu|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Mirage 2.4.0 released
 </li>
@@ -16911,19 +17346,22 @@ with stack overflows (cf. tail recursion).</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2015-04-09 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-04-09|js}
-    ; permalink = {js|weekly-2015-04-09|js}
-    ; description = {js|9th Apr 2015: Decoupling the mirage tool and libs, Public Q&A session|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2015-04-09 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2015-04-09|js};
+        permalink = {js|weekly-2015-04-09|js};
+        description =
+          {js|9th Apr 2015: Decoupling the mirage tool and libs, Public Q&A session|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Quality and Test
 </li>
@@ -17022,19 +17460,22 @@ have to shift to the Thursday again. Please add any
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2015-03-25 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-03-25|js}
-    ; permalink = {js|weekly-2015-03-25|js}
-    ; description = {js|25th Mar 2015: Security advisory processes, TLS update and requests|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2015-03-25 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2015-03-25|js};
+        permalink = {js|weekly-2015-03-25|js};
+        description =
+          {js|25th Mar 2015: Security advisory processes, TLS update and requests|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Security advisory process
 </li>
@@ -17134,19 +17575,22 @@ indications that we may need to delay it by a day - Please add any
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2015-03-11 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-03-11|js}
-    ; permalink = {js|weekly-2015-03-11|js}
-    ; description = {js|11th Mar 2015: More racing, Testing, Networking, Large merges and Cleanups|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2015-03-11 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2015-03-11|js};
+        permalink = {js|weekly-2015-03-11|js};
+        description =
+          {js|11th Mar 2015: More racing, Testing, Networking, Large merges and Cleanups|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Race issues
 </li>
@@ -17282,19 +17726,22 @@ of Dave's work on shared-block-ring can help with some of ThomasG's activities.<
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2015-02-25 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-02-25|js}
-    ; permalink = {js|weekly-2015-02-25|js}
-    ; description = {js|25th Feb 2015: Races, Testing, Deployment, Pioneers and Roadmapping|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2015-02-25 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2015-02-25|js};
+        permalink = {js|weekly-2015-02-25|js};
+        description =
+          {js|25th Feb 2015: Races, Testing, Deployment, Pioneers and Roadmapping|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li><code>mirage-net-xen</code> race issue
 </li>
@@ -17476,19 +17923,22 @@ please do try it out!</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2015-02-11 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-02-11|js}
-    ; permalink = {js|weekly-2015-02-11|js}
-    ; description = {js|11th Feb 2015: Improving quality, error handling, TLS merge and GSoC|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2015-02-11 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2015-02-11|js};
+        permalink = {js|weekly-2015-02-11|js};
+        description =
+          {js|11th Feb 2015: Improving quality, error handling, TLS merge and GSoC|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Improving Quality
 </li>
@@ -17606,19 +18056,22 @@ live.).</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2015-01-28 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-01-28|js}
-    ; permalink = {js|weekly-2015-01-28|js}
-    ; description = {js|28th Jan 2014: OPAM 1.2, FOSDEM, new URL and 3.0 meta-planning|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2015-01-28 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2015-01-28|js};
+        permalink = {js|weekly-2015-01-28|js};
+        description =
+          {js|28th Jan 2014: OPAM 1.2, FOSDEM, new URL and 3.0 meta-planning|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Move to only OPAM 1.2
 </li>
@@ -17690,19 +18143,22 @@ patches merging across libraries (he's been doing this already).</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2015-01-14 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2015-01-14|js}
-    ; permalink = {js|weekly-2015-01-14|js}
-    ; description = {js|14th Jan 2014: Project name, 4.02.1 support, TLS on Xen and Error handling|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2015-01-14 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2015-01-14|js};
+        permalink = {js|weekly-2015-01-14|js};
+        description =
+          {js|14th Jan 2014: Project name, 4.02.1 support, TLS on Xen and Error handling|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>&quot;Mirage OS&quot; or &quot;MirageOS&quot;?
 </li>
@@ -17860,19 +18316,22 @@ deploy and write about.</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2014-12-10 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2014-12-10|js}
-    ; permalink = {js|weekly-2014-12-10|js}
-    ; description = {js|10th Dec 2014: Entropy, Tracing docs, OSX backend, IPv6 and Projects|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2014-12-10 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2014-12-10|js};
+        permalink = {js|weekly-2014-12-10|js};
+        description =
+          {js|10th Dec 2014: Entropy, Tracing docs, OSX backend, IPv6 and Projects|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Entropy progress
 </li>
@@ -17959,19 +18418,22 @@ an openflow controller.</p>
 <p><strong>Happy Holidays to all!</strong></p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2014-11-26 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2014-11-26|js}
-    ; permalink = {js|weekly-2014-11-26|js}
-    ; description = {js|26th Nov 2014: Entropy, Config modularity, IPv6 stack and Pioneer projects|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2014-11-26 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2014-11-26|js};
+        permalink = {js|weekly-2014-11-26|js};
+        description =
+          {js|26th Nov 2014: Entropy, Config modularity, IPv6 stack and Pioneer projects|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Configuration Modularity
 </li>
@@ -18066,19 +18528,22 @@ directory doesn't already exist. There weren't any objections to this.</p>
 to the <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2014-11-12 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2014-11-12|js}
-    ; permalink = {js|weekly-2014-11-12|js}
-    ; description = {js|12th Nov 2014: TLS, IPv6, OCaml 4.02.1, Library requests and Xenstore|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2014-11-12 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2014-11-12|js};
+        permalink = {js|weekly-2014-11-12|js};
+        description =
+          {js|12th Nov 2014: TLS, IPv6, OCaml 4.02.1, Library requests and Xenstore|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Review previous notes
 </li>
@@ -18213,19 +18678,22 @@ Same time, different day.</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2014-10-28 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2014-10-28|js}
-    ; permalink = {js|weekly-2014-10-28|js}
-    ; description = {js|28th Oct 2014: Docker tests, mirage-dev, tracing and onboarding newcomers|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2014-10-28 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2014-10-28|js};
+        permalink = {js|weekly-2014-10-28|js};
+        description =
+          {js|28th Oct 2014: Docker tests, mirage-dev, tracing and onboarding newcomers|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Review notes from last time
 </li>
@@ -18369,19 +18837,22 @@ code from OCaml.org.</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2014-10-14 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2014-10-14|js}
-    ; permalink = {js|weekly-2014-10-14|js}
-    ; description = {js|14th Oct 2014: Vchan, Conduit, library release plans and funky graphs.|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2014-10-14 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2014-10-14|js};
+        permalink = {js|weekly-2014-10-14|js};
+        description =
+          {js|14th Oct 2014: Vchan, Conduit, library release plans and funky graphs.|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Vchan/Conduit code review
 </li>
@@ -18495,19 +18966,22 @@ reviewing next time.</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2014-09-30 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2014-09-30|js}
-    ; permalink = {js|weekly-2014-09-30|js}
-    ; description = {js|30th Sep 2014: Mirage 2.0 libs, Calendar and some Jitsu|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2014-09-30 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2014-09-30|js};
+        permalink = {js|weekly-2014-09-30|js};
+        description =
+          {js|30th Sep 2014: Mirage 2.0 libs, Calendar and some Jitsu|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Mirage 2.0 libs status
 </li>
@@ -18569,19 +19043,22 @@ Thomas still working on this.</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2014-09-16 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2014-09-16|js}
-    ; permalink = {js|weekly-2014-09-16|js}
-    ; description = {js|16th Sep 2014: Mirage 2.0 lib releases, Cohttp, Doc day and ARM dev|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2014-09-16 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2014-09-16|js};
+        permalink = {js|weekly-2014-09-16|js};
+        description =
+          {js|16th Sep 2014: Mirage 2.0 lib releases, Cohttp, Doc day and ARM dev|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Mirage 2.0 libs
 <ul>
@@ -18664,19 +19141,22 @@ IrminStore instead?</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2014-08-20 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2014-08-20|js}
-    ; permalink = {js|weekly-2014-08-20|js}
-    ; description = {js|20th Aug 2014: XenSummit feedback, Conduit patches and ARM profiling|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2014-08-20 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2014-08-20|js};
+        permalink = {js|weekly-2014-08-20|js};
+        description =
+          {js|20th Aug 2014: XenSummit feedback, Conduit patches and ARM profiling|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>XenSummit Talk
 </li>
@@ -18800,19 +19280,22 @@ dial in by phone (very useful when travelling or on poor wifi).</p>
 <a href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a> for actual details a day or so in advance.</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2014-08-07 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2014-08-07|js}
-    ; permalink = {js|weekly-2014-08-07|js}
-    ; description = {js|7th Aug 2014: 2.0 release review, Docs Day and ARM updates|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2014-08-07 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2014-08-07|js};
+        permalink = {js|weekly-2014-08-07|js};
+        description =
+          {js|7th Aug 2014: 2.0 release review, Docs Day and ARM updates|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>2.0 release summary
 <ul>
@@ -18931,19 +19414,22 @@ likely in late September.</p>
 at XenSummit. Amir would like avoid the confusion of the last two calls :)</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2014-07-08 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2014-07-08|js}
-    ; permalink = {js|weekly-2014-07-08|js}
-    ; description = {js|8th July 2014: More releases, ARM, Blog posts and OSCON prep|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2014-07-08 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2014-07-08|js};
+        permalink = {js|weekly-2014-07-08|js};
+        description =
+          {js|8th July 2014: More releases, ARM, Blog posts and OSCON prep|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Mirage 1.2 release
 </li>
@@ -19064,19 +19550,21 @@ will be at OSCON in Portland, Oregon.</p>
 <a href="http://www.youtube.com/watch?v=EbEBErvW-Uc">Nanoo-nanoo!</a> <em>[I couldn't resist - AC :)]</em></p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2014-06-24 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2014-06-24|js}
-    ; permalink = {js|weekly-2014-06-24|js}
-    ; description = {js|24th June 2014: Releases, ARM, TLS and Repos|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2014-06-24 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2014-06-24|js};
+        permalink = {js|weekly-2014-06-24|js};
+        description = {js|24th June 2014: Releases, ARM, TLS and Repos|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Mirage 1.2 release
 <ul>
@@ -19147,19 +19635,22 @@ helps with this</p>
 <p>Discussion of Conduit</p>
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2014-06-10 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2014-06-10|js}
-    ; permalink = {js|weekly-2014-06-10|js}
-    ; description = {js|10th June 2014: Irmin, Conduit, Deployment and Fist pumping|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2014-06-10 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2014-06-10|js};
+        permalink = {js|weekly-2014-06-10|js};
+        description =
+          {js|10th June 2014: Irmin, Conduit, Deployment and Fist pumping|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Xen Hackathon summary
 </li>
@@ -19275,19 +19766,22 @@ the time of <a href="http://www.oscon.com/oscon2014/public/schedule/detail/35024
 <p><a href="https://twitter.com/ID_AA_Carmack/status/476046680698003458"><img src="/graphics/carmack-unikernel.jpg" alt="Carmack on Unikernels" /></a></p>
 <p>Next call will be <strong>24th June</strong>. Amir will send an email to the list for
 <a href="https://github.com/mirage/mirage-www/wiki/Call-Agenda">Agenda items</a> on the 23rd.</p>
-|js}
-    };
- 
-    { updated = {js|2014-05-27 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2014-05-27|js}
-    ; permalink = {js|weekly-2014-05-27|js}
-    ; description = {js|27th May 2014: Mirage on ARM, Irmin and Xen Hackathon|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2014-05-27 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2014-05-27|js};
+        permalink = {js|weekly-2014-05-27|js};
+        description =
+          {js|27th May 2014: Mirage on ARM, Irmin and Xen Hackathon|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Mirage on ARM
 </li>
@@ -19380,19 +19874,22 @@ laments that his unikernel site is languishing in a Git repo until he can
 deploy them to the Bytemark machines. Will put this on the agenda for the
 next call.</p>
 <p>Next call will be 10th June and items can be added to the <a href="https://github.com/mirage/mirage-www/wiki/Call-Agenda">Agenda</a>.</p>
-|js}
-    };
- 
-    { updated = {js|2014-04-29 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2014-04-29|js}
-    ; permalink = {js|weekly-2014-04-29|js}
-    ; description = {js|29th April 2014: GSoC, Irminsule and Mirage Tutorial|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2014-04-29 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2014-04-29|js};
+        permalink = {js|weekly-2014-04-29|js};
+        description =
+          {js|29th April 2014: GSoC, Irminsule and Mirage Tutorial|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>GSoC/OPW
 </li>
@@ -19491,19 +19988,22 @@ though.</p>
 <h4>AoB</h4>
 <p>Wiki page for collecting agenda items is now up. See it at:
 <a href="https://github.com/mirage/mirage-www/wiki/Call-Agenda">https://github.com/mirage/mirage-www/wiki</a></p>
-|js}
-    };
- 
-    { updated = {js|2014-04-15 16:00|js}
-    ; author = 
-    { name = {js|Dave Scott|js}
-    ; uri = Some {js|http://dave.recoil.org/|js}
-    ; email = Some {js|dave@recoil.org|js}
-    }
-    ; subject = {js|Weekly Meeting: 2014-04-15|js}
-    ; permalink = {js|weekly-2014-04-15|js}
-    ; description = {js|15th April 2014: GSoC, vchan, Mini-OS/ARM and Irminsule|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2014-04-15 16:00|js};
+        author =
+          {
+            name = {js|Dave Scott|js};
+            uri = Some {js|http://dave.recoil.org/|js};
+            email = Some {js|dave@recoil.org|js};
+          };
+        subject = {js|Weekly Meeting: 2014-04-15|js};
+        permalink = {js|weekly-2014-04-15|js};
+        description =
+          {js|15th April 2014: GSoC, vchan, Mini-OS/ARM and Irminsule|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>GSoC/OPW
 </li>
@@ -19583,19 +20083,21 @@ next time (e.g building the mirage website).</p>
 upcoming agenda items. Will save Dave from having to dig through his email
 between calls and thus avoid agenda items being forgotten. Amir will
 set this up and then hand over to Dave to maintain.</p>
-|js}
-    };
- 
-    { updated = {js|2014-04-01 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2014-04-01|js}
-    ; permalink = {js|weekly-2014-04-01|js}
-    ; description = {js|1st April 2014: Mini-OS, IOCaml and Xenstore|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2014-04-01 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2014-04-01|js};
+        permalink = {js|weekly-2014-04-01|js};
+        description = {js|1st April 2014: Mini-OS, IOCaml and Xenstore|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>GSoC/OPW update (Anil)
 </li>
@@ -19660,19 +20162,22 @@ these right (and working).</p>
 <p>Incompatible change from Mirage v1.  Will only affect mirage-net and mirage.
 if all people <code>opam upgrade</code>, then should be no issue as everything will
 change at once.</p>
-|js}
-    };
- 
-    { updated = {js|2014-03-18 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2014-03-18|js}
-    ; permalink = {js|weekly-2014-03-18|js}
-    ; description = {js|18th March 2014: Crypto, GSoC and a Mirage tutorial day.|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2014-03-18 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2014-03-18|js};
+        permalink = {js|weekly-2014-03-18|js};
+        description =
+          {js|18th March 2014: Crypto, GSoC and a Mirage tutorial day.|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>SSL + crypto
 </li>
@@ -19755,19 +20260,22 @@ term-time (for obvious reasons).</p>
 <p>Irminsule is being used by Dominic in Nottingham and it does stuff related
 to maildir. Mort has put Dominic in touch with Gregory (who's working on
 IMAP).  Exciting stuff!</p>
-|js}
-    };
- 
-    { updated = {js|2014-03-04 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2014-03-04|js}
-    ; permalink = {js|weekly-2014-03-04|js}
-    ; description = {js|4th March 2014: racing bugs and unikernel deployment.|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2014-03-04 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2014-03-04|js};
+        permalink = {js|weekly-2014-03-04|js};
+        description =
+          {js|4th March 2014: racing bugs and unikernel deployment.|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>tcp arp bug -- race in network setup?
 </li>
@@ -19843,19 +20351,21 @@ to sockets.  Possibly also related to the TCP item above.</p>
 <p><em>Google Summer of Code</em> - Mentors should be encouraging students to apply.
 Requirements are that they're student (of any kind) at an accredited
 institution.</p>
-|js}
-    };
- 
-    { updated = {js|2014-02-26 16:00|js}
-    ; author = 
-    { name = {js|Amir Chaudhry|js}
-    ; uri = Some {js|http://amirchaudhry.com|js}
-    ; email = Some {js|amirmc@gmail.com|js}
-    }
-    ; subject = {js|Weekly Meeting: 2014-02-26|js}
-    ; permalink = {js|weekly-2014-02-26|js}
-    ; description = {js|26th February 2014: homepages are here (almost!).|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2014-02-26 16:00|js};
+        author =
+          {
+            name = {js|Amir Chaudhry|js};
+            uri = Some {js|http://amirchaudhry.com|js};
+            email = Some {js|amirmc@gmail.com|js};
+          };
+        subject = {js|Weekly Meeting: 2014-02-26|js};
+        permalink = {js|weekly-2014-02-26|js};
+        description = {js|26th February 2014: homepages are here (almost!).|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Google Summer of Code
 </li>
@@ -19923,19 +20433,21 @@ find useful as PRs to mirage-skeleton's readme.</p>
 Some digging around in code and docs to better understand this.  Dave
 mentions cloudinit.  Julian will file bug for startinfo and Anil will look
 at cloudinit.</p>
-|js}
-    };
- 
-    { updated = {js|2013-06-11 16:00|js}
-    ; author = 
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }
-    ; subject = {js|Weekly Meeting: 2013-06-11|js}
-    ; permalink = {js|weekly-2013-06-11|js}
-    ; description = {js|11th June 2013: the end of the start is in sight|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2013-06-11 16:00|js};
+        author =
+          {
+            name = {js|Anil Madhavapeddy|js};
+            uri = Some {js|http://anil.recoil.org|js};
+            email = Some {js|anil@recoil.org|js};
+          };
+        subject = {js|Weekly Meeting: 2013-06-11|js};
+        permalink = {js|weekly-2013-06-11|js};
+        description = {js|11th June 2013: the end of the start is in sight|js};
+        body =
+          {js|<h3>Agenda</h3>
 <p>Work through the integration of:</p>
 <ul>
 <li>the new UNIX backend which spins off a separate unikernel process
@@ -19998,19 +20510,22 @@ alarming rate.  We also need this to generate binary distribution of Mirage for
 the OSCON preview.</p>
 <p>Jon/Dave/Citrix are working with upstream CentOS, so this is the first place to start.
 Anil: we can customise OCamlot much more easily than Jenkins, so this should be good to hook in.</p>
-|js}
-    };
- 
-    { updated = {js|2013-06-04 16:00|js}
-    ; author = 
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }
-    ; subject = {js|Weekly Meeting: 2013-06-04|js}
-    ; permalink = {js|weekly-2013-06-04|js}
-    ; description = {js|6th June 2013: EC2, shared ring performance and outreach|js}
-    ; body = {js|<p><em>Attendees:</em> Jonathan Ludlam, Vincent Bernardoff, Dave Scott, Anil Madhavapeddy, Amir Chaudhry, Mike McClurg</p>
+|js};
+      };
+      {
+        updated = {js|2013-06-04 16:00|js};
+        author =
+          {
+            name = {js|Anil Madhavapeddy|js};
+            uri = Some {js|http://anil.recoil.org|js};
+            email = Some {js|anil@recoil.org|js};
+          };
+        subject = {js|Weekly Meeting: 2013-06-04|js};
+        permalink = {js|weekly-2013-06-04|js};
+        description =
+          {js|6th June 2013: EC2, shared ring performance and outreach|js};
+        body =
+          {js|<p><em>Attendees:</em> Jonathan Ludlam, Vincent Bernardoff, Dave Scott, Anil Madhavapeddy, Amir Chaudhry, Mike McClurg</p>
 <h3>Mirari</h3>
 <p>Excellent progress on Mirari from Vincent, who will have patches available soon for merging.</p>
 <p>Anil: main last change we need to make is to stop Mirari from requiring OPAM
@@ -20065,19 +20580,22 @@ Prashanth pointed out axTLS, which is a BSD licensed alternative to MatrixSSL an
 therefore worth looking into more (but it's API isn't quite as agnostic to sockets
 as MatrixSSL, sadly, but should still work fine as sockets can be nonblocking in
 the axTLS world).</p>
-|js}
-    };
- 
-    { updated = {js|2013-05-28 16:00|js}
-    ; author = 
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }
-    ; subject = {js|Weekly Meeting: 2013-05-28|js}
-    ; permalink = {js|weekly-2013-05-28|js}
-    ; description = {js|28 May 2013: Build pain reduced to mild ache, Try Mirage, Benchmarking available|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2013-05-28 16:00|js};
+        author =
+          {
+            name = {js|Anil Madhavapeddy|js};
+            uri = Some {js|http://anil.recoil.org|js};
+            email = Some {js|anil@recoil.org|js};
+          };
+        subject = {js|Weekly Meeting: 2013-05-28|js};
+        permalink = {js|weekly-2013-05-28|js};
+        description =
+          {js|28 May 2013: Build pain reduced to mild ache, Try Mirage, Benchmarking available|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Build progress since last week
 </li>
@@ -20134,19 +20652,21 @@ to aid benchmarking.  Helps other people to use (and contribute to) these other
 libraries.  Vincent has been Ocamldoc-ing as he goes along and that's been
 <em>very</em> useful.  It's hard to do that in one go but as you go along its much
 easier.  Please do this for the libs that you are working on.</p>
-|js}
-    };
- 
-    { updated = {js|2013-05-21 16:00|js}
-    ; author = 
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }
-    ; subject = {js|Weekly Meeting: 2013-05-21|js}
-    ; permalink = {js|weekly-2013-05-21|js}
-    ; description = {js|21 May 2013: Build, build, build, argh.|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2013-05-21 16:00|js};
+        author =
+          {
+            name = {js|Anil Madhavapeddy|js};
+            uri = Some {js|http://anil.recoil.org|js};
+            email = Some {js|anil@recoil.org|js};
+          };
+        subject = {js|Weekly Meeting: 2013-05-21|js};
+        permalink = {js|weekly-2013-05-21|js};
+        description = {js|21 May 2013: Build, build, build, argh.|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Mirari update (Vincent)
 </li>
@@ -20195,19 +20715,21 @@ git remotes.</p>
 various POSIX bindings working!  In the worst case it's 10x slower (usu 2-3 x
 slower) but you don't have to write any C, and we know how to fix the slowdown.
 It'll be open-source very soon.</p>
-|js}
-    };
- 
-    { updated = {js|2013-05-14 16:00|js}
-    ; author = 
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }
-    ; subject = {js|Weekly Meeting: 2013-05-14|js}
-    ; permalink = {js|weekly-2013-05-14|js}
-    ; description = {js|14th May 2013: Ocamlot, actors and performance|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2013-05-14 16:00|js};
+        author =
+          {
+            name = {js|Anil Madhavapeddy|js};
+            uri = Some {js|http://anil.recoil.org|js};
+            email = Some {js|anil@recoil.org|js};
+          };
+        subject = {js|Weekly Meeting: 2013-05-14|js};
+        permalink = {js|weekly-2013-05-14|js};
+        description = {js|14th May 2013: Ocamlot, actors and performance|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Ocamlot update and use in Mirage (Anil, David Sheets)
 </li>
@@ -20282,19 +20804,22 @@ in ocamlopt, and Anil will investigate.</p>
 <p>A number of Cambridge students are going to Jane Street for internships, and
 we're synching up projects so that they can continue after the summer.  Ideas
 for internships welcome.</p>
-|js}
-    };
- 
-    { updated = {js|2013-04-30 16:00|js}
-    ; author = 
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }
-    ; subject = {js|Weekly Meeting: 2013-04-30|js}
-    ; permalink = {js|weekly-2013-04-30|js}
-    ; description = {js|30th April 2013: device drivers, SSL, actors, OpenFlow|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2013-04-30 16:00|js};
+        author =
+          {
+            name = {js|Anil Madhavapeddy|js};
+            uri = Some {js|http://anil.recoil.org|js};
+            email = Some {js|anil@recoil.org|js};
+          };
+        subject = {js|Weekly Meeting: 2013-04-30|js};
+        permalink = {js|weekly-2013-04-30|js};
+        description =
+          {js|30th April 2013: device drivers, SSL, actors, OpenFlow|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Moving devices drivers out into userspace (Dave Scott)
 </li>
@@ -20359,19 +20884,22 @@ heaps and message passing (of interest to Stephen Dolan and Leo).</p>
 <p><em>Anil</em>: nothing we're doing requires compatibility with current hardware so perhaps just work with 1.3 and then figure out a backwards compatible mapping.
 <em>Prashanth</em>: I'll send some links to updated spec (find it <a href="https://lists.cam.ac.uk/pipermail/cl-mirage/2013-May/msg00000.html">here</a>).</p>
 <p>No call next week (7th May) as several members are travelling, but we can resume the call as normal in two weeks on the 14th May.</p>
-|js}
-    };
- 
-    { updated = {js|2013-04-23 16:00|js}
-    ; author = 
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }
-    ; subject = {js|Weekly Meeting: 2013-04-23|js}
-    ; permalink = {js|weekly-2013-04-23|js}
-    ; description = {js|23th April 2013: Irminsule, concurrent revisions and release checklist|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2013-04-23 16:00|js};
+        author =
+          {
+            name = {js|Anil Madhavapeddy|js};
+            uri = Some {js|http://anil.recoil.org|js};
+            email = Some {js|anil@recoil.org|js};
+          };
+        subject = {js|Weekly Meeting: 2013-04-23|js};
+        permalink = {js|weekly-2013-04-23|js};
+        description =
+          {js|23th April 2013: Irminsule, concurrent revisions and release checklist|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Thomas Gazagnaire: <a href="http://www.cl.cam.ac.uk/projects/ocamllabs/tasks/t2.html#Irminsule">Irminsule</a> demonstration
 </li>
@@ -20443,19 +20971,21 @@ Turns out no-one else has really tried as most of us use Tuntap on MacOS X and t
 <li>Figure out the SSL options for 1.0.
 </li>
 </ul>
-|js}
-    };
- 
-    { updated = {js|2013-04-16 16:00|js}
-    ; author = 
-    { name = {js|Anil Madhavapeddy|js}
-    ; uri = Some {js|http://anil.recoil.org|js}
-    ; email = Some {js|anil@recoil.org|js}
-    }
-    ; subject = {js|Weekly Meeting: 2013-04-16|js}
-    ; permalink = {js|weekly-2013-04-16|js}
-    ; description = {js|16th April 2013: release, libvirt and Mirari|js}
-    ; body = {js|<h3>Agenda</h3>
+|js};
+      };
+      {
+        updated = {js|2013-04-16 16:00|js};
+        author =
+          {
+            name = {js|Anil Madhavapeddy|js};
+            uri = Some {js|http://anil.recoil.org|js};
+            email = Some {js|anil@recoil.org|js};
+          };
+        subject = {js|Weekly Meeting: 2013-04-16|js};
+        permalink = {js|weekly-2013-04-16|js};
+        description = {js|16th April 2013: release, libvirt and Mirari|js};
+        body =
+          {js|<h3>Agenda</h3>
 <ul>
 <li>Anil Madhavapeddy: overview of release goals
 </li>
@@ -20620,8 +21150,9 @@ good thing and we can use this in all the libraries.  Balraj created a
 TCP loopback VM that uses two VIFs in single VM (see mirage-skeleton/tcp).</p>
 <p>Plan for next week's call: Discuss the mirari FRP integration in more detail.
 Invite Daniel Bunzli to advise.</p>
-|js}
-    }]
+|js};
+      };
+    ]
 end
 
 module Link = struct
@@ -20633,497 +21164,571 @@ module Link = struct
     stream : string;
   }
 
-  let all = 
-[
-    { id = {js|talk-big-techday8|js}
-    ; uri = {js|http://www.techcast.com/events/bigtechday8/salvator-1130/|js}
-    ; title = {js|Nymote: Git your own cloud here|js}
-    ; date = {js|2015-06-12|js}
-    ; stream = {js|public-talk|js}
-    };
- 
-    { id = {js|tls-podcast-ohm|js}
-    ; uri = {js|http://monoxyd.de/20150408-ohm-008-ohne-heftige-mangel|js}
-    ; title = {js|(german) OHM #008 – Ohne Heftige Mängel: TLS und dessen Probleme; robuste Implementierung von Sicherheitsprotokollen; OCaml-TLS und MirageOS|js}
-    ; date = {js|2015-04-08|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|cam-news-nymote|js}
-    ; uri = {js|http://www.cambridge-news.co.uk/personal-cloud-private-data-reality-thanks-Nymote/story-26074338-detail/story.html|js}
-    ; title = {js|A personal cloud for your private data could become a reality thanks to Nymote|js}
-    ; date = {js|2015-02-24|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|acolyer-mergeable-structures|js}
-    ; uri = {js|http://blog.acolyer.org/2015/01/14/mergeable-persistent-data-structures/|js}
-    ; title = {js|Mergeable persistent data structures|js}
-    ; date = {js|2015-01-14|js}
-    ; stream = {js|public-blog|js}
-    };
- 
-    { id = {js|acolyer-unikernels|js}
-    ; uri = {js|http://blog.acolyer.org/2015/01/13/unikernels-library-operating-systems-for-the-cloud/|js}
-    ; title = {js|Unikernels: Library Operating Systems for the Cloud|js}
-    ; date = {js|2015-01-13|js}
-    ; stream = {js|public-blog|js}
-    };
- 
-    { id = {js|gfx-os-tech-to-watch|js}
-    ; uri = {js|http://gfxmonk.net/2015/01/04/os-technologies-to-watch.html|js}
-    ; title = {js|OS Technologies To Watch In 2015|js}
-    ; date = {js|2015-01-04|js}
-    ; stream = {js|public-blog|js}
-    };
- 
-    { id = {js|31c3-secure-modular-os-tls|js}
-    ; uri = {js|http://media.ccc.de/browse/congress/2014/31c3_-_6443_-_en_-_saal_2_-_201412271245_-_trustworthy_secure_modular_operating_system_engineering_-_hannes_-_david_kaloper.html#video|js}
-    ; title = {js|Trustworthy secure modular operating system engineering|js}
-    ; date = {js|2014-12-27|js}
-    ; stream = {js|public-talk|js}
-    };
- 
-    { id = {js|oups-dec2014-state-of-mirage|js}
-    ; uri = {js|https://www.irill.org/videos/oups-december-2014/MirageOS|js}
-    ; title = {js|OCaml Users Paris: State of the Mirage|js}
-    ; date = {js|2014-12-09|js}
-    ; stream = {js|public-talk|js}
-    };
- 
-    { id = {js|techrepublic-unikernels|js}
-    ; uri = {js|http://www.techrepublic.com/article/unikernels-offer-a-stripped-down-alternative-to-linux/|js}
-    ; title = {js|Unikernels offer a stripped down alternative to Linux|js}
-    ; date = {js|2014-12-18|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|after-docker-immutable-infra|js}
-    ; uri = {js|https://medium.com/@darrenrush/after-docker-unikernels-and-immutable-infrastructure-93d5a91c849e|js}
-    ; title = {js|After Docker: Unikernels and Immutable Infrastructure|js}
-    ; date = {js|2014-11-06|js}
-    ; stream = {js|public-blog|js}
-    };
- 
-    { id = {js|unikernels-what-where-why-awick|js}
-    ; uri = {js|https://www.youtube.com/watch?v=oHcHTFleNtg|js}
-    ; title = {js|Unikernels: Who, What, Where, When, Why - Adam Wick, Galois|js}
-    ; date = {js|2014-10-17|js}
-    ; stream = {js|public-talk|js}
-    };
- 
-    { id = {js|enterprise-oss-2014|js}
-    ; uri = {js|http://www.linux.com/news/software/applications/789241--5-new-enterprise-open-source-projects-to-watch/|js}
-    ; title = {js|5 New Enterprise Open Source Projects to Watch|js}
-    ; date = {js|2014-09-24|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|haskell-symposium-2014-keynote|js}
-    ; uri = {js|https://www.youtube.com/watch?v=UEIHfXLMtwA|js}
-    ; title = {js|Haskell Symposium 2014 Keynote on Unikernels|js}
-    ; date = {js|2014-09-05|js}
-    ; stream = {js|public-talk|js}
-    };
- 
-    { id = {js|edge-cases-episode-101|js}
-    ; uri = {js|http://edgecasesshow.com/101-a-program-that-runs-on-metal.html|js}
-    ; title = {js|A Program That Runs on Metal|js}
-    ; date = {js|2014-08-14|js}
-    ; stream = {js|public-blog|js}
-    };
- 
-    { id = {js|miso-talk-entrepreneur-first|js}
-    ; uri = {js|http://amirchaudhry.com/describing-miso-entrepreneur-first-2014|js}
-    ; title = {js|Describing the MISO stack at Entrepreneur First|js}
-    ; date = {js|2014-07-25|js}
-    ; stream = {js|public-blog|js}
-    };
- 
-    { id = {js|mirage-20-pr-congoo|js}
-    ; uri = {js|http://www.congoo.com/news/addstorycomment.aspx?st=291376442&Channel_ID=8&Category_ID=-1|js}
-    ; title = {js|Xen Project Introduces New Mirage OS Release|js}
-    ; date = {js|2014-07-22|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|mirage-20-pr-reuters|js}
-    ; uri = {js|http://www.reuters.com/article/2014/07/22/idUSnMKWyFRLBa+1de+MKW20140722|js}
-    ; title = {js|Xen Project Introduces New Mirage OS Release|js}
-    ; date = {js|2014-07-22|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|mirage-20-pr-phoronix|js}
-    ; uri = {js|http://www.phoronix.com/scan.php?page=news_item&px=MTc0NjY|js}
-    ; title = {js|Xen Project Announces Mirage OS 2.0|js}
-    ; date = {js|2014-07-22|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|mirage-20-pr-linux-embedded|js}
-    ; uri = {js|https://www.linux.com/news/embedded-mobile/mobile-linux/781359-xen-project-announces-mirage-os-20|js}
-    ; title = {js|Xen Project Announces Mirage OS 2.0|js}
-    ; date = {js|2014-07-22|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|mirage-20-pr-slashdot|js}
-    ; uri = {js|http://beta.slashdot.org/submission/3717339/news-mirage-os-20----compile-your-own-cloud|js}
-    ; title = {js|News: Mirage OS 2.0 -- Compile Your Own Cloud|js}
-    ; date = {js|2014-07-22|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|mirage-20-pr-vmblog|js}
-    ; uri = {js|http://vmblog.com/archive/2014/07/22/xen-project-introduces-new-mirage-os-release.aspx|js}
-    ; title = {js|Xen Project Introduces New Mirage OS Release|js}
-    ; date = {js|2014-07-22|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|mirage-20-pr-lastminutegeek|js}
-    ; uri = {js|http://www.lastminutegeek.com/english/77-linuxtoday/1151651-mirage-os-v20-the-new-features.html|js}
-    ; title = {js|Mirage OS v2.0: The new features|js}
-    ; date = {js|2014-07-22|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|mirage-20-pr-techinvestornews|js}
-    ; uri = {js|http://www.techinvestornews.com/Cloud/Latest-Cloud-Computing-News/xen-unveils-mirage-os-2.0-for-open-source-virtual-cloud-apps|js}
-    ; title = {js|Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps|js}
-    ; date = {js|2014-07-22|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|mirage-20-pr-slashdot-2|js}
-    ; uri = {js|http://beta.slashdot.org/submission/3720459/xen-unveils-mirage-os-20-for-open-source-virtual-cloud-apps|js}
-    ; title = {js|Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps|js}
-    ; date = {js|2014-07-22|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|mirage-20-pr-linuxtoday|js}
-    ; uri = {js|http://www.linuxtoday.com/high_performance/mirage-os-v2.0-the-new-features.html|js}
-    ; title = {js|Mirage OS v2.0: The new features|js}
-    ; date = {js|2014-07-23|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|mirage-20-pr-twit|js}
-    ; uri = {js|https://plus.google.com/+TWiT/posts/6DkCPz3TSdd|js}
-    ; title = {js|FLOSS Weekly 302 | TWiT.TV|js}
-    ; date = {js|2014-07-23|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|mirage-20-pr-cloudcomputinginfo|js}
-    ; uri = {js|http://cloudcomputing.info/en/news/2014/07/xen-project-releases-mirage-os-2-0.html|js}
-    ; title = {js|Xen Project releases Mirage OS 2.0|js}
-    ; date = {js|2014-07-23|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|mirage-20-pr-vibriefing|js}
-    ; uri = {js|http://www.vibriefing.com/xen-unveils-mirage-os-2-0-for-open-source-virtual-cloud-apps/|js}
-    ; title = {js|Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps|js}
-    ; date = {js|2014-07-25|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|mirage-20-pr-marketwatch|js}
-    ; uri = {js|http://www.marketwatch.com/story/xen-project-introduces-new-mirage-os-release-2014-07-22|js}
-    ; title = {js|Xen Project Introduces New Mirage OS Release|js}
-    ; date = {js|2014-07-22|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|mirage-20-pr-linuxquestions|js}
-    ; uri = {js|http://www.linuxquestions.org/questions/syndicated-linux-news-67/lxer-xen-unveils-mirage-os-2-0-for-open-source-virtual-cloud-apps-4175512075/|js}
-    ; title = {js|LXer: Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps|js}
-    ; date = {js|2014-07-22|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|mirage-20-pr-4-traders|js}
-    ; uri = {js|http://www.4-traders.com/news/Xen-Project-Introduces-New-Mirage-OS-Release--18774589/|js}
-    ; title = {js| Xen Project Introduces New Mirage OS Release|js}
-    ; date = {js|2014-07-22|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|mirage-20-pr-release|js}
-    ; uri = {js|http://www.marketwired.com/press-release/xen-project-introduces-new-mirage-os-release-1931602.htm|js}
-    ; title = {js|Xen Project Introduces New Mirage OS Release|js}
-    ; date = {js|2014-07-22|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|yahoo-pr-mirage-20-release|js}
-    ; uri = {js|http://finance.yahoo.com/news/xen-project-introduces-mirage-os-120000542.html|js}
-    ; title = {js|Yahoo Finance - Xen Project Introduces New Mirage OS Release|js}
-    ; date = {js|2014-07-22|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|cloud-computing-mirage-20|js}
-    ; uri = {js|http://cloudcomputing.info/en/news/2014/07/xen-project-releases-mirage-os-2-0.html|js}
-    ; title = {js|CloudComputing - Xen Project releases Mirage OS 2.0|js}
-    ; date = {js|2014-07-22|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|xenblog-mirage-20-release|js}
-    ; uri = {js|http://blog.xen.org/index.php/2014/07/22/mirage-os-v2-0-the-new-features/|js}
-    ; title = {js|XenBlog: Mirage OS v2.0: The new features|js}
-    ; date = {js|2014-07-22|js}
-    ; stream = {js|public-blog|js}
-    };
- 
-    { id = {js|varguy-mirage-20-release|js}
-    ; uri = {js|http://thevarguy.com/virtualization-applications-and-technologies/072314/xen-unveils-mirage-os-20-open-source-virtual-cloud-apps|js}
-    ; title = {js|Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps|js}
-    ; date = {js|2014-07-23|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|mirage-20-release-linux-magazin-de|js}
-    ; uri = {js|http://www.linux-magazin.de/NEWS/Ocaml-Cloud-OS-Mirage-OS-2.0-erhoeht-Sicherheit|js}
-    ; title = {js|(german) OCaml-Cloud-OS Mirage OS 2.0 erhöht Sicherheit|js}
-    ; date = {js|2014-07-23|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|mirage-20-release-yc-isvoc|js}
-    ; uri = {js|http://yc.isvoc.com/201407231852-xen-project-introduces-new-mirage-os-release.html#.U9AWkhZD3nc|js}
-    ; title = {js|(chinese) Xen项目推出新的幻影操作系统版本|js}
-    ; date = {js|2014-07-23|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|mirage-20-release-admin-magazin-de|js}
-    ; uri = {js|http://www.admin-magazin.de/News/Mirage-OS-2.0-veroeffentlicht|js}
-    ; title = {js|(german) Mirage OS 2.0 veröffentlicht|js}
-    ; date = {js|2014-07-22|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|bww-mirage-20-release|js}
-    ; uri = {js|http://www.broadwayworld.com/bwwgeeks/article/Xen-Project-Introduces-New-Mirage-OS-Release-20140722#.U9AX5xZD3nc|js}
-    ; title = {js|BWW: Xen Project Introduces New Mirage OS Release|js}
-    ; date = {js|2014-07-22|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|open-source-china-mirage-20-release|js}
-    ; uri = {js|http://www.oschina.net/news/53851/mirage-os-2-0-released|js}
-    ; title = {js|(chinese) Mirage OS 2.0 发布，云编程平台|js}
-    ; date = {js|2014-07-23|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|seedhack-experience|js}
-    ; uri = {js|http://seedcamp.com/seedhack-5-0/|js}
-    ; title = {js|The Seedhack Experience|js}
-    ; date = {js|2014-07-23|js}
-    ; stream = {js|public-blog|js}
-    };
- 
-    { id = {js|hn-introducing-irmin|js}
-    ; uri = {js|https://news.ycombinator.com/item?id=8053687|js}
-    ; title = {js|HN: Irmin: Git-like distributed, branchable storage|js}
-    ; date = {js|2014-07-18|js}
-    ; stream = {js|hackernews|js}
-    };
- 
-    { id = {js|hn-introducing-asn1|js}
-    ; uri = {js|https://news.ycombinator.com/item?id=8020125|js}
-    ; title = {js|HN: OCaml-TLS: ASN.1 and notation embedding|js}
-    ; date = {js|2014-07-11|js}
-    ; stream = {js|hackernews|js}
-    };
- 
-    { id = {js|hn-mirage-os-unikernel-for-xen-hypervisor|js}
-    ; uri = {js|https://news.ycombinator.com/item?id=7726748|js}
-    ; title = {js|HN: Mirage OS: A Unikernel For The Xen Hypervisor|js}
-    ; date = {js|2014-05-10|js}
-    ; stream = {js|hackernews|js}
-    };
- 
-    { id = {js|hn-ocaml-tls-api-internals-attacks-mitigation|js}
-    ; uri = {js|https://news.ycombinator.com/item?id=8031368|js}
-    ; title = {js|HN: OCaml-TLS: the protocol implementation and mitigations to known attacks|js}
-    ; date = {js|2014-07-14|js}
-    ; stream = {js|hackernews|js}
-    };
- 
-    { id = {js|hn-announcing-mirage-20-release|js}
-    ; uri = {js|https://news.ycombinator.com/item?id=8069132|js}
-    ; title = {js|HN: Mirage v2.0: a recap of the new features|js}
-    ; date = {js|2014-07-22|js}
-    ; stream = {js|hackernews|js}
-    };
- 
-    { id = {js|hn-acm-queue-01|js}
-    ; uri = {js|https://news.ycombinator.com/item?id=7053638|js}
-    ; title = {js|HN: Unikernels: Rise of the Virtual Library Operating System|js}
-    ; date = {js|2014-01-14|js}
-    ; stream = {js|hackernews|js}
-    };
- 
-    { id = {js|hn-acm-queue-02|js}
-    ; uri = {js|https://news.ycombinator.com/item?id=8025493|js}
-    ; title = {js|HN: Unikernels: Rise of the Virtual Library Operating System|js}
-    ; date = {js|2014-07-12|js}
-    ; stream = {js|hackernews|js}
-    };
- 
-    { id = {js|hn-introducing-tls|js}
-    ; uri = {js|https://news.ycombinator.com/item?id=8005130|js}
-    ; title = {js|HN: Introducing Transport Layer Security in pure OCaml|js}
-    ; date = {js|2014-07-08|js}
-    ; stream = {js|hackernews|js}
-    };
- 
-    { id = {js|digital-conversations-2014|js}
-    ; uri = {js|http://www.brondbjerg.co.uk/blog/2014/06/building-the-next-generation-of-the-web/|js}
-    ; title = {js|Digital Conversations - Building the Next Generation of the Web|js}
-    ; date = {js|2014-06-12|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|linux-magazin-de-zero-install|js}
-    ; uri = {js|http://www.linux-magazin.de/Ausgaben/2014/06/Ocaml/%28language%29/ger-DE/|js}
-    ; title = {js|Programmieren in OCaml (German)|js}
-    ; date = {js|2014-06-01|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|se-radio-2014|js}
-    ; uri = {js|http://www.se-radio.net/2014/05/episode-204-anil-madhavapeddy-on-the-mirage-cloud-operating-system-and-the-ocaml-language/|js}
-    ; title = {js|Software Engineering Radio: podcast on MirageOS and OCaml with Anil Madhavapeddy|js}
-    ; date = {js|2014-05-30|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|nw-lang-mirageos|js}
-    ; uri = {js|http://www.networkworld.com/slideshow/149127/beyond-the-usual-suspects-10-hot-programming-languages-on-the-rise.html#slide10|js}
-    ; title = {js|Beyond the usual suspects: 10 hot programming languages on the rise|js}
-    ; date = {js|2014-04-17|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|citirx-containers-xen|js}
-    ; uri = {js|http://open.citrix.com/blog/328-are-containers-the-right-answer-to-the-wrong-question.html|js}
-    ; title = {js|Are Containers the Right Answer to the Wrong Question?|js}
-    ; date = {js|2014-04-08|js}
-    ; stream = {js|public-blog|js}
-    };
- 
-    { id = {js|mindy-unikernel-1|js}
-    ; uri = {js|http://www.somerandomidiot.com/blog/2014/03/14/its-a-mirage/|js}
-    ; title = {js|It's a Mirage! (or, How to Shave a Yak.)|js}
-    ; date = {js|2014-03-14|js}
-    ; stream = {js|public-blog|js}
-    };
- 
-    { id = {js|amirmc-jekyll-1|js}
-    ; uri = {js|http://amirchaudhry.com/from-jekyll-to-unikernel-in-fifty-lines|js}
-    ; title = {js|From Jekyll site to Unikernel in fifty lines of code|js}
-    ; date = {js|2014-03-10|js}
-    ; stream = {js|public-blog|js}
-    };
- 
-    { id = {js|pcworld-2014-xenarm|js}
-    ; uri = {js|http://www.pcworld.com/article/2106460/xen-hypervisor-moves-into-arm-space.html|js}
-    ; title = {js|Xen hypervisor moves into ARM space|js}
-    ; date = {js|2014-03-10|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|fosdem-2014-video|js}
-    ; uri = {js|http://video.fosdem.org/2014/Janson/Sunday/MirageOS_compiling_functional_library_operating_systems.webm|js}
-    ; title = {js|FOSDEM 2014: MirageOS: compiling functional library operating systems|js}
-    ; date = {js|2014-02-02|js}
-    ; stream = {js|public-talk|js}
-    };
- 
-    { id = {js|fosdem-2014|js}
-    ; uri = {js|https://fosdem.org/2014/interviews/2014-anil-madhavapeddy-richard-mortier/|js}
-    ; title = {js|Interview with Anil Madhavapeddy and Richard Mortier on MirageOS|js}
-    ; date = {js|2014-01-29|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|osnews-2014|js}
-    ; uri = {js|http://www.osnews.com/comments/27516?view=threaded&sort=&threshold=0|js}
-    ; title = {js|OSNews: MirageOS: rise of the virtual library operating system|js}
-    ; date = {js|2014-01-15|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|nymote-mirage-ann-2014|js}
-    ; uri = {js|http://nymote.org/blog/2014/announcing-first-mirage-release/|js}
-    ; title = {js|Nymote.org: Announcing the first major release of Mirage - the Cloud Operating System|js}
-    ; date = {js|2014-01-13|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|infoworld-mirage-2014|js}
-    ; uri = {js|http://www.infoworld.com/t/operating-systems/xen-mirage-the-less-more-cloud-os-233823|js}
-    ; title = {js|Xen Mirage: The less-is-more cloud OS|js}
-    ; date = {js|2014-01-09|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|infoq-rwo-2013|js}
-    ; uri = {js|http://www.infoq.com/articles/real-world-ocaml-interview|js}
-    ; title = {js|Book Review and Interview: Real World OCaml|js}
-    ; date = {js|2014-01-08|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|techweek-europe-2013|js}
-    ; uri = {js|http://www.techweekeurope.co.uk/comment/xen-launches-mirage-cloud-os-133875|js}
-    ; title = {js|Xen Launches The Mirage Cloud OS|js}
-    ; date = {js|2013-12-11|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|linuxcom-cloud-os-2013|js}
-    ; uri = {js|http://www.linux.com/news/enterprise/cloud-computing/751156-are-cloud-operating-systems-the-next-big-thing-|js}
-    ; title = {js|Linux.com: Are Cloud Operating Systems the Next Big Thing?|js}
-    ; date = {js|2013-12-03|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|infoq-mirageos-2013|js}
-    ; uri = {js|http://www.infoq.com/news/2013/12/mirageos|js}
-    ; title = {js|InfoQ: Xen Project Releases 1.0 of Mirage OS|js}
-    ; date = {js|2013-12-23|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|eweek-mirageos-2013|js}
-    ; uri = {js|http://www.eweek.com/cloud/xen-project-builds-its-own-cloud-os-mirage.html/|js}
-    ; title = {js|eWeek: Xen Project Builds Its Own Cloud OS Mirage|js}
-    ; date = {js|2013-12-09|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|xenproject-mirageos-2013|js}
-    ; uri = {js|http://www.xenproject.org/about/in-the-news/162-xen-project-releases-mirage-os-welcomes-arm-as-newest-member.html|js}
-    ; title = {js|Xen Project Releases Mirage OS, Welcomes ARM as Newest Member|js}
-    ; date = {js|2013-12-09|js}
-    ; stream = {js|press-coverage|js}
-    };
- 
-    { id = {js|voxoz-docker-2013|js}
-    ; uri = {js|http://blog.docker.io/2013/09/powering-voxoz-ecosystem-with-docker/|js}
-    ; title = {js|Powering Voxoz ecosystem with Docker|js}
-    ; date = {js|2013-09-26|js}
-    ; stream = {js|public-blog|js}
-    }]
+  let all =
+    [
+      {
+        id = {js|talk-big-techday8|js};
+        uri = {js|http://www.techcast.com/events/bigtechday8/salvator-1130/|js};
+        title = {js|Nymote: Git your own cloud here|js};
+        date = {js|2015-06-12|js};
+        stream = {js|public-talk|js};
+      };
+      {
+        id = {js|tls-podcast-ohm|js};
+        uri = {js|http://monoxyd.de/20150408-ohm-008-ohne-heftige-mangel|js};
+        title =
+          {js|(german) OHM #008 – Ohne Heftige Mängel: TLS und dessen Probleme; robuste Implementierung von Sicherheitsprotokollen; OCaml-TLS und MirageOS|js};
+        date = {js|2015-04-08|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|cam-news-nymote|js};
+        uri =
+          {js|http://www.cambridge-news.co.uk/personal-cloud-private-data-reality-thanks-Nymote/story-26074338-detail/story.html|js};
+        title =
+          {js|A personal cloud for your private data could become a reality thanks to Nymote|js};
+        date = {js|2015-02-24|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|acolyer-mergeable-structures|js};
+        uri =
+          {js|http://blog.acolyer.org/2015/01/14/mergeable-persistent-data-structures/|js};
+        title = {js|Mergeable persistent data structures|js};
+        date = {js|2015-01-14|js};
+        stream = {js|public-blog|js};
+      };
+      {
+        id = {js|acolyer-unikernels|js};
+        uri =
+          {js|http://blog.acolyer.org/2015/01/13/unikernels-library-operating-systems-for-the-cloud/|js};
+        title = {js|Unikernels: Library Operating Systems for the Cloud|js};
+        date = {js|2015-01-13|js};
+        stream = {js|public-blog|js};
+      };
+      {
+        id = {js|gfx-os-tech-to-watch|js};
+        uri =
+          {js|http://gfxmonk.net/2015/01/04/os-technologies-to-watch.html|js};
+        title = {js|OS Technologies To Watch In 2015|js};
+        date = {js|2015-01-04|js};
+        stream = {js|public-blog|js};
+      };
+      {
+        id = {js|31c3-secure-modular-os-tls|js};
+        uri =
+          {js|http://media.ccc.de/browse/congress/2014/31c3_-_6443_-_en_-_saal_2_-_201412271245_-_trustworthy_secure_modular_operating_system_engineering_-_hannes_-_david_kaloper.html#video|js};
+        title = {js|Trustworthy secure modular operating system engineering|js};
+        date = {js|2014-12-27|js};
+        stream = {js|public-talk|js};
+      };
+      {
+        id = {js|oups-dec2014-state-of-mirage|js};
+        uri = {js|https://www.irill.org/videos/oups-december-2014/MirageOS|js};
+        title = {js|OCaml Users Paris: State of the Mirage|js};
+        date = {js|2014-12-09|js};
+        stream = {js|public-talk|js};
+      };
+      {
+        id = {js|techrepublic-unikernels|js};
+        uri =
+          {js|http://www.techrepublic.com/article/unikernels-offer-a-stripped-down-alternative-to-linux/|js};
+        title = {js|Unikernels offer a stripped down alternative to Linux|js};
+        date = {js|2014-12-18|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|after-docker-immutable-infra|js};
+        uri =
+          {js|https://medium.com/@darrenrush/after-docker-unikernels-and-immutable-infrastructure-93d5a91c849e|js};
+        title = {js|After Docker: Unikernels and Immutable Infrastructure|js};
+        date = {js|2014-11-06|js};
+        stream = {js|public-blog|js};
+      };
+      {
+        id = {js|unikernels-what-where-why-awick|js};
+        uri = {js|https://www.youtube.com/watch?v=oHcHTFleNtg|js};
+        title =
+          {js|Unikernels: Who, What, Where, When, Why - Adam Wick, Galois|js};
+        date = {js|2014-10-17|js};
+        stream = {js|public-talk|js};
+      };
+      {
+        id = {js|enterprise-oss-2014|js};
+        uri =
+          {js|http://www.linux.com/news/software/applications/789241--5-new-enterprise-open-source-projects-to-watch/|js};
+        title = {js|5 New Enterprise Open Source Projects to Watch|js};
+        date = {js|2014-09-24|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|haskell-symposium-2014-keynote|js};
+        uri = {js|https://www.youtube.com/watch?v=UEIHfXLMtwA|js};
+        title = {js|Haskell Symposium 2014 Keynote on Unikernels|js};
+        date = {js|2014-09-05|js};
+        stream = {js|public-talk|js};
+      };
+      {
+        id = {js|edge-cases-episode-101|js};
+        uri =
+          {js|http://edgecasesshow.com/101-a-program-that-runs-on-metal.html|js};
+        title = {js|A Program That Runs on Metal|js};
+        date = {js|2014-08-14|js};
+        stream = {js|public-blog|js};
+      };
+      {
+        id = {js|miso-talk-entrepreneur-first|js};
+        uri =
+          {js|http://amirchaudhry.com/describing-miso-entrepreneur-first-2014|js};
+        title = {js|Describing the MISO stack at Entrepreneur First|js};
+        date = {js|2014-07-25|js};
+        stream = {js|public-blog|js};
+      };
+      {
+        id = {js|mirage-20-pr-congoo|js};
+        uri =
+          {js|http://www.congoo.com/news/addstorycomment.aspx?st=291376442&Channel_ID=8&Category_ID=-1|js};
+        title = {js|Xen Project Introduces New Mirage OS Release|js};
+        date = {js|2014-07-22|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|mirage-20-pr-reuters|js};
+        uri =
+          {js|http://www.reuters.com/article/2014/07/22/idUSnMKWyFRLBa+1de+MKW20140722|js};
+        title = {js|Xen Project Introduces New Mirage OS Release|js};
+        date = {js|2014-07-22|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|mirage-20-pr-phoronix|js};
+        uri = {js|http://www.phoronix.com/scan.php?page=news_item&px=MTc0NjY|js};
+        title = {js|Xen Project Announces Mirage OS 2.0|js};
+        date = {js|2014-07-22|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|mirage-20-pr-linux-embedded|js};
+        uri =
+          {js|https://www.linux.com/news/embedded-mobile/mobile-linux/781359-xen-project-announces-mirage-os-20|js};
+        title = {js|Xen Project Announces Mirage OS 2.0|js};
+        date = {js|2014-07-22|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|mirage-20-pr-slashdot|js};
+        uri =
+          {js|http://beta.slashdot.org/submission/3717339/news-mirage-os-20----compile-your-own-cloud|js};
+        title = {js|News: Mirage OS 2.0 -- Compile Your Own Cloud|js};
+        date = {js|2014-07-22|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|mirage-20-pr-vmblog|js};
+        uri =
+          {js|http://vmblog.com/archive/2014/07/22/xen-project-introduces-new-mirage-os-release.aspx|js};
+        title = {js|Xen Project Introduces New Mirage OS Release|js};
+        date = {js|2014-07-22|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|mirage-20-pr-lastminutegeek|js};
+        uri =
+          {js|http://www.lastminutegeek.com/english/77-linuxtoday/1151651-mirage-os-v20-the-new-features.html|js};
+        title = {js|Mirage OS v2.0: The new features|js};
+        date = {js|2014-07-22|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|mirage-20-pr-techinvestornews|js};
+        uri =
+          {js|http://www.techinvestornews.com/Cloud/Latest-Cloud-Computing-News/xen-unveils-mirage-os-2.0-for-open-source-virtual-cloud-apps|js};
+        title =
+          {js|Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps|js};
+        date = {js|2014-07-22|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|mirage-20-pr-slashdot-2|js};
+        uri =
+          {js|http://beta.slashdot.org/submission/3720459/xen-unveils-mirage-os-20-for-open-source-virtual-cloud-apps|js};
+        title =
+          {js|Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps|js};
+        date = {js|2014-07-22|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|mirage-20-pr-linuxtoday|js};
+        uri =
+          {js|http://www.linuxtoday.com/high_performance/mirage-os-v2.0-the-new-features.html|js};
+        title = {js|Mirage OS v2.0: The new features|js};
+        date = {js|2014-07-23|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|mirage-20-pr-twit|js};
+        uri = {js|https://plus.google.com/+TWiT/posts/6DkCPz3TSdd|js};
+        title = {js|FLOSS Weekly 302 | TWiT.TV|js};
+        date = {js|2014-07-23|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|mirage-20-pr-cloudcomputinginfo|js};
+        uri =
+          {js|http://cloudcomputing.info/en/news/2014/07/xen-project-releases-mirage-os-2-0.html|js};
+        title = {js|Xen Project releases Mirage OS 2.0|js};
+        date = {js|2014-07-23|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|mirage-20-pr-vibriefing|js};
+        uri =
+          {js|http://www.vibriefing.com/xen-unveils-mirage-os-2-0-for-open-source-virtual-cloud-apps/|js};
+        title =
+          {js|Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps|js};
+        date = {js|2014-07-25|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|mirage-20-pr-marketwatch|js};
+        uri =
+          {js|http://www.marketwatch.com/story/xen-project-introduces-new-mirage-os-release-2014-07-22|js};
+        title = {js|Xen Project Introduces New Mirage OS Release|js};
+        date = {js|2014-07-22|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|mirage-20-pr-linuxquestions|js};
+        uri =
+          {js|http://www.linuxquestions.org/questions/syndicated-linux-news-67/lxer-xen-unveils-mirage-os-2-0-for-open-source-virtual-cloud-apps-4175512075/|js};
+        title =
+          {js|LXer: Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps|js};
+        date = {js|2014-07-22|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|mirage-20-pr-4-traders|js};
+        uri =
+          {js|http://www.4-traders.com/news/Xen-Project-Introduces-New-Mirage-OS-Release--18774589/|js};
+        title = {js| Xen Project Introduces New Mirage OS Release|js};
+        date = {js|2014-07-22|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|mirage-20-pr-release|js};
+        uri =
+          {js|http://www.marketwired.com/press-release/xen-project-introduces-new-mirage-os-release-1931602.htm|js};
+        title = {js|Xen Project Introduces New Mirage OS Release|js};
+        date = {js|2014-07-22|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|yahoo-pr-mirage-20-release|js};
+        uri =
+          {js|http://finance.yahoo.com/news/xen-project-introduces-mirage-os-120000542.html|js};
+        title =
+          {js|Yahoo Finance - Xen Project Introduces New Mirage OS Release|js};
+        date = {js|2014-07-22|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|cloud-computing-mirage-20|js};
+        uri =
+          {js|http://cloudcomputing.info/en/news/2014/07/xen-project-releases-mirage-os-2-0.html|js};
+        title = {js|CloudComputing - Xen Project releases Mirage OS 2.0|js};
+        date = {js|2014-07-22|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|xenblog-mirage-20-release|js};
+        uri =
+          {js|http://blog.xen.org/index.php/2014/07/22/mirage-os-v2-0-the-new-features/|js};
+        title = {js|XenBlog: Mirage OS v2.0: The new features|js};
+        date = {js|2014-07-22|js};
+        stream = {js|public-blog|js};
+      };
+      {
+        id = {js|varguy-mirage-20-release|js};
+        uri =
+          {js|http://thevarguy.com/virtualization-applications-and-technologies/072314/xen-unveils-mirage-os-20-open-source-virtual-cloud-apps|js};
+        title =
+          {js|Xen Unveils Mirage OS 2.0 for Open Source Virtual Cloud Apps|js};
+        date = {js|2014-07-23|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|mirage-20-release-linux-magazin-de|js};
+        uri =
+          {js|http://www.linux-magazin.de/NEWS/Ocaml-Cloud-OS-Mirage-OS-2.0-erhoeht-Sicherheit|js};
+        title = {js|(german) OCaml-Cloud-OS Mirage OS 2.0 erhöht Sicherheit|js};
+        date = {js|2014-07-23|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|mirage-20-release-yc-isvoc|js};
+        uri =
+          {js|http://yc.isvoc.com/201407231852-xen-project-introduces-new-mirage-os-release.html#.U9AWkhZD3nc|js};
+        title = {js|(chinese) Xen项目推出新的幻影操作系统版本|js};
+        date = {js|2014-07-23|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|mirage-20-release-admin-magazin-de|js};
+        uri =
+          {js|http://www.admin-magazin.de/News/Mirage-OS-2.0-veroeffentlicht|js};
+        title = {js|(german) Mirage OS 2.0 veröffentlicht|js};
+        date = {js|2014-07-22|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|bww-mirage-20-release|js};
+        uri =
+          {js|http://www.broadwayworld.com/bwwgeeks/article/Xen-Project-Introduces-New-Mirage-OS-Release-20140722#.U9AX5xZD3nc|js};
+        title = {js|BWW: Xen Project Introduces New Mirage OS Release|js};
+        date = {js|2014-07-22|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|open-source-china-mirage-20-release|js};
+        uri = {js|http://www.oschina.net/news/53851/mirage-os-2-0-released|js};
+        title = {js|(chinese) Mirage OS 2.0 发布，云编程平台|js};
+        date = {js|2014-07-23|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|seedhack-experience|js};
+        uri = {js|http://seedcamp.com/seedhack-5-0/|js};
+        title = {js|The Seedhack Experience|js};
+        date = {js|2014-07-23|js};
+        stream = {js|public-blog|js};
+      };
+      {
+        id = {js|hn-introducing-irmin|js};
+        uri = {js|https://news.ycombinator.com/item?id=8053687|js};
+        title = {js|HN: Irmin: Git-like distributed, branchable storage|js};
+        date = {js|2014-07-18|js};
+        stream = {js|hackernews|js};
+      };
+      {
+        id = {js|hn-introducing-asn1|js};
+        uri = {js|https://news.ycombinator.com/item?id=8020125|js};
+        title = {js|HN: OCaml-TLS: ASN.1 and notation embedding|js};
+        date = {js|2014-07-11|js};
+        stream = {js|hackernews|js};
+      };
+      {
+        id = {js|hn-mirage-os-unikernel-for-xen-hypervisor|js};
+        uri = {js|https://news.ycombinator.com/item?id=7726748|js};
+        title = {js|HN: Mirage OS: A Unikernel For The Xen Hypervisor|js};
+        date = {js|2014-05-10|js};
+        stream = {js|hackernews|js};
+      };
+      {
+        id = {js|hn-ocaml-tls-api-internals-attacks-mitigation|js};
+        uri = {js|https://news.ycombinator.com/item?id=8031368|js};
+        title =
+          {js|HN: OCaml-TLS: the protocol implementation and mitigations to known attacks|js};
+        date = {js|2014-07-14|js};
+        stream = {js|hackernews|js};
+      };
+      {
+        id = {js|hn-announcing-mirage-20-release|js};
+        uri = {js|https://news.ycombinator.com/item?id=8069132|js};
+        title = {js|HN: Mirage v2.0: a recap of the new features|js};
+        date = {js|2014-07-22|js};
+        stream = {js|hackernews|js};
+      };
+      {
+        id = {js|hn-acm-queue-01|js};
+        uri = {js|https://news.ycombinator.com/item?id=7053638|js};
+        title =
+          {js|HN: Unikernels: Rise of the Virtual Library Operating System|js};
+        date = {js|2014-01-14|js};
+        stream = {js|hackernews|js};
+      };
+      {
+        id = {js|hn-acm-queue-02|js};
+        uri = {js|https://news.ycombinator.com/item?id=8025493|js};
+        title =
+          {js|HN: Unikernels: Rise of the Virtual Library Operating System|js};
+        date = {js|2014-07-12|js};
+        stream = {js|hackernews|js};
+      };
+      {
+        id = {js|hn-introducing-tls|js};
+        uri = {js|https://news.ycombinator.com/item?id=8005130|js};
+        title = {js|HN: Introducing Transport Layer Security in pure OCaml|js};
+        date = {js|2014-07-08|js};
+        stream = {js|hackernews|js};
+      };
+      {
+        id = {js|digital-conversations-2014|js};
+        uri =
+          {js|http://www.brondbjerg.co.uk/blog/2014/06/building-the-next-generation-of-the-web/|js};
+        title =
+          {js|Digital Conversations - Building the Next Generation of the Web|js};
+        date = {js|2014-06-12|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|linux-magazin-de-zero-install|js};
+        uri =
+          {js|http://www.linux-magazin.de/Ausgaben/2014/06/Ocaml/%28language%29/ger-DE/|js};
+        title = {js|Programmieren in OCaml (German)|js};
+        date = {js|2014-06-01|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|se-radio-2014|js};
+        uri =
+          {js|http://www.se-radio.net/2014/05/episode-204-anil-madhavapeddy-on-the-mirage-cloud-operating-system-and-the-ocaml-language/|js};
+        title =
+          {js|Software Engineering Radio: podcast on MirageOS and OCaml with Anil Madhavapeddy|js};
+        date = {js|2014-05-30|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|nw-lang-mirageos|js};
+        uri =
+          {js|http://www.networkworld.com/slideshow/149127/beyond-the-usual-suspects-10-hot-programming-languages-on-the-rise.html#slide10|js};
+        title =
+          {js|Beyond the usual suspects: 10 hot programming languages on the rise|js};
+        date = {js|2014-04-17|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|citirx-containers-xen|js};
+        uri =
+          {js|http://open.citrix.com/blog/328-are-containers-the-right-answer-to-the-wrong-question.html|js};
+        title = {js|Are Containers the Right Answer to the Wrong Question?|js};
+        date = {js|2014-04-08|js};
+        stream = {js|public-blog|js};
+      };
+      {
+        id = {js|mindy-unikernel-1|js};
+        uri =
+          {js|http://www.somerandomidiot.com/blog/2014/03/14/its-a-mirage/|js};
+        title = {js|It's a Mirage! (or, How to Shave a Yak.)|js};
+        date = {js|2014-03-14|js};
+        stream = {js|public-blog|js};
+      };
+      {
+        id = {js|amirmc-jekyll-1|js};
+        uri =
+          {js|http://amirchaudhry.com/from-jekyll-to-unikernel-in-fifty-lines|js};
+        title = {js|From Jekyll site to Unikernel in fifty lines of code|js};
+        date = {js|2014-03-10|js};
+        stream = {js|public-blog|js};
+      };
+      {
+        id = {js|pcworld-2014-xenarm|js};
+        uri =
+          {js|http://www.pcworld.com/article/2106460/xen-hypervisor-moves-into-arm-space.html|js};
+        title = {js|Xen hypervisor moves into ARM space|js};
+        date = {js|2014-03-10|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|fosdem-2014-video|js};
+        uri =
+          {js|http://video.fosdem.org/2014/Janson/Sunday/MirageOS_compiling_functional_library_operating_systems.webm|js};
+        title =
+          {js|FOSDEM 2014: MirageOS: compiling functional library operating systems|js};
+        date = {js|2014-02-02|js};
+        stream = {js|public-talk|js};
+      };
+      {
+        id = {js|fosdem-2014|js};
+        uri =
+          {js|https://fosdem.org/2014/interviews/2014-anil-madhavapeddy-richard-mortier/|js};
+        title =
+          {js|Interview with Anil Madhavapeddy and Richard Mortier on MirageOS|js};
+        date = {js|2014-01-29|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|osnews-2014|js};
+        uri =
+          {js|http://www.osnews.com/comments/27516?view=threaded&sort=&threshold=0|js};
+        title =
+          {js|OSNews: MirageOS: rise of the virtual library operating system|js};
+        date = {js|2014-01-15|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|nymote-mirage-ann-2014|js};
+        uri =
+          {js|http://nymote.org/blog/2014/announcing-first-mirage-release/|js};
+        title =
+          {js|Nymote.org: Announcing the first major release of Mirage - the Cloud Operating System|js};
+        date = {js|2014-01-13|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|infoworld-mirage-2014|js};
+        uri =
+          {js|http://www.infoworld.com/t/operating-systems/xen-mirage-the-less-more-cloud-os-233823|js};
+        title = {js|Xen Mirage: The less-is-more cloud OS|js};
+        date = {js|2014-01-09|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|infoq-rwo-2013|js};
+        uri = {js|http://www.infoq.com/articles/real-world-ocaml-interview|js};
+        title = {js|Book Review and Interview: Real World OCaml|js};
+        date = {js|2014-01-08|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|techweek-europe-2013|js};
+        uri =
+          {js|http://www.techweekeurope.co.uk/comment/xen-launches-mirage-cloud-os-133875|js};
+        title = {js|Xen Launches The Mirage Cloud OS|js};
+        date = {js|2013-12-11|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|linuxcom-cloud-os-2013|js};
+        uri =
+          {js|http://www.linux.com/news/enterprise/cloud-computing/751156-are-cloud-operating-systems-the-next-big-thing-|js};
+        title =
+          {js|Linux.com: Are Cloud Operating Systems the Next Big Thing?|js};
+        date = {js|2013-12-03|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|infoq-mirageos-2013|js};
+        uri = {js|http://www.infoq.com/news/2013/12/mirageos|js};
+        title = {js|InfoQ: Xen Project Releases 1.0 of Mirage OS|js};
+        date = {js|2013-12-23|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|eweek-mirageos-2013|js};
+        uri =
+          {js|http://www.eweek.com/cloud/xen-project-builds-its-own-cloud-os-mirage.html/|js};
+        title = {js|eWeek: Xen Project Builds Its Own Cloud OS Mirage|js};
+        date = {js|2013-12-09|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|xenproject-mirageos-2013|js};
+        uri =
+          {js|http://www.xenproject.org/about/in-the-news/162-xen-project-releases-mirage-os-welcomes-arm-as-newest-member.html|js};
+        title =
+          {js|Xen Project Releases Mirage OS, Welcomes ARM as Newest Member|js};
+        date = {js|2013-12-09|js};
+        stream = {js|press-coverage|js};
+      };
+      {
+        id = {js|voxoz-docker-2013|js};
+        uri =
+          {js|http://blog.docker.io/2013/09/powering-voxoz-ecosystem-with-docker/|js};
+        title = {js|Powering Voxoz ecosystem with Docker|js};
+        date = {js|2013-09-26|js};
+        stream = {js|public-blog|js};
+      };
+    ]
 end
 
 module Paper = struct
@@ -21138,196 +21743,283 @@ module Paper = struct
     abstract : string;
   }
 
-  let all = 
-[
-    { name = {js|cacm|js}
-    ; title = {js|Unikernels: Rise of the Virtual Library Operating System|js}
-    ; links = 
- [
-          { description = {js|Read Online|js}
-          ; uri = {js|http://queue.acm.org/detail.cfm?id=2566628|js}
-          }]
-    ; authors = 
- [{js|Anil Madhavapeddy|js}; {js|David Scott|js}]
-    ; description = {js|In Communications of the ACM, January 2014.|js}
-    ; abstract = {js|What if all the software layers in a virtual appliance were compiled within the same safe, high-level language framework?
-|js}
-    };
- 
-    { name = {js|rwo|js}
-    ; title = {js|Real World OCaml: functional programming for the masses|js}
-    ; links = 
- [
-          { description = {js|Read Online|js}
-          ; uri = {js|https://realworldocaml.org|js}
-          }]
-    ; authors = 
- [{js|Anil Madhavapeddy|js}; {js|Yaron Minsky|js}; {js|Jason Hickey|js}]
-    ; description = {js|Published by O'Reilly Associates, 510 pages, Nov 2013.|js}
-    ; abstract = {js|This fast-moving tutorial introduces you to OCaml, an industrial-strength programming language designed for expressiveness, safety, and speed. Through the book’s many examples, you’ll quickly learn how OCaml stands out as a tool for writing fast, succinct, and readable systems code. Real World OCaml takes you through the concepts of the language at a brisk pace, and then helps you explore the tools and techniques that make OCaml an effective and practical tool. In the book’s third section, you’ll delve deep into the details of the compiler toolchain and OCaml’s simple and efficient runtime system.
-|js}
-    };
- 
-    { name = {js|asplos|js}
-    ; title = {js|Unikernels: library operating systems for the cloud|js}
-    ; links = 
- [
-          { description = {js|Download PDF|js}
-          ; uri = {js|http://anil.recoil.org/papers/2013-asplos-mirage.pdf|js}
-          }]
-    ; authors = 
- [{js|Anil Madhavapeddy|js}; {js|Richard Mortier|js};
-  {js|Charalampos Rotsos|js}; {js|David Scott|js}; {js|Balraj Singh|js};
-  {js|Thomas Gazagnaire|js}; {js|Steven Smith|js}; {js|Steven Hand|js};
-  {js|Jon Crowcroft|js}]
-    ; description = {js|Proceedings of the 18th International Conference on Architectural Support for Programming Languages and Operating Systems ASPLOS '13, April, 2013.|js}
-    ; abstract = {js|We present <em>unikernels</em>, a new approach to deploying cloud services via applications written in high-level source code. Unikernels are single-purpose appliances that are compile-time specialised into standalone kernels, and sealed against modification when deployed to a cloud platform. In return they offer significant reduction in image sizes, improved efficiency and security, and should reduce operational costs. Our MirageOS prototype compiles OCaml code into unikernels that run on commodity clouds and offer an order of magnitude reduction in code size without significant performance penalty. The architecture combines static type-safety with a single address-space layout that can be made immutable via a hypervisor extension. MirageOS contributes a suite of type-safe protocol libraries, and our results demonstrate that the hypervisor is a platform that overcomes the hardware compatibility issues that have made past library operating systems impractical to deploy in the real-world.
-|js}
-    };
- 
-    { name = {js|openflow|js}
-    ; title = {js|Cost, Performance & Flexibility in OpenFlow: Pick Three|js}
-    ; links = 
- [
-          { description = {js|Download PDF|js}
-          ; uri = {js|http://www.cs.nott.ac.uk/~rmm/papers/pdf/iccsdn12-mirageof.pdf|js}
-          }]
-    ; authors = 
- [{js|Richard Mortier|js}; {js|Charalampos Rotsos|js};
-  {js|Anil Madhavapeddy|js}; {js|Balraj Singh|js}; {js|Andrew Moore|js}]
-    ; description = {js|Proceedings of IEEE ICC Software Defined Networking workshop, June 2012.|js}
-    ; abstract = {js|...
-|js}
-    };
- 
-    { name = {js|droplets|js}
-    ; title = {js|Unclouded Vision|js}
-    ; links = 
- [
-          { description = {js|Download PDF|js}
-          ; uri = {js|http://www.cs.nott.ac.uk/~rmm/papers/pdf/icdcn11-droplets.pdf|js}
-          }]
-    ; authors = 
- [{js|Jon Crowcroft|js}; {js|Anil Madhavapeddy|js};
-  {js|Malte Schwarzkopf|js}; {js|Theo Hong|js}; {js|Richard Mortier|js}]
-    ; description = {js|Proceedings of 12th International Conference on Distributed Computing and Networking ICDCN '11, January 2011. Invited paper.|js}
-    ; abstract = {js|...
-|js}
-    };
- 
-    { name = {js|hotcloud|js}
-    ; title = {js|Turning down the LAMP: Software Specialisation for the Cloud|js}
-    ; links = 
- [
-          { description = {js|Download PDF|js}
-          ; uri = {js|http://anil.recoil.org/papers/2010-hotcloud-lamp.pdf|js}
-          }]
-    ; authors = 
- [{js|Anil Madhavapeddy|js}; {js|Richard Mortier|js}; {js|Ripduman Sohan|js};
-  {js|Thomas Gazagnaire|js}; {js|Steven Hand|js}; {js|Tim Deegan|js};
-  {js|Derek McAuley|js}; {js|Jon Crowcroft|js}]
-    ; description = {js|2nd USENIX Workshop on Hot Topics in Cloud Computing HotCloud '10, June 2010.|js}
-    ; abstract = {js|This paper positions work on the Xen backend for MirageOS. It is a decent summary of the idea, although some details such as the filesystem extension are likely to be significantly different in the first release.
-|js}
-    };
- 
-    { name = {js|dustclouds|js}
-    ; title = {js|Using Dust Clouds to Enhance Anonymous Communication|js}
-    ; links = 
- [
-          { description = {js|Download PDF|js}
-          ; uri = {js|http://www.cs.nott.ac.uk/~rmm/papers/pdf/iwsp10-dustclouds.pdf|js}
-          }]
-    ; authors = 
- [{js|Richard Mortier|js}; {js|Anil Madhavapeddy|js}; {js|Theo Hong|js};
-  {js|Derek Murray|js}; {js|Malte Schwarzkopf|js}]
-    ; description = {js|Proceedings of the 18th International Workshop on Security Protocols (IWSP), April 2010|js}
-    ; abstract = {js|...
-|js}
-    };
- 
-    { name = {js|visions|js}
-    ; title = {js|Multiscale not Multicore: Efficient Heterogeneous Cloud Computing|js}
-    ; links = 
- [
-          { description = {js|Download PDF|js}
-          ; uri = {js|http://anil.recoil.org/papers/2010-bcs-visions.pdf|js}
-          };
-  
-          { description = {js|BCS Homepage|js}
-          ; uri = {js|http://www.bcs.org/server.php?show=nav.11980|js}
-          }]
-    ; authors = 
- [{js|Anil Madhavapeddy|js}; {js|Richard Mortier|js}; {js|Jon Crowcroft|js};
-  {js|Steven Hand|js}]
-    ; description = {js|ACM/BCS Visions of Computer Science, April 2010|js}
-    ; abstract = {js|This is a vision paper that lays out the broader background to the project, including some of the problem areas we are tackling in social networking and scientific computing. The first half is a good introduction to the area, but read the later HotCloud paper instead of the technical second half.
-|js}
-    };
- 
-    { name = {js|wgt|js}
-    ; title = {js|Statically-typed value persistence for ML|js}
-    ; links = 
- [
-          { description = {js|Download PDF|js}
-          ; uri = {js|http://anil.recoil.org/papers/2010-dyntype-wgt.pdf|js}
-          };
-  
-          { description = {js|Prezy Presentation|js}
-          ; uri = {js|http://prezi.com/qjkrijlacqiq/mirage/|js}
-          }]
-    ; authors = 
- [{js|Thomas Gazagnaire|js}; {js|Anil Madhavapeddy|js}]
-    ; description = {js|Workshop on Generative Technologies, April 2010|js}
-    ; abstract = {js|This paper defines the dyntype dynamic typing extension we developed for OCaml, and the SQL mapper that converts ML values directly into SQL calls. The approach is useful as it is purely meta-programming instead of compiler patching, and thus much easier to integrate with other OCaml code.
-|js}
-    };
- 
-    { name = {js|icfem|js}
-    ; title = {js|Combining Static Model Checking with Dynamic Enforcement using the Statecall Policy Language|js}
-    ; links = 
- [
-          { description = {js|Download PDF|js}
-          ; uri = {js|http://anil.recoil.org/papers/2009-icfem-spl.pdf|js}
-          }]
-    ; authors = 
- [{js|Anil Madhavapeddy|js}]
-    ; description = {js|International Conference on Formal Engineering Methods ICFEM, December 2009.|js}
-    ; abstract = {js|A small domain-specific language which compiles to both PROMELA (for static model checking) and OCaml (for dynamic enforcement) of state machines. This paper defines the DSL and an example against an SSH server written in pure OCaml.
-|js}
-    };
- 
-    { name = {js|eurosys|js}
-    ; title = {js|Melange: Towards a "functional" Internet|js}
-    ; links = 
- [
-          { description = {js|Download PDF|js}
-          ; uri = {js|http://anil.recoil.org/papers/2007-eurosys-melange.pdf|js}
-          };
-  
-          { description = {js|ACM Portal|js}
-          ; uri = {js|http://portal.acm.org/citation.cfm?id=1272996.1273009|js}
-          }]
-    ; authors = 
- [{js|Anil Madhavapeddy|js}; {js|Alex Ho|js}; {js|Tim Deegan|js};
-  {js|David Scott|js}; {js|Ripduman Sohan|js}]
-    ; description = {js|EuroSys 2007, March 2007.|js}
-    ; abstract = {js|The original paper that formed the basis of MirageOS. We define MPL, a DSL to express bi-directional packet descriptions and compile them into efficient, type-safe OCaml code. Performance is tested for DNS and SSH servers written in OCaml versus their C counterparts (BIND and OpenSSH
-|js}
-    };
- 
-    { name = {js|mainname|js}
-    ; title = {js|The Main Name System|js}
-    ; links = 
- [
-          { description = {js|Download PDF|js}
-          ; uri = {js|http://www.tjd.phlegethon.org/words/thesis.pdf|js}
-          }]
-    ; authors = 
- [{js|Tim Deegan|js}]
-    ; description = {js|PhD Thesis, University of Cambridge, 2006.|js}
-    ; abstract = {js|This thesis describes the Main Name System, an approach to centralising DNS for improved reliability. The source code for the MirageOS DNS library is based directly off the data structures described in this thesis.
-|js}
-    }]
+  let all =
+    [
+      {
+        name = {js|cacm|js};
+        title = {js|Unikernels: Rise of the Virtual Library Operating System|js};
+        links =
+          [
+            {
+              description = {js|Read Online|js};
+              uri = {js|http://queue.acm.org/detail.cfm?id=2566628|js};
+            };
+          ];
+        authors = [ {js|Anil Madhavapeddy|js}; {js|David Scott|js} ];
+        description = {js|In Communications of the ACM, January 2014.|js};
+        abstract =
+          {js|What if all the software layers in a virtual appliance were compiled within the same safe, high-level language framework?
+|js};
+      };
+      {
+        name = {js|rwo|js};
+        title = {js|Real World OCaml: functional programming for the masses|js};
+        links =
+          [
+            {
+              description = {js|Read Online|js};
+              uri = {js|https://realworldocaml.org|js};
+            };
+          ];
+        authors =
+          [
+            {js|Anil Madhavapeddy|js};
+            {js|Yaron Minsky|js};
+            {js|Jason Hickey|js};
+          ];
+        description =
+          {js|Published by O'Reilly Associates, 510 pages, Nov 2013.|js};
+        abstract =
+          {js|This fast-moving tutorial introduces you to OCaml, an industrial-strength programming language designed for expressiveness, safety, and speed. Through the book’s many examples, you’ll quickly learn how OCaml stands out as a tool for writing fast, succinct, and readable systems code. Real World OCaml takes you through the concepts of the language at a brisk pace, and then helps you explore the tools and techniques that make OCaml an effective and practical tool. In the book’s third section, you’ll delve deep into the details of the compiler toolchain and OCaml’s simple and efficient runtime system.
+|js};
+      };
+      {
+        name = {js|asplos|js};
+        title = {js|Unikernels: library operating systems for the cloud|js};
+        links =
+          [
+            {
+              description = {js|Download PDF|js};
+              uri = {js|http://anil.recoil.org/papers/2013-asplos-mirage.pdf|js};
+            };
+          ];
+        authors =
+          [
+            {js|Anil Madhavapeddy|js};
+            {js|Richard Mortier|js};
+            {js|Charalampos Rotsos|js};
+            {js|David Scott|js};
+            {js|Balraj Singh|js};
+            {js|Thomas Gazagnaire|js};
+            {js|Steven Smith|js};
+            {js|Steven Hand|js};
+            {js|Jon Crowcroft|js};
+          ];
+        description =
+          {js|Proceedings of the 18th International Conference on Architectural Support for Programming Languages and Operating Systems ASPLOS '13, April, 2013.|js};
+        abstract =
+          {js|We present <em>unikernels</em>, a new approach to deploying cloud services via applications written in high-level source code. Unikernels are single-purpose appliances that are compile-time specialised into standalone kernels, and sealed against modification when deployed to a cloud platform. In return they offer significant reduction in image sizes, improved efficiency and security, and should reduce operational costs. Our MirageOS prototype compiles OCaml code into unikernels that run on commodity clouds and offer an order of magnitude reduction in code size without significant performance penalty. The architecture combines static type-safety with a single address-space layout that can be made immutable via a hypervisor extension. MirageOS contributes a suite of type-safe protocol libraries, and our results demonstrate that the hypervisor is a platform that overcomes the hardware compatibility issues that have made past library operating systems impractical to deploy in the real-world.
+|js};
+      };
+      {
+        name = {js|openflow|js};
+        title = {js|Cost, Performance & Flexibility in OpenFlow: Pick Three|js};
+        links =
+          [
+            {
+              description = {js|Download PDF|js};
+              uri =
+                {js|http://www.cs.nott.ac.uk/~rmm/papers/pdf/iccsdn12-mirageof.pdf|js};
+            };
+          ];
+        authors =
+          [
+            {js|Richard Mortier|js};
+            {js|Charalampos Rotsos|js};
+            {js|Anil Madhavapeddy|js};
+            {js|Balraj Singh|js};
+            {js|Andrew Moore|js};
+          ];
+        description =
+          {js|Proceedings of IEEE ICC Software Defined Networking workshop, June 2012.|js};
+        abstract = {js|...
+|js};
+      };
+      {
+        name = {js|droplets|js};
+        title = {js|Unclouded Vision|js};
+        links =
+          [
+            {
+              description = {js|Download PDF|js};
+              uri =
+                {js|http://www.cs.nott.ac.uk/~rmm/papers/pdf/icdcn11-droplets.pdf|js};
+            };
+          ];
+        authors =
+          [
+            {js|Jon Crowcroft|js};
+            {js|Anil Madhavapeddy|js};
+            {js|Malte Schwarzkopf|js};
+            {js|Theo Hong|js};
+            {js|Richard Mortier|js};
+          ];
+        description =
+          {js|Proceedings of 12th International Conference on Distributed Computing and Networking ICDCN '11, January 2011. Invited paper.|js};
+        abstract = {js|...
+|js};
+      };
+      {
+        name = {js|hotcloud|js};
+        title =
+          {js|Turning down the LAMP: Software Specialisation for the Cloud|js};
+        links =
+          [
+            {
+              description = {js|Download PDF|js};
+              uri = {js|http://anil.recoil.org/papers/2010-hotcloud-lamp.pdf|js};
+            };
+          ];
+        authors =
+          [
+            {js|Anil Madhavapeddy|js};
+            {js|Richard Mortier|js};
+            {js|Ripduman Sohan|js};
+            {js|Thomas Gazagnaire|js};
+            {js|Steven Hand|js};
+            {js|Tim Deegan|js};
+            {js|Derek McAuley|js};
+            {js|Jon Crowcroft|js};
+          ];
+        description =
+          {js|2nd USENIX Workshop on Hot Topics in Cloud Computing HotCloud '10, June 2010.|js};
+        abstract =
+          {js|This paper positions work on the Xen backend for MirageOS. It is a decent summary of the idea, although some details such as the filesystem extension are likely to be significantly different in the first release.
+|js};
+      };
+      {
+        name = {js|dustclouds|js};
+        title = {js|Using Dust Clouds to Enhance Anonymous Communication|js};
+        links =
+          [
+            {
+              description = {js|Download PDF|js};
+              uri =
+                {js|http://www.cs.nott.ac.uk/~rmm/papers/pdf/iwsp10-dustclouds.pdf|js};
+            };
+          ];
+        authors =
+          [
+            {js|Richard Mortier|js};
+            {js|Anil Madhavapeddy|js};
+            {js|Theo Hong|js};
+            {js|Derek Murray|js};
+            {js|Malte Schwarzkopf|js};
+          ];
+        description =
+          {js|Proceedings of the 18th International Workshop on Security Protocols (IWSP), April 2010|js};
+        abstract = {js|...
+|js};
+      };
+      {
+        name = {js|visions|js};
+        title =
+          {js|Multiscale not Multicore: Efficient Heterogeneous Cloud Computing|js};
+        links =
+          [
+            {
+              description = {js|Download PDF|js};
+              uri = {js|http://anil.recoil.org/papers/2010-bcs-visions.pdf|js};
+            };
+            {
+              description = {js|BCS Homepage|js};
+              uri = {js|http://www.bcs.org/server.php?show=nav.11980|js};
+            };
+          ];
+        authors =
+          [
+            {js|Anil Madhavapeddy|js};
+            {js|Richard Mortier|js};
+            {js|Jon Crowcroft|js};
+            {js|Steven Hand|js};
+          ];
+        description = {js|ACM/BCS Visions of Computer Science, April 2010|js};
+        abstract =
+          {js|This is a vision paper that lays out the broader background to the project, including some of the problem areas we are tackling in social networking and scientific computing. The first half is a good introduction to the area, but read the later HotCloud paper instead of the technical second half.
+|js};
+      };
+      {
+        name = {js|wgt|js};
+        title = {js|Statically-typed value persistence for ML|js};
+        links =
+          [
+            {
+              description = {js|Download PDF|js};
+              uri = {js|http://anil.recoil.org/papers/2010-dyntype-wgt.pdf|js};
+            };
+            {
+              description = {js|Prezy Presentation|js};
+              uri = {js|http://prezi.com/qjkrijlacqiq/mirage/|js};
+            };
+          ];
+        authors = [ {js|Thomas Gazagnaire|js}; {js|Anil Madhavapeddy|js} ];
+        description = {js|Workshop on Generative Technologies, April 2010|js};
+        abstract =
+          {js|This paper defines the dyntype dynamic typing extension we developed for OCaml, and the SQL mapper that converts ML values directly into SQL calls. The approach is useful as it is purely meta-programming instead of compiler patching, and thus much easier to integrate with other OCaml code.
+|js};
+      };
+      {
+        name = {js|icfem|js};
+        title =
+          {js|Combining Static Model Checking with Dynamic Enforcement using the Statecall Policy Language|js};
+        links =
+          [
+            {
+              description = {js|Download PDF|js};
+              uri = {js|http://anil.recoil.org/papers/2009-icfem-spl.pdf|js};
+            };
+          ];
+        authors = [ {js|Anil Madhavapeddy|js} ];
+        description =
+          {js|International Conference on Formal Engineering Methods ICFEM, December 2009.|js};
+        abstract =
+          {js|A small domain-specific language which compiles to both PROMELA (for static model checking) and OCaml (for dynamic enforcement) of state machines. This paper defines the DSL and an example against an SSH server written in pure OCaml.
+|js};
+      };
+      {
+        name = {js|eurosys|js};
+        title = {js|Melange: Towards a "functional" Internet|js};
+        links =
+          [
+            {
+              description = {js|Download PDF|js};
+              uri =
+                {js|http://anil.recoil.org/papers/2007-eurosys-melange.pdf|js};
+            };
+            {
+              description = {js|ACM Portal|js};
+              uri =
+                {js|http://portal.acm.org/citation.cfm?id=1272996.1273009|js};
+            };
+          ];
+        authors =
+          [
+            {js|Anil Madhavapeddy|js};
+            {js|Alex Ho|js};
+            {js|Tim Deegan|js};
+            {js|David Scott|js};
+            {js|Ripduman Sohan|js};
+          ];
+        description = {js|EuroSys 2007, March 2007.|js};
+        abstract =
+          {js|The original paper that formed the basis of MirageOS. We define MPL, a DSL to express bi-directional packet descriptions and compile them into efficient, type-safe OCaml code. Performance is tested for DNS and SSH servers written in OCaml versus their C counterparts (BIND and OpenSSH
+|js};
+      };
+      {
+        name = {js|mainname|js};
+        title = {js|The Main Name System|js};
+        links =
+          [
+            {
+              description = {js|Download PDF|js};
+              uri = {js|http://www.tjd.phlegethon.org/words/thesis.pdf|js};
+            };
+          ];
+        authors = [ {js|Tim Deegan|js} ];
+        description = {js|PhD Thesis, University of Cambridge, 2006.|js};
+        abstract =
+          {js|This thesis describes the Main Name System, an approach to centralising DNS for improved reliability. The source code for the MirageOS DNS library is based directly off the data structures described in this thesis.
+|js};
+      };
+    ]
 end
-
