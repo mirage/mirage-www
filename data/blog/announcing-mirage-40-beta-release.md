@@ -42,7 +42,9 @@ That new tool, called [opam-monorepo](https://github.com/ocamllabs/opam-monorepo
 
 [![asciicast](https://asciinema.org/a/rRf6s8cNyHUbBsDDfZkBjkf7X.svg)](https://asciinema.org/a/rRf6s8cNyHUbBsDDfZkBjkf7X?speed=2)
 
-`opam-monorepo` is already available in Opam and can be used on many projects which use `dune` as a build system. However, as we don't expect the complete set of OCaml dependencies to use `dune`, we MirageOS maintainers are committed to maintaining patches to build the most common dependencies with `dune`. These packages are hosted in a separate [dune-universe/mirage-opam-overlays](https://github.com/mirage/opam-overlays) repository, which can be used by `opam-monorepo` and is enabled by default when using the Mirage CLI tool.
+`opam-monorepo` is already available in Opam and can be used on many projects which use `dune` as a build system. However, as we don't expect the complete set of OCaml dependencies to use `dune`, we MirageOS maintainers are committed to maintaining patches to build the most common dependencies with `dune`. Two repositories are used for that purpose:
+- [dune-universe/opam-overlays](https://github.com/dune-universe/opam-overlays) is set up by default by `opam-monorepo` and contains most packages.
+- [dune-universe/mirage-opam-overlays](https://github.com/dune-universe/mirage-opam-overlays) is enabled when using the Mirage CLI tool. 
 
 ## Next Steps
 
