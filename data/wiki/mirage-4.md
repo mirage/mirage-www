@@ -1,5 +1,5 @@
 ---
-updated: 2022-01-24 16:00
+updated: 2022-02-11 16:00
 author:
   name: Thomas Gazagnaire
   uri: http://gazagnaire.org
@@ -8,11 +8,7 @@ subject: Mirage 4
 permalink: mirage-4
 ---
 
-Welcome to the MirageOS 4 release page. No official announcement has been made, 
-but the current work is available as a bleeding-edge repository.
-
-You can follow the advances in the release process through the 
-[tracking issue](https://github.com/mirage/mirage/issues/1217).
+Welcome to the MirageOS 4 release page. 
 
 ### What's new ?
 
@@ -66,8 +62,8 @@ features that were slowing down the MirageOS development workflow.
 - **Port to dune**: since the beginning of the work on MirageOS 4, many packages have
   been ported to dune. This is a _requirement_ to be able to use it in a unikernel. 
   The libraries using alternative build systems (such as `B0`) have been ported to `dune`,
-  but as upstreaming the work is not expected, the MirageOS team maintains a repository
-  of _build system forks_: [mirage/opam-overlays](https://github.com/mirage/opam-overlays). 
+  but as upstreaming the work is not expected, the MirageOS team maintains repositories
+  of _build system forks_: [dune-universe/opam-overlays](https://github.com/dune-universe/opam-overlays) and [dune-universe/mirage-opam-overlays](https://github.com/dune-universe/mirage-opam-overlays). 
 
   The mission of porting and maintaining _dune-built_ forks is assured by the 
   [dune-universe](https://github.com/dune-universe) team.
@@ -127,27 +123,21 @@ The output is available in the `dist/` folder.
 ### How to test 
 
 ```sh
-# Add the MirageOS 4 development repository
-$ opam repo add mirage https://github.com/mirage/mirage-dev.git#master
-
 # Install MirageOS 4
-$ opam install mirage
+$ opam install 'mirage>=4.0'
 
-# Clone this website
-$ git clone https://github.com/mirage/mirage-www -b next
-
-# Go in the source folder
-$ cd mirage-www/src
+# Clone this website repository
+$ git clone https://github.com/mirage/mirage-www
 
 # Configure the unikernel
-$ mirage configure -t hvt
+$ mirage configure -f mirage/config.ml -t hvt
 
 # Fetch and install dependencies
 $ make depend
 
 # Build the unikernel
-$ mirage build
+$ dune build mirage/
 
 # Launch it (a tap interface needs to be configured for the hvt target)
-$ solo5-hvt --net:service=tap100 dist/www.hvt
+$ solo5-hvt --net:service=tap100 mirage/dist/www.hvt
 ```
