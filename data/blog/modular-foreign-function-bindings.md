@@ -354,7 +354,7 @@ number of projects across a variety of domains: [graphics][tgls],
 and many others.  Further resources (documentation, forums, etc.) are
 available via the [home page][ocaml-ctypes].
 
-[mirage-ocaml]: https://mirage.io/wiki/technical-background#WhyOCaml
+[mirage-ocaml]: https://mirage.io/docs/technical-background#WhyOCaml
 [libffi]: https://sourceware.org/libffi/
 [tgls]: http://erratique.ch/software/tgls
 [ocaml-ctypes]: https://github.com/ocamllabs/ocaml-ctypes

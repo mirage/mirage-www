@@ -80,7 +80,7 @@ Aside from leading (and upstreaming to Xen) the port of [MirageOS to ARM](https:
 
 The support is now comprehensive and integrated into the MirageOS trees: the [Lwt](http://ocsigen.org/lwt) cooperative threading engine has hooks for thread switching, most of the core libraries register named events, traces are dumped into shared memory buffers in the [CTF](http://wiki.eclipse.org/Linux_Tools_Project/TMF/CTF_guide) file format used by the Linux trace toolkit, and there are JavaScript and GTK+ [GUI frontends](https://github.com/talex5/mirage-trace-viewer) that can parse them.
 
-You can find the latest instructions on [Tracing and Profiling](https://mirage.io/wiki/profiling) on this website, and here are Thomas' original blog posts on the subject:
+You can find the latest instructions on [Tracing and Profiling](https://mirage.io/docs/profiling) on this website, and here are Thomas' original blog posts on the subject:
 
 - [Optimising the Unikernel](http://roscidus.com/blog/blog/2014/08/15/optimising-the-unikernel/)
 - [Visualising an Asynchronous Monad](http://roscidus.com/blog/blog/2014/10/27/visualising-an-asynchronous-monad/)
@@ -146,7 +146,7 @@ So what's coming up for our unikernels in 2015?  Our focus heading into the new 
 
 ### Want to get involved?
 
-This is a really fun time to get involved with unikernels and the MirageOS project. The year of 2014 has seen [lots of discussion](https://mirage.io/links/) about the potential of unikernels and we'll see some of the first big deployments involving them in 2015.  For the ones among you who wish to learn more, then check out the [pioneer projects](https://github.com/mirage/mirage-www/wiki/Pioneer-Projects), watch out for [Amir's meeting notes](https://mirage.io/wiki) and join the voice calls if you want a more interactive discussion, and engage on the [mailing lists](https://mirage.io/community/) with any questions you might have.
+This is a really fun time to get involved with unikernels and the MirageOS project. The year of 2014 has seen [lots of discussion](https://mirage.io/links/) about the potential of unikernels and we'll see some of the first big deployments involving them in 2015.  For the ones among you who wish to learn more, then check out the [pioneer projects](https://github.com/mirage/mirage-www/wiki/Pioneer-Projects), watch out for [Amir's meeting notes](https://mirage.io/docs) and join the voice calls if you want a more interactive discussion, and engage on the [mailing lists](https://mirage.io/community/) with any questions you might have.
 
 For me personally, it's been a real privilege to spend the year working with and learning from the friendly, intelligent and diverse community that is springing up around the project.  The progression from experiment to reality has been a lot of work, but the unikernel dream is finally coming together rath[er nicely thanks to everyone's hard work and enthusiasm.  I'd also like to thank all of our [funding bodies](https://mirage.io/community/) and the [Linux Foundation](http://linuxfoundation.org) and the [Xen Project](http://xenproject.org) (especially Lars Kurth and Russell Pavlicek) for their support throughout the year that made all this work possible.  Happy new year, everyone!
 

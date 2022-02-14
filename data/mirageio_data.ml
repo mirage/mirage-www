@@ -828,7 +828,7 @@ We abandoned the hackification approach.
 Why is this interesting? These were my first encounters with OCaml! The <a href="https://docs.hhvm.com/hack/typechecker/introduction">hack typechecker</a> is written in OCaml, and Dan and I have read it to understand the gradual typing approach.
 Also, we played with <a href="https://github.com/facebook/pfff/wiki/Main"><code>pfff</code></a>, a tool written in OCaml that allows structural edits on PHP programs, based on the abstact syntax tree.
 I made a list to translate between Haskell and OCaml syntax, and later Maggie Zhou and I used <code>pfff</code> to <a href="https://codeascraft.com/author/sschirmer/">unify</a> the syntax of several hundred endpoints in Etsy's internal API.</p>
-<p>At the MirageOS retreat, I started my week reading <a href="https://dev.realworldocaml.org/">&quot;Real World OCaml&quot;</a>, but got stuck because the examples did not work with the buildsystem used in the book. Stephen helped me to find a workaround, I made a PR to the book but it was closed since it is a temporary problem. Also, I started reading about OCaml's <a href="https://mirage.io/wiki/tutorial-lwt">&quot;lwt&quot; library</a> for concurrent programming. The abbreviation stands for lightweight threads and the library provides a monadic way to do multithreading, really similar to <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html">twitter futures</a> in Scala. Asynchronous calls can be made in a thread, which then returns at some point when the call was successful or failed. We can  do operations &quot;inside&quot; lwt with bind (<code>&gt;&gt;=</code>) in the same way we can flatMap over Futures in scala. The library also provides ways to run multiple threads in sequence or in parallel, and to block and wait.
+<p>At the MirageOS retreat, I started my week reading <a href="https://dev.realworldocaml.org/">&quot;Real World OCaml&quot;</a>, but got stuck because the examples did not work with the buildsystem used in the book. Stephen helped me to find a workaround, I made a PR to the book but it was closed since it is a temporary problem. Also, I started reading about OCaml's <a href="https://mirage.io/docs/tutorial-lwt">&quot;lwt&quot; library</a> for concurrent programming. The abbreviation stands for lightweight threads and the library provides a monadic way to do multithreading, really similar to <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html">twitter futures</a> in Scala. Asynchronous calls can be made in a thread, which then returns at some point when the call was successful or failed. We can  do operations &quot;inside&quot; lwt with bind (<code>&gt;&gt;=</code>) in the same way we can flatMap over Futures in scala. The library also provides ways to run multiple threads in sequence or in parallel, and to block and wait.
 In the evening, there was a talk about a <a href="https://github.com/cfcs/mirage-ocra-demo">high-end smart card</a> that based on a private start value can provide a succession of keys. The hardware is interesting, being the size of a credit card it has a small keypad and a screen. Some banks use these cards already (for their TAN system?), and we all got a sample card to play with.</p>
 <p>One day I went swimming with Lix and Reynir, which was quite the adventure since the swimming pool was closed and we were not sure what to do. We still made it to the part that was still open, swam a lot and then got a cake for Hannes birthday which lead to a cake overflow since there were multiple cakes and an awesome party with candles, food and live music already. :D Thanks everyone for organizing!! Happy birthday Hannes!</p>
 <p>I started reading another book, <a href="http://ocaml-book.com/">&quot;OCaml from the very beginning&quot;</a>, and working through it with Kugg. This book was more focused on algorithms and the language itself than on tooling and libraries, and the exercises were really fun to solve. Fire up OCaml's REPL <a href="https://github.com/diml/utop"><code>utop</code></a> and go! :D</p>
@@ -836,7 +836,7 @@ In the evening, there was a talk about a <a href="https://github.com/cfcs/mirage
 It is called solo5 because of MirageOS's system calls, initially a set of 5 calls to the hypervisor, called hypercalls which sounds really futuristic. :D</p>
 <p>So that's the other fun problem: I don't know too much about kernel programming yet. I did the <a href="http://eudyptula-challenge.org/">Eudyptula (Linux kernel) challenge</a>, an email-based challenge that sends you programming quests to learn about kernel programming.
 Over the course of the challenge, I've made my own Linux kernel module that says &quot;Hello world!&quot; but I have not built anything serious yet.</p>
-<p>The next things I learned were <a href="https://mirage.io/wiki/hello-world">configuring and compiling</a> a MirageOS unikernel. Hannes showed me how this works.
+<p>The next things I learned were <a href="https://mirage.io/docs/hello-world">configuring and compiling</a> a MirageOS unikernel. Hannes showed me how this works.
 The config system is powerful and can be tailored to the unikernel we are about to build, via a config file.
 After configuring the build, we can build the kernel for a target backend of our choice. I started out with compiling to Unix, which means all network calls go through unix pipes and the unikernel runs as a simple unix binary in my host system, which is really useful for testing.</p>
 <p>The next way to run MirageOS that I tried was running it in ukvm. For this setup you have to change the networking approach so that you can talk from the host system to you unikernel inside ukvm. In Linux you can use the Tun/Tap loopback interface for networking to wire up this connection.</p>
@@ -1044,7 +1044,7 @@ opam pin add ocp-index-top https://github.com/reynir/ocp-index-top.git</p>
           {js|<p>This winter, 33 people from around the world gathered in Marrakesh for a Mirage hack retreat. This is fast becoming a <a href="/blog/2016-spring-hackathon">MirageOS</a> <a href="/blog/2017-march-hackathon-roundup">tradition</a>, and we're a little sad that it's over already! We've collected some trip reports from those who attended the 2017 winter hack retreat, and we'd like to thank our amazing hosts, organisers and everyone who took the time to write up their experiences.
 <img src="/graphics/winter2017.jpg" style="float:right; padding: 15px" /></p>
 <p>We, the MirageOS community, strongly believe in using our own software: this website has been a unikernel since day one^W^W it was possible to run MirageOS unikernels.  In Marrakesh we used our own DHCP and DNS server without trouble.  There are many more services under heavy development (including git, ssh, ...), which we're looking forward to using soon ourselves.</p>
-<p>Several atteendees joined for the second or third time in Marrakesh, and brought their own projects, spanning over <a href="https://github.com/andreas/ocaml-graphql-server">graphql</a>, <a href="https://reproducible-builds.org/">reproducible builds</a> (with application to <a href="https://github.com/talex5/qubes-mirage-firewall">qubes-mirage-firewall</a>, see <a href="http://layer-acht.org/thinking/blog/20171204-qubes-mirage-firewall/">holger's report</a> and <a href="https://github.com/ocaml/ocaml/pull/1515">Gabriel's OCaml fixes for build path variation</a>).  A stream of improving error messages in the OCaml compiler (based on <a href="https://github.com/ocaml/ocaml/pull/102">Arthur Charguéraud PR</a>) was prepared and merged (<a href="https://github.com/ocaml/ocaml/pull/1496">PR 1496</a>, <a href="https://github.com/ocaml/ocaml/pull/1501">PR 1501</a>, <a href="https://github.com/ocaml/ocaml/pull/1505">PR 1505</a>, <a href="https://github.com/ocaml/ocaml/pull/1510">PR 1510</a>, and <a href="https://github.com/ocaml/ocaml/pull/1534">PR 1534</a>).  Our OCaml <a href="https://github.com/mirage/ocaml-git/">git implementation</a> was rewritten to support git push properly, and this PR was <a href="https://github.com/mirage/ocaml-git/pull/227">merged</a>.  Other projects of interest are <a href="https://github.com/haesbaert/awa-ssh">awa-ssh</a>, <a href="https://github.com/mirage/charrua-core/pull/76">anonymity profiles in DHCP</a>, and fixes to the deployment troubles of <a href="https://github.com/mirage/mirage-www">our website</a>.  There is now a <a href="https://github.com/cfcs/eye-of-mirage">mirage PNG viewer integrated into Qubes</a> and a <a href="https://github.com/cfcs/passmenage">password manager</a>.  Some <a href="https://github.com/juga0/mirage_mar2017">getting started notes</a> were written down as well as the new <a href="https://mirage.io/wiki/learning">learning about MirageOS</a> website.</p>
+<p>Several atteendees joined for the second or third time in Marrakesh, and brought their own projects, spanning over <a href="https://github.com/andreas/ocaml-graphql-server">graphql</a>, <a href="https://reproducible-builds.org/">reproducible builds</a> (with application to <a href="https://github.com/talex5/qubes-mirage-firewall">qubes-mirage-firewall</a>, see <a href="http://layer-acht.org/thinking/blog/20171204-qubes-mirage-firewall/">holger's report</a> and <a href="https://github.com/ocaml/ocaml/pull/1515">Gabriel's OCaml fixes for build path variation</a>).  A stream of improving error messages in the OCaml compiler (based on <a href="https://github.com/ocaml/ocaml/pull/102">Arthur Charguéraud PR</a>) was prepared and merged (<a href="https://github.com/ocaml/ocaml/pull/1496">PR 1496</a>, <a href="https://github.com/ocaml/ocaml/pull/1501">PR 1501</a>, <a href="https://github.com/ocaml/ocaml/pull/1505">PR 1505</a>, <a href="https://github.com/ocaml/ocaml/pull/1510">PR 1510</a>, and <a href="https://github.com/ocaml/ocaml/pull/1534">PR 1534</a>).  Our OCaml <a href="https://github.com/mirage/ocaml-git/">git implementation</a> was rewritten to support git push properly, and this PR was <a href="https://github.com/mirage/ocaml-git/pull/227">merged</a>.  Other projects of interest are <a href="https://github.com/haesbaert/awa-ssh">awa-ssh</a>, <a href="https://github.com/mirage/charrua-core/pull/76">anonymity profiles in DHCP</a>, and fixes to the deployment troubles of <a href="https://github.com/mirage/mirage-www">our website</a>.  There is now a <a href="https://github.com/cfcs/eye-of-mirage">mirage PNG viewer integrated into Qubes</a> and a <a href="https://github.com/cfcs/passmenage">password manager</a>.  Some <a href="https://github.com/juga0/mirage_mar2017">getting started notes</a> were written down as well as the new <a href="https://mirage.io/docs/learning">learning about MirageOS</a> website.</p>
 <p>A huge fraction of the <a href="https://github.com/solo5/solo5">Solo5 contributors</a> gathered in Marrakesh as well and discussed the future, including terminology, the project scope, and outlined a roadmap for merging branches in various states.  Adrian from the <a href="https://muen.sk">Muen</a> project joined the discussion, and in the aftermath they are now running their website using MirageOS on top of the Muen separation kernel.</p>
 <p>A complete list of fixes and discussions is not available, please bear with us if we forgot anything above.  A sneak preview: there will be <a href="http://retreat.mirage.io">another retreat in March 2018</a> in Marrakesh.  Following are texts written by individual participants about their experience.</p>
 <h2>Mindy Preston</h2>
@@ -2180,7 +2180,7 @@ decrease the binary size and improve the performance.</p>
         permalink = {js|announcing-mirage-30-release|js};
         body =
           {js|<p>We're excited to announce MirageOS 3.0! MirageOS is a modern, modular library operating system that allows the creation of small, secure, legacy-free services. MirageOS applications can be compiled to run as self-contained virtual machines (a few MB in size) on Xen or KVM hosts, FreeBSD's bhyve, or even as regular Unix processes (allowing access to regular debugging tools).  The system libraries themselves can be reused in traditional applications, just like any other software library.</p>
-<p><a href="https://github.com/mirage/mirage/releases/tag/v3.0.0">Full release notes are available on GitHub</a>.  If you're interested in getting started with MirageOS 3 right away, you might be interested in the <a href="https://mirage.io/wiki/hello-world">revamped guide to getting started</a>, <a href="https://github.com/mirage/mirage-skeleton">a small collection of example unikernels</a>, or the <a href="https://mirage.io/wiki/mirage2-to-mirage3">porting guide for updating Mirage 2.x unikernels to Mirage 3</a>.</p>
+<p><a href="https://github.com/mirage/mirage/releases/tag/v3.0.0">Full release notes are available on GitHub</a>.  If you're interested in getting started with MirageOS 3 right away, you might be interested in the <a href="https://mirage.io/docs/hello-world">revamped guide to getting started</a>, <a href="https://github.com/mirage/mirage-skeleton">a small collection of example unikernels</a>, or the <a href="https://mirage.io/docs/mirage2-to-mirage3">porting guide for updating Mirage 2.x unikernels to Mirage 3</a>.</p>
 <p>Here's a summary of the things in MirageOS 3 that we're most excited about:</p>
 <h3>Solo5</h3>
 <p>MirageOS 3.0 is the first release that integrates the solo5 targets, <code>virtio</code> and <code>ukvm</code>, fully with the <code>mirage</code> front-end tool.  Now you can <code>mirage configure -t ukvm</code>, build a unikernel, and run directly with the generated <code>ukvm-bin</code>!  We've updated the &quot;hello world&quot; tutorial to reflect our excitement about <code>ukvm</code> -- the <code>ukvm</code> target is considerably easier to interface with and configure than <code>xen</code> was, and for a lot of users this will be a clearer path toward operational deployment of unikernels.</p>
@@ -2193,7 +2193,7 @@ decrease the binary size and improve the performance.</p>
 <h3>Result-y Errors</h3>
 <p>The module types provided by MirageOS 3 replace the previous error paradigm (a combination of exceptions and directly returning polymorphic variants) with one that uses <a href="https://github.com/ocaml/ocaml/pull/147">the Result module included in OCaml 4.03 and up</a>.  A notable exception is when problems occur during the unikernel's initialization (i.e., in <code>connect</code> functions), where unikernels will now fail hard as soon as they can.  The goal of these changes is to surface errors when the application cares about them, and to not present any uninitialized or unstable state to an application at start time.</p>
 <p>The MirageOS 3 module types define a core set of likely errors for each module type (see <a href="http://docs.mirage.io/mirage-flow/Mirage_flow/module-type-S/index.html">the mirage-flow module type</a> for an example), which can be extended by any given implementation.  Module types now specify that each implementation must include a pretty-printer that can handle all emitted error types.  Functions that return a <code>success</code> type when they run as expected return a <code>(success, error) Result.t</code>, which the caller can print with <code>pp_error</code> if the value is an <code>Error</code>.</p>
-<p>For more background on the result type, see the <a href="http://erratique.ch/software/rresult">Rresult library</a> which defines further useful operations on <code>Result.t</code> and is used widely in MirageOS libraries.  <a href="https://mirage.io/wiki/mirage-3.0-errors">A more in-depth explanation of errors</a> in Mirage 3 is also available.</p>
+<p>For more background on the result type, see the <a href="http://erratique.ch/software/rresult">Rresult library</a> which defines further useful operations on <code>Result.t</code> and is used widely in MirageOS libraries.  <a href="https://mirage.io/docs/mirage-3.0-errors">A more in-depth explanation of errors</a> in Mirage 3 is also available.</p>
 <h3>Logs Where You Want Them</h3>
 <p>MirageOS version 2.9.0 included automatic support for logging via the <code>Logs</code> and <code>Mirage_logs</code> library, but by default logs were always printed to the console and changing the log reporter was cumbersome.  In MirageOS 3, you can send logs to a consumer of syslog messages with <code>syslog_udp</code>, <code>syslog_tcp</code>, or with the full authentication and encryption provided by <code>ocaml-tls</code> using <code>syslog_tls</code>.  For more information, see <a href="https://hannes.nqsb.io/Posts/Syslog">the excellent writeup at hannes.nqsb.io</a>.</p>
 <h3>Disaggregated Module Type Definitions</h3>
@@ -2472,7 +2472,7 @@ Our first Cambridge-based MirageOS hack retreat took place yesterday - and what 
 </li>
 </ul>
 <h3>Onboarding new MirageOS/OCaml users</h3>
-<p>Our tutorials and onboarding guides <em>really</em> needed a facelift and an update, so <a href="https://ocaml.io/w/User:GemmaG">Gemma Gordon</a> spent the morning with some of our new users to observe their installation process and tried to pinpoint blockers and areas of misunderstanding. Providing the simple, concise instructions needed in a guide together with alternatives for every possible system and version requirement is a tricky combination to get right, but we made some <a href="https://github.com/mirage/mirage-www/pull/468">changes</a> to the <a href="https://mirage.io/wiki/install">installation guide</a> that we hope will help. The next task is to do the same for our other popular tutorials, reconfigure the layout for easy reading and centralise the information as much as possible between the OPAM, MirageOS and OCaml guides. Thank you to Marwan Aljubeh for his insight into this process.</p>
+<p>Our tutorials and onboarding guides <em>really</em> needed a facelift and an update, so <a href="https://ocaml.io/w/User:GemmaG">Gemma Gordon</a> spent the morning with some of our new users to observe their installation process and tried to pinpoint blockers and areas of misunderstanding. Providing the simple, concise instructions needed in a guide together with alternatives for every possible system and version requirement is a tricky combination to get right, but we made some <a href="https://github.com/mirage/mirage-www/pull/468">changes</a> to the <a href="https://mirage.io/docs/install">installation guide</a> that we hope will help. The next task is to do the same for our other popular tutorials, reconfigure the layout for easy reading and centralise the information as much as possible between the OPAM, MirageOS and OCaml guides. Thank you to Marwan Aljubeh for his insight into this process.</p>
 <p>Other industrial users are also steaming ahead with their own MirageOS deployments. <a href="http://amirchaudhry.com">Amir Chaudhry</a> spent the hackathon blogging about <a href="http://unikernel.org/blog/2016/unikernel-nfv-platform">NFV Platforms with MirageOS unikernels</a>, which details how Ericsson Silicon Valley has been using MirageOS to build lightweight routing kernels.</p>
 <h3>Packaging</h3>
 <p>Thomas Gazagnaire was frenetically converting <code>functoria</code>, <code>mirage</code>, <code>mirage-types</code> and <code>mirage-console</code> to use <a href="https://github.com/dbuenzli/topkg">topkg</a>, and the feedback prompted fixes and a new release from Daniel Buenzli.</p>
@@ -3975,7 +3975,7 @@ opam install certify
 <pre><code>cat intermediate.pem cert.pem &gt; server.pem
 </code></pre>
 <h2>Packaging Up an HTTPS Site with Mirage-Seal</h2>
-<p>Equipped with a private key and a certificate, let's make an HTTPS unikernel!  First, use <code>opam</code> to install <code>mirage-seal</code>.  If <code>opam</code> or other MirageOS tooling aren't set up yet, check out the <a href="https://mirage.io/wiki/install">instructions for getting started</a>.</p>
+<p>Equipped with a private key and a certificate, let's make an HTTPS unikernel!  First, use <code>opam</code> to install <code>mirage-seal</code>.  If <code>opam</code> or other MirageOS tooling aren't set up yet, check out the <a href="https://mirage.io/docs/install">instructions for getting started</a>.</p>
 <pre><code>opam install mirage-seal
 </code></pre>
 <p><code>mirage-seal</code> has a few required arguments.</p>
@@ -4400,7 +4400,7 @@ Nicolas has <a href="http://lists.xenproject.org/archives/html/mirageos-devel/20
 <a href="http://roscidus.com">Thomas Leonard</a> joined the project this year after publishing a widely read <a href="http://roscidus.com/blog/blog/2014/06/06/python-to-ocaml-retrospective/">blog series</a> on his experiences from switching from Python to OCaml.
 Aside from leading (and upstreaming to Xen) the port of <a href="https://mirage.io/blog/introducing-xen-minios-arm">MirageOS to ARM</a>, he also explored how to add profiling throughout the unikernel stack.</p>
 <p>The support is now comprehensive and integrated into the MirageOS trees: the <a href="http://ocsigen.org/lwt">Lwt</a> cooperative threading engine has hooks for thread switching, most of the core libraries register named events, traces are dumped into shared memory buffers in the <a href="http://wiki.eclipse.org/Linux_Tools_Project/TMF/CTF_guide">CTF</a> file format used by the Linux trace toolkit, and there are JavaScript and GTK+ <a href="https://github.com/talex5/mirage-trace-viewer">GUI frontends</a> that can parse them.</p>
-<p>You can find the latest instructions on <a href="https://mirage.io/wiki/profiling">Tracing and Profiling</a> on this website, and here are Thomas' original blog posts on the subject:</p>
+<p>You can find the latest instructions on <a href="https://mirage.io/docs/profiling">Tracing and Profiling</a> on this website, and here are Thomas' original blog posts on the subject:</p>
 <ul>
 <li><a href="http://roscidus.com/blog/blog/2014/08/15/optimising-the-unikernel/">Optimising the Unikernel</a>
 </li>
@@ -4469,7 +4469,7 @@ One very important project that has had a lot of work put into it in 2014 (but i
 </li>
 </ul>
 <h3>Want to get involved?</h3>
-<p>This is a really fun time to get involved with unikernels and the MirageOS project. The year of 2014 has seen <a href="https://mirage.io/links/">lots of discussion</a> about the potential of unikernels and we'll see some of the first big deployments involving them in 2015.  For the ones among you who wish to learn more, then check out the <a href="https://github.com/mirage/mirage-www/wiki/Pioneer-Projects">pioneer projects</a>, watch out for <a href="https://mirage.io/wiki">Amir's meeting notes</a> and join the voice calls if you want a more interactive discussion, and engage on the <a href="https://mirage.io/community/">mailing lists</a> with any questions you might have.</p>
+<p>This is a really fun time to get involved with unikernels and the MirageOS project. The year of 2014 has seen <a href="https://mirage.io/links/">lots of discussion</a> about the potential of unikernels and we'll see some of the first big deployments involving them in 2015.  For the ones among you who wish to learn more, then check out the <a href="https://github.com/mirage/mirage-www/wiki/Pioneer-Projects">pioneer projects</a>, watch out for <a href="https://mirage.io/docs">Amir's meeting notes</a> and join the voice calls if you want a more interactive discussion, and engage on the <a href="https://mirage.io/community/">mailing lists</a> with any questions you might have.</p>
 <p>For me personally, it's been a real privilege to spend the year working with and learning from the friendly, intelligent and diverse community that is springing up around the project.  The progression from experiment to reality has been a lot of work, but the unikernel dream is finally coming together rath[er nicely thanks to everyone's hard work and enthusiasm.  I'd also like to thank all of our <a href="https://mirage.io/community/">funding bodies</a> and the <a href="http://linuxfoundation.org">Linux Foundation</a> and the <a href="http://xenproject.org">Xen Project</a> (especially Lars Kurth and Russell Pavlicek) for their support throughout the year that made all this work possible.  Happy new year, everyone!</p>
 |js};
       };
@@ -4492,7 +4492,7 @@ One very important project that has had a lot of work put into it in 2014 (but i
 </small>
 <p>The <a href="https://mirage.io/blog/announcing-mirage10">first release</a> of MirageOS back in December 2013 introduced the prototype
 of the <a href="http://queue.acm.org/detail.cfm?id=2566628">unikernel concept</a>, which realised the promise of a safe,
-flexible mechanism to build highly optimized software stacks purpose-built for deployment in the public cloud (more <a href="https://mirage.io/wiki/overview-of-mirage">background</a> on this).
+flexible mechanism to build highly optimized software stacks purpose-built for deployment in the public cloud (more <a href="https://mirage.io/docs/overview-of-mirage">background</a> on this).
 Since then, we've been hard at work using and extending MirageOS for real projects and the community has been
 <a href="https://mirage.io/blog/welcome-to-our-summer-hackers">steadily growing</a>.</p>
 <p>We're thrilled to announce the release of MirageOS v2.0 today!  Over the past
@@ -4502,7 +4502,7 @@ the new features in this latest release, coordinated by the tireless <a href="ht
 <ul>
 <li><strong>ARM device support</strong>: While the first version of MirageOS was specialised towards conventional x86 clouds, the code generation and boot libraries have now been made portable enough to operate on low-power embedded ARM devices such as the <a href="http://cubieboard.org/">Cubieboard 2</a>.  This is a key part of our efforts to build a safe, unified <a href="http://anil.recoil.org/papers/2010-bcs-visions.pdf">mutiscale programming model</a> for both cloud and mobile workloads as part of the <a href="http://nymote.org">Nymote</a> project.  We also upstreamed the changes required to the Xen Project so that other unikernel efforts such as <a href="https://github.com/GaloisInc/HaLVM">HalVM</a> or <a href="https://www.usenix.org/system/files/conference/nsdi14/nsdi14-paper-martins.pdf">ClickOS</a> can benefit.
 <ul>
-<li><em>&quot;<a href="https://mirage.io/blog/introducing-xen-minios-arm">Introducing an ARMy of unikernels</a>&quot;</em> by <a href="http://roscidus.com/blog/">Thomas Leonard</a> talks about the changes required and <a href="https://mirage.io/wiki/xen-on-cubieboard2">instructions</a> for trying this out for yourself on your own cheap Cubieboard.
+<li><em>&quot;<a href="https://mirage.io/blog/introducing-xen-minios-arm">Introducing an ARMy of unikernels</a>&quot;</em> by <a href="http://roscidus.com/blog/">Thomas Leonard</a> talks about the changes required and <a href="https://mirage.io/docs/xen-on-cubieboard2">instructions</a> for trying this out for yourself on your own cheap Cubieboard.
 </li>
 </ul>
 </li>
@@ -4612,14 +4612,14 @@ adding ARM support:</p>
 I've been testing using the Cubieboard 2 (and CubieTruck):</p>
 <p><img src="/graphics/cubieboard2.jpg" alt="Cubieboard2" /></p>
 <p>The first step is to install Xen.
-<a href="https://mirage.io/wiki/xen-on-cubieboard2">Running Xen on the Cubieboard2</a>
+<a href="https://mirage.io/docs/xen-on-cubieboard2">Running Xen on the Cubieboard2</a>
 documents the manual installation process, but you can now also use
 <a href="https://github.com/mirage/xen-arm-builder">mirage/xen-arm-builder</a> to build
 an SDcard image automatically.
 Copy the image to the SDcard, connect the network cable and power, and the
 board will boot Xen.</p>
 <p>Once booted you can ssh to Dom0, the privileged Linux domain used to manage
-the system, <a href="https://mirage.io/wiki/install">install Mirage</a>, and build your unikernel just
+the system, <a href="https://mirage.io/docs/install">install Mirage</a>, and build your unikernel just
 as on x86.
 Currently, you need to select the Git versions of some components.
 The following commands will install the necessary versions if you're using
@@ -7721,7 +7721,7 @@ things to note to become a successful applicant.</p>
 selected are much higher if you demonstrate some participation and
 code contributions (even minor) <em>before</em> submitting an application.
 Thus, even if you don't have a copy of Xen around, roll up your sleeves
-and head over to the <a href="https://mirage.io/wiki/install">installation instructions</a>.</p>
+and head over to the <a href="https://mirage.io/docs/install">installation instructions</a>.</p>
 </li>
 <li>
 <p>Contributions do not have to be just code.  They can be documentation,
@@ -7875,7 +7875,7 @@ into <a href="https://opam.ocaml.org">OPAM</a>.  Here are some of the highlights
 <li>The <a href="https://github.com/mirage/io-page">io-page</a> library no longer needs Unix and Xen variants, as the interface has been standardized to work in both.
 </li>
 </ul>
-<p>All of Dave's hacking on Xen device drivers is showcased in this <a href="https://mirage.io/wiki/xen-synthesize-virtual-disk">xen-disk wiki post</a> that
+<p>All of Dave's hacking on Xen device drivers is showcased in this <a href="https://mirage.io/docs/xen-synthesize-virtual-disk">xen-disk wiki post</a> that
 explains how you can synthesize your own virtual disk backends using MirageOS.  Xen uses a <a href="https://www.usenix.org/legacy/event/usenix05/tech/general/full_papers/short_papers/warfield/warfield.pdf">split device</a> model,
 and now MirageOS lets us build <em>backend</em> device drivers that service VMs as well as the frontends!</p>
 <p>Last, but not least, <a href="http://gazagnaire.org">Thomas Gazagnaire</a> has been building a brand new storage system for MirageOS guests that uses git-style branches under the hood to help coordinate clusters of unikernels.  We'll talk about how this works in a future update, but there are some cool libraries and prototypes available on OPAM for the curious.</p>
@@ -9729,7 +9729,7 @@ $ passwd
 $ exit
 </code></pre>
 <p>You should now have an bootable image. You can either hook up a serial UART cable to the pi or connect it to an HDMI screen.
-You can now e.g. follow the mirage <a href="https://mirage.io/wiki/hello-world">hello world</a> to setup your unikernel.</p>
+You can now e.g. follow the mirage <a href="https://mirage.io/docs/hello-world">hello world</a> to setup your unikernel.</p>
 |js};
       };
       {
@@ -14395,7 +14395,7 @@ the conventional virtualized equivalents, and are more  resource-efficient in te
         permalink = {js|overview-of-mirage|js};
         body =
           {js|<p>If you're familiar with the using the command line, The best way to
-learn about MirageOS is to try out the <a href="https://mirage.io/wiki/install">installation
+learn about MirageOS is to try out the <a href="https://mirage.io/docs/install">installation
 instructions</a> for yourself!</p>
 <h3>What is MirageOS and why is it important?</h3>
 <p><a href="http://www.berndnaut.nl/images/NimbusNP3web.jpg"><img style="float:right; margin-left: 15px; margin-bottom: 15px;" src="/graphics/nimbus-np3-smilde.jpg"></img></a></p>
@@ -15920,7 +15920,7 @@ how to upgrade from v0.9 to v0.10 would be a useful post.</p>
 <p><strong>MirageOS end-of-year review</strong> — We've done this previously for <a href="https://mirage.io/blog/2014-in-review">2014</a> and
 it was well received, so we should continue the pattern. We have a lot of
 material to draw on, in terms of <a href="https://mirage.io/releases/">changelogs</a>, <a href="https://mirage.io/blog/">blog posts</a> and
-these <a href="https://mirage.io/wiki/#Weekly-calls-and-release-notes">call notes</a>. Jeremy agreed to take a look at this and see what he can
+these <a href="https://mirage.io/docs/#Weekly-calls-and-release-notes">call notes</a>. Jeremy agreed to take a look at this and see what he can
 start pulling together for others to look over.</p>
 <p><strong>Unikernel.org</strong> — There's also a new community site for unikernels as a
 whole at <a href="http://unikernel.org">unikernel.org</a>. Having a short post here to introduce that would
@@ -16349,7 +16349,7 @@ while. There are a few things that it would be worth writing up posts about.</p>
 <ul>
 <li>
 <p>Summary of the recent talks that have taken place (Amir has a draft). Any
-videos can be added to the <a href="https://mirage.io/wiki/talks">Videos</a> page of the website (which could do with
+videos can be added to the <a href="https://mirage.io/docs/talks">Videos</a> page of the website (which could do with
 a refresh).</p>
 </li>
 <li>
@@ -16439,7 +16439,7 @@ ThomasG's not had a chance to look at that yet but would be great to keep them
 if we can.  There's also been some work on related tools we use (cmdliner), to
 add support for environment variables (<a href="https://github.com/dbuenzli/cmdliner/commit/e82fd02842719167c3a04fc7ed0edf9a8036203c">dbuenzli/cmdliner@e82fd02</a>).</p>
 <p>Aside from the code review, there's already a draft blog post prepared (Amir
-will review), as well as a note for the <a href="https://mirage.io/wiki/breaking-changes">breaking changes</a> page of
+will review), as well as a note for the <a href="https://mirage.io/docs/breaking-changes">breaking changes</a> page of
 the website (a few things may change for some people).</p>
 <p>Getting the IPV6 support in was also blocked on the configuration step too.
 Once we've completed the releases around Functoria, we can work on getting an
@@ -16519,7 +16519,7 @@ expectations between the <code>mirage</code> tool itself and what we talk about 
 announcements. Whatever changes we make need to be thought about, since this
 output should be readable programatically.</p>
 <p>In any case, we should take care to continue to communicate
-<a href="https://mirage.io/wiki/breaking-changes">breaking changes</a> clearly as well as putting out
+<a href="https://mirage.io/docs/breaking-changes">breaking changes</a> clearly as well as putting out
 <a href="https://mirage.io/releases/">release notes</a>.</p>
 <!--
 Since we were discussing numbering, Amir was really hoping to insert a joke
@@ -16612,7 +16612,7 @@ certain things. It's not really a huge, breaking change as most existing
 <code>config.ml</code> files will work (although a few will need tweaking). Should be
 ready to look at for merge before the next call. Gabriel will work on some new
 examples that will help explain the differences, as well as a blog post.
-Should also add a note to the <a href="https://mirage.io/wiki/breaking-changes">breaking changes</a> page for anything
+Should also add a note to the <a href="https://mirage.io/docs/breaking-changes">breaking changes</a> page for anything
 that does need updating (as well as emailing the list).</p>
 <h4>Describing an end-to-end system</h4>
 <p>We have a reasonably good toolchain that gets us from code push to deployable
@@ -17195,7 +17195,7 @@ Lots of people seem to have scripts for this including Anil, Mindy and
 Jyostna, and it would be good to publicise or consolidate these. We'd also
 have to ensure they work when we have SSL support.</p>
 <h4>MirageOS Q&amp;A hangout</h4>
-<p>This was discussed in a <a href="https://mirage.io/wiki/weekly-2015-04-09/#MirageOSPublicHangoutFAQsession">previous call</a> and was meant to be brought
+<p>This was discussed in a <a href="https://mirage.io/weekly/weekly-2015-04-09#MirageOSPublicHangoutFAQsession">previous call</a> and was meant to be brought
 up this time.  Given how busy we're likely to be this summer, we'll probably
 put this off until later in the year.</p>
 <p>--</p>
@@ -17333,7 +17333,7 @@ broken, we need to move to fix them.</p>
 <h4>AoB</h4>
 <ul>
 <li>
-<p>Handling constraints in the mirage tool - Discussed <a href="https://mirage.io/wiki/weekly-2015-04-09/#Handlingconstraintsinthemiragetool">last week</a>
+<p>Handling constraints in the mirage tool - Discussed <a href="https://mirage.io/weekly/weekly-2015-04-09#Handlingconstraintsinthemiragetool">last week</a>
 but nothing further to add this time around.</p>
 </li>
 <li>
@@ -17543,7 +17543,7 @@ a version of Xenserver (with xapi).  The idea is that this would then host the
 Mirage website. We need Anil present to discuss this so this item is moved to
 the next call.</p>
 <h4>3.0 Planning</h4>
-<p>Following on from the <a href="https://mirage.io/wiki/weekly-2015-02-25#30Planning">previous discussion</a> a month ago, it's
+<p>Following on from the <a href="https://mirage.io/weekly/weekly-2015-02-25#30Planning">previous discussion</a> a month ago, it's
 becoming clear that there's an emphasis on improving quality of the libs.
 which means better tests.  Amir will summarise where things are with the
 thoughts around the 3.0 release and send to the list before the next time we
@@ -17615,7 +17615,7 @@ Jon Ludlam, Anil Madhavapeddy, Hannes Mehnert, Richard Mortier and Dave Scott</p
 <h3>Notes</h3>
 <h4>Race issues</h4>
 <p>The startOfDay race issue between netback and netfront — discussed on the
-<a href="https://mirage.io/wiki/weekly-2015-02-25#miragenetxenraceissue">last call</a> — is still unresolved. It's still difficult to
+<a href="https://mirage.io/weekly/weekly-2015-02-25#miragenetxenraceissue">last call</a> — is still unresolved. It's still difficult to
 reproduce but we do have a <a href="https://github.com/mirage/mirage-net-xen/issues/20#issuecomment-78264578">minimal example</a> of this problem, which
 should help greatly. It only seems to surface when it's on a live Xen host
 which is why it's a tricky one to deal with.  It would be very useful if
@@ -17626,7 +17626,7 @@ it to work for the time being. Ironically, this whole issue didn't occur until
 ThomasL's optimisations, which in a way, means they were good enough to
 surface this issue (in other words, this is still progress!).</p>
 <h4>Quality and test</h4>
-<p>The testing breakout squad <a href="https://mirage.io/wiki/weekly-2015-02-25#Qualityandtestinfrastructure">we proposed</a> didn't quite convene but
+<p>The testing breakout squad <a href="https://mirage.io/weekly/weekly-2015-02-25#Qualityandtestinfrastructure">we proposed</a> didn't quite convene but
 things around test are still getting better. Anil has been fixing breakages
 reported via <a href="https://github.com/mirage/is-mirage-broken/blob/master/logs/README.md">is-mirage-broken</a> and things look good as mirage-skeleton
 is now successfully building across all platforms. cohttp and TLS are also
@@ -17771,9 +17771,9 @@ the case. Currently, we're not even sure if it's <em>definitely</em> a v1.3 issu
 things do seem to work under v1.2.  It's even possible that it could be a dom0
 problem.  A reproduction of the issue from others would be quite helpful and
 Magnus mentioned he would give this a shot. Either way, this tells us we need
-more unit tests, as we've <a href="https://mirage.io/wiki/weekly-2015-02-11#ImprovingQuality">previously discussed</a>.</p>
+more unit tests, as we've <a href="https://mirage.io/weekly/weekly-2015-02-11#ImprovingQuality">previously discussed</a>.</p>
 <h4>Quality and test infrastructure</h4>
-<p><a href="https://mirage.io/wiki/weekly-2015-02-11#ImprovingQuality">Last time</a>, we discussed whether we may be able to do certain things
+<p><a href="https://mirage.io/weekly/weekly-2015-02-11#ImprovingQuality">Last time</a>, we discussed whether we may be able to do certain things
 with OPAM remotes (e.g like splicing between remotes).  After a chat with
 Louis, the lead maintainer of OPAM, it seems this would not be a
 straightforward thing to do — which means it's not an avenue we can explore
@@ -18471,7 +18471,7 @@ reluctance to use Xenstore as the solution since we're not comfortable putting
 secret entropy through it — much better to use vchan.</p>
 <p>ThomasL did get TLS working on the cubieboard recently (as did Hannes at ICFP).</p>
 <h4>Merging IPv6 and STACKV4</h4>
-<p><em>See also the <a href="https://mirage.io/wiki/weekly-2014-11-12#IPv6patchset">notes from the last call</a>.</em></p>
+<p><em>See also the <a href="https://mirage.io/weekly/weekly-2014-11-12#IPv6patchset">notes from the last call</a>.</em></p>
 <p>Anil has been merging some of <a href="https://github.com/mirage/mirage/pull/319">Nic's changes</a> into his trees.
 There has been a fair amount of renaming but for the most part, it shouldn't
 be that difficult to update other code that uses the stack — things may simply
@@ -18490,7 +18490,7 @@ others (and perhaps a few pages on the website too).</p>
 using it and are reporting issues that Anil is looking into. These seem to be
 related to SSL and he'll deal with them.</p>
 <h4>Pioneer Projects</h4>
-<p><em>See also the <a href="https://mirage.io/wiki/weekly-2014-10-28#Miragetaskslistfornewcomers">notes from an earlier call</a>.</em></p>
+<p><em>See also the <a href="https://mirage.io/weekly/weekly-2014-10-28#Miragetaskslistfornewcomers">notes from an earlier call</a>.</em></p>
 <p>We previously discussed the idea of a list of possible jobs/projects for
 newcomers to Mirage. Amir came up with a name for these (Pioneer Projects) and
 Anil started putting together a list, which you can see on the
@@ -19254,7 +19254,7 @@ what the differences are between Xen on the cloud (x86) and embedded devices
 (ARM). Others tell him this mainly relates to Mini-OS and it's relation to
 Mirage (and ClickOS and HaLVM etc). There are several posts that might help
 explain things, for example ThomasL's <a href="https://mirage.io/blog/introducing-xen-minios-arm">blog post on ARM</a> and wiki
-pages on <a href="https://mirage.io/wiki/xen-events">Xen events</a> and <a href="https://mirage.io/wiki/xen-on-cubieboard2">setting up a Cubieboard2</a>.
+pages on <a href="https://mirage.io/docs/xen-events">Xen events</a> and <a href="https://mirage.io/docs/xen-on-cubieboard2">setting up a Cubieboard2</a>.
 Amir will start with those and if anything isn't clear, he'll ask ThomasG
 about it. Amir might write this up for the website if it'll help explain to
 others too.</p>
@@ -19671,7 +19671,7 @@ Anil Madhavapeddy, Richard Mortier, Mindy Preston and David Scott</p>
 <h4>Xen Hackathon</h4>
 <p>The <a href="http://wiki.xenproject.org/wiki/Hackathon/May2014">Xen Developer Hackathon</a> took place a couple of weeks ago and
 Anil, ThomasL, Dave, Jon and Nik all attended.  Apparently it did turn into
-a chatathon as <a href="https://mirage.io/wiki/weekly-2014-05-27#XenHackathon">previously predicted</a>.</p>
+a chatathon as <a href="https://mirage.io/weekly/weekly-2014-05-27#XenHackathon">previously predicted</a>.</p>
 <p>A group of people went through Amir's <a href="http://amirchaudhry.com/from-jekyll-to-unikernel-in-fifty-lines">Jekyll to Unikernel post</a> to
 get their sites building using TravisCI. They did get this working but the
 post was written based on a Mac workflow and some parts didn't work well on
