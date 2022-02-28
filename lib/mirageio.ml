@@ -175,7 +175,8 @@ struct
     let router = Dream.router routes
   end
 
-  let router = Dream.logger @@ Router.router @@ Dream.not_found
+  let router = Dream.logger @@ Router.router
+  
   let http ?(port = 80) stack = Dream.http ~port (Stack.tcp stack) router
 
   let https ?(port = 443) ?tls stack =
