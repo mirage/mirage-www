@@ -13,9 +13,6 @@ depends: [
   "dune" {>= "2.7"}
   "dream"
   "dream-mirage"
-  "mirage-kv-mem"
-  "mirage-clock-unix"
-  "mirage-unix"
   "crunch" {build}
   "omd" {build}
   "yaml" {build}

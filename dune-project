@@ -25,9 +25,6 @@
   dune
   dream
   dream-mirage
-  mirage-kv-mem
-  mirage-clock-unix
-  mirage-unix
   (crunch :build)
   (omd :build)
   (yaml :build)
@@ -42,6 +39,7 @@
   (ocaml (>= 4.08.0))
   dune
   mirageio
+  mirage-kv-mem
   mirage-clock-unix
-  mirage-unix
+  (mirage-unix (>= 5.0.0))
   (tcpip (>= 7.0.0))))
