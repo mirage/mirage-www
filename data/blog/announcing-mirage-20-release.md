@@ -15,7 +15,7 @@ permalink: announcing-mirage-20-release
 
 The [first release](https://mirage.io/blog/announcing-mirage10) of MirageOS back in December 2013 introduced the prototype
 of the [unikernel concept](http://queue.acm.org/detail.cfm?id=2566628), which realised the promise of a safe,
-flexible mechanism to build highly optimized software stacks purpose-built for deployment in the public cloud (more [background](https://mirage.io/wiki/overview-of-mirage) on this).
+flexible mechanism to build highly optimized software stacks purpose-built for deployment in the public cloud (more [background](https://mirage.io/docs/overview-of-mirage) on this).
 Since then, we've been hard at work using and extending MirageOS for real projects and the community has been
 [steadily growing](https://mirage.io/blog/welcome-to-our-summer-hackers).
 
@@ -26,7 +26,7 @@ the new features in this latest release, coordinated by the tireless [Amir Chaud
 <img src="/graphics/cubieboard2.jpg" style="float:right; padding: 5px" width="250px" />
 
 * **ARM device support**: While the first version of MirageOS was specialised towards conventional x86 clouds, the code generation and boot libraries have now been made portable enough to operate on low-power embedded ARM devices such as the [Cubieboard 2][cubie2].  This is a key part of our efforts to build a safe, unified [mutiscale programming model][multiscale] for both cloud and mobile workloads as part of the [Nymote][nymote] project.  We also upstreamed the changes required to the Xen Project so that other unikernel efforts such as [HalVM](https://github.com/GaloisInc/HaLVM) or [ClickOS](https://www.usenix.org/system/files/conference/nsdi14/nsdi14-paper-martins.pdf) can benefit.
-  - *"[Introducing an ARMy of unikernels](https://mirage.io/blog/introducing-xen-minios-arm)"* by [Thomas Leonard][talex5] talks about the changes required and [instructions](https://mirage.io/wiki/xen-on-cubieboard2) for trying this out for yourself on your own cheap Cubieboard.
+  - *"[Introducing an ARMy of unikernels](https://mirage.io/blog/introducing-xen-minios-arm)"* by [Thomas Leonard][talex5] talks about the changes required and [instructions](https://mirage.io/docs/xen-on-cubieboard2) for trying this out for yourself on your own cheap Cubieboard.
 * **Irmin distributed, branchable storage**: Unikernels usually execute in a distributed, disconnection-prone environment (particularly with the new mobile ARM support).  We therefore built the [Irmin][irmin] library to explicitly make synchronization easier via a Git-like persistence model that can be used to build and easily trace the operation of distributed applications across all of these diverse environments.
   - *"[Introducing Irmin: Git-like distributed, branchable storage](https://mirage.io/blog/introducing-irmin)"* by [Thomas Gazagnaire][tg] describes the concepts and high-level architecture of the system.
   - *"[Using Irmin to add fault-tolerance to the Xenstore database](https://mirage.io/blog/introducing-irmin-in-xenstore)"* by [Dave Scott][djs] shows how Irmin is used in a real-world application: the security-critical Xen toolstack that manages hosts full of virtual machines ([video](https://www.youtube.com/watch?v=DSzvFwIVm5s)).

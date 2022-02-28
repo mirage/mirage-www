@@ -86,7 +86,7 @@ cat intermediate.pem cert.pem > server.pem
 
 ## Packaging Up an HTTPS Site with Mirage-Seal
 
-Equipped with a private key and a certificate, let's make an HTTPS unikernel!  First, use `opam` to install `mirage-seal`.  If `opam` or other MirageOS tooling aren't set up yet, check out the [instructions for getting started](https://mirage.io/wiki/install).
+Equipped with a private key and a certificate, let's make an HTTPS unikernel!  First, use `opam` to install `mirage-seal`.  If `opam` or other MirageOS tooling aren't set up yet, check out the [instructions for getting started](https://mirage.io/docs/install).
 
 ```
 opam install mirage-seal
