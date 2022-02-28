@@ -131,6 +131,7 @@ Here's the trace for a successful run (where the message was transmitted):
 <noscript>Sorry, you need to enable JavaScript to see this page.</noscript>
 </canvas>
 </div>
+
 [View full screen](/html/trace-viewer.html?trace=good)
 
 Use your mouse's scroll wheel (or the buttons at the bottom) to zoom.
@@ -164,6 +165,7 @@ To find the problem, we can compare a good trace and a bad trace:
 <div class='trace-viewer'>
 <canvas tabindex='2' id='good-detail' style='width: 100%; height:500px'>No canvas support. </canvas>
 </div>
+
 [View full screen](/html/trace-viewer.html?trace=good-detail)
 
 Above: a trace from a successful run. Below: a trace from a failed run.
@@ -171,6 +173,7 @@ Above: a trace from a successful run. Below: a trace from a failed run.
 <div class='trace-viewer'>
 <canvas tabindex='3' id='bad-detail' style='width: 100%; height:500px'>No canvas support.</canvas>
 </div>
+
 [View full screen](/html/trace-viewer.html?trace=bad-detail)
 
 Normally, when a thread doesn't do anything it is drawn only as a tiny stub in the display.
