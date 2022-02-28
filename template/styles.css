@@ -24,8 +24,15 @@
   filter: blur(1px);
 }
 
+html {
+  @apply bg-repeat-y bg-top;
+  background-size: 100%;
+  background-image: url("../img/wavesbg-bottom.png");
+}
+
 body {
-  @apply bg-cover bg-top min-h-screen font-inter text-body;
+  @apply bg-no-repeat bg-top min-h-screen font-inter text-body;
+  background-size: 100%;
   background-image: url("../img/wavesbg.png");
 }
 
@@ -44,7 +51,11 @@ body {
 
 @media (min-width: 1080px) {
   .content-container {
-    margin: 92px auto;
+    margin: 0 auto;
+  }
+
+  body {
+    padding: 92px 0;
   }
 }
 
