@@ -49,6 +49,14 @@ struct
       | Some doc -> Dream.html (Docs_inner.render doc)
       | None -> not_found req
 
+    let wiki_redirect req =
+      Dream.redirect ~status:`Moved_Permanently req "/docs"
+
+    let wiki_redirect_inner req =
+      let permalink = Dream.param req "permalink" in
+      let location = "/docs/" ^ permalink in
+      Dream.redirect ~status:`Moved_Permanently req location
+
     let weekly req =
       let permalink = Dream.param req "permalink" in
       let weekly_opt =
@@ -156,6 +164,8 @@ struct
         Dream.get "/community" Handler.community;
         Dream.get "/docs" Handler.docs;
         Dream.get "/docs/:permalink" Handler.docs_inner;
+        Dream.get "/wiki" Handler.wiki_redirect;
+        Dream.get "/wiki/:permalink" Handler.wiki_redirect_inner;
         Dream.get "/weekly/:permalink" Handler.weekly;
         Dream.get "/papers" Handler.papers;
         Dream.get "/feed.xml" Handler.atom;
