@@ -68,10 +68,6 @@ module Blog = struct
       min-width: 38em;
       min-height: 43em;
     "></iframe>
-<p><a href="https://data.robur.coop/tlstunnel-deps.svg"><img src="https://data.robur.coop/tlstunnel-deps.svg" alt="Tlstunnel dependencies" title="Tlstunnel deps" /></a></p>
-<p>We also visualize the contributing modules and their sizes to the binary:</p>
-<p><a href="https://data.robur.coop/tlstunnel-treemap-top.svg"><img src="https://data.robur.coop/tlstunnel-treemap-top.svg" alt="Tlstunnel size top" title="Tlstunnel treemap top" /></a>
-<a href="https://data.robur.coop/tlstunnel-treemap.svg"><img src="https://data.robur.coop/tlstunnel-treemap.svg" alt="Tlstunnel size" title="Tlstunnel treemap" /></a></p>
 <p>Rand wrote a more in-depth explanation about the <a href="https://builds.robur.coop/job/tlstunnel/build/7f0afdeb-0a52-4de1-b96f-00f654ce9249/">visualizations</a> <a href="https://r7p5.earth/blog/2022-3-7/Builder-web%20visualizations%20at%20Robur">on his blog</a>.</p>
 <p>If you've comments or are interested in deploying MirageOS unikernels at your organization, <a href="https://robur.coop/Contact">get in touch with us</a>.</p>|js}
       };

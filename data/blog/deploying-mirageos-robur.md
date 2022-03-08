@@ -48,13 +48,6 @@ We also visualize the contributing modules and their sizes to the binary:
       min-height: 43em;
     "></iframe>
 
-[![Tlstunnel dependencies](https://data.robur.coop/tlstunnel-deps.svg "Tlstunnel deps")](https://data.robur.coop/tlstunnel-deps.svg)
-
-We also visualize the contributing modules and their sizes to the binary:
-
-[![Tlstunnel size top](https://data.robur.coop/tlstunnel-treemap-top.svg "Tlstunnel treemap top")](https://data.robur.coop/tlstunnel-treemap-top.svg)
-[![Tlstunnel size](https://data.robur.coop/tlstunnel-treemap.svg "Tlstunnel treemap")](https://data.robur.coop/tlstunnel-treemap.svg)
-
 Rand wrote a more in-depth explanation about the [visualizations](https://builds.robur.coop/job/tlstunnel/build/7f0afdeb-0a52-4de1-b96f-00f654ce9249/) [on his blog](https://r7p5.earth/blog/2022-3-7/Builder-web%20visualizations%20at%20Robur).
 
 If you've comments or are interested in deploying MirageOS unikernels at your organization, [get in touch with us](https://robur.coop/Contact).
