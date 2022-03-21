@@ -93,22 +93,16 @@ let render () = Layout.render ~title:"MirageOS Community" ~description:"Get in t
         <h3 class="text-lg font-bold">Emeriti</h3>
         <ul class="list-disc ml-4 space-y-2 mt-2">
           <li>
-            <strong> <a href="https://lucina.net/">Martin Lucina</a> </strong>, <a href="https://github.com/mato">@mato</a>
+            <strong> <a href="http://amirchaudhry.com/">Amir Chaudhry</a> </strong> <a href="https://github.com/amirmc">@amirmc</a>
           </li>
           <li>
-            <strong>
-              <a href="http://amirchaudhry.com/">Amir Chaudhry</a>
-            </strong>
-            <a href="https://github.com/amirmc">@amirmc</a>
+            <strong> <a href="https://lucina.net/">Martin Lucina</a> </strong>, <a href="https://github.com/mato">@mato</a>
           </li>
           <li>
             <strong> <a href="http://mort.io/">Richard Mortier</a> </strong>, University of Cambridge &amp; Kvasir Analytics <a href="https://github.com/mor1">@mor1</a>
           </li>
           <li>
-            <strong>
-              <a href="http://www.somerandomidiot.com">Mindy Preston</a>
-            </strong>
-            <a href="https://github.com/yomimono">@yomimono</a>
+            <strong> <a href="http://www.somerandomidiot.com">Mindy Preston</a> </strong> <a href="https://github.com/yomimono">@yomimono</a>
           </li>
         </ul>
       </div>
@@ -121,9 +115,7 @@ let render () = Layout.render ~title:"MirageOS Community" ~description:"Get in t
       <div>
         <ul class="list-disc ml-4 space-y-2 mb-4">
           <li>
-            <a href="https://github.com/vbmithr">
-              <em>Vincent Bernardoff</em>
-            </a>
+            <a href="https://github.com/vbmithr"> <em>Vincent Bernardoff</em> </a>
           </li>
           <li>
             <a href="https://github.com/Weichen81"> <em>Wei Chen</em> </a>, ARM
@@ -132,10 +124,13 @@ let render () = Layout.render ~title:"MirageOS Community" ~description:"Get in t
             <a href="http://www.cl.cam.ac.uk/~jac22/"> <em>Jon Crowcroft</em> </a>, University of Cambridge
           </li>
           <li>
-            <a href="https://github.com/pqwy"> <em>David Kaloper</em> </a>, University of Cambridge
+            <a href="https://github.com/haesbaert"> <em>Christiano Haesbaert</em> </a>, genua mbh
           </li>
           <li>
             <a href="http://www.cl.cam.ac.uk/~smh22/"> <em>Steven Hand</em> </a>, Google
+          </li>
+          <li>
+            <a href="https://github.com/pqwy"> <em>David Kaloper</em> </a>, University of Cambridge
           </li>
           <li>
             <a href="https://github.com/ricarkol"> <em>Ricardo Koller</em> </a>, IBM Research
@@ -150,28 +145,19 @@ let render () = Layout.render ~title:"MirageOS Community" ~description:"Get in t
             <a href="http://www.cl.cam.ac.uk/~cr409/"> <em>Haris Rotsos</em> </a>, University of Cambridge
           </li>
           <li>
-            <a href="https://github.com/kensan">
-              <em>Adrian-Ken Rueegsegger</em>
-            </a>
+            <a href="https://github.com/kensan"> <em>Adrian-Ken Rueegsegger</em> </a>
           </li>
           <li>
-            <a href="https://github.com/dsheets">
-              <em>David Sheets</em>
-            </a>
+            <a href="https://github.com/dsheets"> <em>David Sheets</em> </a>
           </li>
           <li>
-            <a href="https://github.com/balrajsingh">
-              <em>Balraj Singh</em>
-            </a>
-          </li>
-          <li>
-            <a href="https://www.cl.cam.ac.uk/~jdy22/"> <em>Jeremy Yallop</em> </a>, University of Cambridge
+            <a href="https://github.com/balrajsingh"> <em>Balraj Singh</em> </a>
           </li>
           <li>
             <a href="https://github.com/djwillia"> <em>Dan Williams</em> </a>, IBM Research
           </li>
           <li>
-            <a href="https://github.com/haesbaert"> <em>Christiano Haesbaert</em> </a>, genua mbh
+            <a href="https://www.cl.cam.ac.uk/~jdy22/"> <em>Jeremy Yallop</em> </a>, University of Cambridge
           </li>
         </ul>
         <p>The MirageOS3 release announcement contained a more complete list. For a complete list, please look at the contributors to individual git repositories. If you are missing here, please add yourself via a PR to the mirage-www repository.</p>
