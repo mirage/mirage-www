@@ -73,6 +73,13 @@ struct
       Dream.respond
         ~headers:[ ("Content-Type", "application/atom+xml") ]
         (Atom.render ~blog_posts ~contributors ~last_update)
+
+    let metrics _req =
+      let data = Prometheus.CollectorRegistry.(collect default) in
+      let body = Fmt.to_to_string Metrics.TextFormat_0_0_4.output data in
+      Dream.respond
+        ~headers:[ ("Content-Type", "text/plain; version=0.0.4") ]
+        body
   end
 
   module Last_modified = struct
@@ -147,19 +154,62 @@ struct
                   asset)
   end
 
+  module Metrics = struct
+    open Prometheus
+
+    let now () = Ptime.to_float_s (Ptime.v (Pclock.now_d_ps ()))
+
+    let response_time =
+      Gauge.v ~help:"Mirage.io handler response time" "mirageio_response_time_s"
+
+    let n_requests_pages =
+      Counter.v ~help:"Mirage.io number of page requests"
+        "mirageio_requests_pages"
+
+    let n_requests_assets =
+      Counter.v ~help:"Mirage.io number of asset requests"
+        "mirageio_requests_assets"
+
+    let n_cached =
+      Counter.v ~help:"Mirage.io number of cache match" "mirageio_cached"
+
+    let n_errors =
+      Counter.v ~help:"Mirage.io number of errors" "mirageio_errors"
+
+    let middleware counter handler req =
+      let open Lwt.Syntax in
+      let start = now () in
+      let+ response = handler req in
+      let elapsed = now () -. start in
+      Gauge.set response_time elapsed;
+      Counter.inc_one counter;
+      (match Dream.status response with
+      | `OK -> ()
+      | `Not_Modified -> Counter.inc_one n_cached
+      | _ -> Counter.inc_one n_errors);
+      response
+  end
+
   module Router = struct
     let routes =
       [
-        Dream.get "/" Handler.index;
-        Dream.get "/blog" Handler.blog;
-        Dream.get "/blog/:permalink" Handler.blog_inner;
-        Dream.get "/community" Handler.community;
-        Dream.get "/docs" Handler.docs;
-        Dream.get "/docs/:permalink" Handler.docs_inner;
-        Dream.get "/weekly/:permalink" Handler.weekly;
-        Dream.get "/papers" Handler.papers;
-        Dream.get "/feed.xml" Handler.atom;
-        Dream.get "/**" (Dream.static ~loader:Static.loader "");
+        Dream.get "/metrics" Handler.metrics;
+        Dream.scope "/"
+          [ Metrics.middleware Metrics.n_requests_pages ]
+          [
+            Dream.get "/" Handler.index;
+            Dream.get "/blog" Handler.blog;
+            Dream.get "/blog/:permalink" Handler.blog_inner;
+            Dream.get "/community" Handler.community;
+            Dream.get "/docs" Handler.docs;
+            Dream.get "/docs/:permalink" Handler.docs_inner;
+            Dream.get "/weekly/:permalink" Handler.weekly;
+            Dream.get "/papers" Handler.papers;
+            Dream.get "/feed.xml" Handler.atom;
+          ];
+        Dream.get "/**"
+          (Metrics.middleware Metrics.n_requests_assets
+          @@ Dream.static ~loader:Static.loader "");
       ]
 
     let router = Dream.router routes

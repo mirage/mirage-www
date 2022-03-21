@@ -28,6 +28,7 @@
   mirage-kv-mem
   mirage-clock-unix
   mirage-unix
+  prometheus
   (crunch :build)
   (omd :build)
   (yaml :build)
