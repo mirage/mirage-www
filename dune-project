@@ -29,7 +29,8 @@
   (omd :build)
   (yaml :build)
   (fmt :build)
-  (ppx_deriving_yaml :build)))
+  (ppx_deriving_yaml :build)
+  (tailwindcss :build)))
 
 (package 
  (name mirageio-bin)

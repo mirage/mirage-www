@@ -18,6 +18,7 @@ depends: [
   "yaml" {build}
   "fmt" {build}
   "ppx_deriving_yaml" {build}
+  "tailwindcss" {build}
   "odoc" {with-doc}
 ]
 build: [
@@ -36,6 +37,7 @@ build: [
 ]
 dev-repo: "git+https://github.com/tmattio/mirageio.git"
 pin-depends: [
+  ["tailwindcss.dev" "git+https://github.com/tmattio/opam-tailwindcss#fb0f82edd09999f7be033ab1785ba5f6b60ed8f6"] # branch main
   ["dream.dev" "git+https://github.com/TheLortex/dream.git#8ac308a2127655b9f4b5930e38e8481b2322a594"] # branch master+mirage
   ["dream-mirage.dev" "git+https://github.com/TheLortex/dream.git#8ac308a2127655b9f4b5930e38e8481b2322a594"]
   ["dream-pure.dev" "git+https://github.com/TheLortex/dream.git#8ac308a2127655b9f4b5930e38e8481b2322a594"]
