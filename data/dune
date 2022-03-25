@@ -12,7 +12,6 @@
 
 (rule
  (targets mirageio_data.ml)
- (mode promote-until-clean)
  (deps
   (source_tree blog/)
   (source_tree link/)
