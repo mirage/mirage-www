@@ -25,6 +25,7 @@
   dune
   dream
   dream-mirage
+  mirage-kv-mem
   (crunch :build)
   (omd :build)
   (yaml :build)

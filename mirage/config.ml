@@ -108,7 +108,7 @@ let packages =
         "git+https://github.com/jonahbeckford/ocaml-ctypes#ef61d3885ffc40d50a90213e20ffd356b28d66bb"
       (* dune-port branch*)
       "ctypes";
-    package
+    package ~build:true
       ~pin:
         "git+https://github.com/TheLortex/ocaml-yaml#3658b337eae4da65c86a26eae08d79bd5c1cea51"
       "yaml"

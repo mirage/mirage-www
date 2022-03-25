@@ -13,6 +13,7 @@ depends: [
   "dune" {>= "2.7"}
   "dream"
   "dream-mirage"
+  "mirage-kv-mem"
   "crunch" {build}
   "omd" {build}
   "yaml" {build}

@@ -1,6 +1,7 @@
 (library
  (name mirageio)
- (libraries dream-mirage mirage-time tcpip mirageio_template mirageio_data))
+ (libraries dream-mirage mirage-time tcpip mirageio_template mirageio_data
+   mirage-kv-mem))
 
 (rule
  (targets asset.ml asset.mli)
