@@ -2,7 +2,7 @@ FROM ocaml/opam:debian-11-ocaml-4.13
 RUN mkdir -p /home/opam/www/mirage
 WORKDIR /home/opam/www
 RUN curl -L https://github.com/tailwindlabs/tailwindcss/releases/download/v3.0.16/tailwindcss-linux-x64 -o tailwindcss && chmod +x tailwindcss
-RUN sudo ln -f /usr/bin/opam-2.1 /usr/bin/opam && cd ~/opam-repository && git pull origin master && git reset --hard 3c93ec8b041d8ea43bccf39cdfd03f9294e4d75d && opam update
+RUN sudo ln -f /usr/bin/opam-2.1 /usr/bin/opam && cd ~/opam-repository && git pull origin master && git reset --hard b4b53d683854f45fd379100bb7ab5923aac5ad68 && opam update
 RUN opam repo add mirage-dev git+https://github.com/mirage/mirage-dev.git#c01677fa050d502e34452167b2d4d121054f5e78
 RUN opam install mirage
 COPY --chown=opam:root mirage/config.ml /home/opam/www/mirage/
