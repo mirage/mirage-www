@@ -10,5 +10,5 @@
   (action
    (chdir
     %{workspace_root}
-    (run ./tailwindcss build -c tailwind.config.js -i template/styles.css -o
+    (run tailwindcss build -c tailwind.config.js -i template/styles.css -o
       %{target})))))

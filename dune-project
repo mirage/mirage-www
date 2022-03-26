@@ -28,13 +28,14 @@
   mirage-kv-mem
   mirage-clock-unix
   mirage-unix
+  (tailwindcss :build)
   (crunch :build)
   (omd :build)
   (yaml :build)
   (fmt :build)
   (ppx_deriving_yaml :build)))
 
-(package 
+(package
  (name mirageio-bin)
  (synopsis "Unix binary for the mirage.io website")
  (description "Unix binary for the mirage.io website")

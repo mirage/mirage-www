@@ -18,14 +18,6 @@ Or globally, with:
 make deps
 ```
 
-You'll also need to download the TailwindCSS CLI. You can follow the [TailwindCSS documentation](https://tailwindcss.com/blog/standalone-cli#get-started) to do this. Put the binary in `/tailwindcss`.
-
-Make sure to give execution rights to the file:
-
-```
-chmod +x tailwindcss
-```
-
 Then, build the project with:
 
 ```bash
