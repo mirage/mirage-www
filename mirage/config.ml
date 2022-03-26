@@ -100,14 +100,7 @@ let tls_only_keys =
       v additional_hostnames;
     ]
 
-let packages =
-  [
-    package "mirageio";
-    package ~build:true
-      ~pin:
-        "git+https://github.com/TheLortex/ocaml-yaml.git#7e1f117645ea10fbec2bd3dbbf0d8f581cce891f"
-      "yaml";
-  ]
+let packages = [ package "mirageio"; package ~build:true "yaml" ]
 
 let https =
   let keys = keys @ tls_only_keys in
