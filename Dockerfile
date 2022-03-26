@@ -9,9 +9,9 @@ COPY --chown=opam:root mirage/config.ml /home/opam/www/mirage/
 COPY --chown=opam:root mirageio.opam /home/opam/www/
 ARG TARGET=unix
 ARG EXTRA_FLAGS=
-RUN opam config exec -- mirage configure -f mirage/config.ml -t $TARGET $EXTRA_FLAGS
-RUN opam config exec -- make depend
+RUN opam exec -- mirage configure -f mirage/config.ml -t $TARGET $EXTRA_FLAGS
+RUN opam exec -- make depend
 COPY --chown=opam:root . /home/opam/www
-RUN opam config exec -- mirage configure -f mirage/config.ml -t $TARGET $EXTRA_FLAGS
-RUN opam config exec -- dune build mirage/ --profile release
+RUN opam exec -- mirage configure -f mirage/config.ml -t $TARGET $EXTRA_FLAGS
+RUN opam exec -- dune build mirage/ --profile release
 RUN if [ $TARGET = hvt ]; then sudo cp mirage/dist/www.$TARGET /unikernel.$TARGET; fi
