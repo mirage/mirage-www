@@ -14,7 +14,7 @@ MirageOS consists of a set of OCaml libraries that link with a runtime to form e
 
 MirageOS has been tested on many modern Linux distributions, macOS 10.10+ and FreeBSD 11+.
 
-You will need OPAM 2.0.0 or later and OCaml 4.08.0 or later.
+You will need OPAM 2.1.0 or later and OCaml 4.12.1 or later.
 
 Further requirements for the host/build system depend on the specific backend in use:
 
@@ -50,7 +50,7 @@ This has the latest packages required in the base distribution, so just run:
 
 #### Ubuntu 15.10 (Vivid) or lower
 
-The version of OPAM in older Ubuntus is not high enough to run Mirage (which requires OPAM 2.0.0 or higher), so you will need to add a custom PPA for the latest packages:
+The version of OPAM in older Ubuntus is not high enough to run Mirage (which requires OPAM 2.1.0 or higher), so you will need to add a custom PPA for the latest packages:
 
     sudo add-apt-repository ppa:avsm/ppa
     sudo apt-get update
@@ -79,10 +79,10 @@ For notes specific to installing and running MirageOS on ARM64 (including embedd
 
 We use [OPAM](https://opam.ocaml.org) to manage OCaml compiler and library installations. It tracks library versions across upgrades and will recompile dependencies automatically if they get out of date. Please refer to OPAM [documentation](https://opam.ocaml.org) if you want to know more, but we will cover the basics to get you started here. There is a [Quick Install Guide](http://opam.ocaml.org/doc/Install.html) if the above instructions don't cover your operating system.
 
-Note that you require **OPAM 2.0.0 or greater** to use with MirageOS. Some distribution packages provide earlier versions and must be updated; check with
+Note that you require **OPAM 2.1.0 or greater** to use with MirageOS. Some distribution packages provide earlier versions and must be updated; check with
 
-    $ opam --version ## response should be at least 2.0.0 viz.
-    2.0.1
+    $ opam --version ## response should be at least 2.1.0 viz.
+    2.1.2
 
 All the OPAM state is held in the `.opam` directory in your home directory, including compiler installations. You should never need to switch to a root user to install packages. Package listings are obtained through `remote` sources, which defaults to the contents of [github.com/ocaml/opam-repository](https://github.com/ocaml/opam-repository).
 
@@ -92,11 +92,11 @@ After installation, `opam update -u` refreshes the package list and recompiles p
     # list of your remotes, which should include opam.ocaml.org
     $ opam remote
 
-Next, make sure you have at least **OCaml 4.08.0 or higher** as your active compiler. This is generally the case on macOS, though Debian only has it in the *testing* distribution at present. But don't worry: if your compiler is out of date, just run `opam switch` to have it locally install the right version for you.
+Next, make sure you have at least **OCaml 4.12.1 or higher** as your active compiler. This is generally the case on macOS, though Debian only has it in the *testing* distribution at present. But don't worry: if your compiler is out of date, just run `opam switch` to have it locally install the right version for you.
 
     $ ocaml -version
-    # if it is not 4.08.0 or higher, then run this
-    $ opam switch 4.08.0
+    # if it is not 4.12.1 or higher, then run this
+    $ opam switch 4.13.1
 
 Once you've got the right version, set up your shell environment to point to the current compiler switch.
 
@@ -120,4 +120,3 @@ Finally, install the MirageOS command-line tool.
     $ mirage --help
 
 That's it. You now have everything required to start developing MirageOS unikernels that will run either as POSIX processes or as standalone unikernels. Next, why not try [building a MirageOS *hello world*](/wiki/hello-world)?
-
