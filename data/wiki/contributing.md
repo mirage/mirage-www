@@ -1,5 +1,5 @@
 ---
-updated: 2014-08-12 22:56
+updated: 2014-08-12
 author:
   name: Mindy Preston
   uri: https://github.com/yomimono

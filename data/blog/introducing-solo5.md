@@ -1,5 +1,5 @@
 ---
-updated: 2016-1-7 18:10
+updated: 2016-1-7
 authors:
 - name: Dan Williams
   uri: https://github.com/djwillia

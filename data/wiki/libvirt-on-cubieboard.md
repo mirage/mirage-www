@@ -1,5 +1,5 @@
 ---
-updated: 2014-08-21 11:19
+updated: 2014-08-21
 author:
   name: Nick Betteridge
   uri: https://github.com/buzzheavyyear

@@ -1,5 +1,5 @@
 ---
-updated: 2012-9-12 0:00
+updated: 2012-9-12
 authors:
 - name: Dave Scott
   uri: http://dave.recoil.org/

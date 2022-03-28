@@ -1,5 +1,5 @@
 ---
-updated: 2013-08-15 16:00
+updated: 2013-08-15
 author:
   name: Balraj Singh
   uri:

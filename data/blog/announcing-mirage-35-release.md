@@ -1,5 +1,5 @@
 ---
-updated: 2019-03-05 20:00
+updated: 2019-03-05
 authors:
 - name: Hannes Mehnert
   uri: https://github.com/hannesm

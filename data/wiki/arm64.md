@@ -1,5 +1,5 @@
 ---
-updated: 2019-10-18 19:00
+updated: 2019-10-18
 author:
   name: derpeter
   uri:

@@ -1,5 +1,5 @@
 ---
-updated: 2015-12-29 15:30
+updated: 2015-12-29
 authors:
 - name: Christiano Haesbaert
   uri: http://www.haesbaert.org/

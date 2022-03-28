@@ -1,5 +1,5 @@
 ---
-updated: 2020-01-08 20:00
+updated: 2020-01-08
 authors:
 - name: Damien Leloup
   uri: https://www.lemonde.fr/signataires/damien-leloup/

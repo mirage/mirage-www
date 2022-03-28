@@ -1,5 +1,5 @@
 ---
-updated: 2022-02-10 17:00
+updated: 2022-02-10
 authors:
 - name: Thomas Gazagnaire
   uri: https://gazagnaire.org

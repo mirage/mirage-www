@@ -1,5 +1,5 @@
 ---
-updated: 2013-05-20 16:20
+updated: 2013-05-20
 authors:
 - name: Anil Madhavapeddy
   uri: http://anil.recoil.org

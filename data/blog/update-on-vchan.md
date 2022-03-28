@@ -1,5 +1,5 @@
 ---
-updated: 2014-07-16 12:00
+updated: 2014-07-16
 authors:
 - name: Jon Ludlam
   uri: http://jon.recoil.org

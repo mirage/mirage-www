@@ -1,5 +1,5 @@
 ---
-updated: 2022-03-08 13:00
+updated: 2022-03-08
 authors:
 - name: Rand
   uri: https://r7p5.earth

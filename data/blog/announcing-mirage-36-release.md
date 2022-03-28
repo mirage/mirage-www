@@ -1,5 +1,5 @@
 ---
-updated: 2019-10-18 15:00
+updated: 2019-10-18
 authors:
 - name: Martin Lucina
   uri: https://lucina.net/

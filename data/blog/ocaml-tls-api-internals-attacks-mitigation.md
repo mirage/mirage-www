@@ -1,5 +1,5 @@
 ---
-updated: 2014-07-14 12:00
+updated: 2014-07-14
 authors:
 - name: David Kaloper
   uri: https://github.com/pqwy

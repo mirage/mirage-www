@@ -1,5 +1,5 @@
 ---
-updated: 2019-14-26 17:23
+updated: 2019-14-26
 author:
   name: Amir Chaudhry
   uri: http://amirchaudhry.com

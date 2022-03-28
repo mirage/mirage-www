@@ -1,5 +1,5 @@
 ---
-updated: 2014-07-22 10:00
+updated: 2014-07-22
 authors:
 - name: Thomas Leonard
   uri: http://roscidus.com/blog/
