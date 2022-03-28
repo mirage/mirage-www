@@ -1658,13 +1658,21 @@ Ensure the default browser behavior of the `hidden` attribute.
   filter: blur(1px);
 }
 
+html {
+  background-position: top;
+  background-repeat: repeat-y;
+  background-size: 100%;
+  background-image: url("../img/wavesbg-bottom.png");
+}
+
 body {
   min-height: 100vh;
-  background-size: cover;
   background-position: top;
+  background-repeat: no-repeat;
   font-family: Inter;
   --tw-text-opacity: 1;
   color: rgb(51 51 51 / var(--tw-text-opacity));
+  background-size: 100%;
   background-image: url("../img/wavesbg.png");
 }
 
@@ -1687,7 +1695,11 @@ body {
 
 @media (min-width: 1080px) {
   .content-container {
-    margin: 92px auto;
+    margin: 0 auto;
+  }
+
+  body {
+    padding: 92px 0;
   }
 }
 
