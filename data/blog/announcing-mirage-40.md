@@ -76,7 +76,7 @@ MirageOS is a library operating system that constructs unikernels for
 secure, high-performance, low-energy footprint applications across
 various hypervisor and embedded platforms. It is available as an
 open-source project created and maintained by the [MirageOS Core
-Team](https://github.com/orgs/mirage/teams/core/members). A unikernel
+Team](https://mirage.io/community). A unikernel
 can be customised based on the target architecture by picking the
 relevant MirageOS libraries and compiling them into a standalone
 operating system, which contains strictly the functionality necessary
