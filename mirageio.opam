@@ -19,7 +19,7 @@ depends: [
   "tailwindcss" {build}
   "crunch" {build}
   "omd" {build}
-  "yaml" {build & >= "3.1.0"}
+  "yaml" {build}
   "fmt" {build}
   "ppx_deriving_yaml" {build}
   "odoc" {with-doc}
