@@ -1,7 +1,7 @@
 pin-depends: [
-  ["dream.dev" "git+https://github.com/TheLortex/dream.git#78991aad7d2372b391178b148ce69fd4707de116"] # branch master+mirage
-  ["dream-mirage.dev" "git+https://github.com/TheLortex/dream.git#78991aad7d2372b391178b148ce69fd4707de116"]
-  ["dream-pure.dev" "git+https://github.com/TheLortex/dream.git#78991aad7d2372b391178b148ce69fd4707de116"]
-  ["dream-httpaf.dev" "git+https://github.com/TheLortex/dream.git#78991aad7d2372b391178b148ce69fd4707de116"]
+  ["dream.dev" "git+https://github.com/TheLortex/dream.git#650b216d0f8b6f322110b80f03eaa5183b88a8d4"] # branch master+mirage
+  ["dream-mirage.dev" "git+https://github.com/TheLortex/dream.git#650b216d0f8b6f322110b80f03eaa5183b88a8d4"]
+  ["dream-pure.dev" "git+https://github.com/TheLortex/dream.git#650b216d0f8b6f322110b80f03eaa5183b88a8d4"]
+  ["dream-httpaf.dev" "git+https://github.com/TheLortex/dream.git#650b216d0f8b6f322110b80f03eaa5183b88a8d4"]
   ["tailwindcss.dev" "git+https://github.com/tmattio/opam-tailwindcss#fb0f82edd09999f7be033ab1785ba5f6b60ed8f6"]
 ]
