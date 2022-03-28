@@ -1,5 +1,5 @@
 ---
-updated: 2013-11-10 16:00
+updated: 2013-11-10
 author:
   name: Christine Koppelt
   uri: https://github.com/cko

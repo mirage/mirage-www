@@ -1,5 +1,5 @@
 ---
-updated: 2017-12-3 12:00
+updated: 2017-12-3
 author:
   name: Martin Keegan
   uri: http://mk.ucant.org/

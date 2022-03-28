@@ -1,5 +1,5 @@
 ---
-updated: 2013-08-23 17:43
+updated: 2013-08-23
 authors:
 - name: Vincent Bernardoff
   uri: https://github.com/vbmithr

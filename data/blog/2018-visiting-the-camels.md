@@ -1,5 +1,5 @@
 ---
-updated: 2018-04-20 16:00
+updated: 2018-04-20
 authors:
 - name: Stefanie Schirmer
   uri: https://linse.me

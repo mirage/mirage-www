@@ -1,5 +1,5 @@
 ---
-updated: 2015-10-15 19:00
+updated: 2015-10-15
 authors:
 - name: Amir Chaudhry
   uri: http://amirchaudhry.com

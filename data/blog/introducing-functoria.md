@@ -1,5 +1,5 @@
 ---
-updated: 2016-2-29 12:00
+updated: 2016-2-29
 authors:
 - name: Gabriel Radanne
   uri: https://github.com/drup

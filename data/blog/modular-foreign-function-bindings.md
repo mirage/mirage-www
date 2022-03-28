@@ -1,5 +1,5 @@
 ---
-updated: 2014-07-15 12:00
+updated: 2014-07-15
 authors:
 - name: Jeremy Yallop
   uri: https://github.com/yallop

@@ -1,5 +1,5 @@
 ---
-updated: 2016-6-29 16:00
+updated: 2016-6-29
 authors:
 - name: Gemma Gordon
   uri: https://github.com/GemmaG

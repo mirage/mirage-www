@@ -1,5 +1,5 @@
 ---
-updated: 2016-03-13 10:30
+updated: 2016-03-13
 author:
   name: Thomas Gazagnaire
 subject: DNS Performance Tests

@@ -1,5 +1,5 @@
 ---
-updated: 2019-10-18 15:00
+updated: 2019-10-18
 author:
   name: Richard Mortier
   uri: http://mort.io/

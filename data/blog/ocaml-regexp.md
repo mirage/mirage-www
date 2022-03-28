@@ -1,5 +1,5 @@
 ---
-updated: 2011-08-12 15:00
+updated: 2011-08-12
 authors:
 - name: Raphael Proust
   uri: https://github.com/raphael-proust
