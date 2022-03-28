@@ -10,10 +10,10 @@ permalink: announcing-mirage-40
 **On behalf of the MirageOS team, I am delighted to announce the release
   of MirageOS 4.0.0!**
 
-Since the first release of 2013, MirageOS has made steady progress
-towards deploying a self-managed internet infrastructure. The
+Since its first release in 2013, MirageOS has made steady progress
+towards deploying self-managed internet infrastructure. The
 project’s initial aim was to self-host as many services as possible
-aimed at empowering internet users to securely deploy infrastructure
+aimed at empowering internet users to deploy infrastructure securely
 to own their data and take back control of their privacy. MirageOS can
 securely deploy [static website
 hosting](https://github.com/roburio/unipi) with “Let’s Encrypt”
@@ -45,9 +45,9 @@ the [Tezos](https://tezos.com/) blockchain, and
 [Hyper](https://hyper.ag/) uses MirageOS to build sensor analytics and
 an automation platform for sustainable agriculture.
 
-In the coming weeks, our blog will feature in-depth technical contents
-for the new features that MirageOS brings, as well as a tour of
-existing community and commercial users of MirageOS. Please reach out
+In the coming weeks, our blog will feature in-depth technical content
+for the new features that MirageOS brings and a tour of
+the existing community and commercial users of MirageOS. Please reach out
 If you’d like to tell us about your story.
 
 ## Install MirageOS 4
@@ -61,10 +61,10 @@ $ opam update
 $ opam install 'mirage>4'
 ```
 
-*Note*: if you upgrade from MirageOS 3 you will need to manually clean
-the previous generated files (or call `mirage clean` before
-upgrading). You would also want to read [the full list of API
-changes](https://mirage.io/docs/breaking-changes).  You can see
+*Note*: if you upgrade from MirageOS 3, you will need to manually clean
+the previously generated files (or call `mirage clean` before
+upgrading). You would also want to read [the complete list of API
+changes](https://mirage.io/docs/breaking-changes). You can see
 unikernel examples in
 [mirage/mirage-skeleton](https://github.com/mirage/mirage-skeleton),
 [roburio/unikernels](https://github.com/roburio/unikernels) or
@@ -76,23 +76,23 @@ MirageOS is a library operating system that constructs unikernels for
 secure, high-performance, low-energy footprint applications across
 various hypervisor and embedded platforms. It is available as an
 open-source project created and maintained by the [MirageOS Core
-Team](https://github.com/orgs/mirage/teams/core/members). A unikernel
+Team](https://mirage.io/community). A unikernel
 can be customised based on the target architecture by picking the
 relevant MirageOS libraries and compiling them into a standalone
-operating system, which contains strictly the functionality necessary
+operating system, strictly containing the functionality necessary
 for the target. This minimises the unikernel’s footprint, increasing
 the security of the deployed operating system.
 
 The MirageOS architecture can be divided into operating system
 libraries, typed signatures, and a metaprogramming compiler. The
 operating system libraries implement various functionalities, ranging
-from low-level network card drivers, to full reimplementations of the
+from low-level network card drivers to full reimplementations of the
 TLS protocol, as well as the Git protocol to store versioned data. A
 set of typed signatures ensures that the OS libraries are consistent
 and work well in conjunction with each other. Most importantly,
-MirageOS is also a metaprogramming compiler which can input OCaml
+MirageOS is also a metaprogramming compiler that can input OCaml
 source code along with its dependencies, and a deployment target
-description in order to generate an executable unikernel, i.e., a
+description to generate an executable unikernel, i.e., a
 specialised binary artefact containing only the code needed to run on
 the target platform. Overall, MirageOS focuses on providing a small,
 well-defined, typed interface with the system components of the target
@@ -111,7 +111,7 @@ easier to integrate MirageOS with C and Rust libraries.
 
 This release introduces a significant change in how MirageOS compiles
 projects. We developed a new tool called
-[opam-monorepo](https://github.com/ocamllabs/opam-monorepo), which
+[opam-monorepo](https://github.com/ocamllabs/opam-monorepo) that
 separates package management from building the resulting source
 code. It creates a lock file for the project’s dependencies, downloads
 and extracts the dependency sources locally, and sets up a [dune
@@ -143,7 +143,7 @@ OCaml compiler flags.
 
 The change in how MirageOS compiles projects that accompanies this
 release required implementing a new developer experience for Opam
-users, in order to simplify cross-compilation of large OCaml projects.
+users, to simplify cross-compilation of large OCaml projects.
 
 A new tool called
 [opam-monorepo](https://dune.readthedocs.io/en/stable/dune-files.html#dune-workspace-1)
@@ -155,19 +155,19 @@ code. It is an opam plugin that:
 go.
 
 `opam-monorepo` is already available in opam and can be used
-on many projects which use dune as a build system. However, as we
+on many projects which use Dune as a build system. However, as we
 don’t expect the complete set of OCaml dependencies to use Dune, we
 MirageOS maintainers are committed to maintaining patches that build
 the most common dependencies with dune. These packages are hosted in two
 separate Opam repositories:
 - [dune-universe/opam-overlays](https://github.com/dune-universe/opam-overlays)
-  adds patched packages (with a `+dune` version) that compiles with
+  adds patched packages (with a `+dune` version) that compile with
   Dune.
 - [dune-universe/mirage-opam-overlays](https://github.com/dune-universe/mirage-opam-overlays)
-  add patched packages (with a `+dune+mirage` version) that fixes
+  add patched packages (with a `+dune+mirage` version) that fix
   cross-compilation with Dune.
 
-These repositories are enabled by default when using the `mirage` CLI tool.
+When using the `mirage` CLI tool, these repositories are enabled by default.
 
 ## In Memory of Lars Kurth
 
