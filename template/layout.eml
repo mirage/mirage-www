@@ -74,7 +74,7 @@ let render ~description ~title ~tab inner =
         </div>
       </div>
 
-      <div class="content-center"><%s! inner %></div>
+      <div class="content-center min-w-0"><%s! inner %></div>
     </section>
   </body>
 </html>
