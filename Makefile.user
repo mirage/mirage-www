@@ -6,7 +6,7 @@ all::
 
 .PHONY: deps
 deps: ## Install development dependencies
-        opam pin add -yn tailwindcss.dev git+https://github.com/tmattio/opam-tailwindcss
+	opam pin add -yn tailwindcss.dev git+https://github.com/tmattio/opam-tailwindcss
 	opam install -y dune-release ocamlformat utop ocaml-lsp-server tailwindcss
 	opam install --deps-only --with-test --with-doc -y .
 
