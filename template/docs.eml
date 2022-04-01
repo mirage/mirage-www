@@ -62,8 +62,8 @@ let render ~(weeklies : Mirageio_data.Weekly.t list) = Layout.render
       </div>
       <div class="px-8 py-6 lg:border-l lg:col-span-2">
         <div class="mb-4">
-          <div class="text-lg font-space font-bold">Weekly calls and release notes</div>
-          <p class="text-grey text-xs">Calls take place every two weeks and are announced on the mailing list.</p>
+          <div class="text-lg font-space font-bold">Former weekly calls and release notes</div>
+          <p class="text-grey text-xs">Calls taken place every two weeks and announced on the mailing list.</p>
         </div>
         <div class="space-y-2 flex flex-col">
           <div class="text-sm italic space-y-3">
