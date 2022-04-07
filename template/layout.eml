@@ -1,9 +1,15 @@
-type tab = 
+type tab =
   | Home
   | Blog
   | Docs
   | Api
   | Community
+
+let extra_link = function
+  | Blog ->
+    <link rel="alternate" type="application/rss+xml"
+      title="RSS Feed for mirage.io" href="/feed.xml" />
+  | _ -> ""
 
 let render ~description ~title ~tab inner =
 <!DOCTYPE html>
@@ -16,6 +22,7 @@ let render ~description ~title ~tab inner =
     <link rel="stylesheet" href="/main.css" />
     <link rel="stylesheet" href="/vendor/font-files/inter.css" />
     <link rel="stylesheet" href="/vendor/font-files/spacegrotesk.css" />
+    <%s! extra_link tab %>
 
     <title><%s title %></title>
   </head>
