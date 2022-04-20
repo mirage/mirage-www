@@ -10,7 +10,7 @@ permalink: tutorial-lwt
 
 [Lwt](https://www.ocsigen.org/lwt) is a lightweight cooperative threading library for OCaml. A good way to understand Lwt and its use in MirageOS is to write some simple code. This document introduces the basic concepts and suggests programs to write. Code for all examples is in the `mirage-skeleton/tutorial/lwt/` [repository](https://github.com/mirage/mirage-skeleton/tree/master/tutorial/lwt).
 
-##Basics
+## Basics
 
 The full Lwt manual is available [elsewhere](https://ocsigen.org/lwt), but the minimal stuff needed to get started is here.
 
@@ -160,7 +160,7 @@ end
 
 This code is also found in [tutorial/lwt/heads1/unikernel.ml][heads1_unikernel.ml] in the [mirage-skeleton](https://github.com/mirage/mirage-skeleton) code repository.  Build it with `mirage configure -t unix && make depend && make`, as described above.
 
-##Challenge 2: Looping echo server
+## Challenge 2: Looping echo server
 
 Write an echo server that reads from a dummy input generator and, for each line it reads, writes it to the console. The server should stop after reading 10 lines.
 
@@ -190,7 +190,7 @@ You might notice that it's very similar to the previous example `config.ml`, but
 By the way, the `>|=` operator ("map") used here is similar to `>>=` but automatically wraps the result of the function you provide with `return`. It's used here because `String.make` is synchronous (it doesn't return a thread). We could also have used `>>=` and `return` together to get the same effect.
 
 
-###Solution
+### Solution
 
 ```ocaml
 open OS
@@ -223,7 +223,7 @@ Note: Lwt's `>>=` operator does the threaded equivalent of a tail-call
 optimisation, so this won't consume more and more memory as it runs.
 
 
-##The main event loop
+## The main event loop
 
 Understanding the basic principles behind Lwt can be helpful.
 
@@ -237,7 +237,7 @@ when compared to preemptive system threads. Sleeping registers an
 event that will wake up the associated thread when possible.
 
 
-##Mutexes and cooperation
+## Mutexes and cooperation
 
 With Lwt, it is often possible to avoid mutexes altogether! The web server from the [Ocsigen](https://ocsigen.org) project uses only two, for example. In usual concurrent systems, mutexes are used to prevent two (or more) threads executing concurrently on a given piece of data. This can happen when a thread is preemptively interrupted and another one starts running. In Lwt, a thread executes serially until it explicitly yields (most commonly via `>>=`); for this reason, Lwt threads are said to be [cooperative](https://en.wikipedia.org/wiki/Cooperative_multitasking#Cooperative_multitasking.2Ftime-sharing).
 
@@ -272,7 +272,7 @@ The obvious danger associated with cooperative threading is having threads not c
 If locking a data structure is still needed, the `Lwt_mutex` module provides the necessary functions. To obtain more information on thread switching (and how to prevent it) read the Lwt mailing list archive: [Lwt_stream, thread switch within push function](https://sympa.inria.fr/sympa/arc/ocsigen/2011-09/msg00029.html) which continues [here](https://sympa.inria.fr/sympa/arc/ocsigen/2011-10/msg00001.html).
 
 
-##Spawning background threads
+## Spawning background threads
 
 If you want to spawn a thread without waiting for the result, use `Lwt.async`:
 
@@ -326,7 +326,7 @@ However, `test2`'s `t` blocks first. In this case, the sleeping `t` is passed to
 Moving the `let t = ` inside the `catch` callback avoids this problem (as does using `Lwt.fail` instead of `raise`).
 
 
-##Error handling
+## Error handling
 
 In Mirage code, we typically distinguish two types of error: programming errors (bugs, which should be reported to the programmer to be fixed) and expected errors (e.g. network disconnected or invalid TCP packet received).
 We try to use the type system to ensure that expected errors are handled gracefully.
@@ -365,11 +365,11 @@ let example () =
   ok (a + b)
 ```
 
-###Use raise or fail for bugs
+### Use raise or fail for bugs
 
 If a bug is detected, you should raise an exception. In threaded code you should use `Lwt.fail`, although Lwt will catch exceptions and turn them into failures automatically if you forget.
 
-###Catching exceptions
+### Catching exceptions
 
 You shouldn't normally need to catch specific exceptions (it would be better to use an `Error` return in that case), but it is sometimes necessary.
 
@@ -392,7 +392,7 @@ is
   )
 ```
 
-###Finalize
+### Finalize
 
 Depending on how the unikernel is set up, an exception may or may not be fatal.
 In general, if you allocate a resource that won't be automatically freed by the garbage collector then you should use `Lwt.finalize` to ensure it is cleaned up whether the function using it succeeds or not:
@@ -411,7 +411,7 @@ To make it harder to get this wrong, it is a good idea to provide a `with_` func
 ```
 
 
-##User-defined threads
+## User-defined threads
 
 You can create a thread that sleeps until you explicitly make it return a result with `Lwt.wait`,
 which returns a thread and a _waker_:
@@ -428,7 +428,7 @@ let invoke_remote msg =
 This is mainly useful when interacting with external processes (as in this example), or libraries that don't support Lwt directly.
 
 
-##Cancelling
+## Cancelling
 
 In order to cancel a thread, the function `cancel` (provided by the module Lwt) is needed. It has type `'a t -> unit` and does exactly what it says (except on certain complicated cases that are not in the scope of this tutorial). A simple timeout function that cancels a thread after a given number of seconds can be written easily:
 
@@ -439,7 +439,7 @@ In order to cancel a thread, the function `cancel` (provided by the module Lwt) 
     Time.sleep_ns delay >|= fun () -> cancel t
 ```
 
-###Challenge 3: Timeouts
+### Challenge 3: Timeouts
 
 This `timeout` function does not allow one to use the result returned by the thread `t`.
 
@@ -458,7 +458,7 @@ You can test your solution with this application, which creates a thread that ma
     | Some v -> C.log c (Printf.sprintf "Returned %S" v)
 ```
 
-###Solution
+### Solution
 
 ```ocaml
   let timeout delay t =
