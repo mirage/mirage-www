@@ -35,7 +35,7 @@ If you're ready to experiment with the dual stack: below is a diff for our basic
 https://github.com/roburio/tlstunnel/commit/2cb3e5aa11fca4b48bb524f3c0dbb754a6c8739b
 changed tlstunnel from IPv4 stack to dual stack.
 
-```
+```diff
 diff --git a/device-usage/network/config.ml b/device-usage/network/config.ml
 index c425edb..eabc9d6 100644
 --- a/device-usage/network/config.ml

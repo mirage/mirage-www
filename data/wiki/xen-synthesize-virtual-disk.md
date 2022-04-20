@@ -160,7 +160,7 @@ in `xen-disk`; all we need to do is tweak it slightly.
 In the "connect" function we simply need to set "shared" to "false" to
 achieve the behaviour we want i.e.
 
-```
+```ocaml
 let connect id =
   let fd = Unix.openfile (filename_of_id id) [ Unix.O_RDONLY ] 0o0 in
   let stats = Unix.LargeFile.fstat fd in
@@ -172,7 +172,7 @@ let connect id =
 
 The read and write functions can be left as they are:
 
-```
+```ocaml
 let forall offset bufs f =
   let rec loop offset = function
   | [] -> ()

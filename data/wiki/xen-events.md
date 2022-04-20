@@ -160,7 +160,7 @@ threads which have registered themselves as waiters. Typically a MirageOS device
 driver will repeatedly call
 [mirage-platform/xen/lib/activations.mli:after](https://github.com/mirage/mirage-platform/blob/v1.0.0/xen/lib/activations.mli#L22)
 as follows:
-```
+```ocaml
 let rec process_events channel last_event =
   Activations.after channel last_event >>= fun latest_event ->
   ...

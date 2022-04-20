@@ -14,7 +14,7 @@ Building a MirageOS unikernel for the Xen backend results in a Xen PV kernel wit
 
 For recent Xen versions, Mirage will attempt to provide a reasonable configuration document for use with the `xl` tool.  The filename will be based on the string argument given to `register` in the unikernel's `config.ml`.  For instance, if your `config.ml` has lines like this:
 
-```
+```ocaml
 let () =
   register "hello" [main $ default_posix_clock]
 ```

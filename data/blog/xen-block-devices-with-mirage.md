@@ -141,7 +141,7 @@ The `xen-disk` program has a set of simple built-in virtual disk implementations
 Each one satisifies a simple signature, contained in
 [src/storage.mli](https://github.com/mirage/xen-disk/blob/master/src/storage.mli):
 
-```
+```ocaml
 type configuration = {
   filename: string;      (** path where the data will be stored *)
   format: string option; (** format of physical data *)
@@ -209,7 +209,7 @@ particular `lwt` uses `Lwt_bytes.map_file` as a wrapper for the
 In the "open-disk" function we simply need to set "shared" to "false" to
 achieve the behaviour we want i.e.
 
-```
+```ocaml
   let open_disk configuration =
     let fd = Unix.openfile configuration.filename [ Unix.O_RDONLY ] 0o0 in
     let stats = Unix.LargeFile.fstat fd in
@@ -220,7 +220,7 @@ achieve the behaviour we want i.e.
 
 The read and write functions can be left as they are:
 
-```
+```ocaml
   let read (_, mmap) buf offset_sectors len_sectors =
     let offset_sectors = Int64.to_int offset_sectors in
     let len_bytes = len_sectors * sector_size in

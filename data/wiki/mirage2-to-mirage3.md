@@ -18,7 +18,7 @@ A number of refinements to the configuration language for Mirage were made in th
 
 The idiom for deciding which `impl` to use based on the backend is the most noticeable change.  Numerous older `config.ml` files include code like the following, from [mirage-skeleton's `kv_ro` example in commit `21adfc85b124e886d871079f28bd0a868ba3c5fb`](https://github.com/mirage/mirage-skeleton/tree/21adfc85b124e886d871079f28bd0a868ba3c5fb/kv_ro), which attempts to detect which `kv_ro` device to use based on the target chosen with `mirage configure -t` and environment variables:
 
-```
+```ocaml
 let mode =
   let x = try Unix.getenv "FS" with Not_found -> "crunch" in
   match x with
@@ -38,7 +38,7 @@ let disk =
 
 Functoria improved the situation considerably by including convenience functions which not only have logic for autodetecting which implementations are suitable based on the backend selected, but also other arguments given to `mirage configure`.  The code above can be replaced with:
 
-```
+```ocaml
 let disk = generic_kv_ro "t"
 ```
 
@@ -68,7 +68,7 @@ Many existing unikernels will find it useful to replace their existing network s
 
 A good example of replacing old configurator code can be seen between [the pre-functoria `network` example](https://github.com/mirage/mirage-skeleton/tree/21adfc85b124e886d871079f28bd0a868ba3c5fb/stackv4), and [the `device-usage/network` example from the Mirage-3.0.0-compatible branch of `mirage-skeleton`](https://github.com/mirage/mirage-skeleton/tree/e9360fa1ce02d26a8931238a16000fa12df40ebf/device-usage/network).  We can replace this old code from `config.ml`:
 
-```
+```ocaml
 let net =
   try match Sys.getenv "NET" with
     | "direct" -> `Direct
@@ -92,7 +92,7 @@ let stack console =
 
 with this:
 
-```
+```ocaml
 let stack = generic_stackv4 default_network
 ```
 
@@ -100,7 +100,7 @@ You may notice that `generic_stackv4` doesn't take a `console` argument, where t
 
 The `mirage_logs` library and its incorporation into the configuration language dates back to version 2.9.0, but a number of libraries still required a `console impl` argument and expected to log to the console.  In Mirage 3.0.0, we've tried to replace the calls to `Console.log` with calls to `Logs.debug`, `Logs.info`, or `Logs.warn` as appropriate.  Consequently, many of the functions which previously needed to be passed a console no longer require it.  For example, we can take [the `stackv4` example from `mirage-skeleton` commit f36d2958f616fb882df37f08d3440797471ca0cc](https://github.com/mirage/mirage-skeleton/tree/f36d2958f616fb882df37f08d3440797471ca0cc/stackv4), which fails with Mirage 3:
 
-```
+```ocaml
 mirage-skeleton/stackv4$ cat config.ml
 open Mirage
 
@@ -426,7 +426,7 @@ make: *** [build] Error 1
 
 The module `T` is the TCP module from the stack passed by `Mirage_stack_lwt.V4`.  The module type definition for `TCP` lives in [mirage-protocols](http://docs.mirage.io/mirage-protocols/Mirage_protocols/module-type-TCP/index.html), where we can find a [function named `dst`](http://docs.mirage.io/mirage-protocols/Mirage_protocols/module-type-TCP/index.html#val-dst) with which to replace the call to `get_dst`.  (This change is also noted in the [mirage-tcpip version 3.0.0 release notes](https://github.com/mirage/mirage-tcpip/releases/tag/v3.0.0).)  Replacing `get_dest` with `dst` gives us the following `unikernel.ml`:
 
-```
+```ocaml
 open Lwt.Infix
 open Printf
 
@@ -511,19 +511,19 @@ make: *** [build] Error 1
 
 We get this build failure because the code expects `T.read` to return a value of type 
 
-```
+```ocaml
 [< `Eof | `Error of 'a | `Ok of 'b ]
 ```
 
 but errors have been [reworked in Mirage 3](https://mirage.io/blog/mirage-3.0-errors).  `T.read`, and other functions like it, now return a value of type
 
-```
+```ocaml
 (T.buffer Mirage_flow.or_eof, T.error) result
 ```
 
 We know that `T.buffer` is `Cstruct.t` from [`Mirage_protocols_lwt.TCP`](http://docs.mirage.io/mirage-protocols-lwt/Mirage_protocols_lwt/index.html#module-type-TCP).  [`Mirage_flow.or_eof`](http://docs.mirage.io/mirage-flow/Mirage_flow/index.html#type-or_eof) is parameterized over that type, and [T.error](http://docs.mirage.io/mirage-protocols/Mirage_protocols/module-type-TCP/index.html#type-error) is some superset of [Tcp.error](http://docs.mirage.io/mirage-protocols/Mirage_protocols/module-type-TCP/index.html#type-error) so we can expect the type of `T.read`'s returned value to be
 
-```
+```ocaml
 Ok of (`Data of Cstruct.t)
 Ok of `Eof
 Error of `Timeout
@@ -533,7 +533,7 @@ Error of ???
 
 where ??? is something that can be printed by `T.pp_error`, but the details of which we don't know.  We can change the `function` which is on the right of the `>>=` produced by `T.read` to comply with this error scheme:
 
-```
+```ocaml
 open Lwt.Infix
 open Printf
 
@@ -598,7 +598,7 @@ The error handling above is very unsatisfying, though, and so is the output -- f
 
 Our `config.ml` will look like this:
 
-```
+```ocaml
 open Mirage
 
 let handler = foreign "Unikernel.Main" (stackv4 @-> job)
@@ -611,7 +611,7 @@ let () =
 
 and then we'll need to change our `unikernel.ml` like so:
 
-```
+```ocaml
 open Lwt.Infix
 
 module Main (S:Mirage_stack_lwt.V4) = struct
@@ -720,7 +720,7 @@ because the function `foreign` no longer takes a `libraries` argument.
 
 The [documentation for `foreign`](http://docs.mirage.io/mirage/Mirage/index.html#val-foreign) will be a useful reference for us.  In Mirage 3, `packages` is now a variable of type `package list`.  One can get a `package` by calling [Mirage.package](http://docs.mirage.io/functoria/Functoria/index.html#pkg), which has the following signature:
 
-```
+```ocaml
 val package : ?build:bool -> ?sublibs:string list -> ?ocamlfind:string list -> ?min:string -> ?max:string -> string -> package
 ```
 
@@ -854,7 +854,7 @@ We need to make many of the changes mentioned in the example above, so let's get
 
 We'll use `Mirage_console_lwt.S` instead of `V1_LWT.CONSOLE`, replace `V1_LWT.NETWORK` with `Mirage_net_lwt.S`, choose `Mirage_clock_lwt.MCLOCK` as the module type we want to replace `V1_LWT.CLOCK`, and use `Mirage_time_lwt.S` in place of `V1_LWT.TIME` to get the following `unikernel.ml`:
 
-```
+```ocaml
 open Lwt.Infix
 
 let red fmt    = Printf.sprintf ("\027[31m"^^fmt^^"\027[m")
@@ -1125,7 +1125,7 @@ make: *** [build] Error 1
 
 The `connect` functions that we're directly invoking no longer return a polymorphic variant, but rather will raise an exception if a problem occurred.  Therefore, we no longer need to wrap them in `or_error`, so we can remove that function from `unikernel.ml`:
 
-```
+```ocaml
 open Lwt.Infix
 
 let ipaddr   = "10.0.0.2"
@@ -1276,9 +1276,9 @@ make: *** [build] Error 1
 The `IP` module type no longer allows for mutable IP configuration settings.  [The type signature for `I.connect`](http://docs.mirage.io/tcpip/Static_ipv4/Make/index.html#val-connect) shows that, with some help from [Ipaddr.V4](http://docs.mirage.io/ipaddr/Ipaddr/V4/index.html) and a bit of adjustment `gateway` being `Ipaddr.V4.t option` rather than `Ipaddr.V4.t list` as `I.set_ip_gateways` previously expected, we can set the values directly when invoking `I.connect` from `unikernel.ml`:
 
 
-```
+```ocaml
 
-pen Lwt.Infix
+open Lwt.Infix
 
 let ipaddr   = "10.0.0.2/24"
 let gateway  = "10.0.0.1"
@@ -1351,7 +1351,7 @@ make: *** [build] Error 1
 
 Our error message tells us that `N.listen` can now return an error, so our function that expects it to return `unit` is no longer valid.  We can fix this problem by changing the function on the right-hand side of the `>>=` following the call to `listen` to be a function that matches on the possible values, as we did for `T.read` in the previous example:
 
-```
+```ocaml
 open Lwt.Infix
 
 let ipaddr   = "10.0.0.2/24"

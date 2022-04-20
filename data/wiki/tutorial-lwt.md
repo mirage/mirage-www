@@ -307,7 +307,7 @@ Lwt.async (fun () ->
 By the way, the reason `async` and `catch` take functions that create threads rather than just plain threads is so they can start the thread inside a `try .. with` block and so handle OCaml exceptions consistently.
 Be careful not to disable this safety feature by accident - consider:
 
-```
+```ocaml
 let test1 () =
   let t = raise (Failure "early failure") in
   Lwt.catch (fun () -> t)
