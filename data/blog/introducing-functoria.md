@@ -23,7 +23,7 @@ Based on this configuration it will use [opam][] to install the dependencies, ha
 
 A very simple configuration file looks like this:
 
-```
+```ocaml
 open Mirage
 let main = foreign "Unikernel.Main" (console @-> job)
 let () = register "console" [main $ default_console]
@@ -61,7 +61,7 @@ at configure and run time, so we use the stage `` `Both``. This gives us the fol
 [API_arg_opt]: http://mirage.github.io/functoria/Functoria_key.Arg.html#VALopt
 [API_arg_string]: http://mirage.github.io/functoria/Functoria_key.Arg.html#VALstring
 
-```
+```ocaml
 let lang_key =
   let doc = Key.Arg.info
       ~doc:"The default language for the unikernel." [ "l" ; "lang" ]
@@ -89,7 +89,7 @@ We can do much more with keys, for example we can use them to switch devices at 
 To illustrate, let us take the example of dynamic storage, where we want to choose between a block device and a crunch device with a command line option.
 In order to do that, we must first define a boolean key:
 
-```
+```ocaml
 let fat_key =
   let doc = Key.Arg.info
       ~doc:"Use a fat device if true, crunch otherwise." [ "fat" ]
@@ -101,7 +101,7 @@ We can use the [`if_impl`][API_if] combinator to choose between two devices depe
 
 [API_if]: http://mirage.github.io/functoria/Functoria.html#VALif_impl
 
-```
+```ocaml
 let dynamic_storage =
   if_impl (Key.value fat_key)
     (kv_ro_of_fs my_fat_device)
@@ -125,7 +125,7 @@ All these keys and dynamic implementations make for complicated unikernels. In o
 
 Let us consider the `console` example in [mirage-skeleton][]:
 
-```
+```ocaml
 open Mirage
 
 let main = foreign "Unikernel.Main" (console @-> job)
@@ -153,7 +153,7 @@ If your unikernel has a data dependency — say, initializing the entropy — yo
 
 As an example, let us look at the [`app_info`][API_app_info] device. This device makes the configuration information available at runtime. We can declare a dependency on it:
 
-```
+```ocaml
 let main =
   foreign "Unikernel.Main" ~deps:[abstract app_info] (console @-> job)
 ```

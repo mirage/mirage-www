@@ -15,7 +15,7 @@ Event-driven systems are simple to implement, scalable to lots of network client
 OCaml has the excellent [Lwt](http://ocsigen.org) threading library that utilises a monadic approach to solving this.
 Consider this simplified signature:
 
-```
+```ocaml
   val return : 'a -> 'a Lwt.t 
   val bind : 'a Lwt.t -> ('a -> 'b Lwt.t) -> 'b Lwt.t
   val run : 'a Lwt.t -> 'a
@@ -26,13 +26,13 @@ The `return` function is the simplest way to construct such a thread from an OCa
 
 If we then wish to use the value of thread, we must compose a function that will be called in the future when the thread completes. This is what the `bind` function above is for. For example, assume we have a function that will let us sleep for some time:
 
-```
+```ocaml
   val sleep: int -> unit Lwt.t
 ```
 
 We can now use the `bind` function to do something after the sleep is complete:
 
-```
+```ocaml
   let x = sleep 5 in
   let y = bind x (fun () -> print_endline "awake!") in
   run y
@@ -50,7 +50,7 @@ MirageOS currently uses Lwt extensively, and we have been very happy with using 
 
 Lwt addresses the first problem via a comprehensive [syntax extension](http://ocsigen.org/lwt/2.3.0/api/Pa_lwt) which provides Lwt equivalents for many common operations. For example, the above example with sleep can be written as:
 
-```
+```ocaml
   lwt x = sleep 5 in
   print_endline "awake"
 ```
@@ -64,7 +64,7 @@ Delimcc can be combined with Lwt very elegantly, and Jake Donham did just this w
 
 The interface for fibers is also simple:
 
-```
+```ocaml
   val start: (unit -> 'a) -> 'a Lwt.t
   val await : 'a Lwt.t -> 'a
 ```
@@ -75,7 +75,7 @@ A fiber can be launched with `start`, and during its execution can block on anot
 
 I put together a few microbenchmarks to try out the performance of Lwt threads versus fibers. The fiber test looks like this:
 
-```
+```ocaml
   module Fiber = struct
     let basic fn yields =
       for i = 1 to 15000 do
@@ -91,7 +91,7 @@ I put together a few microbenchmarks to try out the performance of Lwt threads v
 
 We invoke the run function with two arguments: a thread to use for blocking and the number of times we should yield serially (so we can confirm that an increasing number of yields scales linearly).  The Lwt version is pretty similar:
 
-```
+```ocaml
   module LWT = struct
     let basic fn yields =
       for_lwt i = 1 to 15000 do
@@ -121,7 +121,7 @@ There are two blocking functions used in the graph above:
 
 Interestingly, using a fiber is slower than normal Lwt here, even though our callstack is not very deep.  I would have hoped that fibers would be significantly cheaper with a small callstack, as the amount of backtracking should be quite low.  Lets confirm that fibers do in fact slow down as the size of the callstack increases via this test:
 
-```
+```ocaml
   module Fiber = struct
     let recurse fn depth =
       let rec sum n = 
@@ -141,7 +141,7 @@ Interestingly, using a fiber is slower than normal Lwt here, even though our cal
 
 The `recurse` function is deliberately not tail-recursive, so that the callstack increases as the `depth` parameter grows.  The Lwt equivalent is slightly more clunky as we have to rewrite the loop to bind and return:
 
-```
+```ocaml
   module LWT = struct
     let recurse fn depth =
       let rec sum n =
@@ -185,7 +185,7 @@ Jake Donham comments:
 
 When writing the test, I figured that calling the thread waiting function more often wouldn't alter the result (careless). So I modified the test suite to have a `recurse` test that only waits a single time at the end of a long call stack (see below) as well as the original N^2 version (now called `recurse2`).
 
-```
+```ocaml
   module Fiber = struct
     let recurse fn depth =
       let rec sum n = 
@@ -212,7 +212,7 @@ However, when we run the `recurse` test with a single yield at the end of the lo
 
 The reason for Lwt being slower in this becomes more clear when we examine what the code looks like after it has been passed through the `pa_lwt` syntax extension. The code before looks like:
 
-```
+```ocaml
   let recurse fn depth =
     let rec sum n =
       match n with
@@ -225,7 +225,7 @@ The reason for Lwt being slower in this becomes more clear when we examine what 
 
 and after `pa_lwt` macro-expands it:
 
-```
+```ocaml
   let recurse fn depth =
     let rec sum n =
       match n with

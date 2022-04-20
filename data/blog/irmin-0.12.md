@@ -12,7 +12,7 @@ Development of the [Irmin](https://github.com/mirage/irmin) Git-like data store 
 
 Previously, an Irmin application that wanted to use watches would setup file-system scanning/polling by doing:
 
-```
+```ocaml
   let () = Irmin_unix.install_dir_polling_listener 1.0
 ```
 
@@ -20,7 +20,7 @@ which would scan the `.git/refs` directory every second. This worked in practice
 
 In the new 0.12.0 release, you need to use:
 
-```
+```ocaml
    let () = Irmin_unix.set_listen_dir_hook ()
 ```
 

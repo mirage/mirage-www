@@ -110,7 +110,7 @@ Irmin applications are naturally written as functors, with the details of the pe
 abstract.
 The following [Irmin-inspired](https://github.com/mirage/irmin/blob/0.8.3/lib/core/irminView.mli) signature represents what Xenstore needs
 from Irmin:
-```
+```ocaml
 module type VIEW = sig
   type t
 
@@ -158,7 +158,7 @@ One of the most significant user-visible features is that all of the operations 
 Irmin can be inspected using the standard `git` command line tool.
 The runes to configure Irmin to write
 [git](http://git-scm.com) format data to the filesystem are as follows:
-```
+```ocaml
     let open Irmin_unix in
     let module Git = IrminGit.FS(struct
       let root = Some filename
@@ -178,7 +178,7 @@ easy. We currently use [sexplib](https://github.com/janestreet/sexplib) to map N
 values onto strings for Irmin.
 
 The resulting [Irmin glue module](https://github.com/mirage/ocaml-xenstore-server/blob/blog/introducing-irmin-in-xenstore/userspace/main.ml#L101) looks like:
-```
+```ocaml
     let module V = struct
       type t = DB.View.t
       let create = DB.View.create

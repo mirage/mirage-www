@@ -34,7 +34,7 @@ of the device drivers that actually execute the code (be it a Unix binary or a
 dedicated Xen kernel).  It lets us write code of this form
 (taken from [mirage-skeleton/block](https://github.com/mirage/mirage-skeleton/tree/master/block)):
 
-```
+```ocaml
 let () =
   let main = foreign "Unikernel.Block_test" (console @-> block @-> job) in
   let img = block_of_file "disk.img" in
@@ -79,7 +79,7 @@ stack, and is parameterized across its network dependencies.  This means
 that once can quickly assemble a custom network stack from modular components,
 such as this little fragment below from [mirage-skeleton/ethifv4/](https://github.com/mirage/mirage-skeleton/blob/master/ethifv4/unikernel.ml):
 
-```
+```ocaml
 module Main (C: CONSOLE) (N: NETWORK) = struct
 
   module E = Ethif.Make(N)

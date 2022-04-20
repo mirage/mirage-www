@@ -45,7 +45,7 @@ still being sufficiently high performance to be interesting!
 By way of a sample of how it fits together, here's a skeleton for a simple
 controller application:
 
-```
+```ocaml
 type mac_switch = {
   addr: OP.eaddr; 
   switch: OP.datapath_id;

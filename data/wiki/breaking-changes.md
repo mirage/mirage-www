@@ -82,7 +82,7 @@ You can do so by adding ~deps:[abstract nocrypto] to the arguments of Mirage.for
 
 Data dependencies (such as entropy initialization) are now explicit.
 In order to fix this, you need to declare the dependency like so:
-```
+```ocaml
 open Mirage
 
 let my_functor =

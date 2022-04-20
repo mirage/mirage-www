@@ -54,7 +54,7 @@ with clients, both Unix sockets and for a special Xen inter-domain shared memory
 painless process to extract the required socket-like IO signature and turn the bulk of the server into
 a [functor](http://caml.inria.fr/pub/docs/manual-ocaml-4.00/manual004.html). The IO signature ended up looking approximately like:
 
-```
+```ocaml
     type t
     val read: t -> string -> int -> int -> int Lwt.t
     val write: t -> string -> int -> int -> unit Lwt.t

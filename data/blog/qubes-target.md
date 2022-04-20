@@ -217,7 +217,7 @@ let default_qubesdb = impl qubesdb_conf
 
 Other than the `type qubesdb = QUBES_DB` and `let qubesdb = Type QUBES_DB`, this isn't very different from the previous `gui` and `qrexec` examples.  Next, we'll need something that can take a `qubesdb`, look up the configuration, and set up an `ipv4` from the lower layers:
 
-```
+```ocaml
 let ipv4_qubes_conf = impl @@ object
     inherit base_configurable
     method ty = qubesdb @-> ethernet @-> arpv4 @-> ipv4
