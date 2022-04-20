@@ -15,7 +15,7 @@ closer to the application level, it is necessary to either reimplement the C
 bindings in Javascript or OCaml, or remove them completely. This is particularly
 important for the standard library.
 
-##The `Str` module has to go!
+## The `Str` module has to go!
 
 `Str` provides regular expressions in a non-reentrant, non-functional fashion.
 While the OCaml distribution provides it in `otherlibs`, it is installed by
@@ -40,7 +40,7 @@ set of perks and drawbacks:
   be slower than `Str` and needed an estimation of performance cost in order to
   assess the practicality of the solution.
 
-##Benchmarking `Str`
+## Benchmarking `Str`
 
 There is a purely OCaml regexp library readily available, called `Regexp` and
 developed by Claude Marché from the LRI laboratory. You can find the
@@ -72,7 +72,7 @@ Quite surprisingly for the string matching operation, the C based `Str` module
 is less efficient than the pure OCaml `Regexp`. The `Pcre` results were even worse
 than `Str`. Why?
 
-###A simple library for a simple task
+### A simple library for a simple task
 
 The `Regexp` library is lightweight, and so far faster than its C based
 counterparts. One of the features `Regexp` lacks is "group capture": the ability
@@ -82,7 +82,7 @@ instead of the regular parentheses. `Str` does not offer  this, and thus
 imposes the runtime cost of capture even when not necessary. In other words, the
 slowdown/group capturing "is not a feature, it's a bug!"
 
-###The MirageOS Regexp library
+### The MirageOS Regexp library
 
 With the introduction of `Regexp` into the tree, the libraries available to MirageOS
 applications are now `Str`-free and safer to use across multiple backends. The main
