@@ -21,14 +21,14 @@ Initially a thread is _sleeping_ (the result is not yet known). At some point, i
 Lwt provides a number of functions for working with threads.
 The first useful function is `return`, which constructs a trivial, already-returned thread:
 
-```
+```ocaml
   val return: 'a -> 'a Lwt.t
 ```
 
 This is useful if an API requires a thread, but you already happen to know the value.
 Once the value is wrapped in its Lwt thread, it cannot directly be used (as in general a thread may not have terminated yet). This is where the `>>=` operator (pronounced "bind") comes in:
 
-```
+```ocaml
   val ( >>= ): 'a Lwt.t -> ('a -> 'b Lwt.t) -> 'b Lwt.t
 ```
 
@@ -131,7 +131,7 @@ end
 
 Assuming you want to build as a normal Unix process, compile the application with:
 
-```
+```sh
   mirage configure -t unix
   make depend
   make
@@ -180,7 +180,7 @@ let () =
 
 You might notice that it's very similar to the previous example `config.ml`, but it requires an extra package `randomconv`.  `randomconv` has convenience functions for dealing with random data, which this challenge asks you to do.  Here is a basic dummy input generator you can use for testing:
 
-```
+```ocaml
   let read_line () =
     OS.Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:2500 R.generate))
     >|= fun () ->
@@ -243,7 +243,7 @@ With Lwt, it is often possible to avoid mutexes altogether! The web server from 
 
 For example, consider this code to generate unique IDs:
 
-```
+```ocaml
 let next =
   let i = ref 0 in
   fun () ->
@@ -256,7 +256,7 @@ It is entirely safe to call this from multiple Lwt threads, since we know that `
 Calling `x >>= f` (and similar) will run other threads while waiting for `x` to terminate, and these may well invoke the function again, so you can't assume things won't be modified across a bind.
 For example, this version is _not_ safe:
 
-```
+```ocaml
 let next =
   let i = ref 0 in
   fun () ->
@@ -276,7 +276,7 @@ If locking a data structure is still needed, the `Lwt_mutex` module provides the
 
 If you want to spawn a thread without waiting for the result, use `Lwt.async`:
 
-```
+```ocaml
 Lwt.async (fun () ->
   OS.Time.sleep_ns (Duration.of_sec 10) >>= fun () ->
   C.log c "Finished"
@@ -291,7 +291,7 @@ It is often better to catch such exceptions and log them with some contextual in
 Here's some real Mirage code that spawns a new background thread to handle a new frame received from the network.
 The log message includes the exception it caught, a dump of the troublesome frame and, like all log messages, information about when it occurred and in which module.
 
-```
+```ocaml
 (* Handle a frame of data from the network... *)
 Lwt.async (fun () ->
   Lwt.catch (fun () -> fn data)
@@ -338,7 +338,7 @@ This is a built-in in OCaml 4.03 and available from the `result` opam package fo
 
 Here's an example that calls `read_arg` twice and returns the sum of the results on success. If either `read_arg` returns an error then that is returned immediately.
 
-```
+```ocaml
 let example () =
   read_arg () >>= function
   | Error _ as e -> Lwt.return e
@@ -351,7 +351,7 @@ let example () =
 
 It is often useful to provide some helpers to handle this pattern (using Lwt threads and result types together) more simply:
 
-```
+```ocaml
 let ok x = Lwt.return (Ok x)
 
 let (>>*=) m f =
@@ -375,7 +375,7 @@ You shouldn't normally need to catch specific exceptions (it would be better to 
 
 The Lwt-equivalent of
 
-```
+```ocaml
 try foo x
 with
 | Error_you_want_to_catch -> (* handle error here *)
@@ -383,7 +383,7 @@ with
 
 is
 
-```
+```ocaml
  Lwt.catch
   (fun () -> foo x)
   (function
@@ -397,7 +397,7 @@ is
 Depending on how the unikernel is set up, an exception may or may not be fatal.
 In general, if you allocate a resource that won't be automatically freed by the garbage collector then you should use `Lwt.finalize` to ensure it is cleaned up whether the function using it succeeds or not:
 
-```
+```ocaml
   let r = Resource.alloc () in
   Lwt.finalize
     (fun () -> use r)
@@ -406,7 +406,7 @@ In general, if you allocate a resource that won't be automatically freed by the 
 
 To make it harder to get this wrong, it is a good idea to provide a `with_` function, so users can just do:
 
-```
+```ocaml
   with_resource (fun r -> use r)
 ```
 
@@ -416,7 +416,7 @@ To make it harder to get this wrong, it is a good idea to provide a `with_` func
 You can create a thread that sleeps until you explicitly make it return a result with `Lwt.wait`,
 which returns a thread and a _waker_:
 
-```
+```ocaml
 let invoke_remote msg =
   let t, waker = Lwt.wait () in
   let id = new_id () in
@@ -432,7 +432,7 @@ This is mainly useful when interacting with external processes (as in this examp
 
 In order to cancel a thread, the function `cancel` (provided by the module Lwt) is needed. It has type `'a t -> unit` and does exactly what it says (except on certain complicated cases that are not in the scope of this tutorial). A simple timeout function that cancels a thread after a given number of seconds can be written easily:
 
-```
+```ocaml
   (* In this example and all those afterwards, we consider Lwt and OS to be
      opened *)
   let timeout delay t =
@@ -475,7 +475,7 @@ Does your solution match the one given here and always returns after `f` seconds
 
 This is a good place to introduce a third operation to compose threads: `pick`.
 
-```
+```ocaml
   val pick : 'a t list -> 'a t
 ```
 
