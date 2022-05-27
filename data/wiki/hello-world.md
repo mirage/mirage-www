@@ -100,7 +100,7 @@ $ mirage configure -t unix
 - `opam-monorepo pull` locally fetch unikernel dependencies.
 
 NOTE: while performing the _lock_ step, an additional repository 
-(https://github.com/mirage/opam-overlays.git) is added in your opam switch. 
+[https://github.com/mirage/opam-overlays.git](https://github.com/mirage/opam-overlays.git) is added in your opam switch. 
 This repository contains packages that have been changed to use the _dune_ build 
 system. The `--extra-repo` argument in `mirage configure` changes the additional 
 repository to use. `--no-extra-repo` can be used to disable the extra repository, 
