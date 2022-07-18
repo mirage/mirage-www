@@ -112,7 +112,7 @@ First install OCaml and the usual build tools:
 ```
 Then install the OCamlPro `opam` package manager to simplify the installation of extra packages
 ```
-    git clone git://github.com/OCamlPro/opam.git
+    git clone https://github.com/OCamlPro/opam.git
     cd opam
     make
     make install
@@ -125,7 +125,7 @@ Initialise OPAM with the default packages:
 ```
 Add the "mirage" development package source (this step will not be needed once the package definitions are upstreamed)
 ```
-    opam remote -add dev git://github.com/mirage/opam-repo-dev
+    opam remote -add dev https://github.com/mirage/opam-repo-dev
 ```
 Switch to the special "mirage" version of the OCaml compiler
 ```
@@ -144,7 +144,7 @@ Install the Mirage development libraries
 If this fails with "+ runtime/dietlibc/lib/atof.c:1: sorry, unimplemented: 64-bit mode not compiled in" it means you need a 64-bit build environment.
 Next, clone the xen stubdom tree
 ```
-    git clone git://github.com/djs55/ocaml-xenstore-xen
+    git clone https://github.com/djs55/ocaml-xenstore-xen
 ```
 Build the Xen stubdom
 ```

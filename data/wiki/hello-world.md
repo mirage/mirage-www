@@ -15,7 +15,7 @@ the [mirage-skeleton](http://github.com/mirage/mirage-skeleton) repository.
 Begin by cloning and changing directory to it:
 
 ```bash
-$ git clone git://github.com/mirage/mirage-skeleton.git
+$ git clone https://github.com/mirage/mirage-skeleton.git
 $ cd mirage-skeleton
 ```
 

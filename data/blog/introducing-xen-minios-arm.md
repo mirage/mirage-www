@@ -96,7 +96,7 @@ the xen-arm-builder image:
 ```bash
 $ opam init
 $ opam install mirage-xen-minios
-$ opam remote add mirage-dev git://github.com/mirage/mirage-dev
+$ opam remote add mirage-dev https://github.com/mirage/mirage-dev
 $ opam install mirage
 ```
 
