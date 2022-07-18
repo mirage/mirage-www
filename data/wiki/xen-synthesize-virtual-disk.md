@@ -100,7 +100,7 @@ used for basic testing!
 Assuming that worked ok, clone and build the source for `xen-disk` yourself:
 
 ```
-  git clone git://github.com/mirage/xen-disk
+  git clone https://github.com/mirage/xen-disk
   cd xen-disk
   make
 ```

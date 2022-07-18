@@ -19,7 +19,7 @@ actually serve the traffic.
 First, clone the website [source code](https://github.com/mirage/mirage-www):
 
 ```
-$ git clone git://github.com/mirage/mirage-www
+$ git clone https://github.com/mirage/mirage-www
 $ cd mirage-www/src
 $ cat config.ml
 ```

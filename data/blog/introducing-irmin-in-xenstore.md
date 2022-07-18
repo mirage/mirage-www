@@ -311,7 +311,7 @@ Install the OCaml build dependencies:
 ```
 Clone the code and build it:
 ```
-  git clone git://github.com/mirage/ocaml-xenstore-server
+  git clone https://github.com/mirage/ocaml-xenstore-server
   cd ocaml-xenstore-server
   make
 ```

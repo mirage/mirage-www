@@ -115,7 +115,7 @@ Take note of the common prefix.  Define a variable to hold it:
 
 Xen needs to be started in non-secure HYP mode. Use this U-Boot Git repository:
 
-    git clone git://github.com/jwrdegoede/u-boot-sunxi.git
+    git clone https://github.com/jwrdegoede/u-boot-sunxi.git
     cd u-boot-sunxi
     git checkout -b sunxi-next origin/sunxi-next
 

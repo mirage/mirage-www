@@ -103,8 +103,8 @@ should not be necessary after the Mirage developer preview at
 [OSCON 2013](http://www.oscon.com/oscon2013/public/schedule/detail/28956).
 
 ```
-  opam remote add mirage-dev git://github.com/mirage/opam-repo-dev
-  opam remote add xapi-dev git://github.com/xapi-project/opam-repo-dev
+  opam remote add mirage-dev https://github.com/mirage/opam-repo-dev
+  opam remote add xapi-dev https://github.com/xapi-project/opam-repo-dev
 ```
 
 Install the unmodified `xen-disk` package, this will ensure all the build
@@ -130,7 +130,7 @@ used for basic testing!
 Assuming that worked ok, clone and build the source for `xen-disk` yourself:
 
 ```
-  git clone git://github.com/mirage/xen-disk
+  git clone https://github.com/mirage/xen-disk
   cd xen-disk
   make
 ```

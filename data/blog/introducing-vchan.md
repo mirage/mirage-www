@@ -62,7 +62,7 @@ This will install the library and its dependencies. `mirari` is
 necessary to build the *echo unikernel*:
 
 ```
-    git clone git://github.com/mirage/ocaml-vchan
+    git clone https://github.com/mirage/ocaml-vchan
     cd test
     mirari configure --xen --no-install
     mirari build --xen
