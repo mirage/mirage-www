@@ -124,9 +124,92 @@ let app =
       (Letsencrypt, https $ default_random);
     ]
 
+let separate_networks =
+  let doc =
+    Key.Arg.info ~doc:"Separate external and internal networks"
+      [ "separate-networks" ]
+  in
+  Key.(create "separate-networks" Arg.(flag doc))
+
+let external_netif =
+  Key.(
+    if_impl is_solo5
+      (netif ~group:"external" "external")
+      (netif ~group:"external" "tap0"))
+
+let external_stack =
+  if_impl
+    (Key.value separate_networks)
+    (generic_stackv4v6 ~group:"external" external_netif)
+    (generic_stackv4v6 default_network)
+
+let internal_netif =
+  Key.(
+    if_impl is_solo5
+      (netif ~group:"internal" "internal")
+      (netif ~group:"internal" "tap1"))
+
+let internal_stack =
+  if_impl
+    (Key.value separate_networks)
+    (generic_stackv4v6 ~group:"internal" internal_netif)
+    external_stack
+
+let mirage_monitoring =
+  let ip_key =
+    let ip =
+      let doc =
+        Key.Arg.info ~doc:"IP of InfluxDB server to transmit metrics to"
+          [ "metrics-ip" ]
+      in
+      Key.(create "metrics-ip" Arg.(required ip_address doc))
+    in
+    Key.v ip
+  in
+  let port_key =
+    let port =
+      let doc =
+        Key.Arg.info ~doc:"Port of InfluxDB server to transmit metrics to"
+          [ "metrics-port" ]
+      in
+      Key.(create "metrics-port" Arg.(opt (some int) None doc))
+    in
+    Key.v port
+  in
+  let hostname_key =
+    let hostname =
+      let doc =
+        Key.Arg.info ~doc:"Hostname for the metrics" [ "metrics-hostname" ]
+      in
+      Key.(create "metrics-hostname" Arg.(opt (some string) None doc))
+    in
+    Key.v hostname
+  in
+  let connect _ modname = function
+    | [ _; _; stack ] ->
+        Fmt.str "Lwt.return (%s.create %a ?port:%a ?hostname:%a %s)" modname
+          Key.serialize_call ip_key Key.serialize_call port_key
+          Key.serialize_call hostname_key stack
+    | _ -> assert false
+  in
+  impl
+    ~packages:[ package "mirage-monitoring" ]
+    ~keys:[ ip_key; port_key; hostname_key ]
+    ~connect "Mirage_monitoring.Make"
+    (time @-> pclock @-> stackv4v6 @-> job)
+
+let enable_metrics =
+  let doc = Key.Arg.info ~doc:"Enable metrics reporting" [ "metrics" ] in
+  Key.(create "metrics" Arg.(flag doc))
+
+let optional_monitoring time pclock stack =
+  if_impl (Key.value enable_metrics)
+    (mirage_monitoring $ time $ pclock $ stack)
+    noop
+
 let () =
   register "www"
     [
-      app $ default_posix_clock $ default_time
-      $ generic_stackv4v6 default_network;
+      optional_monitoring default_time default_posix_clock internal_stack;
+      app $ default_posix_clock $ default_time $ external_stack;
     ]
