@@ -293,13 +293,13 @@ And build the unikernel with
 $ make build
 ```
 
-This builds a Unix binary called `hello` that contains the simple console
-application, it is available in the `dist` folder. Note that `make` simply calls
-`mirage build` which itself turns into a simple `dune build` command. If you are 
-familiar with `dune` it is possible to inspect the build rules for the unikernel. 
+Our Unix binary is built in the `dist` at `dist/hello`. Note that `make` simply
+calls `mirage build` which itself turns into a simple `dune build` command. If
+you are  familiar with `dune` it is possible to inspect the build rules for the
+unikernel generated in `dune.build`. 
 
-Finally to run your application, simply run it
-directly — as it is a standard Unix binary — and observe the exciting log messages that our loop is generating:
+To run your application, execute the binary — and observe the exciting log
+messages that our loop is generating:
 
 ```bash
 $ ./hello
