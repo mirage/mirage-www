@@ -42,8 +42,9 @@ let start =
   Lwt.return_unit
 ```
 
-So this is a unikernel whose entry point (`start`) does nothing other than
-return an `Lwt` thread that will evaluate to `unit`. Easy.
+Every Mirage unikernal must have a `start` function as its entry point. The
+`start` function for our `noop` unikernal but return an `Lwt` promise for a
+`unit` value.
 
 Before we can build even our `noop` unikernel, we must define its configuration.
 That is, we need to tell Mirage what OCaml module contains the `start` entry
