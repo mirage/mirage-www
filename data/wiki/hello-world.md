@@ -503,7 +503,7 @@ primarily reading and writing aligned buffers to a 64-bit offset within the
 device.
 
 On Unix, the development workflow to handle block devices is by mapping them
-onto local files. The `config.ml` for the block example contains some logic for automatically creating a disk image file (and removing it when `mirage clean` is called), in addition to a more familiar-looking set of calls to `foreign` and `register`:
+onto local files. The `config.ml` for the block example contains some logic for automatically creating a disk image file (and removing it when `mirage clean` is called), in addition to a more familiar-looking set of calls to `main` and `register`:
 
 ```ocaml
 open Mirage
