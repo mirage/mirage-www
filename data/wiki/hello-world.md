@@ -83,70 +83,56 @@ Finally, we declare the entry point to OCaml in the usual way (`let () = ...`),
 case) to be used when we build our unikernel.
 
 Building our unikernel is then simply a matter of:
+
 1. Evaluating its configuration:
 
-```bash
-$ cd tutorial/noop
-/Users/mort/research/projects/mirage/src/mirage-skeleton/tutorial/noop
-$ mirage configure -t unix
-```
+    ```bash
+    $ cd tutorial/noop
+    $ mirage configure -t unix
+    ```
 
-2. Installating dependencies:
+    This step will generate a number of build configuration files, including a
+    `Makefile` defining targets that we will use in the next step.
 
-- `opam install` for installing the build tools in the opam switch.
-- `opam-monorepo lock` resolves the unikernel dependencies a generates a 
-  _lockfile_.
-- `lockfile depext` installs the external dependencies of the unikernel
-  dependencies (another set of potential build tools).
-- `opam-monorepo pull` locally fetch unikernel dependencies.
+2. Installing dependencies:
 
-NOTE: while performing the _lock_ step, an additional repository 
-<https://github.com/mirage/opam-overlays.git> is added in your opam switch. 
-This repository contains packages that have been changed to use the _dune_ build 
-system. The `--extra-repo` argument in `mirage configure` changes the additional 
-repository to use. `--no-extra-repo` can be used to disable the extra repository, 
-but the _lock_ step might fail because of dependencies that are not using the 
-_dune_ build system.
+    ```bash
+    $ make depends
+    ```
 
-```json
-$ make depend
- ↳ opam depexts
- ↳ opam install global dependencies
-Nothing to do.
-using overlay repository mirage-tmp: https://github.com/mirage/opam-overlays.git
-[mirage-tmp] no changes from git+https://github.com/mirage/opam-overlays.git
-[NOTE] Repository mirage-tmp has been added to the selections of switch
-       mirage-4.12.0 only.
-       Run `opam repository add mirage-tmp
-       --all-switches|--set-default' to use it in all existing
-       switches, or in newly created switches, respectively.
+    The `depends` target in the generated `Makefile` will run commands to:
 
- ↳ opam-monorepo lock
-==> Using 1 locally scanned package as the root.
-==> Found 55 opam dependencies for the root package.
-==> Querying opam database for their metadata and Dune compatibility.
-==> Calculating exact pins for each of them.
-==> Wrote lockfile with 39 entries to mirage/noop-unix.opam.locked. You can now run opam monorepo pull to fetch their sources.
- ↳ lockfile depexts
-removing overlay repository mirage-tmp
-Repositories removed from the selections of switch mirage-4.12.0. Use '--all' to forget about them altogether.
- ↳ opam-monorepo pull
-==> Pulling lockfile mirage/noop-unix.opam.locked          
-Successfully pulled 39/39 repositories
-```
+    - Resolve the unikernel dependencies and generates a _lockfile_.
+    - Install the build tools in the opam switch.
+    - install external dependencies of the unikernel dependencies (another set of
+      potential build tools).
+    - Fetch unikernel dependencies.
 
-...and compiling:
+    NOTE: while performing the _lock_ step, an additional repository 
+    <https://github.com/mirage/opam-overlays.git> is added in your opam switch. 
+    This repository contains packages that have been changed to use the _dune_ build 
+    system. The `--extra-repo` argument in `mirage configure` changes the additional 
+    repository to use. `--no-extra-repo` can be used to disable the extra repository, 
+    but the _lock_ step might fail because of dependencies that are not using the 
+    _dune_ build system.
+
+3. Compiling:
+
+    ```bash
+    $ make build
+    ```
+
+You can combine steps (2) and (3) by running the default `make` target:
 
 ```bash
 $ make
 ```
 
-As we configured for Unix (the `-t unix` argument to the `mirage configure`
-command), the result is a standard Unix ELF binary that can simply be executed:
+Because we set the configuration target to be Unix (the `-t unix` argument to
+the `mirage configure` command), the result is a standard Unix ELF located in
+`dist/noop` that can be executed:
 
 ```bash
-$ ls -l dist/noop
--rwxr-xr-x 1 lucas lucas 5280056 Sep 27 11:52 noop
 $ dist/noop
 $ echo $?
 0
