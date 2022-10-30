@@ -570,8 +570,8 @@ We can build this example for another backend too:
 
 ```bash
 $ mirage configure -t hvt
-$ make depend
-$ make
+$ make depends
+$ make build
 ```
 
 Now we just need to boot the unikernel with `solo5-hvt` as before. We should see
@@ -676,8 +676,8 @@ Let's try a few different kinds of key-value implementations.  First, we'll buil
 ```
 $ cd device-usage/kv_ro
 $ mirage configure -t unix
-$ make depend
-$ make
+$ make depends
+$ make build
 $ less _build/default/static_t.ml # the generated filesystem
 $ dist/kv_ro
 ```
@@ -687,8 +687,8 @@ We can use the `direct` implementation with the Unix target as well:
 ```
 $ cd device-usage/kv_ro
 $ mirage configure -t unix --kv_ro=direct
-$ make depend
-$ make
+$ make depends
+$ make build
 $ dist/kv_ro
 ```
 
@@ -756,8 +756,8 @@ first.
 ```bash
 $ cd device-usage/network
 $ mirage configure -t unix --net socket
-$ make depend
-$ make
+$ make depends
+$ make build
 $ dist/network
 ```
 
@@ -803,8 +803,8 @@ To configure via DHCP:
 ```bash
 $ cd device-usage/network
 $ mirage configure -t unix --dhcp true --net direct
-$ make depend
-$ make
+$ make depends
+$ make build
 $ sudo dist/network -l "*:debug"
 ```
 
@@ -829,8 +829,8 @@ create a `tap0` interface owned by you (`$ sudo tunctl -u $USER -t tap0`). Bring
 ```bash
 $ cd device-usage/network
 $ mirage configure -t unix --dhcp false --net direct
-$ make depend
-$ make
+$ make depends
+$ make build
 $ sudo dist/network -l "*:debug"
 ```
 
@@ -874,8 +874,8 @@ Let's make a network-enabled unikernel with `hvt`!  The IP configuration should 
 ```
 $ cd device-usage/network
 $ mirage configure -t hvt --dhcp true # for environments where DHCP works
-$ make depend
-$ make
+$ make depends
+$ make build
 $ solo5-hvt --net:service=tap100 -- dist/network.hvt --ipv4=10.0.0.10/24
             |      ___|
   __|  _ \  |  _ \ __ \
