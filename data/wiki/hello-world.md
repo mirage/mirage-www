@@ -322,8 +322,8 @@ To build a Solo5-based unikernel that will run on a host system with hardware vi
 
 ```bash
 $ mirage configure -t hvt
-$ make depend
-$ make
+$ make depends
+$ make build
 ```
 *Everything* else remains the same! The set of dependencies required, the `main.ml`, and the `Makefile` differ significantly, but since the source code of your application was
 parameterised over the `Time` type, it doesn't matter — you do not need to
