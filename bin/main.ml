@@ -13,7 +13,17 @@ let stack_of_addr addr =
   Stack.connect udp_socket tcp_socket
 
 let () =
+  let port =
+    match Sys.getenv_opt "MIRAGE_WWW_PORT" with
+    | Some p -> int_of_string p
+    | None -> 8080
+  in
   Sys.(set_signal sigpipe Signal_ignore);
   Lwt_main.run
   @@ let* stack = stack_of_addr "0.0.0.0/0" in
-     Mirageio.http ~port:8080 stack
+     Lwt.join
+       [
+         Mirageio.http ~port stack;
+         Lwt_io.printlf "\nmirage-www is being served at http://localhost:%d%!"
+           port;
+       ]
