@@ -281,15 +281,16 @@ directory includes generated files to run and build your program, including
 - and a `hello-unix.opam` file with a list of the packages necessary to build the
   unikernel.
 
+Install the dependencies with
+
 ```bash
-$ make depend
+$ make depends
 ```
 
-In order to automatically install the dependencies discovered by `mirage
-configure` in your current `opam` switch, execute `make depend`.
+And build the unikernel with
 
 ```bash
-$ make
+$ make build
 ```
 
 This builds a Unix binary called `hello` that contains the simple console
