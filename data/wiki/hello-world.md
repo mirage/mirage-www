@@ -388,7 +388,9 @@ We create a `key` with `Key.create` which is an optional bit of configuration.  
 
 Once we've created our configuration key, we specify that we'd like it available in the unikernel by passing it to `main` in the `keys` parameter.
 
-We can then read the value corresponding to configuration key using the generated function `Key_gen.hello` as shown below.
+We can then read the value corresponding to  configuration key using the
+appropriate function in the generated `Key_gen` module. In our case,
+`Key_gen.hello` as shown below.
 
 ```
 $ cat unikernel.ml
