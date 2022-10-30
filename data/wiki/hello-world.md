@@ -325,13 +325,18 @@ $ mirage configure -t hvt
 $ make depends
 $ make build
 ```
-*Everything* else remains the same! The set of dependencies required, the `main.ml`, and the `Makefile` differ significantly, but since the source code of your application was
-parameterised over the `Time` type, it doesn't matter — you do not need to
-make any changes for your code to run when linked against the Solo5 console driver
-instead of Unix.
 
-When you build the `hvt` version, you'll see a new artifact which is the
-unikernel: a file called `hello.hvt`.  A `solo5-hvt` binary will be installed by OPAM on your `$PATH`. This binary is a _tender_, responsible for loading your unikernel, attaching to host system devices and running it. To try running `hello.hvt`, pass it as an argument to `solo5-hvt`:
+*Everything* else remains the same! The set of dependencies required to build,
+the generated `main.ml`, and the generated `Makefile` have changed, but since
+the source code of your application was parameterised over the `Time` module, it
+doesn't matter — you do not need to make any changes for your code to run when
+linked against the Solo5 console driver instead of Unix.
+
+When you build the `hvt` version, you'll see a new artifact in the `dist`
+directory: a file called `hello.hvt`.  Additionally, a `solo5-hvt` binary will
+be installed by OPAM on your `$PATH`. This binary is a _tender_, responsible for
+loading your unikernel, attaching to host system devices and running it. To try
+running `hello.hvt`, pass it as an argument to `solo5-hvt`:
 
 ```bash
 $ solo5-hvt dist/hello.hvt
