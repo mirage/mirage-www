@@ -265,8 +265,8 @@ instructions about how to satisfy those dependencies (it will be given a
 
 #### Building a Unix binary
 
-We invoke all this by configuring, building and finally running the resulting
-unikernel under Unix first.
+Lets test all of this by first configuring, building, and running the resulting
+unikernel under Unix:
 
 ```bash
 $ cd tutorial/hello
@@ -274,9 +274,12 @@ $ mirage configure -t unix
 ```
 
 `mirage configure` generates a `Makefile` with all the build rules included from
-evaluating the configuration file, a `main.ml` that represents the entry point
-of your unikernel, and an `opam` file with a list of the packages necessary to
-build the unikernel.
+evaluating the configuration file and a `mirage` directory. The `mirage`
+directory includes generated files to run and build your program, including
+
+- a `main.ml` that represents the entry point of your unikernel,
+- and a `hello-unix.opam` file with a list of the packages necessary to build the
+  unikernel.
 
 ```bash
 $ make depend
