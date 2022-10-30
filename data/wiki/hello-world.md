@@ -307,7 +307,16 @@ $ ./hello
 
 #### Building for Another Backend
 
-**Note**: The following sections of this tutorial use the [Solo5](https://github.com/Solo5/solo5/tree/v0.7.0)-based `hvt` backend as an example. This backend is supported on Linux, FreeBSD, and OpenBSD systems with hardware virtualization. Please see the Solo5 documentation for the support [status](https://github.com/Solo5/solo5/blob/v0.7.0/docs/building.md#supported-targets) of further backends such as `spt` (for deployment on Linux using a strict seccomp sandbox), `virtio` (for deployment on e.g. Google Compute Engine) and `muen` (for deployment on the [Muen Separation Kernel](https://muen.sk)).
+**Note**: The following sections of this tutorial use the
+[Solo5](https://github.com/Solo5/solo5/tree/v0.7.0)-based `hvt` backend as an
+example. This backend is supported on Linux, FreeBSD, and OpenBSD systems with
+hardware virtualization. Please see the Solo5 documentation for the support
+[status](https://github.com/Solo5/solo5/blob/v0.7.0/docs/building.md#supported-targets)
+of further backends such as `spt` (for deployment on Linux using a strict
+seccomp sandbox), `virtio` (for deployment on e.g. Google Compute Engine) and
+`muen` (for deployment on the [Muen Separation Kernel](https://muen.sk)). On
+supported platforms, Solo5 will be installed automatically when `make depends`
+is run.
 
 To build a Solo5-based unikernel that will run on a host system with hardware virtualization, re-run `mirage configure` and ask for the `hvt` target instead of `unix`.
 
