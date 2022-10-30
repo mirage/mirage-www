@@ -46,8 +46,8 @@ Every Mirage unikernal must have a `start` function as its entry point. The
 `start` function for our `noop` unikernal but return an `Lwt` promise for a
 `unit` value.
 
-Before we can build even our `noop` unikernel, we must define its configuration.
-That is, we need to tell Mirage what OCaml module contains the `start` entry
+Before we can build our `noop` unikernel, we must define its configuration
+telling Mirage what OCaml module contains the `start` entry
 point. We do this by writing a `config.ml` file that sits next to our
 `unikernel.ml` file:
 
