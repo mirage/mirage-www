@@ -418,8 +418,8 @@ Let's configure the example for Unix and build it:
 
 ```bash
 $ mirage configure -t unix
-$ make depend
-$ make
+$ make depends
+$ make build
 ```
 
 When the target is Unix, Mirage will use an implementation for configuration keys that looks at the contents of `OS.Env.argv`. In other words, it looks directly at the command line that was used to invoke the program.  If we call `hello` with no arguments, the default value is used:
