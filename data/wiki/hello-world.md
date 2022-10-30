@@ -140,19 +140,35 @@ $ echo $?
 
 Congratulations! You've just built and run your very first unikernel!
 
-
-Note that the string passed to `main` is now `"Unikernel.Main"` as we must
-refer to the `Main` module inside the `Unikernel` module. Everything else stays
-the same.  Go ahead and try that out by building the unikernel inside
-`noop-functor`.
-
-
-...and now, onwards to unikernels that actually **do** something!
-
 ### Step 1: Hello World!
 
-As a first step, let's build and run the MirageOS "Hello World" unikernel.
-This will print a log message with the word `hello` 4 times before terminating:
+Most programs will depend on some system devices which they use to interact with
+the environment. In this section, we illustrate how to define unikernels that
+depend on such devices. 
+
+Mirage unikernals use *functors* to specify abstract device dependencies that
+are not dependent on the particular details of an environment.  In OCaml, a
+*functor* is a module that takes other modules as parameters.  Functors are used
+widely throughout Mirage and we will explain the basic idea and provide examples
+in this tutorial. For a proper introduction into the core concepts, you may see
+[Real World OCaml, Ch.9][rwo-9] (and also [Ch.10, First-Class Modules][rwo-10]).
+
+[rwo-9]: https://realworldocaml.org/v1/en/html/functors.html
+[rwo-10]: https://realworldocaml.org/v1/en/html/first-class-modules.html
+
+Functors act as functions from modules to modules. They allow us to pass
+dependencies into a unikernel, so that the program running inside can interact
+with the environment (read files, send packets, etc) without needing to care
+whether it will eventually be built to target Unix, Xen, KVM, or something else
+entirely. The modules that are passed into the unikernel in this way must
+satisfy type signatures that are specified when the unikernel `job` value is
+created in the `config.ml` file.  
+
+In this section, we present a simple example of a unikernel that uses a functor
+to depend on a device for reading the systems time.  We will build and run the
+MirageOS "Hello World" unikernel that prints a log message with the word
+`hello`, sleeps for 1 second, and repeats this 4 times before finally
+terminating.  The output will look like this:
 
 ```
 2017-02-08 09:54:44 -01:00: INF [application] hello
@@ -161,7 +177,7 @@ This will print a log message with the word `hello` 4 times before terminating:
 2017-02-08 09:54:47 -01:00: INF [application] hello
 ```
 
-First, let's look at the code:
+Let's start by looking at the code:
 
 ```ocaml
 $ cat hello/unikernel.ml
@@ -183,16 +199,23 @@ module Hello (Time : Mirage_time.S) = struct
 end
 ```
 
-To veteran OCaml programmers among you, this might look a little odd: We have a
-main `Hello` module parameterised by a module (`Time`, of type `Mirage_time.S`) that contains a method `start` taking an ignored parameter `_time` (an instance of a `time`).  This is the basic structure required to make this a MirageOS unikernel
-rather than a standard OCaml POSIX application.
+We define a main `Hello` module parameterised by a module `Time`, of type
+`Mirage_time.S`. The `Time` module provides the functionality enabling us to
+interact with the environment clock. Our `start` function also takes a parameter
+`_time` (an instance of a `time` which is ignored). This parameterization of a
+unikernel's main module and its `start` function is the basic structure required
+to make a MirageOS unikernel that can be built to run on any supported
+environment, rather than a standard OCaml POSIX application.
 
 The module type for our `Time` module, `Mirage_time.S`, is defined in an
-external package [mirage-time](https://github.com/mirage/mirage-time).  The name `S` for "the module type of things like this" is a common OCaml convention (comparable to naming the most-used type in a module `t`).  There are many packages defining module types for use in Mirage.
+external package [mirage-time](https://github.com/mirage/mirage-time).  The name
+pattern `Foo.S` for "the **s**ignature of `Foo` modules" is a common OCaml
+convention (comparable to naming the most-used type in a module `t`).  There are
+many packages defining module types for use in Mirage.
 
-The concrete implementation of `Time` will be supplied at
-compile time, depending on the target that you are compiling for. This
-configuration is stored in `config.ml`, so let's take a look:
+The concrete implementation of `Time` will be supplied at compile time,
+depending on the target that you are compiling for. This calls for some
+additional configuration  in `config.ml`, so let's take a look:
 
 ```ocaml
 $ cat tutorial/hello/config.ml
@@ -200,37 +223,22 @@ $ cat tutorial/hello/config.ml
 open Mirage
 
 let main =
-  main
-    ~packages:[package "duration"]
-    "Unikernel.Hello" (time @-> job)
+  main "Unikernel.Hello" (time @-> job)
 
 let () =
   register "hello" [main $ default_time]
 ```
 
-The configuration file is a normal OCaml module that calls `register` to create
-one or more jobs, each of which represent a process (with a start/stop
-lifecycle). Each job most likely depends on some device drivers; all the
-available device drivers are defined in the `Mirage` module
-(see [the Mirage module documentation](http://mirage.github.io/mirage/)).
-
 In this case, the `main` variable declares that the entry point of the process
 is the `Hello` module from the file `unikernel.ml`. The `@->` combinator is used
 to add a device driver to the list of functor arguments in the job definition
-(see `unikernel.ml`), and the final value of using this combinator should always
-be a `job` if you intend to register it.
-
-The `foreign` function also takes some additional arguments: `~keys`, the list of
-configuration keys we want to allow the user to specify at configuration or build time, and
-`packages`, a list of additional `opam` packages that should be included in the list of
-build dependencies for the project.  We'll talk more about configuration keys in the next example.
+and the final value of this combinator should always be a `job`.
 
 Notice that we refer to the module name as a string (`"Unikernel.Hello"`) when
-calling `main`, instead of directly as
-an OCaml value. The `mirage` command-line tool evaluates this configuration file
-at build time and outputs a `main.ml` that has the concrete values filled in for
-you, with the exact modules varying by which backend you selected (e.g. Unix or
-Xen).
+calling `main`, instead of directly as an OCaml value. The `mirage` command-line
+tool evaluates this configuration file at build time and outputs a `main.ml`
+that has the concrete values filled in for you depending on which target you
+selected during configuration (e.g. Unix or Xen).
 
 MirageOS mirrors the unikernel model on Unix as far as possible: your application is
 built as a unikernel which needs to be instantiated and run whether on Unix or
@@ -239,10 +247,21 @@ much like a conventional OS does when run as a virtual machine, and so it must
 be passed references to devices such as the console, network interfaces and
 block devices on startup.
 
+In general, a `config.ml` file is a normal OCaml module that calls `register` to
+register one or more jobs, each of which represent a process (with a start/stop
+lifecycle). Each job most likely depends on some device drivers; all the
+available device drivers are defined in the `Mirage` module (see [the Mirage
+module documentation](http://mirage.github.io/mirage/mirage/index.html)).
+
 In this case, this simple `hello world` example requires some notion of time,
 so we register a single `Job` consisting of the `Unikernel.Hello` module
 (and, implicitly its `start` function) and pass it references to a
 timer.
+
+When we call `Mirage.main` we specify the devices our `Unikernal.Hello` program
+depends on (a `time` device) and when we call `Mirage.register`, we provide
+instructions about how to satisfy those dependencies (it will be given a
+`default_time` device, suitable for the target it's eventually built for).
 
 #### Building a Unix binary
 
