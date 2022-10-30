@@ -557,8 +557,8 @@ Build this on Unix in the same way as the previous examples:
 ```bash
 $ cd device-usage/block
 $ mirage configure -t unix
-$ make depend
-$ make
+$ make depends
+$ make build
 $ ./dist/block_test
 ```
 
