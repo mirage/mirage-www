@@ -165,7 +165,7 @@ satisfy type signatures that are specified when the unikernel `job` value is
 created in the `config.ml` file.  
 
 In this section, we present a simple example of a unikernel that uses a functor
-to depend on a device for reading the systems time.  We will build and run the
+to depend on a device for reading the system's time.  We will build and run the
 MirageOS "Hello World" unikernel that prints a log message with the word
 `hello`, sleeps for 1 second, and repeats this 4 times before finally
 terminating.  The output will look like this:
