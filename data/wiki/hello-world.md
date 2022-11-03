@@ -43,7 +43,7 @@ let start =
 ```
 
 Every Mirage unikernal must have a `start` function as its entry point. The
-`start` function for our `noop` unikernal but return an `Lwt` promise for a
+`start` function for our `noop` unikernel returns an `Lwt` promise for a
 `unit` value.
 
 Before we can build our `noop` unikernel, we must define its configuration
