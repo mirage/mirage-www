@@ -33,7 +33,7 @@ make start
 ```
 
 The server runs on port `8080` by default. To change the port, set the
-`MIRAGE_WWW_PORT` environmnet variable:
+`MIRAGE_WWW_PORT` environment variable:
 
 ```bash
 MIRAGE_WWW_PORT=8088 make start
