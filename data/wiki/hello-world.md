@@ -265,7 +265,7 @@ instructions about how to satisfy those dependencies (it will be given a
 
 #### Building a Unix binary
 
-Lets test all of this by first configuring, building, and running the resulting
+Let's test all of this by first configuring, building, and running the resulting
 unikernel under Unix:
 
 ```bash
