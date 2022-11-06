@@ -293,7 +293,7 @@ And build the unikernel with
 $ make build
 ```
 
-Our Unix binary is built in the `dist` at `dist/hello`. Note that `make` simply
+Our Unix binary is built as `dist/hello`. Note that `make` simply
 calls `mirage build` which itself turns into a simple `dune build` command. If
 you are  familiar with `dune` it is possible to inspect the build rules for the
 unikernel generated in `dune.build`. 
