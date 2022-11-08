@@ -32,6 +32,13 @@ After building the project, you can run the server with:
 make start
 ```
 
+The server runs on port `8080` by default. To change the port, set the
+`MIRAGE_WWW_PORT` environment variable:
+
+```bash
+MIRAGE_WWW_PORT=8088 make start
+```
+
 To start the server in watch mode, you can run:
 
 ```bash

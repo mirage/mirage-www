@@ -42,11 +42,12 @@ let start =
   Lwt.return_unit
 ```
 
-So this is a unikernel whose entry point (`start`) does nothing other than
-return an `Lwt` thread that will evaluate to `unit`. Easy.
+Every Mirage unikernal must have a `start` function as its entry point. The
+`start` function for our `noop` unikernel returns an `Lwt` promise for a
+`unit` value.
 
-Before we can build even our `noop` unikernel, we must define its configuration.
-That is, we need to tell Mirage what OCaml module contains the `start` entry
+Before we can build our `noop` unikernel, we must define its configuration
+telling Mirage what OCaml module contains the `start` entry
 point. We do this by writing a `config.ml` file that sits next to our
 `unikernel.ml` file:
 
@@ -82,70 +83,56 @@ Finally, we declare the entry point to OCaml in the usual way (`let () = ...`),
 case) to be used when we build our unikernel.
 
 Building our unikernel is then simply a matter of:
+
 1. Evaluating its configuration:
 
-```bash
-$ cd tutorial/noop
-/Users/mort/research/projects/mirage/src/mirage-skeleton/tutorial/noop
-$ mirage configure -t unix
-```
+    ```bash
+    $ cd tutorial/noop
+    $ mirage configure -t unix
+    ```
 
-2. Installating dependencies:
+    This step will generate a number of build configuration files, including a
+    `Makefile` defining targets that we will use in the next step.
 
-- `opam install` for installing the build tools in the opam switch.
-- `opam-monorepo lock` resolves the unikernel dependencies a generates a 
-  _lockfile_.
-- `lockfile depext` installs the external dependencies of the unikernel
-  dependencies (another set of potential build tools).
-- `opam-monorepo pull` locally fetch unikernel dependencies.
+2. Installing dependencies:
 
-NOTE: while performing the _lock_ step, an additional repository 
-<https://github.com/mirage/opam-overlays.git> is added in your opam switch. 
-This repository contains packages that have been changed to use the _dune_ build 
-system. The `--extra-repo` argument in `mirage configure` changes the additional 
-repository to use. `--no-extra-repo` can be used to disable the extra repository, 
-but the _lock_ step might fail because of dependencies that are not using the 
-_dune_ build system.
+    ```bash
+    $ make depends
+    ```
 
-```json
-$ make depend
- ↳ opam depexts
- ↳ opam install global dependencies
-Nothing to do.
-using overlay repository mirage-tmp: https://github.com/mirage/opam-overlays.git
-[mirage-tmp] no changes from git+https://github.com/mirage/opam-overlays.git
-[NOTE] Repository mirage-tmp has been added to the selections of switch
-       mirage-4.12.0 only.
-       Run `opam repository add mirage-tmp
-       --all-switches|--set-default' to use it in all existing
-       switches, or in newly created switches, respectively.
+    The `depends` target in the generated `Makefile` will run commands to:
 
- ↳ opam-monorepo lock
-==> Using 1 locally scanned package as the root.
-==> Found 55 opam dependencies for the root package.
-==> Querying opam database for their metadata and Dune compatibility.
-==> Calculating exact pins for each of them.
-==> Wrote lockfile with 39 entries to mirage/noop-unix.opam.locked. You can now run opam monorepo pull to fetch their sources.
- ↳ lockfile depexts
-removing overlay repository mirage-tmp
-Repositories removed from the selections of switch mirage-4.12.0. Use '--all' to forget about them altogether.
- ↳ opam-monorepo pull
-==> Pulling lockfile mirage/noop-unix.opam.locked          
-Successfully pulled 39/39 repositories
-```
+    - Resolve the unikernel dependencies and generates a _lockfile_.
+    - Install the build tools in the opam switch.
+    - install external dependencies of the unikernel dependencies (another set of
+      potential build tools).
+    - Fetch unikernel dependencies.
 
-...and compiling:
+    NOTE: while performing the _lock_ step, an additional repository 
+    <https://github.com/mirage/opam-overlays.git> is added in your opam switch. 
+    This repository contains packages that have been changed to use the _dune_ build 
+    system. The `--extra-repo` argument in `mirage configure` changes the additional 
+    repository to use. `--no-extra-repo` can be used to disable the extra repository, 
+    but the _lock_ step might fail because of dependencies that are not using the 
+    _dune_ build system.
+
+3. Compiling:
+
+    ```bash
+    $ make build
+    ```
+
+You can combine steps (2) and (3) by running the default `make` target:
 
 ```bash
 $ make
 ```
 
-As we configured for Unix (the `-t unix` argument to the `mirage configure`
-command), the result is a standard Unix ELF binary that can simply be executed:
+Because we set the configuration target to be Unix (the `-t unix` argument to
+the `mirage configure` command), the result is a standard Unix ELF located in
+`dist/noop` that can be executed:
 
 ```bash
-$ ls -l dist/noop
--rwxr-xr-x 1 lucas lucas 5280056 Sep 27 11:52 noop
 $ dist/noop
 $ echo $?
 0
@@ -153,70 +140,35 @@ $ echo $?
 
 Congratulations! You've just built and run your very first unikernel!
 
-#### Aside: Doing Nothing with Functors!
-
-Functors are one of those OCaml things that can seem a bit intimidating at first
-(traditionally, "monads" get the same sort of reaction). However, as they're
-used fairly widely throughout Mirage, a very brief introduction to the commonest
-way we use them is needed. For a better introduction as to how to actually make
-use of them, what they are, and so on
-see
-[Real World OCaml, Ch.9](https://realworldocaml.org/v1/en/html/functors.html)
-(and also
-[Ch.10, First-Class Modules](https://realworldocaml.org/v1/en/html/first-class-modules.html)).
-
-In short, in Mirage, they're used as a way to abstract over the target
-environment for the unikernel. Functors are, roughly, functions from modules to
-modules, and they allow us to pass modules into a unikernel so that the code
-inside a unikernel can interact with its environment (read files, send packets,
-etc) without needing to care whether it's been built to target Unix, Xen, KVM, or
-something else entirely. The modules that are passed into the unikernel in this
-way are required to conform to type signatures that are specified when the
-unikernel `job` value is created in the `config.ml` file.
-
-We'll see several examples of this below but, for now, we need to wrap up our
-`noop` unikernel in a module inside the `Unikernel` module so that we can use it
-as a functor. This is actually quite straightforward — we simply wrap the
-`start` function in `unikernel.ml` inside some module. For example,
-
-```ocaml
-$ cat tutorial/noop-functor/unikernel.ml
-module Main = struct
-
-  let start =
-    Lwt.return_unit
-
-end
-```
-
-The use of the name `Main` is purely convention, and you should feel free to
-replace it with completely different if you wish!
-
-The only other change is to the corresponding invocation in `config.ml`:
-
-```ocaml
-$ cat tutorial/noop-functor/config.ml
-open Mirage
-
-let main =
-  main "Unikernel.Main" job
-
-let () =
-  register "noop" [main]
-```
-
-Note that the string passed to `main` is now `"Unikernel.Main"` as we must
-refer to the `Main` module inside the `Unikernel` module. Everything else stays
-the same.  Go ahead and try that out by building the unikernel inside
-`noop-functor`.
-
-
-...and now, onwards to unikernels that actually **do** something!
-
 ### Step 1: Hello World!
 
-As a first step, let's build and run the MirageOS "Hello World" unikernel.
-This will print a log message with the word `hello` 4 times before terminating:
+Most programs will depend on some system devices which they use to interact with
+the environment. In this section, we illustrate how to define unikernels that
+depend on such devices. 
+
+Mirage unikernals use *functors* to specify abstract device dependencies that
+are not dependent on the particular details of an environment.  In OCaml, a
+*functor* is a module that takes other modules as parameters.  Functors are used
+widely throughout Mirage and we will explain the basic idea and provide examples
+in this tutorial. For a proper introduction into the core concepts, you may see
+[Real World OCaml, Ch.9][rwo-9] (and also [Ch.10, First-Class Modules][rwo-10]).
+
+[rwo-9]: https://dev.realworldocaml.org/functors.html
+[rwo-10]: https://dev.realworldocaml.org/first-class-modules.html
+
+Functors act as functions from modules to modules. They allow us to pass
+dependencies into a unikernel, so that the program running inside can interact
+with the environment (read files, send packets, etc) without needing to care
+whether it will eventually be built to target Unix, Xen, KVM, or something else
+entirely. The modules that are passed into the unikernel in this way must
+satisfy type signatures that are specified when the unikernel `job` value is
+created in the `config.ml` file.  
+
+In this section, we present a simple example of a unikernel that uses a functor
+to depend on a device for reading the system's time.  We will build and run the
+MirageOS "Hello World" unikernel that prints a log message with the word
+`hello`, sleeps for 1 second, and repeats this 4 times before finally
+terminating.  The output will look like this:
 
 ```
 2017-02-08 09:54:44 -01:00: INF [application] hello
@@ -225,7 +177,7 @@ This will print a log message with the word `hello` 4 times before terminating:
 2017-02-08 09:54:47 -01:00: INF [application] hello
 ```
 
-First, let's look at the code:
+Let's start by looking at the code:
 
 ```ocaml
 $ cat hello/unikernel.ml
@@ -247,16 +199,23 @@ module Hello (Time : Mirage_time.S) = struct
 end
 ```
 
-To veteran OCaml programmers among you, this might look a little odd: We have a
-main `Hello` module parameterised by a module (`Time`, of type `Mirage_time.S`) that contains a method `start` taking an ignored parameter `_time` (an instance of a `time`).  This is the basic structure required to make this a MirageOS unikernel
-rather than a standard OCaml POSIX application.
+We define a main `Hello` module parameterised by a module `Time`, of type
+`Mirage_time.S`. The `Time` module provides the functionality enabling us to
+interact with the environment clock. Our `start` function also takes a parameter
+`_time` (an instance of a `time` which is ignored). This parameterization of a
+unikernel's main module and its `start` function is the basic structure required
+to make a MirageOS unikernel that can be built to run on any supported
+environment, rather than a standard OCaml POSIX application.
 
 The module type for our `Time` module, `Mirage_time.S`, is defined in an
-external package [mirage-time](https://github.com/mirage/mirage-time).  The name `S` for "the module type of things like this" is a common OCaml convention (comparable to naming the most-used type in a module `t`).  There are many packages defining module types for use in Mirage.
+external package [mirage-time](https://github.com/mirage/mirage-time).  The name
+pattern `Foo.S` for "the **s**ignature of `Foo` modules" is a common OCaml
+convention (comparable to naming the most-used type in a module `t`).  There are
+many packages defining module types for use in Mirage.
 
-The concrete implementation of `Time` will be supplied at
-compile time, depending on the target that you are compiling for. This
-configuration is stored in `config.ml`, so let's take a look:
+The concrete implementation of `Time` will be supplied at compile time,
+depending on the target that you are compiling for. This calls for some
+additional configuration  in `config.ml`, so let's take a look:
 
 ```ocaml
 $ cat tutorial/hello/config.ml
@@ -264,37 +223,22 @@ $ cat tutorial/hello/config.ml
 open Mirage
 
 let main =
-  main
-    ~packages:[package "duration"]
-    "Unikernel.Hello" (time @-> job)
+  main "Unikernel.Hello" (time @-> job)
 
 let () =
   register "hello" [main $ default_time]
 ```
 
-The configuration file is a normal OCaml module that calls `register` to create
-one or more jobs, each of which represent a process (with a start/stop
-lifecycle). Each job most likely depends on some device drivers; all the
-available device drivers are defined in the `Mirage` module
-(see [the Mirage module documentation](http://mirage.github.io/mirage/)).
-
 In this case, the `main` variable declares that the entry point of the process
 is the `Hello` module from the file `unikernel.ml`. The `@->` combinator is used
 to add a device driver to the list of functor arguments in the job definition
-(see `unikernel.ml`), and the final value of using this combinator should always
-be a `job` if you intend to register it.
-
-The `foreign` function also takes some additional arguments: `~keys`, the list of
-configuration keys we want to allow the user to specify at configuration or build time, and
-`packages`, a list of additional `opam` packages that should be included in the list of
-build dependencies for the project.  We'll talk more about configuration keys in the next example.
+and the final value of this combinator should always be a `job`.
 
 Notice that we refer to the module name as a string (`"Unikernel.Hello"`) when
-calling `main`, instead of directly as
-an OCaml value. The `mirage` command-line tool evaluates this configuration file
-at build time and outputs a `main.ml` that has the concrete values filled in for
-you, with the exact modules varying by which backend you selected (e.g. Unix or
-Xen).
+calling `main`, instead of directly as an OCaml value. The `mirage` command-line
+tool evaluates this configuration file at build time and outputs a `main.ml`
+that has the concrete values filled in for you depending on which target you
+selected during configuration (e.g. Unix or Xen).
 
 MirageOS mirrors the unikernel model on Unix as far as possible: your application is
 built as a unikernel which needs to be instantiated and run whether on Unix or
@@ -303,15 +247,26 @@ much like a conventional OS does when run as a virtual machine, and so it must
 be passed references to devices such as the console, network interfaces and
 block devices on startup.
 
+In general, a `config.ml` file is a normal OCaml module that calls `register` to
+register one or more jobs, each of which represent a process (with a start/stop
+lifecycle). Each job most likely depends on some device drivers; all the
+available device drivers are defined in the `Mirage` module (see [the Mirage
+module documentation](http://mirage.github.io/mirage/mirage/index.html)).
+
 In this case, this simple `hello world` example requires some notion of time,
 so we register a single `Job` consisting of the `Unikernel.Hello` module
 (and, implicitly its `start` function) and pass it references to a
 timer.
 
+When we call `Mirage.main` we specify the devices our `Unikernal.Hello` program
+depends on (a `time` device) and when we call `Mirage.register`, we provide
+instructions about how to satisfy those dependencies (it will be given a
+`default_time` device, suitable for the target it's eventually built for).
+
 #### Building a Unix binary
 
-We invoke all this by configuring, building and finally running the resulting
-unikernel under Unix first.
+Let's test all of this by first configuring, building, and running the resulting
+unikernel under Unix:
 
 ```bash
 $ cd tutorial/hello
@@ -319,28 +274,32 @@ $ mirage configure -t unix
 ```
 
 `mirage configure` generates a `Makefile` with all the build rules included from
-evaluating the configuration file, a `main.ml` that represents the entry point
-of your unikernel, and an `opam` file with a list of the packages necessary to
-build the unikernel.
+evaluating the configuration file and a `mirage` directory. The `mirage`
+directory includes generated files to run and build your program, including
+
+- a `main.ml` that represents the entry point of your unikernel,
+- and a `hello-unix.opam` file with a list of the packages necessary to build the
+  unikernel.
+
+Install the dependencies with
 
 ```bash
-$ make depend
+$ make depends
 ```
 
-In order to automatically install the dependencies discovered by `mirage
-configure` in your current `opam` switch, execute `make depend`.
+And build the unikernel with
 
 ```bash
-$ make
+$ make build
 ```
 
-This builds a Unix binary called `hello` that contains the simple console
-application, it is available in the `dist` folder. Note that `make` simply calls
-`mirage build` which itself turns into a simple `dune build` command. If you are 
-familiar with `dune` it is possible to inspect the build rules for the unikernel. 
+Our Unix binary is built as `dist/hello`. Note that `make` simply
+calls `mirage build` which itself turns into a simple `dune build` command. If
+you are  familiar with `dune` it is possible to inspect the build rules for the
+unikernel generated in `dune.build`. 
 
-Finally to run your application, simply run it
-directly — as it is a standard Unix binary — and observe the exciting log messages that our loop is generating:
+To run your application, execute the binary — and observe the exciting log
+messages that our loop is generating:
 
 ```bash
 $ ./hello
@@ -348,22 +307,36 @@ $ ./hello
 
 #### Building for Another Backend
 
-**Note**: The following sections of this tutorial use the [Solo5](https://github.com/Solo5/solo5/tree/v0.7.0)-based `hvt` backend as an example. This backend is supported on Linux, FreeBSD, and OpenBSD systems with hardware virtualization. Please see the Solo5 documentation for the support [status](https://github.com/Solo5/solo5/blob/v0.7.0/docs/building.md#supported-targets) of further backends such as `spt` (for deployment on Linux using a strict seccomp sandbox), `virtio` (for deployment on e.g. Google Compute Engine) and `muen` (for deployment on the [Muen Separation Kernel](https://muen.sk)).
+**Note**: The following sections of this tutorial use the
+[Solo5](https://github.com/Solo5/solo5/tree/v0.7.0)-based `hvt` backend as an
+example. This backend is supported on Linux, FreeBSD, and OpenBSD systems with
+hardware virtualization. Please see the Solo5 documentation for the support
+[status](https://github.com/Solo5/solo5/blob/v0.7.0/docs/building.md#supported-targets)
+of further backends such as `spt` (for deployment on Linux using a strict
+seccomp sandbox), `virtio` (for deployment on e.g. Google Compute Engine) and
+`muen` (for deployment on the [Muen Separation Kernel](https://muen.sk)). On
+supported platforms, Solo5 will be installed automatically when `make depends`
+is run.
 
 To build a Solo5-based unikernel that will run on a host system with hardware virtualization, re-run `mirage configure` and ask for the `hvt` target instead of `unix`.
 
 ```bash
 $ mirage configure -t hvt
-$ make depend
-$ make
+$ make depends
+$ make build
 ```
-*Everything* else remains the same! The set of dependencies required, the `main.ml`, and the `Makefile` differ significantly, but since the source code of your application was
-parameterised over the `Time` type, it doesn't matter — you do not need to
-make any changes for your code to run when linked against the Solo5 console driver
-instead of Unix.
 
-When you build the `hvt` version, you'll see a new artifact which is the
-unikernel: a file called `hello.hvt`.  A `solo5-hvt` binary will be installed by OPAM on your `$PATH`. This binary is a _tender_, responsible for loading your unikernel, attaching to host system devices and running it. To try running `hello.hvt`, pass it as an argument to `solo5-hvt`:
+*Everything* else remains the same! The set of dependencies required to build,
+the generated `main.ml`, and the generated `Makefile` have changed, but since
+the source code of your application was parameterised over the `Time` module, it
+doesn't matter — you do not need to make any changes for your code to run when
+linked against the Solo5 console driver instead of Unix.
+
+When you build the `hvt` version, you'll see a new artifact in the `dist`
+directory: a file called `hello.hvt`.  Additionally, a `solo5-hvt` binary will
+be installed by OPAM on your `$PATH`. This binary is a _tender_, responsible for
+loading your unikernel, attaching to host system devices and running it. To try
+running `hello.hvt`, pass it as an argument to `solo5-hvt`:
 
 ```bash
 $ solo5-hvt dist/hello.hvt
@@ -415,7 +388,9 @@ We create a `key` with `Key.create` which is an optional bit of configuration.  
 
 Once we've created our configuration key, we specify that we'd like it available in the unikernel by passing it to `main` in the `keys` parameter.
 
-We can then read the value corresponding to configuration key using the generated function `Key_gen.hello` as shown below.
+We can then read the value corresponding to  configuration key using the
+appropriate function in the generated `Key_gen` module. In our case,
+`Key_gen.hello` as shown below.
 
 ```
 $ cat unikernel.ml
@@ -443,8 +418,8 @@ Let's configure the example for Unix and build it:
 
 ```bash
 $ mirage configure -t unix
-$ make depend
-$ make
+$ make depends
+$ make build
 ```
 
 When the target is Unix, Mirage will use an implementation for configuration keys that looks at the contents of `OS.Env.argv`. In other words, it looks directly at the command line that was used to invoke the program.  If we call `hello` with no arguments, the default value is used:
@@ -528,7 +503,7 @@ primarily reading and writing aligned buffers to a 64-bit offset within the
 device.
 
 On Unix, the development workflow to handle block devices is by mapping them
-onto local files. The `config.ml` for the block example contains some logic for automatically creating a disk image file (and removing it when `mirage clean` is called), in addition to a more familiar-looking set of calls to `foreign` and `register`:
+onto local files. The `config.ml` for the block example contains some logic for automatically creating a disk image file (and removing it when `mirage clean` is called), in addition to a more familiar-looking set of calls to `main` and `register`:
 
 ```ocaml
 open Mirage
@@ -582,8 +557,8 @@ Build this on Unix in the same way as the previous examples:
 ```bash
 $ cd device-usage/block
 $ mirage configure -t unix
-$ make depend
-$ make
+$ make depends
+$ make build
 $ ./dist/block_test
 ```
 
@@ -595,8 +570,8 @@ We can build this example for another backend too:
 
 ```bash
 $ mirage configure -t hvt
-$ make depend
-$ make
+$ make depends
+$ make build
 ```
 
 Now we just need to boot the unikernel with `solo5-hvt` as before. We should see
@@ -701,8 +676,8 @@ Let's try a few different kinds of key-value implementations.  First, we'll buil
 ```
 $ cd device-usage/kv_ro
 $ mirage configure -t unix
-$ make depend
-$ make
+$ make depends
+$ make build
 $ less _build/default/static_t.ml # the generated filesystem
 $ dist/kv_ro
 ```
@@ -712,8 +687,8 @@ We can use the `direct` implementation with the Unix target as well:
 ```
 $ cd device-usage/kv_ro
 $ mirage configure -t unix --kv_ro=direct
-$ make depend
-$ make
+$ make depends
+$ make build
 $ dist/kv_ro
 ```
 
@@ -781,8 +756,8 @@ first.
 ```bash
 $ cd device-usage/network
 $ mirage configure -t unix --net socket
-$ make depend
-$ make
+$ make depends
+$ make build
 $ dist/network
 ```
 
@@ -828,8 +803,8 @@ To configure via DHCP:
 ```bash
 $ cd device-usage/network
 $ mirage configure -t unix --dhcp true --net direct
-$ make depend
-$ make
+$ make depends
+$ make build
 $ sudo dist/network -l "*:debug"
 ```
 
@@ -854,8 +829,8 @@ create a `tap0` interface owned by you (`$ sudo tunctl -u $USER -t tap0`). Bring
 ```bash
 $ cd device-usage/network
 $ mirage configure -t unix --dhcp false --net direct
-$ make depend
-$ make
+$ make depends
+$ make build
 $ sudo dist/network -l "*:debug"
 ```
 
@@ -899,8 +874,8 @@ Let's make a network-enabled unikernel with `hvt`!  The IP configuration should 
 ```
 $ cd device-usage/network
 $ mirage configure -t hvt --dhcp true # for environments where DHCP works
-$ make depend
-$ make
+$ make depends
+$ make build
 $ solo5-hvt --net:service=tap100 -- dist/network.hvt --ipv4=10.0.0.10/24
             |      ___|
   __|  _ \  |  _ \ __ \
