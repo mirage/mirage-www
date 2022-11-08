@@ -153,7 +153,7 @@ widely throughout Mirage and we will explain the basic idea and provide examples
 in this tutorial. For a proper introduction into the core concepts, you may see
 [Real World OCaml, Ch.9][rwo-9] (and also [Ch.10, First-Class Modules][rwo-10]).
 
-[rwo-9]: https://realworldocaml.org/v1/en/html/functors.html
+[rwo-9]: https://dev.realworldocaml.org/functors.html
 [rwo-10]: https://realworldocaml.org/v1/en/html/first-class-modules.html
 
 Functors act as functions from modules to modules. They allow us to pass
