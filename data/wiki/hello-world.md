@@ -42,7 +42,7 @@ let start =
   Lwt.return_unit
 ```
 
-Every Mirage unikernal must have a `start` function as its entry point. The
+Every Mirage unikernel must have a `start` function as its entry point. The
 `start` function for our `noop` unikernel returns an `Lwt` promise for a
 `unit` value.
 
@@ -146,7 +146,7 @@ Most programs will depend on some system devices which they use to interact with
 the environment. In this section, we illustrate how to define unikernels that
 depend on such devices. 
 
-Mirage unikernals use *functors* to specify abstract device dependencies that
+Mirage unikernels use *functors* to specify abstract device dependencies that
 are not dependent on the particular details of an environment.  In OCaml, a
 *functor* is a module that takes other modules as parameters.  Functors are used
 widely throughout Mirage and we will explain the basic idea and provide examples
@@ -258,7 +258,7 @@ so we register a single `Job` consisting of the `Unikernel.Hello` module
 (and, implicitly its `start` function) and pass it references to a
 timer.
 
-When we call `Mirage.main` we specify the devices our `Unikernal.Hello` program
+When we call `Mirage.main` we specify the devices our `Unikernel.Hello` program
 depends on (a `time` device) and when we call `Mirage.register`, we provide
 instructions about how to satisfy those dependencies (it will be given a
 `default_time` device, suitable for the target it's eventually built for).
