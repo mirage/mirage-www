@@ -90,7 +90,7 @@ let render ~blog_posts = Layout.render ~title:"Welcome to MirageOS" ~description
     <p>The framework is fully event-driven, with no support for preemptive threading.</p>
 
     <p>
-      <a href="/blog/announcing-mirage-30-release" class="link-blue">MirageOS 3.0</a> was released in February 2017, preceded by <a href="/blog/announcing-mirage-20-release" class="link-blue">MirageOS 2.0</a> in July 2014 and <a href="/blog/announcing-mirage10" class="link-blue">MirageOS 1.0</a> in
+      <a href="/blog/announcing-mirage-40" class="link-blue">MirageOS 4.0</a> was released in March 2022, preceded by <a href="/blog/announcing-mirage-30-release" class="link-blue">MirageOS 3.0</a> in February 2017, and <a href="/blog/announcing-mirage-20-release" class="link-blue">MirageOS 2.0</a> in July 2014, and <a href="/blog/announcing-mirage10" class="link-blue">MirageOS 1.0</a> in
       December 2013. All the infrastructure you see here is <a href="https://github.com/mirage/mirage-www" class="link-blue">self-hosted</a>.
     </p>
 
