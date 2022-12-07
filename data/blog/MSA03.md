@@ -73,11 +73,11 @@ The following PRs were part of the fix:
 
 ### Timeline
 
-2022-12-04: initial report by Krzysztof Burghardt https://github.com/mirage/qubes-mirage-firewall/issues/166
-2022-12-04: investigation by Hannes Mehnert and Pierre Alain
-2022-12-05: initial fix by Pierre Alain https://github.com/Solo5/solo5/pull/538
-2022-12-05: review of fix by Thomas Leonard
-2022-12-07: release of fixed packages and security advisory
+- 2022-12-04: initial report by Krzysztof Burghardt https://github.com/mirage/qubes-mirage-firewall/issues/166
+- 2022-12-04: investigation by Hannes Mehnert and Pierre Alain
+- 2022-12-05: initial fix by Pierre Alain https://github.com/Solo5/solo5/pull/538
+- 2022-12-05: review of fix by Thomas Leonard
+- 2022-12-07: release of fixed packages and security advisory
 
 ### References
 
