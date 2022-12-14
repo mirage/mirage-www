@@ -18,6 +18,7 @@ permalink: MSA03
                 qubes-mirage-firewall >= 0.8.0 & < 0.8.4
 - Corrected:    2022-12-07: solo5 0.7.5,
                 2022-12-07: qubes-mirage-firewall 0.8.4
+- CVE:          CVE-2022-46770
 
 For general information regarding MirageOS Security Advisories,
 please visit [https://mirage.io/security](https://mirage.io/security).
@@ -57,6 +58,9 @@ No workaround is available.
 
 The solution is to fix the console output code in solo5, as done in
 https://github.com/Solo5/solo5/pull/538/commits/099be86f0a17a619fcadbb970bb9e511d28d3cd8
+
+For the qubes-mirage-firewall, update to a solo5 release (0.7.5) which has the
+issue fixed. This has been done in the release 0.8.4 of qubes-mirage-firewall.
 
 The recommended way to upgrade is:
 ```bash
