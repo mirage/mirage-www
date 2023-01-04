@@ -17,7 +17,7 @@ depends: [
   "mirage-clock-unix"
   "mirage-unix"
   "tailwindcss" {build}
-  "crunch" {build}
+  "crunch" {build & < "3.1.0"}
   "omd" {build}
   "yaml" {build}
   "fmt" {build}
