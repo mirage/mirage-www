@@ -2,12 +2,13 @@
  (name gen_data)
  (modules
   (:standard \ mirageio_data))
- (libraries omd yaml fmt)
+ (libraries omd yaml fmt ptime)
  (preprocess
   (pps ppx_deriving_yaml)))
 
 (library
  (name mirageio_data)
+ (libraries ptime)
  (modules mirageio_data))
 
 (rule
