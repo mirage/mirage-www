@@ -2,7 +2,6 @@
  asset/
  (rule
   (target main.css)
-  (mode promote-until-clean)
   (deps
    %{workspace_root}/tailwind.config.js
    %{workspace_root}/template/styles.css
