@@ -171,7 +171,7 @@ When using the `mirage` CLI tool, these repositories are enabled by default.
 
 ## In Memory of Lars Kurth
 
-<img src="https://xenproject.org/wp-content/uploads/sites/79/2020/01/LarsK_0.jpg" width=180 heigth=180></img>
+<img src="https://xenproject.org/wp-content/uploads/sites/79/2020/01/LarsK_0.jpg" width="180" heigth="180"></img>
 
 We dedicate this release of MirageOS 4.0 to [Lars
 Kurth](https://xenproject.org/2020/01/31/saying-goodbye-to-lars-kurth-open-source-advocate-and-friend/).
