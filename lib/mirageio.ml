@@ -6,6 +6,7 @@ module Make
     (Stack : Tcpip.Stack.V4V6) =
 struct
   module Dream = Dream__mirage.Mirage.Make (Pclock) (Time) (Stack)
+  module Middleware = Middleware.Make (Pclock) (Time) (Stack)
 
   module Handler = struct
     open Mirageio_template
@@ -173,7 +174,7 @@ struct
     let router = Dream.router routes
   end
 
-  let router = Dream.logger @@ Router.router
+  let router = Dream.logger @@ Middleware.head @@ Router.router
   let http ?(port = 80) stack = Dream.http ~port (Stack.tcp stack) router
 
   let https ?(port = 443) ?tls stack =
