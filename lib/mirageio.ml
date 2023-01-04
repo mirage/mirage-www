@@ -174,7 +174,10 @@ struct
     let router = Dream.router routes
   end
 
-  let router = Dream.logger @@ Middleware.head @@ Router.router
+  let router =
+    Dream.logger @@ Middleware.no_trailing_slash @@ Middleware.head
+    @@ Router.router
+
   let http ?(port = 80) stack = Dream.http ~port (Stack.tcp stack) router
 
   let https ?(port = 443) ?tls stack =
