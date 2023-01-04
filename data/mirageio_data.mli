@@ -4,7 +4,7 @@ end
 
 module Blog : sig
   type t = {
-    updated : string;
+    updated : Ptime.t;
     authors : People.t list;
     subject : string;
     permalink : string;

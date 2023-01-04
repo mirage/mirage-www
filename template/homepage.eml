@@ -104,7 +104,7 @@ let render ~blog_posts = Layout.render ~title:"Welcome to MirageOS" ~description
         <div class="items-center space-x-2">
           <img class="inline" src="/icon/speech-bubble.svg" alt="Speech Bubble Icon" />
           <a href="/blog/<%s item.permalink %>" class="link-blue"> <%s item.subject %> </a>
-          <span class="text-grey">(<%s! item.updated %>)</span>
+          <span class="text-grey">(<%s! Util.date_to_string item.updated %>)</span>
         </div>
         <% ); %>
         <div>

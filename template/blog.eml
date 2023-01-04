@@ -15,7 +15,7 @@ let render ~latest ~recent = Layout.render
       <div class="text-sm mt-2">
         By <%s! Component.people item.authors %>
         -
-        <span class="text-grey"><%s! item.updated %></span>
+        <span class="text-grey"><%s! Util.date_to_string item.updated %></span>
       </div>
       <div class="mt-2 prose prose-sm prose-pre:bg-primary max-h-72 text-ellipsis overflow-hidden">
         <%s! item.body %>

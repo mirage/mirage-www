@@ -7,7 +7,7 @@ let render (item : Mirageio_data.Blog.t) = Layout.render
   <p class="font-bold text-grey mt-2">
     By <%s! Component.people item.authors %>
     -
-    <%s! item.updated %>
+    <%s! Util.date_to_string item.updated %>
   </p>
 </div>
 <hr class="border-black" />

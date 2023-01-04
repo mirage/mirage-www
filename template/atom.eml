@@ -5,7 +5,7 @@ let render ~blog_posts ~contributors ~last_update =
   <title>The MirageOS Blog</title>
   <subtitle>The MirageOS Blog on building functional operating systems</subtitle>
   <rights>All rights reserved by the author</rights>
-  <updated><%s last_update %></updated>
+  <updated><%s Ptime.to_rfc3339 last_update %></updated>
   <link rel="self" href="https://mirage.io/feed.xml" />
   <link rel="alternate" href="https://mirage.io/blog/" type="text/html" />
 
@@ -37,7 +37,7 @@ let render ~blog_posts ~contributors ~last_update =
     </author>
     <% ); %>
     <rights>All rights reserved by the author</rights>
-    <updated><%s item.updated %></updated>
+    <updated><%s Ptime.to_rfc3339 item.updated %></updated>
     <link rel="alternate" href="https://mirage.io/blog/<%s item.permalink %>" type="text/html" />
     <content type="xhtml">
       <div xmlns="http://www.w3.org/1999/xhtml">

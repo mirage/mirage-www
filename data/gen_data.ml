@@ -22,7 +22,7 @@ module Blog = struct
   [@@deriving yaml]
 
   type t = {
-    updated : string;
+    updated : Ptime.t;
     authors : People.t list;
     subject : string;
     permalink : string;
@@ -32,28 +32,34 @@ module Blog = struct
   let all () =
     Utils.map_md_files_in_dir ~decode_meta:meta_of_yaml
       (fun ~file:_ ~meta ~body ->
+        let date =
+          let int = int_of_string in
+          match String.split_on_char '-' meta.updated with
+          | [ year; month; day ] -> (int year, int month, int day)
+          | _ -> failwith ("failed to parse date: '" ^ meta.updated ^ "'")
+        in
         {
-          updated = meta.updated;
+          updated = Ptime.of_date date |> Option.get;
           authors = meta.authors;
           subject = meta.subject;
           permalink = meta.permalink;
           body = Omd.of_string body |> Omd.to_html;
         })
       "data/blog/"
-    |> List.sort (fun x1 x2 -> String.compare x1.updated x2.updated)
+    |> List.sort (fun x1 x2 -> Ptime.compare x1.updated x2.updated)
     |> List.rev
 
   let pp ppf v =
     Fmt.pf ppf
       {|
-    { updated = %a
+    { updated = Ptime.of_float_s %f |> Option.get
     ; authors = %a
     ; subject = %a
     ; permalink = %a
     ; body = %a
     }|}
-      Pp.string v.updated (Pp.list People.pp) v.authors Pp.string v.subject
-      Pp.string v.permalink Pp.string v.body
+      (Ptime.to_float_s v.updated) (Pp.list People.pp) v.authors Pp.string
+      v.subject Pp.string v.permalink Pp.string v.body
 end
 
 module Wiki = struct
@@ -218,7 +224,7 @@ end
 
 module Blog = struct
   type t = {
-    updated : string;
+    updated : Ptime.t;
     authors : People.t list;
     subject : string;
     permalink : string;
