@@ -28,12 +28,13 @@ struct
     | _ -> handler request
 
   let no_trailing_slash next_handler request =
-    let target = Dream.target request in
-    match target with
-    | "/" -> next_handler request
-    | _ ->
-        let length = String.length target in
-        if target.[length - 1] = '/' then
-          Dream.redirect request (String.sub target 0 (length - 1))
-        else next_handler request
+    let target = "///" ^ Dream.target request in
+    (* FIXME: https://github.com/aantron/dream/issues/248 *)
+    let path, query = target |> Dream.split_target in
+    let path =
+      path |> Dream.from_path |> Dream.drop_trailing_slash |> Dream.to_path
+    in
+    let target = path ^ if query = "" then "" else "?" ^ query in
+    if Dream.target request = target then next_handler request
+    else Dream.redirect request target
 end
