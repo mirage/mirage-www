@@ -36,10 +36,9 @@
           ocaml-base-compiler = "*";
           mirage = "4.3.3";
         };
-
-        devPackagesQuery = {
-          ocaml-lsp-server = "*";
-          ocamlformat = "*";
+        queryForOverlay = {
+          ke = "*";
+          mirage-crypto-rng = "0.10.7";
         };
         overlay = final: prev: {
           # dream-httpaf is vendored in dream, so we don't detect dream's depdnancy on gluten and gluten's depenancy on ke
@@ -50,16 +49,23 @@
           "dream" = prev."dream".overrideAttrs (oa: {
             buildInputs = oa.buildInputs ++ [ prev.mirage-crypto-rng ];
           });
+          # uses https://github.com/NixOS/nixpkgs/pull/159564
+          "tailwindcss" = pkgs.nodePackages.tailwindcss.overrideAttrs (oldAttrs: {
+            plugins = [
+              pkgs.nodePackages."@tailwindcss/typography"
+            ];
+          });
         };
-        queryForOverlay = {
-          ke = "*";
-          mirage-crypto-rng = "0.10.7";
+
+        devPackagesQuery = {
+          ocaml-lsp-server = "*";
+          ocamlformat = "*";
         };
         scope =
           let scope = opam-nix-lib.buildOpamProject' { } ./. (query // devPackagesQuery // queryForOverlay); in
           scope.overrideScope' overlay;
 
-        unikernelPkgs = let
+        unikernel = let
           mirage-nix = (hillingar.lib.${system});
           inherit (mirage-nix) mkUnikernelPackages;
         in
@@ -76,10 +82,11 @@
               ptime = "1.0.0+dune"; # ptime 1.1.0 doesn't have an overlay
               omd = "1.3.2"; # omd.2.0.0 introduces a dependancy on non-dune uunf
             };
-            inherit query;
+            queryArgs.overlays = opam-nix-lib.__overlays ++ [ overlay ];
+            query = query // queryForOverlay;
           } self;
       in {
-        packages = { inherit scope; unikernel = unikernelPkgs; };
+        packages = { inherit scope unikernel; };
 
         defaultPackage = self.packages.${system}.scope.mirageio-bin;
 
