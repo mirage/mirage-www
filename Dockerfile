@@ -1,7 +1,7 @@
 FROM ocaml/opam:debian-11-ocaml-4.13
 RUN mkdir -p /home/opam/www/mirage
 WORKDIR /home/opam/www
-RUN sudo ln -f /usr/bin/opam-2.1 /usr/bin/opam && cd ~/opam-repository && git pull origin master && git reset --hard 59abe7be7457eed1c245c61034a50a1551f235ed && opam update
+RUN sudo ln -f /usr/bin/opam-2.1 /usr/bin/opam && cd ~/opam-repository && git pull origin master && git reset --hard f89ed543c5f09a526a9acddc922f7983d532848f && opam update
 RUN opam pin git+https://github.com/tmattio/opam-tailwindcss#fb0f82edd09999f7be033ab1785ba5f6b60ed8f6
 RUN opam repo add mirage-dev git+https://github.com/mirage/mirage-dev.git#842c55556ffd0950d21141d6ab99e52a8d88a50f
 RUN opam install mirage
