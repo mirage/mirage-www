@@ -2,16 +2,27 @@
 
 (name mirageio)
 
-(documentation "https://tmattio.github.io/mirageio/")
+(documentation "https://mirage.github.io/mirage-www/")
 
 (source
- (github tmattio/mirageio))
+ (github mirage/mirage-www))
 
 (license ISC)
 
-(authors "Thibaut Mattio")
+(authors
+  "Anil Madhavapeddy"
+  "Amir Chaudhry"
+  "Thomas Gazagnaire"
+  "Richard Mortier"
+  "Hannes Mehnert"
+  "Mindy Preston"
+  "Lucas Pluvinage"
+  "Thomas Leonard"
+  "Dave Scott"
+  "Martin Keegan"
+  "Thibaut Mattio")
 
-(maintainers "Thibaut Mattio")
+(maintainers "mirageos-devel@list.xenproject.org")
 
 (generate_opam_files true)
 
@@ -29,7 +40,7 @@
   mirage-clock-unix
   mirage-unix
   (tailwindcss :build)
-  (crunch :build)
+  (crunch (and :build (>= 3.1.0)))
   (omd :build)
   (yaml :build)
   (fmt :build)
