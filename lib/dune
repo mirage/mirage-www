@@ -6,6 +6,10 @@
 (rule
  (targets asset.ml asset.mli)
  (deps
+  ; Not specifying dependencies on main.css on purpose so we can skip the generation
+  ; of the CSS file if we only want to run the server.
+  ; Uncomment in development
+  ../asset/main.css
   (source_tree ../asset))
  (action
   (with-stdout-to
