@@ -2,12 +2,24 @@
 opam-version: "2.0"
 synopsis: "Website infrastructure and content for mirage.io"
 description: "Website infrastructure and content for mirage.io"
-maintainer: ["Thibaut Mattio"]
-authors: ["Thibaut Mattio"]
+maintainer: "mirageos-devel@list.xenproject.org"
+authors: [
+  "Anil Madhavapeddy"
+  "Amir Chaudhry"
+  "Thomas Gazagnaire"
+  "Richard Mortier"
+  "Hannes Mehnert"
+  "Mindy Preston"
+  "Lucas Pluvinage"
+  "Thomas Leonard"
+  "Dave Scott"
+  "Martin Keegan"
+  "Thibaut Mattio"
+]
 license: "ISC"
-homepage: "https://github.com/tmattio/mirageio"
-doc: "https://tmattio.github.io/mirageio/"
-bug-reports: "https://github.com/tmattio/mirageio/issues"
+homepage: "https://github.com/mirage/mirage-www"
+doc: "https://mirage.github.io/mirage-www/"
+bug-reports: "https://github.com/mirage/mirage-www/issues"
 depends: [
   "ocaml" {>= "4.08.0"}
   "dune" {>= "2.7"}
@@ -38,7 +50,7 @@ build: [
     "@doc" {with-doc}
   ]
 ]
-dev-repo: "git+https://github.com/tmattio/mirageio.git"
+dev-repo: "git+https://github.com/mirage/mirage-www.git"
 pin-depends: [
   ["dream.dev" "git+https://github.com/TheLortex/dream.git#e8ba8e4c6c8689e0e568153fd908369fb8303d53"] # branch mirage-alpha4
   ["dream-mirage.dev" "git+https://github.com/TheLortex/dream.git#e8ba8e4c6c8689e0e568153fd908369fb8303d53"]
