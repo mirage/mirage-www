@@ -58,8 +58,9 @@ module Blog = struct
     ; permalink = %a
     ; body = %a
     }|}
-      (Ptime.to_float_s v.updated) (Pp.list People.pp) v.authors Pp.string
-      v.subject Pp.string v.permalink Pp.string v.body
+      (Ptime.to_float_s v.updated)
+      (Pp.list People.pp) v.authors Pp.string v.subject Pp.string v.permalink
+      Pp.string v.body
 end
 
 module Wiki = struct
