@@ -54,21 +54,21 @@ let render ~blog_posts = Layout.render ~title:"Welcome to MirageOS" ~description
         <img src="/icon/fast-start.svg" alt="Fast Start Icon" />
         <div class="font-bold font-space text-lg">Fast Start</div>
       </div>
-      <p class="text-grey text-sm">MirageOS applications takes a few milliseconds to start-up instead of the few minutes that takes traditional OS.</p>
+      <p class="text-grey text-sm">MirageOS applications take a few milliseconds to start-up instead of the few minutes that traditional OSes take.</p>
     </div>
     <div class="space-y-1">
       <div class="flex items-center space-x-2.5">
         <img src="/icon/binaries.svg" alt="Binaries Icon" />
         <div class="font-bold font-space text-lg">Small Binaries</div>
       </div>
-      <p class="text-grey text-sm">MirageOS binaries are self-contained: they do not need an additional OS to execute. Despite this, the size of MirageOS binary is usually a few megabytes.</p>
+      <p class="text-grey text-sm">MirageOS binaries are self-contained: they do not need an additional OS to execute. Even then, the size of MirageOS binary is usually a few megabytes.</p>
     </div>
     <div class="space-y-1">
       <div class="flex items-center space-x-2.5">
         <img src="/icon/footprint.svg" alt="Footprint Icon" />
         <div class="font-bold font-space text-lg">Small Footprint</div>
       </div>
-      <p class="text-grey text-sm">MirageOS applications use a few megabytes of memory, while traditional application and their associated OS waste gigabytes for simple applications.</p>
+      <p class="text-grey text-sm">MirageOS applications use a few megabytes of memory, while traditional applications and their associated OS waste gigabytes for simple applications.</p>
     </div>
     <div class="space-y-1">
       <div class="flex items-center space-x-2.5">
