@@ -7,9 +7,6 @@
     hillingar.inputs.opam-nix.follows = "opam-nix";
 
     # maintain different repositories to those pinned in upstream repositories
-    opam-nix.inputs.opam-repository.follows = "opam-repository";
-    hillingar.inputs.opam-repository.follows = "opam-repository";
-    hillingar.inputs.opam-overlays.follows = "opam-overlays";
     opam-repository = {
       url = "github:ocaml/opam-repository";
       flake = false;
@@ -18,12 +15,25 @@
       url = "github:dune-universe/opam-overlays";
       flake = false;
     };
+    opam-nix.inputs.opam-repository.follows = "opam-repository";
+    opam-nix.inputs.opam-overlays.follows = "opam-overlays";
+    hillingar.inputs.opam-repository.follows = "opam-repository";
+    hillingar.inputs.opam-overlays.follows = "opam-overlays";
 
     # follow this flake's nixpkgs
     # useful if pinning nixos system nixpkgs with
     #   `nix.registry.nixpkgs.flake = nixpkgs;`
     opam-nix.inputs.nixpkgs.follows = "nixpkgs";
     hillingar.inputs.nixpkgs.follows = "nixpkgs";
+
+    # deduplicate flakes
+    flake-utils.url = "github:numtide/flake-utils";
+    hillingar.inputs.flake-utils.follows = "flake-utils";
+    opam-nix.inputs.flake-utils.follows = "flake-utils";
+    opam2json.url = "github:tweag/opam2json";
+    opam2json.inputs.nixpkgs.follows = "nixpkgs";
+    hillingar.inputs.opam2json.follows = "opam2json";
+    opam-nix.inputs.opam2json.follows = "opam2json";
   };
 
   outputs = { self, nixpkgs, flake-utils, opam-nix, hillingar, ... }:
