@@ -302,7 +302,7 @@ To run your application, execute the binary — and observe the exciting log
 messages that our loop is generating:
 
 ```bash
-$ ./hello
+$ ./dist/hello
 ```
 
 #### Building for Another Backend
