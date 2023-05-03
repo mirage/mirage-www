@@ -52,9 +52,9 @@ build: [
 ]
 dev-repo: "git+https://github.com/mirage/mirage-www.git"
 pin-depends: [
-  ["dream.dev" "git+https://github.com/TheLortex/dream.git#8bd9b9aa0640d15a94b9610709bf9ee24d70e8f0"] # branch mirage-alpha4
-  ["dream-mirage.dev" "git+https://github.com/TheLortex/dream.git#8bd9b9aa0640d15a94b9610709bf9ee24d70e8f0"]
-  ["dream-pure.dev" "git+https://github.com/TheLortex/dream.git#8bd9b9aa0640d15a94b9610709bf9ee24d70e8f0"]
-  ["dream-httpaf.dev" "git+https://github.com/TheLortex/dream.git#8bd9b9aa0640d15a94b9610709bf9ee24d70e8f0"]
+  ["dream.dev" "git+https://github.com/aantron/dream.git#baa222bb8ec3ac25333d9967341fc4b8245fa77b"]
+  ["dream-mirage.dev" "git+https://github.com/aantron/dream.git#baa222bb8ec3ac25333d9967341fc4b8245fa77b"]
+  ["dream-pure.dev" "git+https://github.com/aantron/dream.git#baa222bb8ec3ac25333d9967341fc4b8245fa77b"]
+  ["dream-httpaf.dev" "git+https://github.com/aantron/dream.git#baa222bb8ec3ac25333d9967341fc4b8245fa77b"]
   ["tailwindcss.dev" "git+https://github.com/tmattio/opam-tailwindcss#fb0f82edd09999f7be033ab1785ba5f6b60ed8f6"]
 ]

@@ -5,17 +5,16 @@ all::
 	opam exec -- dune build --root . @install
 
 .PHONY: deps
-deps: ## Install development dependencies
-	opam pin add -yn tailwindcss.dev git+https://github.com/tmattio/opam-tailwindcss
-	opam install -y dune-release ocamlformat utop ocaml-lsp-server tailwindcss
+deps: opam_files
 	opam install --deps-only --with-test --with-doc -y .
 
-.PHONY: create_switch
-create_switch:
-	opam switch create . --no-install -y
+.PHONY: opam_files
+opam_files:
+	opam exec -- dune build mirageio.opam _tools.opam
 
 .PHONY: switch
-switch: create_switch deps ## Create an opam switch and install development dependencies
+switch:
+	opam switch create . --deps-only --with-test --with-doc -y
 
 .PHONY: build
 build:: ## Build the project, including non installable libraries and executables
