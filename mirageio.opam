@@ -34,6 +34,10 @@ depends: [
   "yaml" {build}
   "fmt" {build}
   "ppx_deriving_yaml" {build}
+  "dune-release" {with-test & dev}
+  "ocamlformat" {= "0.24.1" & with-test & dev}
+  "utop" {with-test & dev}
+  "ocaml-lsp-server" {with-test & dev}
   "odoc" {with-doc}
 ]
 build: [

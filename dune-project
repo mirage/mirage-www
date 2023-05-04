@@ -44,14 +44,8 @@
   (omd :build)
   (yaml :build)
   (fmt :build)
-  (ppx_deriving_yaml :build)))
-
-(package
- (name _tools)
- (synopsis "Dev tools for mirage-www")
- (description "Dev tools for mirage-www")
- (depends
-  dune-release
-  (ocamlformat (= 0.24.1))
-  utop
-  ocaml-lsp-server))
+  (ppx_deriving_yaml :build)
+  (dune-release (and :with-test :dev))
+  (ocamlformat (and (= 0.24.1) :with-test :dev))
+  (utop (and :with-test :dev))
+  (ocaml-lsp-server (and :with-test :dev))))

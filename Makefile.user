@@ -10,7 +10,7 @@ deps: opam_files
 
 .PHONY: opam_files
 opam_files:
-	opam exec -- dune build mirageio.opam _tools.opam
+	opam exec -- dune build mirageio.opam
 
 .PHONY: switch
 switch:
