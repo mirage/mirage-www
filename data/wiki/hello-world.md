@@ -38,11 +38,13 @@ hope, fairly short. First, the unikernel itself:
 
 ```ocaml
 $ cat tutorial/noop/unikernel.ml
-let start =
-  Lwt.return_unit
+module Main (_ : sig end) = struct
+  let start () = Lwt.return_unit
+end
 ```
 
-Every Mirage unikernel must have a `start` function as its entry point. The
+Every Mirage unikernel must define a functor that is being applied. In that
+functor, it must provide a `start` function as its the entry point. The
 `start` function for our `noop` unikernel returns an `Lwt` promise for a
 `unit` value.
 
@@ -55,11 +57,8 @@ point. We do this by writing a `config.ml` file that sits next to our
 $ cat tutorial/noop/config.ml
 open Mirage
 
-let main =
-  main "Unikernel" job
-
-let () =
-  register "noop" [main]
+let main = main "Unikernel.Main" (job @-> job)
+let () = register "noop" [ main $ noop ]
 ```
 
 There's a little more going on here than in `unikernel.ml`. First we open the
@@ -75,8 +74,8 @@ simply rename `unikernel.ml` accordingly.
 The second parameter, `job`, is a bit more interesting. This declares the type
 of our unikernel in terms of the devices (that is, things such as network
 interfaces, network stacks, filesystems and so on) it requires to operate. As
-this is a unikernel that does nothing, it needs no devices and so is simply a
-`job`.
+this is a unikernel that does nothing, it needs only a stub devices and so is
+`job @-> job`.
 
 Finally, we declare the entry point to OCaml in the usual way (`let () = ...`),
 `register`ing our unikernel entry point (`main`) with a name (`"noop"` in this
@@ -108,12 +107,12 @@ Building our unikernel is then simply a matter of:
       potential build tools).
     - Fetch unikernel dependencies.
 
-    NOTE: while performing the _lock_ step, an additional repository 
-    <https://github.com/mirage/opam-overlays.git> is added in your opam switch. 
-    This repository contains packages that have been changed to use the _dune_ build 
-    system. The `--extra-repo` argument in `mirage configure` changes the additional 
-    repository to use. `--no-extra-repo` can be used to disable the extra repository, 
-    but the _lock_ step might fail because of dependencies that are not using the 
+    NOTE: while performing the _lock_ step, an additional repository
+    <https://github.com/mirage/opam-overlays.git> is added in your opam switch.
+    This repository contains packages that have been changed to use the _dune_ build
+    system. The `--extra-repo` argument in `mirage configure` changes the additional
+    repository to use. `--no-extra-repo` can be used to disable the extra repository,
+    but the _lock_ step might fail because of dependencies that are not using the
     _dune_ build system.
 
 3. Compiling:
@@ -144,7 +143,7 @@ Congratulations! You've just built and run your very first unikernel!
 
 Most programs will depend on some system devices which they use to interact with
 the environment. In this section, we illustrate how to define unikernels that
-depend on such devices. 
+depend on such devices.
 
 Mirage unikernels use *functors* to specify abstract device dependencies that
 are not dependent on the particular details of an environment.  In OCaml, a
@@ -162,7 +161,7 @@ with the environment (read files, send packets, etc) without needing to care
 whether it will eventually be built to target Unix, Xen, KVM, or something else
 entirely. The modules that are passed into the unikernel in this way must
 satisfy type signatures that are specified when the unikernel `job` value is
-created in the `config.ml` file.  
+created in the `config.ml` file.
 
 In this section, we present a simple example of a unikernel that uses a functor
 to depend on a device for reading the system's time.  We will build and run the
@@ -296,7 +295,7 @@ $ make build
 Our Unix binary is built as `dist/hello`. Note that `make` simply
 calls `mirage build` which itself turns into a simple `dune build` command. If
 you are  familiar with `dune` it is possible to inspect the build rules for the
-unikernel generated in `dune.build`. 
+unikernel generated in `dune.build`.
 
 To run your application, execute the binary — and observe the exciting log
 messages that our loop is generating:
@@ -536,7 +535,7 @@ The `main` binding looks much like the earlier `hello` example, except for the
 addition of a `block` device in the list. When we register the job, we supply a
 block device from a local file via [`block_of_file`](https://docs.mirage.io/mirage/Mirage/#val-block_of_file).
 
-Using `deps` we also supply a _custom dependency_ `config_shell` in charge of 
+Using `deps` we also supply a _custom dependency_ `config_shell` in charge of
 building the `disk.img` image. This is done using _dune_ rules.
 
 <br />
