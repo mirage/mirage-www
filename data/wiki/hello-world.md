@@ -34,53 +34,19 @@ machine, you should use `mirage configure -t macosx` instead.
 
 Before we try and do anything complicated, let's build a unikernel that starts
 and then exits, without doing anything else. The code for this is, as you might
-hope, fairly short. First, the unikernel itself:
-
-```ocaml
-$ cat tutorial/noop/unikernel.ml
-let start =
-  Lwt.return_unit
-```
-
-Every Mirage unikernel must have a `start` function as its entry point. The
-`start` function for our `noop` unikernel returns an `Lwt` promise for a
-`unit` value.
-
+hope, fairly short.
 Before we can build our `noop` unikernel, we must define its configuration
-telling Mirage what OCaml module contains the `start` entry
-point. We do this by writing a `config.ml` file that sits next to our
-`unikernel.ml` file:
+telling Mirage what jobs the unikernel is to run.
+We do this by writing a `config.ml` file:
 
 ```ocaml
 $ cat tutorial/noop/config.ml
-open Mirage
-
-let main =
-  main "Unikernel" job
-
-let () =
-  register "noop" [main]
+let () = Mirage.register "noop" []
 ```
 
-There's a little more going on here than in `unikernel.ml`. First we open the
-`Mirage` module to save on typing. Next, we define a value `main`.  This name is
-only a convention, and you should feel free to change it if you wish.
-`main` calls the `Mirage.main` function, passing two parameters.
-The first is a string declaring the module name that contains
-our entry point — in this case, standard OCaml compilation behaviour means that
-the `unikernel.ml` file produces a module named `Unikernel`. Again, there's
-nothing special about this name, and if you want to use something else here,
-simply rename `unikernel.ml` accordingly.
-
-The second parameter, `job`, is a bit more interesting. This declares the type
-of our unikernel in terms of the devices (that is, things such as network
-interfaces, network stacks, filesystems and so on) it requires to operate. As
-this is a unikernel that does nothing, it needs no devices and so is simply a
-`job`.
-
 Finally, we declare the entry point to OCaml in the usual way (`let () = ...`),
-`register`ing our unikernel entry point (`main`) with a name (`"noop"` in this
-case) to be used when we build our unikernel.
+`register`ing our unikernel entry points (in this case the empty list) and with a
+name of the unikernel(`"noop"` in this case) we will build.
 
 Building our unikernel is then simply a matter of:
 
@@ -142,9 +108,10 @@ Congratulations! You've just built and run your very first unikernel!
 
 ### Step 1: Hello World!
 
-Most programs will depend on some system devices which they use to interact with
-the environment. In this section, we illustrate how to define unikernels that
-depend on such devices. 
+Except for the noop example above, all unikernels have at least one job.
+Furthermore, most programs will depend on some system devices which they use to
+interact with the environment.
+In this section, we illustrate how to define unikernels that depend on such devices.
 
 Mirage unikernels use *functors* to specify abstract device dependencies that
 are not dependent on the particular details of an environment.  In OCaml, a
@@ -162,7 +129,7 @@ with the environment (read files, send packets, etc) without needing to care
 whether it will eventually be built to target Unix, Xen, KVM, or something else
 entirely. The modules that are passed into the unikernel in this way must
 satisfy type signatures that are specified when the unikernel `job` value is
-created in the `config.ml` file.  
+created in the `config.ml` file.
 
 In this section, we present a simple example of a unikernel that uses a functor
 to depend on a device for reading the system's time.  We will build and run the
@@ -184,15 +151,13 @@ $ cat hello/unikernel.ml
 open Lwt.Infix
 
 module Hello (Time : Mirage_time.S) = struct
-
   let start _time =
-
     let rec loop = function
       | 0 -> Lwt.return_unit
       | n ->
-        Logs.info (fun f -> f "hello");
-        Time.sleep_ns (Duration.of_sec 1) >>= fun () ->
-        loop (n-1)
+          Logs.info (fun f -> f "hello");
+          Time.sleep_ns (Duration.of_sec 1) >>= fun () ->
+          loop (n-1)
     in
     loop 4
 
@@ -201,7 +166,8 @@ end
 
 We define a main `Hello` module parameterised by a module `Time`, of type
 `Mirage_time.S`. The `Time` module provides the functionality enabling us to
-interact with the environment clock. Our `start` function also takes a parameter
+interact with the environment clock.
+Our `start` function, which is the entrypoint of the job, also takes a parameter
 `_time` (an instance of a `time` which is ignored). This parameterization of a
 unikernel's main module and its `start` function is the basic structure required
 to make a MirageOS unikernel that can be built to run on any supported
@@ -219,20 +185,21 @@ additional configuration  in `config.ml`, so let's take a look:
 
 ```ocaml
 $ cat tutorial/hello/config.ml
-
 open Mirage
 
-let main =
-  main "Unikernel.Hello" (time @-> job)
-
-let () =
-  register "hello" [main $ default_time]
+let main = main "Unikernel.Hello" (time @-> job) ~packages:[ package "duration" ]
+let () = register "hello" [ main $ default_time ]
 ```
 
-In this case, the `main` variable declares that the entry point of the process
-is the `Hello` module from the file `unikernel.ml`. The `@->` combinator is used
-to add a device driver to the list of functor arguments in the job definition
-and the final value of this combinator should always be a `job`.
+First we open the `Mirage` module to save on typing.
+Next, we define a value `main`.
+This name is only a convention, and you should feel free to change it if you wish.
+`main` calls the `Mirage.main` function, passing two parameters.
+The first is a string declaring the module name that contains our entry point — in this case, standard OCaml compilation behaviour means that the `unikernel.ml` file produces a module named `Unikernel`.
+Again, there's nothing special about this name, and if you want to use something else here, simply rename `unikernel.ml` accordingly.
+The `@->` combinator is used to add a device driver to the list of functor arguments in the job definition and the final value of this combinator should always be a `job`.
+The named argument `~packages` defines extra OCaml package dependencies that the job depends on.
+In this case we depend on the `duration` library for converting from seconds to nanoseconds.
 
 Notice that we refer to the module name as a string (`"Unikernel.Hello"`) when
 calling `main`, instead of directly as an OCaml value. The `mirage` command-line
@@ -249,12 +216,12 @@ block devices on startup.
 
 In general, a `config.ml` file is a normal OCaml module that calls `register` to
 register one or more jobs, each of which represent a process (with a start/stop
-lifecycle). Each job most likely depends on some device drivers; all the
+lifecycle). Each job depends on some device drivers; all the
 available device drivers are defined in the `Mirage` module (see [the Mirage
 module documentation](http://mirage.github.io/mirage/mirage/index.html)).
 
 In this case, this simple `hello world` example requires some notion of time,
-so we register a single `Job` consisting of the `Unikernel.Hello` module
+so we register a single `job` consisting of the `Unikernel.Hello` module
 (and, implicitly its `start` function) and pass it references to a
 timer.
 
