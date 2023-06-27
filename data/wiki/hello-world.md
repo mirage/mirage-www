@@ -503,41 +503,27 @@ primarily reading and writing aligned buffers to a 64-bit offset within the
 device.
 
 On Unix, the development workflow to handle block devices is by mapping them
-onto local files. The `config.ml` for the block example contains some logic for automatically creating a disk image file (and removing it when `mirage clean` is called), in addition to a more familiar-looking set of calls to `main` and `register`:
+onto local files.
+On solo5 on the other hand, the block devices are mapped to alphanumeric names.
+The solo5 tender then at runtime maps the names onto local files.
+The `config.ml` for the block example contains some logic for handling this difference.
+The expression `if_impl Key.is_solo5 (block_of_file "storage") (block_of_file "disk.img")` detects if we are on the solo5 target.
+If so, we emit a block device backed by the name "storage".
+Otherwise, we emit a block device backed by the file "disk.img".
 
 ```ocaml
 open Mirage
 
-type shellconfig = ShellConfig
-let shellconfig = typ ShellConfig
+let main = main "Unikernel.Main" (block @-> job)
 
-let config_shell = impl
-  ~dune:(fun _i -> [Dune.stanza {|
-(rule (targets disk.img)
- (action (run dd if=/dev/zero of=disk.img count=100000))
-)|}])
-  ~install:(fun _ -> Functoria.Install.v ~etc:[Fpath.v "disk.img"] ())
-  "shell_config"
-  shellconfig
+let img =
+  if_impl Key.is_solo5 (block_of_file "storage") (block_of_file "disk.img")
 
-let main =
-  let packages = [ package "io-page"; package "duration"; package ~build:true "bos"; package ~build:true "fpath" ] in
-  main
-    ~packages
-    ~deps:[dep config_shell] "Unikernel.Main" (time @-> block @-> job)
-
-let img = Key.(if_impl is_solo5 (block_of_file "storage") (block_of_file "disk.img"))
-
-let () =
-  register "block_test" [main $ default_time $ img]
+let () = register "block_test" [main $ img]
 ```
 
 The `main` binding looks much like the earlier `hello` example, except for the
-addition of a `block` device in the list. When we register the job, we supply a
-block device from a local file via [`block_of_file`](https://docs.mirage.io/mirage/Mirage/#val-block_of_file).
-
-Using `deps` we also supply a _custom dependency_ `config_shell` in charge of 
-building the `disk.img` image. This is done using _dune_ rules.
+addition of a `block` device in the list..
 
 <br />
 <div class="panel callout">
@@ -559,6 +545,14 @@ $ cd device-usage/block
 $ mirage configure -t unix
 $ make depends
 $ make build
+```
+
+Now, with the unikernel built we can run it.
+However, the unikernel expects a block device.
+We can create a disk image of all zeroes before we run the unikernel:
+
+```bash
+$ dd if=/dev/zero of=disk.img count=100000 # only needed once
 $ ./dist/block_test
 ```
 
@@ -580,35 +574,32 @@ Solo5 [block device driver](https://github.com/mirage/mirage-block-solo5) and is
 mapping the unikernel's block requests directly through to it, rather than
 relying on the host OS (the Linux or FreeBSD kernel).
 
-If we tell `solo5-hvt` where the disk image is, it will provide that disk image to the unikernel:
+If we tell `solo5-hvt` where the disk image for the name `storage` is, it will provide that disk image to the unikernel:
 
 ```bash
-$ solo5-hvt --block:storage=disk.img dist/block_test.hvt
+$ solo5-hvt --block:storage=disk.img ./dist/block_test.hvt
             |      ___|
   __|  _ \  |  _ \ __ \
 \__ \ (   | | (   |  ) |
 ____/\___/ _|\___/____/
+Solo5: Bindings version v0.7.5
 Solo5: Memory map: 512 MB addressable:
-Solo5:     unused @ (0x0 - 0xfffff)
-Solo5:       text @ (0x100000 - 0x1eefff)
-Solo5:     rodata @ (0x1ef000 - 0x228fff)
-Solo5:       data @ (0x229000 - 0x2dffff)
-Solo5:       heap >= 0x2e0000 < stack < 0x20000000
-2018-06-21 12:21:11 -00:00: INF [block] sectors = 100000
-read_write=true
-sector_size=512
+Solo5:   reserved @ (0x0 - 0xfffff)
+Solo5:       text @ (0x100000 - 0x1defff)
+Solo5:     rodata @ (0x1df000 - 0x214fff)
+Solo5:       data @ (0x215000 - 0x2c1fff)
+Solo5:       heap >= 0x2c2000 < stack < 0x20000000
+2023-06-27 10:27:24 -00:00: INF [block] { Mirage_block.read_write = true; sector_size = 512;
+              size_sectors = 100000L }
+reading 1 sectors at 100000
+reading 12 sectors at 99989
+2023-06-27 10:27:24 -00:00: INF [block] Test sequence finished
 
-2018-06-21 12:21:11 -00:00: ERR [block] Expecting error output from the following operation...
-2018-06-21 12:21:11 -00:00: ERR [block] Expecting error output from the following operation...
-2018-06-21 12:21:11 -00:00: ERR [block] Expecting error output from the following operation...
-2018-06-21 12:21:11 -00:00: ERR [block] Expecting error output from the following operation...
-2018-06-21 12:21:11 -00:00: INF [block] Test sequence finished
+2023-06-27 10:27:24 -00:00: INF [block] Total tests started: 10
 
-2018-06-21 12:21:11 -00:00: INF [block] Total tests started: 10
+2023-06-27 10:27:24 -00:00: INF [block] Total tests passed:  10
 
-2018-06-21 12:21:11 -00:00: INF [block] Total tests passed:  10
-
-2018-06-21 12:21:11 -00:00: INF [block] Total tests failed:  0
+2023-06-27 10:27:24 -00:00: INF [block] Total tests failed:  0
 
 Solo5: solo5_exit(0) called
 ```
