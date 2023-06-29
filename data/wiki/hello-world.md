@@ -189,7 +189,9 @@ additional configuration  in `config.ml`, so let's take a look:
 $ cat tutorial/hello/config.ml
 open Mirage
 
-let main = main "Unikernel.Hello" (time @-> job) ~packages:[ package "duration" ]
+let main =
+  main "Unikernel.Hello" (time @-> job) ~packages:[ package "duration" ]
+
 let () = register "hello" [ main $ default_time ]
 ```
 
