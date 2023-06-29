@@ -37,6 +37,7 @@ and then exits, without doing anything else. The code for this is, as you might
 hope, fairly short.
 Before we can build our `noop` unikernel, we must define its configuration
 telling Mirage what jobs the unikernel is to run.
+In this example we define a unikernel with zero jobs by passing the empty list.
 We do this by writing a `config.ml` file:
 
 ```ocaml
@@ -109,9 +110,9 @@ Congratulations! You've just built and run your very first unikernel!
 ### Step 1: Hello World!
 
 Except for the noop example above, all unikernels have at least one job.
-Furthermore, most programs will depend on some system devices which they use to
-interact with the environment.
-In this section, we illustrate how to define unikernels that depend on such devices.
+A job is a module with a `start` function as entrypoint that performs some task.
+Most jobs will depend on some system devices which they use to interact with the environment.
+In this section, we illustrate how to define unikernels with jobs that depend on such devices.
 
 Mirage unikernels use *functors* to specify abstract device dependencies that
 are not dependent on the particular details of an environment.  In OCaml, a
@@ -468,15 +469,16 @@ The [Mirage_block](https://mirage.github.io/mirage-block)
 interface signature contains the operations that are possible on a block device:
 primarily reading and writing aligned buffers to a 64-bit offset within the
 device.
-
 On Unix, the development workflow to handle block devices is by mapping them
 onto local files.
 On solo5 on the other hand, the block devices are mapped to alphanumeric names.
+
 The solo5 tender then at runtime maps the names onto local files.
 The `config.ml` for the block example contains some logic for handling this difference.
 The expression `if_impl Key.is_solo5 (block_of_file "storage") (block_of_file "disk.img")` detects if we are on the solo5 target.
-If so, we emit a block device backed by the name "storage".
-Otherwise, we emit a block device backed by the file "disk.img".
+If so, we emit a block device backed by the name `storage`.
+Otherwise, we emit a block device backed by the file `disk.img`.
+Remember, the name has to be alphanumeric on Solo5, so the dot in `disk.img` will not work on Solo5.
 
 ```ocaml
 open Mirage
