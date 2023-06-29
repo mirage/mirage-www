@@ -112,7 +112,8 @@ Congratulations! You've just built and run your very first unikernel!
 Except for the noop example above, all unikernels have at least one job.
 A job is a module with a `start` function as entrypoint that performs some task.
 Most jobs will depend on some system devices which they use to interact with the environment.
-In this section, we illustrate how to define unikernels with jobs that depend on such devices.
+This tutorial will cover examples timer devices, key-value stores, block devies and network interfaces.
+In this section, we illustrate how to define a unikernel with a job that depends on a timer device.
 
 Mirage unikernels use *functors* to specify abstract device dependencies that
 are not dependent on the particular details of an environment.  In OCaml, a
