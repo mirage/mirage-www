@@ -32,16 +32,19 @@
  (description "Website infrastructure and content for mirage.io")
  (depends
   (ocaml
-   (>= 4.08.0))
+   (>= 4.14))
   dune
   dream
   dream-mirage
-  mirage-kv-mem
-  mirage-clock-unix
-  mirage-unix
+  (tcpip (>= 8.0))
+  (mirage-time (>= 3.0))
+  (mirage-kv-mem (>= 3.2.1))
+  (mirage-clock-unix (>= 3.0))
+  (mirage-unix (>= 5.0.0))
+  (ptime (>= 0.8.1))
   (tailwindcss :build)
   (crunch (and :build (>= 3.1.0)))
-  (omd :build)
+  (omd (and :build (< 2.0.0~alpha3)))
   (yaml :build)
   (fmt :build)
-  (ppx_deriving_yaml :build)))
+  (ppx_deriving_yaml (and :build (>= 0.2.1)))))

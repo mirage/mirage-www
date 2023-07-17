@@ -21,19 +21,22 @@ homepage: "https://github.com/mirage/mirage-www"
 doc: "https://mirage.github.io/mirage-www/"
 bug-reports: "https://github.com/mirage/mirage-www/issues"
 depends: [
-  "ocaml" {>= "4.08.0"}
+  "ocaml" {>= "4.14"}
   "dune" {>= "2.7"}
   "dream"
   "dream-mirage"
-  "mirage-kv-mem"
-  "mirage-clock-unix"
-  "mirage-unix"
+  "tcpip" {>= "8.0"}
+  "mirage-time" {>= "3.0"}
+  "mirage-kv-mem" {>= "3.2.1"}
+  "mirage-clock-unix" {>= "3.0"}
+  "mirage-unix" {>= "5.0.0"}
+  "ptime" {>= "0.8.1"}
   "tailwindcss" {build}
   "crunch" {build & >= "3.1.0"}
-  "omd" {build}
+  "omd" {build & < "2.0.0~alpha3"}
   "yaml" {build}
   "fmt" {build}
-  "ppx_deriving_yaml" {build}
+  "ppx_deriving_yaml" {build & >= "0.2.1"}
   "odoc" {with-doc}
 ]
 build: [
@@ -52,9 +55,9 @@ build: [
 ]
 dev-repo: "git+https://github.com/mirage/mirage-www.git"
 pin-depends: [
-  ["dream.dev" "git+https://github.com/TheLortex/dream.git#8bd9b9aa0640d15a94b9610709bf9ee24d70e8f0"] # branch mirage-alpha4
-  ["dream-mirage.dev" "git+https://github.com/TheLortex/dream.git#8bd9b9aa0640d15a94b9610709bf9ee24d70e8f0"]
-  ["dream-pure.dev" "git+https://github.com/TheLortex/dream.git#8bd9b9aa0640d15a94b9610709bf9ee24d70e8f0"]
-  ["dream-httpaf.dev" "git+https://github.com/TheLortex/dream.git#8bd9b9aa0640d15a94b9610709bf9ee24d70e8f0"]
-  ["tailwindcss.dev" "git+https://github.com/tmattio/opam-tailwindcss#fb0f82edd09999f7be033ab1785ba5f6b60ed8f6"]
+  ["dream-pure.dev"    "git+https://github.com/tmcgilchrist/dream.git#fcc20d00bf61a1c417aa38e18b62aa3d0962704e"]
+  ["dream.dev"         "git+https://github.com/tmcgilchrist/dream.git#fcc20d00bf61a1c417aa38e18b62aa3d0962704e"]
+  ["dream-mirage.dev"  "git+https://github.com/tmcgilchrist/dream.git#fcc20d00bf61a1c417aa38e18b62aa3d0962704e"]
+  ["dream-httpaf.dev"  "git+https://github.com/tmcgilchrist/dream.git#fcc20d00bf61a1c417aa38e18b62aa3d0962704e"]
+  ["tailwindcss.dev" "git+https://github.com/tmattio/opam-tailwindcss#a4c0ee9b9a80d44c4a953b07dc29e4aa065adf57"]
 ]
