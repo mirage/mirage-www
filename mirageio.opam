@@ -30,7 +30,7 @@ depends: [
   "mirage-unix"
   "tailwindcss" {build}
   "crunch" {build & >= "3.1.0"}
-  "omd" {build}
+  "omd" {build & < "2.0.0~alpha3"}
   "yaml" {build}
   "fmt" {build}
   "ppx_deriving_yaml" {build}
