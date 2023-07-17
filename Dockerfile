@@ -1,4 +1,4 @@
-FROM ocaml/opam:debian-11-ocaml-4.13
+FROM ocaml/opam:debian-12-ocaml-4.13
 RUN mkdir -p /home/opam/www/mirage
 WORKDIR /home/opam/www
 RUN sudo ln -f /usr/bin/opam-2.1 /usr/bin/opam && cd ~/opam-repository && git pull origin master && git reset --hard 67a3d729ae0a48d689cd3a6cf17fa41494a4cb72 && opam update
