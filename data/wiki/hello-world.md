@@ -34,53 +34,20 @@ machine, you should use `mirage configure -t macosx` instead.
 
 Before we try and do anything complicated, let's build a unikernel that starts
 and then exits, without doing anything else. The code for this is, as you might
-hope, fairly short. First, the unikernel itself:
-
-```ocaml
-$ cat tutorial/noop/unikernel.ml
-let start =
-  Lwt.return_unit
-```
-
-Every Mirage unikernel must have a `start` function as its entry point. The
-`start` function for our `noop` unikernel returns an `Lwt` promise for a
-`unit` value.
-
+hope, fairly short.
 Before we can build our `noop` unikernel, we must define its configuration
-telling Mirage what OCaml module contains the `start` entry
-point. We do this by writing a `config.ml` file that sits next to our
-`unikernel.ml` file:
+telling Mirage what jobs the unikernel is to run.
+In this example we define a unikernel with zero jobs by passing the empty list.
+We do this by writing a `config.ml` file:
 
 ```ocaml
 $ cat tutorial/noop/config.ml
-open Mirage
-
-let main =
-  main "Unikernel" job
-
-let () =
-  register "noop" [main]
+let () = Mirage.register "noop" []
 ```
 
-There's a little more going on here than in `unikernel.ml`. First we open the
-`Mirage` module to save on typing. Next, we define a value `main`.  This name is
-only a convention, and you should feel free to change it if you wish.
-`main` calls the `Mirage.main` function, passing two parameters.
-The first is a string declaring the module name that contains
-our entry point — in this case, standard OCaml compilation behaviour means that
-the `unikernel.ml` file produces a module named `Unikernel`. Again, there's
-nothing special about this name, and if you want to use something else here,
-simply rename `unikernel.ml` accordingly.
-
-The second parameter, `job`, is a bit more interesting. This declares the type
-of our unikernel in terms of the devices (that is, things such as network
-interfaces, network stacks, filesystems and so on) it requires to operate. As
-this is a unikernel that does nothing, it needs no devices and so is simply a
-`job`.
-
 Finally, we declare the entry point to OCaml in the usual way (`let () = ...`),
-`register`ing our unikernel entry point (`main`) with a name (`"noop"` in this
-case) to be used when we build our unikernel.
+`register`ing our unikernel entry points (in this case the empty list) and with a
+name of the unikernel(`"noop"` in this case) we will build.
 
 Building our unikernel is then simply a matter of:
 
@@ -142,9 +109,11 @@ Congratulations! You've just built and run your very first unikernel!
 
 ### Step 1: Hello World!
 
-Most programs will depend on some system devices which they use to interact with
-the environment. In this section, we illustrate how to define unikernels that
-depend on such devices. 
+Except for the noop example above, all unikernels have at least one job.
+A job is a module with a `start` function as entrypoint that performs some task.
+Most jobs will depend on some system devices which they use to interact with the environment.
+This tutorial will cover examples timer devices, key-value stores, block devies and network interfaces.
+In this section, we illustrate how to define a unikernel with a job that depends on a timer device.
 
 Mirage unikernels use *functors* to specify abstract device dependencies that
 are not dependent on the particular details of an environment.  In OCaml, a
@@ -162,7 +131,7 @@ with the environment (read files, send packets, etc) without needing to care
 whether it will eventually be built to target Unix, Xen, KVM, or something else
 entirely. The modules that are passed into the unikernel in this way must
 satisfy type signatures that are specified when the unikernel `job` value is
-created in the `config.ml` file.  
+created in the `config.ml` file.
 
 In this section, we present a simple example of a unikernel that uses a functor
 to depend on a device for reading the system's time.  We will build and run the
@@ -184,15 +153,13 @@ $ cat hello/unikernel.ml
 open Lwt.Infix
 
 module Hello (Time : Mirage_time.S) = struct
-
   let start _time =
-
     let rec loop = function
       | 0 -> Lwt.return_unit
       | n ->
-        Logs.info (fun f -> f "hello");
-        Time.sleep_ns (Duration.of_sec 1) >>= fun () ->
-        loop (n-1)
+          Logs.info (fun f -> f "hello");
+          Time.sleep_ns (Duration.of_sec 1) >>= fun () ->
+          loop (n-1)
     in
     loop 4
 
@@ -201,7 +168,8 @@ end
 
 We define a main `Hello` module parameterised by a module `Time`, of type
 `Mirage_time.S`. The `Time` module provides the functionality enabling us to
-interact with the environment clock. Our `start` function also takes a parameter
+interact with the environment clock.
+Our `start` function, which is the entrypoint of the job, also takes a parameter
 `_time` (an instance of a `time` which is ignored). This parameterization of a
 unikernel's main module and its `start` function is the basic structure required
 to make a MirageOS unikernel that can be built to run on any supported
@@ -219,20 +187,23 @@ additional configuration  in `config.ml`, so let's take a look:
 
 ```ocaml
 $ cat tutorial/hello/config.ml
-
 open Mirage
 
 let main =
-  main "Unikernel.Hello" (time @-> job)
+  main "Unikernel.Hello" (time @-> job) ~packages:[ package "duration" ]
 
-let () =
-  register "hello" [main $ default_time]
+let () = register "hello" [ main $ default_time ]
 ```
 
-In this case, the `main` variable declares that the entry point of the process
-is the `Hello` module from the file `unikernel.ml`. The `@->` combinator is used
-to add a device driver to the list of functor arguments in the job definition
-and the final value of this combinator should always be a `job`.
+First we open the `Mirage` module to save on typing.
+Next, we define a value `main`.
+This name is only a convention, and you should feel free to change it if you wish.
+`main` calls the `Mirage.main` function, passing two parameters.
+The first is a string declaring the module name that contains our entry point — in this case, standard OCaml compilation behaviour means that the `unikernel.ml` file produces a module named `Unikernel`.
+Again, there's nothing special about this name, and if you want to use something else here, simply rename `unikernel.ml` accordingly.
+The `@->` combinator is used to add a device driver to the list of functor arguments in the job definition and the final value of this combinator should always be a `job`.
+The named argument `~packages` defines extra OCaml package dependencies that the job depends on.
+In this case we depend on the `duration` library for converting from seconds to nanoseconds.
 
 Notice that we refer to the module name as a string (`"Unikernel.Hello"`) when
 calling `main`, instead of directly as an OCaml value. The `mirage` command-line
@@ -249,12 +220,12 @@ block devices on startup.
 
 In general, a `config.ml` file is a normal OCaml module that calls `register` to
 register one or more jobs, each of which represent a process (with a start/stop
-lifecycle). Each job most likely depends on some device drivers; all the
+lifecycle). Each job depends on some device drivers; all the
 available device drivers are defined in the `Mirage` module (see [the Mirage
 module documentation](http://mirage.github.io/mirage/mirage/index.html)).
 
 In this case, this simple `hello world` example requires some notion of time,
-so we register a single `Job` consisting of the `Unikernel.Hello` module
+so we register a single `job` consisting of the `Unikernel.Hello` module
 (and, implicitly its `start` function) and pass it references to a
 timer.
 
@@ -501,43 +472,30 @@ The [Mirage_block](https://mirage.github.io/mirage-block)
 interface signature contains the operations that are possible on a block device:
 primarily reading and writing aligned buffers to a 64-bit offset within the
 device.
-
 On Unix, the development workflow to handle block devices is by mapping them
-onto local files. The `config.ml` for the block example contains some logic for automatically creating a disk image file (and removing it when `mirage clean` is called), in addition to a more familiar-looking set of calls to `main` and `register`:
+onto local files.
+On solo5 on the other hand, the block devices are mapped to alphanumeric names.
+
+The solo5 tender then at runtime maps the names onto local files.
+The `config.ml` for the block example contains some logic for handling this difference.
+The expression `if_impl Key.is_solo5 (block_of_file "storage") (block_of_file "disk.img")` detects if we are on the solo5 target.
+If so, we emit a block device backed by the name `storage`.
+Otherwise, we emit a block device backed by the file `disk.img`.
+Remember, the name has to be alphanumeric on Solo5, so the dot in `disk.img` will not work on Solo5.
 
 ```ocaml
 open Mirage
 
-type shellconfig = ShellConfig
-let shellconfig = typ ShellConfig
+let main = main "Unikernel.Main" (block @-> job)
 
-let config_shell = impl
-  ~dune:(fun _i -> [Dune.stanza {|
-(rule (targets disk.img)
- (action (run dd if=/dev/zero of=disk.img count=100000))
-)|}])
-  ~install:(fun _ -> Functoria.Install.v ~etc:[Fpath.v "disk.img"] ())
-  "shell_config"
-  shellconfig
+let img =
+  if_impl Key.is_solo5 (block_of_file "storage") (block_of_file "disk.img")
 
-let main =
-  let packages = [ package "io-page"; package "duration"; package ~build:true "bos"; package ~build:true "fpath" ] in
-  main
-    ~packages
-    ~deps:[dep config_shell] "Unikernel.Main" (time @-> block @-> job)
-
-let img = Key.(if_impl is_solo5 (block_of_file "storage") (block_of_file "disk.img"))
-
-let () =
-  register "block_test" [main $ default_time $ img]
+let () = register "block_test" [main $ img]
 ```
 
 The `main` binding looks much like the earlier `hello` example, except for the
-addition of a `block` device in the list. When we register the job, we supply a
-block device from a local file via [`block_of_file`](https://docs.mirage.io/mirage/Mirage/#val-block_of_file).
-
-Using `deps` we also supply a _custom dependency_ `config_shell` in charge of 
-building the `disk.img` image. This is done using _dune_ rules.
+addition of a `block` device in the list..
 
 <br />
 <div class="panel callout">
@@ -559,6 +517,14 @@ $ cd device-usage/block
 $ mirage configure -t unix
 $ make depends
 $ make build
+```
+
+Now, with the unikernel built we can run it.
+However, the unikernel expects a block device.
+We can create a disk image of all zeroes before we run the unikernel:
+
+```bash
+$ dd if=/dev/zero of=disk.img count=100000 # only needed once
 $ ./dist/block_test
 ```
 
@@ -580,35 +546,32 @@ Solo5 [block device driver](https://github.com/mirage/mirage-block-solo5) and is
 mapping the unikernel's block requests directly through to it, rather than
 relying on the host OS (the Linux or FreeBSD kernel).
 
-If we tell `solo5-hvt` where the disk image is, it will provide that disk image to the unikernel:
+If we tell `solo5-hvt` where the disk image for the name `storage` is, it will provide that disk image to the unikernel:
 
 ```bash
-$ solo5-hvt --block:storage=disk.img dist/block_test.hvt
+$ solo5-hvt --block:storage=disk.img ./dist/block_test.hvt
             |      ___|
   __|  _ \  |  _ \ __ \
 \__ \ (   | | (   |  ) |
 ____/\___/ _|\___/____/
+Solo5: Bindings version v0.7.5
 Solo5: Memory map: 512 MB addressable:
-Solo5:     unused @ (0x0 - 0xfffff)
-Solo5:       text @ (0x100000 - 0x1eefff)
-Solo5:     rodata @ (0x1ef000 - 0x228fff)
-Solo5:       data @ (0x229000 - 0x2dffff)
-Solo5:       heap >= 0x2e0000 < stack < 0x20000000
-2018-06-21 12:21:11 -00:00: INF [block] sectors = 100000
-read_write=true
-sector_size=512
+Solo5:   reserved @ (0x0 - 0xfffff)
+Solo5:       text @ (0x100000 - 0x1defff)
+Solo5:     rodata @ (0x1df000 - 0x214fff)
+Solo5:       data @ (0x215000 - 0x2c1fff)
+Solo5:       heap >= 0x2c2000 < stack < 0x20000000
+2023-06-27 10:27:24 -00:00: INF [block] { Mirage_block.read_write = true; sector_size = 512;
+              size_sectors = 100000L }
+reading 1 sectors at 100000
+reading 12 sectors at 99989
+2023-06-27 10:27:24 -00:00: INF [block] Test sequence finished
 
-2018-06-21 12:21:11 -00:00: ERR [block] Expecting error output from the following operation...
-2018-06-21 12:21:11 -00:00: ERR [block] Expecting error output from the following operation...
-2018-06-21 12:21:11 -00:00: ERR [block] Expecting error output from the following operation...
-2018-06-21 12:21:11 -00:00: ERR [block] Expecting error output from the following operation...
-2018-06-21 12:21:11 -00:00: INF [block] Test sequence finished
+2023-06-27 10:27:24 -00:00: INF [block] Total tests started: 10
 
-2018-06-21 12:21:11 -00:00: INF [block] Total tests started: 10
+2023-06-27 10:27:24 -00:00: INF [block] Total tests passed:  10
 
-2018-06-21 12:21:11 -00:00: INF [block] Total tests passed:  10
-
-2018-06-21 12:21:11 -00:00: INF [block] Total tests failed:  0
+2023-06-27 10:27:24 -00:00: INF [block] Total tests failed:  0
 
 Solo5: solo5_exit(0) called
 ```
