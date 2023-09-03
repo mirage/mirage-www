@@ -29,23 +29,95 @@ module Blog = struct
     body : string;
   }
 
+  let parse_date str =
+    let date =
+      let int = int_of_string in
+      match String.split_on_char '-' str with
+      | [ year; month; day ] -> (int year, int month, int day)
+      | _ -> failwith ("failed to parse date: '" ^ str ^ "'")
+    in
+    Ptime.of_date date |> Option.get
+
+  module Advisory = struct
+    let take_until fn lst =
+      let rec aux acc = function
+        | [] -> raise Not_found
+        | line :: _ when fn line -> List.rev acc
+        | line :: next -> aux (line :: acc) next
+      in
+      aux [] lst
+
+    let find_field ~field content =
+      let prefix = "- " ^ field in
+      List.find_map
+        (fun s ->
+          if String.starts_with ~prefix s then
+            match String.split_on_char ':' s with
+            | [ _; value ] -> Some (String.trim value)
+            | _ -> None
+          else None)
+        content
+      |> Option.get
+
+    let rec string_trim_char c str =
+      let l = String.length str in
+      if l = 0 then str
+      else if str.[l - 1] = c then string_trim_char c (String.sub str 0 (l - 1))
+      else str
+
+    let parse ~file ~content =
+      let id =
+        match String.split_on_char '.' (Filename.basename file) with
+        | [ id; "txt"; "asc" ] -> id
+        | _ ->
+            failwith
+              "failed to parse advisory ID. Expected file name format is \
+               ID.txt.asc"
+      in
+      match String.split_on_char '\n' content with
+      | "-----BEGIN PGP SIGNED MESSAGE-----" :: _ :: "" :: content ->
+          let content =
+            take_until (String.equal "-----BEGIN PGP SIGNATURE-----") content
+          in
+          let subject =
+            find_field ~field:"Affects" content |> string_trim_char ','
+          in
+          let updated = find_field ~field:"Announced" content |> parse_date in
+          let body =
+            String.concat "\n" content |> Omd.of_string |> Omd.to_html
+          in
+          {
+            updated;
+            authors =
+              [
+                {
+                  People.name = "MirageOS security team";
+                  uri = None;
+                  email = Some "security@mirage.io";
+                };
+              ];
+            subject = "MirageOS security advisory " ^ id ^ ": " ^ subject;
+            permalink = "MSA" ^ id;
+            body;
+          }
+      | _ -> failwith "Failed to parse advisory message"
+  end
+
   let all () =
-    Utils.map_md_files_in_dir ~decode_meta:meta_of_yaml
-      (fun ~file:_ ~meta ~body ->
-        let date =
-          let int = int_of_string in
-          match String.split_on_char '-' meta.updated with
-          | [ year; month; day ] -> (int year, int month, int day)
-          | _ -> failwith ("failed to parse date: '" ^ meta.updated ^ "'")
-        in
-        {
-          updated = Ptime.of_date date |> Option.get;
-          authors = meta.authors;
-          subject = meta.subject;
-          permalink = meta.permalink;
-          body = Omd.of_string body |> Omd.to_html;
-        })
-      "data/blog/"
+    let blog =
+      Utils.map_md_files_in_dir ~decode_meta:meta_of_yaml
+        (fun ~file:_ ~meta ~body ->
+          {
+            updated = parse_date meta.updated;
+            authors = meta.authors;
+            subject = meta.subject;
+            permalink = meta.permalink;
+            body = Omd.of_string body |> Omd.to_html;
+          })
+        "data/blog/"
+    in
+    let advisories = Utils.map_files_in_dir Advisory.parse "data/security" in
+    blog @ advisories
     |> List.sort (fun x1 x2 -> Ptime.compare x1.updated x2.updated)
     |> List.rev
 
