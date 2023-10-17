@@ -207,9 +207,48 @@ let optional_monitoring time pclock stack =
     (mirage_monitoring $ time $ pclock $ stack)
     noop
 
+let syslog =
+  let syslog =
+    let doc = Key.Arg.info ~doc:"syslog host IP" ["syslog"] in
+    Key.(v (create "syslog" Arg.(opt (some ip_address) None doc)))
+  in
+  let hostname_key =
+    let hostname =
+      let doc =
+        Key.Arg.info ~doc:"Hostname for syslog" [ "syslog-hostname" ]
+      in
+      Key.(create "syslog-hostname" Arg.(opt (some string) None doc))
+    in
+    Key.v hostname
+  in
+  let connect _ modname = function
+    | [ _ ; stack ] ->
+      Fmt.str "Lwt.return (match %a with\
+               | None -> Logs.warn (fun m -> m \"no syslog specified, dumping on stdout\")\
+               | Some ip -> Logs.set_reporter (%s.create %s ip ~hostname:%a ()))"
+        Key.serialize_call syslog modname stack
+        Key.serialize_call hostname_key
+    | _ -> assert false
+  in
+  impl
+    ~packages:[ package ~sublibs:["mirage"] ~min:"0.4.0" "logs-syslog" ]
+    ~keys:[ hostname_key ; syslog ]
+    ~connect "Logs_syslog_mirage.Udp"
+    (pclock @-> stackv4v6 @-> job)
+
+let enable_syslog =
+  let doc = Key.Arg.info ~doc:"Enable syslog" [ "syslog" ] in
+  Key.(create "syslog" Arg.(flag doc))
+
+let optional_syslog pclock stack =
+  if_impl (Key.value enable_syslog)
+    (syslog $ pclock $ stack)
+    noop
+
 let () =
   register "www"
     [
       optional_monitoring default_time default_posix_clock internal_stack;
+      optional_syslog default_posix_clock internal_stack;
       app $ default_posix_clock $ default_time $ external_stack;
     ]
