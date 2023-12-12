@@ -1,6 +1,6 @@
 (library
  (name mirageio_template)
- (libraries dream-mirage mirageio_data))
+ (libraries dream dream-mirage mirageio_data))
 
 (rule
  (targets atom.ml)

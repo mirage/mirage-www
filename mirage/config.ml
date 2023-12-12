@@ -202,10 +202,18 @@ let enable_metrics =
   let doc = Key.Arg.info ~doc:"Enable metrics reporting" [ "metrics" ] in
   Key.(create "metrics" Arg.(flag doc))
 
+type i0 = I0
+let i0 = Functoria.Type.v I0
+let no0 = Functoria.impl "Int" job
+
+type n1 = N1
+let n1 = Functoria.Type.v N1
+let noop1 = Functoria.impl "Set.Make" (job @-> job)
+
 let optional_monitoring time pclock stack =
   if_impl (Key.value enable_metrics)
     (mirage_monitoring $ time $ pclock $ stack)
-    noop
+    (noop1 $ no0)
 
 let () =
   register "www"
