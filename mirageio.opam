@@ -26,6 +26,7 @@ depends: [
   "dream"
   "dream-mirage"
   "tcpip" {>= "8.0"}
+  "mirage" {>= "4.4.1"}
   "mirage-time" {>= "3.0"}
   "mirage-kv-mem" {>= "3.2.1"}
   "mirage-clock-unix" {>= "3.0"}
