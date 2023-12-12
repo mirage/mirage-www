@@ -3,5 +3,5 @@ pin-depends: [
   ["dream.dev"         "git+https://github.com/tmcgilchrist/dream.git#fcc20d00bf61a1c417aa38e18b62aa3d0962704e"]
   ["dream-mirage.dev"  "git+https://github.com/tmcgilchrist/dream.git#fcc20d00bf61a1c417aa38e18b62aa3d0962704e"]
   ["dream-httpaf.dev"  "git+https://github.com/tmcgilchrist/dream.git#fcc20d00bf61a1c417aa38e18b62aa3d0962704e"]
-  ["tailwindcss.dev" "git+https://github.com/tmattio/opam-tailwindcss#a4c0ee9b9a80d44c4a953b07dc29e4aa065adf57"]
+  ["tailwindcss.dev" "https://github.com/tmattio/opam-tailwindcss/archive/3e60fc32bbcf82525999d83ad0f395e16107026b.tar.gz"]
 ]
