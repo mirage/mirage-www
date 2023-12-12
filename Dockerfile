@@ -4,7 +4,6 @@ RUN mkdir -p /home/opam/www/mirage
 WORKDIR /home/opam/www
 RUN sudo ln -f /usr/bin/opam-2.1 /usr/bin/opam && cd ~/opam-repository && git pull origin master && git reset --hard 30b1b97d735732e40996cf2e6b06d478ac40633f && opam update
 RUN opam pin tailwindcss.dev https://github.com/tmattio/opam-tailwindcss/archive/3e60fc32bbcf82525999d83ad0f395e16107026b.tar.gz
-RUN opam repo add mirage-dev git+https://github.com/mirage/mirage-dev.git#749c02302f8f15e609332edbe827541558554a80
 RUN opam install mirage
 COPY --chown=opam:root mirage/config.ml /home/opam/www/mirage/
 COPY --chown=opam:root mirageio.opam /home/opam/www/
