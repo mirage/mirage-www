@@ -1,5 +1,5 @@
 ---
-updated: 2013-08-15
+updated: 2024-03-23
 author:
   name: Balraj Singh
   uri:
@@ -89,8 +89,9 @@ Now write a program that spins off two threads, each of which sleeps for some
 amount of time, say 1 and 2 seconds and then one prints "Heads", the other
 "Tails". After both have finished, it prints "Finished" and exits.
 
-To sleep for some number of nanoseconds use `OS.Time.sleep_ns`, and to print to
-the console use `C.log`. Note that `OS` is a Mirage-specific module; if you are
+To sleep for some number of nanoseconds use the function `sleep_ns` declared in the
+interface [Mirage_time.S](https://mirage.github.io/mirage-time/mirage-time/Mirage_time/module-type-S/index.html), and to print to
+the console use `Logs.info`. Note that `Mirage_time` is a Mirage-specific module; if you are
 using Lwt in another context, use `Lwt_unix.sleep` and `Lwt_io.write`. (You will
 also need to manually start the main event loop with `Lwt_main.run`.)
 
@@ -100,7 +101,7 @@ functions for converting between seconds, milliseconds, nanoseconds, and other
 units of time.
 
 ```ocaml
-OS.Time.sleep_ns (Duration.of_sec 3) (* sleep for 3 seconds *)
+Time.sleep_ns (Duration.of_sec 3) (* sleep for 3 seconds *)
 ```
 
 You will need to have MirageOS [installed](/wiki/install). Create a file
@@ -109,23 +110,20 @@ You will need to have MirageOS [installed](/wiki/install). Create a file
 ```ocaml
 open Mirage
 
-let packages = [package "duration"]
+let main =
+  main ~packages:[ package "duration" ] "Unikernel.Heads1" (time @-> job)
 
-let () =
-  let main = foreign ~packages "Unikernel.Heads1" (console @-> job) in
-  register "heads1" [ main $ default_console ]
+let () = register "heads1" [ main $ default_time ]
 ```
-
 Add a file `unikernel.ml` with the following content and edit it:
 
 ```ocaml
-open OS
 open Lwt.Infix
 
-module Heads1 (C: Mirage_console.S) = struct
-  let start c =
+module Heads1 (Time : Mirage_time.S) = struct
+  let start _time =
     (* Add your implementation here... *)
-    C.log c "Finished"
+    Logs.info (fun m -> m "Finished")
 end
 ```
 
@@ -143,18 +141,18 @@ If you prefer to build for another target (like `xen` or `hvt`), change the `-t`
 ### Solution
 
 ```ocaml
-open OS
 open Lwt.Infix
 
-module Heads1 (C: Mirage_console.S) = struct
-
-  let start c =
-    Lwt.join [
-      (Time.sleep_ns (Duration.of_sec 1) >>= fun () -> C.log c "Heads");
-      (Time.sleep_ns (Duration.of_sec 2) >>= fun () -> C.log c "Tails")
-    ] >>= fun () ->
-    C.log c "Finished"
-
+module Heads1 (Time : Mirage_time.S) = struct
+  let start _time =
+    Lwt.join
+      [
+        ( Time.sleep_ns (Duration.of_sec 1) >|= fun () ->
+          Logs.info (fun m -> m "Heads") );
+        ( Time.sleep_ns (Duration.of_sec 2) >|= fun () ->
+          Logs.info (fun m -> m "Tails") );
+      ]
+    >|= fun () -> Logs.info (fun m -> m "Finished")
 end
 ```
 
@@ -171,20 +169,19 @@ For convenience, here is a `config.ml` which you might use for this exercise:
 ```ocaml
 open Mirage
 
-let packages = [package "duration"; package "randomconv"]
+let main =
+  let packages = [ package "duration"; package ~max:"0.2.0" "randomconv" ] in
+  main ~packages "Unikernel.Echo_server" (time @-> random @-> job)
 
-let () =
-  let main = foreign ~packages "Unikernel.Echo_server" (console @-> random @-> job) in
-  register "echo_server" [ main $ default_console $ default_random ]
+let () = register "echo_server" [ main $ default_time $ default_random ]
 ```
 
 You might notice that it's very similar to the previous example `config.ml`, but it requires an extra package `randomconv`.  `randomconv` has convenience functions for dealing with random data, which this challenge asks you to do.  Here is a basic dummy input generator you can use for testing:
 
 ```ocaml
   let read_line () =
-    OS.Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:2500 R.generate))
-    >|= fun () ->
-    String.make (Randomconv.int ~bound:20 R.generate) 'a'
+    Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:2500 generate))
+    >|= fun () -> String.make (Randomconv.int ~bound:20 generate) 'a'
 ```
 
 By the way, the `>|=` operator ("map") used here is similar to `>>=` but automatically wraps the result of the function you provide with `return`. It's used here because `String.make` is synchronous (it doesn't return a thread). We could also have used `>>=` and `return` together to get the same effect.
@@ -193,26 +190,24 @@ By the way, the `>|=` operator ("map") used here is similar to `>>=` but automat
 ### Solution
 
 ```ocaml
-open OS
 open Lwt.Infix
 
-module Echo_server (C: Mirage_console.S) (R: Mirage_random.S) = struct
+module Echo_server (Time : Mirage_time.S) (R : Mirage_random.S) = struct
+  let generate n = R.generate n |> Cstruct.to_string
 
   let read_line () =
-    OS.Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:2500 R.generate))
-    >|= fun () ->
-    String.make (Randomconv.int ~bound:20 R.generate) 'a'
+    Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:2500 generate))
+    >|= fun () -> String.make (Randomconv.int ~bound:20 generate) 'a'
 
-  let start c _r =
+  let start _time _r =
     let rec echo_server = function
       | 0 -> Lwt.return ()
       | n ->
-        read_line () >>= fun s ->
-        C.log c s >>= fun () ->
-        echo_server (n - 1)
+          read_line () >>= fun s ->
+          Logs.info (fun m -> m "%s" s);
+          echo_server (n - 1)
     in
     echo_server 10
-
 end
 ```
 
@@ -278,8 +273,8 @@ If you want to spawn a thread without waiting for the result, use `Lwt.async`:
 
 ```ocaml
 Lwt.async (fun () ->
-  OS.Time.sleep_ns (Duration.of_sec 10) >>= fun () ->
-  C.log c "Finished"
+  Time.sleep_ns (Duration.of_sec 10) >|= fun () ->
+  Logs.info (fun m -> m "Tails")
 )
 ```
 
@@ -314,7 +309,7 @@ let test1 () =
     (fun ex -> print_endline "caught exception!"; Lwt.return ())
 
 let test2 () =
-  let t = OS.Time.sleep_ns (Duration.of_sec 1) >>= fun () -> raise (Failure "late failure") in
+  let t = Time.sleep_ns (Duration.of_sec 1) >>= fun () -> raise (Failure "late failure") in
   Lwt.catch (fun () -> t)
     (fun ex -> print_endline "caught exception!"; Lwt.return ())
 ```
@@ -448,25 +443,56 @@ Modify the `timeout` function so that it returns either `None` if `t` has not ye
 You can test your solution with this application, which creates a thread that may be cancelled before it returns:
 
 ```ocaml
-  let start c _r =
+  let start _time _r =
     let t =
-      Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:3000 R.generate))
+      Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:3000 generate))
       >|= fun () -> "Heads"
     in
-    timeout (Duration.of_sec 2) t >>= function
-    | None   -> C.log c "Cancelled"
-    | Some v -> C.log c (Printf.sprintf "Returned %S" v)
+    timeout (Duration.of_sec 2) t >|= function
+    | None -> Logs.info (fun m -> m "Cancelled")
+    | Some v -> Logs.info (fun m -> m "Returned %S" v)
+```
+
+For convenience, here is a `config.ml` which you might use for this exercise:
+
+```ocaml
+open Mirage
+
+let main =
+  main
+    ~packages:[ package "duration"; package ~max:"0.2.0" "randomconv" ]
+    "Unikernel.Timeout1"
+    (time @-> random @-> job)
+
+let () = register "timeout1" [ main $ default_time $ default_random ]
 ```
 
 ### Solution
 
 ```ocaml
+open Lwt.Infix
+
+module Timeout1 (Time : Mirage_time.S) (R : Mirage_random.S) = struct
   let timeout delay t =
     Time.sleep_ns delay >>= fun () ->
     match Lwt.state t with
-    | Lwt.Sleep    -> Lwt.cancel t; Lwt.return None
+    | Lwt.Sleep ->
+        Lwt.cancel t;
+        Lwt.return None
     | Lwt.Return v -> Lwt.return (Some v)
-    | Lwt.Fail ex  -> Lwt.fail ex
+    | Lwt.Fail ex -> Lwt.fail ex
+
+  let generate i = R.generate i |> Cstruct.to_string
+
+  let start _time _r =
+    let t =
+      Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:3000 generate))
+      >|= fun () -> "Heads"
+    in
+    timeout (Duration.of_sec 2) t >|= function
+    | None -> Logs.info (fun m -> m "Cancelled")
+    | Some v -> Logs.info (fun m -> m "Returned %S" v)
+end
 ```
 
 This solution and application are found in [tutorial/lwt/timeout1/unikernel.ml][timeout1_unikernel.ml] in the repository.
