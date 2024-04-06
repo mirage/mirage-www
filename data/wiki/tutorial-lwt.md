@@ -81,7 +81,7 @@ Two important functions to compose threads are `join` and `choose`.
 
 `choose l` behaves as the first thread in `l` to terminate. If several threads are already terminated, one is chosen at random.
 
-The [Lwt_list](https://ocsigen.org/lwt/5.1.2/api/Lwt_list) module provides many other functions for handling lists of threads.
+The [Lwt_list](https://ocsigen.org/lwt/latest/api/Lwt_list) module provides many other functions for handling lists of threads.
 
 ## Challenge 1: Sleep and join
 
@@ -533,7 +533,7 @@ Found in [lwt/tutorial/timeout2/unikernel.ml][timeout2_unikernel.ml] in the repo
 The `cancel` function should be used very sparingly, since it essentially throws an unexpected exception into the middle of some executing code that probably wasn't expecting it.
 A cancel that occurs when the thread happens to be performing an uncancellable operation will be silently ignored.
 
-A safer alternative is to use [Lwt_switch](https://ocsigen.org/lwt/5.1.2/api/Lwt_switch).
+A safer alternative is to use [Lwt_switch](https://ocsigen.org/lwt/latest/api/Lwt_switch).
 This means that cancellation will only happen at well defined points, although it does require explicit support from the code being cancelled.
 If you have a function that only responds to cancel, you might want to wrap it in a function that takes a switch and cancels it when the switch is turned off.
 
