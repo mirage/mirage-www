@@ -26,7 +26,7 @@ The first useful function is `return`, which constructs a trivial, already-retur
 ```
 
 This is useful if an API requires a thread, but you already happen to know the value.
-Once the value is wrapped in its Lwt thread, it cannot directly be used (as in general a thread may not have terminated yet). This is where the `>>=` operator (pronounced "bind") comes in:
+Once the value is wrapped in its Lwt thread, it cannot directly be used (as in general a thread may not have terminated yet). This is where the `>>=` infix operator (pronounced "bind") comes in:
 
 ```ocaml
   val ( >>= ): 'a Lwt.t -> ('a -> 'b Lwt.t) -> 'b Lwt.t
