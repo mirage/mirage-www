@@ -18,7 +18,8 @@
   (source_tree link/)
   (source_tree paper/)
   (source_tree weekly/)
-  (source_tree wiki/))
+  (source_tree wiki/)
+  (source_tree security/))
  (action
   (chdir
    %{workspace_root}
