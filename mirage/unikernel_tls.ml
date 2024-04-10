@@ -13,27 +13,31 @@ type t = {
   https_port : int;
 }
 
+let docs = Cli.docs
+
 let dns_key =
-  let doc = Arg.info ~doc:"nsupdate key (name:type:value,...)" [ "dns-key" ] in
+  let doc =
+    Arg.info ~docs ~doc:"nsupdate key (name:type:value,...)" [ "dns-key" ]
+  in
   Arg.(required & opt (some string) None doc)
 
 let ip_address = Arg.conv (Ipaddr.of_string, Ipaddr.pp)
 
 let dns_server =
-  let doc = Arg.info ~doc:"dns server IP" [ "dns-server" ] in
+  let doc = Arg.info ~docs ~doc:"dns server IP" [ "dns-server" ] in
   Arg.(required & opt (some ip_address) None doc)
 
 let dns_port =
-  let doc = Arg.info ~doc:"dns server port" [ "dns-port" ] in
+  let doc = Arg.info ~docs ~doc:"dns server port" [ "dns-port" ] in
   Arg.(value & opt int 53 doc)
 
 let key_seed =
-  let doc = Arg.info ~doc:"certificate key seed" [ "key-seed" ] in
+  let doc = Arg.info ~docs ~doc:"certificate key seed" [ "key-seed" ] in
   Arg.(required & opt (some string) None doc)
 
 let additional_hostnames =
   let doc =
-    Arg.info ~doc:"Additional names (used for certificates)"
+    Arg.info ~docs ~doc:"Additional names (used for certificates)"
       [ "additional-hostname" ]
   in
   let domain = Arg.conv (Domain_name.of_string, Domain_name.pp) in
