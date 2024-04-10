@@ -6,7 +6,8 @@ all::
 
 .PHONY: deps
 deps: ## Install development dependencies
-	opam install -y ocamlformat merlin
+	opam pin add -yn tailwindcss.dev git+https://github.com/tmattio/opam-tailwindcss
+	opam install -y dune-release ocamlformat utop ocaml-lsp-server tailwindcss
 	opam install --deps-only --with-test --with-doc -y .
 
 .PHONY: create_switch
@@ -19,6 +20,10 @@ switch: create_switch deps ## Create an opam switch and install development depe
 .PHONY: build
 build:: ## Build the project, including non installable libraries and executables
 	opam exec -- dune build --root .
+
+.PHONY: install
+install: all ## Install the packages on the system
+	opam exec -- dune install --root .
 
 .PHONY: start
 start: all ## Run the produced executable
@@ -39,3 +44,7 @@ fmt: ## Format the codebase with ocamlformat
 .PHONY: watch
 watch: ## Watch for the filesystem and rebuild on every change
 	opam exec -- dune build @run -w --force --no-buffer
+
+.PHONY: utop
+utop: ## Run a REPL and link with the project's libraries
+	opam exec -- dune utop --root . lib -- -implicit-bindings

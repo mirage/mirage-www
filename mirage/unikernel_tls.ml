@@ -1,71 +1,4 @@
 open Lwt.Syntax
-open Cmdliner
-
-type t = {
-  dns_key : string;
-  key_seed : string;
-  dns_server : Ipaddr.t;
-  dns_port : int;
-  host : [ `host ] Domain_name.t;
-  redirect : string option;
-  additional_hostnames : [ `raw ] Domain_name.t list;
-  http_port : int;
-  https_port : int;
-}
-
-let dns_key =
-  let doc = Arg.info ~doc:"nsupdate key (name:type:value,...)" [ "dns-key" ] in
-  Arg.(required & opt (some string) None doc)
-
-let ip_address = Arg.conv (Ipaddr.of_string, Ipaddr.pp)
-
-let dns_server =
-  let doc = Arg.info ~doc:"dns server IP" [ "dns-server" ] in
-  Arg.(required & opt (some ip_address) None doc)
-
-let dns_port =
-  let doc = Arg.info ~doc:"dns server port" [ "dns-port" ] in
-  Arg.(value & opt int 53 doc)
-
-let key_seed =
-  let doc = Arg.info ~doc:"certificate key seed" [ "key-seed" ] in
-  Arg.(required & opt (some string) None doc)
-
-let additional_hostnames =
-  let doc =
-    Arg.info ~doc:"Additional names (used for certificates)"
-      [ "additional-hostname" ]
-  in
-  let domain = Arg.conv (Domain_name.of_string, Domain_name.pp) in
-  Arg.(value & opt (list domain) [] doc)
-
-let setup =
-  Term.(
-    const
-      (fun
-        http_port
-        redirect
-        https_port
-        dns_key
-        dns_server
-        dns_port
-        host
-        key_seed
-        additional_hostnames
-      ->
-        {
-          http_port;
-          redirect;
-          https_port;
-          dns_key;
-          dns_server;
-          dns_port;
-          host;
-          key_seed;
-          additional_hostnames;
-        })
-    $ Cli.http_port $ Cli.redirect $ Cli.https_port $ dns_key $ dns_server
-    $ dns_port $ Cli.host $ key_seed $ additional_hostnames)
 
 module Make
     (Random : Mirage_random.S)
@@ -92,12 +25,11 @@ struct
                 exit 42))
     | _ -> ()
 
-  let tls_init stack
-      { host; additional_hostnames; dns_key; key_seed; dns_server; dns_port; _ }
-      =
+  let tls_init stack hostname additional_hostnames =
     let* certificates_result =
-      Certify.retrieve_certificate stack ~dns_key ~hostname:host
-        ~additional_hostnames ~key_seed dns_server dns_port
+      Certify.retrieve_certificate stack ~dns_key:(Key_gen.dns_key ()) ~hostname
+        ~additional_hostnames ~key_seed:(Key_gen.key_seed ())
+        (Key_gen.dns_server ()) (Key_gen.dns_port ())
     in
     match certificates_result with
     | Error (`Msg m) -> Lwt.fail_with m
@@ -106,20 +38,27 @@ struct
         let conf = Tls.Config.server ~certificates:(`Single certificates) () in
         Lwt.return conf
 
-  let start _ _ _ stack t =
-    let* cfg = tls_init stack t in
+  let start _ _ _ stack =
+    let host = Key_gen.host () in
+    let redirect = Key_gen.redirect () in
+    let hostname = Domain_name.(of_string_exn (Key_gen.host ()) |> host_exn) in
+    let additional_hostnames =
+      List.map
+        (fun n -> Domain_name.(of_string_exn n))
+        (Key_gen.additional_hostnames ())
+    in
+    let* cfg = tls_init stack hostname additional_hostnames in
     let http =
       WWW.Dream.(
-        http ~port:t.http_port (Stack.tcp stack) @@ fun req ->
-        redirect ~status:`Moved_Permanently req
-          ("https://" ^ Domain_name.to_string t.host))
+        http ~port:(Key_gen.http_port ()) (Stack.tcp stack) @@ fun req ->
+        redirect ~status:`Moved_Permanently req ("https://" ^ host))
     in
     let https =
-      match t.redirect with
-      | None -> WWW.https ~port:t.https_port ~tls:cfg stack
+      match redirect with
+      | None -> WWW.https ~port:(Key_gen.https_port ()) ~tls:cfg stack
       | Some domain ->
           WWW.Dream.(
-            https ~port:t.https_port (Stack.tcp stack) @@ fun req ->
+            https ~port:(Key_gen.https_port ()) (Stack.tcp stack) @@ fun req ->
             redirect ~status:`Moved_Permanently req domain)
     in
     Lwt.join [ http; https ]

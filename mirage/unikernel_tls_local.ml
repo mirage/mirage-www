@@ -1,18 +1,4 @@
 open Lwt.Syntax
-open Cmdliner
-
-type t = {
-  host : [ `host ] Domain_name.t;
-  http_port : int;
-  https_port : int;
-  redirect : string option;
-}
-
-let setup =
-  Term.(
-    const (fun host redirect http_port https_port ->
-        { host; redirect; http_port; https_port })
-    $ Cli.host $ Cli.redirect $ Cli.http_port $ Cli.https_port)
 
 module Make
     (Random : Mirage_random.S)
@@ -38,19 +24,20 @@ struct
                 exit 42))
     | _ -> ()
 
-  let start _ _ _ stack { http_port; https_port; host; redirect } =
+  let start _ _ _ stack =
+    let host = Key_gen.host () in
+    let redirect = Key_gen.redirect () in
     let http =
       WWW.Dream.(
-        http ~port:http_port (Stack.tcp stack) @@ fun req ->
-        redirect ~status:`Moved_Permanently req
-          ("https://" ^ Domain_name.to_string host))
+        http ~port:(Key_gen.http_port ()) (Stack.tcp stack) @@ fun req ->
+        redirect ~status:`Moved_Permanently req ("https://" ^ host))
     in
     let https =
       match redirect with
-      | None -> WWW.https ~port:https_port stack
+      | None -> WWW.https ~port:(Key_gen.https_port ()) stack
       | Some domain ->
           WWW.Dream.(
-            https ~port:https_port (Stack.tcp stack) @@ fun req ->
+            https ~port:(Key_gen.https_port ()) (Stack.tcp stack) @@ fun req ->
             redirect ~status:`Moved_Permanently req domain)
     in
     Lwt.join [ http; https ]
