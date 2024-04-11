@@ -82,13 +82,6 @@ let internal_stack =
     (generic_stackv4v6 ~group:"internal" internal_netif)
     external_stack
 
-(* FIXME: should be exposed in mirage? *)
-let runtime_network_key ~pos ~name fmt =
-  Fmt.kstr
-    (Runtime_arg.create ~name ~pos
-       ~packages:[ package "mirage-runtime" ~sublibs:[ "network" ] ])
-    ("Mirage_runtime_network." ^^ fmt)
-
 let mirage_monitoring =
   let ip = runtime_arg ~pos:__POS__ "Cli.metrics_ip" in
   let port = runtime_arg ~pos:__POS__ "Cli.metrics_port" in
