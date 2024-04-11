@@ -27,20 +27,23 @@ let tls_key =
 
 let packages = [ package "mirageio"; package ~build:true "yaml" ]
 
+let packages_v =
+  Key.if_ Key.is_solo5 [ package ~scope:`Switch "solo5" ~max:"0.8.0" ] []
+
 let https =
   let runtime_args = [ runtime_arg ~pos:__POS__ "Unikernel_tls.setup" ] in
   let packages = package ~sublibs:[ "mirage" ] "dns-certify" :: packages in
-  main "Unikernel_tls.Make" ~runtime_args ~packages
+  main "Unikernel_tls.Make" ~runtime_args ~packages ~packages_v
     (random @-> pclock @-> time @-> stackv4v6 @-> job)
 
 let https_local =
   let runtime_args = [ runtime_arg ~pos:__POS__ "Unikernel_tls_local.setup" ] in
-  main "Unikernel_tls_local.Make" ~runtime_args ~packages
+  main "Unikernel_tls_local.Make" ~runtime_args ~packages ~packages_v
     (random @-> pclock @-> time @-> stackv4v6 @-> job)
 
 let http =
   let runtime_args = [ runtime_arg ~pos:__POS__ "Unikernel.setup" ] in
-  main "Unikernel.Make" ~runtime_args ~packages
+  main "Unikernel.Make" ~runtime_args ~packages ~packages_v
     (pclock @-> time @-> stackv4v6 @-> job)
 
 let app =
@@ -81,13 +84,6 @@ let internal_stack =
     (Key.value separate_networks)
     (generic_stackv4v6 ~group:"internal" internal_netif)
     external_stack
-
-(* FIXME: should be exposed in mirage? *)
-let runtime_network_key ~pos ~name fmt =
-  Fmt.kstr
-    (Runtime_arg.create ~name ~pos
-       ~packages:[ package "mirage-runtime" ~sublibs:[ "network" ] ])
-    ("Mirage_runtime_network." ^^ fmt)
 
 let mirage_monitoring =
   let ip = runtime_arg ~pos:__POS__ "Cli.metrics_ip" in
