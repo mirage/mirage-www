@@ -28,11 +28,13 @@ known). At some point, it changes to be either _returned_ (with a
 value of type `'a`) or _failed_ (with an exception). Once returned or
 failed, a thread never changes state again.
 
-Lwt provides a number of functions for working with threads.
-The first useful function is `return`, which constructs a trivial, already-returned thread:
+Lwt provides a number of functions for working with threads.  The
+first useful function is `return`, which constructs a trivial,
+already-returned thread:
 
 ```ocaml
-  val return: 'a -> 'a Lwt.t
+# Lwt.return;;
+- : 'a -> 'a Lwt.t = <fun>
 ```
 
 This is useful if an API requires a thread, but you already happen to
@@ -42,7 +44,8 @@ terminated yet). This is where the `>>=` infix operator (pronounced
 "bind") comes in:
 
 ```ocaml
-  val ( >>= ): 'a Lwt.t -> ('a -> 'b Lwt.t) -> 'b Lwt.t
+# Lwt.( >>= );;
+- : 'a Lwt.t -> ('a -> 'b Lwt.t) -> 'b Lwt.t = <fun>
 ```
 
 `t >>= f` creates a thread which first waits for thread `t` to return
@@ -58,19 +61,19 @@ equivalent Lwt-threaded one using just `>>=` and `return`.  For
 example consider this code to input two values and add them:
 
 ```ocaml
-  let x =
-    let a = get_input "Enter a" in
-    let b = get_input "Enter b" in
-    a + b
+let x =
+  let a = get_input "Enter a" in
+  let b = get_input "Enter b" in
+  a + b
 ```
 
 Removing the `let ... in ...` syntax, we could also write:
 
 ```ocaml
-  let x =
-    get_input "Enter a" |> fun a ->
-    get_input "Enter b" |> fun b ->
-    a + b
+let x =
+  get_input "Enter a" |> fun a ->
+  get_input "Enter b" |> fun b ->
+  a + b
 ```
 
 If the `get_input` function's type is changed from `string -> int` to
@@ -78,10 +81,12 @@ the threaded-equivalent, `string -> int Lwt.t`, then our example could
 be changed to:
 
 ```ocaml
-  let x =
-    get_input "Enter a" >>= fun a ->
-    get_input "Enter b" >>= fun b ->
-    Lwt.return (a + b)
+open Lwt.Infix
+
+let x =
+  get_input_lwt "Enter a" >>= fun a ->
+  get_input_lwt "Enter b" >>= fun b ->
+  Lwt.return (a + b)
 ```
 
 Note that the final result, `x`, is itself a thread now. Since we
@@ -95,7 +100,8 @@ multiple things at once, by composing threads in more ways than just
 and `choose`.
 
 ```ocaml
-  val join : unit Lwt.t list -> unit Lwt.t
+# Lwt.join;;
+- : unit Lwt.t list -> unit Lwt.t = <fun>
 ```
 
 `join` takes a list of threads and waits for all of them to
@@ -103,7 +109,8 @@ terminate. If at least one thread fails then `join l` will fail with
 the same exception as the first to fail, after all threads terminate.
 
 ```ocaml
- val choose : 'a t list -> 'a t
+# Lwt.choose;;
+- : 'a Lwt.t list -> 'a Lwt.t = <fun>
 ```
 
 `choose l` behaves as the first thread in `l` to terminate. If several
@@ -132,13 +139,14 @@ functions for converting between seconds, milliseconds, nanoseconds, and other
 units of time.
 
 ```ocaml
-Time.sleep_ns (Duration.of_sec 3) (* sleep for 3 seconds *)
+(* sleep for n seconds *)
+let sleep_s n = Time.sleep_ns (Duration.of_sec n)
 ```
 
 You will need to have MirageOS [installed](/wiki/install). Create a file
 `config.ml` with the following content:
 
-```ocaml
+```ocaml file=files/tutorial-lwt/heads1.ml
 open Mirage
 
 let main =
@@ -160,11 +168,10 @@ end
 
 Assuming you want to build as a normal Unix process, compile the application with:
 
-```sh
-  mirage configure -t unix
-  make depend
-  make
-  ./main.native
+```sh skip
+$  mirage configure -t unix
+$  make depend
+$  dune exec -- ./main.exe
 ```
 
 If you prefer to build for another target (like `xen` or `hvt`),
@@ -208,7 +215,7 @@ syntax (e.g. `while` and `for`).
 
 For convenience, here is a `config.ml` which you might use for this exercise:
 
-```ocaml
+```ocaml file=files/tutorial-lwt/echo_server.ml
 open Mirage
 
 let main =
@@ -225,9 +232,9 @@ which this challenge asks you to do.  Here is a basic dummy input
 generator you can use for testing:
 
 ```ocaml
-  let read_line () =
-    Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:2500 generate))
-    >|= fun () -> String.make (Randomconv.int ~bound:20 generate) 'a'
+let read_line () =
+  Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:2500 generate))
+  >|= fun () -> String.make (Randomconv.int ~bound:20 R.generate) 'a'
 ```
 
 By the way, the `>|=` operator ("map") used here is similar to `>>=`
@@ -242,10 +249,8 @@ together to get the same effect.
 open Lwt.Infix
 
 module Echo_server (Time : Mirage_time.S) (R : Mirage_random.S) = struct
-  let generate n = R.generate n |> Cstruct.to_string
-
   let read_line () =
-    Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:2500 generate))
+    Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:2500 R.generate))
     >|= fun () -> String.make (Randomconv.int ~bound:20 generate) 'a'
 
   let start _time _r =
@@ -344,10 +349,11 @@ which continues
 If you want to spawn a thread without waiting for the result, use `Lwt.async`:
 
 ```ocaml
-Lwt.async (fun () ->
-  Time.sleep_ns (Duration.of_sec 10) >|= fun () ->
-  Logs.info (fun m -> m "Tails")
-)
+let spwawn () =
+  Lwt.async (fun () ->
+    Time.sleep_ns (Duration.of_sec 10) >|= fun () ->
+    Logs.info (fun m -> m "Tails")
+  )
 ```
 
 **Note**: do _not_ do `let _ = my_background_thread ()`. This ignores
@@ -367,15 +373,16 @@ it occurred and in which module.
 
 ```ocaml
 (* Handle a frame of data from the network... *)
-Lwt.async (fun () ->
-  Lwt.catch (fun () -> fn data)
-    (fun ex ->
-       Log.err (fun f -> f "uncaught exception from listen callback \
-                            while handling frame:@\n%a@\nException: @[%s@]"
-                   S.pp_frame data (Printexc.to_string ex));
-       Lwt.return ()
-    )
-)
+let process fn data =
+  Lwt.async (fun () ->
+    Lwt.catch (fun () -> fn data)
+      (fun ex ->
+         Logs.err (fun f -> f "uncaught exception from listen callback \
+                              while handling frame:@\n%a@\nException: @[%s@]"
+                              pp_frame data (Printexc.to_string ex));
+         Lwt.return ()
+      )
+  )
 ```
 
 By the way, the reason `async` and `catch` take functions that create
@@ -467,7 +474,7 @@ necessary.
 
 The Lwt-equivalent of
 
-```ocaml
+```ocaml skip
 try foo x
 with
 | Error_you_want_to_catch -> (* handle error here *)
@@ -475,7 +482,7 @@ with
 
 is
 
-```ocaml
+```ocaml skip
  Lwt.catch
   (fun () -> foo x)
   (function
@@ -492,7 +499,7 @@ automatically freed by the garbage collector then you should use
 `Lwt.finalize` to ensure it is cleaned up whether the function using
 it succeeds or not:
 
-```ocaml
+```ocaml skip
   let r = Resource.alloc () in
   Lwt.finalize
     (fun () -> use r)
@@ -502,7 +509,7 @@ it succeeds or not:
 To make it harder to get this wrong, it is a good idea to provide a
 `with_` function, so users can just do:
 
-```ocaml
+```ocaml skip
   with_resource (fun r -> use r)
 ```
 
@@ -534,10 +541,8 @@ scope of this tutorial). A simple timeout function that cancels a
 thread after a given number of seconds can be written easily:
 
 ```ocaml
-  (* In this example and all those afterwards, we consider Lwt and OS to be
-     opened *)
-  let timeout delay t =
-    Time.sleep_ns delay >|= fun () -> cancel t
+let timeout delay t =
+  Time.sleep_ns delay >|= fun () -> Lwt.cancel t
 ```
 
 ### Challenge 3: Timeouts
@@ -555,19 +560,21 @@ You can test your solution with this application, which creates a
 thread that may be cancelled before it returns:
 
 ```ocaml
-  let start _time _r =
-    let t =
-      Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:3000 generate))
-      >|= fun () -> "Heads"
-    in
-    timeout (Duration.of_sec 2) t >|= function
-    | None -> Logs.info (fun m -> m "Cancelled")
-    | Some v -> Logs.info (fun m -> m "Returned %S" v)
+let timeout s t : string option Lwt.t = failwith "TODO"
+
+let start _time _r =
+  let t =
+    Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:3000 R.generate))
+    >|= fun () -> "Heads"
+  in
+  timeout (Duration.of_sec 2) t >|= function
+  | None -> Logs.info (fun m -> m "Cancelled")
+  | Some v -> Logs.info (fun m -> m "Returned %S" v)
 ```
 
 For convenience, here is a `config.ml` which you might use for this exercise:
 
-```ocaml
+```ocaml file=files/tutorial-lwt/timeout1.ml
 open Mirage
 
 let main =
@@ -594,11 +601,9 @@ module Timeout1 (Time : Mirage_time.S) (R : Mirage_random.S) = struct
     | Lwt.Return v -> Lwt.return (Some v)
     | Lwt.Fail ex -> Lwt.fail ex
 
-  let generate i = R.generate i |> Cstruct.to_string
-
   let start _time _r =
     let t =
-      Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:3000 generate))
+      Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:3000 R.generate))
       >|= fun () -> "Heads"
     in
     timeout (Duration.of_sec 2) t >|= function
@@ -617,7 +622,8 @@ Does your solution match the one given here and always returns after
 This is a good place to introduce a third operation to compose threads: `pick`.
 
 ```ocaml
-  val pick : 'a t list -> 'a t
+# Lwt.pick ;;
+- : 'a Lwt.t list -> 'a Lwt.t = <fun>
 ```
 
 `pick` behaves exactly like `choose` except that it cancels all other
@@ -639,12 +645,12 @@ challenge.
 ### Solution
 
 ```ocaml
-  let timeout delay t =
-    let tmout = Time.sleep_ns delay in
-    Lwt.pick [
-      (tmout >|= fun () -> None);
-      (t >|= fun v -> Some v);
-    ]
+let timeout delay t =
+  let tmout = Time.sleep_ns delay in
+  Lwt.pick [
+    (tmout >|= fun () -> None);
+    (t >|= fun v -> Some v);
+  ]
 ```
 
 Found in [lwt/tutorial/timeout2/unikernel.ml][timeout2_unikernel.ml]
