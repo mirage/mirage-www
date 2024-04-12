@@ -37,7 +37,9 @@ let read_file file =
       really_input_string ic length)
     ~finally:(fun () -> close_in ic)
 
-let read_from_dir dir = ls_dir dir |> List.map (fun f -> (f, read_file f))
+let read_from_dir ?(filter = fun _ -> true) dir =
+  ls_dir dir
+  |> List.filter_map (fun f -> if filter f then Some (f, read_file f) else None)
 
 let map_files_in_dir f dir =
   read_from_dir dir
@@ -48,16 +50,15 @@ let map_files_in_dir f dir =
            raise exn)
 
 let map_md_files_in_dir ~decode_meta f dir =
-  read_from_dir dir
-  |> List.filter_map (fun (file, content) ->
-         if not (Filename.extension file = ".md") then None
-         else
-           let meta, body = extract_metadata_body content in
-           let meta = decode_or_raise ~loc:file decode_meta meta in
-           try Some (f ~file ~meta ~body)
-           with exn ->
-             prerr_endline ("Error in " ^ file);
-             raise exn)
+  let filter file = Filename.extension file = ".md" in
+  read_from_dir ~filter dir
+  |> List.map (fun (file, content) ->
+         let meta, body = extract_metadata_body content in
+         let meta = decode_or_raise ~loc:file decode_meta meta in
+         try f ~file ~meta ~body
+         with exn ->
+           prerr_endline ("Error in " ^ file);
+           raise exn)
 
 let with_yml_file ~decoder f =
   let yaml = decode_or_raise ~loc:f Yaml.of_string (read_file f) in

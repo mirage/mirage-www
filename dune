@@ -9,5 +9,12 @@
   (action
    (chdir
     %{workspace_root}
-    (run tailwindcss build -c tailwind.config.js -i template/styles.css -o
-      %{target})))))
+    (run
+     tailwindcss
+     build
+     -c
+     tailwind.config.js
+     -i
+     template/styles.css
+     -o
+     %{target})))))

@@ -1,0 +1,12 @@
+(mdx
+ (files tutorial-lwt.md)
+ (preludes files/tutorial-lwt/prelude.ml)
+ (libraries
+  lwt
+  mirage-time
+  duration
+  mirage
+  logs
+  randomconv
+  cstruct
+  mirage-random))

@@ -1,5 +1,6 @@
 (library
  (name mirageio_template)
+ (public_name mirageio.template)
  (libraries dream-mirage mirageio_data))
 
 (rule

@@ -22,7 +22,7 @@ doc: "https://mirage.github.io/mirage-www/"
 bug-reports: "https://github.com/mirage/mirage-www/issues"
 depends: [
   "ocaml" {>= "4.14"}
-  "dune" {>= "2.7"}
+  "dune" {>= "3.8"}
   "dream"
   "dream-mirage"
   "tcpip" {>= "8.0"}
@@ -31,6 +31,8 @@ depends: [
   "mirage-clock-unix" {>= "3.0"}
   "mirage-unix" {>= "5.0.0"}
   "ptime" {>= "0.8.1"}
+  "mdx" {with-test}
+  "mirage" {with-test}
   "tailwindcss" {build}
   "crunch" {build & >= "3.1.0"}
   "omd" {build & < "2.0.0~alpha3"}

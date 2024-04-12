@@ -1,0 +1,9 @@
+(executable
+ (name heads1)
+ (modules heads1)
+ (libraries mirage))
+
+(executable
+ (name echo_server)
+ (modules echo_server)
+ (libraries mirage))

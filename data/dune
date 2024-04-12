@@ -8,6 +8,7 @@
 
 (library
  (name mirageio_data)
+ (public_name mirageio.data)
  (libraries ptime)
  (modules mirageio_data))
 

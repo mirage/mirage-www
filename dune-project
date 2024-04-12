@@ -1,4 +1,5 @@
-(lang dune 2.7)
+(lang dune 3.8)
+(using mdx 0.4)
 
 (name mirageio)
 
@@ -42,6 +43,8 @@
   (mirage-clock-unix (>= 3.0))
   (mirage-unix (>= 5.0.0))
   (ptime (>= 0.8.1))
+  (mdx :with-test)
+  (mirage :with-test)
   (tailwindcss :build)
   (crunch (and :build (>= 3.1.0)))
   (omd (and :build (< 2.0.0~alpha3)))
