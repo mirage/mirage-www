@@ -2,6 +2,7 @@
  asset/
  (rule
   (target main.css)
+  (mode fallback)
   (deps
    %{workspace_root}/tailwind.config.js
    %{workspace_root}/template/styles.css
