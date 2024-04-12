@@ -1,9 +1,3 @@
-(executable
- (name heads1)
- (modules heads1)
- (libraries mirage))
-
-(executable
- (name echo_server)
- (modules echo_server)
+(executables
+ (names heads1 timeout1 echo_server)
  (libraries mirage))
