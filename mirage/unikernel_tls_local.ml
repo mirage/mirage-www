@@ -42,8 +42,8 @@ struct
     let http =
       WWW.Dream.(
         http ~port:http_port (Stack.tcp stack) @@ fun req ->
-        redirect ~status:`Moved_Permanently req
-          ("https://" ^ Domain_name.to_string host))
+        let uri = ("https://" ^ Domain_name.to_string host) ^ target req in
+        redirect ~status:`Moved_Permanently req uri)
     in
     let https =
       match redirect with
@@ -51,7 +51,8 @@ struct
       | Some domain ->
           WWW.Dream.(
             https ~port:https_port (Stack.tcp stack) @@ fun req ->
-            redirect ~status:`Moved_Permanently req domain)
+            let uri = domain ^ target req in
+            redirect ~status:`Moved_Permanently req uri)
     in
     Lwt.join [ http; https ]
 end
