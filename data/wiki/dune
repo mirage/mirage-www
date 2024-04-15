@@ -1,6 +1,6 @@
 (mdx
- (files tutorial-lwt.md)
- (preludes files/tutorial-lwt/prelude.ml)
+ (files tutorial-lwt.md hello-world.md)
+ (preludes files/prelude.ml)
  (libraries
   lwt
   mirage-time
@@ -9,4 +9,8 @@
   logs
   randomconv
   cstruct
-  mirage-random))
+  mirage-random
+  mirage-block-unix
+  mirage-kv-unix
+  mirage-net-unix
+  charrua-client.mirage))

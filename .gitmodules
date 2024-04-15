@@ -1,0 +1,3 @@
+[submodule "data/wiki/files/mirage-skeleton"]
+	path = data/wiki/files/mirage-skeleton
+	url = https://github.com/mirage/mirage-skeleton

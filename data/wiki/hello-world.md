@@ -1,5 +1,5 @@
 ---
-updated: 2019-10-18
+updated: 2024-04-19
 author:
   name: Richard Mortier
   uri: http://mort.io/
@@ -14,8 +14,9 @@ to get a working MirageOS installation. The examples below are in
 the [mirage-skeleton](http://github.com/mirage/mirage-skeleton) repository.
 Begin by cloning and changing directory to it:
 
-```bash
+```bash skip
 $ git clone https://github.com/mirage/mirage-skeleton.git
+Cloning into 'mirage-skeleton'...
 $ cd mirage-skeleton
 ```
 
@@ -40,7 +41,7 @@ telling Mirage what jobs the unikernel is to run.
 In this example we define a unikernel with zero jobs by passing the empty list.
 We do this by writing a `config.ml` file:
 
-```ocaml
+```bash dir=files/mirage-skeleton
 $ cat tutorial/noop/config.ml
 let () = Mirage.register "noop" []
 ```
@@ -53,7 +54,7 @@ Building our unikernel is then simply a matter of:
 
 1. Evaluating its configuration:
 
-    ```bash
+    ```bash dir=files/mirage-skeleton
     $ cd tutorial/noop
     $ mirage configure -t unix
     ```
@@ -63,7 +64,7 @@ Building our unikernel is then simply a matter of:
 
 2. Installing dependencies:
 
-    ```bash
+    ```bash dir=files/mirage-skeleton/tutorial/noop
     $ make depends
     ```
 
@@ -75,31 +76,35 @@ Building our unikernel is then simply a matter of:
       potential build tools).
     - Fetch unikernel dependencies.
 
-    NOTE: while performing the _lock_ step, an additional repository 
-    <https://github.com/mirage/opam-overlays.git> is added in your opam switch. 
-    This repository contains packages that have been changed to use the _dune_ build 
-    system. The `--extra-repo` argument in `mirage configure` changes the additional 
-    repository to use. `--no-extra-repo` can be used to disable the extra repository, 
-    but the _lock_ step might fail because of dependencies that are not using the 
+    NOTE: while performing the _lock_ step, an additional repository
+    <https://github.com/mirage/opam-overlays.git> is added in your opam switch.
+    This repository contains packages that have been changed to use the _dune_ build
+    system. The `--extra-repo` argument in `mirage configure` changes the additional
+    repository to use. `--no-extra-repo` can be used to disable the extra repository,
+    but the _lock_ step might fail because of dependencies that are not using the
     _dune_ build system.
 
 3. Compiling:
 
-    ```bash
+    ```bash dir=files/mirage-skeleton/tutorial/noop
     $ make build
     ```
 
-You can combine steps (2) and (3) by running the default `make` target:
+You can combine steps (2) and (3) by running the default `make` target.
 
-```bash
-$ make
+Once all the dependencies are installed, you can also just run `dune build`
+to build the unikernel (no need to call the slow `make depends` every time!):
+
+```bash dir=files/mirage-skeleton/tutorial/noop
+$ mirage configure -t unix
+$ dune build
 ```
 
 Because we set the configuration target to be Unix (the `-t unix` argument to
 the `mirage configure` command), the result is a standard Unix ELF located in
 `dist/noop` that can be executed:
 
-```bash
+```bash dir=files/mirage-skeleton/tutorial/noop
 $ dist/noop
 $ echo $?
 0
@@ -109,11 +114,13 @@ Congratulations! You've just built and run your very first unikernel!
 
 ### Step 1: Hello World!
 
-Except for the noop example above, all unikernels have at least one job.
-A job is a module with a `start` function as entrypoint that performs some task.
-Most jobs will depend on some system devices which they use to interact with the environment.
-This tutorial will cover examples timer devices, key-value stores, block devies and network interfaces.
-In this section, we illustrate how to define a unikernel with a job that depends on a timer device.
+Except for the noop example above, all unikernels have at least one
+job.  A job is a module with a `start` function as entrypoint that
+performs some task.  Most jobs will depend on some system devices
+which they use to interact with the environment.  This tutorial will
+cover examples timer devices, key-value stores, block devies and
+network interfaces.  In this section, we illustrate how to define a
+unikernel with a job that depends on a timer device.
 
 Mirage unikernels use *functors* to specify abstract device dependencies that
 are not dependent on the particular details of an environment.  In OCaml, a
@@ -148,8 +155,8 @@ terminating.  The output will look like this:
 
 Let's start by looking at the code:
 
-```ocaml
-$ cat hello/unikernel.ml
+```bash dir=files/mirage-skeleton
+$ cat tutorial/hello/unikernel.ml
 open Lwt.Infix
 
 module Hello (Time : Mirage_time.S) = struct
@@ -158,11 +165,9 @@ module Hello (Time : Mirage_time.S) = struct
       | 0 -> Lwt.return_unit
       | n ->
           Logs.info (fun f -> f "hello");
-          Time.sleep_ns (Duration.of_sec 1) >>= fun () ->
-          loop (n-1)
+          Time.sleep_ns (Duration.of_sec 1) >>= fun () -> loop (n - 1)
     in
     loop 4
-
 end
 ```
 
@@ -185,7 +190,7 @@ The concrete implementation of `Time` will be supplied at compile time,
 depending on the target that you are compiling for. This calls for some
 additional configuration  in `config.ml`, so let's take a look:
 
-```ocaml
+```bash dir=files/mirage-skeleton
 $ cat tutorial/hello/config.ml
 open Mirage
 
@@ -195,15 +200,20 @@ let main =
 let () = register "hello" [ main $ default_time ]
 ```
 
-First we open the `Mirage` module to save on typing.
-Next, we define a value `main`.
-This name is only a convention, and you should feel free to change it if you wish.
-`main` calls the `Mirage.main` function, passing two parameters.
-The first is a string declaring the module name that contains our entry point — in this case, standard OCaml compilation behaviour means that the `unikernel.ml` file produces a module named `Unikernel`.
-Again, there's nothing special about this name, and if you want to use something else here, simply rename `unikernel.ml` accordingly.
-The `@->` combinator is used to add a device driver to the list of functor arguments in the job definition and the final value of this combinator should always be a `job`.
-The named argument `~packages` defines extra OCaml package dependencies that the job depends on.
-In this case we depend on the `duration` library for converting from seconds to nanoseconds.
+First we open the `Mirage` module to save on typing.  Next, we define
+a value `main`.  This name is only a convention, and you should feel
+free to change it if you wish.  `main` calls the `Mirage.main`
+function, passing two parameters.  The first is a string declaring the
+module name that contains our entry point — in this case, standard
+OCaml compilation behaviour means that the `unikernel.ml` file
+produces a module named `Unikernel`.  Again, there's nothing special
+about this name, and if you want to use something else here, simply
+rename `unikernel.ml` accordingly.  The `@->` combinator is used to
+add a device driver to the list of functor arguments in the job
+definition and the final value of this combinator should always be a
+`job`.  The named argument `~packages` defines extra OCaml package
+dependencies that the job depends on.  In this case we depend on the
+`duration` library for converting from seconds to nanoseconds.
 
 Notice that we refer to the module name as a string (`"Unikernel.Hello"`) when
 calling `main`, instead of directly as an OCaml value. The `mirage` command-line
@@ -239,8 +249,11 @@ instructions about how to satisfy those dependencies (it will be given a
 Let's test all of this by first configuring, building, and running the resulting
 unikernel under Unix:
 
-```bash
+```bash dir=files/mirage-skeleton
 $ cd tutorial/hello
+```
+
+```bash dir=files/mirage-skeleton/tutorial/hello
 $ mirage configure -t unix
 ```
 
@@ -254,26 +267,30 @@ directory includes generated files to run and build your program, including
 
 Install the dependencies with
 
-```bash
+```bash skip
 $ make depends
 ```
 
 And build the unikernel with
 
-```bash
-$ make build
+```bash dir=files/mirage-skeleton/tutorial/hello
+$ dune build
 ```
 
 Our Unix binary is built as `dist/hello`. Note that `make` simply
 calls `mirage build` which itself turns into a simple `dune build` command. If
 you are  familiar with `dune` it is possible to inspect the build rules for the
-unikernel generated in `dune.build`. 
+unikernel generated in `dune.build`.
 
 To run your application, execute the binary — and observe the exciting log
 messages that our loop is generating:
 
-```bash
-$ ./dist/hello
+```bash dir=files/mirage-skeleton/tutorial/hello,non-deterministic=output
+$ dist/hello
+2024-04-14T14:15:22+02:00: [INFO] [application] hello
+2024-04-14T14:15:23+02:00: [INFO] [application] hello
+2024-04-14T14:15:24+02:00: [INFO] [application] hello
+2024-04-14T14:15:25+02:00: [INFO] [application] hello
 ```
 
 #### Building for Another Backend
@@ -289,12 +306,23 @@ seccomp sandbox), `virtio` (for deployment on e.g. Google Compute Engine) and
 supported platforms, Solo5 will be installed automatically when `make depends`
 is run.
 
-To build a Solo5-based unikernel that will run on a host system with hardware virtualization, re-run `mirage configure` and ask for the `hvt` target instead of `unix`.
+To build a Solo5-based unikernel that will run on a host system with
+hardware virtualization, re-run `mirage configure` and ask for the
+`hvt` target instead of `unix`.
 
-```bash
+```bash dir=files/mirage-skeleton
+$ cd tutorial/hello
+```
+
+```bash dir=files/mirage-skeleton/tutorial/hello
 $ mirage configure -t hvt
+```
+
+You can then install its dependencies and build it with:
+
+```bash skip
 $ make depends
-$ make build
+$ dune build
 ```
 
 *Everything* else remains the same! The set of dependencies required to build,
@@ -309,8 +337,8 @@ be installed by OPAM on your `$PATH`. This binary is a _tender_, responsible for
 loading your unikernel, attaching to host system devices and running it. To try
 running `hello.hvt`, pass it as an argument to `solo5-hvt`:
 
-```bash
-$ solo5-hvt dist/hello.hvt
+```bash skip
+$ solo5-hvt tutorial/hello/dist/hello.hvt
             |      ___|
   __|  _ \  |  _ \ __ \
 \__ \ (   | | (   |  ) |
@@ -328,119 +356,117 @@ Solo5:       heap >= 0x2d1000 < stack < 0x20000000
 Solo5: solo5_exit(0) called
 ```
 
-We get some additional output from the initialization of the unikernel and its successful boot, then we see our expected output, and Solo5's report of the application's successful completion.
+We get some additional output from the initialization of the unikernel
+and its successful boot, then we see our expected output, and Solo5's
+report of the application's successful completion.
 
 #### Configuration Keys
 
-It's very common to pass additional runtime information to a program via command-line options or arguments.  But a unikernel doesn't have access to a command line, so how can we pass it runtime information?
+It's very common to pass additional runtime information to a program
+via command-line options or arguments.  But a unikernel doesn't have
+access to a command line, so how can we pass it runtime information?
 
-Mirage provides a nice abstraction for this in the form of configuration keys.  The `Mirage` module provides a module `Key`, which contains functions for creating and using configuration keys.  For an example, let's have a look at `hello-key`:
+Mirage provides a nice abstraction for this in the form of
+configuration keys.  The `Mirage` module provides a module `Key`,
+which contains functions for creating and using configuration keys.
+For an example, let's have a look at `hello-key`:
 
-```
-$ cd tutorial/hello-key
-$ cat config.ml
+```bash dir=files/mirage-skeleton
+$ cat tutorial/hello-key/config.ml
 open Mirage
 
-let hello =
-  let doc = Key.Arg.info ~doc:"How to say hello." ["hello"] in
-  Key.(create "hello" Arg.(opt string "Hello World!" doc))
-
-let main =
-  main
-    ~keys:[key hello]
-    ~packages:[package "duration"]
-    "Unikernel.Hello" (time @-> job)
-
-let () =
-  register "hello" [main $ default_time]
+let runtime_args = [ runtime_arg ~pos:__POS__ "Unikernel.hello" ]
+let packages = [ package "duration" ]
+let main = main ~runtime_args ~packages "Unikernel.Hello" (time @-> job)
+let () = register "hello-key" [ main $ default_time ]
 ```
 
-We create a `key` with `Key.create` which is an optional bit of configuration.  It will default to "Hello World!" if unspecified.  This particular key happens to be of type `string`, so no conversion will be required, but it's possible to ask for more exotic types in the call to `Arg`.  See [the Functoria Key.Arg module documentation](http://mirage.github.io/functoria/functoria/Functoria_key/Arg/index.html) for more details.
+We create a `key` with `Key.create` which is an optional bit of
+configuration.  It will default to "Hello World!" if unspecified.
+This particular key happens to be of type `string`, so no conversion
+will be required, but it's possible to ask for more exotic types in
+the call to `Arg`.  See [the Functoria Key.Arg module
+documentation](http://mirage.github.io/functoria/functoria/Functoria_key/Arg/index.html)
+for more details.
 
-Once we've created our configuration key, we specify that we'd like it available in the unikernel by passing it to `main` in the `keys` parameter.
+Once we've created our configuration key, we specify that we'd like it
+available in the unikernel by passing it to `main` in the `keys`
+parameter.
 
 We can then read the value corresponding to  configuration key using the
 appropriate function in the generated `Key_gen` module. In our case,
 `Key_gen.hello` as shown below.
 
-```
-$ cat unikernel.ml
+```bash dir=files/mirage-skeleton
+$ cat tutorial/hello-key/unikernel.ml
 open Lwt.Infix
+open Cmdliner
 
-module Hello (Time : Mirage_time_lwt.S) = struct
+let hello =
+  let doc = Arg.info ~doc:"How to say hello." [ "hello" ] in
+  Arg.(value & opt string "Hello World!" doc)
 
-  let start _time =
-
-    let hello = Key_gen.hello () in
-
+module Hello (Time : Mirage_time.S) = struct
+  let start _time hello =
     let rec loop = function
       | 0 -> Lwt.return_unit
       | n ->
-        Logs.info (fun f -> f "%s" hello);
-        Time.sleep_ns (Duration.of_sec 1) >>= fun () ->
-        loop (n-1)
+          Logs.info (fun f -> f "%s" hello);
+          Time.sleep_ns (Duration.of_sec 1) >>= fun () -> loop (n - 1)
     in
     loop 4
-
 end
 ```
 
-Let's configure the example for Unix and build it:
+Let's configure the example for Unix and build it (do not forget to call `make
+depends` if you have not done it yet for this tutorial):
 
-```bash
+```bash dir=files/mirage-skeleton/
+$ cd tutorial/hello-key
+```
+
+```bash dir=files/mirage-skeleton/tutorial/hello-key
 $ mirage configure -t unix
-$ make depends
-$ make build
+$ dune build
 ```
 
-When the target is Unix, Mirage will use an implementation for configuration keys that looks at the contents of `OS.Env.argv`. In other words, it looks directly at the command line that was used to invoke the program.  If we call `hello` with no arguments, the default value is used:
+When the target is Unix, Mirage will use an implementation for
+configuration keys that looks at the contents of `OS.Env.argv`. In
+other words, it looks directly at the command line that was used to
+invoke the program.  If we call `hello` with no arguments, the default
+value is used:
 
-```
-$ dist/hello
-2017-02-08 18:18:23 -03:00: INF [application] Hello World!
-2017-02-08 18:18:24 -03:00: INF [application] Hello World!
-2017-02-08 18:18:25 -03:00: INF [application] Hello World!
-2017-02-08 18:18:26 -03:00: INF [application] Hello World!
+```bash dir=files/mirage-skeleton/tutorial/hello-key,non-deterministic=output
+$ dist/hello-key
+2024-04-17T16:13:44+02:00: [INFO] [application] Hello World!
+2024-04-17T16:13:45+02:00: [INFO] [application] Hello World!
+2024-04-17T16:13:46+02:00: [INFO] [application] Hello World!
+2024-04-17T16:13:47+02:00: [INFO] [application] Hello World!
 ```
 
 but we can ask for something else:
 
-```
-$ dist/hello --hello="Bonjour!"
-2017-02-08 18:20:46 +09:00: INF [application] Bonjour!
-2017-02-08 18:20:47 +09:00: INF [application] Bonjour!
-2017-02-08 18:20:48 +09:00: INF [application] Bonjour!
-2017-02-08 18:20:49 +09:00: INF [application] Bonjour!
-```
-
-When the target is Unix, it's also possible to get useful hints by calling the generated program with `--help`.
-
-Many configuration keys can be specified either at configuration time or at run time.  `mirage configure` will allow us to change the default value for `hello`, while retaining the ability to override it at runtime:
-
-```
-$ mirage configure -t unix --hello="Hola!"
-$ make depend
-$ make
-$ dist/hello
-2017-02-08 18:30:30 +06:00: INF [application] Hola!
-2017-02-08 18:30:31 +06:00: INF [application] Hola!
-2017-02-08 18:30:32 +06:00: INF [application] Hola!
-2017-02-08 18:30:33 +06:00: INF [application] Hola!
-$ dist/hello --hello="Hi!"
-2017-02-08 18:30:54 +06:00: INF [application] Hi!
-2017-02-08 18:30:55 +06:00: INF [application] Hi!
-2017-02-08 18:30:56 +06:00: INF [application] Hi!
-2017-02-08 18:30:57 +06:00: INF [application] Hi!
+```bash dir=files/mirage-skeleton,non-deterministic=output
+$ tutorial/hello-key/dist/hello-key --hello="Bonjour!"
+2024-04-17T16:13:48+02:00: [INFO] [application] Bonjour!
+2024-04-17T16:13:49+02:00: [INFO] [application] Bonjour!
+2024-04-17T16:13:50+02:00: [INFO] [application] Bonjour!
+2024-04-17T16:13:51+02:00: [INFO] [application] Bonjour!
 ```
 
-When configured for non-Unix backends, other mechanisms are used to pass the runtime information to the unikernel.  `solo5-hvt`, which we used to run `hello.hvt` in the non-keyed example, will pass keys specified on the command line to the unikernel when invoked:
+When the target is Unix, it's also possible to get useful hints by
+calling the generated program with `--help`.
 
-```
+When configured for non-Unix backends, other mechanisms are used to
+pass the runtime information to the unikernel.  `solo5-hvt`, which we
+used to run `hello.hvt` in the non-keyed example, will pass keys
+specified on the command line to the unikernel when invoked:
+
+``` skip
 $ cd tutorial/hello-key
 $ mirage configure -t hvt
-$ make depend
-$ make
-$ solo5-hvt -- dist/hello.hvt --hello="Hola!"
+$ dune build
+$ solo5-hvt -- dist/hello-key.hvt --hello="Hola!"
             |      ___|
   __|  _ \  |  _ \ __ \
 \__ \ (   | | (   |  ) |
@@ -476,14 +502,16 @@ On Unix, the development workflow to handle block devices is by mapping them
 onto local files.
 On solo5 on the other hand, the block devices are mapped to alphanumeric names.
 
-The solo5 tender then at runtime maps the names onto local files.
-The `config.ml` for the block example contains some logic for handling this difference.
-The expression `if_impl Key.is_solo5 (block_of_file "storage") (block_of_file "disk.img")` detects if we are on the solo5 target.
-If so, we emit a block device backed by the name `storage`.
+The solo5 tender then at runtime maps the names onto local files.  The
+`config.ml` for the block example contains some logic for handling
+this difference.  The expression `if_impl Key.is_solo5 (block_of_file
+"storage") (block_of_file "disk.img")` detects if we are on the solo5
+target.  If so, we emit a block device backed by the name `storage`.
 Otherwise, we emit a block device backed by the file `disk.img`.
-Remember, the name has to be alphanumeric on Solo5, so the dot in `disk.img` will not work on Solo5.
+Remember, the name has to be alphanumeric on Solo5, so the dot in
+`disk.img` will not work on Solo5.
 
-```ocaml
+```ocaml file=files/mirage-skeleton/device-usage/block/config.ml
 open Mirage
 
 let main = main "Unikernel.Main" (block @-> job)
@@ -491,7 +519,7 @@ let main = main "Unikernel.Main" (block @-> job)
 let img =
   if_impl Key.is_solo5 (block_of_file "storage") (block_of_file "disk.img")
 
-let () = register "block_test" [main $ img]
+let () = register "block_test" [ main $ img ]
 ```
 
 The `main` binding looks much like the earlier `hello` example, except for the
@@ -512,20 +540,37 @@ addition of a `block` device in the list..
 
 Build this on Unix in the same way as the previous examples:
 
-```bash
+```bash dir=files/mirage-skeleton
 $ cd device-usage/block
+```
+
+And configure and build the project (do not forget to use `make depends` if you
+have not done so already):
+
+```bash dir=files/mirage-skeleton/device-usage/block
 $ mirage configure -t unix
-$ make depends
-$ make build
+$ dune build
 ```
 
 Now, with the unikernel built we can run it.
 However, the unikernel expects a block device.
 We can create a disk image of all zeroes before we run the unikernel:
 
-```bash
+```bash dir=files/mirage-skeleton/device-usage/block,non-deterministic=output
 $ dd if=/dev/zero of=disk.img count=100000 # only needed once
+100000+0 records in
+100000+0 records out
+51200000 bytes transferred in 0.216251 secs (236761911 bytes/sec)
 $ ./dist/block_test
+2024-04-17T16:13:53+02:00: [INFO] [block] { Mirage_block.read_write = true;
+                                            sector_size = 512;
+                                            size_sectors = 100000L }
+reading 1 sectors at 100000
+reading 12 sectors at 99989
+2024-04-17T16:13:53+02:00: [INFO] [block] Test sequence finished
+2024-04-17T16:13:53+02:00: [INFO] [block] Total tests started: 10
+2024-04-17T16:13:53+02:00: [INFO] [block] Total tests passed:  10
+2024-04-17T16:13:53+02:00: [INFO] [block] Total tests failed:  0
 ```
 
 `block_test` will write a series
@@ -534,10 +579,9 @@ same (the logic for this is in `unikernel.ml` within the `Block_test` module).
 
 We can build this example for another backend too:
 
-```bash
+```bash skip
 $ mirage configure -t hvt
-$ make depends
-$ make build
+$ dune build
 ```
 
 Now we just need to boot the unikernel with `solo5-hvt` as before. We should see
@@ -548,7 +592,7 @@ relying on the host OS (the Linux or FreeBSD kernel).
 
 If we tell `solo5-hvt` where the disk image for the name `storage` is, it will provide that disk image to the unikernel:
 
-```bash
+```bash skip
 $ solo5-hvt --block:storage=disk.img ./dist/block_test.hvt
             |      ___|
   __|  _ \  |  _ \ __ \
@@ -566,13 +610,9 @@ Solo5:       heap >= 0x2c2000 < stack < 0x20000000
 reading 1 sectors at 100000
 reading 12 sectors at 99989
 2023-06-27 10:27:24 -00:00: INF [block] Test sequence finished
-
 2023-06-27 10:27:24 -00:00: INF [block] Total tests started: 10
-
 2023-06-27 10:27:24 -00:00: INF [block] Total tests passed:  10
-
 2023-06-27 10:27:24 -00:00: INF [block] Total tests failed:  0
-
 Solo5: solo5_exit(0) called
 ```
 
@@ -592,17 +632,12 @@ will compare against a known constant.
 The `config.ml` might look familiar after the earlier block and console
 examples:
 
-```ocaml
+```ocaml file=files/mirage-skeleton/device-usage/kv_ro/config.ml
 open Mirage
 
 let disk = generic_kv_ro "t"
-
-let main =
-  main
-    "Unikernel.Main" (kv_ro @-> job)
-
-let () =
-  register "kv_ro" [main $ disk]
+let main = main "Unikernel.Main" (kv_ro @-> job)
+let () = register "kv_ro" [ main $ disk ]
 ```
 
 We construct the `kv_ro` device `disk` by using the `generic_kv_ro`
@@ -619,14 +654,14 @@ Using `generic_kv_ro` in your `config.ml` causes Mirage to automatically create 
 configuration key, `kv_ro`, which you can use to request a specific implementation
 of the key-value store's implementation.  To see documentation, try:
 
-```bash
+```bash skip
 $ cd device-usage/kv_ro
 $ mirage help configure
 ```
 
 Under the "UNIKERNEL PARAMETERS" section, you should see:
 
-```bash
+```
        --kv_ro=KV_RO (absent=crunch)
            Use a fat, archive, crunch or direct pass-through implementation
            for the unikernel.
@@ -634,29 +669,47 @@ Under the "UNIKERNEL PARAMETERS" section, you should see:
 
 More documentation is available at [the `Mirage` module documentation for generic_kv_ro](http://mirage.github.io/mirage/mirage/Mirage/index.html#val-generic_kv_ro).
 
-Let's try a few different kinds of key-value implementations.  First, we'll build a Unix version.  If we don't specify which kind of `kv_ro` we want, we'll get a `crunch` implementation, the contents of which we can see at `_build/default/static_t.ml`, the file being generated by `dune` rules described in `dune.build`:
+Let's try a few different kinds of key-value implementations.  First,
+we'll build a Unix version.  If we don't specify which kind of `kv_ro`
+we want, we'll get a `crunch` implementation, the contents of which we
+can see at `_build/default/static_t.ml`, the file being generated by
+`dune` rules described in `dune.build`:
 
-```
-$ cd device-usage/kv_ro
+```bash dir=files/mirage-skeleton/device-usage/kv_ro
 $ mirage configure -t unix
-$ make depends
-$ make build
-$ less _build/default/static_t.ml # the generated filesystem
+$ dune build
+Generating Static_t.ml
+Generating Static_t.mli
+$ ls _build/default/Static_t.ml # the generated filesystem
+_build/default/Static_t.ml
+```
+
+And you can check this runs as expected:
+```bash dir=files/mirage-skeleton/device-usage/kv_ro,non-deterministic=output
 $ dist/kv_ro
+2024-04-17T16:13:54+02:00: [INFO] [application] Contents of extremely secret vital storage confirmed!
 ```
 
 We can use the `direct` implementation with the Unix target as well:
 
-```
-$ cd device-usage/kv_ro
+```bash dir=files/mirage-skeleton/device-usage/kv_ro
 $ mirage configure -t unix --kv_ro=direct
-$ make depends
-$ make build
-$ dist/kv_ro
+$ dune build
 ```
 
-You may have noticed that, unlike with our `hello_key` example, the `kv_ro` key
-can't be specified at runtime — it's only understood as an argument to `mirage configure`.  This is because the `kv_ro` implementation we choose influences the set of dependencies that are assembled and baked into the final product.  If we choose `direct`, we'll get a different set of software than if we choose `crunch`.  In either case, no code that isn't required will be included in the final product.
+```bash dir=files/mirage-skeleton/device-usage/kv_ro,non-deterministic=output
+$ dist/kv_ro
+2024-04-17T16:13:55+02:00: [INFO] [application] Contents of extremely secret vital storage confirmed!
+```
+
+You may have noticed that, unlike with our `hello_key` example, the
+`kv_ro` key can't be specified at runtime — it's only understood as an
+argument to `mirage configure`.  This is because the `kv_ro`
+implementation we choose influences the set of dependencies that are
+assembled and baked into the final product.  If we choose `direct`,
+we'll get a different set of software than if we choose `crunch`.  In
+either case, no code that isn't required will be included in the final
+product.
 
 You should now be seeing the power of the MirageOS configuration tool: We have
 built several applications that use fairly complex concepts such as filesystems
@@ -689,38 +742,47 @@ All of this can be manipulated via command-line arguments or environment variabl
 just as we configured the key-value store in the previous example.  The example in
 the `device-usage/network` directory of `mirage-skeleton` is illustrative:
 
-```ocaml
+```ocaml file=files/mirage-skeleton/device-usage/network/config.ml
 open Mirage
 
-let port =
-  let doc = Key.Arg.info ~doc:"The TCP port on which to listen for incoming connections." ["port"] in
-  Key.(create "port" Arg.(opt int 8080 doc))
-
-let main = main ~keys:[Key.abstract port] "Unikernel.Main" (stackv4 @-> job)
-
-let stack = generic_stackv4 default_network
-
-let () =
-  register "network" [
-    main $ stack
-  ]
+let runtime_args = [ runtime_arg ~pos:__POS__ "Unikernel.port" ]
+let main = main ~runtime_args "Unikernel.Main" (stackv4v6 @-> job)
+let stack = generic_stackv4v6 default_network
+let () = register "network" [ main $ stack ]
 ```
 
-We have a custom configuration key defining which TCP port to listen for connections on.
-The network device is derived from `default_network`, a function provided by Mirage which will choose a reasonable default based on the target the user chooses to pass to `mirage configure` - just like the reasonable default provided by `generic_kv_ro` in the previous example.
+We have a custom configuration key defining which TCP port to listen
+for connections on.  The network device is derived from
+`default_network`, a function provided by Mirage which will choose a
+reasonable default based on the target the user chooses to pass to
+`mirage configure` - just like the reasonable default provided by
+`generic_kv_ro` in the previous example.
 
-`generic_stackv4` attempts to build a sensible network stack on top of the physical interface given by `default_network`.  There are quite a few configuration keys exposed when `generic_stackv4` is given related to networking configuration. For a full list, try `mirage help configure` in the `device-usage/network` directory.
+`generic_stackv4` attempts to build a sensible network stack on top of
+the physical interface given by `default_network`.  There are quite a
+few configuration keys exposed when `generic_stackv4` is given related
+to networking configuration. For a full list, try `mirage help
+configure` in the `device-usage/network` directory.
 
 #### Unix / Socket networking
 
 Let's get the network stack compiling using the standard Unix sockets APIs
 first.
 
-```bash
+```bash dir=files/mirage-skeleton
 $ cd device-usage/network
+```
+
+And, as previously, configure and build the unikernel (if needed, use
+`make depends` to install the required dependency):
+
+```bash dir=files/mirage-skeleton/device-usage/network
 $ mirage configure -t unix --net socket
-$ make depends
-$ make build
+$ dune build
+```
+
+And run it:
+```bash skip
 $ dist/network
 ```
 
@@ -730,7 +792,7 @@ Let's try talking to it using
 the commonly available _netcat_ `nc(1)` utility. From a different console
 execute:
 
-```
+```bash skip
 $ echo -n hello tcp world | nc -nw1 127.0.0.1 8080
 ```
 
@@ -742,13 +804,15 @@ isn't being output.  That's because we haven't specified the log level for
 is sent with the log level set to `debug`, so to see it, we need to run `dist/network`
 with a higher log level for all logs:
 
-```
+```bash skip
 $ dist/network -l "*:debug"
 ```
 
-The program will then output the debug-level logs, which include the content of any messages it reads.  Here's an example of what you might see:
+The program will then output the debug-level logs, which include the
+content of any messages it reads.  Here's an example of what you might
+see:
 
-```
+```bash skip
 $ dist/network -l "*:debug"
 2017-02-10 17:23:24 +02:00: INF [tcpip-stack-socket] Manager: connect
 2017-02-10 17:23:24 +02:00: INF [tcpip-stack-socket] Manager: configuring
@@ -759,15 +823,22 @@ hello tcp world
 
 #### Unix / MirageOS Stack with DHCP
 
-Next, let's try using the direct MirageOS network stack.  It will be necessary to run these programs with `sudo` or as the root user, as they need direct access to a network device.  We won't be able to contact them via the loopback interface on `127.0.0.1` either — the stack will need to either obtain IP address information via DHCP, or it can be configured directly via the `--ipv4` configuration key.
+Next, let's try using the direct MirageOS network stack.  It will be
+necessary to run these programs with `sudo` or as the root user, as
+they need direct access to a network device.  We won't be able to
+contact them via the loopback interface on `127.0.0.1` either — the
+stack will need to either obtain IP address information via DHCP, or
+it can be configured directly via the `--ipv4` configuration key.
 
 To configure via DHCP:
 
-```bash
-$ cd device-usage/network
+```bash dir=files/mirage-skeleton/device-usage/network
 $ mirage configure -t unix --dhcp true --net direct
-$ make depends
-$ make build
+$ dune build
+```
+
+And run it:
+```bash skip
 $ sudo dist/network -l "*:debug"
 ```
 
@@ -789,11 +860,14 @@ show`; if you do not, load the tuntap kernel module (`$ sudo modprobe tun`) and
 create a `tap0` interface owned by you (`$ sudo tunctl -u $USER -t tap0`). Bring
 `tap0` up using `$ sudo ifconfig tap0 10.0.0.1 up`, then:
 
-```bash
-$ cd device-usage/network
+```bash dir=files/mirage-skeleton/device-usage/network
 $ mirage configure -t unix --dhcp false --net direct
-$ make depends
-$ make build
+$ dune build
+```
+
+And run it:
+
+```bash skip
 $ sudo dist/network -l "*:debug"
 ```
 
@@ -805,7 +879,7 @@ For macosx:
 
 Now you should be able to ping the unikernel's interface:
 
-```bash
+```bash skip
 $ ping 10.0.0.2
 PING 10.0.0.2 (10.0.0.2) 56(84) bytes of data.
 64 bytes from 10.0.0.2: icmp_seq=1 ttl=38 time=0.527 ms
@@ -820,7 +894,7 @@ rtt min/avg/max/mdev = 0.291/0.395/0.527/0.098 ms
 Finally, you can then execute the same `nc(1)` commands as before (modulo the
 target IP address of course!) to interact with the running unikernel:
 
-```
+```bash skip
 $ echo -n hello tcp world | nc -nw1 10.0.0.2 8080
 ```
 
@@ -832,9 +906,14 @@ read: 15 "hello tcp world"
 
 #### Hvt
 
-Let's make a network-enabled unikernel with `hvt`!  The IP configuration should be similar to what you've set up in the previous examples, but instead of `-t unix` or `-t macosx`, build with a `hvt` target.  If you need to specify a static IP address, remember that it should go at the end of the command in which you invoke `solo5-hvt`, just like the argument to `hello` in the `hello-key` example.
+Let's make a network-enabled unikernel with `hvt`!  The IP
+configuration should be similar to what you've set up in the previous
+examples, but instead of `-t unix` or `-t macosx`, build with a `hvt`
+target.  If you need to specify a static IP address, remember that it
+should go at the end of the command in which you invoke `solo5-hvt`,
+just like the argument to `hello` in the `hello-key` example.
 
-```
+```bash skip
 $ cd device-usage/network
 $ mirage configure -t hvt --dhcp true # for environments where DHCP works
 $ make depends
@@ -856,17 +935,22 @@ Solo5:       heap >= 0x332000 < stack < 0x20000000
 2018-06-21 12:24:46 -00:00: INF [udp] UDP interface connected on 10.0.0.10
 2018-06-21 12:24:46 -00:00: INF [tcpip-stack-direct] stack assembled: mac=3a:40:76:41:5d:b0,ip=10.0.0.10
 ```
-See the Solo5 documentation on [running Solo5-based unikernels](https://github.com/Solo5/solo5/blob/v0.6.3/docs/building.md#running-solo5-based-unikernels) for details on how to set up the `tap100` interface used above for hvt networking.
+
+See the Solo5 documentation on [running Solo5-based
+unikernels](https://github.com/Solo5/solo5/blob/v0.6.3/docs/building.md#running-solo5-based-unikernels)
+for details on how to set up the `tap100` interface used above for hvt
+networking.
 
 ### What's Next?
 
-There are a number of other examples in `device-usage/` which show some simple invocations
-of various devices like consoles and clocks.  You may also be
-interested in the `applications/` directory of the `mirage-skeleton`
-repository, which contains examples that use multiple devices to build nontrivial
-applications, like DNS, DHCP, and HTTPS servers.
+There are a number of other examples in `device-usage/` which show
+some simple invocations of various devices like consoles and clocks.
+You may also be interested in the `applications/` directory of the
+`mirage-skeleton` repository, which contains examples that use
+multiple devices to build nontrivial applications, like DNS, DHCP, and
+HTTPS servers.
 
 The real MirageOS website (which is itself a unikernel) may also be of
-interest to you!  Documentation is available at [mirage-www](/wiki/mirage-www),
-and the source code is published [in a public GitHub repository](https://github.com/mirage/mirage-www).
-
+interest to you!  Documentation is available at
+[mirage-www](/wiki/mirage-www), and the source code is published [in a
+public GitHub repository](https://github.com/mirage/mirage-www).
