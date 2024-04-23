@@ -38,7 +38,6 @@ let render ~(weeklies : Mirageio_data.Weekly.t list) = Layout.render
           <a href="/docs/opam" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">📔</span> Keeping up-to-date</a>
           <a href="/docs/breaking-changes" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">🔨</span> Breaking changes</a>
           <a href="/docs/mirage-3.0-errors" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">🆘</span> Error Handling</a>
-          <a href="/docs/profiling" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">⌮</span> Tracing and Profiling</a>
           <a href="/docs/contributing" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">☝</span> Contributing to MirageOS</a>
           <a href="/docs/arm64" class="inline-block link-blue"><span class="inline-flex w-5 justify-center">💾</span> Mirage on ARM64 (e.g. Raspberry Pi 3)</a>
         </div>
