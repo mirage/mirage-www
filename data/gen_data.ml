@@ -43,7 +43,10 @@ module Blog = struct
           authors = meta.authors;
           subject = meta.subject;
           permalink = meta.permalink;
-          body = Omd.of_string body |> Omd.to_html;
+          body =
+            Cmarkit.Doc.of_string ~strict:true ~heading_auto_ids:true body
+            |> Hilite.Md.transform
+            |> Cmarkit_html.of_doc ~safe:false;
         })
       "data/blog/"
     |> List.sort (fun x1 x2 -> Ptime.compare x1.updated x2.updated)
@@ -88,7 +91,10 @@ module Wiki = struct
           author = meta.author;
           subject = meta.subject;
           permalink = meta.permalink;
-          body = Omd.of_string body |> Omd.to_html;
+          body =
+            Cmarkit.Doc.of_string ~strict:true ~heading_auto_ids:true body
+            |> Hilite.Md.transform
+            |> Cmarkit_html.of_doc ~safe:false;
         })
       "data/wiki/"
     |> List.sort (fun x1 x2 -> String.compare x1.updated x2.updated)
@@ -135,7 +141,10 @@ module Weekly = struct
           subject = meta.subject;
           permalink = meta.permalink;
           description = meta.description;
-          body = Omd.of_string body |> Omd.to_html;
+          body =
+            Cmarkit.Doc.of_string ~strict:true ~heading_auto_ids:true body
+            |> Hilite.Md.transform
+            |> Cmarkit_html.of_doc ~safe:false;
         })
       "data/weekly/"
     |> List.sort (fun x1 x2 -> String.compare x1.updated x2.updated)
