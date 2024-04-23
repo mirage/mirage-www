@@ -5,12 +5,6 @@ type tab =
   | Api
   | Community
 
-let extra_link = function
-  | Blog ->
-    <link rel="alternate" type="application/rss+xml"
-      title="RSS Feed for mirage.io" href="/feed.xml" />
-  | _ -> ""
-
 let render ~description ~title ~tab inner =
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +16,8 @@ let render ~description ~title ~tab inner =
     <link rel="stylesheet" href="/main.css" />
     <link rel="stylesheet" href="/vendor/font-files/inter.css" />
     <link rel="stylesheet" href="/vendor/font-files/spacegrotesk.css" />
-    <%s! extra_link tab %>
+    <link rel="alternate" type="application/atom+xml"
+      title="RSS Feed for mirage.io" href="/feed.xml" />
 
     <title><%s title %></title>
   </head>
@@ -34,8 +29,8 @@ let render ~description ~title ~tab inner =
           <img src="/logo.svg" alt="Mirage OS Logo" />
         </a>
         <div class="p-2 flex flex-col-reverse items-center md:items-start">
-          <div class="flex space-x-3 text-white mt-4">
-            <a href="https://github.com/mirage" class="opacity-60 hover:opacity-100 transition-opacity">
+          <div class="flex flex-wrap gap-3 text-white mt-4">
+            <a href="https://github.com/mirage" class="opacity-60 hover:opacity-100 transition-opacity" title="Mirage GitHub Organisation">
               <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_317_1697)">
                   <path
@@ -52,7 +47,7 @@ let render ~description ~title ~tab inner =
                 </defs>
               </svg>
             </a>
-            <a href="https://twitter.com/OpenMirage" class="opacity-60 hover:opacity-100 transition-opacity">
+            <a href="https://twitter.com/OpenMirage" class="opacity-60 hover:opacity-100 transition-opacity" title="OpenMirage Twitter Account">
               <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M12.8475 0.642883C5.846 0.642883 0.168945 6.31994 0.168945 13.3214C0.168945 20.323 5.846 26 12.8475 26C19.849 26 25.5261 20.323 25.5261 13.3214C25.5261 6.31994 19.849 0.642883 12.8475 0.642883ZM18.9406 10.1999C18.9491 10.3329 18.9491 10.4716 18.9491 10.6074C18.9491 14.7619 15.7851 19.5475 10.0033 19.5475C8.2204 19.5475 6.56766 19.0296 5.17528 18.1382C5.42998 18.1665 5.67337 18.1778 5.93373 18.1778C7.40535 18.1778 8.75811 17.6797 9.83635 16.8364C8.45529 16.8081 7.29498 15.9024 6.89877 14.6572C7.38271 14.728 7.81854 14.728 8.31662 14.6006C7.60551 14.4562 6.96634 14.0699 6.50771 13.5076C6.04908 12.9453 5.79927 12.2415 5.80072 11.5159V11.4763C6.21673 11.7112 6.70633 11.8555 7.21857 11.8753C6.78796 11.5883 6.43481 11.1995 6.19045 10.7434C5.94608 10.2872 5.81805 9.77783 5.8177 9.26035C5.8177 8.67453 5.97052 8.13965 6.24504 7.67553C7.03434 8.64718 8.01927 9.44187 9.13582 10.0079C10.2524 10.574 11.4755 10.8988 12.7258 10.9612C12.2815 8.82452 13.8776 7.09537 15.7964 7.09537C16.702 7.09537 17.5171 7.47459 18.0916 8.08588C18.8019 7.95287 19.4811 7.68685 20.0867 7.33026C19.8519 8.05758 19.3594 8.6717 18.7057 9.05941C19.3396 8.99149 19.9509 8.81603 20.5169 8.56982C20.0896 9.19809 19.5547 9.7556 18.9406 10.1999V10.1999Z"
@@ -60,7 +55,7 @@ let render ~description ~title ~tab inner =
                 />
               </svg>
             </a>
-            <a href="https://docs.mirage.io/" class="opacity-60 hover:opacity-100 transition-opacity">
+            <a href="https://docs.mirage.io/" class="opacity-60 hover:opacity-100 transition-opacity" title="Mirage Packages Documentationmake">
               <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   fill-rule="evenodd"
@@ -68,6 +63,11 @@ let render ~description ~title ~tab inner =
                   d="M12.8832 26C19.8853 26 25.5617 20.3236 25.5617 13.3214C25.5617 6.31927 19.8853 0.642883 12.8832 0.642883C5.88098 0.642883 0.20459 6.31927 0.20459 13.3214C0.20459 20.3236 5.88098 26 12.8832 26ZM6.01602 6.98218C8.24831 6.99208 9.91567 7.27108 11.1086 7.84062C11.4934 8.02073 11.8521 8.25196 12.175 8.52804C12.2317 8.57733 12.2771 8.63821 12.3082 8.70656C12.3393 8.77491 12.3554 8.84915 12.3553 8.92424V20.0546C12.3554 20.0812 12.3477 20.1073 12.3332 20.1295C12.3186 20.1518 12.2979 20.1693 12.2734 20.1798C12.249 20.1904 12.2221 20.1935 12.1959 20.1889C12.1697 20.1842 12.1455 20.172 12.1262 20.1537C10.7163 18.8211 8.36255 18.6019 6.01602 18.6019C5.41379 18.6019 4.95947 18.1202 4.95947 17.4816V8.03542C4.95916 7.8623 5.00139 7.69175 5.08245 7.53878C5.16352 7.38581 5.28092 7.25511 5.42436 7.15816C5.5991 7.04071 5.80549 6.97932 6.01602 6.98218ZM19.7511 6.98218C19.9616 6.97896 20.168 7.04001 20.3428 7.15717C20.4867 7.25409 20.6044 7.38494 20.6858 7.53817C20.7671 7.6914 20.8094 7.86229 20.809 8.03575V17.5447C20.809 17.8249 20.6977 18.0936 20.4995 18.2918C20.3014 18.4899 20.0327 18.6012 19.7525 18.6012C15.9674 18.6009 14.48 19.3048 13.6324 20.1468C13.6141 20.1646 13.591 20.1767 13.5659 20.1815C13.5408 20.1863 13.5149 20.1836 13.4913 20.1737C13.4677 20.1638 13.4476 20.1471 13.4335 20.1258C13.4194 20.1045 13.4118 20.0795 13.4119 20.054V8.92292C13.4118 8.84787 13.4279 8.77367 13.4589 8.70534C13.49 8.637 13.5353 8.57609 13.5918 8.52672C13.915 8.25118 14.2738 8.02041 14.6586 7.84062C15.8515 7.26976 17.5188 6.99208 19.7511 6.98218Z"
                   class="fill-current"
                 />
+              </svg>
+            </a>
+            <a href="/feed.xml" title="MirageOS RSS Feed" class="opacity-60 hover:opacity-100 transition-opacity">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="26" height="26">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12.75 19.5v-.75a7.5 7.5 0 0 0-7.5-7.5H4.5m0-6.75h.75c7.87 0 14.25 6.38 14.25 14.25v.75M6 18.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
               </svg>
             </a>
           </div>
