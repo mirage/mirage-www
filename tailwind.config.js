@@ -19,7 +19,38 @@ module.exports = {
       fontFamily: {
         space: ['Space Grotesk'],
         inter: ['Inter'],
-      }
+      },
+      typography: (theme) => ({
+        DEFAULT: {
+          css: [{
+            'code::before': {
+              content: '""',
+            },
+            'code::after': {
+              content: '""',
+            },
+            h1: {
+              fontWeight: 700,
+            },
+            code: {
+              fontSize: "1em",
+            },
+            'h2 code': {
+              fontSize: "1em",
+            },
+            'h3 code': {
+              fontSize: "1em",
+            },
+          }]
+        },
+        sm: {
+          css: {
+            code: {
+              fontSize: "1em",
+            },
+          },
+        }
+      }),
     },
   },
   plugins: [
