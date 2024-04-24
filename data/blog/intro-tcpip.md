@@ -252,7 +252,7 @@ All the application programmer needs to do is define functionality in relation t
 
 An OCaml HTTP server, [Cohttp](http://www.github.com/mirage/ocaml-cohttp), is currently powering this very blog.  A simple static webserver using Cohttp [is included in `mirage-skeleton`](https://github.com/mirage/mirage-skeleton/tree/master/static_website).
 
-[The OCaml-TLS demonstration server](https://tls.nqsb.io/) announced here [just a few days ago](http://mirage.io/blog/introducing-ocaml-tls) is also running atop Cohttp - [source is available on Github](https://github.com/mirleft/tls-demo-server).
+[The OCaml-TLS demonstration server](https://tls.nqsb.io/) announced here [just a few days ago](/blog/introducing-ocaml-tls) is also running atop Cohttp - [source is available on Github](https://github.com/mirleft/tls-demo-server).
 
 ## The future
 
