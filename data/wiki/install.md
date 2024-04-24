@@ -1,5 +1,5 @@
 ---
-updated: 2019-10-22
+updated: 2024-04-24
 author:
   name: Anil Madhavapeddy
   uri: http://anil.recoil.org
@@ -39,7 +39,7 @@ If you are using Homebrew, run
 
 ### Linux-specific notes
 
-#### Ubuntu 16.04 (Xenial) or higher
+#### Ubuntu 22.04 (Jammy) or higher
 
 This has the latest packages required in the base distribution, so just run:
 
@@ -48,7 +48,7 @@ This has the latest packages required in the base distribution, so just run:
     opam init
     opam install mirage
 
-#### Ubuntu 15.10 (Vivid) or lower
+#### Ubuntu 20.04 (Focal) or lower
 
 The version of OPAM in older Ubuntus is not high enough to run Mirage (which requires OPAM 2.1.0 or higher), so you will need to add a custom PPA for the latest packages:
 
@@ -58,7 +58,7 @@ The version of OPAM in older Ubuntus is not high enough to run Mirage (which req
     opam init
     opam install mirage
 
-#### Debian Stable (Buster) or Unstable (Sid)
+#### Debian Stable (Bookworm) or Unstable (Sid)
 
 This has the latest packages required in the base distribution, so just run:
 
@@ -69,7 +69,7 @@ This has the latest packages required in the base distribution, so just run:
 
 ### FreeBSD-specific notes
 
-You will need ports or `pkg` set up. To install OPAM use the `ocaml-opam` port/package. FreeBSD currently packages OCaml 4.05.0, so you will need to install a newer compiler using OPAM.
+You will need ports or `pkg` set up. To install OPAM use the `ocaml-opam` port/package.
 
 ### ARM64-specific notes
 
