@@ -24,6 +24,10 @@
   filter: blur(1px);
 }
 
+.btn-primary > div {
+  @apply bg-[#181818] text-white hover:bg-white hover:text-[#181818];
+}
+
 html {
   @apply bg-repeat-y bg-top;
   background-size: 100%;

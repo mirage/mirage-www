@@ -2,6 +2,11 @@ let render ~blog_posts = Layout.render ~title:"Welcome to MirageOS" ~description
 <div class="text-center font-space w-4/5 mx-auto py-8 space-y-6">
   <h1 class="text-3xl font-bold">A programming framework for building type-safe, modular systems</h1>
   <div class="flex flex-col sm:flex-row justify-center items-center sm:space-x-6 sm:space-y-0 space-y-4">
+    <a href="/docs/hello-world" class="btn btn-primary">
+      <div>
+        <span>Get Started</span>
+      </div>
+    </a>
     <a href="https://github.com/mirage" class="btn">
       <div>
         <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
