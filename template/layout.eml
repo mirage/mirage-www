@@ -29,7 +29,7 @@ let render ~description ~title ~tab inner =
           <img src="/logo.svg" alt="Mirage OS Logo" />
         </a>
         <div class="p-2 flex flex-col-reverse items-center md:items-start">
-          <div class="flex flex-wrap gap-3 text-white mt-4">
+          <div class="flex flex-wrap gap-2 text-white mt-4">
             <a href="https://github.com/mirage" class="opacity-60 hover:opacity-100 transition-opacity" title="Mirage GitHub Organisation">
               <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_317_1697)">
