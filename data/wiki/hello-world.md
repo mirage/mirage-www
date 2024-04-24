@@ -360,15 +360,21 @@ We get some additional output from the initialization of the unikernel
 and its successful boot, then we see our expected output, and Solo5's
 report of the application's successful completion.
 
-#### Configuration Keys
+#### Runtime Arguments
 
 It's very common to pass additional runtime information to a program
 via command-line options or arguments.  But a unikernel doesn't have
-access to a command line, so how can we pass it runtime information?
+access to a command line, so how can we pass some information to it
+at runtime?
 
 Mirage provides a nice abstraction for this in the form of
-configuration keys.  The `Mirage` module provides a module `Key`,
-which contains functions for creating and using configuration keys.
+`runtime_args`.
+
+We declare that our unikernel will receive a runtime argument `hello`,
+using the function `runtime_arg`.  Once we've created our list of
+runtime arguments, we pass it to the unikernel by passing it to
+`Mirage.main` in the `runtime_args` parameter.
+
 For an example, let's have a look at `hello-key`:
 
 ```bash dir=files/mirage-skeleton
@@ -381,21 +387,18 @@ let main = main ~runtime_args ~packages "Unikernel.Hello" (time @-> job)
 let () = register "hello-key" [ main $ default_time ]
 ```
 
-We create a `key` with `Key.create` which is an optional bit of
-configuration.  It will default to "Hello World!" if unspecified.
-This particular key happens to be of type `string`, so no conversion
-will be required, but it's possible to ask for more exotic types in
-the call to `Arg`.  See [the Functoria Key.Arg module
-documentation](http://mirage.github.io/functoria/functoria/Functoria_key/Arg/index.html)
+(Note: you must always provide `~pos:__POS__` to the `runtime_arg` function -
+`__POS__` is value from the OCaml Standard Library that represents the current location
+in the file, which here used for error reporting.)
+
+Below, the function `hello` (which uses the `cmdliner` package) declares the
+type of the runtime argument as `string` and sets a default value of `"Hello World!"`,
+for the case that the argument is not provided at runtime.  See [the Cmdliner.Arg module
+documentation](https://ocaml.org/p/cmdliner/latest/doc/Cmdliner/Arg/index.html)
 for more details.
 
-Once we've created our configuration key, we specify that we'd like it
-available in the unikernel by passing it to `main` in the `keys`
-parameter.
-
-We can then read the value corresponding to  configuration key using the
-appropriate function in the generated `Key_gen` module. In our case,
-`Key_gen.hello` as shown below.
+Then, we receive the value corresponding to the runtime argument `hello`
+as parameter `hello` on the `start` function, as shown below.
 
 ```bash dir=files/mirage-skeleton
 $ cat tutorial/hello-key/unikernel.ml
@@ -431,7 +434,7 @@ $ dune build
 ```
 
 When the target is Unix, Mirage will use an implementation for
-configuration keys that looks at the contents of `OS.Env.argv`. In
+runtime arguments that looks at the contents of `OS.Env.argv`. In
 other words, it looks directly at the command line that was used to
 invoke the program.  If we call `hello` with no arguments, the default
 value is used:
@@ -459,8 +462,8 @@ calling the generated program with `--help`.
 
 When configured for non-Unix backends, other mechanisms are used to
 pass the runtime information to the unikernel.  `solo5-hvt`, which we
-used to run `hello.hvt` in the non-keyed example, will pass keys
-specified on the command line to the unikernel when invoked:
+used to run `hello.hvt` in the non-keyed example, will pass runtime
+arguments specified on the command line to the unikernel when invoked:
 
 ``` skip
 $ cd tutorial/hello-key
@@ -751,7 +754,7 @@ let stack = generic_stackv4v6 default_network
 let () = register "network" [ main $ stack ]
 ```
 
-We have a custom configuration key defining which TCP port to listen
+We have a runtime argument defining which TCP port to listen
 for connections on.  The network device is derived from
 `default_network`, a function provided by Mirage which will choose a
 reasonable default based on the target the user chooses to pass to
