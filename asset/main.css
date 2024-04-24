@@ -664,7 +664,7 @@ video {
 
 .prose :where(h1):not(:where([class~="not-prose"] *)) {
   color: var(--tw-prose-headings);
-  font-weight: 800;
+  font-weight: 700;
   font-size: 2.25em;
   margin-top: 0;
   margin-bottom: 0.8888889em;
@@ -737,15 +737,15 @@ video {
 .prose :where(code):not(:where([class~="not-prose"] *)) {
   color: var(--tw-prose-code);
   font-weight: 600;
-  font-size: 0.875em;
+  font-size: 1em;
 }
 
 .prose :where(code):not(:where([class~="not-prose"] *))::before {
-  content: "`";
+  content: "";
 }
 
 .prose :where(code):not(:where([class~="not-prose"] *))::after {
-  content: "`";
+  content: "";
 }
 
 .prose :where(a code):not(:where([class~="not-prose"] *)) {
@@ -758,12 +758,12 @@ video {
 
 .prose :where(h2 code):not(:where([class~="not-prose"] *)) {
   color: inherit;
-  font-size: 0.875em;
+  font-size: 1em;
 }
 
 .prose :where(h3 code):not(:where([class~="not-prose"] *)) {
   color: inherit;
-  font-size: 0.9em;
+  font-size: 1em;
 }
 
 .prose :where(h4 code):not(:where([class~="not-prose"] *)) {
@@ -1075,7 +1075,7 @@ video {
 }
 
 .prose-sm :where(code):not(:where([class~="not-prose"] *)) {
-  font-size: 0.8571429em;
+  font-size: 1em;
 }
 
 .prose-sm :where(h2 code):not(:where([class~="not-prose"] *)) {
