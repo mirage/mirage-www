@@ -584,7 +584,7 @@ Mirleft, Morocco.
 <img src="/graphics/aftas-mirleft.jpg" alt="Aftas Beach" />
 
 [horizon]: http://www.horizon.ac.uk
-[mirage]: 
+[mirage]: https://mirage.io
 [ocamllabs]: http://www.cl.cam.ac.uk/projects/ocamllabs/
 [aftas]: http://www.aftasmirleft.com/
 [ucn]: http://usercentricnetworking.eu/
