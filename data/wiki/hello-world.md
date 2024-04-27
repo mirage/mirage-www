@@ -752,8 +752,8 @@ let () = register "network" [ main $ stack ]
 We have a runtime argument defining which TCP port to listen
 for connections on.  The network device is derived from
 `default_network`, a function provided by Mirage which will choose a
-reasonable default based on the target the user chooses to pass to
-`mirage configure` - just like the reasonable default provided by
+default based on the target the user chooses to pass to
+`mirage configure` - just like the default provided by
 `generic_kv_ro` in the previous example.
 
 `generic_stackv4v6` builds a network stack on top of
@@ -817,7 +817,7 @@ $ dist/network -l "*:debug"
 hello tcp world
 ```
 
-#### Unix with OCaml network stack
+#### Unix with the OCaml network stack
 
 Next, let's try using the OCaml network stack with the Unix target. This is done
 by passing `--net direct` to `mirage configure`. It will be
@@ -877,36 +877,6 @@ And you will see the same output in the unikernel's terminal:
 read: 15 "hello tcp world"
 ```
 
-#### Unix with OCaml netwok stack and DHCP
-
-The [DHCP](https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol)
-protocol can be used for dynamically configuring the IP address and other things.
-If you run a DHCP server, you don't need to manually assign an IP address to
-the unikernel.
-
-To configure a MirageOS unikernel to use dhcp, pass `--net direct --dhcp true`
-to `mirage configure`:
-
-```bash dir=files/mirage-skeleton/device-usage/network
-$ mirage configure -t unix --dhcp true --net direct
-$ dune build
-```
-
-And run it:
-
-```bash skip
-$ sudo dist/network -l "*:debug"
-```
-
-For macosx:
-
-```
-(* TODO! *)
-```
-
-From the unikernel output, you should be able to discover which IP address it
-is using.
-
 #### Hvt
 
 Let's make a network-enabled unikernel with `hvt`!  The IP
@@ -944,13 +914,15 @@ unikernels](https://github.com/Solo5/solo5/blob/v0.6.3/docs/building.md#running-
 for details on how to set up the `tap100` interface used above for hvt
 networking.
 
-You can also use DHCP with solo5, by passing `--dhcp true` to `mirage configure`.
-
 ### What's Next?
 
 To have your unikernel being able to communicate with the entire Internet, you
 will need to setup a firewall
 (and [NAT](https://en.wikipedia.org/wiki/Network_address_translation)).
+
+The MirageOS network stack supports
+[DHCP](https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol), have
+a look into `--dhcp true` if you're interested.
 
 There are a number of other examples in `device-usage/` which show
 some simple invocations of various devices like consoles and clocks.
