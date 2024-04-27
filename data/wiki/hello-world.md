@@ -726,6 +726,11 @@ passed at compile time and runtime.
 You built multiple MirageOS unikernels, and at some point you may want them to
 communicate with the external world. We use network for that.
 
+Please note this document only explains how to communicate from your host system
+to your unikernel. For having your unikernel being able to communicate with the
+entire Internet, you will need to setup firewalling
+([NAT](https://en.wikipedia.org/wiki/Network_address_translation)).
+
 For MirageOS unikernels running as Unix application, we have the option to use
 the host system stack (Unix sockets API). For any other target, we must
 use the OCaml network stack. On Unix, we can also use the OCaml network stack
@@ -829,6 +834,7 @@ You need to construct a tap interface, and configure an IP address in the same
 network segment on your host system to communicate with the unikernel:
 
 ```bash skip
+$ sudo modprobe tun
 $ sudo tunctl -u $USER -t tap0
 $ sudo ifconfig tap0 10.0.0.1 up
 ```
@@ -941,6 +947,10 @@ networking.
 You can also use DHCP with solo5, by passing `--dhcp true` to `mirage configure`.
 
 ### What's Next?
+
+To have your unikernel being able to communicate with the entire Internet, you
+will need to setup a firewall
+(and [NAT](https://en.wikipedia.org/wiki/Network_address_translation)).
 
 There are a number of other examples in `device-usage/` which show
 some simple invocations of various devices like consoles and clocks.
