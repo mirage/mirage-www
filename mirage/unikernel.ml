@@ -20,5 +20,6 @@ struct
     | Some domain ->
         WWW.Dream.(
           http ~port (Stack.tcp stack) @@ fun req ->
-          redirect ~status:`Moved_Permanently req domain)
+          let uri = domain ^ target req in
+          redirect ~status:`Moved_Permanently req uri)
 end
