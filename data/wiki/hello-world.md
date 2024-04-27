@@ -756,7 +756,7 @@ reasonable default based on the target the user chooses to pass to
 `mirage configure` - just like the reasonable default provided by
 `generic_kv_ro` in the previous example.
 
-`generic_stackv4v6` attempts to build a sensible network stack on top of
+`generic_stackv4v6` builds a network stack on top of
 the physical interface given by `default_network`.
 
 #### Unix with host system (socket) networking
