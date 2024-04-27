@@ -723,27 +723,23 @@ passed at compile time and runtime.
 
 ### Step 4: Networking
 
-There are several ways that we might want to configure our network for a Mirage
-application:
+You built multiple MirageOS unikernels, and at some point you may want them to
+communicate with the external world. We use network for that.
 
-* On Unix, it's convenient to use the standard kernel socket API for developing
-  higher level protocols (such
-  as [HTTP](http://github.com/mirage/ocaml-cohttp)). These run over TCP or UDP
-  and so sockets work just fine.
-* When we want finer control over the network stack, or simply to test the fully-OCaml
-  network implementation , we can use a userspace device facility such as the
-  common Unix [tuntap](http://en.wikipedia.org/wiki/TUN/TAP) to parse Ethernet
-  frames from userspace. This requires additional configuration to assign IP
-  addresses, and possibly configure a network bridge to let the unikernel talk
-  to the outside world.
-* Once the unikernel works under Unix with the
-  direct [OCaml TCP/IP stack](https://github.com/mirage/mirage-tcpip),
-  recompiling it for a unikernel target like `xen`, `hvt`, or `virtio` shouldn't
-  result in a change in behavior.
+Please note this document only explains how to communicate from your host system
+to your unikernel. For having your unikernel being able to communicate with the
+entire Internet, you will need to setup firewalling
+([NAT](https://en.wikipedia.org/wiki/Network_address_translation)).
 
-All of this can be manipulated via command-line arguments or environment variables,
+For MirageOS unikernels running as Unix application, we have the option to use
+the host system stack (Unix sockets API). For any other target, we must
+use the OCaml network stack. On Unix, we can also use the OCaml network stack
+by utilizing a [tuntap](http://en.wikipedia.org/wiki/TUN/TAP) interface.
+
+Which of the two network stacks to use can be specified via command-line arguments,
 just as we configured the key-value store in the previous example.  The example in
-the `device-usage/network` directory of `mirage-skeleton` is illustrative:
+the `device-usage/network` directory of
+[`mirage-skeleton`](http://github.com/mirage/mirage-skeleton) is illustrative:
 
 ```ocaml file=files/mirage-skeleton/device-usage/network/config.ml
 open Mirage
@@ -757,20 +753,18 @@ let () = register "network" [ main $ stack ]
 We have a runtime argument defining which TCP port to listen
 for connections on.  The network device is derived from
 `default_network`, a function provided by Mirage which will choose a
-reasonable default based on the target the user chooses to pass to
-`mirage configure` - just like the reasonable default provided by
+default based on the target the user chooses to pass to
+`mirage configure` - just like the default provided by
 `generic_kv_ro` in the previous example.
 
-`generic_stackv4` attempts to build a sensible network stack on top of
-the physical interface given by `default_network`.  There are quite a
-few configuration keys exposed when `generic_stackv4` is given related
-to networking configuration. For a full list, try `mirage help
-configure` in the `device-usage/network` directory.
+`generic_stackv4v6` builds a network stack on top of
+the physical interface given by `default_network`.
 
-#### Unix / Socket networking
+#### Unix with host system (socket) networking
 
-Let's get the network stack compiling using the standard Unix sockets APIs
-first.
+Let's get the network stack compiling using the Unix target and using the host
+system network stack first. This is the default when using the Unix target -
+the `--net socket` is superfluous.
 
 ```bash dir=files/mirage-skeleton
 $ cd device-usage/network
@@ -824,20 +818,26 @@ $ dist/network -l "*:debug"
 hello tcp world
 ```
 
-#### Unix / MirageOS Stack with DHCP
+#### Unix with the OCaml network stack
 
-Next, let's try using the direct MirageOS network stack.  It will be
-necessary to run these programs with `sudo` or as the root user, as
-they need direct access to a network device.  We won't be able to
-contact them via the loopback interface on `127.0.0.1` either — the
-stack will need to either obtain IP address information via DHCP, or
-it can be configured directly via the `--ipv4` configuration key.
-
-To configure via DHCP:
+Next, let's try using the OCaml network stack with the Unix target. This is done
+by passing `--net direct` to `mirage configure`. It will be
+necessary to run these programs with `sudo` (or `doas`) or as the root user, as
+they need direct access to a `tap` network device. The IPv4 address defaults to
+10.0.0.2, and can be configured via the `--ipv4=10.0.42.2/24` runtime argument.
 
 ```bash dir=files/mirage-skeleton/device-usage/network
-$ mirage configure -t unix --dhcp true --net direct
+$ mirage configure -t unix --net direct
 $ dune build
+```
+
+You need to construct a tap interface, and configure an IP address in the same
+network segment on your host system to communicate with the unikernel:
+
+```bash skip
+$ sudo modprobe tun
+$ sudo tunctl -u $USER -t tap0
+$ sudo ifconfig tap0 10.0.0.1 up
 ```
 
 And run it:
@@ -845,40 +845,11 @@ And run it:
 $ sudo dist/network -l "*:debug"
 ```
 
-Hopefully, the application will successfully receive its network configuration.
-Once the program has completed the lease transaction, it will log the configuration
-information, and you'll be able to contact it as before via its own IP.
+This will output once it successfully started up that it constructed the TCP/IP
+stack successfully.
 
-#### Unix / MirageOS Stack with static IP addresses
-
-By default, if we do not use DHCP with a `direct` network stack, Mirage will
-configure the stack to use an address of `10.0.0.2`.  You can specify a different address
-with the `--ipv4` configuration key.  Depending on whether you've
-configured with `-t macosx` or `-t unix`, the logic for contacting the application
-from another terminal will be different.
-
-For unix:
-Verify that you have an existing `tap0` interface by reviewing `$ sudo ip link
-show`; if you do not, load the tuntap kernel module (`$ sudo modprobe tun`) and
-create a `tap0` interface owned by you (`$ sudo tunctl -u $USER -t tap0`). Bring
-`tap0` up using `$ sudo ifconfig tap0 10.0.0.1 up`, then:
-
-```bash dir=files/mirage-skeleton/device-usage/network
-$ mirage configure -t unix --dhcp false --net direct
-$ dune build
-```
-
-And run it:
-
-```bash skip
-$ sudo dist/network -l "*:debug"
-```
-
-For macosx:
-
-```
-(* TODO! *)
-```
+You are now able to communicate to the unikernel - via control messages (ICMP),
+and also netcast, as shown before.
 
 Now you should be able to ping the unikernel's interface:
 
@@ -895,7 +866,7 @@ rtt min/avg/max/mdev = 0.291/0.395/0.527/0.098 ms
 ```
 
 Finally, you can then execute the same `nc(1)` commands as before (modulo the
-target IP address of course!) to interact with the running unikernel:
+target IP address) to interact with the running unikernel:
 
 ```bash skip
 $ echo -n hello tcp world | nc -nw1 10.0.0.2 8080
@@ -918,7 +889,7 @@ just like the argument to `hello` in the `hello-key` example.
 
 ```bash skip
 $ cd device-usage/network
-$ mirage configure -t hvt --dhcp true # for environments where DHCP works
+$ mirage configure -t hvt
 $ make depends
 $ make build
 $ solo5-hvt --net:service=tap100 -- dist/network.hvt --ipv4=10.0.0.10/24
@@ -945,6 +916,14 @@ for details on how to set up the `tap100` interface used above for hvt
 networking.
 
 ### What's Next?
+
+To have your unikernel being able to communicate with the entire Internet, you
+will need to setup a firewall
+(and [NAT](https://en.wikipedia.org/wiki/Network_address_translation)).
+
+The MirageOS network stack supports
+[DHCP](https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol), have
+a look into `--dhcp true` if you're interested.
 
 There are a number of other examples in `device-usage/` which show
 some simple invocations of various devices like consoles and clocks.
