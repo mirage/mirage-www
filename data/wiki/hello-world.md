@@ -738,7 +738,8 @@ by utilizing a [tuntap](http://en.wikipedia.org/wiki/TUN/TAP) interface.
 
 Which of the two network stacks to use can be specified via command-line arguments,
 just as we configured the key-value store in the previous example.  The example in
-the `device-usage/network` directory of `mirage-skeleton` is illustrative:
+the `device-usage/network` directory of
+[`mirage-skeleton`](http://github.com/mirage/mirage-skeleton) is illustrative:
 
 ```ocaml file=files/mirage-skeleton/device-usage/network/config.ml
 open Mirage
