@@ -10,7 +10,8 @@ permalink: gallery
 
 The MirageOS gallery features unikernels that are used in production.
 
-- [QubesOS Firewall](https://github.com/mirage/qubes-mirage-firewall) [writeup](http://roscidus.com/blog/blog/2016/01/01/a-unikernel-firewall-for-qubesos/)- [Unipi](https://github.com/robur-coop/unipi), a webserver serving static websites from a git remote
+- [QubesOS Firewall](https://github.com/mirage/qubes-mirage-firewall) [writeup](http://roscidus.com/blog/blog/2016/01/01/a-unikernel-firewall-for-qubesos/)
+- [Unipi](https://github.com/robur-coop/unipi), a webserver serving static websites from a git remote
 - [Static website server](https://github.com/mirage/mirage-skeleton/tree/main/applications/static_website_tls), a unikernel with statically compiled website content
 - [Pastebin](https://github.com/dinosaure/pasteur), a paste bin [online](https://paste.osau.re/)
 - [Tlstunnel](https://github.com/robur-coop/tlstunnel), a TLS reverse proxy
