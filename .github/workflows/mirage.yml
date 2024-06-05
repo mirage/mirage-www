@@ -16,6 +16,7 @@ jobs:
           ocaml-compiler: 5.2.0
           opam-repositories: |
             default: https://github.com/ocaml/opam-repository.git
+            override: https://github.com/shym/custom-opam-repository.git#monorepo
 
       - name: Install dependencies
         run: |
