@@ -1,0 +1,34 @@
+name: Build the Mirage unikernel
+on: [push, pull_request]
+
+jobs:
+  mirage:
+    name: OCaml 5.2.0
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install OPAM and OCaml
+        uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: 5.2.0
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get install -y libseccomp-dev
+          opam pin add -n ocaml-solo5 'https://github.com/shym/ocaml-solo5.git#ocaml-5.2-reb'
+          opam install mirage ocaml-solo5
+
+      - name: Build
+        run: |
+          rm Makefile # To let mirage create its custom Makefile instead
+          opam exec -- mirage configure -t hvt -f mirage/config.ml
+          opam exec -- make depend
+          opam exec -- dune build mirage/
+
+      - name: Query the built unikernel
+        run: |
+          opam exec -- solo5-elftool query-abi mirage/dist/www.hvt
+          opam exec -- solo5-elftool query-manifest mirage/dist/www.hvt
