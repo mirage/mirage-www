@@ -60,7 +60,7 @@
   (mirage-net-unix :with-test)
   (mirage-logs :with-test)
   (mirage-crypto-rng-mirage :with-test)
-  (mirage-bootvar-unix :with-test)
+  (mirage-bootvar :with-test)
   (dns-certify :with-test)
   (lwt :with-test)
   (charrua-client :with-test)))
