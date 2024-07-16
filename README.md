@@ -60,6 +60,7 @@ opam install "mirage>=4.0.0"
 Then, the unikernel can be _configured_:
 
 ```bash
+rm Makefile # To let mirage create its custom Makefile instead
 mirage configure -f mirage/config.ml -t <TARGET> ...
 ```
 
