@@ -13,7 +13,7 @@ permalink: deploying-mirageos-robur
 
 We are pleased to announce that the EU [NGI Pointer](https://pointer.ngi.eu) funding received by [robur](https://robur.coop) in 2021 lead to improved operations for MirageOS unikernels.
 
-Our main achievement are [reproducible binary builds](https://builds.robur.coop) of opam packages, including MirageOS unikernels and system packages. The infrastructure behind it, [orb](https://github.com/roburio/orb), [builder](https://github.com/roburio/builder), [builder-web](https://github.com/roburio/builder-web) is itself reproducible and delivered as packages by [builds.robur.coop](https://builds.robur.coop).
+Our main achievement are [reproducible binary builds](https://builds.robur.coop) of opam packages, including MirageOS unikernels and system packages. The infrastructure behind it, [orb](https://github.com/robur-coop/orb), [builder](https://github.com/robur-coop/builder), [builder-web](https://github.com/robur-coop/builder-web) is itself reproducible and delivered as packages by [builds.robur.coop](https://builds.robur.coop).
 
 The documentation how to get started [installing MirageOS unikernels and albatross from packages](https://robur.coop/Projects/Reproducible_builds) is available online, further documentation on [monitoring](https://hannes.robur.coop/Posts/Monitoring) is available as well.
 
@@ -24,7 +24,7 @@ The funding proposal covered the parts (as outlined in [an earlier post from 202
 
 We [announced the web interface earlier](https://discuss.ocaml.org/t/ann-robur-reproducible-builds/8827) and also [posted about deployment](https://hannes.robur.coop/Posts/Deploy) possibilities.
 
-At the heart of our infrastructure is [builder-web](https://github.com/roburio/builder-web), a database that receives binary builds and provides a web interface and binary package repositories ([apt.robur.coop](https://apt.robur.coop) and [pkg.robur.coop](https://pkg.robur.coop)). Reynir discusses the design and implementation of [builder-web](https://github.com/roburio/builder-web) in [his blogpost](https://reyn.ir/posts/2022-03-08-builder-web.html).
+At the heart of our infrastructure is [builder-web](https://github.com/robur-coop/builder-web), a database that receives binary builds and provides a web interface and binary package repositories ([apt.robur.coop](https://apt.robur.coop) and [pkg.robur.coop](https://pkg.robur.coop)). Reynir discusses the design and implementation of [builder-web](https://github.com/robur-coop/builder-web) in [his blogpost](https://reyn.ir/posts/2022-03-08-builder-web.html).
 
 There we [visualize](https://builds.robur.coop/job/tlstunnel/build/7f0afdeb-0a52-4de1-b96f-00f654ce9249/) the opam dependencies of an opam package:
 

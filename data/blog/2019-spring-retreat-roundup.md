@@ -11,7 +11,7 @@ permalink: 2019-spring-retreat-roundup
 Early March 2019, 31 MirageOS hackers gathered again in Marrakesh for our bi-annual hack retreat. We'd like to thank our amazing hosts, and everyone who participated on-site or remotely, and especially those who wrote up their experiences.
 <img src="/graphics/spring2019.jpg" style="glot:right; padding: 15px" />
 
-On this retreat, we ate our own dogfood, and used our MirageOS [DHCP](https://github.com/mirage/mirage-skeleton/tree/master/applications/dhcp), [recursive DNS resolver](https://github.com/roburio/unikernels/tree/master/resolver), and [CalDAV](https://github.com/roburio/caldav) unikernels as isolated virtual machines running on a [PC Engines APU](https://pcengines.ch/apu2c4.htm) with [FreeBSD](https://freebsd.org) as host system. The CalDAV server persisted its data in a git repository on the host system, using the raw git protocol for communication, the smart HTTP protocol could have been used as well. Lynxis wrote a [detailed blog post about our uplink situation](https://lunarius.fe80.eu/blog/mirageos-2019.html).
+On this retreat, we ate our own dogfood, and used our MirageOS [DHCP](https://github.com/mirage/mirage-skeleton/tree/master/applications/dhcp), [recursive DNS resolver](https://github.com/robur-coop/unikernels/tree/master/resolver), and [CalDAV](https://github.com/robur-coop/caldav) unikernels as isolated virtual machines running on a [PC Engines APU](https://pcengines.ch/apu2c4.htm) with [FreeBSD](https://freebsd.org) as host system. The CalDAV server persisted its data in a git repository on the host system, using the raw git protocol for communication, the smart HTTP protocol could have been used as well. Lynxis wrote a [detailed blog post about our uplink situation](https://lunarius.fe80.eu/blog/mirageos-2019.html).
 
 Lots of interesting discussions took place, code was developed, knowledge was exchanged, and issues were solved while we enjoyed the sun and the Moroccan food. The following list is not exhaustive, but gives an overview what was pushed forward.
 
@@ -100,7 +100,7 @@ The ixy network driver supports Intel 82599 network interface cards, and [is imp
 
 ## DNS client API
 
-Our proposed API is [described here](https://github.com/roburio/udns/blob/09c5e3c74c92505ec97f2a16818cc8a030e2868f/client/udns_client_flow.mli#L53-L80). Unix, Lwt, and MirageOS implementations are already available.
+Our proposed API is [described here](https://github.com/robur-coop/udns/blob/09c5e3c74c92505ec97f2a16818cc8a030e2868f/client/udns_client_flow.mli#L53-L80). Unix, Lwt, and MirageOS implementations are already available.
 
 ## [mirage-http](https://github.com/mirage/mirage-http) unified HTTP API
 
