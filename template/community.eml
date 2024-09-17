@@ -77,7 +77,7 @@ let render () = Layout.render ~title:"MirageOS Community" ~description:"Get in t
             <strong> <a href="http://anil.recoil.org">Anil Madhavapeddy</a> </strong>, University of Cambridge, <a href="https://github.com/avsm">@avsm</a>
           </li>
           <li>
-            <strong> <a href="https://hannes.robur.coop">Hannes Mehnert</a> </strong>, <a href="http://robur.io">robur</a>, <a href="https://github.com/hannesm">@hannesm</a>
+            <strong> <a href="https://hannes.robur.coop">Hannes Mehnert</a> </strong>, <a href="http://robur.coop">robur</a>, <a href="https://github.com/hannesm">@hannesm</a>
           </li>
           <li>
             <strong> <a href="https://www.lortex.org">Lucas Pluvinage</a> </strong>, <a href="https://github.com/TheLortex">@TheLortex</a>
