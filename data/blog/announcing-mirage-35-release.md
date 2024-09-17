@@ -31,7 +31,7 @@ The 3.5.0 release contains several API improvements of different MirageOS interf
 
 ### [Key-value store](https://github.com/mirage/mirage-kv)
 
-We improved the key-value store API, and added a read-write store. There is also [ongoing work](https://github.com/mirage/irmin/pull/559) which implements the read-write interface using irmin, a branchable persistent storage that can communicate via the git protocol. Motivations for these changes were the development of [CalDAV](https://github.com/roburio/caldav), but also the development of [wodan](https://github.com/mirage/wodan), a flash-friendly, safe and flexible filesystem. The goal is to EOL the [mirage-fs](https://github.com/mirage/mirage-fs) interface in favour of the key-value store.
+We improved the key-value store API, and added a read-write store. There is also [ongoing work](https://github.com/mirage/irmin/pull/559) which implements the read-write interface using irmin, a branchable persistent storage that can communicate via the git protocol. Motivations for these changes were the development of [CalDAV](https://github.com/robur-coop/caldav), but also the development of [wodan](https://github.com/mirage/wodan), a flash-friendly, safe and flexible filesystem. The goal is to EOL the [mirage-fs](https://github.com/mirage/mirage-fs) interface in favour of the key-value store.
 
 Major API improvements (in [this PR](https://github.com/mirage/mirage-kv/pull/14), since 2.0.0):
 - The `key` is now a path (list of segments) instead of a `string`

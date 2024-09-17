@@ -16,13 +16,13 @@ project’s initial aim was to self-host as many services as possible
 aimed at empowering internet users to deploy infrastructure securely
 to own their data and take back control of their privacy. MirageOS can
 securely deploy [static website
-hosting](https://github.com/roburio/unipi) with “Let’s Encrypt”
+hosting](https://github.com/robur-coop/unipi) with “Let’s Encrypt”
 certificate provisioning and a [secure SMTP
 stack](https://github.com/mirage/ptt) with security
 extensions. MirageOS can also deploy decentralised communication
 infrastructure like [Matrix](https://github.com/mirage/ocaml-matrix),
-[OpenVPN servers](https://github.com/roburio/openvpn), and [TLS
-tunnels](https://github.com/roburio/tlstunnel) to ensure data privacy
+[OpenVPN servers](https://github.com/robur-coop/openvpn), and [TLS
+tunnels](https://github.com/robur-coop/tlstunnel) to ensure data privacy
 or [DNS(SEC) servers](https://github.com/mirage/ocaml-dns) for better
 authentication.
 
@@ -67,7 +67,7 @@ upgrading). You would also want to read [the complete list of API
 changes](https://mirage.io/docs/breaking-changes). You can see
 unikernel examples in
 [mirage/mirage-skeleton](https://github.com/mirage/mirage-skeleton),
-[roburio/unikernels](https://github.com/roburio/unikernels) or
+[robur-coop/unikernels](https://github.com/robur-coop/unikernels) or
 [tarides/unikernels](https://github.com/tarides/unikernels).
 
 ## About MirageOS
