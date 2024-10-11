@@ -23,7 +23,7 @@ description of the concepts and high-level architecture of the system.
 [tezos]: https://tezos.com/
 [datakit]: https://github.com/docker/datakit
 [cuekeeper]: https://github.com/talex5/cuekeeper
-[architecture]: https://mirage.io/blog/introducing-irmin
+[architecture]: https://mirageos.org/blog/introducing-irmin
 
 To install Irmin 1.0:
 

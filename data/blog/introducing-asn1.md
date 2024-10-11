@@ -574,9 +574,9 @@ Posts in this TLS series:
  - [OCaml-TLS: ASN.1 and notation embedding][asn1-intro]
  - [OCaml-TLS: the protocol implementation and mitigations to known attacks][tls-api]
 
-[tls-intro]: https://mirage.io/blog/introducing-ocaml-tls
-[nocrypto-intro]: https://mirage.io/blog/introducing-nocrypto
-[x509-intro]: https://mirage.io/blog/introducing-x509
-[asn1-intro]: https://mirage.io/blog/introducing-asn1
-[tls-api]: https://mirage.io/blog/ocaml-tls-api-internals-attacks-mitigation
+[tls-intro]: https://mirageos.org/blog/introducing-ocaml-tls
+[nocrypto-intro]: https://mirageos.org/blog/introducing-nocrypto
+[x509-intro]: https://mirageos.org/blog/introducing-x509
+[asn1-intro]: https://mirageos.org/blog/introducing-asn1
+[tls-api]: https://mirageos.org/blog/ocaml-tls-api-internals-attacks-mitigation
 

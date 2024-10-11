@@ -53,9 +53,9 @@ you have `stunnel` or `stud` in use somewhere, then replacing it with the
 and send us feedback!
 
 
-### openmirage.org -> mirage.io ###
+### openmirage.org -> mirageos.org ###
 
-We've also switched our domain over to **<https://mirage.io>**, which is a
+We've also switched our domain over to **<https://mirageos.org>**, which is a
 unikernel running the full stack. We've been discussing this transition for a
 while on our [fortnightly calls][calls] and have actually been running this
 unikernel in parallel for a while. Setting things up this way has allowed us
@@ -77,7 +77,7 @@ Since we're incorporating more security features, it's important to consider
 the process of disclosing issues to us.  Many bugs can be reported as usual on
 our [issue tracker][issues] but if you think you've discovered a
 **security vulnerability**, the best way to inform us is described on a new
-page at **<https://mirage.io/security>**.
+page at **<https://mirageos.org/security>**.
 
 
 ### Get started! ###

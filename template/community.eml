@@ -13,10 +13,6 @@ let render () = Layout.render ~title:"MirageOS Community" ~description:"Get in t
           <a class="link-blue" href="http://en.wikipedia.org/wiki/ISC_license">ISC</a> license. If you find bugs or installation issues, please report them via the main <a class="link-blue" href="https://github.com/mirage/mirage/issues">issue tracker</a>. Broader queries or OCaml questions are very
           welcome on our <a class="link-blue" href="http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel">mailing list</a>.
         </p>
-        <p>
-          Please see the <a class="link-blue" href="https://mirage.io/docs/contributing">guide to contributions</a> if you wish to submit a patch. There is also a list of <a class="link-blue" href="http://canopy.mirage.io/tags/help%20needed">pioneer projects</a> if you are looking for an area in
-          need of work, at various difficulty levels.
-        </p>
       </div>
     </div>
     <div class="p-8 flex-1 space-y-6 text-center">

@@ -192,6 +192,6 @@ assembling your own components for your unikernel for whatever specialised
 unikernels you want to build.
 
 We'll talk about the deployment scripts that run the
-[live site](https://mirage.io) in the
+[live site](https://mirageos.org) in the
 [next article](/docs/deploying-via-ci).
 

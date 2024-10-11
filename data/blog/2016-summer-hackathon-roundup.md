@@ -25,17 +25,17 @@ We'll write about all of this in more detail, but for now here are the hack retr
 
 ### Solo5/MirageOS integration (KVM-based backend)
 
-Progress on the Solo5 project has been steaming ahead [since January](https://mirage.io/blog/introducing-solo5), and this was the perfect opportunity to get everyone together to plan its integration with MirageOS. [Dan Williams](http://researcher.ibm.com/researcher/view.php?person=us-djwillia) from IBM Research flew over to join us for the week, and [Martin Lucina](https://github.com/mato) headed to Cambridge to prepare for the upstreaming of the recent Solo5 work. This included deciding on naming and ownership of the repositories, detailing the relationships between repositories and getting ready to publish the mirage-solo5 packages to OPAM. [Mindy Preston](http://somerandomidiot.com), our MirageOS 3.0 release manager, and [Anil Madhavapeddy](http://anil.recoil.org) and [Thomas Gazagnaire](http://gazagnaire.org) (OPAM minions) were on hand to help plan this smoothly.
+Progress on the Solo5 project has been steaming ahead [since January](https://mirageos.org/blog/introducing-solo5), and this was the perfect opportunity to get everyone together to plan its integration with MirageOS. [Dan Williams](http://researcher.ibm.com/researcher/view.php?person=us-djwillia) from IBM Research flew over to join us for the week, and [Martin Lucina](https://github.com/mato) headed to Cambridge to prepare for the upstreaming of the recent Solo5 work. This included deciding on naming and ownership of the repositories, detailing the relationships between repositories and getting ready to publish the mirage-solo5 packages to OPAM. [Mindy Preston](http://somerandomidiot.com), our MirageOS 3.0 release manager, and [Anil Madhavapeddy](http://anil.recoil.org) and [Thomas Gazagnaire](http://gazagnaire.org) (OPAM minions) were on hand to help plan this smoothly.
 
-See their updates from the day on [Canopy](http://canopy.mirage.io/Posts/Solo5) and related blog posts:
+See their updates from the day on [Canopy](http://canopy.mirageos.org/Posts/Solo5) and related blog posts:
 
-* [Introducing Solo 5](https://mirage.io/blog/introducing-solo5)
+* [Introducing Solo 5](https://mirageos.org/blog/introducing-solo5)
 * Unikernel Monitors HotCloud 2016 [paper](https://www.usenix.org/system/files/conference/hotcloud16/hotcloud16_williams.pdf) and [slides](https://www.usenix.org/sites/default/files/conference/protected-files/hotcloud16_slides_williams.pdf)
 * [upstreaming GitHub issue](https://github.com/Solo5/solo5/issues/36) and [FreeBSD support tracking issue](https://github.com/Solo5/solo5/issues/61) from Hannes Mehnert.
 
 ### Onboarding new MirageOS/OCaml users
 
-Our tutorials and onboarding guides _really_ needed a facelift and an update, so [Gemma Gordon](https://ocaml.io/w/User:GemmaG) spent the morning with some of our new users to observe their installation process and tried to pinpoint blockers and areas of misunderstanding. Providing the simple, concise instructions needed in a guide together with alternatives for every possible system and version requirement is a tricky combination to get right, but we made some [changes](https://github.com/mirage/mirage-www/pull/468) to the [installation guide](https://mirage.io/docs/install) that we hope will help. The next task is to do the same for our other popular tutorials, reconfigure the layout for easy reading and centralise the information as much as possible between the OPAM, MirageOS and OCaml guides. Thank you to Marwan Aljubeh for his insight into this process.
+Our tutorials and onboarding guides _really_ needed a facelift and an update, so [Gemma Gordon](https://ocaml.io/w/User:GemmaG) spent the morning with some of our new users to observe their installation process and tried to pinpoint blockers and areas of misunderstanding. Providing the simple, concise instructions needed in a guide together with alternatives for every possible system and version requirement is a tricky combination to get right, but we made some [changes](https://github.com/mirage/mirage-www/pull/468) to the [installation guide](https://mirageos.org/docs/install) that we hope will help. The next task is to do the same for our other popular tutorials, reconfigure the layout for easy reading and centralise the information as much as possible between the OPAM, MirageOS and OCaml guides. Thank you to Marwan Aljubeh for his insight into this process.
 
 Other industrial users are also steaming ahead with their own MirageOS deployments. [Amir Chaudhry](http://amirchaudhry.com) spent the hackathon blogging about [NFV Platforms with MirageOS unikernels](http://unikernel.org/blog/2016/unikernel-nfv-platform), which details how Ericsson Silicon Valley has been using MirageOS to build lightweight routing kernels.
 
@@ -64,7 +64,7 @@ Our MirageOS release manager, Mindy Preston, was on hand to talk with everyone a
 
 ### Error logging
 
-Thomas Leonard continued with the work he started in Marrakech by [updating the error reporting patches](https://github.com/mirage/functoria/pull/55) (also [here](https://github.com/mirage/mirage-dev/pull/107)) to work with the latest version of MirageOS (which has a different logging system based on Daniel Buenzlis [Logs](http://erratique.ch/software/logs)). See the [original post](http://canopy.mirage.io/Posts/Errors) for more details.
+Thomas Leonard continued with the work he started in Marrakech by [updating the error reporting patches](https://github.com/mirage/functoria/pull/55) (also [here](https://github.com/mirage/mirage-dev/pull/107)) to work with the latest version of MirageOS (which has a different logging system based on Daniel Buenzlis [Logs](http://erratique.ch/software/logs)). See the [original post](http://canopy.mirageos.org/Posts/Errors) for more details.
 
 ### Ctypes 0.7.0 release
 

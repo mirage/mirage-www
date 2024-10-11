@@ -9,7 +9,7 @@ permalink: introducing-irmin-in-xenstore
 ---
 
 *This is the second in a series of posts that introduces the [Irmin](https://github.com/mirage/irmin) distributed storage engine.
-You might like to begin with the [introductory post](https://mirage.io/blog/introducing-irmin).*
+You might like to begin with the [introductory post](https://mirageos.org/blog/introducing-irmin).*
 
 [Xenstore](http://wiki.xen.org/wiki/XenStore) is a critical service found on all hosts
 running [Xen](http://www.xen.org/). Xenstore is necessary to

@@ -17,7 +17,7 @@ permalink: MSA01
 - Corrected:    2019-03-20 1.10.1 release
 
 For general information regarding MirageOS Security Advisories,
-please visit [https://mirage.io/security](https://mirage.io/security).
+please visit [https://mirageos.org/security](https://mirageos.org/security).
 
 ### Background
 
@@ -93,7 +93,7 @@ master: [6c7a13a5dae0f58dcc0653206a73fa3d8174b6d2](https://github.com/mirage/mir
 [netchannel](https://github.com/mirage/mirage-net-xen)
 
 You can find the latest version of this advisory online at
-[https://mirage.io/blog/MSA01](https://mirage.io/blog/MSA01).
+[https://mirageos.org/blog/MSA01](https://mirageos.org/blog/MSA01).
 
 This advisory is signed using OpenPGP, you can verify the signature
 by downloading our public key from a keyserver (`gpg --recv-key 4A732D757C0EDA74`),

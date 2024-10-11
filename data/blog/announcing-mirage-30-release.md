@@ -10,7 +10,7 @@ permalink: announcing-mirage-30-release
 
 We're excited to announce MirageOS 3.0! MirageOS is a modern, modular library operating system that allows the creation of small, secure, legacy-free services. MirageOS applications can be compiled to run as self-contained virtual machines (a few MB in size) on Xen or KVM hosts, FreeBSD's bhyve, or even as regular Unix processes (allowing access to regular debugging tools).  The system libraries themselves can be reused in traditional applications, just like any other software library.
 
-[Full release notes are available on GitHub](https://github.com/mirage/mirage/releases/tag/v3.0.0).  If you're interested in getting started with MirageOS 3 right away, you might be interested in the [revamped guide to getting started](https://mirage.io/docs/hello-world), [a small collection of example unikernels](https://github.com/mirage/mirage-skeleton), or the [porting guide for updating Mirage 2.x unikernels to Mirage 3](https://mirage.io/docs/mirage2-to-mirage3).
+[Full release notes are available on GitHub](https://github.com/mirage/mirage/releases/tag/v3.0.0).  If you're interested in getting started with MirageOS 3 right away, you might be interested in the [revamped guide to getting started](https://mirageos.org/docs/hello-world), [a small collection of example unikernels](https://github.com/mirage/mirage-skeleton), or the [porting guide for updating Mirage 2.x unikernels to Mirage 3](https://mirageos.org/docs/mirage2-to-mirage3).
 
 Here's a summary of the things in MirageOS 3 that we're most excited about:
 
@@ -36,7 +36,7 @@ The module types provided by MirageOS 3 replace the previous error paradigm (a c
 
 The MirageOS 3 module types define a core set of likely errors for each module type (see [the mirage-flow module type](http://docs.mirage.io/mirage-flow/Mirage_flow/module-type-S/index.html) for an example), which can be extended by any given implementation.  Module types now specify that each implementation must include a pretty-printer that can handle all emitted error types.  Functions that return a `success` type when they run as expected return a `(success, error) Result.t`, which the caller can print with `pp_error` if the value is an `Error`.
 
-For more background on the result type, see the [Rresult library](http://erratique.ch/software/rresult) which defines further useful operations on `Result.t` and is used widely in MirageOS libraries.  [A more in-depth explanation of errors](https://mirage.io/docs/mirage-3.0-errors) in Mirage 3 is also available.
+For more background on the result type, see the [Rresult library](http://erratique.ch/software/rresult) which defines further useful operations on `Result.t` and is used widely in MirageOS libraries.  [A more in-depth explanation of errors](https://mirageos.org/docs/mirage-3.0-errors) in Mirage 3 is also available.
 
 ### Logs Where You Want Them
 

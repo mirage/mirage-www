@@ -30,8 +30,8 @@
 
 (package
  (name mirageio)
- (synopsis "Website infrastructure and content for mirage.io")
- (description "Website infrastructure and content for mirage.io")
+ (synopsis "Website infrastructure and content for mirageos.org")
+ (description "Website infrastructure and content for mirageos.org")
  (depends
   (ocaml
    (>= 4.14))

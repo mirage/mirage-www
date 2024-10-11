@@ -26,7 +26,7 @@ permalink: MSA02
                 2019-03-27: ocaml-vchan 4.0.2
 
 For general information regarding MirageOS Security Advisories,
-please visit [https://mirage.io/security](https://mirage.io/security).
+please visit [https://mirageos.org/security](https://mirageos.org/security).
 
 ### Background
 
@@ -104,7 +104,7 @@ The following PRs were part of the fix:
 ### References
 
 You can find the latest version of this advisory online at
-[https://mirage.io/blog/MSA02](https://mirage.io/blog/MSA02).
+[https://mirageos.org/blog/MSA02](https://mirageos.org/blog/MSA02).
 
 This advisory is signed using OpenPGP, you can verify the signature
 by downloading our public key from a keyserver (`gpg --recv-key
