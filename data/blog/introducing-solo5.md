@@ -67,7 +67,7 @@ is called Mini-OS.  Mini-OS was (I believe) originally written as
 a vehicle to demonstrate the paravirtualized interface offered by Xen
 for people to have a reference to port their kernels to and as a base
 for new kernel builders to build specialized Xen domains.  Mini-OS is
-a popular base for [MirageOS](https://mirageos.org),
+a popular base for [MirageOS](/),
 [ClickOS](http://cnp.neclab.eu/projects/clickos/),
 and [other unikernels](http://unikernel.org/projects/).  Other
 software that implements a unikernel base include

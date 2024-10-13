@@ -515,7 +515,7 @@ We get this build failure because the code expects `T.read` to return a value of
 [< `Eof | `Error of 'a | `Ok of 'b ]
 ```
 
-but errors have been [reworked in Mirage 3](https://mirageos.org/blog/mirage-3.0-errors).  `T.read`, and other functions like it, now return a value of type
+but errors have been [reworked in Mirage 3](/blog/mirage-3.0-errors).  `T.read`, and other functions like it, now return a value of type
 
 ```ocaml
 (T.buffer Mirage_flow.or_eof, T.error) result

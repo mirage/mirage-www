@@ -54,7 +54,7 @@ If you’d like to tell us about your story.
 
 The easiest way to install MirageOS 4 is by using the [opam package
 manager](https://opam.ocaml.org/) version 2.1. Follow the
-[installation guide](https://mirageos.org/docs/install) for more details.
+[installation guide](/docs/install) for more details.
 
 ```
 $ opam update
@@ -64,7 +64,7 @@ $ opam install 'mirage>4'
 *Note*: if you upgrade from MirageOS 3, you will need to manually clean
 the previously generated files (or call `mirage clean` before
 upgrading). You would also want to read [the complete list of API
-changes](https://mirageos.org/docs/breaking-changes). You can see
+changes](/docs/breaking-changes). You can see
 unikernel examples in
 [mirage/mirage-skeleton](https://github.com/mirage/mirage-skeleton),
 [robur-coop/unikernels](https://github.com/robur-coop/unikernels) or
@@ -76,7 +76,7 @@ MirageOS is a library operating system that constructs unikernels for
 secure, high-performance, low-energy footprint applications across
 various hypervisor and embedded platforms. It is available as an
 open-source project created and maintained by the [MirageOS Core
-Team](https://mirageos.org/community). A unikernel
+Team](/community). A unikernel
 can be customised based on the target architecture by picking the
 relevant MirageOS libraries and compiling them into a standalone
 operating system, strictly containing the functionality necessary
@@ -124,8 +124,8 @@ OCaml to 4.12.1), and a cross-compiler for OCaml. Finally, MirageOS
 unikernels via Merlin, making day-to-day coding much faster.
 
 Review a complete list of features on the [MirageOS 4 release
-page](https://mirageos.org/docs/mirage-4). And check out [the breaking
-API changes](https://mirageos.org/docs/breaking-changes).
+page](/docs/mirage-4). And check out [the breaking
+API changes](/docs/breaking-changes).
 
 ## About Cross-Compilation and opam overlays
 

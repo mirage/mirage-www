@@ -9,7 +9,7 @@ permalink: announcing-mirage-40-beta-release
 
 **On behalf of the Mirage team, I am delighted to announce the beta release of MirageOS 4.0!**
 
-[MirageOS](https://mirageos.org) is a library operating system that constructs unikernels for secure, high-performance network applications across a variety of hypervisor and embedded platforms. For example, OCaml code can be developed on a standard OS, such as Linux or macOS, and then compiled into a fully standalone, specialised unikernel that runs under a Xen or KVM hypervisor. The MirageOS project also supplies several protocol and storage implementations written in pure OCaml, ranging from TCP/IP to TLS to a full Git-like storage stack.
+[MirageOS](/) is a library operating system that constructs unikernels for secure, high-performance network applications across a variety of hypervisor and embedded platforms. For example, OCaml code can be developed on a standard OS, such as Linux or macOS, and then compiled into a fully standalone, specialised unikernel that runs under a Xen or KVM hypervisor. The MirageOS project also supplies several protocol and storage implementations written in pure OCaml, ranging from TCP/IP to TLS to a full Git-like storage stack.
 
 The beta of the MirageOS 4.00 release contains:
 - `mirage.4.0.0~beta`: the CLI tool;
@@ -29,7 +29,7 @@ This new release of MirageOS adds systematic support for cross-compilation to al
 
 MirageOS implements cross-compilation using *Dune Workspaces*, which can take a whole collection of OCaml code (including all transitive dependencies) and compile it with a given set of C and OCaml compiler flags. This workflow also unlocks support for familiar IDE tools (such as `ocaml-lsp-server` and Merlin) while developing unikernels in OCaml. It makes day-to-day coding much faster because builds are decoupled from configuration and package updates. This means that live-builds, such as Dune's watch mode, now work fine even for exotic build targets!
 
-A complete list of features can be found on the [MirageOS 4 release page](https://mirageos.org/docs/mirage-4).
+A complete list of features can be found on the [MirageOS 4 release page](/docs/mirage-4).
 
 ## Cross-Compilation and Dune Overlays
 
@@ -48,6 +48,6 @@ That new tool, called [opam-monorepo](https://github.com/ocamllabs/opam-monorepo
 
 ## Next Steps
 
-Your feedback on this beta release is very much appreciated. You can follow the tutorials [here](https://mirageos.org/docs/mirage-4). Issues are very welcome on our [bug-tracker](https://github.com/mirage/mirage/issues), or come find us on Matrix in the MirageOS channel: [#mirageos:matrix.org](https://matrix.to/#/#mirageos:matrix.org) or on [Discuss](https://discuss.ocaml.org/t/mirageos-4-0-beta-release/9302).
+Your feedback on this beta release is very much appreciated. You can follow the tutorials [here](/docs/mirage-4). Issues are very welcome on our [bug-tracker](https://github.com/mirage/mirage/issues), or come find us on Matrix in the MirageOS channel: [#mirageos:matrix.org](https://matrix.to/#/#mirageos:matrix.org) or on [Discuss](https://discuss.ocaml.org/t/mirageos-4-0-beta-release/9302).
 
 The **final release** will happen in about a month. This release will incorporate your early feedback. It will also ensure the existing MirageOS ecosystem is compatible with MirageOS 4 by reducing the overlay packages to the bare minimum. We also plan to write more on `opam-monorepo` and all the new things MirageOS 4.0 will bring.

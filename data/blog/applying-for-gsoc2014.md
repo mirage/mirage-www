@@ -20,7 +20,7 @@ things to note to become a successful applicant.
   selected are much higher if you demonstrate some participation and
   code contributions (even minor) *before* submitting an application.
   Thus, even if you don't have a copy of Xen around, roll up your sleeves
-  and head over to the [installation instructions](https://mirageos.org/docs/install).
+  and head over to the [installation instructions](/docs/install).
 
 * Contributions do not have to be just code.  They can be documentation,
   help with packaging, wiki posts about a particular use, or test cases
