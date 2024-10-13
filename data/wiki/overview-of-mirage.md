@@ -10,7 +10,7 @@ permalink: overview-of-mirage
 
 If you're familiar with the using the command line, The best way to
 learn about MirageOS is to try out the [installation
-instructions](https://mirage.io/docs/install) for yourself!
+instructions](https://mirageos.org/docs/install) for yourself!
 
 ### What is MirageOS and why is it important?
 

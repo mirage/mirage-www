@@ -29,7 +29,7 @@ Some other events of note recently:
 
 * After several years of scribing awesome notes about our development, Amir has handed over the reigns to [Enguerrand](https://github.com/engil).
   Enguerrand joined OCaml Labs as an intern, and has built an IRC-to-Git logging bot which records our meetings over IRC and commits them
-  directly to a [repository](https://github.com/hannesm/canopy-data) which is [available online](http://canopy.mirage.io/irclogs).  Thanks Amir
+  directly to a [repository](https://github.com/hannesm/canopy-data) which is [available online](http://canopy.mirageos.org/irclogs).  Thanks Amir
   and Enguerrand for all their hard work on recording the growing amount of development in MirageOS.  [Gemma Gordon](https://ocaml.io/w/User:GemmaG)
   has also joined the project and been coordinating the [meetings](https://github.com/mirage/mirage-www/wiki/Call-Agenda).  The next one is in a
   few hours, so please join us on `#mirage` on Freenode IRC at 4pm British time if you would like to participate or are just curious!
@@ -42,7 +42,7 @@ Some other events of note recently:
 
 There have also been a number of talks in the past couple of months about MirageOS and its libraries:
 
-* [Dan Williams](http://researcher.watson.ibm.com/researcher/view.php?person=us-djwillia) from IBM Research delivered a paper at [USENIX HotCloud 2016](https://www.usenix.org/conference/hotcloud16/workshop-program/presentation/williams) about [Unikernel Monitors](https://www.usenix.org/system/files/conference/hotcloud16/hotcloud16_williams.pdf). This explains the basis of his work on [Solo5](https://mirage.io/blog/introducing-solo5), which we are currently integrating into MirageOS as a KVM-based boot backend to complement the Xen port.  You can also find his [talk slides](https://www.usenix.org/sites/default/files/conference/protected-files/hotcloud16_slides_williams.pdf) online.
+* [Dan Williams](http://researcher.watson.ibm.com/researcher/view.php?person=us-djwillia) from IBM Research delivered a paper at [USENIX HotCloud 2016](https://www.usenix.org/conference/hotcloud16/workshop-program/presentation/williams) about [Unikernel Monitors](https://www.usenix.org/system/files/conference/hotcloud16/hotcloud16_williams.pdf). This explains the basis of his work on [Solo5](https://mirageos.org/blog/introducing-solo5), which we are currently integrating into MirageOS as a KVM-based boot backend to complement the Xen port.  You can also find his [talk slides](https://www.usenix.org/sites/default/files/conference/protected-files/hotcloud16_slides_williams.pdf) online.
 * [Amir Chaudhry](https://twitter.com/amirmc) has given several talks and demos recently: check out his slides and detailed
   writeups about [GlueCon 2016](http://amirchaudhry.com/gluecon2016) and [CraftConf 2016](http://amirchaudhry.com/craftconf2016) in particular,
   as they come with instructions on how to reproduce his Mirage/ARM on-stage demonstrations of unikernels.

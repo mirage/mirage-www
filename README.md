@@ -1,6 +1,6 @@
-# Mirage.io
+# Mirageos.org
 
-Website infrastructure and content for mirage.io
+Website infrastructure and content for mirageos.org
 
 ## Set up your development environment
 
@@ -53,7 +53,6 @@ Alternatively, the `mirage/` folder implements the webserver as a MirageOS 4 uni
 To set it up, install the _mirage_ tool:
 
 ```bash
-opam repo add mirage-dev https://github.com/mirage/mirage-dev.git # until MirageOS 4 is released
 opam install "mirage>=4.0.0"
 ```
 

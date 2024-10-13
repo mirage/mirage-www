@@ -17,7 +17,7 @@ permalink: MSA00
 - Corrected:    2016-01-08 1.5.0 release, 2016-05-03 1.4.2 release
 
 For general information regarding MirageOS Security Advisories,
-please visit [https://mirage.io/security](https://mirage.io/security).
+please visit [https://mirageos.org/security](https://mirageos.org/security).
 
 Hannes published a [blog article](https://hannes.nqsb.io/Posts/BadRecordMac) about
 the analysis of this issue.
@@ -105,7 +105,7 @@ master: [0b1e53c0875062a50e2d5823b7da0d8e0a64dc37](https://github.com/mirage/mir
 [mirage-net-xen](https://github.com/mirage/mirage-net-xen)
 
 You can find the latest version of this advisory online at
-[https://mirage.io/blog/MSA00](https://mirage.io/blog/MSA00).
+[https://mirageos.org/blog/MSA00](https://mirageos.org/blog/MSA00).
 
 This advisory is signed using OpenPGP, you can verify the signature
 by downloading our public key from a keyserver (`gpg --recv-key 4A732D757C0EDA74`),

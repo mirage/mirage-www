@@ -13,7 +13,7 @@ permalink: announcing-mirage-39-release
 
 We are pleased to announce the release of MirageOS 3.9.0.
 
-Our last release announcement was for [MirageOS 3.6.0](https://mirage.io/blog/announcing-mirage-36-release), so we will also cover changes since 3.7.x and 3.8.x in this announcement.
+Our last release announcement was for [MirageOS 3.6.0](https://mirageos.org/blog/announcing-mirage-36-release), so we will also cover changes since 3.7.x and 3.8.x in this announcement.
 
 New features:
 

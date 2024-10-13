@@ -11,7 +11,7 @@ subject: Easy HTTPS Unikernels with mirage-seal
 permalink: mirage-seal
 ---
 
-Building a static website is one of the better-supported user stories for MirageOS, but it currently results in an HTTP-only site, with no capability for TLS.  Although there's been a great TLS stack [available for a while now](https://mirage.io/blog/introducing-ocaml-tls), it was a bit fiddly to assemble the pieces of TLS, Cohttp, and the MirageOS frontend tool in order to construct an HTTPS unikernel.  With MirageOS 2.5, that's changed!  Let's celebrate by building an HTTPS-serving unikernel of our very own.
+Building a static website is one of the better-supported user stories for MirageOS, but it currently results in an HTTP-only site, with no capability for TLS.  Although there's been a great TLS stack [available for a while now](https://mirageos.org/blog/introducing-ocaml-tls), it was a bit fiddly to assemble the pieces of TLS, Cohttp, and the MirageOS frontend tool in order to construct an HTTPS unikernel.  With MirageOS 2.5, that's changed!  Let's celebrate by building an HTTPS-serving unikernel of our very own.
 
 ## Prerequisites
 
@@ -86,7 +86,7 @@ cat intermediate.pem cert.pem > server.pem
 
 ## Packaging Up an HTTPS Site with Mirage-Seal
 
-Equipped with a private key and a certificate, let's make an HTTPS unikernel!  First, use `opam` to install `mirage-seal`.  If `opam` or other MirageOS tooling aren't set up yet, check out the [instructions for getting started](https://mirage.io/docs/install).
+Equipped with a private key and a certificate, let's make an HTTPS unikernel!  First, use `opam` to install `mirage-seal`.  If `opam` or other MirageOS tooling aren't set up yet, check out the [instructions for getting started](https://mirageos.org/docs/install).
 
 ```
 opam install mirage-seal

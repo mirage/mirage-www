@@ -21,7 +21,7 @@ permalink: MSA03
 - CVE:          CVE-2022-46770
 
 For general information regarding MirageOS Security Advisories,
-please visit [https://mirage.io/security](https://mirage.io/security).
+please visit [https://mirageos.org/security](https://mirageos.org/security).
 
 ### Background
 
@@ -86,7 +86,7 @@ The following PRs were part of the fix:
 ### References
 
 You can find the latest version of this advisory online at
-[https://mirage.io/blog/MSA03](https://mirage.io/blog/MSA03).
+[https://mirageos.org/blog/MSA03](https://mirageos.org/blog/MSA03).
 
 This advisory is signed using OpenPGP, you can verify the signature
 by downloading our public key from a keyserver (`gpg --recv-key

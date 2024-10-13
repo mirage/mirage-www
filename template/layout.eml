@@ -18,7 +18,7 @@ let render ~description ~title ~tab inner =
     <link rel="stylesheet" href="/vendor/font-files/inter.css" />
     <link rel="stylesheet" href="/vendor/font-files/spacegrotesk.css" />
     <link rel="alternate" type="application/atom+xml"
-      title="RSS Feed for mirage.io" href="/feed.xml" />
+      title="RSS Feed for mirageos.org" href="/feed.xml" />
 
     <title><%s title %></title>
   </head>
