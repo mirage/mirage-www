@@ -56,7 +56,7 @@ let render ~description ~title ~tab inner =
                 />
               </svg>
             </a>
-            <a href="https://docs.mirage.io/" class="opacity-60 hover:opacity-100 transition-opacity" title="Mirage Packages Documentationmake">
+            <a href="https://ocaml.org/packages/search?q=tag%3A%22org%3Amirage%22" class="opacity-60 hover:opacity-100 transition-opacity" title="Mirage Packages Documentation">
               <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   fill-rule="evenodd"
@@ -76,7 +76,7 @@ let render ~description ~title ~tab inner =
             <a class="hover:text-white<%s if tab = Home then " text-blue font-bold" else ""%>" href="/">Home</a>
             <a class="hover:text-white<%s if tab = Blog then " text-blue font-bold" else ""%>" href="/blog">Blog</a>
             <a class="hover:text-white<%s if tab = Docs then " text-blue font-bold" else ""%>" href="/docs">Docs</a>
-            <a class="hover:text-white<%s if tab = Api then " text-blue font-bold" else ""%>" href="https://docs.mirage.io/">API</a>
+            <a class="hover:text-white<%s if tab = Api then " text-blue font-bold" else ""%>" href="https://ocaml.org/packages/search?q=tag%3A%22org%3Amirage%22">API</a>
             <a class="hover:text-white<%s if tab = Community then " text-blue font-bold" else ""%>" href="/community">Community</a>
           </div>
         </div>

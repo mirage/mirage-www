@@ -46,7 +46,7 @@ required boilerplate to compile for a specific backend - by selecting the
 network device driver, the console, the network stack, and other devices -
 taking user-supplied configuration arguments into account.  In Mirage, the OCaml
 TCP/IP stack requires any network device which implements the
-[`Mirage_net.S`](http://docs.mirage.io/mirage-net/Mirage_net/module-type-S/index.html)
+[`Mirage_net.S`](https://ocaml.org/p/mirage-net/1.0.0/doc/Mirage_net/module-type-S/index.html)
 module type.
 
 At the end of the day, some mechanism needs to be in place which links the
