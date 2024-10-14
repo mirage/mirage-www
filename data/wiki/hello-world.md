@@ -381,15 +381,10 @@ For an example, let's have a look at `hello-key`:
 $ cat tutorial/hello-key/config.ml
 open Mirage
 
-let runtime_args = [ runtime_arg ~pos:__POS__ "Unikernel.hello" ]
 let packages = [ package "duration" ]
-let main = main ~runtime_args ~packages "Unikernel.Hello" (time @-> job)
+let main = main ~packages "Unikernel.Hello" (time @-> job)
 let () = register "hello-key" [ main $ default_time ]
 ```
-
-(Note: you must always provide `~pos:__POS__` to the `runtime_arg` function -
-`__POS__` is value from the OCaml Standard Library that represents the current location
-in the file, which here used for error reporting.)
 
 Below, the function `hello` (which uses the `cmdliner` package) declares the
 type of the runtime argument as `string` and sets a default value of `"Hello World!"`,
@@ -397,8 +392,10 @@ for the case that the argument is not provided at runtime.  See [the Cmdliner.Ar
 documentation](https://ocaml.org/p/cmdliner/latest/doc/Cmdliner/Arg/index.html)
 for more details.
 
-Then, we receive the value corresponding to the runtime argument `hello`
-as parameter `hello` on the `start` function, as shown below.
+The function [Mirage_runtime.register_arg](https://ocaml.org/p/mirage-runtime/latest/doc/Mirage_runtime/index.html#val-register_arg)
+registers the `'a Cmdliner.Term.t` as a runtime argument to the unikernel. It
+returns a function (`unit -> 'a`), which returns the value passed via `--hello`
+at boot time. The evaluation of runtime arguments is done just before `start`.
 
 ```bash dir=files/mirage-skeleton
 $ cat tutorial/hello-key/unikernel.ml
@@ -407,14 +404,14 @@ open Cmdliner
 
 let hello =
   let doc = Arg.info ~doc:"How to say hello." [ "hello" ] in
-  Arg.(value & opt string "Hello World!" doc)
+  Mirage_runtime.register_arg Arg.(value & opt string "Hello World!" doc)
 
 module Hello (Time : Mirage_time.S) = struct
-  let start _time hello =
+  let start _time =
     let rec loop = function
       | 0 -> Lwt.return_unit
       | n ->
-          Logs.info (fun f -> f "%s" hello);
+          Logs.info (fun f -> f "%s" (hello ()));
           Time.sleep_ns (Duration.of_sec 1) >>= fun () -> loop (n - 1)
     in
     loop 4
@@ -732,9 +729,10 @@ entire Internet, you will need to setup firewalling
 ([NAT](https://en.wikipedia.org/wiki/Network_address_translation)).
 
 For MirageOS unikernels running as Unix application, we have the option to use
-the host system stack (Unix sockets API). For any other target, we must
-use the OCaml network stack. On Unix, we can also use the OCaml network stack
-by utilizing a [tuntap](http://en.wikipedia.org/wiki/TUN/TAP) interface.
+the host system stack (Unix sockets API, `--net=host`). For any other target,
+we must use the OCaml network stack. On Unix, we can also use the OCaml network
+stack by utilizing a [tuntap](http://en.wikipedia.org/wiki/TUN/TAP) interface
+(`--net=ocaml`).
 
 Which of the two network stacks to use can be specified via command-line arguments,
 just as we configured the key-value store in the previous example.  The example in
@@ -744,14 +742,12 @@ the `device-usage/network` directory of
 ```ocaml file=files/mirage-skeleton/device-usage/network/config.ml
 open Mirage
 
-let runtime_args = [ runtime_arg ~pos:__POS__ "Unikernel.port" ]
-let main = main ~runtime_args "Unikernel.Main" (stackv4v6 @-> job)
+let main = main "Unikernel.Main" (stackv4v6 @-> job)
 let stack = generic_stackv4v6 default_network
 let () = register "network" [ main $ stack ]
 ```
 
-We have a runtime argument defining which TCP port to listen
-for connections on.  The network device is derived from
+The network device is derived from
 `default_network`, a function provided by Mirage which will choose a
 default based on the target the user chooses to pass to
 `mirage configure` - just like the default provided by
