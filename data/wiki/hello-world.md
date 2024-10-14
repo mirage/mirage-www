@@ -729,7 +729,7 @@ entire Internet, you will need to setup firewalling
 ([NAT](https://en.wikipedia.org/wiki/Network_address_translation)).
 
 For MirageOS unikernels running as Unix application, we have the option to use
-the host system stack (Unix sockets API, `--net=socket`). For any other target,
+the host system stack (Unix sockets API, `--net=host`). For any other target,
 we must use the OCaml network stack. On Unix, we can also use the OCaml network
 stack by utilizing a [tuntap](http://en.wikipedia.org/wiki/TUN/TAP) interface
 (`--net=ocaml`).
