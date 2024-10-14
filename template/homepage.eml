@@ -51,7 +51,7 @@ let render ~blog_posts = Layout.render ~title:"Welcome to MirageOS" ~description
 
     <p class="font-inter">This lets your services run more efficiently, securely and with finer control than with a full conventional software stack.</p>
 
-   <p class="font-inter"><a href="https://mirageos.org/docs/mirage-4" class="link-blue">Check what's new in MirageOS 4.</a></p>
+   <p class="font-inter"><a href="/docs/mirage-4" class="link-blue">Check what's new in MirageOS 4.</a></p>
   </div>
   <div class="p-9 border-t lg:border-t-0 lg:border-l border-black bg-cyan flex-1 space-y-6">
     <div class="space-y-1">

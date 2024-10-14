@@ -212,5 +212,5 @@ $ exit
 ```
 
 You should now have an bootable image. You can either hook up a serial UART cable to the pi or connect it to an HDMI screen.
-You can now e.g. follow the mirage [hello world](https://mirageos.org/docs/hello-world) to setup your unikernel.
+You can now e.g. follow the mirage [hello world](/docs/hello-world) to setup your unikernel.
 

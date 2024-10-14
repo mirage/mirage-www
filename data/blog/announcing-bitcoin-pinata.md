@@ -29,7 +29,7 @@ the details on the [site itself][tls-pinata]. Remember that the codebase is
 reverse engineer. Have fun!
 
 
-[om-tls]: https://mirageos.org/blog/introducing-ocaml-tls
+[om-tls]: /blog/introducing-ocaml-tls
 [mirleft-map]: https://goo.gl/maps/GpcQs
 [tls-demo]: https://tls.nqsb.io
 [31c3]: http://media.ccc.de/browse/congress/2014/31c3_-_6443_-_en_-_saal_2_-_201412271245_-_trustworthy_secure_modular_operating_system_engineering_-_hannes_-_david_kaloper.html#video

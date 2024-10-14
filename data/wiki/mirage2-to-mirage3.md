@@ -44,7 +44,7 @@ let disk = generic_kv_ro "t"
 
 `generic_kv_ro` knows about not only the Xen, Unix, and MacOSX targets handled by the previous config.ml code, but also will do the right thing for new targets Ukvm, Virtio, and Qubes.  The command-line argument `--kv_ro` will be understood when `mirage configure` is run from a directory with a `config.ml` including `generic_kv_ro`.
 
-Several useful `default_` and `generic_` functions are provided by [the Mirage module](http://docs.mirage.io/mirage/Mirage) for use in `config.ml`:
+Several useful `default_` and `generic_` functions are provided by [the Mirage module](https://ocaml.org/p/mirage/3.0.0/doc/Mirage/index.html) for use in `config.ml`:
 
 ```
 ~/mirage$ grep -E 'val (generic_|default_)'  lib/mirage.mli
@@ -424,7 +424,7 @@ Makefile:18: recipe for target 'build' failed
 make: *** [build] Error 1
 ```
 
-The module `T` is the TCP module from the stack passed by `Mirage_stack_lwt.V4`.  The module type definition for `TCP` lives in [mirage-protocols](http://docs.mirage.io/mirage-protocols/Mirage_protocols/module-type-TCP/index.html), where we can find a [function named `dst`](http://docs.mirage.io/mirage-protocols/Mirage_protocols/module-type-TCP/index.html#val-dst) with which to replace the call to `get_dst`.  (This change is also noted in the [mirage-tcpip version 3.0.0 release notes](https://github.com/mirage/mirage-tcpip/releases/tag/v3.0.0).)  Replacing `get_dest` with `dst` gives us the following `unikernel.ml`:
+The module `T` is the TCP module from the stack passed by `Mirage_stack_lwt.V4`.  The module type definition for `TCP` lives in [mirage-protocols](https://ocaml.org/p/mirage-protocols/1.0.0/doc/Mirage_protocols/module-type-TCP/index.html), where we can find a [function named `dst`](https://ocaml.org/p/mirage-protocols/1.0.0/doc/Mirage_protocols/module-type-TCP/index.html#val-dst) with which to replace the call to `get_dst`.  (This change is also noted in the [mirage-tcpip version 3.0.0 release notes](https://github.com/mirage/mirage-tcpip/releases/tag/v3.0.0).)  Replacing `get_dest` with `dst` gives us the following `unikernel.ml`:
 
 ```ocaml
 open Lwt.Infix
@@ -515,13 +515,13 @@ We get this build failure because the code expects `T.read` to return a value of
 [< `Eof | `Error of 'a | `Ok of 'b ]
 ```
 
-but errors have been [reworked in Mirage 3](https://mirageos.org/blog/mirage-3.0-errors).  `T.read`, and other functions like it, now return a value of type
+but errors have been [reworked in Mirage 3](/blog/mirage-3.0-errors).  `T.read`, and other functions like it, now return a value of type
 
 ```ocaml
 (T.buffer Mirage_flow.or_eof, T.error) result
 ```
 
-We know that `T.buffer` is `Cstruct.t` from [`Mirage_protocols_lwt.TCP`](http://docs.mirage.io/mirage-protocols-lwt/Mirage_protocols_lwt/index.html#module-type-TCP).  [`Mirage_flow.or_eof`](http://docs.mirage.io/mirage-flow/Mirage_flow/index.html#type-or_eof) is parameterized over that type, and [T.error](http://docs.mirage.io/mirage-protocols/Mirage_protocols/module-type-TCP/index.html#type-error) is some superset of [Tcp.error](http://docs.mirage.io/mirage-protocols/Mirage_protocols/module-type-TCP/index.html#type-error) so we can expect the type of `T.read`'s returned value to be
+We know that `T.buffer` is `Cstruct.t` from [`Mirage_protocols_lwt.TCP`](https://ocaml.org/p/mirage-protocols-lwt/1.2.0/doc/Mirage_protocols_lwt/module-type-TCP/index.html#type-buffer).  [`Mirage_flow.or_eof`](https://ocaml.org/p/mirage-flow/1.2.0/doc/Mirage_flow/index.html#type-or_eof.Eof) is parameterized over that type, and [T.error](https://ocaml.org/p/mirage-protocols/1.0.0/doc/Mirage_protocols/module-type-TCP/index.html#type-error.Tcp.error) is some superset of [Tcp.error](https://ocaml.org/p/mirage-protocols/1.0.0/doc/Mirage_protocols/Tcp/index.html#type-error) so we can expect the type of `T.read`'s returned value to be
 
 ```ocaml
 Ok of (`Data of Cstruct.t)
@@ -718,7 +718,7 @@ because the function `foreign` no longer takes a `libraries` argument.
 
 `libraries` and `packages` were two optional string list arguments in Mirageversions >= 2.7.x but < 3.x.  `libraries` was for `ocamlfind` libraries, and `packages` for OPAM packages; both string lists were simply fed `ocamlfind` and `opam` commands respectively.
 
-The [documentation for `foreign`](http://docs.mirage.io/mirage/Mirage/index.html#val-foreign) will be a useful reference for us.  In Mirage 3, `packages` is now a variable of type `package list`.  One can get a `package` by calling [Mirage.package](http://docs.mirage.io/functoria/Functoria/index.html#pkg), which has the following signature:
+The [documentation for `foreign`](https://ocaml.org/p/mirage/3.0.0/doc/Mirage/index.html#val-foreign) will be a useful reference for us.  In Mirage 3, `packages` is now a variable of type `package list`.  One can get a `package` by calling [Mirage.package](https://ocaml.org/p/functoria/3.0.1/doc/Functoria/index.html#val-package), which has the following signature:
 
 ```ocaml
 val package : ?build:bool -> ?sublibs:string list -> ?ocamlfind:string list -> ?min:string -> ?max:string -> string -> package
@@ -770,7 +770,7 @@ Hint: Recursive traversal of subdirectories was not enabled for this build,
 
 In Mirage3, the catchall `CLOCK` module type was replaced with two distinct types of clock modules: `PCLOCK`, a POSIX-compatible wall clock, and `MCLOCK`, a monotonically increasing counter.  In our experience porting MirageOS libraries, nearly all users of `CLOCK` wanted something like `MCLOCK` rather than something like `PCLOCK`.
 
-In the case of `ping`, we only want to pass the module to `Arpv4.Make`.  The [signature for Arpv4.Make](http://docs.mirage.io/tcpip/Arpv4/Make/index.html) in version 3.0 asks for an `MCLOCK`, so we'll include an `mclock` in the arguments to `foreign`.  In `register`, we'll use [`default_monotonic_clock`](http://docs.mirage.io/mirage/Mirage/index.html#val-default_monotonic_clock).  Our `config.ml` will look like:
+In the case of `ping`, we only want to pass the module to `Arpv4.Make`.  The [signature for Arpv4.Make](https://ocaml.org/p/tcpip/3.0.0/doc/Arpv4/index.html#module-Make) in version 3.0 asks for an `MCLOCK`, so we'll include an `mclock` in the arguments to `foreign`.  In `register`, we'll use [`default_monotonic_clock`](https://ocaml.org/p/mirage/3.0.0/doc/Mirage/index.html#val-default_monotonic_clock).  Our `config.ml` will look like:
 
 ```ocaml
 $ cat config.ml
@@ -1198,7 +1198,7 @@ make: *** [build] Error 1
 
 ### Another tcpip function change
 
-Line 18 is the call to `A.connect`.  The documentation for [the Arpv4 module in mirage-tcpip](http://docs.mirage.io/tcpip/Arpv4/Make/index.html), which we're invoking directly, has a [connect function](http://docs.mirage.io/tcpip/Arpv4/Make/index.html#val-connect) that expects a `Clock.t`, where `Clock` is the second module which was passed to `Arpv4.Make`.  The unikernel receives such a `Clock.t` as an argument to `start`, but it's currently ignoring it.  Let's edit `unikernel.ml` to stop ignoring `_clock`, and pass it as an argument to `A.connect`:
+Line 18 is the call to `A.connect`.  The documentation for [the Arpv4 module in mirage-tcpip](https://ocaml.org/p/tcpip/3.0.0/doc/Arpv4/index.html#module-Make), which we're invoking directly, has a [connect function](https://ocaml.org/p/tcpip/3.0.0/doc/Arpv4/Make/index.html#val-connect) that expects a `Clock.t`, where `Clock` is the second module which was passed to `Arpv4.Make`.  The unikernel receives such a `Clock.t` as an argument to `start`, but it's currently ignoring it.  Let's edit `unikernel.ml` to stop ignoring `_clock`, and pass it as an argument to `A.connect`:
 
 ```ocaml
 open Lwt.Infix
@@ -1273,7 +1273,7 @@ make: *** [build] Error 1
 
 ### Ipv4 configuration
 
-The `IP` module type no longer allows for mutable IP configuration settings.  [The type signature for `I.connect`](http://docs.mirage.io/tcpip/Static_ipv4/Make/index.html#val-connect) shows that, with some help from [Ipaddr.V4](http://docs.mirage.io/ipaddr/Ipaddr/V4/index.html) and a bit of adjustment `gateway` being `Ipaddr.V4.t option` rather than `Ipaddr.V4.t list` as `I.set_ip_gateways` previously expected, we can set the values directly when invoking `I.connect` from `unikernel.ml`:
+The `IP` module type no longer allows for mutable IP configuration settings.  [The type signature for `I.connect`](https://ocaml.org/p/tcpip/3.0.0/doc/Static_ipv4/Make/index.html#val-connect) shows that, with some help from [Ipaddr.V4](https://ocaml.org/p/ipaddr/latest/doc/Ipaddr/V4/index.html) and a bit of adjustment `gateway` being `Ipaddr.V4.t option` rather than `Ipaddr.V4.t list` as `I.set_ip_gateways` previously expected, we can set the values directly when invoking `I.connect` from `unikernel.ml`:
 
 
 ```ocaml

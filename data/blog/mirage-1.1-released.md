@@ -127,9 +127,9 @@ Networking and web libraries:
 [Dave Scott](http://dave.recoil.org) led the splitting up of several low-level Xen libraries as part of the build simplication.  These now compile on both Xen (using the direct hypercall interface) and Unix (using the dom0 `/dev` devices) where possible.
 * [xen-evtchn](https://github.com/xapi-project/ocaml-evtchn) for the event notification mechanism. There are a couple of wiki posts that explain how [event channels](/wiki/xen-events) and [suspend/resume](/wiki/xen-suspend) work in MirageOS/Xen guests.
 * [xen-gnt](https://github.com/xapi-project/ocaml-gnt) for the grant table mechanism that controls inter-process memory.
-* The [io-page](https://github.com/mirageos.org-page) library no longer needs Unix and Xen variants, as the interface has been standardized to work in both.
+* The [io-page](https://github.com/mirage/io-page) library no longer needs Unix and Xen variants, as the interface has been standardized to work in both.
 
-All of Dave's hacking on Xen device drivers is showcased in this [xen-disk wiki post](https://mirageos.org/docs/xen-synthesize-virtual-disk) that 
+All of Dave's hacking on Xen device drivers is showcased in this [xen-disk wiki post](/docs/xen-synthesize-virtual-disk) that 
 explains how you can synthesize your own virtual disk backends using MirageOS.  Xen uses a [split device](https://www.usenix.org/legacy/event/usenix05/tech/general/full_papers/short_papers/warfield/warfield.pdf) model,
 and now MirageOS lets us build *backend* device drivers that service VMs as well as the frontends!
 

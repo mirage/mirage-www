@@ -79,7 +79,7 @@ I've been testing using the Cubieboard 2 (and CubieTruck):
 ![Cubieboard2](/graphics/cubieboard2.jpg)
 
 The first step is to install Xen.
-[Running Xen on the Cubieboard2](https://mirageos.org/docs/xen-on-cubieboard2)
+[Running Xen on the Cubieboard2](/docs/xen-on-cubieboard2)
 documents the manual installation process, but you can now also use
 [mirage/xen-arm-builder](https://github.com/mirage/xen-arm-builder) to build
 an SDcard image automatically.
@@ -100,7 +100,7 @@ $ opam remote add mirage-dev https://github.com/mirage/mirage-dev
 $ opam install mirage
 ```
 
-[mirage-install]: https://mirageos.org/docs/install
+[mirage-install]: /docs/install
 
 ### Technical details
 
@@ -198,5 +198,5 @@ development version, but has only been lightly tested.
 If you have any problems or questions, or get it working on other devices,
 please [let us know][contact]!
 
-[contact]: https://mirageos.org/community/
+[contact]: /community/
 

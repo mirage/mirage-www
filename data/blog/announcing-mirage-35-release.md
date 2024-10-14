@@ -93,7 +93,7 @@ The semantics of arguments passed to a MirageOS unikernel used to vary between d
 - [ipaddr 3.0.0](https://github.com/mirage/ocaml-ipaddr) major API changes, the s-expression serialisation is a separate subpackage, macaddr is now a standalone opam package
 - [base64 3.0.0](https://github.com/mirage/base64) performance and API changes, see [this announcement](https://discuss.ocaml.org/t/ann-major-release-of-base64-article)
 - [git 2.0.0](https://github.com/mirage/ocaml-git), read [this announcement](https://discuss.ocaml.org/t/ann-ocaml-git-2-0), as well as [its design and implementation](https://discuss.ocaml.org/t/ocaml-git-git-design-and-implementation)
-- [io-page 2.0.0](https://github.com/mirageos.org-page), see [this announcement](https://discuss.ocaml.org/t/ann-io-page-2-0-0-with-packaging-changes)
+- [io-page 2.0.0](https://github.com/mirage/io-page), see [this announcement](https://discuss.ocaml.org/t/ann-io-page-2-0-0-with-packaging-changes)
 - [cohttp 2.0.0](https://github.com/mirage/ocaml-cohttp), see [this announcement](https://discuss.ocaml.org/t/ann-major-releases-of-cohttp-conduit-dns-tcpip)
 - [dns 1.0.0](https://github.com/mirage/ocaml-dns), see [this announcement](https://discuss.ocaml.org/t/ann-major-releases-of-cohttp-conduit-dns-tcpip)
 - [conduit 1.0.0](https://github.com/mirage/ocaml-conduit), see [this announcement](https://discuss.ocaml.org/t/ann-major-releases-of-cohttp-conduit-dns-tcpip)

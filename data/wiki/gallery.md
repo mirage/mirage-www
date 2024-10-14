@@ -23,14 +23,14 @@ The MirageOS gallery features unikernels that are used in production.
 - [Let's encrypt provisioning](https://github.com/robur-coop/dns-letsencrypt-secondary), a unikernel which provisions certificates via let's encrypt
 
 Example live unikernels
-- [MirageOS website](https://github.com/mirage/mirage-www), [online](https://mirageos.org)
+- [MirageOS website](https://github.com/mirage/mirage-www), [online](/)
 - [Roburs blog](https://git.robur.coop/robur/blog.robur.coop), [online](https://blog.robur.coop)
 
 Unikernel example repositories
 - [mirage-skeleton](https://github.com/mirage/mirage-skeleton)
 
 Emeriti
-- [NQSB website](https://github.com/mirleft/nqsb.io), website with a single resource, dispatch via SNI [online](https://nqsb.io)
+- [NQSB website](https://github.com/mirleft/nqsb.io), website with a single resource, dispatch via SNI
 - [Canopy](https://github.com/Engil/Canopy), a git-blogging unikernel, content as markdown in a git remote
 - [BTC Piñata](https://github.com/mirleft/btc-pinata), a self-serving security bounty
 - [TLS handshake demonstration](https://github.com/mirleft/tls-demo-server)

@@ -8,7 +8,7 @@ subject: Creating Xen block devices with MirageOS
 permalink: xen-block-devices-with-mirage
 ---
 
-[MirageOS](https://mirageos.org/) is a
+[MirageOS](/) is a
 [unikernel](http://anil.recoil.org/papers/2013-asplos-mirage.pdf)
 or "library operating system" that allows us to build applications
 which can be compiled to very diverse environments: the same code can be linked
@@ -270,6 +270,6 @@ then Mirage makes those experiments very easy too.
 
 If you come up with a cool example with Mirage, then send us a
 [pull request](https://github.com/mirage) or send us an email to the
-[Mirage mailing list](https://mirageos.org/about/) -- we'd
+[Mirage mailing list](/about/) -- we'd
 love to hear about it!
 
