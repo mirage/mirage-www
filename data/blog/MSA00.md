@@ -19,7 +19,7 @@ permalink: MSA00
 For general information regarding MirageOS Security Advisories,
 please visit [https://mirageos.org/security](https://mirageos.org/security).
 
-Hannes published a [blog article](https://hannes.nqsb.io/Posts/BadRecordMac) about
+Hannes published a [blog article](https://hannes.robur.coop/Posts/BadRecordMac) about
 the analysis of this issue.
 
 ### Background
