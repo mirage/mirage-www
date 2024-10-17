@@ -70,9 +70,7 @@ signed the outermost certificate. Further constraints, such as the
 maximum chain length and the validity period, are checked as
 well. Finally, the server name in the server certificate is checked to
 match the expected identity.
-For an example, you can see the sequence diagram of the TLS handshake your browser makes when you visit our [demonstration server][tls-demo].
-
-[tls-demo]: https://tls.nqsb.io
+For an example, you can see the sequence diagram of the TLS handshake your browser makes when you visit our demonstration server (not available anymore).
 
 ### Example code for verification
 

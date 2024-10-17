@@ -541,8 +541,8 @@ deployed TLS stacks, as shown by our [demo server][demo].  The code
 size is nearly two orders of magnitude smaller than OpenSSL, the most
 widely used open source library (written in C, which a lot of
 programming languages wrap instead of providing their own TLS
-implementation). Our code base seems to be robust -- the [demo
-server][demo] successfully finished over 22500 sessions in less than a
+implementation). Our code base seems to be robust -- the demo
+server (no longer available( successfully finished over 22500 sessions in less than a
 week, with only 11 failing traces.
 
 There is a huge need for high quality TLS implementations, because
@@ -560,7 +560,6 @@ testing our code in their services.
 **Please be aware that this release is a *beta* and is missing external code audits.
 It is not yet intended for use in any security critical applications.**
 
-[demo]: https://tls.nqsb.io
 [polar]: https://polarssl.org/tech-updates/security-advisories/polarssl-security-advisory-2014-02
 [java]: http://armoredbarista.blogspot.de/2014/04/easter-hack-even-more-critical-bugs-in.html
 [CVE-2014-1266]: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-1266

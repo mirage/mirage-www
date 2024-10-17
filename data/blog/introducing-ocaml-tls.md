@@ -115,7 +115,7 @@ Subsequent blog posts [over the coming
 days](https://github.com/mirage/mirage/issues/257) will examine in more detail
 the design and implementation of the four libraries, as well as the security
 trade-offs and some TLS attacks and our mitigations against them.  For now
-though, we invite you to try out our **[demonstration server][^7]**
+though, we invite you to try out our **demonstration server** (no longer available)
 running our stack over HTTPS.  We're particularly interested in feedback on our [issue tracker](https://github.com/mirleft/ocaml-tls) about
 clients that fail to connect, and any queries from anyone reviewing the [source code](https://github.com/mirleft/)
 of the constituent libraries. 
@@ -125,7 +125,6 @@ of the constituent libraries.
 [^4]: https://github.com/mirleft/ocaml-tls/issues?labels=security+concern&page=1&state=open
 [^5]: https://github.com/mirleft/ocaml-asn1-combinators
 [^6]: https://github.com/mirleft/ocaml-nocrypto
-[^7]: https://tls.nqsb.io/
 [^8]: https://github.com/mirleft/ocaml-x509
 [^9]: http://lists.xenproject.org/archives/html/mirageos-devel/
 [^10]: https://github.com/mirage/mirage-entropy
