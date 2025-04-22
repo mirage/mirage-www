@@ -165,6 +165,8 @@ module Make (Stack : Tcpip.Stack.V4V6) = struct
         Dream.get "/blog" Handler.blog;
         Dream.get "/blog/:permalink" Handler.blog_inner;
         Dream.get "/community" Handler.community;
+        (* It's important to keep /security at the root as it's linked in
+           securty advisories that are signed (and so can't be changed). *)
         Dream.get "/security" Handler.security;
         Dream.get "/docs/security" Handler.security_redirect;
         Dream.get "/docs" Handler.docs;
