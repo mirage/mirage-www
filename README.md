@@ -80,3 +80,21 @@ Clean up:
 mirage clean -f mirage/config.ml
 rm -rf mirage/duniverse
 ```
+
+
+Complete build instruction for the current state
+``` bash
+make deps
+make build
+make start # Run on unix
+mirage configure -f mirage/config.ml -t hvt # Creates the dune-workspace but no makefile
+cd mirage/
+mirage configure -f config.ml -t hvt
+opam pin .. # not --kind=path because that breaks make depends?
+make depends
+make build # throws an error. Not necessary?
+cd ..
+rm -rf mirage/duniverse/mirage-www
+dune build mirage
+solo5-hvt mirage/dist/www.hvt
+```
