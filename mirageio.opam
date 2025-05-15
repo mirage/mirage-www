@@ -50,6 +50,7 @@ depends: [
   "lwt" {with-test}
   "charrua-client" {with-test}
   "odoc" {with-doc}
+  "cmdliner-stdlib"
 ]
 build: [
   ["dune" "subst"] {dev}
@@ -67,9 +68,5 @@ build: [
 ]
 dev-repo: "git+https://github.com/mirage/mirage-www.git"
 pin-depends: [
-  ["dream-pure.dev"    "git+https://github.com/samoht/dream.git#e3c57b830ca7f517f531ac998ab13923f8bd076d"]
-  ["dream.dev"         "git+https://github.com/samoht/dream.git#e3c57b830ca7f517f531ac998ab13923f8bd076d"]
-  ["dream-mirage.dev"  "git+https://github.com/samoht/dream.git#e3c57b830ca7f517f531ac998ab13923f8bd076d"]
-  ["dream-httpaf.dev"  "git+https://github.com/samoht/dream.git#e3c57b830ca7f517f531ac998ab13923f8bd076d"]
   ["tailwindcss.dev" "https://github.com/tmattio/opam-tailwindcss/archive/3e60fc32bbcf82525999d83ad0f395e16107026b.tar.gz"]
 ]
