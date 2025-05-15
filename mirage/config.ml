@@ -34,17 +34,17 @@ let https =
   let runtime_args = [ runtime_arg ~pos:__POS__ "Unikernel_tls.setup" ] in
   let packages = package ~sublibs:[ "mirage" ] "dns-certify" :: packages in
   main "Unikernel_tls.Make" ~runtime_args ~packages ~packages_v
-    (random @-> pclock @-> time @-> stackv4v6 @-> job)
+    (random @-> stackv4v6 @-> job)
 
 let https_local =
   let runtime_args = [ runtime_arg ~pos:__POS__ "Unikernel_tls_local.setup" ] in
   main "Unikernel_tls_local.Make" ~runtime_args ~packages ~packages_v
-    (random @-> pclock @-> time @-> stackv4v6 @-> job)
+    (random @-> stackv4v6 @-> job)
 
 let http =
   let runtime_args = [ runtime_arg ~pos:__POS__ "Unikernel.setup" ] in
   main "Unikernel.Make" ~runtime_args ~packages ~packages_v
-    (pclock @-> time @-> stackv4v6 @-> job)
+    (stackv4v6 @-> job)
 
 let app =
   match_impl ~default:http (Key.value tls_key)
@@ -98,20 +98,20 @@ let mirage_monitoring =
   impl
     ~packages:[ package "mirage-monitoring" ]
     ~runtime_args:[ ip; port; hostname ] ~connect "Mirage_monitoring.Make"
-    (time @-> pclock @-> stackv4v6 @-> job)
+    (stackv4v6 @-> job)
 
 let enable_metrics =
   let doc = Key.Arg.info ~doc:"Enable metrics reporting" [ "metrics" ] in
   Key.(create "metrics" Arg.(flag doc))
 
-let optional_monitoring time pclock stack =
+let optional_monitoring stack =
   if_impl (Key.value enable_metrics)
-    (mirage_monitoring $ time $ pclock $ stack)
+    (mirage_monitoring $ stack)
     noop
 
 let () =
   register "www"
     [
-      optional_monitoring default_time default_posix_clock internal_stack;
-      app $ default_posix_clock $ default_time $ external_stack;
+      optional_monitoring internal_stack;
+      app $ external_stack;
     ]

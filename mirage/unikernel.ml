@@ -8,13 +8,11 @@ let setup =
     $ Cli.http_port $ Cli.redirect)
 
 module Make
-    (Pclock : Mirage_clock.PCLOCK)
-    (Time : Mirage_time.S)
     (Stack : Tcpip.Stack.V4V6) =
 struct
-  module WWW = Mirageio.Make (Pclock) (Time) (Stack)
+  module WWW = Mirageio.Make (Stack)
 
-  let start _ _ stack { http_port = port; redirect } =
+  let start stack { http_port = port; redirect } =
     match redirect with
     | None -> WWW.http ~port stack
     | Some domain ->

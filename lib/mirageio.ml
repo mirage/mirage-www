@@ -1,12 +1,10 @@
 open Import
 
 module Make
-    (Pclock : Mirage_clock.PCLOCK)
-    (Time : Mirage_time.S)
     (Stack : Tcpip.Stack.V4V6) =
 struct
-  module Dream = Dream__mirage.Mirage.Make (Pclock) (Time) (Stack)
-  module Middleware = Middleware.Make (Pclock) (Time) (Stack)
+  module Dream = Dream__mirage.Mirage.Make (Stack)
+  module Middleware = Middleware.Make (Stack)
 
   module Handler = struct
     open Mirageio_template

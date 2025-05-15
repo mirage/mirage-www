@@ -1,5 +1,5 @@
 module Stack = Tcpip_stack_socket.V4V6
-module Mirageio = Mirageio.Make (Pclock) (Unix_os.Time) (Stack)
+module Mirageio = Mirageio.Make (Stack)
 open Lwt.Syntax
 
 let stack_of_addr addr =
