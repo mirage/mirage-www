@@ -44,7 +44,6 @@
   (mirage-clock-unix (>= 3.0))
   (mirage-unix (>= 5.0.0))
   (ptime (>= 0.8.1))
-  (tailwindcss :build)
   (crunch (and :build (>= 3.1.0)))
   (cmarkit (and :build
    (>= 0.2.0)))
