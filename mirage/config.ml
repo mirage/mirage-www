@@ -28,7 +28,7 @@ let tls_key =
 let packages = [ package "mirageio"; package ~build:true "yaml" ]
 
 let packages_v =
-  Key.if_ Key.is_solo5 [ package ~scope:`Switch "solo5" ~max:"0.8.0" ] []
+  Key.if_ Key.is_solo5 [ package ~scope:`Switch "solo5" ] []
 
 let https =
   let runtime_args = [ runtime_arg ~pos:__POS__ "Unikernel_tls.setup" ] in
