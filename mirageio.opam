@@ -65,3 +65,10 @@ build: [
   ]
 ]
 dev-repo: "git+https://github.com/mirage/mirage-www.git"
+
+pin-depends: [
+  ["dream-pure.dev"    "git+https://github.com/Willenbrink/dream.git#fix-dream-mirage"]
+  ["dream.dev"         "git+https://github.com/Willenbrink/dream.git#fix-dream-mirage"]
+  ["dream-mirage.dev"  "git+https://github.com/Willenbrink/dream.git#fix-dream-mirage"]
+  ["dream-httpaf.dev"  "git+https://github.com/Willenbrink/dream.git#fix-dream-mirage"]
+]
