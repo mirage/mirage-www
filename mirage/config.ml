@@ -34,12 +34,12 @@ let https =
   let runtime_args = [ runtime_arg ~pos:__POS__ "Unikernel_tls.setup" ] in
   let packages = package ~sublibs:[ "mirage" ] "dns-certify" :: packages in
   main "Unikernel_tls.Make" ~runtime_args ~packages ~packages_v
-    (random @-> stackv4v6 @-> job)
+    (stackv4v6 @-> job)
 
 let https_local =
   let runtime_args = [ runtime_arg ~pos:__POS__ "Unikernel_tls_local.setup" ] in
   main "Unikernel_tls_local.Make" ~runtime_args ~packages ~packages_v
-    (random @-> stackv4v6 @-> job)
+    (stackv4v6 @-> job)
 
 let http =
   let runtime_args = [ runtime_arg ~pos:__POS__ "Unikernel.setup" ] in
@@ -50,8 +50,8 @@ let app =
   match_impl ~default:http (Key.value tls_key)
     [
       (No, http);
-      (Local, https_local $ default_random);
-      (Letsencrypt, https $ default_random);
+      (Local, https_local);
+      (Letsencrypt, https);
     ]
 
 let separate_networks =
@@ -90,7 +90,7 @@ let mirage_monitoring =
   let port = runtime_arg ~pos:__POS__ "Cli.metrics_port" in
   let hostname = runtime_arg ~pos:__POS__ "Cli.metrics_hostname" in
   let connect _ modname = function
-    | [ _; _; stack; ip; port; hostname ] ->
+    | [ stack; ip; port; hostname ] ->
         code ~pos:__POS__ "Lwt.return (%s.create %s ?port:%s ?hostname:%s %s)"
           modname ip port hostname stack
     | _ -> assert false
