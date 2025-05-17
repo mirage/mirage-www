@@ -68,9 +68,9 @@ build: [
 dev-repo: "git+https://github.com/mirage/mirage-www.git"
 
 pin-depends: [
-  ["dream-pure.dev"    "git+https://github.com/Willenbrink/dream.git#fix-dream-mirage"]
-  ["dream.dev"         "git+https://github.com/Willenbrink/dream.git#fix-dream-mirage"]
-  ["dream-mirage.dev"  "git+https://github.com/Willenbrink/dream.git#fix-dream-mirage"]
-  ["dream-httpaf.dev"  "git+https://github.com/Willenbrink/dream.git#fix-dream-mirage"]
+  ["dream-pure.dev"    "git+https://github.com/Willenbrink/dream.git#30d070b985fe2c9d8df658f7e68d2ff46ef11a52"]
+  ["dream.dev"         "git+https://github.com/Willenbrink/dream.git#30d070b985fe2c9d8df658f7e68d2ff46ef11a52"]
+  ["dream-mirage.dev"  "git+https://github.com/Willenbrink/dream.git#30d070b985fe2c9d8df658f7e68d2ff46ef11a52"]
+  ["dream-httpaf.dev"  "git+https://github.com/Willenbrink/dream.git#30d070b985fe2c9d8df658f7e68d2ff46ef11a52"]
   ["tailwindcss.dev" "https://github.com/tmattio/opam-tailwindcss/archive/3e60fc32bbcf82525999d83ad0f395e16107026b.tar.gz"]
 ]
