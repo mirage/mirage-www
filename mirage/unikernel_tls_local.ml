@@ -22,14 +22,14 @@ struct
   let restart_before_expire = function
     | server :: _, _ -> (
         let expiry = snd (X509.Certificate.validity server) in
-        let diff = Ptime.diff expiry (Ptime.v (Mirage_ptime.now_d_ps ())) in
+        let diff = Ptime.diff expiry (Mirage_ptime.now ()) in
         match Ptime.Span.to_int_s diff with
         | None -> invalid_arg "couldn't convert span to seconds"
         | Some x when x < 0 -> invalid_arg "diff is negative"
         | Some x ->
             Lwt.async (fun () ->
                 let+ () =
-                  Time.sleep_ns
+                  Mirage_sleep.ns
                     (Int64.sub (Duration.of_sec x) (Duration.of_day 1))
                 in
                 exit 42))
