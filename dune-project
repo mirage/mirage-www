@@ -49,6 +49,7 @@
    (>= 0.2.0)))
   (hilite (and :build
    (>= 0.4.0)))
+  (tailwindcss :build)
   (yaml :build)
   (fmt :build)
   (ppx_deriving_yaml (and :build (>= 0.2.1)))
