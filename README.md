@@ -98,3 +98,20 @@ rm -rf mirage/duniverse/mirage-www
 dune build mirage
 solo5-hvt mirage/dist/www.hvt
 ```
+
+``` bash
+mirage configure -f mirage/config.ml -t unix --net socket
+make depends
+make build
+mirage/dist/www --http-port=8080
+mirage configure -f mirage/config.ml -t hvt # Creates the dune-workspace but no makefile
+cd mirage/
+mirage configure -f config.ml -t hvt
+opam pin .. # not --kind=path because that breaks make depends?
+make depends
+make build # throws an error. Not necessary?
+cd ..
+rm -rf mirage/duniverse/mirage-www
+dune build mirage
+solo5-hvt --net:service=tap0 -- mirage/dist/www.hvt --ipv4=10.0.0.2/24 --ipv4-gateway=10.0.0.1
+```
