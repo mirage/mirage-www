@@ -1,0 +1,7 @@
+pin-depends: [
+  ["dream-pure.dev"    "git+https://github.com/mirage/dream.git#39644213ebe43a302956284e4e7f247581452d70"]
+  ["dream.dev"         "git+https://github.com/mirage/dream.git#39644213ebe43a302956284e4e7f247581452d70"]
+  ["dream-mirage.dev"  "git+https://github.com/mirage/dream.git#39644213ebe43a302956284e4e7f247581452d70"]
+  ["dream-httpaf.dev"  "git+https://github.com/mirage/dream.git#39644213ebe43a302956284e4e7f247581452d70"]
+  ["tailwindcss.dev"   "git+https://github.com/tmattio/opam-tailwindcss#2dba26de4257bb686038f6d64aabd05c78b80529"]
+]
