@@ -2,7 +2,6 @@
  (public_name mirageio)
  (libraries
   dream-mirage
-  mirage-time
   tcpip
   mirageio_template
   mirageio_data
