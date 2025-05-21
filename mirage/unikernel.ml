@@ -7,9 +7,7 @@ let setup =
     const (fun http_port redirect -> { http_port; redirect })
     $ Cli.http_port $ Cli.redirect)
 
-module Make
-    (Stack : Tcpip.Stack.V4V6) =
-struct
+module Make (Stack : Tcpip.Stack.V4V6) = struct
   module WWW = Mirageio.Make (Stack)
 
   let start stack { http_port = port; redirect } =

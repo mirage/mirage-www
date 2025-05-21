@@ -14,9 +14,7 @@ let setup =
         { host; redirect; http_port; https_port })
     $ Cli.host $ Cli.redirect $ Cli.http_port $ Cli.https_port)
 
-module Make
-    (Stack : Tcpip.Stack.V4V6) =
-struct
+module Make (Stack : Tcpip.Stack.V4V6) = struct
   module WWW = Mirageio.Make (Stack)
 
   let restart_before_expire = function

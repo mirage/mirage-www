@@ -1,6 +1,4 @@
-module Make
-    (Stack : Tcpip.Stack.V4V6) =
-struct
+module Make (Stack : Tcpip.Stack.V4V6) = struct
   module Dream = Dream__mirage.Mirage.Make (Stack)
 
   let head handler request =

@@ -26,9 +26,7 @@ let tls_key =
   Key.(create "tls" Arg.(opt tls_conv No doc))
 
 let packages = [ package "mirageio"; package ~build:true "yaml" ]
-
-let packages_v =
-  Key.if_ Key.is_solo5 [ package ~scope:`Switch "solo5" ] []
+let packages_v = Key.if_ Key.is_solo5 [ package ~scope:`Switch "solo5" ] []
 
 let https =
   let runtime_args = [ runtime_arg ~pos:__POS__ "Unikernel_tls.setup" ] in
@@ -43,16 +41,11 @@ let https_local =
 
 let http =
   let runtime_args = [ runtime_arg ~pos:__POS__ "Unikernel.setup" ] in
-  main "Unikernel.Make" ~runtime_args ~packages ~packages_v
-    (stackv4v6 @-> job)
+  main "Unikernel.Make" ~runtime_args ~packages ~packages_v (stackv4v6 @-> job)
 
 let app =
   match_impl ~default:http (Key.value tls_key)
-    [
-      (No, http);
-      (Local, https_local);
-      (Letsencrypt, https);
-    ]
+    [ (No, http); (Local, https_local); (Letsencrypt, https) ]
 
 let separate_networks =
   let doc =
@@ -105,13 +98,7 @@ let enable_metrics =
   Key.(create "metrics" Arg.(flag doc))
 
 let optional_monitoring stack =
-  if_impl (Key.value enable_metrics)
-    (mirage_monitoring $ stack)
-    noop
+  if_impl (Key.value enable_metrics) (mirage_monitoring $ stack) noop
 
 let () =
-  register "www"
-    [
-      optional_monitoring internal_stack;
-      app $ external_stack;
-    ]
+  register "www" [ optional_monitoring internal_stack; app $ external_stack ]

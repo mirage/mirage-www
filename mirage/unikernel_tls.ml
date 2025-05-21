@@ -2,7 +2,7 @@ open Lwt.Syntax
 open Cmdliner
 
 type t = {
-  dns_key : [`raw ] Domain_name.t * Dns.Dnskey.t;
+  dns_key : [ `raw ] Domain_name.t * Dns.Dnskey.t;
   key_seed : string;
   dns_server : Ipaddr.t;
   dns_port : int;
@@ -17,8 +17,8 @@ let docs = Cli.docs
 
 let key =
   Arg.conv ~docv:"HOST:HASH:DATA"
-    Dns.Dnskey.(name_key_of_string,
-                (fun ppf v -> Fmt.string ppf (name_key_to_string v)))
+    Dns.Dnskey.
+      (name_key_of_string, fun ppf v -> Fmt.string ppf (name_key_to_string v))
 
 let dns_key =
   let doc =
@@ -76,9 +76,7 @@ let setup =
     $ Cli.http_port $ Cli.redirect $ Cli.https_port $ dns_key $ dns_server
     $ dns_port $ Cli.host $ key_seed $ additional_hostnames)
 
-module Make
-    (Stack : Tcpip.Stack.V4V6) =
-struct
+module Make (Stack : Tcpip.Stack.V4V6) = struct
   module Certify = Dns_certify_mirage.Make (Stack)
   module WWW = Mirageio.Make (Stack)
 
@@ -107,11 +105,11 @@ struct
     in
     match certificates_result with
     | Error (`Msg m) -> Lwt.fail_with m
-    | Ok certificates ->
+    | Ok certificates -> (
         restart_before_expire certificates;
         match Tls.Config.server ~certificates:(`Single certificates) () with
-        | Error `Msg m -> Lwt.fail_with m
-        | Ok conf -> Lwt.return conf
+        | Error (`Msg m) -> Lwt.fail_with m
+        | Ok conf -> Lwt.return conf)
 
   let start stack t =
     let* cfg = tls_init stack t in
