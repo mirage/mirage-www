@@ -3,14 +3,13 @@
  (preludes files/prelude.ml)
  (libraries
   lwt
-  mirage-time
   duration
   mirage
   logs
   randomconv
   cstruct
-  mirage-random
   mirage-block-unix
   mirage-kv-unix
   mirage-net-unix
+  mirage-sleep
   charrua-client.mirage))
