@@ -43,6 +43,7 @@ We do this by writing a `config.ml` file:
 
 ```bash dir=files/mirage-skeleton
 $ cat tutorial/noop/config.ml
+(* mirage >= 4.4.0 & < 4.10.0 *)
 let () = Mirage.register "noop" []
 ```
 
@@ -97,6 +98,7 @@ to build the unikernel (no need to call the slow `make depends` every time!):
 
 ```bash dir=files/mirage-skeleton/tutorial/noop
 $ mirage configure -t unix
+Successfully configured the unikernel. Now run 'make' (or more fine-grained steps: 'make all', 'make depends', or 'make lock').
 $ dune build
 ```
 
@@ -159,16 +161,14 @@ Let's start by looking at the code:
 $ cat tutorial/hello/unikernel.ml
 open Lwt.Infix
 
-module Hello (Time : Mirage_time.S) = struct
-  let start _time =
-    let rec loop = function
-      | 0 -> Lwt.return_unit
-      | n ->
-          Logs.info (fun f -> f "hello");
-          Time.sleep_ns (Duration.of_sec 1) >>= fun () -> loop (n - 1)
-    in
-    loop 4
-end
+let start () =
+  let rec loop = function
+    | 0 -> Lwt.return_unit
+    | n ->
+        Logs.info (fun f -> f "hello");
+        Mirage_sleep.ns (Duration.of_sec 1) >>= fun () -> loop (n - 1)
+  in
+  loop 4
 ```
 
 We define a main `Hello` module parameterised by a module `Time`, of type
@@ -192,12 +192,11 @@ additional configuration  in `config.ml`, so let's take a look:
 
 ```bash dir=files/mirage-skeleton
 $ cat tutorial/hello/config.ml
+(* mirage >= 4.9.0 & < 4.10.0 *)
 open Mirage
 
-let main =
-  main "Unikernel.Hello" (time @-> job) ~packages:[ package "duration" ]
-
-let () = register "hello" [ main $ default_time ]
+let main = main "Unikernel" job ~packages:[ package "duration" ]
+let () = register "hello" [ main ]
 ```
 
 First we open the `Mirage` module to save on typing.  Next, we define
@@ -255,6 +254,8 @@ $ cd tutorial/hello
 
 ```bash dir=files/mirage-skeleton/tutorial/hello
 $ mirage configure -t unix
+adding unit argument to 'start ()' (to delay execution)
+Successfully configured the unikernel. Now run 'make' (or more fine-grained steps: 'make all', 'make depends', or 'make lock').
 ```
 
 `mirage configure` generates a `Makefile` with all the build rules included from
@@ -316,6 +317,8 @@ $ cd tutorial/hello
 
 ```bash dir=files/mirage-skeleton/tutorial/hello
 $ mirage configure -t hvt
+adding unit argument to 'start ()' (to delay execution)
+Successfully configured the unikernel. Now run 'make' (or more fine-grained steps: 'make all', 'make depends', or 'make lock').
 ```
 
 You can then install its dependencies and build it with:
@@ -379,11 +382,12 @@ For an example, let's have a look at `hello-key`:
 
 ```bash dir=files/mirage-skeleton
 $ cat tutorial/hello-key/config.ml
+(* mirage >= 4.9.0 & < 4.10.0 *)
 open Mirage
 
 let packages = [ package "duration" ]
-let main = main ~packages "Unikernel.Hello" (time @-> job)
-let () = register "hello-key" [ main $ default_time ]
+let main = main ~packages "Unikernel" job
+let () = register "hello-key" [ main ]
 ```
 
 Below, the function `hello` (which uses the `cmdliner` package) declares the
@@ -406,16 +410,14 @@ let hello =
   let doc = Arg.info ~doc:"How to say hello." [ "hello" ] in
   Mirage_runtime.register_arg Arg.(value & opt string "Hello World!" doc)
 
-module Hello (Time : Mirage_time.S) = struct
-  let start _time =
-    let rec loop = function
-      | 0 -> Lwt.return_unit
-      | n ->
-          Logs.info (fun f -> f "%s" (hello ()));
-          Time.sleep_ns (Duration.of_sec 1) >>= fun () -> loop (n - 1)
-    in
-    loop 4
-end
+let start () =
+  let rec loop = function
+    | 0 -> Lwt.return_unit
+    | n ->
+        Logs.info (fun f -> f "%s" (hello ()));
+        Mirage_sleep.ns (Duration.of_sec 1) >>= fun () -> loop (n - 1)
+  in
+  loop 4
 ```
 
 Let's configure the example for Unix and build it (do not forget to call `make
@@ -427,6 +429,8 @@ $ cd tutorial/hello-key
 
 ```bash dir=files/mirage-skeleton/tutorial/hello-key
 $ mirage configure -t unix
+adding unit argument to 'start ()' (to delay execution)
+Successfully configured the unikernel. Now run 'make' (or more fine-grained steps: 'make all', 'make depends', or 'make lock').
 $ dune build
 ```
 
@@ -465,6 +469,8 @@ arguments specified on the command line to the unikernel when invoked:
 ``` skip
 $ cd tutorial/hello-key
 $ mirage configure -t hvt
+adding unit argument to 'start ()' (to delay execution)
+Successfully configured the unikernel. Now run 'make' (or more fine-grained steps: 'make all', 'make depends', or 'make lock').
 $ dune build
 $ solo5-hvt -- dist/hello-key.hvt --hello="Hola!"
             |      ___|
@@ -512,6 +518,7 @@ Remember, the name has to be alphanumeric on Solo5, so the dot in
 `disk.img` will not work on Solo5.
 
 ```ocaml file=files/mirage-skeleton/device-usage/block/config.ml
+(* mirage >= 4.4.0 & < 4.10.0 *)
 open Mirage
 
 let main = main "Unikernel.Main" (block @-> job)
@@ -549,6 +556,7 @@ have not done so already):
 
 ```bash dir=files/mirage-skeleton/device-usage/block
 $ mirage configure -t unix
+Successfully configured the unikernel. Now run 'make' (or more fine-grained steps: 'make all', 'make depends', or 'make lock').
 $ dune build
 ```
 
@@ -581,6 +589,7 @@ We can build this example for another backend too:
 
 ```bash skip
 $ mirage configure -t hvt
+Successfully configured the unikernel. Now run 'make' (or more fine-grained steps: 'make all', 'make depends', or 'make lock').
 $ dune build
 ```
 
@@ -633,6 +642,7 @@ The `config.ml` might look familiar after the earlier block and console
 examples:
 
 ```ocaml file=files/mirage-skeleton/device-usage/kv_ro/config.ml
+(* mirage >= 4.4.0 & < 4.10.0 *)
 open Mirage
 
 let disk = generic_kv_ro "t"
@@ -677,6 +687,7 @@ can see at `_build/default/static_t.ml`, the file being generated by
 
 ```bash dir=files/mirage-skeleton/device-usage/kv_ro
 $ mirage configure -t unix
+Successfully configured the unikernel. Now run 'make' (or more fine-grained steps: 'make all', 'make depends', or 'make lock').
 $ dune build
 Generating Static_t.ml
 Generating Static_t.mli
@@ -694,6 +705,7 @@ We can use the `direct` implementation with the Unix target as well:
 
 ```bash dir=files/mirage-skeleton/device-usage/kv_ro
 $ mirage configure -t unix --kv_ro=direct
+Successfully configured the unikernel. Now run 'make' (or more fine-grained steps: 'make all', 'make depends', or 'make lock').
 $ dune build
 ```
 
@@ -740,6 +752,7 @@ the `device-usage/network` directory of
 [`mirage-skeleton`](http://github.com/mirage/mirage-skeleton) is illustrative:
 
 ```ocaml file=files/mirage-skeleton/device-usage/network/config.ml
+(* mirage >= 4.5.0 & < 4.10.0 *)
 open Mirage
 
 let main = main "Unikernel.Main" (stackv4v6 @-> job)
@@ -771,6 +784,7 @@ And, as previously, configure and build the unikernel (if needed, use
 
 ```bash dir=files/mirage-skeleton/device-usage/network
 $ mirage configure -t unix --net socket
+Successfully configured the unikernel. Now run 'make' (or more fine-grained steps: 'make all', 'make depends', or 'make lock').
 $ dune build
 ```
 
@@ -824,6 +838,7 @@ they need direct access to a `tap` network device. The IPv4 address defaults to
 
 ```bash dir=files/mirage-skeleton/device-usage/network
 $ mirage configure -t unix --net direct
+Successfully configured the unikernel. Now run 'make' (or more fine-grained steps: 'make all', 'make depends', or 'make lock').
 $ dune build
 ```
 
@@ -886,6 +901,7 @@ just like the argument to `hello` in the `hello-key` example.
 ```bash skip
 $ cd device-usage/network
 $ mirage configure -t hvt
+Successfully configured the unikernel. Now run 'make' (or more fine-grained steps: 'make all', 'make depends', or 'make lock').
 $ make depends
 $ make build
 $ solo5-hvt --net:service=tap100 -- dist/network.hvt --ipv4=10.0.0.10/24
