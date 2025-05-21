@@ -113,7 +113,7 @@ struct
         | Error `Msg m -> Lwt.fail_with m
         | Ok conf -> Lwt.return conf
 
-  let start _ _ _ stack t =
+  let start stack t =
     let* cfg = tls_init stack t in
     let http =
       WWW.Dream.(

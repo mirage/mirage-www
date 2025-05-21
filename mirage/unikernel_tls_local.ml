@@ -35,7 +35,7 @@ struct
                 exit 42))
     | _ -> ()
 
-  let start _ _ _ stack { http_port; https_port; host; redirect } =
+  let start stack { http_port; https_port; host; redirect } =
     let http =
       WWW.Dream.(
         http ~port:http_port (Stack.tcp stack) @@ fun req ->
