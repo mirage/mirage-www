@@ -125,10 +125,10 @@ Now write a program that spins off two threads, each of which sleeps for some
 amount of time, say 1 and 2 seconds and then one prints "Heads", the other
 "Tails". After both have finished, it prints "Finished" and exits.
 
-To sleep for some number of nanoseconds use the function `sleep_ns`
+To sleep for some number of nanoseconds use the function `Mirage_sleep.ns`
 declared in the interface
-[Mirage_time.S](https://mirage.github.io/mirage-time/mirage-time/Mirage_time/module-type-S/index.html),
-and to print to the console use `Logs.info`. Note that `Mirage_time`
+[Mirage_sleep](https://mirage.github.io/mirage-sleep/mirage-sleep/Mirage_sleep/index.html),
+and to print to the console use `Logs.info`. Note that `Mirage_sleep`
 is a Mirage-specific module; if you are using Lwt in another context,
 use `Lwt_unix.sleep` and `Lwt_io.write`. (You will also need to
 manually start the main event loop with `Lwt_main.run`.)
