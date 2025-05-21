@@ -243,7 +243,7 @@ together to get the same effect.
 open Lwt.Infix
 
 let read_line () =
-  Mirage_sleep,ns (Duration.of_ms (Randomconv.int ~bound:2500 Mirage_crypto_rng.generate))
+  Mirage_sleep.ns (Duration.of_ms (Randomconv.int ~bound:2500 Mirage_crypto_rng.generate))
   >|= fun () -> String.make (Randomconv.int ~bound:20 Mirage_crypto_rng.generate) 'a'
 
 let start () =
