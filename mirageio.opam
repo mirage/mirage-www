@@ -48,6 +48,7 @@ depends: [
   "dns-certify" {with-test}
   "lwt" {with-test}
   "charrua-client" {with-test}
+  "cmdliner-stdlib"
   "odoc" {with-doc}
 ]
 build: [

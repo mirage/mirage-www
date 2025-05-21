@@ -62,4 +62,5 @@
   (mirage-bootvar :with-test)
   (dns-certify :with-test)
   (lwt :with-test)
-  (charrua-client :with-test)))
+  (charrua-client :with-test)
+  cmdliner-stdlib))
