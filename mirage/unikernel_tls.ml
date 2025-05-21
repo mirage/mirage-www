@@ -109,8 +109,9 @@ struct
     | Error (`Msg m) -> Lwt.fail_with m
     | Ok certificates ->
         restart_before_expire certificates;
-        let conf = Tls.Config.server ~certificates:(`Single certificates) () in
-        Lwt.return conf
+        match Tls.Config.server ~certificates:(`Single certificates) () with
+        | Error `Msg m -> Lwt.fail_with m
+        | Ok conf -> Lwt.return conf
 
   let start _ _ _ stack t =
     let* cfg = tls_init stack t in
