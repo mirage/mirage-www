@@ -149,9 +149,7 @@ You will need to have MirageOS [installed](/wiki/install). Create a file
 ```ocaml file=files/tutorial-lwt/heads1.ml
 open Mirage
 
-let main =
-  main ~packages:[ package "duration" ] "Unikernel" job
-
+let main = main ~packages:[ package "duration" ] "Unikernel" job
 let () = register "heads1" [ main ]
 ```
 Add a file `unikernel.ml` with the following content and edit it:
@@ -229,8 +227,8 @@ generator you can use for testing:
 
 ```ocaml
 let read_line () =
-  Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:2500 generate))
-  >|= fun () -> String.make (Randomconv.int ~bound:20 R.generate) 'a'
+  Mirage_sleep.ns (Duration.of_ms (Randomconv.int ~bound:2500 generate))
+  >|= fun () -> String.make (Randomconv.int ~bound:20 Mirage_crypto_rng.generate) 'a'
 ```
 
 By the way, the `>|=` operator ("map") used here is similar to `>>=`
@@ -245,8 +243,8 @@ together to get the same effect.
 open Lwt.Infix
 
 let read_line () =
-  Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:2500 R.generate))
-  >|= fun () -> String.make (Randomconv.int ~bound:20 generate) 'a'
+  Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:2500 Mirage_crypto_rng.generate))
+  >|= fun () -> String.make (Randomconv.int ~bound:20 Mirage_crypto_rng.generate) 'a'
 
 let start () =
   let rec echo_server = function
@@ -558,7 +556,7 @@ let timeout s t : string option Lwt.t = failwith "TODO"
 
 let start () =
   let t =
-    Mirage_sleep.ns (Duration.of_ms (Randomconv.int ~bound:3000 R.generate))
+    Mirage_sleep.ns (Duration.of_ms (Randomconv.int ~bound:3000 Mirage_crypto_rng.generate))
     >|= fun () -> "Heads"
   in
   timeout (Duration.of_sec 2) t >|= function
@@ -595,7 +593,7 @@ let timeout delay t =
 
 let start () =
   let t =
-    Mirage_sleep.ns (Duration.of_ms (Randomconv.int ~bound:3000 R.generate))
+    Mirage_sleep.ns (Duration.of_ms (Randomconv.int ~bound:3000 Mirage_crypto_rng.generate))
     >|= fun () -> "Heads"
   in
   timeout (Duration.of_sec 2) t >|= function

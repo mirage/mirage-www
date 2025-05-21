@@ -12,4 +12,5 @@
   mirage-kv-unix
   mirage-net-unix
   mirage-sleep
+  mirage-crypto-rng
   charrua-client.mirage))
