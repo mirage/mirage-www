@@ -125,10 +125,10 @@ Now write a program that spins off two threads, each of which sleeps for some
 amount of time, say 1 and 2 seconds and then one prints "Heads", the other
 "Tails". After both have finished, it prints "Finished" and exits.
 
-To sleep for some number of nanoseconds use the function `sleep_ns`
+To sleep for some number of nanoseconds use the function `Mirage_sleep.ns`
 declared in the interface
-[Mirage_time.S](https://mirage.github.io/mirage-time/mirage-time/Mirage_time/module-type-S/index.html),
-and to print to the console use `Logs.info`. Note that `Mirage_time`
+[Mirage_sleep](https://mirage.github.io/mirage-sleep/mirage-sleep/Mirage_sleep/index.html),
+and to print to the console use `Logs.info`. Note that `Mirage_sleep`
 is a Mirage-specific module; if you are using Lwt in another context,
 use `Lwt_unix.sleep` and `Lwt_io.write`. (You will also need to
 manually start the main event loop with `Lwt_main.run`.)
@@ -140,7 +140,7 @@ units of time.
 
 ```ocaml
 (* sleep for n seconds *)
-let sleep_s n = Time.sleep_ns (Duration.of_sec n)
+let sleep_s n = Mirage_sleep.ns (Duration.of_sec n)
 ```
 
 You will need to have MirageOS [installed](/wiki/install). Create a file
@@ -149,21 +149,17 @@ You will need to have MirageOS [installed](/wiki/install). Create a file
 ```ocaml file=files/tutorial-lwt/heads1.ml
 open Mirage
 
-let main =
-  main ~packages:[ package "duration" ] "Unikernel.Heads1" (time @-> job)
-
-let () = register "heads1" [ main $ default_time ]
+let main = main ~packages:[ package "duration" ] "Unikernel" job
+let () = register "heads1" [ main ]
 ```
 Add a file `unikernel.ml` with the following content and edit it:
 
 ```ocaml
 open Lwt.Infix
 
-module Heads1 (Time : Mirage_time.S) = struct
-  let start _time =
-    (* Add your implementation here... *)
-    Logs.info (fun m -> m "Finished")
-end
+let start () =
+  (* Add your implementation here... *)
+  Logs.info (fun m -> m "Finished")
 ```
 
 Assuming you want to build as a normal Unix process, compile the application with:
@@ -184,17 +180,15 @@ configure --help`.
 ```ocaml
 open Lwt.Infix
 
-module Heads1 (Time : Mirage_time.S) = struct
-  let start _time =
-    Lwt.join
-      [
-        ( Time.sleep_ns (Duration.of_sec 1) >|= fun () ->
-          Logs.info (fun m -> m "Heads") );
-        ( Time.sleep_ns (Duration.of_sec 2) >|= fun () ->
-          Logs.info (fun m -> m "Tails") );
-      ]
-    >|= fun () -> Logs.info (fun m -> m "Finished")
-end
+let start () =
+  Lwt.join
+    [
+      ( Mirage_sleep.ns (Duration.of_sec 1) >|= fun () ->
+        Logs.info (fun m -> m "Heads") );
+      ( Mirage_sleep.ns (Duration.of_sec 2) >|= fun () ->
+        Logs.info (fun m -> m "Tails") );
+    ]
+  >|= fun () -> Logs.info (fun m -> m "Finished")
 ```
 
 This code is also found in
@@ -220,9 +214,9 @@ open Mirage
 
 let main =
   let packages = [ package "duration"; package ~max:"0.2.0" "randomconv" ] in
-  main ~packages "Unikernel.Echo_server" (time @-> random @-> job)
+  main ~packages "Unikernel" job
 
-let () = register "echo_server" [ main $ default_time $ default_random ]
+let () = register "echo_server" [ main ]
 ```
 
 You might notice that it's very similar to the previous example
@@ -233,8 +227,8 @@ generator you can use for testing:
 
 ```ocaml
 let read_line () =
-  Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:2500 generate))
-  >|= fun () -> String.make (Randomconv.int ~bound:20 R.generate) 'a'
+  Mirage_sleep.ns (Duration.of_ms (Randomconv.int ~bound:2500 generate))
+  >|= fun () -> String.make (Randomconv.int ~bound:20 Mirage_crypto_rng.generate) 'a'
 ```
 
 By the way, the `>|=` operator ("map") used here is similar to `>>=`
@@ -248,21 +242,19 @@ together to get the same effect.
 ```ocaml
 open Lwt.Infix
 
-module Echo_server (Time : Mirage_time.S) (R : Mirage_random.S) = struct
-  let read_line () =
-    Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:2500 R.generate))
-    >|= fun () -> String.make (Randomconv.int ~bound:20 generate) 'a'
+let read_line () =
+  Mirage_sleep.ns (Duration.of_ms (Randomconv.int ~bound:2500 Mirage_crypto_rng.generate))
+  >|= fun () -> String.make (Randomconv.int ~bound:20 Mirage_crypto_rng.generate) 'a'
 
-  let start _time _r =
-    let rec echo_server = function
-      | 0 -> Lwt.return ()
-      | n ->
-          read_line () >>= fun s ->
-          Logs.info (fun m -> m "%s" s);
-          echo_server (n - 1)
-    in
-    echo_server 10
-end
+let start () =
+  let rec echo_server = function
+    | 0 -> Lwt.return ()
+    | n ->
+        read_line () >>= fun s ->
+        Logs.info (fun m -> m "%s" s);
+        echo_server (n - 1)
+  in
+  echo_server 10
 ```
 
 This is in [tutorial/lwt/echo_server/unikernel.ml][echo_server_unikernel.ml] in
@@ -349,9 +341,9 @@ which continues
 If you want to spawn a thread without waiting for the result, use `Lwt.async`:
 
 ```ocaml
-let spwawn () =
+let spawn () =
   Lwt.async (fun () ->
-    Time.sleep_ns (Duration.of_sec 10) >|= fun () ->
+    Mirage_sleep.ns (Duration.of_sec 10) >|= fun () ->
     Logs.info (fun m -> m "Tails")
   )
 ```
@@ -398,7 +390,7 @@ let test1 () =
     (fun ex -> print_endline "caught exception!"; Lwt.return ())
 
 let test2 () =
-  let t = Time.sleep_ns (Duration.of_sec 1) >>= fun () -> raise (Failure "late failure") in
+  let t = Mirage_sleep.ns (Duration.of_sec 1) >>= fun () -> raise (Failure "late failure") in
   Lwt.catch (fun () -> t)
     (fun ex -> print_endline "caught exception!"; Lwt.return ())
 ```
@@ -542,7 +534,7 @@ thread after a given number of seconds can be written easily:
 
 ```ocaml
 let timeout delay t =
-  Time.sleep_ns delay >|= fun () -> Lwt.cancel t
+  Mirage_sleep.ns delay >|= fun () -> Lwt.cancel t
 ```
 
 ### Challenge 3: Timeouts
@@ -562,9 +554,9 @@ thread that may be cancelled before it returns:
 ```ocaml
 let timeout s t : string option Lwt.t = failwith "TODO"
 
-let start _time _r =
+let start () =
   let t =
-    Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:3000 R.generate))
+    Mirage_sleep.ns (Duration.of_ms (Randomconv.int ~bound:3000 Mirage_crypto_rng.generate))
     >|= fun () -> "Heads"
   in
   timeout (Duration.of_sec 2) t >|= function
@@ -580,10 +572,9 @@ open Mirage
 let main =
   main
     ~packages:[ package "duration"; package ~max:"0.2.0" "randomconv" ]
-    "Unikernel.Timeout1"
-    (time @-> random @-> job)
+    "Unikernel" job
 
-let () = register "timeout1" [ main $ default_time $ default_random ]
+let () = register "timeout1" [ main ]
 ```
 
 ### Solution
@@ -591,25 +582,23 @@ let () = register "timeout1" [ main $ default_time $ default_random ]
 ```ocaml
 open Lwt.Infix
 
-module Timeout1 (Time : Mirage_time.S) (R : Mirage_random.S) = struct
-  let timeout delay t =
-    Time.sleep_ns delay >>= fun () ->
-    match Lwt.state t with
-    | Lwt.Sleep ->
-        Lwt.cancel t;
-        Lwt.return None
-    | Lwt.Return v -> Lwt.return (Some v)
-    | Lwt.Fail ex -> Lwt.fail ex
+let timeout delay t =
+  Mirage_sleep.ns delay >>= fun () ->
+  match Lwt.state t with
+  | Lwt.Sleep ->
+      Lwt.cancel t;
+      Lwt.return None
+  | Lwt.Return v -> Lwt.return (Some v)
+  | Lwt.Fail ex -> Lwt.fail ex
 
-  let start _time _r =
-    let t =
-      Time.sleep_ns (Duration.of_ms (Randomconv.int ~bound:3000 R.generate))
-      >|= fun () -> "Heads"
-    in
-    timeout (Duration.of_sec 2) t >|= function
-    | None -> Logs.info (fun m -> m "Cancelled")
-    | Some v -> Logs.info (fun m -> m "Returned %S" v)
-end
+let start () =
+  let t =
+    Mirage_sleep.ns (Duration.of_ms (Randomconv.int ~bound:3000 Mirage_crypto_rng.generate))
+    >|= fun () -> "Heads"
+  in
+  timeout (Duration.of_sec 2) t >|= function
+  | None -> Logs.info (fun m -> m "Cancelled")
+  | Some v -> Logs.info (fun m -> m "Returned %S" v)
 ```
 
 This solution and application are found in
@@ -646,7 +635,7 @@ challenge.
 
 ```ocaml
 let timeout delay t =
-  let tmout = Time.sleep_ns delay in
+  let tmout = Mirage_sleep.ns delay in
   Lwt.pick [
     (tmout >|= fun () -> None);
     (t >|= fun v -> Some v);

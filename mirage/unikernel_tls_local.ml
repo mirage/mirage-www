@@ -14,31 +14,26 @@ let setup =
         { host; redirect; http_port; https_port })
     $ Cli.host $ Cli.redirect $ Cli.http_port $ Cli.https_port)
 
-module Make
-    (Random : Mirage_random.S)
-    (Pclock : Mirage_clock.PCLOCK)
-    (Time : Mirage_time.S)
-    (Stack : Tcpip.Stack.V4V6) =
-struct
-  module WWW = Mirageio.Make (Pclock) (Time) (Stack)
+module Make (Stack : Tcpip.Stack.V4V6) = struct
+  module WWW = Mirageio.Make (Stack)
 
   let restart_before_expire = function
     | server :: _, _ -> (
         let expiry = snd (X509.Certificate.validity server) in
-        let diff = Ptime.diff expiry (Ptime.v (Pclock.now_d_ps ())) in
+        let diff = Ptime.diff expiry (Mirage_ptime.now ()) in
         match Ptime.Span.to_int_s diff with
         | None -> invalid_arg "couldn't convert span to seconds"
         | Some x when x < 0 -> invalid_arg "diff is negative"
         | Some x ->
             Lwt.async (fun () ->
                 let+ () =
-                  Time.sleep_ns
+                  Mirage_sleep.ns
                     (Int64.sub (Duration.of_sec x) (Duration.of_day 1))
                 in
                 exit 42))
     | _ -> ()
 
-  let start _ _ _ stack { http_port; https_port; host; redirect } =
+  let start stack { http_port; https_port; host; redirect } =
     let http =
       WWW.Dream.(
         http ~port:http_port (Stack.tcp stack) @@ fun req ->

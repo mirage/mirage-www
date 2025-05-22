@@ -1,19 +1,10 @@
 (library
  (public_name mirageio)
- (libraries
-  dream-mirage
-  mirage-time
-  tcpip
-  mirageio_template
-  mirageio_data
-  mirage-kv-mem))
+ (libraries dream-mirage tcpip mirageio_template mirageio_data mirage-kv-mem))
 
 (rule
  (targets asset.ml asset.mli)
  (deps
-  ; Not specifying dependencies on main.css on purpose so we can skip the generation
-  ; of the CSS file if we only want to run the server.
-  ; Uncomment in development
   ../asset/main.css
   (source_tree ../asset))
  (action

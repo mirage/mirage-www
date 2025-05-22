@@ -39,9 +39,8 @@
   dream
   dream-mirage
   (tcpip (>= 8.0))
-  (mirage-time (>= 3.0))
+  (mirage-sleep (>= 3.0))
   (mirage-kv-mem (>= 3.2.1))
-  (mirage-clock-unix (>= 3.0))
   (mirage-unix (>= 5.0.0))
   (ptime (>= 0.8.1))
   (tailwindcss :build)
@@ -63,4 +62,5 @@
   (mirage-bootvar :with-test)
   (dns-certify :with-test)
   (lwt :with-test)
-  (charrua-client :with-test)))
+  (charrua-client :with-test)
+  cmdliner-stdlib))

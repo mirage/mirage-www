@@ -2,7 +2,7 @@ open Lwt.Syntax
 open Cmdliner
 
 type t = {
-  dns_key : string;
+  dns_key : [ `raw ] Domain_name.t * Dns.Dnskey.t;
   key_seed : string;
   dns_server : Ipaddr.t;
   dns_port : int;
@@ -15,11 +15,16 @@ type t = {
 
 let docs = Cli.docs
 
+let key =
+  Arg.conv ~docv:"HOST:HASH:DATA"
+    Dns.Dnskey.
+      (name_key_of_string, fun ppf v -> Fmt.string ppf (name_key_to_string v))
+
 let dns_key =
   let doc =
     Arg.info ~docs ~doc:"nsupdate key (name:type:value,...)" [ "dns-key" ]
   in
-  Arg.(required & opt (some string) None doc)
+  Arg.(required & opt (some key) None doc)
 
 let ip_address = Arg.conv (Ipaddr.of_string, Ipaddr.pp)
 
@@ -71,26 +76,21 @@ let setup =
     $ Cli.http_port $ Cli.redirect $ Cli.https_port $ dns_key $ dns_server
     $ dns_port $ Cli.host $ key_seed $ additional_hostnames)
 
-module Make
-    (Random : Mirage_random.S)
-    (Pclock : Mirage_clock.PCLOCK)
-    (Time : Mirage_time.S)
-    (Stack : Tcpip.Stack.V4V6) =
-struct
-  module Certify = Dns_certify_mirage.Make (Random) (Pclock) (Time) (Stack)
-  module WWW = Mirageio.Make (Pclock) (Time) (Stack)
+module Make (Stack : Tcpip.Stack.V4V6) = struct
+  module Certify = Dns_certify_mirage.Make (Stack)
+  module WWW = Mirageio.Make (Stack)
 
   let restart_before_expire = function
     | server :: _, _ -> (
         let expiry = snd (X509.Certificate.validity server) in
-        let diff = Ptime.diff expiry (Ptime.v (Pclock.now_d_ps ())) in
+        let diff = Ptime.diff expiry (Mirage_ptime.now ()) in
         match Ptime.Span.to_int_s diff with
         | None -> invalid_arg "couldn't convert span to seconds"
         | Some x when x < 0 -> invalid_arg "diff is negative"
         | Some x ->
             Lwt.async (fun () ->
                 let+ () =
-                  Time.sleep_ns
+                  Mirage_sleep.ns
                     (Int64.sub (Duration.of_sec x) (Duration.of_day 1))
                 in
                 exit 42))
@@ -100,17 +100,18 @@ struct
       { host; additional_hostnames; dns_key; key_seed; dns_server; dns_port; _ }
       =
     let* certificates_result =
-      Certify.retrieve_certificate stack ~dns_key ~hostname:host
+      Certify.retrieve_certificate stack dns_key ~hostname:host
         ~additional_hostnames ~key_seed dns_server dns_port
     in
     match certificates_result with
     | Error (`Msg m) -> Lwt.fail_with m
-    | Ok certificates ->
+    | Ok certificates -> (
         restart_before_expire certificates;
-        let conf = Tls.Config.server ~certificates:(`Single certificates) () in
-        Lwt.return conf
+        match Tls.Config.server ~certificates:(`Single certificates) () with
+        | Error (`Msg m) -> Lwt.fail_with m
+        | Ok conf -> Lwt.return conf)
 
-  let start _ _ _ stack t =
+  let start stack t =
     let* cfg = tls_init stack t in
     let http =
       WWW.Dream.(
