@@ -35,8 +35,7 @@ module Make (Stack : Tcpip.Stack.V4V6) = struct
       let weeklies = Mirageio_data.Weekly.all in
       Dream.html (Docs.render ~weeklies)
 
-    let docs_inner req =
-      let permalink = Dream.param req "permalink" in
+    let docs_of_permalink req permalink =
       let doc_opt =
         Mirageio_data.Wiki.all
         |> List.find_opt (fun (x : Mirageio_data.Wiki.t) ->
@@ -45,6 +44,15 @@ module Make (Stack : Tcpip.Stack.V4V6) = struct
       match doc_opt with
       | Some doc -> Dream.html (Docs_inner.render doc)
       | None -> not_found req
+
+    let docs_inner req =
+      let permalink = Dream.param req "permalink" in
+      docs_of_permalink req permalink
+
+    let security req = docs_of_permalink req "security"
+
+    let security_redirect req =
+      Dream.redirect ~status:`Moved_Permanently req "/security"
 
     let wiki_redirect req =
       Dream.redirect ~status:`Moved_Permanently req "/docs"
@@ -157,6 +165,10 @@ module Make (Stack : Tcpip.Stack.V4V6) = struct
         Dream.get "/blog" Handler.blog;
         Dream.get "/blog/:permalink" Handler.blog_inner;
         Dream.get "/community" Handler.community;
+        (* It's important to keep /security at the root as it's linked in
+           security advisories that are signed (and so can't be changed). *)
+        Dream.get "/security" Handler.security;
+        Dream.get "/docs/security" Handler.security_redirect;
         Dream.get "/docs" Handler.docs;
         Dream.get "/docs/:permalink" Handler.docs_inner;
         Dream.get "/wiki" Handler.wiki_redirect;
