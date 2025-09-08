@@ -79,6 +79,9 @@ let render () = Layout.render ~title:"MirageOS Community" ~description:"Get in t
             <strong> <a href="https://www.lortex.org">Lucas Pluvinage</a> </strong>, <a href="https://github.com/TheLortex">@TheLortex</a>
           </li>
           <li>
+            <strong> <a href="http://www.somerandomidiot.com">Mindy Preston</a> </strong> <a href="https://github.com/yomimono">@yomimono</a>
+          </li>
+          <li>
             <strong> <a href="http://dave.recoil.org">David Scott</a> </strong>, Docker, <a href="https://github.com/djs55">@djs55</a>
           </li>
           <li>
@@ -97,9 +100,6 @@ let render () = Layout.render ~title:"MirageOS Community" ~description:"Get in t
           </li>
           <li>
             <strong> <a href="http://mort.io/">Richard Mortier</a> </strong>, University of Cambridge &amp; Kvasir Analytics <a href="https://github.com/mor1">@mor1</a>
-          </li>
-          <li>
-            <strong> <a href="http://www.somerandomidiot.com">Mindy Preston</a> </strong> <a href="https://github.com/yomimono">@yomimono</a>
           </li>
         </ul>
       </div>
