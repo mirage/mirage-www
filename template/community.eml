@@ -61,7 +61,7 @@ let render () = Layout.render ~title:"MirageOS Community" ~description:"Get in t
       <div>
         <div>Lexicographically ordered by last name:</div>
         <ul class="list-disc ml-4 space-y-2 mt-2">
-          <li><strong>Pierre Alain</strong>, Enssat-University of Rennes 1, <a href="https://github.com/palainp">@palainp</a></li>
+          <li><strong>Pierre Alain</strong>, University of Rennes 1, <a href="https://github.com/palainp">@palainp</a></li>
           <li><strong>Romain Calascibetta</strong> <a href="https://github.com/dinosaure">@dinosaure</a></li>
           <li>
             <strong> <a href="https://gazagnaire.org">Thomas Gazagnaire</a> </strong>, <a href="https://tarides.com">Tarides</a>, <a href="https://github.com/samoht">@samoht</a>
