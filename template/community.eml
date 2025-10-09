@@ -47,7 +47,7 @@ let render () = Layout.render ~title:"MirageOS Community" ~description:"Get in t
     <div class="bg-orange bg-opacity-40 py-5 px-6 space-y-3">
       <img src="/img/community/mirc.svg" alt="MIRC icon" />
       <p class="">
-        We hang out on IRC in the #mirage channel on <a href="https://libera.chat/" class="link-orange">Libera.Chat</a> (<a href="https://github.com/mirage/mirage-www/wiki/Call-Agenda" class="link-orange">regular scheduled meetings</a>). Bear in mind that questions are more likely to be answered via
+        The MirageOS community can be found on IRC in the #mirage channel on <a href="https://libera.chat/" class="link-orange">Libera.Chat</a> . Bear in mind that questions are more likely to be answered via
         e-mail if we're idling on IRC.
       </p>
     </div>
