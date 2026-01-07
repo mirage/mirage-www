@@ -2,7 +2,7 @@
  (name gen_data)
  (modules
   (:standard \ mirageio_data))
- (libraries cmarkit hilite yaml fmt ptime)
+ (libraries cmarkit hilite hilite.markdown yaml fmt ptime)
  (preprocess
   (pps ppx_deriving_yaml)))
 

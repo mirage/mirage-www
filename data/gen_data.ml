@@ -45,7 +45,7 @@ module Blog = struct
           permalink = meta.permalink;
           body =
             Cmarkit.Doc.of_string ~strict:true ~heading_auto_ids:true body
-            |> Hilite.Md.transform
+            |> Hilite_markdown.transform
             |> Cmarkit_html.of_doc ~safe:false;
         })
       "data/blog/"
@@ -93,7 +93,7 @@ module Wiki = struct
           permalink = meta.permalink;
           body =
             Cmarkit.Doc.of_string ~strict:true ~heading_auto_ids:true body
-            |> Hilite.Md.transform
+            |> Hilite_markdown.transform
             |> Cmarkit_html.of_doc ~safe:false;
         })
       "data/wiki/"
@@ -143,7 +143,7 @@ module Weekly = struct
           description = meta.description;
           body =
             Cmarkit.Doc.of_string ~strict:true ~heading_auto_ids:true body
-            |> Hilite.Md.transform
+            |> Hilite_markdown.transform
             |> Cmarkit_html.of_doc ~safe:false;
         })
       "data/weekly/"

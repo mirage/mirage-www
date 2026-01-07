@@ -48,7 +48,7 @@
   (cmarkit (and :build
    (>= 0.2.0)))
   (hilite (and :build
-   (>= 0.4.0)))
+   (>= 0.5.0)))
   (yaml :build)
   (fmt :build)
   (ppx_deriving_yaml (and :build (>= 0.2.1)))

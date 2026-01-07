@@ -33,7 +33,7 @@ depends: [
   "tailwindcss" {build}
   "crunch" {build & >= "3.1.0"}
   "cmarkit" {build & >= "0.2.0"}
-  "hilite" {build & >= "0.4.0"}
+  "hilite" {build & >= "0.5.0"}
   "yaml" {build}
   "fmt" {build}
   "ppx_deriving_yaml" {build & >= "0.2.1"}
