@@ -43,7 +43,7 @@ We do this by writing a `config.ml` file:
 
 ```bash dir=files/mirage-skeleton
 $ cat tutorial/noop/config.ml
-(* mirage >= 4.4.0 & < 4.10.0 *)
+(* mirage >= 4.4.0 & < 4.11.0 *)
 let () = Mirage.register "noop" []
 ```
 
@@ -192,7 +192,7 @@ additional configuration  in `config.ml`, so let's take a look:
 
 ```bash dir=files/mirage-skeleton
 $ cat tutorial/hello/config.ml
-(* mirage >= 4.9.0 & < 4.10.0 *)
+(* mirage >= 4.9.0 & < 4.11.0 *)
 open Mirage
 
 let main = main "Unikernel" job ~packages:[ package "duration" ]
@@ -382,7 +382,7 @@ For an example, let's have a look at `hello-key`:
 
 ```bash dir=files/mirage-skeleton
 $ cat tutorial/hello-key/config.ml
-(* mirage >= 4.9.0 & < 4.10.0 *)
+(* mirage >= 4.9.0 & < 4.11.0 *)
 open Mirage
 
 let packages = [ package "duration" ]
@@ -518,13 +518,14 @@ Remember, the name has to be alphanumeric on Solo5, so the dot in
 `disk.img` will not work on Solo5.
 
 ```ocaml file=files/mirage-skeleton/device-usage/block/config.ml
-(* mirage >= 4.4.0 & < 4.10.0 *)
+(* mirage >= 4.10.0 & < 4.11.0 *)
 open Mirage
 
 let main = main "Unikernel.Main" (block @-> job)
 
 let img =
-  if_impl Key.is_solo5 (block_of_file "storage") (block_of_file "disk.img")
+  if_impl Key.is_solo5 (block_of_file "storage")
+    (if_impl Key.is_unikraft (block_of_file "0") (block_of_file "disk.img"))
 
 let () = register "block_test" [ main $ img ]
 ```
@@ -642,7 +643,7 @@ The `config.ml` might look familiar after the earlier block and console
 examples:
 
 ```ocaml file=files/mirage-skeleton/device-usage/kv_ro/config.ml
-(* mirage >= 4.4.0 & < 4.10.0 *)
+(* mirage >= 4.4.0 & < 4.11.0 *)
 open Mirage
 
 let disk = generic_kv_ro "t"
@@ -752,7 +753,7 @@ the `device-usage/network` directory of
 [`mirage-skeleton`](http://github.com/mirage/mirage-skeleton) is illustrative:
 
 ```ocaml file=files/mirage-skeleton/device-usage/network/config.ml
-(* mirage >= 4.5.0 & < 4.10.0 *)
+(* mirage >= 4.5.0 & < 4.11.0 *)
 open Mirage
 
 let main = main "Unikernel.Main" (stackv4v6 @-> job)
