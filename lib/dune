@@ -4,8 +4,7 @@
 
 (rule
  (targets site.ml site.mli)
- (deps
-  ../_site)
+ (deps ../_site)
  (action
   (with-stdout-to
    %{null}

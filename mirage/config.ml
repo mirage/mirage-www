@@ -25,7 +25,13 @@ let tls_key =
   in
   Key.(create "tls" Arg.(opt tls_conv No doc))
 
-let packages = [ package "mirageio"; package ~build:true "yaml" ]
+let packages =
+  [ package "mirageio";
+    package "paf" ~sublibs:[ "mirage" ];
+    package "h1";
+    package "magic-mime";
+    package ~build:true "yaml" ]
+
 let packages_v = Key.if_ Key.is_solo5 [ package ~scope:`Switch "solo5" ] []
 
 let https =
