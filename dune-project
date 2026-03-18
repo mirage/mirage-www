@@ -34,16 +34,13 @@
  (description "Website infrastructure and content for mirageos.org")
  (depends
   (ocaml
-   (>= 4.14))
+   (>= 5.1))
   dune
-  dream
-  dream-mirage
+  tw
   (tcpip (>= 8.0))
   (mirage-sleep (>= 3.0))
-  (mirage-kv-mem (>= 3.2.1))
   (mirage-unix (>= 5.0.0))
   (ptime (>= 0.8.1))
-  (tailwindcss :build)
   (crunch (and :build (>= 3.1.0)))
   (cmarkit (and :build
    (>= 0.2.0)))
