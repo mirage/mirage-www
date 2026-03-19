@@ -8,12 +8,15 @@ _build/
 # Local OPAM switch
 _opam/
 
-# Normal npm stuff
-node_modules/
-
-# TailwindCSS
-/tailwindcss
+# Generated site
+site/
 
 # Mirage generated files
 dune-workspace
 Makefile
+mirage/dune-project
+
+# Editor backups
+*~
+\#*\#
+*.corrected
