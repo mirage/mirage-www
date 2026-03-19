@@ -5,6 +5,7 @@ WORKDIR /home/opam/www
 RUN sudo ln -f /usr/bin/opam-2.1 /usr/bin/opam
 RUN cd ~/opam-repository && git pull origin master && git reset --hard 2dee2fe30df966714e056f8af164fe0ed7648a63
 RUN opam update
+RUN opam pin add tw.dev git+https://github.com/samoht/tw.git -n
 RUN opam install 'mirage>=4.5.0'
 COPY --chown=opam:root mirage/config.ml /home/opam/www/mirage/
 COPY --chown=opam:root mirageio.opam /home/opam/www/
@@ -14,5 +15,6 @@ RUN opam exec -- mirage configure -f mirage/config.ml -t $TARGET $EXTRA_FLAGS
 RUN opam exec -- make depend
 COPY --chown=opam:root . /home/opam/www
 RUN opam exec -- mirage configure -f mirage/config.ml -t $TARGET $EXTRA_FLAGS
+RUN opam exec -- dune exec bin/gen_site.exe -- site
 RUN opam exec -- dune build mirage/ --profile release
 RUN if [ $TARGET = hvt ]; then sudo cp mirage/dist/www.$TARGET /unikernel.$TARGET; fi

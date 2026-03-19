@@ -32,7 +32,7 @@
  (synopsis "Website infrastructure and content for mirageos.org")
  (description "Website infrastructure and content for mirageos.org")
  (depends
-  (ocaml (>= 5.1))
+  (ocaml (>= 4.14))
   dune
   tw
   (ptime (>= 0.8.1))
