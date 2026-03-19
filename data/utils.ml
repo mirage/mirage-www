@@ -44,21 +44,21 @@ let read_from_dir ?(filter = fun _ -> true) dir =
 let map_files_in_dir f dir =
   read_from_dir dir
   |> List.map (fun (file, x) ->
-         try f ~file ~content:x
-         with exn ->
-           prerr_endline ("Error in " ^ file);
-           raise exn)
+      try f ~file ~content:x
+      with exn ->
+        prerr_endline ("Error in " ^ file);
+        raise exn)
 
 let map_md_files_in_dir ~decode_meta f dir =
   let filter file = Filename.extension file = ".md" in
   read_from_dir ~filter dir
   |> List.map (fun (file, content) ->
-         let meta, body = extract_metadata_body content in
-         let meta = decode_or_raise ~loc:file decode_meta meta in
-         try f ~file ~meta ~body
-         with exn ->
-           prerr_endline ("Error in " ^ file);
-           raise exn)
+      let meta, body = extract_metadata_body content in
+      let meta = decode_or_raise ~loc:file decode_meta meta in
+      try f ~file ~meta ~body
+      with exn ->
+        prerr_endline ("Error in " ^ file);
+        raise exn)
 
 let with_yml_file ~decoder f =
   let yaml = decode_or_raise ~loc:f Yaml.of_string (read_file f) in

@@ -21,16 +21,13 @@ homepage: "https://github.com/mirage/mirage-www"
 doc: "https://mirage.github.io/mirage-www/"
 bug-reports: "https://github.com/mirage/mirage-www/issues"
 depends: [
-  "ocaml" {>= "4.14"}
+  "ocaml" {>= "5.1"}
   "dune" {>= "3.8"}
-  "dream"
-  "dream-mirage"
+  "tw"
   "tcpip" {>= "8.0"}
   "mirage-sleep" {>= "3.0"}
-  "mirage-kv-mem" {>= "3.2.1"}
   "mirage-unix" {>= "5.0.0"}
   "ptime" {>= "0.8.1"}
-  "tailwindcss" {build}
   "crunch" {build & >= "3.1.0"}
   "cmarkit" {build & >= "0.2.0"}
   "hilite" {build & >= "0.5.0"}
