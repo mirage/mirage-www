@@ -48,3 +48,6 @@ build: [
   ]
 ]
 dev-repo: "git+https://github.com/mirage/mirage-www.git"
+pin-depends: [
+  ["tw.dev" "git+https://github.com/samoht/tw.git"]
+]
