@@ -42,95 +42,149 @@ let w_2_3 = tw "w-2/3"
 let w_2_5 = tw "w-2/5"
 let w_4_5 = tw "w-4/5"
 
-(* Divide *)
-let divide_y = tw "divide-y"
-let divide_x = tw "divide-x"
-let divide_y_0 = tw "divide-y-0"
-let divide_black = tw "divide-black"
+(* {1 Link components} *)
 
-(* {1 Components} *)
-
-(** Styled link with brand blue color and hover underline. *)
 let link_blue ~href children =
   a ~at:[ At.href href ] ~tw:[ text_blue; Tw.hover [ Tw.underline ] ] children
 
-(** Styled link with dark orange color and hover underline. *)
 let link_orange ~href children =
   a
     ~at:[ At.href href ]
     ~tw:[ Tw.text dark_orange 500; Tw.hover [ Tw.underline ] ]
     children
 
-(** Styled link with dark green color and hover underline. *)
 let link_green ~href children =
   a
     ~at:[ At.href href ]
     ~tw:[ Tw.text dark_green 500; Tw.hover [ Tw.underline ] ]
     children
 
-(** Render a person as an HTML string (for embedding in raw HTML contexts). *)
+(* {1 People} *)
+
 let person (p : Mirageio_data.People.t) =
   match p.uri with
   | Some uri -> to_string (link_blue ~href:uri [ txt p.name ])
   | None -> p.name
 
-(** Render a list of people as a comma-separated HTML string. *)
 let people ps = String.concat ", " (List.map person ps)
 
-(** Page subtitle line with grey author/date info. *)
-let byline children =
-  p ~tw:[ Tw.font_bold; text_grey; Tw.mt 2 ] children
+(* {1 Page structure components} *)
 
-(** Standard page header: title + optional subtitle. *)
+let byline children = p ~tw:[ Tw.font_bold; text_grey; Tw.mt 2 ] children
+
 let page_header ~title ?subtitle () =
-  div ~tw:[ Tw.text_left; Tw.px 8; Tw.py 7 ]
+  div
+    ~tw:[ Tw.text_left; Tw.px 8; Tw.py 7 ]
     ([ h1 ~tw:[ Tw.text_3xl; Tw.font_bold ] [ txt title ] ]
-    @ (match subtitle with
-      | Some s -> [ p ~tw:[ Tw.font_bold; text_grey; Tw.mt 2 ] [ txt s ] ]
-      | None -> []))
+    @ match subtitle with Some s -> [ byline [ txt s ] ] | None -> [])
 
-(** Horizontal rule in brand style. *)
 let separator () = hr ~tw:[ Tw.border_black ] ()
 
-(** Prose content area for rendered markdown. *)
 let prose_body content =
-  div ~tw:[ Tw.p 8; Tw.mt 2; Tw.prose; Tw.prose_sm; Tw.max_w_full ]
+  div
+    ~tw:[ Tw.p 8; Tw.mt 2; Tw.prose; Tw.prose_sm; Tw.max_w_full ]
     [ raw content ]
 
-(** Section title used in docs grid. *)
+(* {1 Doc components} *)
+
 let section_title label =
   div ~tw:[ Tw.text_lg; font_space; Tw.font_bold; Tw.mb 4 ] [ txt label ]
 
-(** Doc link with emoji icon prefix. *)
 let doc_link ~href ~icon label =
-  a ~at:[ At.href href ] ~tw:[ Tw.inline_block; text_blue; Tw.hover [ Tw.underline ] ]
-    [ span ~tw:[ Tw.inline_flex; Tw.w 5; Tw.justify_center ] [ txt icon ];
-      txt (" " ^ label) ]
+  a
+    ~at:[ At.href href ]
+    ~tw:[ Tw.inline_block; text_blue; Tw.hover [ Tw.underline ] ]
+    [
+      span ~tw:[ Tw.inline_flex; Tw.w 5; Tw.justify_center ] [ txt icon ];
+      txt (" " ^ label);
+    ]
 
-(** Homepage feature item (icon + title + description). *)
-let feature_item ~icon ~title desc =
-  div ~tw:[ Tw.space_y 1 ]
-    [ div ~tw:[ Tw.flex; Tw.items_center; tw "space-x-[0.625rem]" ]
-        [ img ~at:[ At.src icon; At.alt (title ^ " Icon") ] ();
-          div ~tw:[ Tw.font_bold; font_space; Tw.text_lg ] [ txt title ] ];
-      p ~tw:[ text_grey; Tw.text_sm ] [ txt desc ] ]
+(* {1 Feature item} *)
 
-(** Standard button. *)
+let feature_item ~icon ~alt ~title desc =
+  div
+    ~tw:[ Tw.space_y 1 ]
+    [
+      div
+        ~tw:[ Tw.flex; Tw.items_center; tw "space-x-[0.625rem]" ]
+        [
+          img ~at:[ At.src icon; At.alt alt ] ();
+          div ~tw:[ Tw.font_bold; font_space; Tw.text_lg ] [ txt title ];
+        ];
+      p ~tw:[ text_grey; Tw.text_sm ] [ txt desc ];
+    ]
+
+(* {1 Buttons} *)
+
+let btn_shadow =
+  [
+    tw "after:absolute";
+    tw "after:w-full";
+    tw "after:h-full";
+    tw "after:content-['']";
+    tw "after:border";
+    tw "after:border-[#181818]";
+    tw "after:top-[3px]";
+    tw "after:left-[3px]";
+    tw "after:blur-[1px]";
+  ]
+
+let btn_base =
+  [
+    Tw.relative;
+    Tw.inline_flex;
+    Tw.text_sm;
+    font_inter;
+    Tw.font_medium;
+    Tw.group;
+  ]
+  @ btn_shadow
+
+let btn_inner_base =
+  [
+    Tw.h 9;
+    tw "px-3.5";
+    Tw.flex;
+    Tw.items_center;
+    Tw.justify_center;
+    Tw.border;
+    Tw.border_color body_color 500;
+    Tw.relative;
+    Tw.transition_colors;
+    Tw.space_x 2;
+  ]
+
 let btn ~href children =
-  a ~at:[ At.href href ]
-    ~tw:[ Tw.relative; Tw.inline_flex; Tw.text_sm; font_inter; Tw.font_medium ]
-    [ div
-        ~tw:[ Tw.h 9; tw "px-3.5"; Tw.flex; Tw.items_center; Tw.gap 2;
-              Tw.border_black; Tw.rounded_lg; Tw.border ]
-        children ]
+  a
+    ~at:[ At.href href ]
+    ~tw:btn_base
+    [
+      div
+        ~tw:
+          (btn_inner_base
+          @ [
+              Tw.bg_white;
+              tw "group-hover:bg-[#181818]";
+              tw "group-hover:text-white";
+            ])
+        ~at:[ At.style "z-index: 1" ]
+        children;
+    ]
 
-(** Primary (dark) button. *)
 let btn_primary ~href children =
-  a ~at:[ At.href href ]
-    ~tw:[ Tw.relative; Tw.inline_flex; Tw.text_sm; font_inter; Tw.font_medium ]
-    [ div
-        ~tw:[ Tw.h 9; tw "px-3.5"; Tw.flex; Tw.items_center; Tw.gap 2;
-              Tw.rounded_lg; bg_primary; Tw.text_white;
-              Tw.hover [ Tw.bg_white; Tw.text primary 500 ];
-              Tw.border; Tw.border_black ]
-        children ]
+  a
+    ~at:[ At.href href ]
+    ~tw:btn_base
+    [
+      div
+        ~tw:
+          (btn_inner_base
+          @ [
+              bg_primary;
+              Tw.text_white;
+              tw "group-hover:bg-white";
+              tw "group-hover:text-[#181818]";
+            ])
+        ~at:[ At.style "z-index: 1" ]
+        children;
+    ]

@@ -50,7 +50,6 @@ let () =
   let blog_posts = Mirageio_data.Blog.all in
 
   (* --- Build all page content as (path, Tw_html.t tree) --- *)
-
   let page ~path ~title ~description ~tab inner =
     (path, Layout.render_html ~title ~description ~tab inner)
   in
@@ -60,9 +59,7 @@ let () =
       page ~path:"index.html" ~title:Homepage.title
         ~description:Homepage.description ~tab:Homepage.tab
         (Homepage.render ~blog_posts:(take 8 blog_posts));
-      page ~path:"blog/index.html" ~title:Blog.title
-        ~description:Blog.description ~tab:Blog.tab
-        (Blog.render ~latest:(take 8 blog_posts) ~recent:blog_posts);
+      (* Blog pages are generated below *)
       page ~path:"community/index.html" ~title:Community.title
         ~description:Community.description ~tab:Community.tab
         (Community.render ());
@@ -76,6 +73,29 @@ let () =
         ~description:Not_found.description ~tab:Not_found.tab
         (Not_found.render ());
     ]
+    (* Paginated blog index *)
+    @ (let per_page = Blog.posts_per_page in
+       let total_pages =
+         max 1 ((List.length blog_posts + per_page - 1) / per_page)
+       in
+       let rec paginate page_num remaining acc =
+         match remaining with
+         | [] -> List.rev acc
+         | _ ->
+             let posts = take per_page remaining in
+             let rest = List.filteri (fun i _ -> i >= per_page) remaining in
+             let path =
+               if page_num = 1 then "blog/index.html"
+               else Printf.sprintf "blog/page/%d/index.html" page_num
+             in
+             let p =
+               page ~path ~title:Blog.title ~description:Blog.description
+                 ~tab:Blog.tab
+                 (Blog.render ~posts ~current_page:page_num ~total_pages)
+             in
+             paginate (page_num + 1) rest (p :: acc)
+       in
+       paginate 1 blog_posts [])
     @ List.map
         (fun (post : Mirageio_data.Blog.t) ->
           page
@@ -96,14 +116,12 @@ let () =
         (fun (w : Mirageio_data.Weekly.t) ->
           page
             ~path:(Printf.sprintf "weekly/%s/index.html" w.permalink)
-            ~title:(Weekly.title w)
-            ~description:(Weekly.description w)
+            ~title:(Weekly.title w) ~description:(Weekly.description w)
             ~tab:Weekly.tab (Weekly.render w))
         Mirageio_data.Weekly.all
   in
 
   (* --- Collect Tw utilities and generate CSS --- *)
-
   let all_tw =
     pages |> List.map (fun (_path, tree) -> Tw_html.to_tw tree) |> List.flatten
   in
@@ -112,7 +130,6 @@ let () =
   in
 
   (* --- Write all HTML pages --- *)
-
   List.iter
     (fun (path, tree) ->
       let html = Tw_html.to_string ~doctype:true tree in
@@ -120,29 +137,27 @@ let () =
     pages;
 
   (* --- Write CSS --- *)
-
   write_file (Filename.concat out_dir "main.css") css_string;
 
   (* --- Generate Atom feed --- *)
-
   let contributors =
     let seen = Hashtbl.create 64 in
     blog_posts
     |> List.concat_map (fun (post : Mirageio_data.Blog.t) -> post.authors)
     |> List.filter (fun (a : Mirageio_data.People.t) ->
-           if Hashtbl.mem seen a.name then false
-           else (
-             Hashtbl.replace seen a.name ();
-             true))
+        if Hashtbl.mem seen a.name then false
+        else (
+          Hashtbl.replace seen a.name ();
+          true))
   in
   let last_update =
     match blog_posts with p :: _ -> p.updated | [] -> Ptime.epoch
   in
-  write_file (Filename.concat out_dir "feed.xml")
+  write_file
+    (Filename.concat out_dir "feed.xml")
     (Atom.render ~blog_posts ~contributors ~last_update);
 
   (* --- Copy static assets (skip main.css, we generate it) --- *)
-
   (match List.find_opt Sys.file_exists [ "asset" ] with
   | Some asset_dir ->
       Array.iter
@@ -154,5 +169,4 @@ let () =
         (Sys.readdir asset_dir)
   | None -> Printf.eprintf "Warning: asset/ directory not found\n");
 
-  Printf.printf "Generated %d pages, 1 feed, 1 CSS file\n"
-    (List.length pages)
+  Printf.printf "Generated %d pages, 1 feed, 1 CSS file\n" (List.length pages)

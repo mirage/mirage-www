@@ -11,20 +11,10 @@ let tab = Layout.Docs
 let render (item : Mirageio_data.Wiki.t) =
   div
     [
-      div
-        ~tw:[ Tw.text_left; Tw.px 8; Tw.py 7 ]
-        [
-          h1 ~tw:[ Tw.text_3xl; Tw.font_bold ] [ txt item.subject ];
-          p
-            ~tw:[ Tw.font_bold; Theme.text_grey; Tw.mt 2 ]
-            [
-              txt "By ";
-              raw (Theme.person item.author);
-              txt (" - " ^ item.updated);
-            ];
-        ];
-      hr ~tw:[ Tw.border_black ] ();
-      div
-        ~tw:[ Tw.p 8; Tw.mt 2; Tw.prose; Tw.prose_sm; Tw.max_w_full ]
-        [ raw item.body ];
+      Theme.page_header ~title:item.subject
+        ~subtitle:
+          ("By " ^ Theme.person item.author ^ " \xe2\x80\x93 " ^ item.updated)
+        ();
+      Theme.separator ();
+      Theme.prose_body item.body;
     ]

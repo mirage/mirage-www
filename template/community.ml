@@ -9,38 +9,23 @@ let description =
 let tab = Layout.Community
 
 (* link-blue helper for inline raw HTML content *)
-let lb ~href children =
-  Theme.link_blue ~href children
+let lb ~href children = Theme.link_blue ~href children
 
 let render () =
   div
-    ~tw:
-      [
-        Theme.divide_y;
-        Theme.divide_black;
-      ]
     [
       (* Top 2-column: Community + Research *)
       div
-        ~tw:
-          [
-            Tw.grid;
-            Tw.grid_cols 1;
-            Tw.lg [ Tw.grid_cols 2 ];
-            Theme.divide_y;
-            Tw.lg [ Theme.divide_y_0 ];
-            Tw.lg [ Theme.divide_x ];
-            Theme.divide_black;
-          ]
+        ~tw:[ Tw.grid; Tw.grid_cols 1; Tw.lg [ Tw.grid_cols 2 ] ]
         [
           (* The Community *)
           div
             ~tw:[ Tw.p 8; Tw.space_y 6; Tw.flex_1; Tw.text_center ]
             [
-              div ~tw:[ Tw.pt 6 ]
+              div
+                ~tw:[ Tw.pt 6 ]
                 [
-                  img
-                    ~tw:[ Tw.inline_block ]
+                  img ~tw:[ Tw.inline_block ]
                     ~at:
                       [
                         At.src "/img/community/community.svg";
@@ -49,16 +34,11 @@ let render () =
                       ]
                     ();
                 ];
-              h2
-                ~tw:[ Tw.text_3xl; Tw.font_bold ]
-                [ txt "The Community" ];
+              h2 ~tw:[ Tw.text_3xl; Tw.font_bold ] [ txt "The Community" ];
               div
                 ~tw:
                   [
-                    Tw.text_left;
-                    Tw.text_sm;
-                    Theme.text_dark_grey;
-                    Tw.space_y 6;
+                    Tw.text_left; Tw.text_sm; Theme.text_dark_grey; Tw.space_y 6;
                   ]
                 [
                   p
@@ -66,8 +46,7 @@ let render () =
                       txt "All MirageOS development is done via ";
                       lb ~href:"https://github.com" [ txt "GitHub" ];
                       txt ", consisting of a set of ";
-                      lb ~href:"https://github.com/mirage"
-                        [ txt "libraries" ];
+                      lb ~href:"https://github.com/mirage" [ txt "libraries" ];
                       txt
                         " that form the core distribution. It is all glued \
                          together via the ";
@@ -86,8 +65,8 @@ let render () =
                       lb ~href:"https://github.com/mirage/mirage/issues"
                         [ txt "issue tracker" ];
                       txt
-                        ". Broader queries or OCaml questions are very \
-                         welcome on our ";
+                        ". Broader queries or OCaml questions are very welcome \
+                         on our ";
                       lb
                         ~href:
                           "http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel"
@@ -98,12 +77,21 @@ let render () =
             ];
           (* The Research Project *)
           div
-            ~tw:[ Tw.p 8; Tw.flex_1; Tw.space_y 6; Tw.text_center ]
+            ~tw:
+              [
+                Tw.p 8;
+                Tw.flex_1;
+                Tw.space_y 6;
+                Tw.text_center;
+                Tw.border_t;
+                Tw.border_black;
+                Tw.lg [ Theme.tw "border-t-0"; Tw.border_l ];
+              ]
             [
-              div ~tw:[ Tw.pt 6 ]
+              div
+                ~tw:[ Tw.pt 6 ]
                 [
-                  img
-                    ~tw:[ Tw.inline_block ]
+                  img ~tw:[ Tw.inline_block ]
                     ~at:
                       [
                         At.src "/img/community/research.svg";
@@ -118,16 +106,12 @@ let render () =
               div
                 ~tw:
                   [
-                    Tw.text_left;
-                    Tw.text_sm;
-                    Theme.text_dark_grey;
-                    Tw.space_y 6;
+                    Tw.text_left; Tw.text_sm; Theme.text_dark_grey; Tw.space_y 6;
                   ]
                 [
                   p
                     [
-                      txt
-                        "MirageOS started with funding in 2009 from the ";
+                      txt "MirageOS started with funding in 2009 from the ";
                       lb ~href:"http://www.rcuk.ac.uk/" [ txt "RCUK" ];
                       txt " ";
                       lb ~href:"http://horizon.ac.uk"
@@ -146,19 +130,16 @@ let render () =
                           "http://www.cl.cam.ac.uk/news/2011/03/anil-madhavapeddy-wins-verisign-grant/"
                         [ txt "sponsored" ];
                       txt " work via an ";
-                      lb
-                        ~href:
-                          "http://www.youtube.com/watch?v=5-4lbyD_Fvw"
+                      lb ~href:"http://www.youtube.com/watch?v=5-4lbyD_Fvw"
                         [ txt "Internet Infrastructure Award" ];
                       txt ", and ";
                       lb ~href:"http://www.rackspace.com/cloud/"
                         [ txt "Rackspace" ];
                       txt
-                        " gives us developer resources on their cloud. \
-                         Work has also been supported by the ";
+                        " gives us developer resources on their cloud. Work \
+                         has also been supported by the ";
                       lb
-                        ~href:
-                          "http://www.cl.cam.ac.uk/research/srg/netos/mrc2/"
+                        ~href:"http://www.cl.cam.ac.uk/research/srg/netos/mrc2/"
                         [ txt "MRC2" ];
                       txt " and ";
                       lb ~href:"http://ocaml.io" [ txt "OCaml Labs" ];
@@ -167,18 +148,16 @@ let render () =
                   p
                     [
                       txt
-                        "The research leading to this code has also \
-                         received funding from the European Union's Seventh \
-                         Framework Programme FP7/2007-2013 under the ";
-                      lb ~href:"http://www.trilogy2.eu/"
-                        [ txt "Trilogy 2" ];
-                      txt
-                        " project (grant agreement no 317756) and the ";
+                        "The research leading to this code has also received \
+                         funding from the European Union's Seventh Framework \
+                         Programme FP7/2007-2013 under the ";
+                      lb ~href:"http://www.trilogy2.eu/" [ txt "Trilogy 2" ];
+                      txt " project (grant agreement no 317756) and the ";
                       lb ~href:"http://usercentricnetworking.eu/"
                         [ txt "User Centric Networking" ];
                       txt
-                        " project (grant agreement no 611001). \
-                         Publications are ";
+                        " project (grant agreement no 611001). Publications \
+                         are ";
                       lb ~href:"/docs/papers" [ txt "open access" ];
                       txt ".";
                     ];
@@ -192,11 +171,9 @@ let render () =
             Tw.grid;
             Tw.grid_cols 1;
             Tw.lg [ Tw.grid_cols 3 ];
-            Theme.divide_y;
-            Tw.lg [ Theme.divide_y_0 ];
-            Tw.lg [ Theme.divide_x ];
-            Theme.divide_black;
             Tw.text_sm;
+            Tw.border_t;
+            Tw.border_black;
           ]
         [
           (* Discussion forum *)
@@ -208,14 +185,13 @@ let render () =
                   [
                     At.src "/img/community/users.svg";
                     At.alt "Community icon";
+                    At.v "height" "40";
                   ]
                 ();
               p
                 [
                   txt "Browse through our ";
-                  lb
-                    ~href:
-                      "https://discuss.ocaml.org/tags/mirageos"
+                  lb ~href:"https://discuss.ocaml.org/tags/mirageos"
                     [ txt "discussion forum" ];
                   txt
                     " and participate or start a new thread. We use the \
@@ -223,13 +199,23 @@ let render () =
                 ];
             ];
           (* Mailing list *)
-          div ~tw:[ Tw.py 5; Tw.px 6; Tw.space_y 3 ]
+          div
+            ~tw:
+              [
+                Tw.py 5;
+                Tw.px 6;
+                Tw.space_y 3;
+                Tw.border_t;
+                Tw.border_black;
+                Tw.lg [ Theme.tw "border-t-0"; Tw.border_l ];
+              ]
             [
               img
                 ~at:
                   [
                     At.src "/img/community/envelope.svg";
                     At.alt "Envelope icon";
+                    At.v "height" "40";
                   ]
                 ();
               p
@@ -240,31 +226,36 @@ let render () =
                       "http://lists.xenproject.org/cgi-bin/mailman/listinfo/mirageos-devel"
                     [ txt "developer mailing list" ];
                   txt
-                    " or search the past archives. This is a fairly \
-                     low-volume list, and beginner questions are welcome.";
+                    " or search the past archives. This is a fairly low-volume \
+                     list, and beginner questions are welcome.";
                 ];
             ];
           (* IRC *)
           div
-            ~at:
+            ~at:[ At.style "background-color: rgba(255, 152, 0, 0.4)" ]
+            ~tw:
               [
-                At.style
-                  "background-color: rgba(255, 152, 0, 0.4)";
+                Tw.py 5;
+                Tw.px 6;
+                Tw.space_y 3;
+                Tw.border_t;
+                Tw.border_black;
+                Tw.lg [ Theme.tw "border-t-0"; Tw.border_l ];
               ]
-            ~tw:[ Tw.py 5; Tw.px 6; Tw.space_y 3 ]
             [
               img
                 ~at:
                   [
                     At.src "/img/community/mirc.svg";
                     At.alt "MIRC icon";
+                    At.v "height" "40";
                   ]
                 ();
               p
                 [
                   txt
-                    "The MirageOS community can be found on IRC in the \
-                     #mirage channel on ";
+                    "The MirageOS community can be found on IRC in the #mirage \
+                     channel on ";
                   Theme.link_orange ~href:"https://libera.chat/"
                     [ txt "Libera.Chat" ];
                   txt
@@ -280,37 +271,30 @@ let render () =
             Tw.grid;
             Tw.grid_cols 1;
             Tw.lg [ Tw.grid_cols 2 ];
-            Theme.divide_y;
-            Tw.lg [ Theme.divide_y_0 ];
-            Tw.lg [ Theme.divide_x ];
-            Theme.divide_black;
+            Tw.border_t;
+            Tw.border_black;
           ]
         [
           (* Core Team *)
-          div ~tw:[ Tw.p 9; Tw.space_y 6; Tw.text_sm ]
+          div
+            ~tw:[ Tw.p 9; Tw.space_y 6; Tw.text_sm ]
             [
               div
                 [
-                  h3
-                    ~tw:[ Tw.text_lg; Tw.font_bold ]
-                    [ txt "Core Team" ];
+                  h3 ~tw:[ Tw.text_lg; Tw.font_bold ] [ txt "Core Team" ];
                   p ~tw:[ Theme.text_grey ]
                     [
                       txt
-                        "One of us will review every patch that goes into \
-                         the main distribution. Get in touch with any of \
-                         us individually if you're interested in a \
+                        "One of us will review every patch that goes into the \
+                         main distribution. Get in touch with any of us \
+                         individually if you're interested in a \
                          MirageOS-related internship at our respective \
                          institutions.";
                     ];
                 ];
               div
                 [
-                  div
-                    [
-                      txt
-                        "Lexicographically ordered by last name:";
-                    ];
+                  div [ txt "Lexicographically ordered by last name:" ];
                   ul
                     ~tw:[ Tw.list_disc; Tw.ml 4; Tw.space_y 2; Tw.mt 2 ]
                     [
@@ -336,11 +320,9 @@ let render () =
                                 [ txt "Thomas Gazagnaire" ];
                             ];
                           txt ", ";
-                          lb ~href:"https://tarides.com"
-                            [ txt "Tarides" ];
+                          lb ~href:"https://tarides.com" [ txt "Tarides" ];
                           txt ", ";
-                          lb ~href:"https://github.com/samoht"
-                            [ txt "@samoht" ];
+                          lb ~href:"https://github.com/samoht" [ txt "@samoht" ];
                         ];
                       li
                         [
@@ -350,8 +332,7 @@ let render () =
                                 [ txt "Thomas Leonard" ];
                             ];
                           txt ", ";
-                          lb ~href:"https://github.com/talex5"
-                            [ txt "@talex5" ];
+                          lb ~href:"https://github.com/talex5" [ txt "@talex5" ];
                         ];
                       li
                         [
@@ -361,8 +342,7 @@ let render () =
                                 [ txt "Anil Madhavapeddy" ];
                             ];
                           txt ", University of Cambridge, ";
-                          lb ~href:"https://github.com/avsm"
-                            [ txt "@avsm" ];
+                          lb ~href:"https://github.com/avsm" [ txt "@avsm" ];
                         ];
                       li
                         [
@@ -407,8 +387,7 @@ let render () =
                                 [ txt "David Scott" ];
                             ];
                           txt ", Docker, ";
-                          lb ~href:"https://github.com/djs55"
-                            [ txt "@djs55" ];
+                          lb ~href:"https://github.com/djs55" [ txt "@djs55" ];
                         ];
                       li
                         [
@@ -425,9 +404,7 @@ let render () =
                 ];
               div
                 [
-                  h3
-                    ~tw:[ Tw.text_lg; Tw.font_bold ]
-                    [ txt "Emeriti" ];
+                  h3 ~tw:[ Tw.text_lg; Tw.font_bold ] [ txt "Emeriti" ];
                   ul
                     ~tw:[ Tw.list_disc; Tw.ml 4; Tw.space_y 2; Tw.mt 2 ]
                     [
@@ -439,8 +416,7 @@ let render () =
                                 [ txt "Amir Chaudhry" ];
                             ];
                           txt " ";
-                          lb ~href:"https://github.com/amirmc"
-                            [ txt "@amirmc" ];
+                          lb ~href:"https://github.com/amirmc" [ txt "@amirmc" ];
                         ];
                       li
                         [
@@ -450,8 +426,7 @@ let render () =
                                 [ txt "Martin Lucina" ];
                             ];
                           txt ", ";
-                          lb ~href:"https://github.com/mato"
-                            [ txt "@mato" ];
+                          lb ~href:"https://github.com/mato" [ txt "@mato" ];
                         ];
                       li
                         [
@@ -460,28 +435,33 @@ let render () =
                               lb ~href:"http://mort.io/"
                                 [ txt "Richard Mortier" ];
                             ];
-                          txt
-                            ", University of Cambridge & Kvasir Analytics ";
-                          lb ~href:"https://github.com/mor1"
-                            [ txt "@mor1" ];
+                          txt ", University of Cambridge & Kvasir Analytics ";
+                          lb ~href:"https://github.com/mor1" [ txt "@mor1" ];
                         ];
                     ];
                 ];
             ];
           (* Contributors *)
-          div ~tw:[ Tw.p 9; Tw.space_y 6; Tw.text_sm ]
+          div
+            ~tw:
+              [
+                Tw.p 9;
+                Tw.space_y 6;
+                Tw.text_sm;
+                Tw.border_t;
+                Tw.border_black;
+                Tw.lg [ Theme.tw "border-t-0"; Tw.border_l ];
+              ]
             [
               div
                 [
-                  h3
-                    ~tw:[ Tw.text_lg; Tw.font_bold ]
-                    [ txt "Contributors" ];
+                  h3 ~tw:[ Tw.text_lg; Tw.font_bold ] [ txt "Contributors" ];
                   p ~tw:[ Theme.text_grey ]
                     [
                       txt
-                        "One of us will review every patch that goes into \
-                         the main distribution. Get in touch with any of \
-                         us individually if you're interested in a \
+                        "One of us will review every patch that goes into the \
+                         main distribution. Get in touch with any of us \
+                         individually if you're interested in a \
                          MirageOS-related internship at our respective \
                          institutions.";
                     ];
@@ -553,10 +533,7 @@ let render () =
                       li
                         [
                           lb ~href:"https://github.com/kensan"
-                            [
-                              em
-                                [ txt "Adrian-Ken Rueegsegger" ];
-                            ];
+                            [ em [ txt "Adrian-Ken Rueegsegger" ] ];
                         ];
                       li
                         [
@@ -584,11 +561,11 @@ let render () =
                   p
                     [
                       txt
-                        "The MirageOS3 release announcement contained a \
-                         more complete list. For a complete list, please \
-                         look at the contributors to individual git \
-                         repositories. If you are missing here, please add \
-                         yourself via a PR to the mirage-www repository.";
+                        "The MirageOS3 release announcement contained a more \
+                         complete list. For a complete list, please look at \
+                         the contributors to individual git repositories. If \
+                         you are missing here, please add yourself via a PR to \
+                         the mirage-www repository.";
                     ];
                 ];
             ];

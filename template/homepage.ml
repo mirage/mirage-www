@@ -3,8 +3,7 @@ open Tw_html
 let title = "Welcome to MirageOS"
 
 let description =
-  "MirageOS is a programming framework for building type-safe, modular \
-   systems."
+  "MirageOS is a programming framework for building type-safe, modular systems."
 
 let tab = Layout.Home
 
@@ -55,19 +54,19 @@ let render ~(blog_posts : Mirageio_data.Blog.t list) =
       div
         ~tw:[ Tw.flex; Tw.flex_col; Tw.lg [ Tw.flex_row ] ]
         [
-          div ~tw:[ Tw.p 9; Tw.space_y 4; Tw.flex_1 ]
+          div
+            ~tw:[ Tw.p 9; Tw.space_y 4; Tw.flex_1 ]
             [
               p
                 ~tw:[ Tw.font_medium; Theme.font_space; Tw.text_lg ]
                 [
-                  txt
-                    "MirageOS is a library operating system that constructs ";
+                  txt "MirageOS is a library operating system that constructs ";
                   Theme.link_blue
                     ~href:"https://en.wikipedia.org/wiki/Unikernel"
                     [ txt "unikernels" ];
                   txt
-                    " for secure, high-performance network applications \
-                     across a variety of cloud computing and mobile platforms.";
+                    " for secure, high-performance network applications across \
+                     a variety of cloud computing and mobile platforms.";
                 ];
               p ~tw:[ Theme.font_inter ]
                 [
@@ -104,24 +103,24 @@ let render ~(blog_posts : Mirageio_data.Blog.t list) =
               ]
             [
               Theme.feature_item ~icon:"/icon/fast-start.svg"
-                ~title:"Fast Start"
-                  "MirageOS applications take a few milliseconds to start-up \
-                   instead of the few minutes that traditional OSes take.";
-              Theme.feature_item ~icon:"/icon/binaries.svg"
+                ~alt:"Fast Start Icon" ~title:"Fast Start"
+                "MirageOS applications take a few milliseconds to start-up \
+                 instead of the few minutes that traditional OSes take.";
+              Theme.feature_item ~icon:"/icon/binaries.svg" ~alt:"Binaries Icon"
                 ~title:"Small Binaries"
-                  "MirageOS binaries are self-contained: they do not need an \
-                   additional OS to execute. Even then, the size of MirageOS \
-                   binary is usually a few megabytes.";
+                "MirageOS binaries are self-contained: they do not need an \
+                 additional OS to execute. Even then, the size of MirageOS \
+                 binary is usually a few megabytes.";
               Theme.feature_item ~icon:"/icon/footprint.svg"
-                ~title:"Small Footprint"
-                  "MirageOS applications use a few megabytes of memory, while \
-                   traditional applications and their associated OS waste \
-                   gigabytes for simple applications.";
+                ~alt:"Footprint Icon" ~title:"Small Footprint"
+                "MirageOS applications use a few megabytes of memory, while \
+                 traditional applications and their associated OS waste \
+                 gigabytes for simple applications.";
               Theme.feature_item ~icon:"/icon/safe-logic.svg"
-                ~title:"Safe Logic"
-                  "MirageOS applications are written in OCaml, an industrial \
-                   strength programming language supporting functional, \
-                   imperative and object-oriented styles.";
+                ~alt:"Safe Logic Icon" ~title:"Safe Logic"
+                "MirageOS applications are written in OCaml, an industrial \
+                 strength programming language supporting functional, \
+                 imperative and object-oriented styles.";
             ];
         ];
       hr ~tw:[ Tw.border_black ] ();
@@ -144,15 +143,14 @@ let render ~(blog_posts : Mirageio_data.Blog.t list) =
               p
                 [
                   txt "MirageOS uses the ";
-                  Theme.link_blue ~href:"https://ocaml.org/"
-                    [ txt "OCaml" ];
+                  Theme.link_blue ~href:"https://ocaml.org/" [ txt "OCaml" ];
                   txt " language, with ";
                   Theme.link_blue ~href:"https://github.com/mirage"
                     [ txt "libraries" ];
                   txt
-                    " that provide networking, storage and concurrency \
-                     support that work under Unix during development, but \
-                     become operating system drivers when being compiled for \
+                    " that provide networking, storage and concurrency support \
+                     that work under Unix during development, but become \
+                     operating system drivers when being compiled for \
                      production deployment.";
                 ];
               p
@@ -166,35 +164,29 @@ let render ~(blog_posts : Mirageio_data.Blog.t list) =
                   Theme.link_blue ~href:"/blog/announcing-mirage-40"
                     [ txt "MirageOS 4.0" ];
                   txt " was released in March 2022, preceded by ";
-                  Theme.link_blue
-                    ~href:"/blog/announcing-mirage-30-release"
+                  Theme.link_blue ~href:"/blog/announcing-mirage-30-release"
                     [ txt "MirageOS 3.0" ];
                   txt " in February 2017, and ";
-                  Theme.link_blue
-                    ~href:"/blog/announcing-mirage-20-release"
+                  Theme.link_blue ~href:"/blog/announcing-mirage-20-release"
                     [ txt "MirageOS 2.0" ];
                   txt " in July 2014, and ";
                   Theme.link_blue ~href:"/blog/announcing-mirage10"
                     [ txt "MirageOS 1.0" ];
                   txt
-                    " in December 2013. All the infrastructure you see here \
-                     is ";
-                  Theme.link_blue
-                    ~href:"https://github.com/mirage/mirage-www"
+                    " in December 2013. All the infrastructure you see here is ";
+                  Theme.link_blue ~href:"https://github.com/mirage/mirage-www"
                     [ txt "self-hosted" ];
                   txt ".";
                 ];
               p
                 [
                   txt "Check out the ";
-                  Theme.link_blue ~href:"/docs"
-                    [ txt "documentation" ];
+                  Theme.link_blue ~href:"/docs" [ txt "documentation" ];
                   txt ", compile your ";
                   Theme.link_blue ~href:"/docs/hello-world"
                     [ txt "hello world unikernel" ];
                   txt ", get started with the ";
-                  Theme.link_blue ~href:"/docs/xen-boot"
-                    [ txt "public cloud" ];
+                  Theme.link_blue ~href:"/docs/xen-boot" [ txt "public cloud" ];
                   txt ", or watch the ";
                   Theme.link_blue ~href:"/docs/talks" [ txt "talks" ];
                   txt ".";
@@ -215,10 +207,12 @@ let render ~(blog_posts : Mirageio_data.Blog.t list) =
                 Tw.justify_between;
               ]
             [
-              div ~tw:[ Tw.px 10; Tw.py 8 ]
+              div
+                ~tw:[ Tw.px 10; Tw.py 8 ]
                 [
                   h2 ~tw:[ Tw.text_3xl; Tw.font_bold ] [ txt "Blog" ];
-                  div ~tw:[ Tw.space_y 2; Tw.mt 3 ]
+                  div
+                    ~tw:[ Tw.space_y 2; Tw.mt 3 ]
                     (List.map
                        (fun (item : Mirageio_data.Blog.t) ->
                          div
@@ -237,8 +231,7 @@ let render ~(blog_posts : Mirageio_data.Blog.t list) =
                              span ~tw:[ Theme.text_grey ]
                                [
                                  txt
-                                   ("(" ^ Util.date_to_string item.updated
-                                  ^ ")");
+                                   ("(" ^ Util.date_to_string item.updated ^ ")");
                                ];
                            ])
                        blog_posts

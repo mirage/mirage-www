@@ -49,14 +49,10 @@ let render () =
             [ txt "Uh oh! I think you're lost." ];
           p
             ~tw:
-              [
-                Tw.mt 2;
-                Tw.text_lg;
-                Tw.font_medium;
-                Theme.tw "text-black/50";
-              ]
+              [ Tw.mt 2; Tw.text_lg; Tw.font_medium; Theme.tw "text-black/50" ]
             [ txt "It looks like the page you're looking for doesn't exist." ];
-          div ~tw:[ Tw.mt 6 ]
+          div
+            ~tw:[ Tw.mt 6 ]
             [ Theme.btn ~href:"/" [ span [ txt "Go back home" ] ] ];
         ];
     ]

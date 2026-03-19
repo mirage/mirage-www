@@ -1,11 +1,3 @@
 (library
  (public_name mirageio)
- (libraries lwt ptime mirage-kv-mem))
-
-(rule
- (targets site.ml site.mli)
- (deps ../_site)
- (action
-  (with-stdout-to
-   %{null}
-   (run %{bin:ocaml-crunch} -m lwt ../_site -o site.ml))))
+ (libraries lwt ptime mirage-kv))

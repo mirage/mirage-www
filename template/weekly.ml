@@ -12,24 +12,18 @@ let tab = Layout.Docs
 let render (item : Mirageio_data.Weekly.t) =
   div
     [
+      Theme.page_header ~title:"The MirageOS Documentation"
+        ~subtitle:"and developer guides" ();
+      Theme.separator ();
       div
-        ~tw:[ Tw.text_left; Tw.px 8; Tw.py 7 ]
-        [
-          h1 ~tw:[ Tw.text_3xl; Tw.font_bold ]
-            [ txt "The MirageOS Documentation" ];
-          p
-            ~tw:[ Tw.font_bold; Theme.text_grey; Tw.mt 2 ]
-            [ txt "and developer guides" ];
-        ];
-      hr ~tw:[ Tw.border_black ] ();
-      div ~tw:[ Tw.p 8 ]
+        ~tw:[ Tw.p 8 ]
         [
           div ~tw:[ Tw.text_lg; Tw.font_bold ] [ txt item.subject ];
-          div ~tw:[ Tw.text_sm; Tw.mt 2 ]
+          Theme.byline
             [
               txt "By ";
               raw (Theme.person item.author);
-              txt " - ";
+              txt " \xe2\x80\x93 ";
               span ~tw:[ Theme.text_grey ] [ txt item.updated ];
             ];
           div

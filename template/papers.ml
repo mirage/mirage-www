@@ -10,34 +10,20 @@ let tab = Layout.Docs
 let render (papers : Mirageio_data.Paper.t list) =
   div
     [
-      (* Header *)
-      div
-        ~tw:[ Tw.text_left; Tw.px 8; Tw.py 7 ]
-        [
-          h1 ~tw:[ Tw.text_3xl; Tw.font_bold ] [ txt "MirageOS Papers" ];
-          p
-            ~tw:[ Tw.font_bold; Theme.text_grey; Tw.mt 2 ]
-            [ txt "and research articles" ];
-        ];
-      hr ~tw:[ Tw.border_black ] ();
+      Theme.page_header ~title:"MirageOS Papers"
+        ~subtitle:"and research articles" ();
+      Theme.separator ();
       (* Table *)
-      div ~tw:[ Tw.p 8 ]
+      div
+        ~tw:[ Tw.p 8 ]
         [
           table
-            ~tw:
-              [
-                Tw.max_w_5xl;
-                Tw.lg [ Tw.max_w_full ];
-                Theme.tw "align-top";
-              ]
+            ~tw:[ Tw.max_w_5xl; Tw.lg [ Tw.max_w_full ]; Theme.tw "align-top" ]
             [
               thead
                 ~tw:
                   [
-                    Theme.bg_primary;
-                    Tw.text_white;
-                    Tw.text_left;
-                    Tw.rounded_xl;
+                    Theme.bg_primary; Tw.text_white; Tw.text_left; Tw.rounded_xl;
                   ]
                 [
                   tr
@@ -52,9 +38,7 @@ let render (papers : Mirageio_data.Paper.t list) =
                             Theme.w_2_5;
                           ]
                         [ txt "Title" ];
-                      th
-                        ~tw:[ Tw.py 4; Tw.px 6; Tw.w 56 ]
-                        [ txt "Authors" ];
+                      th ~tw:[ Tw.py 4; Tw.px 6; Tw.w 56 ] [ txt "Authors" ];
                       th
                         ~tw:[ Tw.py 4; Tw.px 6; Tw.rounded_r_lg ]
                         [ txt "Links" ];
@@ -65,10 +49,10 @@ let render (papers : Mirageio_data.Paper.t list) =
                    (fun (paper : Mirageio_data.Paper.t) ->
                      tr
                        [
-                         td ~tw:[ Tw.py 4; Tw.px 6; Tw.font_semibold ]
+                         td
+                           ~tw:[ Tw.py 4; Tw.px 6; Tw.font_semibold ]
                            [
-                             div ~tw:[ Tw.font_semibold ]
-                               [ txt paper.title ];
+                             div ~tw:[ Tw.font_semibold ] [ txt paper.title ];
                              div
                                ~tw:
                                  [
@@ -80,17 +64,11 @@ let render (papers : Mirageio_data.Paper.t list) =
                                [ txt paper.abstract ];
                            ];
                          td
-                           ~at:
-                             [
-                               At.style "vertical-align: top";
-                             ]
+                           ~at:[ At.style "vertical-align: top" ]
                            ~tw:[ Tw.py 4; Tw.px 6; Tw.font_medium ]
                            [ txt (String.concat ", " paper.authors) ];
                          td
-                           ~at:
-                             [
-                               At.style "vertical-align: top";
-                             ]
+                           ~at:[ At.style "vertical-align: top" ]
                            ~tw:[ Tw.py 4; Tw.px 6 ]
                            (List.map
                               (fun (link : Mirageio_data.Paper.link) ->

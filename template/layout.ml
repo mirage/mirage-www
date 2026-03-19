@@ -2,8 +2,7 @@ open Tw_html
 
 type tab = Home | Blog | Docs | Api | Community
 
-(* Helper: parse a Tw class string *)
-let tw s = match Tw.of_string s with Ok t -> t | Error (`Msg e) -> failwith e
+let tw = Theme.tw
 
 (* SVG icons as raw HTML strings *)
 let github_svg =
@@ -30,7 +29,8 @@ let nav_link ~tab ~current_tab ~href label =
 let icon_link ~href ~title:t icon =
   a
     ~at:[ At.href href; At.title t ]
-    ~tw:[ tw "opacity-60"; Tw.hover [ tw "opacity-100" ]; Tw.transition_opacity ]
+    ~tw:
+      [ tw "opacity-60"; Tw.hover [ tw "opacity-100" ]; Tw.transition_opacity ]
     [ icon ]
 
 (* The sidebar *)
@@ -43,7 +43,14 @@ let sidebar ~tab =
         Tw.flex_col;
         Tw.items_center;
         Tw.justify_center;
-        Tw.md [ Tw.justify_start; Tw.items_start; tw "w-[152px]"; tw "shrink-0"; tw "grow-0" ];
+        Tw.md
+          [
+            Tw.justify_start;
+            Tw.items_start;
+            tw "w-[152px]";
+            tw "shrink-0";
+            tw "grow-0";
+          ];
         Tw.mb 7;
       ]
     [
@@ -76,24 +83,14 @@ let sidebar ~tab =
         [
           (* Social icons *)
           div
-            ~tw:
-              [
-                Tw.flex;
-                Tw.flex_wrap;
-                Tw.gap 2;
-                Tw.text_white;
-                Tw.mt 4;
-              ]
+            ~tw:[ Tw.flex; Tw.flex_wrap; Tw.gap 2; Tw.text_white; Tw.mt 4 ]
             [
-              icon_link
-                ~href:"https://github.com/mirage"
-                ~title:"Mirage GitHub Organisation"
-                github_svg;
+              icon_link ~href:"https://github.com/mirage"
+                ~title:"Mirage GitHub Organisation" github_svg;
               icon_link
                 ~href:
                   "https://ocaml.org/packages/search?q=tag%3A%22org%3Amirage%22"
-                ~title:"Mirage Packages Documentation"
-                book_svg;
+                ~title:"Mirage Packages Documentation" book_svg;
               icon_link ~href:"/feed.xml" ~title:"MirageOS RSS Feed" rss_svg;
             ];
           (* Nav links *)
@@ -133,20 +130,12 @@ let head_content ~description =
         ]
       ();
     meta ~at:[ At.name "description"; At.content description ] ();
-    link
-      ~at:[ At.rel "icon"; At.type' "image/png"; At.href "/favicon.ico" ]
-      ();
+    link ~at:[ At.rel "icon"; At.type' "image/png"; At.href "/favicon.ico" ] ();
     link ~at:[ At.rel "stylesheet"; At.href "/main.css" ] ();
     link ~at:[ At.rel "stylesheet"; At.href "/syntax.css" ] ();
+    link ~at:[ At.rel "stylesheet"; At.href "/vendor/font-files/inter.css" ] ();
     link
-      ~at:[ At.rel "stylesheet"; At.href "/vendor/font-files/inter.css" ]
-      ();
-    link
-      ~at:
-        [
-          At.rel "stylesheet";
-          At.href "/vendor/font-files/spacegrotesk.css";
-        ]
+      ~at:[ At.rel "stylesheet"; At.href "/vendor/font-files/spacegrotesk.css" ]
       ();
     link
       ~at:
@@ -165,23 +154,26 @@ let custom_style =
     {|<style>
 h1, h2, h3, h4, h5, h6 { font-family: "Space Grotesk", sans-serif; }
 .prose pre { background-color: #181818; }
+.fill-current { fill: currentColor; }
+.btn svg { width: 18px; }
 </style>|}
 
 (* Returns the full page as a Tw_html.t tree *)
 let render_html ~description ~title:page_title ~tab inner =
   root
     ~at:[ At.lang "en" ]
-    ~tw:[ tw "bg-repeat-y"; tw "bg-top" ]
     [
       head
         ([ title [ txt page_title ]; meta ~at:[ At.charset "utf-8" ] () ]
-        @ head_content ~description
-        @ [ custom_style ]);
+        @ head_content ~description @ [ custom_style ]);
       body
         ~at:
           [
             At.style
-              "background-size: 100%; background-image: url(/img/wavesbg.png)";
+              "background-image: url(/img/wavesbg.png), \
+               url(/img/wavesbg-bottom.png); background-size: 100%, 100%; \
+               background-repeat: no-repeat, repeat-y; background-position: \
+               top, top";
           ]
         ~tw:
           [
@@ -218,6 +210,7 @@ let render_html ~description ~title:page_title ~tab inner =
                     Tw.ml 4;
                     tw "rounded-[10px]";
                     Tw.min_w 0;
+                    Tw.overflow_hidden;
                   ]
                 [ inner ];
             ];
@@ -226,5 +219,4 @@ let render_html ~description ~title:page_title ~tab inner =
 
 (* Returns the full page as a string *)
 let render ~description ~title ~tab inner =
-  render_html ~description ~title ~tab inner
-  |> Tw_html.to_string ~doctype:true
+  render_html ~description ~title ~tab inner |> Tw_html.to_string ~doctype:true
