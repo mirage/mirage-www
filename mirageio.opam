@@ -21,7 +21,7 @@ homepage: "https://github.com/mirage/mirage-www"
 doc: "https://mirage.github.io/mirage-www/"
 bug-reports: "https://github.com/mirage/mirage-www/issues"
 depends: [
-  "ocaml" {>= "5.1"}
+  "ocaml" {>= "4.14"}
   "dune" {>= "3.8"}
   "tw"
   "ptime" {>= "0.8.1"}
