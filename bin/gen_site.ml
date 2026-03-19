@@ -157,15 +157,14 @@ let () =
     (Filename.concat out_dir "feed.xml")
     (Atom.render ~blog_posts ~contributors ~last_update);
 
-  (* --- Copy static assets (skip main.css, we generate it) --- *)
+  (* --- Copy static assets --- *)
   (match List.find_opt Sys.file_exists [ "asset" ] with
   | Some asset_dir ->
       Array.iter
         (fun name ->
-          if name <> "main.css" then
-            copy_dir
-              (Filename.concat asset_dir name)
-              (Filename.concat out_dir name))
+          copy_dir
+            (Filename.concat asset_dir name)
+            (Filename.concat out_dir name))
         (Sys.readdir asset_dir)
   | None -> Printf.eprintf "Warning: asset/ directory not found\n");
 
