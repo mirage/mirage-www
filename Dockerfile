@@ -1,4 +1,4 @@
-FROM ocaml/opam:debian-12-ocaml-4.14
+FROM ocaml/opam:debian-12-ocaml-4.14@sha256:f9803e04143923e5b59749d5be12fc63919456028d4af208942c966666033913
 RUN sudo apt-get update && sudo apt-get install autoconf automake -y --no-install-recommends
 RUN mkdir -p /home/opam/www/mirage
 WORKDIR /home/opam/www
