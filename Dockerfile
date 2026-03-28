@@ -3,7 +3,7 @@ RUN sudo apt-get update && sudo apt-get install autoconf automake -y --no-instal
 RUN mkdir -p /home/opam/www/mirage
 WORKDIR /home/opam/www
 RUN sudo ln -f /usr/bin/opam-2.1 /usr/bin/opam
-RUN cd ~/opam-repository && git pull origin master && git reset --hard 2dee2fe30df966714e056f8af164fe0ed7648a63
+RUN cd ~/opam-repository && git pull origin master && git reset --hard 46f289cd
 RUN opam update
 RUN opam install 'mirage>=4.5.0'
 COPY --chown=opam:root mirage/config.ml /home/opam/www/mirage/
