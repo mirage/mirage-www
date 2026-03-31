@@ -76,9 +76,10 @@ let setup =
     $ Cli.http_port $ Cli.redirect $ Cli.https_port $ dns_key $ dns_server
     $ dns_port $ Cli.host $ key_seed $ additional_hostnames)
 
-module Make (Stack : Tcpip.Stack.V4V6) = struct
+module Make (KV : Mirage_kv.RO) (Stack : Tcpip.Stack.V4V6) = struct
   module Certify = Dns_certify_mirage.Make (Stack)
-  module WWW = Mirageio.Make (Stack)
+  module Paf = Paf_mirage.Make (Stack.TCP)
+  module U = Unikernel.Make (KV) (Stack)
 
   let restart_before_expire = function
     | server :: _, _ -> (
@@ -111,22 +112,26 @@ module Make (Stack : Tcpip.Stack.V4V6) = struct
         | Error (`Msg m) -> Lwt.fail_with m
         | Ok conf -> Lwt.return conf)
 
-  let start stack t =
-    let* cfg = tls_init stack t in
-    let http =
-      WWW.Dream.(
-        http ~port:t.http_port (Stack.tcp stack) @@ fun req ->
-        let uri = "https://" ^ Domain_name.to_string t.host ^ target req in
-        redirect ~status:`Moved_Permanently req uri)
+  let start store stack t =
+    let* tls = tls_init stack t in
+    (* HTTP redirects to HTTPS *)
+    let* http_t = Paf.init ~port:t.http_port (Stack.tcp stack) in
+    let http_service =
+      Paf.http_service ~error_handler:U.error_handler
+        (fun _flow _dst reqd ->
+          let request = H1.Reqd.request reqd in
+          let loc =
+            "https://" ^ Domain_name.to_string t.host ^ request.target
+          in
+          U.respond_with reqd `Moved_permanently [ ("location", loc) ] "")
     in
-    let https =
-      match t.redirect with
-      | None -> WWW.https ~port:t.https_port ~tls:cfg stack
-      | Some domain ->
-          WWW.Dream.(
-            https ~port:t.https_port (Stack.tcp stack) @@ fun req ->
-            let uri = domain ^ target req in
-            redirect ~status:`Moved_Permanently req uri)
+    let (`Initialized http) = Paf.serve http_service http_t in
+    (* HTTPS serves the site *)
+    let* https_t = Paf.init ~port:t.https_port (Stack.tcp stack) in
+    let https_service =
+      Paf.https_service ~tls ~error_handler:U.error_handler
+        (fun flow dst reqd -> U.request_handler store flow dst reqd)
     in
+    let (`Initialized https) = Paf.serve https_service https_t in
     Lwt.join [ http; https ]
 end

@@ -25,23 +25,38 @@ let tls_key =
   in
   Key.(create "tls" Arg.(opt tls_conv No doc))
 
-let packages = [ package "mirageio"; package ~build:true "yaml" ]
+let packages =
+  [ package "paf" ~sublibs:[ "mirage" ];
+    package "h1";
+    package "magic-mime";
+    package ~build:true "yaml" ]
+
 let packages_v = Key.if_ Key.is_solo5 [ package ~scope:`Switch "solo5" ] []
+
+let dev =
+  let doc = Key.Arg.info ~doc:"Use filesystem passthrough (dev mode)" [ "dev" ] in
+  Key.(create "dev" Arg.(flag doc))
+
+let site =
+  if_impl (Key.value dev)
+    (direct_kv_ro "site")
+    (crunch "../site")
 
 let https =
   let runtime_args = [ runtime_arg ~pos:__POS__ "Unikernel_tls.setup" ] in
   let packages = package ~sublibs:[ "mirage" ] "dns-certify" :: packages in
   main "Unikernel_tls.Make" ~runtime_args ~packages ~packages_v
-    (stackv4v6 @-> job)
+    (kv_ro @-> stackv4v6 @-> job)
 
 let https_local =
   let runtime_args = [ runtime_arg ~pos:__POS__ "Unikernel_tls_local.setup" ] in
   main "Unikernel_tls_local.Make" ~runtime_args ~packages ~packages_v
-    (stackv4v6 @-> job)
+    (kv_ro @-> stackv4v6 @-> job)
 
 let http =
   let runtime_args = [ runtime_arg ~pos:__POS__ "Unikernel.setup" ] in
-  main "Unikernel.Make" ~runtime_args ~packages ~packages_v (stackv4v6 @-> job)
+  main "Unikernel.Make" ~runtime_args ~packages ~packages_v
+    (kv_ro @-> stackv4v6 @-> job)
 
 let app =
   match_impl ~default:http (Key.value tls_key)
@@ -101,4 +116,5 @@ let optional_monitoring stack =
   if_impl (Key.value enable_metrics) (mirage_monitoring $ stack) noop
 
 let () =
-  register "www" [ optional_monitoring internal_stack; app $ external_stack ]
+  register "www"
+    [ optional_monitoring internal_stack; app $ site $ external_stack ]

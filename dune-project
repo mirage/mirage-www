@@ -1,6 +1,5 @@
 (lang dune 3.8)
 (using mdx 0.4)
-(using directory-targets 0.1)
 
 (name mirageio)
 
@@ -33,34 +32,13 @@
  (synopsis "Website infrastructure and content for mirageos.org")
  (description "Website infrastructure and content for mirageos.org")
  (depends
-  (ocaml
-   (>= 4.14))
+  (ocaml (>= 4.14))
   dune
-  dream
-  dream-mirage
-  (tcpip (>= 8.0))
-  (mirage-sleep (>= 3.0))
-  (mirage-kv-mem (>= 3.2.1))
-  (mirage-unix (>= 5.0.0))
+  tw
   (ptime (>= 0.8.1))
-  (tailwindcss :build)
-  (crunch (and :build (>= 3.1.0)))
-  (cmarkit (and :build
-   (>= 0.2.0)))
-  (hilite (and :build
-   (>= 0.5.0)))
+  (cmarkit (and :build (>= 0.2.0)))
+  (hilite (and :build (>= 0.5.0)))
   (yaml :build)
   (fmt :build)
   (ppx_deriving_yaml (and :build (>= 0.2.1)))
-  (mdx :with-test)
-  (mirage :with-test)
-  (mirage-block-unix :with-test)
-  (mirage-kv-unix (and :with-test (>= 3.0.0)))
-  (mirage-net-unix :with-test)
-  (mirage-logs :with-test)
-  (mirage-crypto-rng-mirage :with-test)
-  (mirage-bootvar :with-test)
-  (dns-certify :with-test)
-  (lwt :with-test)
-  (charrua-client :with-test)
-  cmdliner-stdlib))
+  (mdx :with-test)))
