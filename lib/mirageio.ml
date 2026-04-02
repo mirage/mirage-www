@@ -25,7 +25,7 @@ module Make (Stack : Tcpip.Stack.V4V6) = struct
       let post_opt =
         Mirageio_data.Blog.all
         |> List.find_opt (fun (x : Mirageio_data.Blog.t) ->
-               x.permalink = permalink)
+            x.permalink = permalink)
       in
       match post_opt with
       | Some post -> Dream.html (Blog_inner.render post)
@@ -39,7 +39,7 @@ module Make (Stack : Tcpip.Stack.V4V6) = struct
       let doc_opt =
         Mirageio_data.Wiki.all
         |> List.find_opt (fun (x : Mirageio_data.Wiki.t) ->
-               x.permalink = permalink)
+            x.permalink = permalink)
       in
       match doc_opt with
       | Some doc -> Dream.html (Docs_inner.render doc)
@@ -67,7 +67,7 @@ module Make (Stack : Tcpip.Stack.V4V6) = struct
       let weekly_opt =
         Mirageio_data.Weekly.all
         |> List.find_opt (fun (x : Mirageio_data.Weekly.t) ->
-               x.permalink = permalink)
+            x.permalink = permalink)
       in
       match weekly_opt with
       | Some weekly -> Dream.html (Weekly.render weekly)
