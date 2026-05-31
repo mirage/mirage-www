@@ -30,7 +30,7 @@ let render () = Layout.render ~title:"MirageOS Community" ~description:"Get in t
         </p>
         <p>
           The research leading to this code has also received funding from the European Union's Seventh Framework Programme FP7/2007-2013 under the <a class="link-blue" href="http://www.trilogy2.eu/">Trilogy 2</a> project (grant agreement no 317756) and the
-          <a class="link-blue" href="http://usercentricnetworking.eu/">User Centric Networking</a> project (grant agreement no 611001). Publications are <a class="link-blue" href="/docs/papers">open access</a>.
+          <a class="link-blue" href="http://usercentricnetworking.eu/">User Centric Networking</a> project (grant agreement no 611001). Publications are <a class="link-blue" href="/papers">open access</a>.
         </p>
       </div>
     </div>
