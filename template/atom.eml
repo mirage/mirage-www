@@ -41,7 +41,7 @@ let render ~blog_posts ~contributors ~last_update =
     <link rel="alternate" href="https://mirageos.org/blog/<%s item.permalink %>" type="text/html" />
     <content type="xhtml">
       <div xmlns="http://www.w3.org/1999/xhtml">
-        <%s! item.body %>
+        <%s! item.xml_body %>
       </div>
     </content>
   </entry>

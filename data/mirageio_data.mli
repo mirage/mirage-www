@@ -9,6 +9,7 @@ module Blog : sig
     subject : string;
     permalink : string;
     body : string;
+    body_xml : string;
   }
 
   val all : t list

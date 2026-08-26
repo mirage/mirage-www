@@ -38,6 +38,14 @@ module Blog = struct
           | [ year; month; day ] -> (int year, int month, int day)
           | _ -> failwith ("failed to parse date: '" ^ meta.updated ^ "'")
         in
+        let body_xml =
+          let doc =
+            Cmarkit.Doc.of_string ~strict:true ~heading_auto_ids:true body
+            |> Hilite_markdown.transform
+          and r = Cmarkit_html.xhtml_renderer ~safe:true ()
+          in
+          Cmarkit_renderer.doc_to_string r doc
+        in
         {
           updated = Ptime.of_date date |> Option.get;
           authors = meta.authors;
@@ -47,6 +55,7 @@ module Blog = struct
             Cmarkit.Doc.of_string ~strict:true ~heading_auto_ids:true body
             |> Hilite_markdown.transform
             |> Cmarkit_html.of_doc ~safe:false;
+          body_xml;
         })
       "data/blog/"
     |> List.sort (fun x1 x2 -> Ptime.compare x1.updated x2.updated)
@@ -60,10 +69,11 @@ module Blog = struct
     ; subject = %a
     ; permalink = %a
     ; body = %a
+    ; body_xml = %a
     }|}
       (Ptime.to_float_s v.updated)
       (Pp.list People.pp) v.authors Pp.string v.subject Pp.string v.permalink
-      Pp.string v.body
+      Pp.string v.body Pp.string v.body_xml
 end
 
 module Wiki = struct
