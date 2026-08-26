@@ -12,6 +12,7 @@ module Blog : sig
   }
 
   val all : t list
+  val all_xhtml : t list
 end
 
 module Wiki : sig

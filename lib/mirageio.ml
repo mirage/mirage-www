@@ -76,7 +76,7 @@ module Make (Stack : Tcpip.Stack.V4V6) = struct
     let papers _req = Dream.html (Papers.render Mirageio_data.Paper.all)
 
     let atom _req =
-      let blog_posts = Mirageio_data.Blog.all in
+      let blog_posts = Mirageio_data.Blog.all_xhtml in
       let contributors =
         Mirageio_data.Blog.all
         |> List.map (fun blog -> blog.Mirageio_data.Blog.authors)
