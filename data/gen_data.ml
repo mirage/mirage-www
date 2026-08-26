@@ -52,6 +52,29 @@ module Blog = struct
     |> List.sort (fun x1 x2 -> Ptime.compare x1.updated x2.updated)
     |> List.rev
 
+  let all_xhtml () =
+    Utils.map_md_files_in_dir ~decode_meta:meta_of_yaml
+      (fun ~file:_ ~meta ~body ->
+        let date =
+          let int = int_of_string in
+          match String.split_on_char '-' meta.updated with
+          | [ year; month; day ] -> (int year, int month, int day)
+          | _ -> failwith ("failed to parse date: '" ^ meta.updated ^ "'")
+        in
+        {
+          updated = Ptime.of_date date |> Option.get;
+          authors = meta.authors;
+          subject = meta.subject;
+          permalink = meta.permalink;
+          body =
+            Cmarkit.Doc.of_string ~strict:true ~heading_auto_ids:true body
+            |> Hilite_markdown.transform
+            |> Cmarkit_renderer.doc_to_string (Cmarkit_html.xhtml_renderer ~safe:false ())
+        })
+      "data/blog/"
+    |> List.sort (fun x1 x2 -> Ptime.compare x1.updated x2.updated)
+    |> List.rev
+
   let pp ppf v =
     Fmt.pf ppf
       {|
@@ -242,6 +265,7 @@ module Blog = struct
   }
 
   let all = %a
+  let all_xhtml = %a
 end
 
 module Wiki = struct
@@ -296,8 +320,8 @@ module Paper = struct
   let all = %a
 end
 |}
-    (Pp.list Blog.pp) (Blog.all ()) (Pp.list Wiki.pp) (Wiki.all ())
-    (Pp.list Weekly.pp) (Weekly.all ()) (Pp.list Link.pp) (Link.all ())
-    (Pp.list Paper.pp) (Paper.all ())
+    (Pp.list Blog.pp) (Blog.all ()) (Pp.list Blog.pp) (Blog.all_xhtml ())
+    (Pp.list Wiki.pp) (Wiki.all ()) (Pp.list Weekly.pp) (Weekly.all ())
+    (Pp.list Link.pp) (Link.all ()) (Pp.list Paper.pp) (Paper.all ())
 
 let () = print_endline output
