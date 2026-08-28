@@ -1,6 +1,6 @@
 let foo () = failwith "foo"
 let read_arg _ = failwith "read_arg"
-let new_id () = Oo.id (object end)
+let new_id () = Oo.id object end
 let on_response_to _ _ : unit = failwith "on_response_to"
 let send_request _ _ : unit = failwith "send_request"
 let pp_frame _ _ = failwith "pp_fram"
