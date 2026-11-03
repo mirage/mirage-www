@@ -1,5 +1,5 @@
 ---
-updated: 2022-12-07
+updated: 2026-11-03
 author:
   name: Amir Chaudhry
   uri: http://amirchaudhry.com
@@ -16,7 +16,9 @@ If you think you've discovered a **security vulnerability**, the best way to
 inform us is to send us an email to **security [at] mirage.io**.  One of the
 team will respond and we will take it from there.
 
-A OpenPGP key is [available from the keyservers](http://keys.mayfirst.org/pks/lookup?op=get&fingerprint=on&search=0x4A732D757C0EDA74), its fingerprint is `23B2 822C 89A9 EC73 C7DF  0748 4A73 2D75 7C0E DA74`.
+Please note that we track security issues via the [OCaml Security team](https://ocaml.org/security). You can find advisories at [osv.dev](https://osv.dev/list?q=mirage&ecosystem=opam) (or in the [OCaml advisories repository](https://github.com/ocaml/security-advisories)).
+
+We published earlier advisories ourselves here (they have been incooperated into the OCaml security advisories):
 
 - [7th December 2022: MSA03 solo5<0.7.5](/blog/MSA03)
 - [26th April 2019: MSA02 mirage-xen<3.3.0](/blog/MSA02)
